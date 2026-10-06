@@ -1,0 +1,3 @@
+[env]
+LIBCLANG_PATH = { value = ".local/libclang/libclang-18.1.1.data/platlib/clang/native", relative = true }
+CMAKE_PROJECT_TOP_LEVEL_INCLUDES = { value = "cmake/portable-cpu.cmake", relative = true }

@@ -1,0 +1,60 @@
+{
+    "$schema":  "https://schema.tauri.app/config/2",
+    "productName":  "Meeting Copilot",
+    "version":  "0.1.0",
+    "identifier":  "local.meeting.copilot",
+    "build":  {
+                  "beforeDevCommand":  "npm run dev",
+                  "devUrl":  "http://127.0.0.1:1420",
+                  "beforeBuildCommand":  "npm run build",
+                  "frontendDist":  "../dist"
+              },
+    "app":  {
+                "windows":  [
+                                {
+                                    "label":  "main",
+                                    "title":  "Meeting Copilot",
+                                    "width":  520,
+                                    "height":  700,
+                                    "minWidth":  480,
+                                    "minHeight":  600
+                                }
+                            ],
+                "security":  {
+                                 "csp":  "default-src \u0027self\u0027; connect-src ipc: http://ipc.localhost; style-src \u0027self\u0027 \u0027unsafe-inline\u0027; img-src \u0027self\u0027 data:; script-src \u0027self\u0027"
+                             }
+            },
+    "bundle":  {
+                   "active":  true,
+                   "targets":  [
+                                   "msi"
+                               ],
+                   "icon":  [
+                                "icons/icon.ico",
+                                "icons/32x32.png",
+                                "icons/128x128.png"
+                            ],
+                   "resources":  {
+                                     "../models/ggml-tiny.en.bin":  "models/ggml-tiny.en.bin",
+                                     "../native/whisper.dll":  "whisper.dll",
+                                     "../native/ggml.dll":  "ggml.dll",
+                                     "../native/ggml-base.dll":  "ggml-base.dll",
+                                     "../native/ggml-cpu-x64.dll":  "ggml-cpu-x64.dll",
+                                     "../native/ggml-cpu-sse42.dll":  "ggml-cpu-sse42.dll",
+                                     "../native/ggml-cpu-sandybridge.dll":  "ggml-cpu-sandybridge.dll",
+                                     "../native/ggml-cpu-haswell.dll":  "ggml-cpu-haswell.dll",
+                                     "../native/ggml-cpu-skylakex.dll":  "ggml-cpu-skylakex.dll",
+                                     "../native/ggml-cpu-icelake.dll":  "ggml-cpu-icelake.dll",
+                                     "../native/ggml-cpu-alderlake.dll":  "ggml-cpu-alderlake.dll",
+                                     "../LICENSE":  "LICENSE.txt",
+                                     "../THIRD_PARTY_NOTICES.txt":  "THIRD_PARTY_NOTICES.txt"
+                                 },
+                   "category":  "Productivity",
+                   "shortDescription":  "Local Windows meeting copilot",
+                   "windows":  {
+                                   "wix":  {
+                                               "language":  "en-US"
+                                           }
+                               }
+               }
+}

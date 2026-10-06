@@ -725,8 +725,10 @@ pub fn run() {
             resize_overlay,
             manage_usage,
             open_debug
+            ,crate::gaze::gaze_snapshot,crate::gaze::gaze_devices,crate::gaze::gaze_start,crate::gaze::gaze_control,crate::gaze::gaze_stop
         ])
         .setup(|app| {
+            app.manage(crate::gaze::Runtime::new(app.handle())?);
             #[cfg(debug_assertions)] eprintln!("runtime: setup");
         let dir = if cfg!(debug_assertions) {
                 std::env::var_os("COPILOT_DATA_DIR")
@@ -806,6 +808,7 @@ pub fn run() {
                         let (tx, rx) = oneshot::channel();
                         let _ = rt.tx.send(Control::Stop(tx)).await;
                         let _ = rx.await;
+                        let _ = crate::gaze::gaze_stop(handle.clone()).await;
                         rt.auth.wait_for_token_requests().await;
                         handle.exit(0);
                     });

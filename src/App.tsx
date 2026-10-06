@@ -4,6 +4,7 @@ import { useMeeting } from './state/store';
 import type { Account, Bootstrap, Model, Settings } from './state/model';
 import Status from './overlay/Status';
 import ContextAttachments from './ContextAttachments';
+import Camera from './Camera';
 const empty: Settings = { microphone: '', output: '', modelPath: '', model: '', speechBackend: 'nemotron', speechChunkMs: 160, nemotronDevice: 1 };
 export default function App() {
   const snapshot = useMeeting(s => s.snapshot);
@@ -74,6 +75,7 @@ export default function App() {
       {snapshot.active ? <><Status snapshot={snapshot} /><div className="meters"><Meter label="REMOTE" level={snapshot.remoteLevel} /><Meter label="SELF" level={snapshot.selfLevel} /></div><div className="button-row"><button disabled={!!busy || loading} onClick={() => run('Updating…', () => command('action', { action: 'pause' }))}>{snapshot.paused ? 'Resume listening' : 'Pause listening'}</button><button className="primary" disabled={!!busy && !loading} onClick={() => run('Stopping…', () => command('stop_meeting'))}>{loading ? 'Cancel startup' : 'Stop meeting'}</button></div><form onSubmit={e => { e.preventDefault(); run('Asking…', async () => { await command('ask', { question }); setQuestion(''); }); }}><label className="sr-only" htmlFor="main-question">Ask about this meeting</label><div className="ask-row"><input id="main-question" value={question} maxLength={4000} onChange={e => setQuestion(e.target.value)} placeholder="Ask about this meeting…" /><button disabled={!question.trim() || !!busy || loading}>Ask</button></div></form><button className="text-button" onClick={() => command('action', { action: 'hide' })}>Hide / show overlay</button></> : <button className="primary start" disabled={!canStart || !!busy} onClick={() => run('Starting meeting…', () => command('start_meeting', { settings }))}>{busy || 'Start meeting'} <span>→</span></button>}
       <p className="privacy">Audio and transcription stay on this device. Meeting context is sent to OpenAI to answer questions, with response storage disabled.</p>
     </section>
+    <Camera />
     <footer><span>Ask manually <kbd>Ctrl Shift Space</kbd></span><span>Hide overlay <kbd>Ctrl Shift H</kbd></span>{data?.debug && <button className="text-button" onClick={() => command('open_debug')}>Debug transcript</button>}</footer>
   </main>;
 }

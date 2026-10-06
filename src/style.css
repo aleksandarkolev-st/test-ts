@@ -7,3 +7,7 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
  .context-attachments p { margin: 0; }
  .context-attachments button { margin-left: 8px; font-size: 12px; }
  .context-attachments details { margin-top: 6px; max-height: 120px; overflow: auto; }
+ .camera-preview { display: block; width: 100%; margin: 18px 0 12px; border-radius: 10px; background: #111; aspect-ratio: 16 / 9; object-fit: contain; }
+ .camera-status { font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+ .camera-toggle { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
+ .camera-toggle input { width: auto; }

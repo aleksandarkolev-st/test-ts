@@ -25,7 +25,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'FLX export or trained-graph parity failed' }
     & uv venv '.local/gaze-runtime' --python 3.11 --cache-dir '.local/uv-cache' --allow-existing
     if ($LASTEXITCODE -ne 0) { throw 'Cannot create camera environment' }
-    & uv pip install --python '.local/gaze-runtime/Scripts/python.exe' --cache-dir '.local/uv-cache' numpy==1.26.4 onnxruntime-directml==1.24.4 opencv-contrib-python==4.11.0.86 mediapipe==0.10.32 pyvirtualcam==0.15.0
+    & uv pip install --python '.local/gaze-runtime/Scripts/python.exe' --cache-dir '.local/uv-cache' numpy==1.26.4 onnxruntime-directml==1.24.4 opencv-contrib-python==4.11.0.86 mediapipe==0.10.32 pyvirtualcam==0.15.0 cv2-enumerate-cameras==1.4.0
     if ($LASTEXITCODE -ne 0) { throw 'Cannot install camera dependencies' }
     Write-Host 'Local FLX models exported and checked against their original graphs. Numeric evidence: artifacts/gaze/export-parity.json.'
 } finally { Pop-Location }

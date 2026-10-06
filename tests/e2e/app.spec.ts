@@ -7,6 +7,8 @@ async function nativeFixture(page: Page) {
     let state = { revision: 1, active: false, paused: false, status: 'off', question: null as any, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null as any, remoteLevel: 0, selfLevel: 0, project: null as any, screenshot: null as any, attachmentBusy: false };
     const account = { clientId: 'fixture-client', email: 'fixture@example.invalid', name: 'Fixture', planEnabled: true };
     let signedIn = false;
+    let camera = { running: false, loading: false, calibrated: false, cameraCalibrated: false, calibrating: null, face: false, correcting: false, message: 'Start the camera to preview and calibrate correction.', error: null, preview: null, device: '', camera: '', fps: 0, frameAgeMs: 0, frameAgeP95Ms: 0, vertical: 0, horizontal: 0 };
+    const cameraBroadcast = () => { for (const [eventId, l] of listeners) if (l.event === 'copilot:gaze') callbacks.get(l.handler)?.({ event: l.event, id: eventId, payload: { ...camera } }); };
     const broadcast = () => { state.revision++; for (const [eventId, l] of listeners) if (l.event === 'copilot:state') callbacks.get(l.handler)?.({ event: l.event, id: eventId, payload: { ...state } }); };
     w.__TAURI_EVENT_PLUGIN_INTERNALS__ = { unregisterListener: (_: string, eventId: number) => listeners.delete(eventId) };
     w.__TAURI_INTERNALS__ = {
@@ -15,6 +17,11 @@ async function nativeFixture(page: Page) {
         if (cmd === 'plugin:event|listen') { listeners.set(++id, { event: args.event, handler: args.handler }); return id; }
         if (cmd === 'plugin:event|unlisten') return;
         if (cmd === 'get_snapshot') return { ...state };
+        if (cmd === 'gaze_snapshot') return { ...camera };
+        if (cmd === 'gaze_devices') return { cameras: [{ index: 0, name: 'Fixture webcam', allowed: true }, { index: 1, name: 'OBS Virtual Camera', allowed: false }], gpus: [{ index: 1, name: 'Fixture AMD GPU', dedicated_video_bytes: 16000000000 }] };
+        if (cmd === 'gaze_start') { camera = { ...camera, running: true, face: true, camera: 'Fixture webcam', device: 'Fixture AMD GPU', fps: 30, message: 'Look at the camera and calibrate.' }; cameraBroadcast(); return; }
+        if (cmd === 'gaze_control') { if (args.action === 'calibrate_camera') camera.cameraCalibrated = true; if (args.action === 'calibrate_notes') { camera.calibrated = true; camera.correcting = true; } cameraBroadcast(); return; }
+        if (cmd === 'gaze_stop') { camera = { ...camera, running: false, preview: null, calibrated: false, cameraCalibrated: false, correcting: false }; cameraBroadcast(); return; }
         if (cmd === 'bootstrap') return { settings: { microphone: '', output: '', modelPath: '', model: '', speechBackend: 'nemotron', speechChunkMs: 160, nemotronRuntime: 'C:\\fixture\\nemo-speech.exe', nemotronDevice: 1 }, devices: [{ id: 'mic', name: 'Fixture microphone', source: 'self', default: true }, { id: 'speaker', name: 'Fixture headphones', source: 'remote', default: true }], accounts: signedIn ? [account] : [], selected: signedIn ? account : null, models: [], snapshot: { ...state }, debug: false };
         if (cmd === 'sign_in') { signedIn = true; return account; }
         if (cmd === 'list_models') return [{ slug: 'fixture-mini', display_name: 'Fixture model' }];
@@ -42,6 +49,19 @@ async function nativeFixture(page: Page) {
 }
 test('browser does not pretend to capture audio or sign in', async ({ page }) => {
   await page.goto('/'); await expect(page.getByText('Open the desktop app to start a meeting.', { exact: false })).toBeVisible(); await expect(page.getByRole('button', { name: 'Start meeting' })).toBeDisabled();
+});
+test('camera uses named input and GPU, calibrates in order and clears on stop', async ({ page }) => {
+  await nativeFixture(page); await page.goto('/');
+  await expect(page.getByLabel('Input camera')).toHaveValue('0');
+  await expect(page.getByLabel('Input camera').getByRole('option', { name: 'OBS Virtual Camera' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Start camera preview' }).click();
+  await expect(page.getByRole('button', { name: 'Calibrate looking at notes' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Calibrate looking at camera' }).click();
+  await page.getByRole('button', { name: 'Calibrate looking at notes' }).click();
+  await expect(page.getByText('Correcting eye gaze', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Stop camera' }).click();
+  await expect(page.getByText('Camera off', { exact: true })).toBeVisible();
+  await expect(page.getByAltText('Live local gaze-correction preview')).toHaveCount(0);
 });
 test('startup, account model discovery, meeting start, pause and stop', async ({ page }) => {
   await nativeFixture(page); await page.goto('/'); await page.getByRole('button', { name: 'Continue with ChatGPT' }).click();

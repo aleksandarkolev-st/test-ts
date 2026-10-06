@@ -35,6 +35,8 @@ pub struct Settings {
     pub model: String,
     #[serde(default)]
     pub reasoning_effort: Option<String>,
+    #[serde(default)]
+    pub project_path: String,
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -82,6 +84,8 @@ enum Control {
     Manual(String),
     Dismiss,
     Expand,
+    Project(Option<String>),
+    ClearProject,
 }
 enum Work {
     Sent(String, u64),
@@ -90,6 +94,7 @@ enum Work {
     Error(String, String),
     Summary(String, meeting::context::Memory),
     SummaryError(String, String),
+    Project(String, String, Result<crate::attachments::project::Project, String>),
 }
 pub struct Runtime {
     tx: mpsc::Sender<Control>,
@@ -159,6 +164,7 @@ async fn actor(
     let mut tick = tokio::time::interval(Duration::from_millis(40));
     let mut transcript_at = 0;
     let mut summary_retry_at = 0;
+    let mut project_request: Option<String> = None;
     loop {
         tokio::select! {
             control=controls.recv()=>{let Some(control)=control else{break};match control {
@@ -174,7 +180,7 @@ async fn actor(
                         },Err(e)=>{let _=reply.send(Err(e));}
                     }
                 },
-                Control::Stop(reply)=>{automatic=false;
+                Control::Stop(reply)=>{automatic=false;project_request=None;
                     cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
                     let result=if let Some(mut s)=session.take(){if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;}db.stop(&s.id,crate::openai::auth::now())}else{Ok(())};
                     let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; while work.try_recv().is_ok(){}*levels.lock().unwrap()=(0.,0.);engine.clear_meeting();window::set_manual(&app,false);window::hide(&app);publish(&app,&mut engine,&view);emit(&app,"meeting.stopped",());let _=reply.send(result);
@@ -189,6 +195,14 @@ async fn actor(
                 Control::Manual(question)=>{automatic=false;if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),question,now,now,prompts::ANSWER));publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{automatic=false;cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
                 Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),q.text,now,now,prompts::EXPAND));publish(&app,&mut engine,&view);}}},
+                Control::Project(path)=>{if let Some(s)=session.as_ref(){
+                    let path=path.unwrap_or_else(||s.settings.project_path.clone());
+                    if path.trim().is_empty(){engine.view.error=Some("Choose a project folder in the main window first".into());publish(&app,&mut engine,&view);continue;}
+                    let id=uuid::Uuid::new_v4().to_string();project_request=Some(id.clone());engine.view.attachment_busy=true;engine.view.error=None;publish(&app,&mut engine,&view);
+                    let session_id=s.id.clone();let tx=work_tx.clone();
+                    tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||crate::attachments::project::collect(std::path::Path::new(&path))).await.map_err(|_|"Project collection failed".to_string()).and_then(|r|r);let _=tx.send(Work::Project(session_id,id,result)).await;});
+                }},
+                Control::ClearProject=>{project_request=None;engine.project=None;engine.view.project=None;engine.view.attachment_busy=false;cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
             }},
             event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;if engine.view.paused{continue;}
                 match event {
@@ -220,6 +234,11 @@ async fn actor(
                 Work::Error(id,error)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;engine.view.status="error".into();engine.view.error=Some(error);publish(&app,&mut engine,&view);}},
                 Work::Summary(id,memory)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.complete_summary(memory);summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;}},
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
+                Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
+                    project_request=None;engine.view.attachment_busy=false;
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);automatic=false;cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),"Give a concise overview of this project and explain its main architecture.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
+                    publish(&app,&mut engine,&view);
+                }},
             }},
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
                 if !engine.view.paused&&engine.view.status!="error" {
@@ -252,7 +271,8 @@ fn generate(
 ) -> CancellationToken {
     let id = uuid::Uuid::new_v4().to_string();
     let now = s.clock.elapsed().as_millis() as u64;
-    let input = engine.context.prompt(&question);
+    let mut input = engine.context.prompt(&question);
+    if let Some(project) = &engine.project { input.push_str(&project.prompt()); }
     engine.view.question = Some(CurrentQuestion {
         id: id.clone(),
         text: question,
@@ -523,12 +543,27 @@ async fn action(
         "manual" => send(&rt, Control::ManualOpen).await,
         "dismiss" => send(&rt, Control::Dismiss).await,
         "expand" => send(&rt, Control::Expand).await,
+        "project" => send(&rt, Control::Project(None)).await,
+        "clear_project" => send(&rt, Control::ClearProject).await,
         _ => Err("Unknown action".into()),
     }
 }
 #[tauri::command]
 fn resize_overlay(app: tauri::AppHandle, height: f64) -> Result<(), String> {
     window::resize(&app, height)
+}
+#[tauri::command]
+async fn choose_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
+    #[cfg(windows)]
+    let owner = app.get_webview_window("main").ok_or("Main window missing")?.hwnd().map_err(|e| e.to_string())?.0 as usize;
+    #[cfg(not(windows))]
+    let owner = { let _ = app; 0 };
+    tokio::task::spawn_blocking(move || crate::attachments::folder::choose(owner)).await.map_err(|_| "Folder picker failed".to_string())?
+}
+#[tauri::command]
+async fn send_project(rt: State<'_, Runtime>, path: String) -> Result<(), String> {
+    if !rt.view.lock().unwrap().active { return Err("Start a meeting first".into()); }
+    send(&rt, Control::Project(Some(path))).await
 }
 #[tauri::command]
 fn manage_usage() -> Result<(), String> {
@@ -589,6 +624,7 @@ pub fn run() {
                 Code::KeyX => Control::Dismiss,
                 Code::KeyM => Control::Pause,
                 Code::ArrowUp => Control::Expand,
+                Code::KeyP => Control::Project(None),
                 _ => return,
             };
             let _ = rt.tx.try_send(c);
@@ -611,6 +647,8 @@ pub fn run() {
             start_meeting,
             stop_meeting,
             ask,
+            choose_project,
+            send_project,
             action,
             resize_overlay,
             manage_usage,
@@ -645,7 +683,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             app.manage(Runtime {

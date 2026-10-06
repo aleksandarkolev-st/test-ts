@@ -33,6 +33,8 @@ pub struct Snapshot {
     pub latency: Option<Latency>,
     pub remote_level: f32,
     pub self_level: f32,
+    pub project: Option<crate::attachments::project::ProjectInfo>,
+    pub attachment_busy: bool,
 }
 impl Default for Snapshot {
     fn default() -> Self {
@@ -50,6 +52,8 @@ impl Default for Snapshot {
             latency: None,
             remote_level: 0.,
             self_level: 0.,
+            project: None,
+            attachment_busy: false,
         }
     }
 }
@@ -58,9 +62,11 @@ pub struct Engine {
     pub view: Snapshot,
     pub context: MeetingContext,
     pub detector: QuestionDetector,
+    pub project: Option<crate::attachments::project::Project>,
 }
 impl Engine {
     pub fn clear_meeting(&mut self) {
+        self.project = None;
         let protection = self.view.protection;
         let revision = self.view.revision + 1;
         *self = Self::default();

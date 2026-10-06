@@ -3,6 +3,7 @@ import { command, connectState, errorText, native } from './bridge';
 import { useMeeting } from './state/store';
 import type { Account, Bootstrap, Model, Settings } from './state/model';
 import Status from './overlay/Status';
+import ContextAttachments from './ContextAttachments';
 const empty: Settings = { microphone: '', output: '', modelPath: '', model: '' };
 export default function App() {
   const snapshot = useMeeting(s => s.snapshot);
@@ -49,6 +50,13 @@ export default function App() {
         <label>Reasoning effort<select aria-label="Reasoning effort" value={settings.reasoningEffort || ''} onChange={e => setSettings(s => ({ ...s, reasoningEffort: (e.target.value || null) as Settings['reasoningEffort'] }))}><option value="">Model default</option>{['none', 'low', 'medium', 'high', 'xhigh'].map(e => <option key={e} value={e}>{e}</option>)}</select></label>
         <p className="field-note">Higher reasoning effort can increase the time to the first answer. Available levels depend on the selected model.</p>
       </fieldset>
+    </section>
+    <section className="device-section"><div className="section-label">PROJECT CONTEXT</div>
+      <label>Project folder<input aria-label="Project folder" value={settings.projectPath || ''} placeholder="Choose the project you want to discuss" disabled={!!busy || snapshot.active} onChange={e => setSettings(s => ({ ...s, projectPath: e.target.value }))} /></label>
+      <button disabled={!!busy || snapshot.active || !native()} onClick={() => run('Choosing project…', async () => { const path = await command<string | null>('choose_project'); if (path) setSettings(s => ({ ...s, projectPath: path })); })}>Choose project folder</button>
+      <p className="field-note">Ctrl Shift P sends all readable project text to OpenAI and attaches it for follow-up questions. Ignore rules, generated folders and credential files are excluded.</p>
+      {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy || !settings.projectPath} onClick={() => run('Sending project…', () => command('action', { action: 'project' }))}>Send project · Ctrl Shift P</button>}
+      <ContextAttachments snapshot={snapshot} onError={setError} />
     </section>
     {(error || snapshot.error) && <div role="alert" className="error">{error || snapshot.error}</div>}
     <section className="meeting-control">

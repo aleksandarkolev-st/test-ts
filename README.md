@@ -4,7 +4,7 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 ## Run
 
-The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.0_x64_en-US.msi`. It bundles the Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
+The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.1_x64_en-US.msi`. It bundles the Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
 
 1. Open Meeting Copilot and choose **Continue with ChatGPT**. Complete the browser sign-in and grant plan usage. Available answer models are loaded from the account's catalog.
 2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose the Vulkan GPU index (1 is the RX 9070 XT on this computer). The default chunk is 160 ms.

@@ -36,6 +36,9 @@ try{
   for(let i=0;i<100;i++){page=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));if(page)break;await new Promise(r=>setTimeout(r,100));}
   assert(page,'Packaged main window did not load');
   const invoke=(name,args={})=>page.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
+  const applicationVersion=await invoke('plugin:app|version');
+  const expectedVersion=JSON.parse(await readFile(path.join(root,'package.json'),'utf8')).version;
+  assert.equal(applicationVersion,expectedVersion,'Extracted app version differs from this build');
   let b=await invoke('bootstrap');assert.equal(b.debug,false);assert(b.devices.length>1);assert(b.snapshot.protection);
   if(process.argv.includes('--use-bundled-speech')){
     assert.equal(b.snapshot.active,false);
@@ -54,7 +57,7 @@ try{
   for(const [name,args] of [['open_debug',{}],['native_diagnostics',{}],['acceptance_event',{kind:'transcript',source:'remote',text:'Fixture question?'}],['acceptance_protection',{enabled:false}]]){
     await assert.rejects(invoke(name,args));
   }
-  const result={pass:true,packagedFiles:required.length,verifiedSidecarResources:resourceFiles,runtimeHashesMatchBuild:true,modelChecksumVerified:true,nemotronDefault:true,frozenCameraPreview:true,productionDebugDisabled:true,acceptanceHooksDisabled:true,captureProtectionReadback:true,audioDeviceCount:b.devices.length,completedAt:new Date().toISOString()};await writeFile(path.join(root,'artifacts/package/results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+  const result={pass:true,applicationVersion,packageDirectory:dir,packagedFiles:required.length,verifiedSidecarResources:resourceFiles,runtimeHashesMatchBuild:true,modelChecksumVerified:true,nemotronDefault:true,frozenCameraPreview:true,productionDebugDisabled:true,acceptanceHooksDisabled:true,captureProtectionReadback:true,audioDeviceCount:b.devices.length,completedAt:new Date().toISOString()};await writeFile(path.join(root,'artifacts/package/results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
   succeeded=true;
   if(keep){console.log('Packaged app remains open for the live ChatGPT sign-in check.');app.unref();}
 }finally{if(browser){const main=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));try{await main?.evaluate(()=>window.__TAURI_INTERNALS__.invoke('gaze_stop'));}catch{}}await browser?.close();if(!keep||!succeeded)app.kill();}

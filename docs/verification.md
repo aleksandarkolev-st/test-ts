@@ -2,7 +2,7 @@
 
 ## Latest Nemotron and camera upgrade (2026-10-07 local time)
 
-The 0.2.0 MSI now includes Nemotron English Q8/Vulkan with independent cached SELF/REMOTE streams, all four requested chunk choices, screenshot/project shortcuts and the frozen FLX/DirectML camera pipeline. Actual native tests pass, including three consecutive rendered-audio questions and both real global shortcuts. Production resource/model hashes, frozen camera preview and disabled debug hooks pass. The signed-in model recalls all nested synthetic project facts and understands the controlled screenshot code and diagram.
+The 0.2.1 MSI now includes Nemotron English Q8/Vulkan with independent cached SELF/REMOTE streams, all four requested chunk choices, screenshot/project shortcuts and the frozen FLX/DirectML camera pipeline. Actual native tests pass, including all 40 synthetic audio clips, ten minutes/127 negative clips with zero false answers, forced speech/camera parent-exit cleanup, and both real global shortcuts. Production resource/model hashes, frozen camera preview and disabled debug hooks pass. The signed-in model recalls all nested synthetic project facts and understands the controlled screenshot code and diagram.
 
 The updated GPT-5.6 Luna/xhigh seeded-context run completed all three samples: **2,123 / 2,326 / 2,960.5 ms** speech-end-to-visible-answer, median **2,326 ms**. The two-second target remains unmet. Camera tests establish real DirectML eye inference, tracking/blend integration, blink passthrough and OBS transport; Camo currently has no visible face, so real user calibration/naturalness remain unverified. See [upgrade status](upgrade-plan.md), [live checks](live-upgrade-verification.md), [camera checks](camera-verification.md) and [package checks](package-verification.md).
 
@@ -129,6 +129,6 @@ Local evidence is ignored by Git:
 - `artifacts/live-service/account-restart.json`: saved real account after process restart.
 - `artifacts/live-service/catalog-latest.json`: fresh read-only exact-model availability check; reproduce with `node scripts/live-model-catalog.mjs`.
 
-See README for build/test commands. Native harness options: `COPILOT_NEGATIVE_MINUTES=10`, `COPILOT_SOAK_MINUTES=60`, `COPILOT_CAPTURE_TEST=1`, a free `COPILOT_CDP_PORT`, and `COPILOT_NATIVE_ARTIFACT_NAME` to retain separate run evidence.
+See README for build/test commands. Native harness options: `COPILOT_ASR_CORPUS=1`, `COPILOT_CRASH_TEST=1`, `COPILOT_NEGATIVE_MINUTES=10`, `COPILOT_SOAK_MINUTES=60`, `COPILOT_CAPTURE_TEST=1`, a free `COPILOT_CDP_PORT`, and `COPILOT_NATIVE_ARTIFACT_NAME` to retain separate run evidence.
 
-Artifacts contain only numeric timing/counts, generic errors and pass/fail status. Do not persist meeting text, summaries, answers, identity or credentials. Raw audio stays local; text context reaches OpenAI for answers and compression. `store:false` does not override service data policies.
+Reports contain numeric timing/counts and verdicts; opt-in diagnostics may also retain public synthetic fixture transcripts and controlled answers. Do not persist user meeting text, summaries, answers, identity or credentials. Raw audio stays local; text context reaches OpenAI for answers and compression. `store:false` does not override service data policies.

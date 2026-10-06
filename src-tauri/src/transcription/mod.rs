@@ -1,3 +1,4 @@
+pub mod nemotron;
 pub mod vad;
 pub mod whisper;
 use crate::{

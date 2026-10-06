@@ -1,0 +1,11 @@
+# Local FLX conversion
+
+Run `./scripts/setup-gaze.ps1` from PowerShell with `uv` and Python 3.11 available. It pins the released FLX checkpoint archive and MediaPipe face-landmarker asset by SHA-256, creates separate workspace-only converter and camera environments, and exports each original TensorFlow checkpoint graph to ONNX. TensorFlow is only a build dependency; the camera environment uses ONNX Runtime DirectML. The original BSD notice is in `third-party/FLX-LICENSE.txt` and must accompany distributed models.
+
+`scripts/export-gaze.py` imports the released `.meta` graph and restores the trained checkpoint, freezes training phase to false, and retains the original sampling and light-correction operations. It does not reconstruct the trained network with modern Keras layers. Six probes per eye cover 0/5/10/15 degrees vertically and ±3 degrees horizontally. The CPU and DirectML results must remain within 0.0005 and 0.002 of the original TensorFlow output, respectively (at most 0.13 and 0.51 RGB8 levels). Profiles must show actual DirectML kernel execution, rather than only a registered provider.
+
+The exporter enumerates DXGI adapters and selects the hardware adapter with the most dedicated video memory unless `-Device N` is supplied. On this computer, both DXGI and Vulkan index 0 identify integrated AMD graphics; index 1 identifies the RX 9070 XT. The pinned runtime's own GGML device enumeration confirmed its Vulkan mapping. Do not assume the first adapter is the discrete GPU.
+
+Measured on the RX 9070 XT: per-eye median DirectML inference was about 0.45 ms (left) and 0.35 ms (right), with p95 about 0.54/0.41 ms. Maximum observed error against the trained graph was below 0.00019. These are warmed, fixed-shape synthetic inference probes, not camera frame latency or evidence of natural correction. Camera tracking, crop/mask behavior, blink preservation, calibration and virtual-camera output still require their own checks.
+
+Sources: [released FLX models](https://github.com/WangWilly/gaze-correction-cam/releases/tag/v0.1.1), [DirectML constraints](https://onnxruntime.ai/docs/execution-providers/DirectML-ExecutionProvider.html), [MediaPipe Face Landmarker](https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/python).

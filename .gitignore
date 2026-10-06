@@ -4,9 +4,12 @@ src-tauri/target/
 models/*.bin
 models/*.gguf
 models/*.download
+models/gaze/*.onnx
+models/gaze/*.task
 native/*.dll
 artifacts/
 .local/
+__pycache__/
 *.log
 test-results/
 playwright-report/

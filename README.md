@@ -4,11 +4,12 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 ## Run
 
-The existing x64 installer at `src-tauri/target/release/bundle/msi/Meeting Copilot_0.1.0_x64_en-US.msi` predates the current upgrade. The source build below includes Nemotron and the context shortcuts; the updated camera pipeline and packaged distribution remain in progress.
+The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.0_x64_en-US.msi`. It bundles the Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
 
 1. Open Meeting Copilot and choose **Continue with ChatGPT**. Complete the browser sign-in and grant plan usage. Available answer models are loaded from the account's catalog.
 2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose the Vulkan GPU index (1 is the RX 9070 XT on this computer). The default chunk is 160 ms.
 3. Click **Start meeting**. Questions from the playback stream trigger answers automatically. **Stop meeting** releases capture and clears meeting content held in memory.
+4. For eye contact, select your input camera under **Eye contact**, start preview, calibrate looking at the camera, then calibrate looking at notes below it. Select **OBS Virtual Camera** in your call. Start around 10–12°; the maximum is 15°. **Stop camera** closes video and clears calibration. See [camera verification and current input limitations](docs/camera-verification.md).
 
 Headphones help avoid playback voices entering the microphone. Loopback captures all audio on the selected output, so other apps playing speech are also treated as REMOTE. This MVP does not identify individual speakers.
 
@@ -26,7 +27,7 @@ Drag the overlay by its status header. Automatic answers do not request focus; m
 
 The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send `reasoning.effort` explicitly. For example, [GPT-5.6 Luna supports xhigh](https://developers.openai.com/api/docs/models/gpt-5.6-luna). Account model availability still comes from the live catalog; higher effort can increase first-answer latency.
 
-The final signed-in production check measured the approved GPT-5.6 Luna/xhigh at **5.79 seconds median from speech ending to the first visible answer** across three real-audio samples, using the corrected timing bounds. All three answers recalled a synthetic fact captured before the question. Median request-to-first-token time was **4.90 seconds**; local finalization was **852 ms**. The plan's two-second target remains unmet. GPT-6 Luna was unavailable in the account catalog. See the [verification ledger](docs/verification.md) for measurements, comparisons and checks that remain unverified.
+The historical signed-in production check used Whisper and measured the approved GPT-5.6 Luna/xhigh at **5.79 seconds median from speech ending to the first visible answer** across three real-audio samples, using the corrected timing bounds. All three answers recalled a synthetic fact captured before the question. Median request-to-first-token time was **4.90 seconds**; local finalization was **852 ms**. The plan's two-second target remains unmet. GPT-6 Luna was unavailable in the account catalog. See the [verification ledger](docs/verification.md) for measurements, comparisons and checks that remain unverified.
 
 ### Reducing first-answer delay
 
@@ -58,12 +59,15 @@ Prerequisites: Windows x64, Node.js 22 or newer, Rust, Visual Studio C++ Build T
 
 ```powershell
 .\scripts\setup.ps1
+.\scripts\setup-nemotron.ps1
+.\scripts\setup-gaze.ps1
 npm run desktop
 ```
 
 `setup.ps1` installs JavaScript dependencies, fetches Rust dependencies, prepares libclang for Windows FFI bindings, and downloads the tiny English Whisper model with a SHA-256 check. Model weights and build outputs are ignored by Git.
 
 ```powershell
+.\scripts\build-gaze.ps1
 npm run package
 ```
 
@@ -84,7 +88,7 @@ $env:COPILOT_REAL_AUDIO='1'
 node scripts/native-e2e.mjs
 ```
 
-The credential test creates and removes synthetic credentials under a random test key; it does not touch saved accounts. Native acceptance uses real WASAPI, VAD, Whisper, Win32 windows, and a local HTTP Responses fixture. Test authentication and event injection require both the `acceptance` feature and a debug build; release builds reject them.
+The credential test creates and removes synthetic credentials under a random test key; it does not touch saved accounts. Native acceptance uses real WASAPI, VAD, the selected local speech backend, Win32 windows, and a local HTTP Responses fixture. Test authentication and event injection require both the `acceptance` feature and a debug build; release builds reject them.
 
 For the wall-clock stability check, set `COPILOT_SOAK_MINUTES=60` and a free `COPILOT_CDP_PORT` before running `scripts/native-e2e.mjs`. The harness uses an isolated executable copy and reports numeric metrics under `artifacts/soak`. Capture tests use an isolated portable OBS installation, a synthetic screen background, and visible positive controls.
 

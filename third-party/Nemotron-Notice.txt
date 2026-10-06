@@ -1,0 +1,12 @@
+Nemotron Speech Streaming EN 0.6B Q8 weights
+Licensed by NVIDIA Corporation under the NVIDIA Open Model License
+
+Source: https://huggingface.co/nvidia/nemotron-speech-streaming-en-0.6b
+Revision: ebe59e5a817142986528bbbee5dba8db7b38ed50
+SHA-256: d9a01898d2a611c8764e23a1c2f45e70bbd5a425dc4de93692ac951dd603812d
+Model license: NVIDIA-OPEN-MODEL-LICENSE.pdf (October 24, 2025)
+License PDF SHA-256: 4d2fb590aa9b30c47f2058bff17291df7fa2aa0c1bd775a20703da9bb267cfab
+
+Native inference uses NVIDIA NeMo-Speech.cpp v0.2.0, distributed under
+its accompanying Apache-2.0 license and bundled third-party notices.
+Source: https://github.com/NVIDIA/NeMo-Speech.cpp/tree/v0.2.0

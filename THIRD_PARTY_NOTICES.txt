@@ -1,4 +1,23 @@
-Meeting Copilot 0.1.0
+Meeting Copilot 0.2.0
+
+Nemotron Speech Streaming EN 0.6B Q8 weights:
+Licensed by NVIDIA Corporation under the NVIDIA Open Model License
+The model attribution, pinned revision and complete NVIDIA agreement are in
+licenses/models/Nemotron-Notice.txt and NVIDIA-OPEN-MODEL-LICENSE.pdf.
+The official NeMo-Speech.cpp v0.2.0 native runtime retains its complete
+license and third-party notices under licenses/nemotron/.
+
+FLX eye-correction checkpoints are converted from the original trained
+TensorFlow graphs. Their BSD notice is licenses/models/FLX-LICENSE.txt.
+Source: https://github.com/chihfanhsu/gaze_correction
+Released checkpoints: https://github.com/WangWilly/gaze-correction-cam
+
+The frozen camera worker includes Python, NumPy, ONNX Runtime DirectML,
+MediaPipe, OpenCV, pyvirtualcam and DirectShow camera enumeration. Original
+wheel license/notice files and exact dependency versions are retained under
+gaze/licenses/. MediaPipe's Face Landmarker float16/1 task is provided by
+Google: https://developers.google.com/mediapipe/solutions/vision/face_landmarker
+The installed OBS Virtual Camera driver is an external prerequisite.
 
 Native speech runtime: whisper.cpp and GGML, bundled through
 whisper-rs-sys 0.14.1. The source, original license, and local changes are in

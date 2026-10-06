@@ -62,6 +62,7 @@ pub struct QuestionDetector {
     pub continued: bool,
     pub last_question: String,
     awaiting_final: bool,
+    final_through: Option<u64>,
 }
 impl QuestionDetector {
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) {
@@ -76,6 +77,7 @@ impl QuestionDetector {
                 }
                 self.remote_speaking = true;
                 self.stopped_at = None;
+                self.final_through = None;
             }
             SpeakerSource::Self_ => self.self_speaking = true,
         }
@@ -85,7 +87,10 @@ impl QuestionDetector {
             SpeakerSource::Remote => {
                 self.remote_speaking = false;
                 self.stopped_at = Some(now);
-                self.awaiting_final = true;
+                // Streaming recognizers may finalize before our independent
+                // VAD delivers Ended. A final covering this audio endpoint
+                // already satisfies the finalization fence.
+                self.awaiting_final = !self.final_through.is_some_and(|t| t >= now);
             }
             SpeakerSource::Self_ => self.self_speaking = false,
         }
@@ -94,6 +99,7 @@ impl QuestionDetector {
         if segment.source != SpeakerSource::Remote || !segment.final_ {
             return false;
         }
+        self.final_through = Some(self.final_through.unwrap_or(0).max(segment.ended_at));
         if self.stopped_at.is_some_and(|t| segment.ended_at >= t) {
             self.awaiting_final = false;
         }
@@ -191,7 +197,9 @@ mod tests {
     fn empty_final_after_chunk_boundary_releases_end_confirmation() {
         let mut q = QuestionDetector::default();
         q.speech_started(SpeakerSource::Remote, 0);
-        q.transcript(&s("What is our launch target?"));
+        let mut earlier_chunk = s("What is our launch target?");
+        earlier_chunk.ended_at = 99;
+        q.transcript(&earlier_chunk);
         assert!(q.confirm(600).is_none());
         q.speech_ended(SpeakerSource::Remote, 100);
         assert!(q.confirm(600).is_none());
@@ -202,5 +210,22 @@ mod tests {
         empty.speech_ended(SpeakerSource::Remote, 100);
         empty.transcript(&s(""));
         assert!(empty.confirm(600).is_none());
+    }
+    #[test]
+    fn streaming_final_before_vad_end_confirms_without_another_final() {
+        let mut q = QuestionDetector::default();
+        q.speech_started(SpeakerSource::Remote, 0);
+        q.transcript(&s("What is our launch target"));
+        q.speech_ended(SpeakerSource::Remote, 100);
+        assert!(q.confirm(599).is_none());
+        assert_eq!(q.confirm(600).unwrap().0, "What is our launch target");
+        // The previous final cannot satisfy a subsequent utterance's fence.
+        q.speech_started(SpeakerSource::Remote, 2000);
+        q.speech_ended(SpeakerSource::Remote, 2200);
+        assert!(q.confirm(2700).is_none());
+        let mut next = s("How do we ship this");
+        next.ended_at = 2200;
+        q.transcript(&next);
+        assert_eq!(q.confirm(2700).unwrap().0, "How do we ship this");
     }
 }

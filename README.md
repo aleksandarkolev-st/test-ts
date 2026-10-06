@@ -52,6 +52,8 @@ ChatGPT plan authorization follows OpenAI's current [open-source client flow](ht
 
 ## Build from source
 
+The Nemotron upgrade is in progress. Prepare the pinned official English Q8 model and Windows Vulkan runtime with `./scripts/setup-nemotron.ps1`; assets stay inside this workspace. `-RuntimeOnly` skips the approximately 700 MB weights. `node scripts/nemotron-smoke.mjs` checks two local synthetic streams against the official runtime. This preparation does not switch the app's current Whisper pipeline. See [remaining upgrade work](docs/upgrade-plan.md).
+
 Prerequisites: Windows x64, Node.js 22 or newer, Rust, Visual Studio C++ Build Tools, CMake, Python, and Edge WebView2. WiX is fetched by the Tauri bundler when needed.
 
 ```powershell

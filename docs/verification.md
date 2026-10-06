@@ -129,6 +129,6 @@ Local evidence is ignored by Git:
 - `artifacts/live-service/account-restart.json`: saved real account after process restart.
 - `artifacts/live-service/catalog-latest.json`: fresh read-only exact-model availability check; reproduce with `node scripts/live-model-catalog.mjs`.
 
-See README for build/test commands. Native harness options: `COPILOT_ASR_CORPUS=1`, `COPILOT_CRASH_TEST=1`, `COPILOT_NEGATIVE_MINUTES=10`, `COPILOT_SOAK_MINUTES=60`, `COPILOT_CAPTURE_TEST=1`, a free `COPILOT_CDP_PORT`, and `COPILOT_NATIVE_ARTIFACT_NAME` to retain separate run evidence.
+See README for build/test commands. Native harness options: `COPILOT_ASR_CORPUS=1`, `COPILOT_CRASH_TEST=1`, `COPILOT_NEGATIVE_MINUTES=10`, `COPILOT_SOAK_MINUTES=60` with `COPILOT_SOAK_REAL_AUDIO=1` for periodic varied Nemotron speech, `COPILOT_CAPTURE_TEST=1`, a free `COPILOT_CDP_PORT`, and `COPILOT_NATIVE_ARTIFACT_NAME` to retain separate run evidence.
 
 Reports contain numeric timing/counts and verdicts; opt-in diagnostics may also retain public synthetic fixture transcripts and controlled answers. Do not persist user meeting text, summaries, answers, identity or credentials. Raw audio stays local; text context reaches OpenAI for answers and compression. `store:false` does not override service data policies.

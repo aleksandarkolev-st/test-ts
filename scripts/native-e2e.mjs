@@ -103,6 +103,36 @@ try{
   if(process.env.COPILOT_CAPTURE_TEST==='1'){
     const {testCapture}=await import('./obs-capture.mjs');results.capture=await testCapture(invoke);passed('OBS display and window capture: protected output compared with visible positive controls');
   }
+  if(process.env.COPILOT_ASR_CORPUS==='1'){
+    const {readFile}=await import('node:fs/promises');
+    const labels=JSON.parse(await readFile(path.join(root,'tests/fixtures/utterances.json'),'utf8'));
+    const corpus={scope:'Synthetic English through actual WASAPI/Nemotron and question detector; not a human meeting accuracy or WER benchmark',clips:[],speechDetected:0,questionsDetected:0,negativeFalseTriggers:0};
+    results.corpus=corpus;
+    for(let index=0;index<labels.length;index++){
+      await invoke('action',{action:'dismiss'});await until(s=>!s.question&&!s.answer);
+      requests=[];const offset=await main.evaluate(()=>window.fixtureTranscripts.length);
+      const audio=path.join(root,`.local/audio/corpus/${String(index).padStart(3,'0')}.wav`);
+      await new Promise((resolve,reject)=>{const player=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audio],{windowsHide:true,stdio:'ignore'});player.on('error',reject);player.on('exit',c=>c===0?resolve():reject(Error('Corpus fixture playback failed')));});
+      // Allow both independently ordered VAD/final events to settle, rather
+      // than counting partial candidates as completed automatic requests.
+      await sleep(1600);
+      const state=await invoke('get_snapshot');assert(state.active&&!state.paused&&!state.error);
+      const finals=await main.evaluate(offset=>window.fixtureTranscripts.slice(offset).filter(s=>s.source==='remote'&&s.final&&s.text.trim()),offset);
+      const automatic=requests.some(r=>!r.instructions.includes('JSON'));
+      corpus.speechDetected+=Number(finals.length>0);
+      if(labels[index].question)corpus.questionsDetected+=Number(automatic);else corpus.negativeFalseTriggers+=Number(automatic);
+      // Only public synthetic fixture transcripts are retained by this opt-in
+      // diagnostic. This event hook does not exist in the release build.
+      corpus.clips.push({index,expectedQuestion:labels[index].question,automaticAnswer:automatic,finals:finals.map(s=>s.text)});
+      await writeFile(path.join(artifact,'corpus-progress.json'),JSON.stringify(corpus,null,2));
+      console.log(`CORPUS ${index+1}/${labels.length}: speech=${finals.length>0}, automatic=${automatic}, expected=${labels[index].question}`);
+    }
+    const questionCount=labels.filter(l=>l.question).length;
+    assert(corpus.speechDetected/labels.length>.95,'Synthetic speech recognition missed the corpus gate');
+    assert(corpus.questionsDetected/questionCount>.85,'Synthetic automatic question detection missed the corpus gate');
+    assert.equal(corpus.negativeFalseTriggers,0,'A negative synthetic clip triggered an automatic answer');
+    passed('Actual audio corpus passes speech/question gates with zero negative automatic requests');
+  }
   const negativeMinutes=Number(process.env.COPILOT_NEGATIVE_MINUTES||0);
   if(negativeMinutes){
     assert(negativeMinutes>=10,'False-trigger acceptance requires ten wall-clock minutes');

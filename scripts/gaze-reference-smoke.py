@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 import time
 import cv2
@@ -20,10 +21,52 @@ from gaze_core import Corrector, observation, eye_input, blend_eye, INPUTS
 from gaze_worker import sessions
 from dxgi_adapters import adapters
 
+
+def verify_outside_unchanged(source, output, bounds):
+    # Compare rectangular views, avoiding full-image boolean gather copies.
+    # The Y bands and merged X intervals cover every pixel outside both eyes.
+    height, width = source.shape[:2]
+    edges = sorted({0, height, *(b[1] for b in bounds), *(b[3] for b in bounds)})
+    for y0, y1 in zip(edges, edges[1:]):
+        cursor = 0
+        intervals = sorted((b[0], b[2]) for b in bounds if b[1] < y1 and b[3] > y0)
+        for x0, x1 in intervals:
+            if x0 > cursor:
+                assert np.array_equal(source[y0:y1, cursor:x0], output[y0:y1, cursor:x0])
+            cursor = max(cursor, x1)
+        if cursor < width:
+            assert np.array_equal(source[y0:y1, cursor:width], output[y0:y1, cursor:width])
+
+
+# Negative controls: a changed pixel must be accepted exactly inside the
+# rectangle union, including overlaps, and rejected at every other position.
+control = np.zeros((8, 8, 3), np.uint8)
+control_bounds = [(1, 1, 4, 4), (3, 2, 7, 5)]
+for control_y in range(8):
+    for control_x in range(8):
+        changed_control = control.copy()
+        changed_control[control_y, control_x] = 255
+        inside = any(x0 <= control_x < x1 and y0 <= control_y < y1
+            for x0, y0, x1, y1 in control_bounds)
+        try:
+            verify_outside_unchanged(control, changed_control, control_bounds)
+        except AssertionError:
+            assert not inside
+        else:
+            assert inside
+
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--image', type=Path, required=True)
 parser.add_argument('--device', type=int, default=1)
+parser.add_argument('--duration', type=float, default=0,
+    help='Replay for this many wall-clock seconds; zero keeps the 35-frame probe')
+parser.add_argument('--fps', type=float, default=30)
+parser.add_argument('--report-name', default='face-integration')
 args = parser.parse_args()
+if not np.isfinite(args.duration) or args.duration < 0 or not 1 <= args.fps <= 60:
+    parser.error('Use a finite nonnegative duration and FPS from 1 to 60')
+if not re.fullmatch(r'[A-Za-z0-9_-]+', args.report_name):
+    parser.error('Report name must be a simple filename without an extension')
 frame = cv2.imread(str(args.image))
 assert frame is not None
 source_frame = frame.copy()
@@ -44,11 +87,21 @@ timings = []
 landmark_timings = []
 correction_timings = []
 counts = []
+loop_started = time.perf_counter()
+next_frame = loop_started
+last_progress = loop_started
+i = 0
+timestamp = -1
 with mp.tasks.vision.FaceLandmarker.create_from_options(options) as detector:
-    for i in range(35):
+    while time.perf_counter() - loop_started < args.duration if args.duration else i < 35:
+        if args.duration:
+            time.sleep(max(0, next_frame - time.perf_counter()))
+            if time.perf_counter() - loop_started >= args.duration:
+                break
         started = time.perf_counter()
+        timestamp = max(timestamp + 1, int((started - loop_started) * 1000)) if args.duration else i * 33
         result = detector.detect_for_video(mp.Image(image_format=mp.ImageFormat.SRGB,
-            data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)), i * 33)
+            data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)), timestamp)
         assert len(result.face_landmarks) == 1
         current = observation(result.face_landmarks[0], frame.shape[1], frame.shape[0],
             result.facial_transformation_matrixes[0])
@@ -65,18 +118,32 @@ with mp.tasks.vision.FaceLandmarker.create_from_options(options) as detector:
         correction_timings.append((correction_done - landmarks_done) * 1000)
         timings.append((correction_done - started) * 1000)
         assert state['correcting'] and 11.99 <= state['vertical'] <= 12.01
-        outside = np.ones(frame.shape[:2], bool)
+        bounds_list = []
         for side, eye in current.eyes.items():
             bounds = eye_input(frame, eye, side)[2]
-            x0, y0, x1, y1 = bounds
-            outside[y0:y1, x0:x1] = False
-        assert np.array_equal(frame[outside], output[outside])
-        changed = int(np.count_nonzero(np.any(frame != output, axis=2)))
+            bounds_list.append(bounds)
+        verify_outside_unchanged(frame, output, bounds_list)
+        x0, y0 = min(b[0] for b in bounds_list), min(b[1] for b in bounds_list)
+        x1, y1 = max(b[2] for b in bounds_list), max(b[3] for b in bounds_list)
+        changed = int(np.count_nonzero(np.any(frame[y0:y1, x0:x1] != output[y0:y1, x0:x1], axis=2)))
         assert changed > 0
         blink, blink_state = corrector.apply(frame, current, now=(i + .5) / 30,
             blinks={'L': 1., 'R': 1.})
         assert np.array_equal(blink, frame) and not blink_state['correcting']
         counts.append(changed)
+        i += 1
+        now = time.perf_counter()
+        if args.duration:
+            # Skip missed nominal frames instead of building a replay queue.
+            next_frame = loop_started + (int((now - loop_started) * args.fps) + 1) / args.fps
+            if now - last_progress >= 60:
+                print(json.dumps(dict(event='progress', elapsedSeconds=now - loop_started,
+                    correctedFrames=i, warmedMedianMs=float(np.median(timings[5:])))), flush=True)
+                last_progress = now
+loop_elapsed = time.perf_counter() - loop_started
+assert len(counts) > 5, 'Probe must produce enough frames for warmed timings'
+if args.duration:
+    assert loop_elapsed >= args.duration
 # Use independent IMAGE detections on the full-resolution public portrait.
 # This checks the learned model's actual direction, rather than its status
 # field or the supplied angle alone. No portrait/processed pixels are saved.
@@ -114,6 +181,9 @@ report = dict(passed=True, scope='Public static face; artificial calibration; no
     source='https://storage.googleapis.com/mediapipe-assets/business-person.png',
     imageSha256=hashlib.sha256(args.image.read_bytes()).hexdigest(), device=device,
     detectedLandmarks=len(result.face_landmarks[0]), correctedFrames=len(counts),
+    requestedDurationSeconds=args.duration, replayElapsedSeconds=loop_elapsed,
+    targetFps=args.fps if args.duration else None,
+    replayFpsIncludingValidation=len(counts) / loop_elapsed,
     verticalDegrees=12, outsideEyeCropsUnchanged=True, immediateBlinkPassthrough=True,
     directionProbe=direction,
     medianChangedEyePixels=float(np.median(counts)),
@@ -123,5 +193,5 @@ report = dict(passed=True, scope='Public static face; artificial calibration; no
     warmedP95Ms=float(np.percentile(timings[5:], 95)))
 artifact = root / 'artifacts/gaze'
 artifact.mkdir(parents=True, exist_ok=True)
-(artifact / 'face-integration.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+(artifact / f'{args.report_name}.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
 print(json.dumps(report))

@@ -83,13 +83,23 @@ pub enum StreamEvent {
 pub fn request_body(model: &str, instructions: &str, input: &str) -> serde_json::Value {
     serde_json::json!({"model":model,"store":false,"stream":true,"instructions":instructions,"input":[{"role":"user","content":input}]})
 }
+pub fn request_body_with_image(model: &str, instructions: &str, input: &str, image: Option<&str>) -> serde_json::Value {
+    let mut body = request_body(model, instructions, input);
+    if let Some(image) = image {
+        body["input"][0]["content"] = serde_json::json!([
+            {"type":"input_text", "text":input},
+            {"type":"input_image", "image_url":image, "detail":"auto"}
+        ]);
+    }
+    body
+}
 impl Client {
     pub fn with_reasoning(mut self, effort: Option<&str>) -> Self {
         self.reasoning_effort = effort.map(String::from);
         self
     }
-    fn body(&self, model: &str, instructions: &str, input: &str) -> serde_json::Value {
-        let mut body = request_body(model, instructions, input);
+    fn body(&self, model: &str, instructions: &str, input: &str, image: Option<&str>) -> serde_json::Value {
+        let mut body = request_body_with_image(model, instructions, input, image);
         if let Some(effort) = &self.reasoning_effort {
             body["reasoning"] = serde_json::json!({"effort": effort});
         }
@@ -117,7 +127,18 @@ impl Client {
         instructions: &str,
         input: &str,
         cancel: CancellationToken,
-        mut event: F,
+        event: F,
+    ) -> Result<(), String>
+    where
+        F: FnMut(StreamEvent) -> Fut + Send,
+        Fut: std::future::Future<Output = Result<(), String>> + Send,
+    {
+        self.stream_with_image(token, model, instructions, input, None, cancel, event).await
+    }
+    #[allow(clippy::too_many_arguments)]
+    pub async fn stream_with_image<F, Fut>(
+        &self, token: &str, model: &str, instructions: &str, input: &str,
+        image: Option<&str>, cancel: CancellationToken, mut event: F,
     ) -> Result<(), String>
     where
         F: FnMut(StreamEvent) -> Fut + Send,
@@ -127,7 +148,7 @@ impl Client {
             .http
             .post(format!("{}/responses", self.base))
             .bearer_auth(token)
-            .json(&self.body(model, instructions, input))
+            .json(&self.body(model, instructions, input, image))
             .send();
         let response = tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=request=>r.map_err(|_|"Answer request connection failed".to_string())?};
         let response = tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=check_http(response)=>r?};
@@ -365,6 +386,18 @@ mod tests {
         assert_eq!(body["store"], false);
         assert_eq!(body["stream"], true);
         assert!(request_body("m", "i", "q").get("reasoning").is_none());
+    }
+    #[tokio::test]
+    async fn image_input_reaches_http_without_file_upload_or_response_storage() {
+        let (client, server) = server("data: {\"type\":\"response.completed\"}\n\n", 0).await;
+        let image = "data:image/png;base64,c3ludGhldGlj";
+        client.with_reasoning(Some("low")).stream_with_image("fixture-token", "account-model", "instructions", "screen question", Some(image), CancellationToken::new(), |_| std::future::ready(Ok(()))).await.unwrap();
+        let body = server.await.unwrap();
+        assert_eq!(body["input"][0]["content"][0]["text"], "screen question");
+        assert_eq!(body["input"][0]["content"][1]["type"], "input_image");
+        assert_eq!(body["input"][0]["content"][1]["image_url"], image);
+        assert_eq!(body["reasoning"]["effort"], "low");
+        assert_eq!(body["store"], false); assert_eq!(body["stream"], true);
     }
     #[tokio::test]
     async fn incomplete_or_failed_stream_never_reports_success() {

@@ -28,6 +28,7 @@ uuid = { version = "1", features = ["v4", "serde"] }
 rusqlite = { version = "0.37", features = ["bundled"] }
 base64 = "0.22"
 ignore = "0.4"
+png = "0.17"
 sha2 = "0.10"
 rand = "0.8"
 jsonwebtoken = "9"

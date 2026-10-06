@@ -20,6 +20,7 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 | Ctrl + Shift + M | Pause/resume capture |
 | Ctrl + Shift + Up | Request a longer answer |
 | Ctrl + Shift + P | Send the selected project to AI |
+| Ctrl + Shift + F8 | Capture the monitor under the pointer and send it to AI |
 
 Drag the overlay by its status header. Automatic answers do not request focus; manual input explicitly does. If another app owns a shortcut, startup reports the conflict and the corresponding on-screen control remains available.
 
@@ -34,6 +35,8 @@ Stop the meeting, keep your selected model, change **Reasoning effort** from **x
 The current xhigh benchmark spends most of its time waiting for the first model token. The app already streams text as it arrives and requests at most three short sentences. Local audio processing accounts for about 0.89 seconds before the request, so reducing that stage alone would not meet the target in the measured run. Earlier low/none trials used different context and timing bounds; they are historical comparisons, not predictions for a new run.
 
 ## Privacy and capture protection
+
+During a meeting, **Ctrl + Shift + F8** (or **Send screenshot**) captures the complete monitor under the mouse pointer as a lossless PNG and asks the AI to explain the visible task. The overlay hides during capture and returns without taking focus. The latest screenshot remains in RAM for follow-up answers until **Remove screenshot** or **Stop meeting**. Retaking replaces it. Screenshots are sent inline to OpenAI; there is no file upload or screenshot library. Image understanding requires a model that accepts image inputs; service errors are shown normally. [ChatGPT plan input support](https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations).
 
 Choose a **Project folder** before starting the meeting. During a meeting, **Ctrl + Shift + P** (or **Send project**) reads it again and sends its complete readable text to OpenAI for a streamed overview. The source remains in RAM for automatic and manual follow-up answers until **Remove project** or **Stop meeting**. No project content is saved to SQLite. The folder path is saved with settings.
 

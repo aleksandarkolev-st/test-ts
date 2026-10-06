@@ -16,7 +16,8 @@ const server=createServer(async(req,res)=>{
   let body='';for await(const chunk of req)body+=chunk;let parsed=JSON.parse(body);assert.equal(parsed.store,false);assert.equal(parsed.stream,true);assert.equal(parsed.model,'fixture-mini');assert.equal(Object.hasOwn(parsed,'temperature'),false);assert.equal(Object.hasOwn(parsed,'max_output_tokens'),false);assert.equal(parsed.input[0].role,'user');requests.push(parsed);
   res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache'});
   let completed=false;res.on('close',()=>{if(!completed)cancelled++;});
-  const slow=parsed.input[0].content.includes('first target');
+  const requestText=typeof parsed.input[0].content==='string'?parsed.input[0].content:parsed.input[0].content.find(c=>c.type==='input_text').text;
+  const slow=requestText.includes('first target');
   const deltas=parsed.instructions.includes('JSON')?[JSON.stringify({summary:'Synthetic fixture discussion',facts:[],decisions:[],dates:[],people:[],open_questions:[]})]:['The launch ','target is ','October 28.'];
   for(const delta of deltas){if(res.destroyed)return;res.write(`data: ${JSON.stringify({type:'response.output_text.delta',delta})}\r\n\r\n`);await sleep(slow?700:80);}
   if(!res.destroyed){completed=true;res.end(`data: ${JSON.stringify({type:'response.completed'})}\r\n\r\n`);}
@@ -40,7 +41,12 @@ try{
   const until=async(predicate,timeout=8000)=>{const start=Date.now();while(Date.now()-start<timeout){const s=await invoke('get_snapshot');if(predicate(s))return s;await sleep(30);}throw Error('Native state condition timed out');};
   const b=await invoke('bootstrap');assert(b.debug);assert(b.devices.some(d=>d.source==='remote'));assert(b.devices.some(d=>d.source==='self'));passed('WASAPI enumerates independent remote and microphone devices');
   const before=await invoke('native_diagnostics');assert(before.affinityRead&&before.affinity===17);assert(before.noActivate&&before.alwaysOnTop);passed('Native HWND affinity readback, topmost and no-activate styles');
-  const settings={...b.settings,microphone:b.devices.find(d=>d.source==='self'&&d.default)?.id||b.devices.find(d=>d.source==='self').id,output:b.devices.find(d=>d.source==='remote'&&d.default)?.id||b.devices.find(d=>d.source==='remote').id,model:'fixture-mini'};
+  const settings={...b.settings,microphone:b.devices.find(d=>d.source==='self'&&d.default)?.id||b.devices.find(d=>d.source==='self').id,output:b.devices.find(d=>d.source==='remote'&&d.default)?.id||b.devices.find(d=>d.source==='remote').id,model:'fixture-mini',projectPath:path.join(root,'.local/context-fixture')};
+  const contextShortcut=async letter=>{
+    assert(['p','{F8}'].includes(letter));const key=`Ctrl+Shift+${letter==='p'?'P':'F8'}`;
+    assert(!b.shortcutErrors.some(e=>e.startsWith(`${key} is unavailable;`)),`${key} must be registered by this isolated app before sending the chord`);
+    await new Promise((resolve,reject)=>{const keys=spawn('powershell.exe',['-NoProfile','-Command',`$copilotShortcutShell=New-Object -ComObject WScript.Shell; $copilotShortcutShell.SendKeys('^+${letter}')`],{windowsHide:true,stdio:'ignore'});keys.on('error',reject);keys.on('exit',code=>code===0?resolve():reject(Error(`Shortcut injection failed: ${code}`)));});
+  };
   await invoke('start_meeting',{settings});await until(s=>s.active&&s.status==='listening');const after=await invoke('native_diagnostics');assert(after.visible);assert.notEqual(after.foregroundHwnd,after.overlayHwnd);passed('Real WASAPI and Whisper start with visible non-focused overlay');
   if(process.env.COPILOT_REAL_AUDIO==='1'){
     const audioPath=path.join(root,'.local/audio/remote-question.wav');
@@ -62,11 +68,18 @@ try{
   await writeFile(path.join(projectPath,'.gitignore'),'ignored.txt\n');await writeFile(path.join(projectPath,'ignored.txt'),'ignored fixture');
   await writeFile(path.join(projectPath,'.env'),'SYNTHETIC_SECRET=exclude_me');await writeFile(path.join(projectPath,'src/main.ts'),'export const projectFact = "synthetic-cobalt-719";\n');
   await writeFile(path.join(projectPath,'README.md'),'A complete synthetic project.\n');await writeFile(path.join(projectPath,'image.bin'),Buffer.from([0,1,2]));
-  await invoke('send_project',{path:projectPath});await until(s=>s.project?.files===3&&!s.attachmentBusy&&s.latency?.completedAt!==null);
+  await contextShortcut('p');await until(s=>s.project?.files===3&&!s.attachmentBusy&&s.latency?.completedAt!==null);passed('Actual Windows Ctrl Shift P shortcut sends the selected project');
   const projectRequest=requests.at(-1).input[0].content;assert(projectRequest.includes('synthetic-cobalt-719'));assert(projectRequest.includes('A complete synthetic project.'));assert(!projectRequest.includes('exclude_me'));assert(!projectRequest.includes('ignored fixture'));
   assert.equal((await invoke('get_snapshot')).project.skipped[0].path,'image.bin');passed('Complete nested project contents reach Responses, ignored and credential files excluded, binary omission reported');
   await invoke('ask',{question:'What is the project fact?'});await until(s=>s.question?.text==='What is the project fact?'&&s.latency?.completedAt!==null);assert(requests.at(-1).input[0].content.includes('synthetic-cobalt-719'));passed('Follow-up answer retains project source in RAM');
   await invoke('action',{action:'clear_project'});await until(s=>s.project===null);await invoke('ask',{question:'What remains after removal?'});await until(s=>s.question?.text==='What remains after removal?'&&s.latency?.completedAt!==null);assert(!requests.at(-1).input[0].content.includes('synthetic-cobalt-719'));passed('Remove project excludes source from subsequent requests');
+  const focusBefore=await invoke('native_diagnostics');
+  await contextShortcut('{F8}');const screen=await until(s=>s.screenshot&&!s.attachmentBusy&&s.latency?.completedAt!==null);passed('Actual Windows Ctrl Shift F8 shortcut captures a screenshot');
+  const imageInput=requests.at(-1).input[0].content.find(c=>c.type==='input_image');assert(imageInput);assert.match(imageInput.image_url,/^data:image\/png;base64,/);
+  const png=Buffer.from(imageInput.image_url.split(',')[1],'base64');assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.readUInt32BE(16),screen.screenshot.width);assert.equal(png.readUInt32BE(20),screen.screenshot.height);
+  const focusAfter=await invoke('native_diagnostics');assert.equal(focusAfter.foregroundHwnd,focusBefore.foregroundHwnd);assert.equal(focusAfter.visible,focusBefore.visible);passed('Real native monitor capture sends a full-size lossless PNG through Responses without stealing focus');
+  await invoke('ask',{question:'Explain the same screenshot again'});await until(s=>s.question?.text==='Explain the same screenshot again'&&s.latency?.completedAt!==null);assert.equal(requests.at(-1).input[0].content.find(c=>c.type==='input_image').image_url,imageInput.image_url);passed('Follow-up answer retains the latest screenshot in RAM');
+  await invoke('action',{action:'clear_screenshot'});await until(s=>s.screenshot===null);await invoke('ask',{question:'What remains without the screenshot?'});await until(s=>s.question?.text==='What remains without the screenshot?'&&s.latency?.completedAt!==null);assert.equal(typeof requests.at(-1).input[0].content,'string');passed('Remove screenshot excludes image data from subsequent requests');
   await invoke('action',{action:'expand'});await until(s=>s.expanded&&s.latency&&s.latency.completedAt!==null);assert(requests.at(-1).instructions.includes('6 short sentences'));passed('More regenerates the same question with the expanded prompt');
   await overlay.getByText('October 28.',{exact:false}).waitFor();await overlay.screenshot({path:path.join(artifact,'overlay.png')});
   await invoke('action',{action:'pause'});await until(s=>s.paused);await invoke('action',{action:'pause'});await until(s=>!s.paused);passed('Pause releases capture and resume reopens both devices');
@@ -108,7 +121,10 @@ try{
     }
     results.soakElapsedMs=Date.now()-Date.parse(results.soakStartedAt);passed('60 minute wall-clock native meeting: capture, repeated streaming, focus and affinity checks');
   }
-  await invoke('stop_meeting');const stopped=await until(s=>!s.active);assert.equal(stopped.answer,'');assert.equal(stopped.question,null);assert.equal(stopped.latency,null);assert.equal((await invoke('native_diagnostics')).visible,false);passed('Stop releases capture, cancels requests, clears private state and hides overlay');
+  await invoke('send_project',{path:projectPath});await until(s=>s.project&&!s.attachmentBusy&&s.latency?.completedAt!==null);
+  await invoke('action',{action:'screenshot'});await until(s=>s.attachmentBusy);await invoke('stop_meeting');const requestCount=requests.length;
+  const stopped=await until(s=>!s.active);assert.equal(stopped.answer,'');assert.equal(stopped.question,null);assert.equal(stopped.latency,null);assert.equal(stopped.project,null);assert.equal(stopped.screenshot,null);assert.equal(stopped.attachmentBusy,false);
+  await sleep(700);assert.equal(requests.length,requestCount);assert.equal((await invoke('native_diagnostics')).visible,false);passed('Stop clears project and screenshot context, ignores late capture work, cancels requests and hides overlay');
   await main.screenshot({path:path.join(artifact,'setup.png')});
   results.pass=true;
 }catch(e){results.pass=false;results.failure=String(e);throw e;}finally{

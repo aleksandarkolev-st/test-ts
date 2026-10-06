@@ -1,4 +1,14 @@
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+static CAPTURE_SUSPENSIONS: AtomicUsize = AtomicUsize::new(0);
+pub struct CaptureSuspension;
+impl Drop for CaptureSuspension {
+    fn drop(&mut self) { CAPTURE_SUSPENSIONS.fetch_sub(1, Ordering::AcqRel); }
+}
+pub fn suspend_for_capture(app: &tauri::AppHandle) -> CaptureSuspension {
+    CAPTURE_SUSPENSIONS.fetch_add(1, Ordering::AcqRel);
+    hide(app);
+    CaptureSuspension
+}
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
     let window = WebviewWindowBuilder::new(
@@ -47,7 +57,7 @@ pub fn position(app: &tauri::AppHandle) -> Result<(), String> {
     Ok(())
 }
 pub fn show(app: &tauri::AppHandle, hidden: &AtomicBool) {
-    if hidden.load(Ordering::Acquire) {
+    if hidden.load(Ordering::Acquire) || CAPTURE_SUSPENSIONS.load(Ordering::Acquire) > 0 {
         return;
     }
     if let Some(w) = app.get_webview_window("overlay") {

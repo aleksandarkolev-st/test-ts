@@ -57,6 +57,8 @@ export default function App() {
       <p className="field-note">Ctrl Shift P sends all readable project text to OpenAI and attaches it for follow-up questions. Ignore rules, generated folders and credential files are excluded.</p>
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy || !settings.projectPath} onClick={() => run('Sending project…', () => command('action', { action: 'project' }))}>Send project · Ctrl Shift P</button>}
       <ContextAttachments snapshot={snapshot} onError={setError} />
+      {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>Send screenshot · Ctrl Shift F8</button>}
+      <p className="field-note">The screenshot shortcut sends the monitor under your pointer to OpenAI. It replaces the previous screenshot and remains attached until removed or the meeting stops.</p>
     </section>
     {(error || snapshot.error) && <div role="alert" className="error">{error || snapshot.error}</div>}
     <section className="meeting-control">

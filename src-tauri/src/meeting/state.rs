@@ -35,6 +35,7 @@ pub struct Snapshot {
     pub self_level: f32,
     pub project: Option<crate::attachments::project::ProjectInfo>,
     pub attachment_busy: bool,
+    pub screenshot: Option<crate::attachments::screenshot::ScreenshotInfo>,
 }
 impl Default for Snapshot {
     fn default() -> Self {
@@ -54,6 +55,7 @@ impl Default for Snapshot {
             self_level: 0.,
             project: None,
             attachment_busy: false,
+            screenshot: None,
         }
     }
 }
@@ -63,6 +65,7 @@ pub struct Engine {
     pub context: MeetingContext,
     pub detector: QuestionDetector,
     pub project: Option<crate::attachments::project::Project>,
+    pub screenshot_data: Option<String>,
 }
 impl Engine {
     pub fn clear_meeting(&mut self) {

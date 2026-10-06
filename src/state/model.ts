@@ -10,10 +10,11 @@ export interface Snapshot {
   remoteLevel: number; selfLevel: number;
   project: { name: string; files: number; bytes: number; skipped: { path: string; reason: string }[] } | null;
   attachmentBusy: boolean;
+  screenshot: { width: number; height: number } | null;
 }
 export interface Settings { microphone: string; output: string; modelPath: string; model: string; projectPath?: string; reasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh' | null }
 export interface AudioDevice { id: string; name: string; source: SpeakerSource; default: boolean }
 export interface Account { clientId: string; email: string | null; name: string | null; planEnabled: boolean }
 export interface Model { slug: string; display_name: string }
 export interface Bootstrap { settings: Settings; devices: AudioDevice[]; accounts: Account[]; selected: Account | null; models: Model[]; snapshot: Snapshot; debug: boolean; shortcutErrors: string[] }
-export const initialSnapshot: Snapshot = { revision: 0, active: false, paused: false, status: 'off', question: null, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null, remoteLevel: 0, selfLevel: 0, project: null, attachmentBusy: false };
+export const initialSnapshot: Snapshot = { revision: 0, active: false, paused: false, status: 'off', question: null, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null, remoteLevel: 0, selfLevel: 0, project: null, attachmentBusy: false, screenshot: null };

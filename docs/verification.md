@@ -1,5 +1,16 @@
 # Implementation and verification ledger
 
+## New context shortcuts (2026-10-06)
+
+Implemented and checked in the current source build:
+
+- **Ctrl+Shift+P**: rereads the selected project folder, sends complete readable source to Responses, and retains it in meeting RAM. The native harness verifies nested file contents in outgoing requests, ignore/credential exclusions, binary-file reporting, follow-up reuse, and removal.
+- **Ctrl+Shift+F8**: captures the monitor under the pointer, sends a full-resolution lossless PNG as `input_image`, and retains the latest screenshot for follow-ups. The native harness verifies PNG dimensions, focus/visibility preservation, image reuse, removal, and Stop during capture. Both new shortcuts were triggered through actual Windows keyboard events, not just command invocation. Ctrl+Shift+S was unavailable on this machine; F8 passed registration and dispatch.
+- Overlay display is suspended while capturing, including when automatic generation starts concurrently. Capture and project jobs are scoped to a session and request ID; late results cannot repopulate a stopped meeting.
+- Checks: frontend production build, 38 Rust tests (2 credential tests intentionally ignored), 2 state tests, 4 browser tests, and the extended native acceptance harness passed. Native answer requests use a local fixture; these checks do **not** prove live-account visual understanding. The existing installed production app/MSI has not yet been updated with these features.
+
+The current goal also includes Nemotron Speech Streaming EN 0.6B and the attached downward-gaze/AMD camera brief. These remain unfinished. The pinned official NeMo-Speech.cpp 0.2.0 Windows Vulkan runtime was downloaded with SHA-256 verification and its CLI/version checked. English Q8 weights are being prepared; speech pipeline integration, measured two-stream inference, gaze correction, camera output, and an updated installer still need completion.
+
 Updated 2026-10-06. The app implements the scope in all 31 sections of `text.txt`. The user authorized leaving unavailable service checks clearly marked. Real ChatGPT sign-in, account model discovery, streaming and account persistence across process restart passed. Live first-visible latency was measured; the two-second target was not met.
 
 Current approved app model: **GPT-5.6 Luna / xhigh**. The user accepted this model on 2026-10-06 after the GPT-6 Luna availability checks. The final rebuilt package's saved account and settings survived restart at **12:06 UTC**; a fresh authenticated model-catalog request also passed, with the meeting stopped. Exact GPT-6 Luna availability is no longer a blocker for the current selection. The latency acceptance gate and the verification gaps below remain open.

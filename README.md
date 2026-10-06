@@ -27,13 +27,13 @@ Drag the overlay by its status header. Automatic answers do not request focus; m
 
 The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send `reasoning.effort` explicitly. For example, [GPT-5.6 Luna supports xhigh](https://developers.openai.com/api/docs/models/gpt-5.6-luna). Account model availability still comes from the live catalog; higher effort can increase first-answer latency.
 
-The historical signed-in production check used Whisper and measured the approved GPT-5.6 Luna/xhigh at **5.79 seconds median from speech ending to the first visible answer** across three real-audio samples, using the corrected timing bounds. All three answers recalled a synthetic fact captured before the question. Median request-to-first-token time was **4.90 seconds**; local finalization was **852 ms**. The plan's two-second target remains unmet. GPT-6 Luna was unavailable in the account catalog. See the [verification ledger](docs/verification.md) for measurements, comparisons and checks that remain unverified.
+The upgraded Nemotron/160 ms production check measured GPT-5.6 Luna/xhigh at **2.326 seconds median from speech ending to the first visible answer** across three real-audio samples. All three answers recalled a synthetic fact captured before the question. Median request-to-first-token time was **1.712 seconds**; local finalization was **591 ms**. The two-second target remains unmet. The historical Whisper/xhigh run measured 5.79 seconds; three variable cloud samples do not isolate the cause of that difference. See [signed-in upgrade evidence](docs/live-upgrade-verification.md) and the [verification ledger](docs/verification.md).
 
 ### Reducing first-answer delay
 
 Stop the meeting, keep your selected model, change **Reasoning effort** from **xhigh** to **low**, then start the meeting again. Choose **none** to prioritize speed further. Lower effort can reduce reasoning quality; measure the result with the same audio and meeting context before treating it as an improvement. A setting change does not guarantee the two-second target.
 
-The current xhigh benchmark spends most of its time waiting for the first model token. The app already streams text as it arrives and requests at most three short sentences. Local audio processing accounts for about 0.89 seconds before the request, so reducing that stage alone would not meet the target in the measured run. Earlier low/none trials used different context and timing bounds; they are historical comparisons, not predictions for a new run.
+The latest xhigh benchmark spends most of its time waiting for the first model token. The app streams text as it arrives and requests at most three short sentences. Local finalization takes about 0.59 seconds in these samples. Earlier low/none trials used Whisper and different context/timing bounds; they are historical comparisons, not predictions for the new pipeline.
 
 ## Privacy and capture protection
 

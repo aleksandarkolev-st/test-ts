@@ -30,6 +30,7 @@ let meetingStarted = false;
 let stage = 'connect';
 let sampleRecords = [];
 let runMetadata = {};
+let originalSettings;
 try {
   const pages = browser.contexts()[0].pages();
   main = pages.find(page => page.url() !== 'about:blank' && !page.url().includes('view=overlay'));
@@ -179,6 +180,7 @@ try {
     const output = boot.settings.output
       || boot.devices.find(device => device.source === 'remote' && device.default)?.id
       || boot.devices.find(device => device.source === 'remote')?.id;
+    originalSettings = boot.settings;
     const settings = {
       ...boot.settings,
       microphone,
@@ -207,6 +209,9 @@ try {
     const samples = sampleRecords;
     runMetadata = {
       productionBuild: !boot.debug,
+      speechBackend: settings.speechBackend ?? 'whisper',
+      speechChunkMs: settings.speechChunkMs ?? null,
+      speechGpu: settings.nemotronDevice ?? null,
       contextMode: contextCheck ? 'seeded_synthetic_meeting_fact' : 'question_only',
       authenticated: true,
       accountCount: boot.accounts.length,
@@ -400,7 +405,10 @@ try {
   throw error;
 } finally {
   if (meetingStarted) {
-    try { await main?.evaluate(() => window.__TAURI_INTERNALS__.invoke('stop_meeting')); } catch {}
+    try {
+      await main?.evaluate(() => window.__TAURI_INTERNALS__.invoke('stop_meeting'));
+      if (originalSettings) await main?.evaluate(settings => window.__TAURI_INTERNALS__.invoke('save_settings', { settings }), originalSettings);
+    } catch { process.exitCode = 1; }
   }
   await browser.close();
 }

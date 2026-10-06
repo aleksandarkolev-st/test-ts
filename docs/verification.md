@@ -1,5 +1,13 @@
 # Implementation and verification ledger
 
+## Latest Nemotron and camera upgrade (2026-10-07 local time)
+
+The 0.2.0 MSI now includes Nemotron English Q8/Vulkan with independent cached SELF/REMOTE streams, all four requested chunk choices, screenshot/project shortcuts and the frozen FLX/DirectML camera pipeline. Actual native tests pass, including three consecutive rendered-audio questions and both real global shortcuts. Production resource/model hashes, frozen camera preview and disabled debug hooks pass. The signed-in model recalls all nested synthetic project facts and understands the controlled screenshot code and diagram.
+
+The updated GPT-5.6 Luna/xhigh seeded-context run completed all three samples: **2,123 / 2,326 / 2,960.5 ms** speech-end-to-visible-answer, median **2,326 ms**. The two-second target remains unmet. Camera tests establish real DirectML eye inference, tracking/blend integration, blink passthrough and OBS transport; Camo currently has no visible face, so real user calibration/naturalness remain unverified. See [upgrade status](upgrade-plan.md), [live checks](live-upgrade-verification.md), [camera checks](camera-verification.md) and [package checks](package-verification.md).
+
+The sections below retain historical Whisper-era evidence. Their installer, corpus, long-duration and latency figures do not certify the new Nemotron pipeline; the latest upgrade documents above supersede their current-status wording.
+
 ## New context shortcuts (2026-10-06)
 
 Implemented and checked in the current source build:
@@ -9,7 +17,7 @@ Implemented and checked in the current source build:
 - Overlay display is suspended while capturing, including when automatic generation starts concurrently. Capture and project jobs are scoped to a session and request ID; late results cannot repopulate a stopped meeting.
 - Checks: frontend production build, 38 Rust tests (2 credential tests intentionally ignored), 2 state tests, 4 browser tests, and the extended native acceptance harness passed. Native answer requests use a local fixture; these checks do **not** prove live-account visual understanding. The existing installed production app/MSI has not yet been updated with these features.
 
-The current goal also includes Nemotron Speech Streaming EN 0.6B and the attached downward-gaze/AMD camera brief. These remain unfinished. The pinned official NeMo-Speech.cpp 0.2.0 Windows Vulkan runtime was downloaded with SHA-256 verification and its CLI/version checked. English Q8 weights are being prepared; speech pipeline integration, measured two-stream inference, gaze correction, camera output, and an updated installer still need completion.
+At this historical checkpoint, the Nemotron and camera integrations and updated installer were still pending. Their implemented behavior and present verification limits are recorded in the latest upgrade documents above.
 
 Updated 2026-10-06. The app implements the scope in all 31 sections of `text.txt`. The user authorized leaving unavailable service checks clearly marked. Real ChatGPT sign-in, account model discovery, streaming and account persistence across process restart passed. Live first-visible latency was measured; the two-second target was not met.
 

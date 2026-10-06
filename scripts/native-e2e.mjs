@@ -58,12 +58,13 @@ try{
   };
   await invoke('start_meeting',{settings});await until(s=>s.active&&s.status==='listening');const after=await invoke('native_diagnostics');assert(after.visible);assert.notEqual(after.foregroundHwnd,after.overlayHwnd);passed(`Real WASAPI and ${settings.speechBackend} start with visible non-focused overlay`);
   if(process.env.COPILOT_REAL_AUDIO==='1'){
-    const audioPath=path.join(root,'.local/audio/remote-question.wav');
+    const audioCases=[{file:'remote-question.wav',word:'launch',category:'direct_wh'}, {file:'corpus/012.wav',word:'approve',category:'yes_no'}, {file:'corpus/015.wav',word:'outage',category:'quantity'}];
     results.realAudioSamples=[];
-    for(let sample=0;sample<3;sample++){
+    for(let sample=0;sample<audioCases.length;sample++){
+    const audioCase=audioCases[sample];const audioPath=path.join(root,'.local/audio',audioCase.file);
     await new Promise((resolve,reject)=>{const playback=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath],{windowsHide:true,stdio:'ignore'});playback.on('error',reject);playback.on('exit',code=>code===0?resolve():reject(Error(`Fixture playback failed: ${code}`)));});
-    try{await until(s=>s.question?.text.toLowerCase().includes('launch')&&s.answer.length>0,15000);}catch(e){results.realAudioFailureState=await invoke('get_snapshot');results.syntheticAudioTranscripts=await main.evaluate(()=>window.fixtureTranscripts);throw e;}const real=await until(s=>s.latency&&s.latency.completedAt!==null,15000);results.realAudioLatencyMs=real.latency.firstTokenAt-real.latency.speechStoppedAt;passed(`Real rendered speech → WASAPI loopback → local VAD/${settings.speechBackend} → detected question → HTTP stream → overlay`);
-    results.realAudioSamples.push({index:sample+1,speechEndToFirstTokenMs:real.latency.firstTokenAt-real.latency.speechStoppedAt});
+    try{await until(s=>s.question?.text.toLowerCase().includes(audioCase.word)&&s.answer.length>0,15000);}catch(e){results.realAudioFailureState=await invoke('get_snapshot');results.syntheticAudioTranscripts=await main.evaluate(()=>window.fixtureTranscripts);throw e;}const real=await until(s=>s.latency&&s.latency.completedAt!==null,15000);results.realAudioLatencyMs=real.latency.firstTokenAt-real.latency.speechStoppedAt;passed(`Real ${audioCase.category} speech → WASAPI loopback → local VAD/${settings.speechBackend} → detected question → HTTP stream → overlay`);
+    results.realAudioSamples.push({index:sample+1,category:audioCase.category,speechEndToFirstTokenMs:real.latency.firstTokenAt-real.latency.speechStoppedAt});
     await invoke('action',{action:'dismiss'});await until(s=>!s.question);requests=[];
     await sleep(1000);
     }

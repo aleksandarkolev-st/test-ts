@@ -1,4 +1,5 @@
 pub mod audio;
+pub mod attachments;
 pub mod meeting;
 pub mod openai;
 pub mod overlay;

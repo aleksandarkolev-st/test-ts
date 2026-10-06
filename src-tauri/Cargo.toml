@@ -27,6 +27,7 @@ futures-util = "0.3"
 uuid = { version = "1", features = ["v4", "serde"] }
 rusqlite = { version = "0.37", features = ["bundled"] }
 base64 = "0.22"
+ignore = "0.4"
 sha2 = "0.10"
 rand = "0.8"
 jsonwebtoken = "9"
@@ -36,7 +37,7 @@ whisper-rs-sys = "0.14.1"
 webbrowser = "1"
 
 [target.'cfg(windows)'.dependencies]
-windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Media_Audio", "Win32_Media_KernelStreaming", "Win32_Media_Multimedia", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_UI_Shell_PropertiesSystem", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi", "Win32_Security_Credentials", "Win32_System_Threading"] }
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Media_Audio", "Win32_Media_KernelStreaming", "Win32_Media_Multimedia", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_UI_Shell", "Win32_UI_Shell_PropertiesSystem", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi", "Win32_Security_Credentials", "Win32_System_Threading"] }
 
 [patch.crates-io]
 whisper-rs-sys = { path = "../vendor/whisper-rs-sys" }

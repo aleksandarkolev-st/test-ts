@@ -58,7 +58,9 @@ def observation(landmarks, width, height, matrix=None):
 
 def eye_input(frame, eye, side):
     points = eye.points
-    cx,cy = points.mean(axis=0)
+    # FLX training/system crops are centered between the eye corners. Using
+    # the lid-point mean shifts the crop when the eyelids are asymmetric.
+    cx,cy = (points[0]+points[3])/2
     length = abs(float(points[3,0]-points[0,0]))
     half_width = length*.75
     crop_height = half_width*1.5

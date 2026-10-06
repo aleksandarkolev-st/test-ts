@@ -82,6 +82,13 @@ class CoreTests(unittest.TestCase):
 
     def test_partial_crops_are_rejected(self):
         self.assertIsNone(eye_input(self.frame,eye(10,100),"R"))
+    def test_crop_center_matches_original_flx_corner_geometry(self):
+        current=eye(160,100)
+        current.points[1:3,1]-=9
+        current.points[4:,1]-=3
+        _,_,bounds=eye_input(self.frame,current,"L")
+        # Corner midpoint (160,100), width 60 and height 45 with 7/12 above.
+        self.assertEqual(bounds,(130,73,190,118))
     def test_model_color_order_matches_original_rgb_training(self):
         frame=np.zeros_like(self.frame);frame[...,2]=255
         image,_,bounds=eye_input(frame,eye(160,100),"L")

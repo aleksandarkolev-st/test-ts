@@ -16,7 +16,7 @@ import numpy as np
 
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'camera'))
-from gaze_core import Corrector, observation, eye_input
+from gaze_core import Corrector, observation, eye_input, blend_eye, INPUTS
 from gaze_worker import sessions
 from dxgi_adapters import adapters
 
@@ -26,6 +26,7 @@ parser.add_argument('--device', type=int, default=1)
 args = parser.parse_args()
 frame = cv2.imread(str(args.image))
 assert frame is not None
+source_frame = frame.copy()
 scale = min(1280 / frame.shape[1], 720 / frame.shape[0])
 resized = cv2.resize(frame, (round(frame.shape[1] * scale), round(frame.shape[0] * scale)))
 frame = np.zeros((720, 1280, 3), np.uint8)
@@ -76,11 +77,45 @@ with mp.tasks.vision.FaceLandmarker.create_from_options(options) as detector:
             blinks={'L': 1., 'R': 1.})
         assert np.array_equal(blink, frame) and not blink_state['correcting']
         counts.append(changed)
+# Use independent IMAGE detections on the full-resolution public portrait.
+# This checks the learned model's actual direction, rather than its status
+# field or the supplied angle alone. No portrait/processed pixels are saved.
+direction_options = mp.tasks.vision.FaceLandmarkerOptions(
+    base_options=mp.tasks.BaseOptions(model_asset_path=str(models / 'face_landmarker.task')),
+    num_faces=1)
+direction = {}
+with mp.tasks.vision.FaceLandmarker.create_from_options(direction_options) as detector:
+    def observe_image(image):
+        detection = detector.detect(mp.Image(image_format=mp.ImageFormat.SRGB,
+            data=cv2.cvtColor(image, cv2.COLOR_BGR2RGB)))
+        assert len(detection.face_landmarks) == 1
+        return observation(detection.face_landmarks[0], image.shape[1], image.shape[0])
+
+    source = observe_image(source_frame)
+    assert source is not None
+    for name, angles in [('zero', [0, 0]), ('up', [12, 0]), ('down', [-12, 0]),
+                         ('right', [0, 3]), ('left', [0, -3])]:
+        output = source_frame.copy()
+        for side, eye in source.eyes.items():
+            image, anchors, bounds = eye_input(source_frame, eye, side)
+            prediction = corrector.sessions[side].run(None, {
+                INPUTS[0]: image, INPUTS[1]: anchors,
+                INPUTS[2]: np.array([angles], np.float32)})[0][0]
+            blend_eye(output, prediction, bounds, eye)
+        measured = observe_image(output)
+        assert measured is not None
+        direction[name] = dict(inputDegrees=angles, measuredGaze=measured.gaze.tolist())
+    assert direction['up']['measuredGaze'][0] < direction['zero']['measuredGaze'][0]
+    assert direction['down']['measuredGaze'][0] > direction['zero']['measuredGaze'][0]
+    assert direction['right']['measuredGaze'][1] > direction['zero']['measuredGaze'][1]
+    assert direction['left']['measuredGaze'][1] < direction['zero']['measuredGaze'][1]
+
 report = dict(passed=True, scope='Public static face; artificial calibration; no naturalness or call-latency assertion',
     source='https://storage.googleapis.com/mediapipe-assets/business-person.png',
     imageSha256=hashlib.sha256(args.image.read_bytes()).hexdigest(), device=device,
     detectedLandmarks=len(result.face_landmarks[0]), correctedFrames=len(counts),
     verticalDegrees=12, outsideEyeCropsUnchanged=True, immediateBlinkPassthrough=True,
+    directionProbe=direction,
     medianChangedEyePixels=float(np.median(counts)),
     frameShape=list(frame.shape), warmedLandmarksMs=float(np.median(landmark_timings[5:])),
     warmedCorrectionMs=float(np.median(correction_timings[5:])),

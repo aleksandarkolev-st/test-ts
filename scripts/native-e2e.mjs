@@ -171,6 +171,33 @@ try{
   const stopped=await until(s=>!s.active);assert.equal(stopped.answer,'');assert.equal(stopped.question,null);assert.equal(stopped.latency,null);assert.equal(stopped.project,null);assert.equal(stopped.screenshot,null);assert.equal(stopped.attachmentBusy,false);
   await sleep(700);assert.equal(requests.length,requestCount);assert.equal((await invoke('native_diagnostics')).visible,false);passed('Stop clears project and screenshot context, ignores late capture work, cancels requests and hides overlay');
   await main.screenshot({path:path.join(artifact,'setup.png')});
+  if(process.env.COPILOT_CRASH_TEST==='1'){
+    await invoke('start_meeting',{settings});await until(s=>s.active&&s.status==='listening');
+    const devices=await invoke('gaze_devices');
+    const camera=devices.cameras.find(c=>c.allowed),gpu=devices.gpus.find(g=>/RX 9070 XT/.test(g.name));
+    assert(camera&&gpu,'Crash-lifetime check requires an eligible camera and RX 9070 XT');
+    await invoke('gaze_start',{settings:{camera:camera.index,device:gpu.index,strength:12}});
+    const deadline=Date.now()+45000;let gaze;
+    while(Date.now()<deadline){gaze=await invoke('gaze_snapshot');assert(!gaze.error,gaze.error);if(gaze.running&&gaze.preview)break;await sleep(50);}
+    assert(gaze.running&&gaze.preview,'Camera must actually run before testing unexpected app exit');
+    const processList=async()=>JSON.parse(await new Promise((resolve,reject)=>{
+      // IDs/names only: never inspect sidecar command lines or private keys.
+      const query=spawn('powershell.exe',['-NoProfile','-Command','@(Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name) | ConvertTo-Json -Compress'],{windowsHide:true,stdio:['ignore','pipe','ignore']});
+      let output='';query.stdout.on('data',b=>output+=b);query.on('error',reject);query.on('exit',c=>c===0?resolve(output):reject(Error('Process lifetime query failed')));
+    }));
+    const all=await processList(),owned=new Set([app.pid]);let added=true;
+    while(added){added=false;for(const p of all)if(owned.has(p.ParentProcessId)&&!owned.has(p.ProcessId)){owned.add(p.ProcessId);added=true;}}
+    const sidecars=all.filter(p=>owned.has(p.ProcessId)&&/^(nemo-speech|python|gaze-worker)\.exe$/i.test(p.Name));
+    assert(sidecars.some(p=>p.Name==='nemo-speech.exe'),'Nemotron sidecar must be owned by the tested app');
+    assert(sidecars.some(p=>/^(python|gaze-worker)\.exe$/i.test(p.Name)),'Camera sidecar must be owned by the tested app');
+    await browser.close();browser=null;main=null;
+    app.kill();await sleep(500);
+    const exitDeadline=Date.now()+15000;let remaining;
+    do{remaining=(await processList()).filter(p=>sidecars.some(s=>s.ProcessId===p.ProcessId));if(!remaining.length)break;await sleep(250);}while(Date.now()<exitDeadline);
+    assert.equal(remaining.length,0,'Unexpected app exit left an owned speech/camera sidecar alive');
+    results.crashLifetime={scope:'Forced termination of the isolated fixture app with actual speech and camera workers running',ownedSidecars:sidecars.map(p=>({pid:p.ProcessId,name:p.Name})),remainingSidecars:0};
+    passed('Unexpected parent termination releases actual Nemotron and camera sidecars');
+  }
   results.pass=true;
 }catch(e){results.pass=false;results.failure=String(e);throw e;}finally{
   if(main){try{await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}catch{}}

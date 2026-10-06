@@ -7,7 +7,7 @@ pub fn score(text: &str, self_speaking: bool) -> i32 {
     if t.ends_with('?') {
         n += 4;
     }
-    if ["why", "what", "how", "who", "when", "where"]
+    if ["why", "what", "how", "who", "when", "where", "which"]
         .iter()
         .any(|w| t == *w || t.starts_with(&format!("{w} ")))
     {
@@ -27,6 +27,22 @@ pub fn score(text: &str, self_speaking: bool) -> i32 {
         "when is ","when are ","when will ","where is ","where are ","who is ","who will ","why is ","why are ","why do ","why did ",
         "can you ","could you ","do you ",
     ].iter().any(|p|t.starts_with(p)) {n+=1;}
+    if !t.ends_with('?') {
+        // RNNT punctuation is optional. Also cover noun/quantity questions
+        // and yes/no inversion, while keeping common declarative fragments
+        // ("what we need", "how it works") below the threshold.
+        let words: Vec<_> = t.split_whitespace().collect();
+        let wh = words.first().is_some_and(|w| ["why","what","how","who","when","where","which"].contains(w));
+        let declarative = words.get(1).is_some_and(|w| ["we","i","you","they","he","she","it","to","i'm","we're","it's"].contains(w));
+        if wh && !declarative && n == 3 { n += 1; }
+        let copula = words.first().is_some_and(|w| ["is","are","was","were"].contains(w))
+            && words.len() >= 3 && words.get(1) != Some(&"not");
+        let inversion = words.first().is_some_and(|w| ["can","could","will","would","should","do","does","did","has","have"].contains(w))
+            && words.get(1).is_some_and(|w| ["we","i","you","they","he","she","it","this","that"].contains(w))
+            && words.len() >= 3;
+        if (copula || inversion) && n < 4 { n = 4; }
+        if ["any idea why ","any idea how ","any idea what ","any idea when ","any idea where "].iter().any(|p|t.starts_with(p)) { n += 2; }
+    }
     for p in ["what do you think", "any idea"] {
         if t.contains(p) {
             n += 2;
@@ -170,6 +186,17 @@ mod tests {
     fn unpunctuated_rnnt_questions_qualify_but_declarations_and_rhetoric_do_not() {
         for text in ["What is our launch target for next quarter", "How do we fix this", "Can you explain the design"] {assert!(score(text,false)>=4,"{text}");}
         for text in ["What we need is another review", "Who knows", "Who cares", "We launch next week"] {assert!(score(text,false)<4,"{text}");}
+    }
+    #[test]
+    fn punctuation_free_fixture_keeps_question_and_negative_classes() {
+        let corpus: Vec<serde_json::Value> = serde_json::from_str(include_str!("../../../tests/fixtures/utterances.json")).unwrap();
+        for case in corpus {
+            let text = case["text"].as_str().unwrap().trim_end_matches(['?', '.', '!']);
+            assert_eq!(score(text, false) >= 4, case["question"].as_bool().unwrap(), "{text}");
+        }
+        for text in ["How it works is simple", "What they said was useful", "Do the work tomorrow", "Have some coffee", "Will joined our team"] {
+            assert!(score(text, false) < 4, "{text}");
+        }
     }
     #[test]
     fn continued_question_and_self_suppression() {

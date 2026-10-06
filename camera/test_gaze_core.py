@@ -82,6 +82,25 @@ class CoreTests(unittest.TestCase):
 
     def test_partial_crops_are_rejected(self):
         self.assertIsNone(eye_input(self.frame,eye(10,100),"R"))
+
+    def test_calibration_rejects_missing_closed_sparse_or_moving_eyes(self):
+        scenarios=[
+            [None]*20,
+            [observed(blink=True) for _ in range(20)],
+            [observed(0) for _ in range(9)]+[None]*11,
+            [observed(.05 if i%2 else -.05) for i in range(20)],
+        ]
+        for samples in scenarios:
+            with self.subTest(kind=str(samples[0])):
+                corrector=Corrector(self.models)
+                corrector.begin_calibration("camera",0)
+                for i,current in enumerate(samples):
+                    output,_=corrector.apply(self.frame,current,i*.08)
+                    np.testing.assert_array_equal(output,self.frame)
+                self.assertIsNone(corrector.camera)
+                self.assertIsNone(corrector.collecting)
+                self.assertFalse(any(model.angles for model in self.models.values()))
+
     def test_crop_center_matches_original_flx_corner_geometry(self):
         current=eye(160,100)
         current.points[1:3,1]-=9

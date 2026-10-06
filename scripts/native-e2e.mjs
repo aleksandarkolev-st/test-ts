@@ -38,7 +38,7 @@ try{
   assert(browser,'WebView2 debug endpoint did not open');const context=browser.contexts()[0];let overlay;
   for(let i=0;i<100;i++){main=context.pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));overlay=context.pages().find(p=>p.url().includes('view=overlay'));if(main&&overlay)break;await sleep(100);}assert(main&&overlay,`Both native windows must load: ${context.pages().map(p=>p.url()).join(', ')}; startup: ${stderr.slice(-2000)}`);
   const invoke=(name,args={})=>main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
-  await main.evaluate(async()=>{window.fixtureTranscripts=[];await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event:'copilot:transcript',target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>window.fixtureTranscripts.push(e.payload))});});
+  await main.evaluate(async enabled=>{window.fixtureTranscripts=[];window.fixtureTranscriptRecording=enabled;if(!enabled)return;await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event:'copilot:transcript',target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>{if(window.fixtureTranscriptRecording)window.fixtureTranscripts.push(e.payload);})});},process.env.COPILOT_REAL_AUDIO==='1'||process.env.COPILOT_ASR_CORPUS==='1');
   const until=async(predicate,timeout=8000)=>{const start=Date.now();while(Date.now()-start<timeout){const s=await invoke('get_snapshot');if(predicate(s))return s;await sleep(30);}throw Error('Native state condition timed out');};
   const b=await invoke('bootstrap');assert(b.debug);assert(b.devices.some(d=>d.source==='remote'));assert(b.devices.some(d=>d.source==='self'));passed('WASAPI enumerates independent remote and microphone devices');
   const before=await invoke('native_diagnostics');assert(before.affinityRead&&before.affinity===17);assert(before.noActivate&&before.alwaysOnTop);passed('Native HWND affinity readback, topmost and no-activate styles');
@@ -153,12 +153,28 @@ try{
   }
   if(soakMinutes){
     assert(soakMinutes>=60,'Acceptance requires at least 60 wall-clock minutes');
+    await main.evaluate(()=>{window.fixtureTranscriptRecording=false;window.fixtureTranscripts=[];});
+    const replay=process.env.COPILOT_SOAK_REAL_AUDIO==='1';
+    if(replay)assert.equal(settings.speechBackend,'nemotron','Cached speech soak must use Nemotron');
+    const audioCases=[{file:'remote-question.wav',word:'launch'},{file:'corpus/012.wav',word:'approve'},{file:'corpus/015.wav',word:'outage'}];
+    results.soakScope=replay?'Periodic varied synthetic WASAPI speech through two continuously open Nemotron cached streams and local HTTP answers; not human meeting accuracy':'Native capture and repeated manual local HTTP answers';
     const deadline=Date.now()+soakMinutes*60_000;results.soakStartedAt=new Date().toISOString();results.soakSamples=[];
     while(Date.now()<deadline){
-      await invoke('ask',{question:'What is the launch target?'});await until(s=>s.latency&&s.latency.completedAt!==null&&s.answer.length>0);
+      let audioCase;
+      if(replay){
+        await invoke('action',{action:'dismiss'});await until(s=>!s.question&&!s.answer);requests=[];
+        audioCase=audioCases[results.soakSamples.length%audioCases.length];
+        const audioPath=path.join(root,'.local/audio',audioCase.file);
+        await new Promise((resolve,reject)=>{const player=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath],{windowsHide:true,stdio:'ignore'});player.on('error',reject);player.on('exit',c=>c===0?resolve():reject(Error('Soak audio playback failed')));});
+        await until(s=>s.question?.text.toLowerCase().includes(audioCase.word)&&s.latency?.completedAt!==null&&s.answer.length>0,15000);
+        assert(requests.some(r=>!r.instructions.includes('JSON')),'Replayed question must automatically generate an answer');
+      }else{
+        await invoke('ask',{question:'What is the launch target?'});await until(s=>s.latency&&s.latency.completedAt!==null&&s.answer.length>0);
+      }
       const diag=await invoke('native_diagnostics');assert.notEqual(diag.foregroundHwnd,diag.overlayHwnd);assert(diag.affinityRead&&diag.affinity===17);
       const s=await invoke('get_snapshot');assert(s.active&&!s.paused&&!s.error);
-      results.soakSamples.push({elapsedMs:Date.now()-Date.parse(results.soakStartedAt),firstTokenMs:s.latency.firstTokenAt-s.latency.requestSentAt,requests:requests.length});
+      assert.equal(await main.evaluate(()=>window.fixtureTranscripts.length),0,'Long soak must not accumulate raw transcript diagnostics');
+      results.soakSamples.push({elapsedMs:Date.now()-Date.parse(results.soakStartedAt),firstTokenMs:s.latency.firstTokenAt-s.latency.requestSentAt,speechEndToFirstTokenMs:replay?s.latency.firstTokenAt-s.latency.speechStoppedAt:null,syntheticAudioFile:audioCase?.file,requests:requests.length});
       // Never retain the meeting text in the harness for the duration of a soak.
       requests=[];await writeFile(path.join(artifact,'progress.json'),JSON.stringify({...results,checks:results.checks},null,2));
       console.log(`SOAK ${Math.round((Date.now()-Date.parse(results.soakStartedAt))/60_000)} / ${soakMinutes} min: native capture and streaming healthy`);

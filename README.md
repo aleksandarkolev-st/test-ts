@@ -1,13 +1,13 @@
 # Meeting Copilot
 
-A local Windows 10/11 meeting assistant. It captures playback and microphone audio separately, transcribes speech with whisper.cpp on the device, detects remote questions, and streams suggested spoken answers into a native overlay.
+A local Windows 10/11 meeting assistant. It captures playback and microphone audio separately, transcribes English with Nemotron Speech Streaming EN 0.6B on the device, detects remote questions, and streams suggested spoken answers into a native overlay. Whisper remains an explicitly selectable legacy backend.
 
 ## Run
 
-The x64 installer is built at `src-tauri/target/release/bundle/msi/Meeting Copilot_0.1.0_x64_en-US.msi`.
+The existing x64 installer at `src-tauri/target/release/bundle/msi/Meeting Copilot_0.1.0_x64_en-US.msi` predates the current upgrade. The source build below includes Nemotron and the context shortcuts; the updated camera pipeline and packaged distribution remain in progress.
 
 1. Open Meeting Copilot and choose **Continue with ChatGPT**. Complete the browser sign-in and grant plan usage. Available answer models are loaded from the account's catalog.
-2. Choose your microphone and the playback device used by your meeting. The English speech model is bundled; a compatible local whisper.cpp model can also be selected.
+2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose the Vulkan GPU index (1 is the RX 9070 XT on this computer). The default chunk is 160 ms.
 3. Click **Start meeting**. Questions from the playback stream trigger answers automatically. **Stop meeting** releases capture and clears meeting content held in memory.
 
 Headphones help avoid playback voices entering the microphone. Loopback captures all audio on the selected output, so other apps playing speech are also treated as REMOTE. This MVP does not identify individual speakers.
@@ -52,7 +52,7 @@ ChatGPT plan authorization follows OpenAI's current [open-source client flow](ht
 
 ## Build from source
 
-The Nemotron upgrade is in progress. Prepare the pinned official English Q8 model and Windows Vulkan runtime with `./scripts/setup-nemotron.ps1`; assets stay inside this workspace. `-RuntimeOnly` skips the approximately 700 MB weights. `node scripts/nemotron-smoke.mjs` checks two local synthetic streams against the official runtime. This preparation does not switch the app's current Whisper pipeline. See [remaining upgrade work](docs/upgrade-plan.md).
+Prepare the pinned official English Q8 model and Windows Vulkan runtime with `./scripts/setup-nemotron.ps1`; assets stay inside this workspace. `-RuntimeOnly` skips the approximately 700 MB weights. Nemotron is the default speech backend. It runs in a private authenticated loopback process with two independent cache-aware WebSockets, sends continuous PCM chunks, and releases both streaming states on pause/stop. Model loading can be cancelled. Neural batching is disabled: the pinned Vulkan runtime stalled concurrent realtime requests with batching enabled on this machine. `node scripts/nemotron-smoke.mjs` verifies actual synthetic streaming; set `COPILOT_NEMOTRON_CHUNK_MS` for each chunk and `COPILOT_NEMOTRON_BACKEND` for the required Vulkan adapter. See [remaining upgrade work](docs/upgrade-plan.md).
 
 Prerequisites: Windows x64, Node.js 22 or newer, Rust, Visual Studio C++ Build Tools, CMake, Python, and Edge WebView2. WiX is fetched by the Tauri bundler when needed.
 

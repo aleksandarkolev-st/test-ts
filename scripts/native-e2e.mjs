@@ -23,7 +23,7 @@ const server=createServer(async(req,res)=>{
   if(!res.destroyed){completed=true;res.end(`data: ${JSON.stringify({type:'response.completed'})}\r\n\r\n`);}
 });await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const port=server.address().port; const debugPort=Number(process.env.COPILOT_CDP_PORT||9227);
-let app,browser,vite,stderr='';const results={kind:'native acceptance with local HTTP fixture',checks:[],localTranscription:[],startedAt:new Date().toISOString()};
+let app,browser,vite,main,stderr='';const results={kind:'native acceptance with local HTTP fixture',checks:[],localTranscription:[],startedAt:new Date().toISOString()};
 function passed(name){results.checks.push({name,pass:true});console.log(`PASS ${name}`);}
 try{
   // Windows locks loaded DLLs. An isolated copy allows builds and additional
@@ -35,23 +35,32 @@ try{
   app=spawn(path.join(executableDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_TEST_API:`http://127.0.0.1:${port}/v1`,COPILOT_DATA_DIR:path.join(root,soakMinutes?'.local/soak-data':'.local/native-data'),WEBVIEW2_USER_DATA_FOLDER:path.join(root,soakMinutes?'.local/webview-soak':'.local/webview-test'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:`--remote-debugging-port=${debugPort}`},stdio:['ignore','ignore','pipe']});
   app.stderr.on('data',b=>{stderr+=b.toString();});
   for(let i=0;i<150;i++){try{browser=await chromium.connectOverCDP(`http://127.0.0.1:${debugPort}`);break;}catch{if(app.exitCode!==null)throw Error(`Native app exited ${app.exitCode}: ${stderr.slice(-2000)}`);await sleep(100);}}
-  assert(browser,'WebView2 debug endpoint did not open');const context=browser.contexts()[0];let main,overlay;
+  assert(browser,'WebView2 debug endpoint did not open');const context=browser.contexts()[0];let overlay;
   for(let i=0;i<100;i++){main=context.pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));overlay=context.pages().find(p=>p.url().includes('view=overlay'));if(main&&overlay)break;await sleep(100);}assert(main&&overlay,`Both native windows must load: ${context.pages().map(p=>p.url()).join(', ')}; startup: ${stderr.slice(-2000)}`);
   const invoke=(name,args={})=>main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
+  await main.evaluate(async()=>{window.fixtureTranscripts=[];await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event:'copilot:transcript',target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>window.fixtureTranscripts.push(e.payload))});});
   const until=async(predicate,timeout=8000)=>{const start=Date.now();while(Date.now()-start<timeout){const s=await invoke('get_snapshot');if(predicate(s))return s;await sleep(30);}throw Error('Native state condition timed out');};
   const b=await invoke('bootstrap');assert(b.debug);assert(b.devices.some(d=>d.source==='remote'));assert(b.devices.some(d=>d.source==='self'));passed('WASAPI enumerates independent remote and microphone devices');
   const before=await invoke('native_diagnostics');assert(before.affinityRead&&before.affinity===17);assert(before.noActivate&&before.alwaysOnTop);passed('Native HWND affinity readback, topmost and no-activate styles');
   const settings={...b.settings,microphone:b.devices.find(d=>d.source==='self'&&d.default)?.id||b.devices.find(d=>d.source==='self').id,output:b.devices.find(d=>d.source==='remote'&&d.default)?.id||b.devices.find(d=>d.source==='remote').id,model:'fixture-mini',projectPath:path.join(root,'.local/context-fixture')};
+  results.speechBackend=settings.speechBackend;results.speechChunkMs=settings.speechChunkMs;results.speechGpu=settings.nemotronDevice;
+  if(settings.speechBackend==='nemotron'){
+    const pending=invoke('start_meeting',{settings}).then(()=>({started:true}),error=>({error:String(error)}));
+    await until(s=>s.active&&s.status==='loading');await invoke('stop_meeting');
+    const cancelledStartup=await pending;assert.match(cancelledStartup.error||'',/cancelled/i);
+    await sleep(1200);const cancelledState=await invoke('get_snapshot');assert.equal(cancelledState.active,false);assert.equal(cancelledState.status,'off');
+    passed('Cancel during Nemotron loading stays responsive and late startup cannot reactivate capture');
+  }
   const contextShortcut=async letter=>{
     assert(['p','{F8}'].includes(letter));const key=`Ctrl+Shift+${letter==='p'?'P':'F8'}`;
     assert(!b.shortcutErrors.some(e=>e.startsWith(`${key} is unavailable;`)),`${key} must be registered by this isolated app before sending the chord`);
     await new Promise((resolve,reject)=>{const keys=spawn('powershell.exe',['-NoProfile','-Command',`$copilotShortcutShell=New-Object -ComObject WScript.Shell; $copilotShortcutShell.SendKeys('^+${letter}')`],{windowsHide:true,stdio:'ignore'});keys.on('error',reject);keys.on('exit',code=>code===0?resolve():reject(Error(`Shortcut injection failed: ${code}`)));});
   };
-  await invoke('start_meeting',{settings});await until(s=>s.active&&s.status==='listening');const after=await invoke('native_diagnostics');assert(after.visible);assert.notEqual(after.foregroundHwnd,after.overlayHwnd);passed('Real WASAPI and Whisper start with visible non-focused overlay');
+  await invoke('start_meeting',{settings});await until(s=>s.active&&s.status==='listening');const after=await invoke('native_diagnostics');assert(after.visible);assert.notEqual(after.foregroundHwnd,after.overlayHwnd);passed(`Real WASAPI and ${settings.speechBackend} start with visible non-focused overlay`);
   if(process.env.COPILOT_REAL_AUDIO==='1'){
     const audioPath=path.join(root,'.local/audio/remote-question.wav');
     await new Promise((resolve,reject)=>{const playback=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath],{windowsHide:true,stdio:'ignore'});playback.on('error',reject);playback.on('exit',code=>code===0?resolve():reject(Error(`Fixture playback failed: ${code}`)));});
-    await until(s=>s.question?.text.toLowerCase().includes('launch')&&s.answer.length>0,15000);const real=await until(s=>s.latency&&s.latency.completedAt!==null,15000);results.realAudioLatencyMs=real.latency.firstTokenAt-real.latency.speechStoppedAt;passed('Real rendered speech → WASAPI loopback → local VAD/Whisper → detected question → HTTP stream → overlay');
+    try{await until(s=>s.question?.text.toLowerCase().includes('launch')&&s.answer.length>0,15000);}catch(e){results.realAudioFailureState=await invoke('get_snapshot');results.syntheticAudioTranscripts=await main.evaluate(()=>window.fixtureTranscripts);throw e;}const real=await until(s=>s.latency&&s.latency.completedAt!==null,15000);results.realAudioLatencyMs=real.latency.firstTokenAt-real.latency.speechStoppedAt;passed(`Real rendered speech → WASAPI loopback → local VAD/${settings.speechBackend} → detected question → HTTP stream → overlay`);
     await invoke('action',{action:'dismiss'});await until(s=>!s.question);requests=[];
   }
   await invoke('acceptance_event',{kind:'started',source:'self',text:null});await invoke('acceptance_event',{kind:'ended',source:'self',text:null});await invoke('acceptance_event',{kind:'transcript',source:'self',text:'What is our own launch date?'});await sleep(700);assert.equal(requests.length,0);passed('SELF speech never starts an automatic answer');
@@ -128,5 +137,6 @@ try{
   await main.screenshot({path:path.join(artifact,'setup.png')});
   results.pass=true;
 }catch(e){results.pass=false;results.failure=String(e);throw e;}finally{
+  if(main){try{await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}catch{}}
   results.completedAt=new Date().toISOString();for(const line of stderr.split(/\r?\n/)){if(line.startsWith('local_stt ')){try{const v=JSON.parse(line.slice(10));results.localTranscription.push({source:v.source,kind:v.kind,previewReused:v.preview_reused,queueWaitMs:v.queue_wait_ms,inferenceMs:v.inference_ms});}catch{}}}await writeFile(path.join(artifact,'results.json'),JSON.stringify(results,null,2));await browser?.close();app?.kill();vite?.kill();server.closeAllConnections();server.close();
 }

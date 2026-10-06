@@ -10,14 +10,18 @@ const chunkMs = Number(process.env.COPILOT_NEMOTRON_CHUNK_MS || 160);
 const rightContext = new Map([[80, 0], [160, 1], [560, 6], [1120, 13]]).get(chunkMs);
 assert.notEqual(rightContext, undefined, 'Choose 80, 160, 560 or 1120 ms');
 const port = Number(process.env.COPILOT_NEMOTRON_PORT || 18971);
+const backend = process.env.COPILOT_NEMOTRON_BACKEND || 'vulkan:1';
+const batching = process.env.COPILOT_NEMOTRON_BATCHING === 'true';
 const base = `http://127.0.0.1:${port}`;
 const startupTimeout = Number(process.env.COPILOT_NEMOTRON_STARTUP_TIMEOUT_MS || 600000);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 try { await fetch(`${base}/health`, { signal: AbortSignal.timeout(300) }); assert.fail('Smoke-test port is already in use'); } catch (error) { if (error.code === 'ERR_ASSERTION') throw error; }
-const report = { kind: 'local official Nemotron English Q8 streaming, synthetic audio, two independent WebSockets', chunkMs, rightContext, samples: [], passed: false };
+const report = { kind: 'local official Nemotron English Q8 streaming, synthetic audio, two independent WebSockets', chunkMs, rightContext, backend, batching, samples: [], passed: false };
 let stderr = '';
-const service = spawn(executable, ['serve', '--host', '127.0.0.1', '--port', String(port), '--asr-model', model, '--backend', 'vulkan:0', '--no-ui', '--asr.streaming.rnnt_right_context', String(rightContext), '--asr.endpointing.enable=true', '--asr.endpointing.stop_history_eou_ms', '510'], { windowsHide: true, cwd: path.dirname(executable), stdio: ['ignore', 'ignore', 'pipe'] });
-service.stderr.on('data', data => { stderr += data; });
+let stdout = '';
+const service = spawn(executable, ['serve', '--host', '127.0.0.1', '--port', String(port), '--asr-model', model, '--backend', backend, '--no-ui', `--asr.batching.enabled=${batching}`, '--asr.batching.max_batch_size', '2', '--asr.batching.state_arena_slots', '2', '--asr.streaming.rnnt_right_context', String(rightContext), '--asr.endpointing.enable=true', '--asr.endpointing.stop_history_eou_ms', '510'], { windowsHide: true, cwd: path.dirname(executable), stdio: ['ignore', 'pipe', 'pipe'] });
+service.stderr.on('data', data => { stderr += data; process.stderr.write(data); });
+service.stdout.on('data', data => { stdout += data; process.stdout.write(data); });
 let launchError; service.on('error', error => { launchError = error; });
 
 function pcm16(bytes) {
@@ -43,6 +47,7 @@ async function stream(source, fixture, expected) {
   const started = performance.now();
   socket.addEventListener('open', () => { opened = true; });
   socket.addEventListener('error', () => { failure = new Error('Local transcription WebSocket failed'); });
+  socket.addEventListener('close', () => { failure = new Error('Local transcription WebSocket closed'); });
   socket.addEventListener('message', message => {
     try {
       const event = JSON.parse(message.data);
@@ -51,9 +56,9 @@ async function stream(source, fixture, expected) {
       events.push({ event, at: performance.now() - started });
     } catch { failure = new Error('Invalid local transcription event'); }
   });
-  async function until(predicate, ms = 15000) {
+  async function until(predicate, ms = Number(process.env.COPILOT_NEMOTRON_INFERENCE_TIMEOUT_MS || 120000)) {
     const deadline = performance.now() + ms;
-    while (!predicate()) { if (failure) throw failure; assert(performance.now() < deadline, `Timed out waiting for ${source} stream event: ${events.map(e => e.event.type).join(', ')}`); await pause(20); }
+    while (!predicate()) { if (failure) throw failure; assert.equal(service.exitCode, null, 'Nemotron exited during inference'); assert(performance.now() < deadline, `Timed out waiting for ${source} stream event: ${events.map(e => e.event.type).join(', ')}`); await pause(20); }
   }
   try {
     await until(() => opened && events.some(e => e.event.type === 'session.created'));
@@ -74,12 +79,12 @@ async function stream(source, fixture, expected) {
     const partials = events.filter(e => e.event.type === 'conversation.item.input_audio_transcription.delta');
     assert(expected.test(text), `${source} stream failed to transcribe its synthetic phrase`);
     assert(partials.length > 0, 'No incremental transcript events');
-    assert(partials[0].at < speechSentAt - started, 'Transcript did not stream before the last audio chunk');
-    return { source, durationMs: audio.length / 32, matchesExpectedPhrase: true, partialEvents: partials.length, finalEvents: finals.length, firstPartialMs: Math.round(partials[0].at - (sendingStarted - started)), finalAfterAudioSentMs: Math.round(started + finals.at(-1).at - speechSentAt) };
+    return { source, durationMs: audio.length / 32, matchesExpectedPhrase: true, partialEvents: partials.length, finalEvents: finals.length, partialBeforeLastAudioChunk: partials[0].at < speechSentAt - started, firstPartialMs: Math.round(partials[0].at - (sendingStarted - started)), finalAfterAudioSentMs: Math.round(started + finals.at(-1).at - speechSentAt) };
   } finally { socket.close(); }
 }
 
 try {
+  const launchedAt = Date.now();
   const deadline = Date.now() + startupTimeout;
   while (true) {
     if (launchError) throw launchError;
@@ -88,17 +93,21 @@ try {
     assert(Date.now() < deadline, `Nemotron model loading timed out: ${stderr.slice(-4000)}`); await pause(200);
   }
   console.log('Local Nemotron runtime ready; checking two independent streams.');
+  report.startupMs = Date.now() - launchedAt;
   report.samples = await Promise.all([
     stream('remote', 'remote-question.wav', /launch.*target/i),
     stream('self', 'context-statement.wav', /February|nineteenth/i),
   ]);
-  report.vulkanDeviceDetected = /RX 9070 XT/i.test(stderr);
-  assert(report.vulkanDeviceDetected, 'The expected AMD RX 9070 XT was not reported by Vulkan');
-  report.passed = true; console.log(JSON.stringify({ chunkMs, passed: true, vulkanDeviceDetected: true, samples: report.samples }, null, 2));
+  report.vulkanSelected = report.readiness.device === backend && /backend=Vulkan\d+/.test(stderr + stdout);
+  assert(report.vulkanSelected, 'The runtime did not select the requested Vulkan device');
+  assert(report.samples.every(s => s.partialBeforeLastAudioChunk), 'Transcripts arrived only after live audio finished');
+  report.passed = true; console.log(JSON.stringify({ chunkMs, passed: true, vulkanSelected: true, samples: report.samples }, null, 2));
 } catch (error) {
   report.failure = String(error); console.error(report.failure); throw error;
 } finally {
   service.kill();
   await mkdir(path.join(root, 'artifacts/nemotron'), { recursive: true });
-  await writeFile(path.join(root, `artifacts/nemotron/streaming-${chunkMs}.json`), JSON.stringify(report, null, 2));
+  const suffix = `${chunkMs}-${backend.replace(':', '-')}`;
+  await writeFile(path.join(root, `artifacts/nemotron/streaming-${suffix}.json`), JSON.stringify(report, null, 2));
+  await writeFile(path.join(root, `artifacts/nemotron/runtime-${suffix}.log`), stdout + stderr);
 }

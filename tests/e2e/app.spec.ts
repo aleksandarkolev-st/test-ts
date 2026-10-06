@@ -15,7 +15,7 @@ async function nativeFixture(page: Page) {
         if (cmd === 'plugin:event|listen') { listeners.set(++id, { event: args.event, handler: args.handler }); return id; }
         if (cmd === 'plugin:event|unlisten') return;
         if (cmd === 'get_snapshot') return { ...state };
-        if (cmd === 'bootstrap') return { settings: { microphone: '', output: '', modelPath: '', model: '' }, devices: [{ id: 'mic', name: 'Fixture microphone', source: 'self', default: true }, { id: 'speaker', name: 'Fixture headphones', source: 'remote', default: true }], accounts: signedIn ? [account] : [], selected: signedIn ? account : null, models: [], snapshot: { ...state }, debug: false };
+        if (cmd === 'bootstrap') return { settings: { microphone: '', output: '', modelPath: '', model: '', speechBackend: 'nemotron', speechChunkMs: 160, nemotronRuntime: 'C:\\fixture\\nemo-speech.exe', nemotronDevice: 1 }, devices: [{ id: 'mic', name: 'Fixture microphone', source: 'self', default: true }, { id: 'speaker', name: 'Fixture headphones', source: 'remote', default: true }], accounts: signedIn ? [account] : [], selected: signedIn ? account : null, models: [], snapshot: { ...state }, debug: false };
         if (cmd === 'sign_in') { signedIn = true; return account; }
         if (cmd === 'list_models') return [{ slug: 'fixture-mini', display_name: 'Fixture model' }];
         if (cmd === 'choose_project') return 'C:\\fixture\\project';

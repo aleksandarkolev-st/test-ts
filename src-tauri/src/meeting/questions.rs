@@ -18,6 +18,15 @@ pub fn score(text: &str, self_speaking: bool) -> i32 {
             n += 3;
         }
     }
+    // Nemotron RNNT emits plain words unless a separate punctuation model is
+    // configured. Direct interrogative grammar must still qualify without '?'.
+    // Keep declarative openings such as "What we need is..." below threshold.
+    if !t.ends_with('?') && [
+        "what is ","what are ","what was ","what will ","what would ","what should ","what do ","what does ","what did ","what's ",
+        "how is ","how are ","how do ","how does ","how did ","how can ","how could ","how would ","how should ",
+        "when is ","when are ","when will ","where is ","where are ","who is ","who will ","why is ","why are ","why do ","why did ",
+        "can you ","could you ","do you ",
+    ].iter().any(|p|t.starts_with(p)) {n+=1;}
     for p in ["what do you think", "any idea"] {
         if t.contains(p) {
             n += 2;
@@ -150,6 +159,11 @@ mod tests {
         assert!(score("Who cares?", false) < 4);
         assert!(score("We launch next week", false) < 4);
         assert_eq!(score("Can you clarify?", true), 2);
+    }
+    #[test]
+    fn unpunctuated_rnnt_questions_qualify_but_declarations_and_rhetoric_do_not() {
+        for text in ["What is our launch target for next quarter", "How do we fix this", "Can you explain the design"] {assert!(score(text,false)>=4,"{text}");}
+        for text in ["What we need is another review", "Who knows", "Who cares", "We launch next week"] {assert!(score(text,false)<4,"{text}");}
     }
     #[test]
     fn continued_question_and_self_suppression() {

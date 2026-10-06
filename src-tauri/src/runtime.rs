@@ -26,17 +26,33 @@ use tauri::{Emitter, Manager, State};
 use tokio::sync::{mpsc, oneshot};
 use tokio_util::sync::CancellationToken;
 
-#[derive(Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Copy, Default, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum SpeechBackend { #[default] Nemotron, Whisper }
+fn default_chunk() -> u32 { 160 }
+fn default_gpu() -> u32 { 1 }
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Settings {
     pub microphone: String,
     pub output: String,
     pub model_path: String,
+    #[serde(default)]
+    pub speech_backend: SpeechBackend,
+    #[serde(default = "default_chunk")]
+    pub speech_chunk_ms: u32,
+    #[serde(default)]
+    pub nemotron_runtime: String,
+    #[serde(default = "default_gpu")]
+    pub nemotron_device: u32,
     pub model: String,
     #[serde(default)]
     pub reasoning_effort: Option<String>,
     #[serde(default)]
     pub project_path: String,
+}
+impl Default for Settings {
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -52,8 +68,12 @@ pub struct Bootstrap {
 }
 struct Pipeline {
     capture: audio::Capture,
-    transcription: transcription::Transcription,
+    transcription: SpeechPipeline,
 }
+enum SpeechPipeline { Whisper(transcription::Transcription), Nemotron(transcription::nemotron::Streaming) }
+impl SpeechPipeline { fn stop(&mut self) { match self {Self::Whisper(p)=>p.stop(),Self::Nemotron(p)=>p.stop()} } }
+#[derive(Clone)]
+enum SpeechModel { Whisper(Arc<whisper_rs::WhisperContext>), Nemotron(Arc<transcription::nemotron::Service>) }
 impl Pipeline {
     fn stop(&mut self) {
         self.capture.stop();
@@ -69,7 +89,7 @@ struct Session {
     id: String,
     clock: Instant,
     settings: Settings,
-    model: Arc<whisper_rs::WhisperContext>,
+    model: SpeechModel,
     pipeline: Option<Pipeline>,
 }
 enum Control {
@@ -90,6 +110,7 @@ enum Control {
     ClearScreenshot,
 }
 enum Work {
+    Started(String, Result<Session, String>),
     Sent(String, u64),
     Delta(String, String),
     Complete(String),
@@ -109,6 +130,8 @@ pub struct Runtime {
     lifecycle: tokio::sync::Mutex<()>,
     models: tokio::sync::Mutex<Vec<Model>>,
     default_model: String,
+    default_nemotron_model: String,
+    default_nemotron_runtime: String,
     shortcut_errors: Vec<String>,
 }
 fn emit(app: &tauri::AppHandle, name: &str, payload: impl Serialize) {
@@ -131,20 +154,35 @@ async fn send(rt: &Runtime, c: Control) -> Result<(), String> {
         .await
         .map_err(|_| "Meeting engine is unavailable".into())
 }
-fn pipeline(
-    model: Arc<whisper_rs::WhisperContext>,
+async fn pipeline(
+    model: SpeechModel,
     s: &Settings,
     clock: Instant,
     events: mpsc::Sender<InputEvent>,
     levels: Arc<Mutex<(f32, f32)>>,
 ) -> Result<Pipeline, String> {
     let (tx, rx) = mpsc::channel(128);
-    let transcription = transcription::start(model, rx, events.clone(), levels)?;
-    let capture = audio::start(s.output.clone(), s.microphone.clone(), clock, tx, events)?;
+    let transcription = match model {
+        SpeechModel::Whisper(model)=>{let ev=events.clone();SpeechPipeline::Whisper(tokio::task::spawn_blocking(move||transcription::start(model,rx,ev,levels)).await.map_err(|e|e.to_string())??)},
+        SpeechModel::Nemotron(service)=>SpeechPipeline::Nemotron(transcription::nemotron::start(service,rx,events.clone(),levels).await?),
+    };
+    let output=s.output.clone();let microphone=s.microphone.clone();
+    let capture = tokio::task::spawn_blocking(move||audio::start(output,microphone,clock,tx,events)).await.map_err(|e|e.to_string())??;
     Ok(Pipeline {
         capture,
         transcription,
     })
+}
+struct Starting { id:String, cancel:CancellationToken, reply:oneshot::Sender<Result<(),String>> }
+async fn start_session(settings:Settings, events:mpsc::Sender<InputEvent>, levels:Arc<Mutex<(f32,f32)>>, cancel:CancellationToken)->Result<Session,String> {
+    let model=match settings.speech_backend {
+        SpeechBackend::Nemotron=>SpeechModel::Nemotron(transcription::nemotron::Service::load(&settings.nemotron_runtime,&settings.model_path,settings.speech_chunk_ms,settings.nemotron_device,&cancel).await?),
+        SpeechBackend::Whisper=>{let path=settings.model_path.clone();SpeechModel::Whisper(tokio::task::spawn_blocking(move||transcription::whisper::load(&path)).await.map_err(|e|e.to_string())??)},
+    };
+    if cancel.is_cancelled(){return Err("Speech startup cancelled".into());}
+    let clock=Instant::now();
+    let pipeline=tokio::select! { _=cancel.cancelled()=>return Err("Speech startup cancelled".into()), result=pipeline(model.clone(),&settings,clock,events,levels)=>result? };
+    Ok(Session{id:uuid::Uuid::new_v4().to_string(),clock,settings,model,pipeline:Some(pipeline)})
 }
 async fn actor(
     app: tauri::AppHandle,
@@ -158,6 +196,7 @@ async fn actor(
     let mut engine = Engine::default();
     engine.view.protection = view.lock().unwrap().protection;
     let mut session: Option<Session> = None;
+    let mut starting: Option<Starting> = None;
     let mut generation: Option<CancellationToken> = None;
     let mut automatic = false;
     let mut summary: Option<CancellationToken> = None;
@@ -171,20 +210,19 @@ async fn actor(
     let mut screenshot_request: Option<String> = None;
     loop {
         tokio::select! {
-            control=controls.recv()=>{let Some(control)=control else{break};match control {
+            control=controls.recv()=>{let Some(control)=control else{break};if starting.is_some()&&!matches!(&control,Control::Start(..)|Control::Stop(..)){continue;}match control {
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Protection(enabled,reply)=>{engine.view.protection=enabled;publish(&app,&mut engine,&view);let _=reply.send(());},
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Inject(mut event,reply)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);match &mut event{InputEvent::SpeechStarted(_,t)|InputEvent::SpeechEnded(_,t)=>*t=now,InputEvent::Transcript(s)=>{s.started_at=now;s.ended_at=now;},_=>{}}let _=events_tx.send(event).await;let _=reply.send(now);}, Control::Start(settings,reply)=>{
-                    if session.is_some(){let _=reply.send(Err("A meeting is already active".into()));continue;}
+                    if session.is_some()||starting.is_some(){let _=reply.send(Err("A meeting is already active".into()));continue;}
                     let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx;
-                    let model_path=settings.model_path.clone();let started=tokio::task::spawn_blocking(move||transcription::whisper::load(&model_path)).await.map_err(|e|e.to_string()).and_then(|r|r);
-                    match started {
-                        Ok(model)=>{let clock=Instant::now();let copy=settings.clone();let ctx=model.clone();let tx=events_tx.clone();let lv=levels.clone();let result=tokio::task::spawn_blocking(move||pipeline(ctx,&copy,clock,tx,lv)).await.map_err(|e|e.to_string()).and_then(|r|r);
-                            match result {Ok(p)=>{let id=uuid::Uuid::new_v4().to_string();if let Err(e)=db.start(&id,crate::openai::auth::now()){drop(p);let _=reply.send(Err(e));continue;}
-                                summary_retry_at=0;transcript_at=0;engine.clear_meeting();engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);session=Some(Session{id,clock,settings,model,pipeline:Some(p)});publish(&app,&mut engine,&view);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=reply.send(Ok(()));},Err(e)=>{let _=reply.send(Err(e));}}
-                        },Err(e)=>{let _=reply.send(Err(e));}
-                    }
+                    let id=uuid::Uuid::new_v4().to_string();let cancel=CancellationToken::new();
+                    starting=Some(Starting{id:id.clone(),cancel:cancel.clone(),reply});
+                    engine.clear_meeting();engine.view.active=true;engine.view.status="loading".into();publish(&app,&mut engine,&view);
+                    let tx=work_tx.clone();let ev=events_tx.clone();let lv=levels.clone();
+                    tauri::async_runtime::spawn(async move{let result=start_session(settings,ev,lv,cancel).await;let _=tx.send(Work::Started(id,result)).await;});
                 },
                 Control::Stop(reply)=>{automatic=false;project_request=None;screenshot_request=None;
+                    if let Some(pending)=starting.take(){pending.cancel.cancel();let _=pending.reply.send(Err("Speech startup cancelled".into()));}
                     cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
                     let result=if let Some(mut s)=session.take(){if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;}db.stop(&s.id,crate::openai::auth::now())}else{Ok(())};
                     let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; while work.try_recv().is_ok(){}*levels.lock().unwrap()=(0.,0.);engine.clear_meeting();window::set_manual(&app,false);window::hide(&app);publish(&app,&mut engine,&view);emit(&app,"meeting.stopped",());let _=reply.send(result);
@@ -192,7 +230,7 @@ async fn actor(
                 Control::Pause=>{automatic=false;if let Some(s)=session.as_mut(){
                     cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();
                     if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();}
-                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match tokio::task::spawn_blocking(move||pipeline(model,&settings,clock,tx,lv)).await.map_err(|e|e.to_string()).and_then(|r|r){Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
+                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
                     publish(&app,&mut engine,&view);
                 }},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
@@ -238,6 +276,15 @@ async fn actor(
                 }
             },
             w=work.recv()=>{let Some(w)=w else{continue};match w {
+                Work::Started(id,result)=>{if starting.as_ref().is_some_and(|pending|pending.id==id){let pending=starting.take().unwrap();
+                    match result {
+                        Ok(s)=>{match db.start(&s.id,crate::openai::auth::now()){
+                            Ok(())=>{session=Some(s);summary_retry_at=0;transcript_at=0;engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=pending.reply.send(Ok(()));},
+                            Err(error)=>{drop(s);engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
+                        }},
+                        Err(error)=>{engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
+                    }publish(&app,&mut engine,&view);
+                }},
                 Work::Sent(id,time)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){if let Some(l)=engine.view.latency.as_mut(){l.request_sent_at=time;}}},
                 Work::Delta(id,delta)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);if let Some(l)=engine.view.latency.as_mut(){if l.first_token_at.is_none(){l.first_token_at=Some(now)}}if engine.view.answer.len()+delta.len()>32_000{cancel_answer(&app,&mut generation);engine.view.error=Some("Answer exceeds display size limit".into());engine.view.status="error".into();publish(&app,&mut engine,&view);continue;}engine.view.answer.push_str(&delta);engine.view.status="answer".into();emit(&app,"answer.delta",serde_json::json!({"id":id,"delta":delta}));publish(&app,&mut engine,&view);}},
                 Work::Complete(id)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;if let Some(l)=engine.view.latency.as_mut(){l.completed_at=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);let metrics=serde_json::json!({"speech_to_transcript":l.transcript_final_at.saturating_sub(l.speech_stopped_at),"question_detection":l.question_confirmed_at.saturating_sub(l.transcript_final_at),"request_to_first_token":l.first_token_at.map(|t|t.saturating_sub(l.request_sent_at)),"total_to_first_answer":l.first_token_at.map(|t|t.saturating_sub(l.speech_stopped_at))});emit(&app,"latency.measured",metrics.clone());eprintln!("latency {metrics}");}emit(&app,"answer.completed",serde_json::json!({"id":id}));publish(&app,&mut engine,&view);}},
@@ -329,8 +376,11 @@ fn generate(
 #[tauri::command]
 async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
     let mut settings = load_settings(&rt.db)?;
-    if settings.model_path.is_empty() {
-        settings.model_path = rt.default_model.clone();
+    if settings.speech_backend == SpeechBackend::Nemotron {
+        if settings.model_path.is_empty() || settings.model_path.ends_with(".bin") { settings.model_path=rt.default_nemotron_model.clone(); }
+        if settings.nemotron_runtime.is_empty(){settings.nemotron_runtime=rt.default_nemotron_runtime.clone();}
+    } else if settings.model_path.is_empty() {
+        settings.model_path=rt.default_model.clone();
     }
     let devices = tokio::task::spawn_blocking(audio::devices)
         .await
@@ -495,6 +545,7 @@ async fn save_settings(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
 }
 #[tauri::command]
 async fn start_meeting(rt: State<'_, Runtime>, settings: Settings) -> Result<(), String> {
+    if settings.speech_backend==SpeechBackend::Nemotron {transcription::nemotron::right_context(settings.speech_chunk_ms)?;}
     if settings
         .reasoning_effort
         .as_deref()
@@ -517,6 +568,7 @@ async fn start_meeting(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
     )?;
     let (tx, rx) = oneshot::channel();
     send(&rt, Control::Start(settings, tx)).await?;
+    drop(_lock);
     rx.await.map_err(|e| e.to_string())?
 }
 #[tauri::command]
@@ -687,6 +739,9 @@ pub fn run() {
         let bundled=app.path().resolve("models/ggml-tiny.en.bin",tauri::path::BaseDirectory::Resource)?;
         let source=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../models/ggml-tiny.en.bin");
         let default_model=if cfg!(debug_assertions)&&source.is_file(){source}else{bundled}.to_string_lossy().into_owned();
+        let asset=|resource:&str,development:&str|->Result<String,tauri::Error>{let source=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(development);let path=if cfg!(debug_assertions)&&source.is_file(){source}else{app.path().resolve(resource,tauri::path::BaseDirectory::Resource)?};Ok(path.to_string_lossy().into_owned())};
+        let default_nemotron_model=asset("models/nemotron-speech-streaming-en-0.6b.q8_0.gguf","../models/nemotron-speech-streaming-en-0.6b.q8_0.gguf")?;
+        let default_nemotron_runtime=asset("nemotron/nemo-speech.exe","../.local/nemotron/nemo-speech-0.2.0-windows-x86_64-vulkan/bin/nemo-speech.exe")?;
             let db = Arc::new(
                 Database::open(&dir.join("settings.sqlite")).map_err(std::io::Error::other)?,
             );
@@ -716,6 +771,8 @@ pub fn run() {
                 lifecycle: tokio::sync::Mutex::new(()),
             models: tokio::sync::Mutex::new(vec![]),
             default_model,
+            default_nemotron_model,
+            default_nemotron_runtime,
             shortcut_errors,
             });
             #[cfg(debug_assertions)] eprintln!("runtime: shortcuts ready");

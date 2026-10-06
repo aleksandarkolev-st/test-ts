@@ -34,10 +34,32 @@ pub fn right_context(chunk_ms: u32) -> Result<u32, String> {
 
 pub struct Service {
     child: Mutex<Child>,
+    #[cfg(windows)]
+    _job: ProcessJob,
     url: String,
     key: String,
     chunk_ms: u32,
 }
+#[cfg(windows)]
+struct ProcessJob(usize);
+#[cfg(windows)]
+impl ProcessJob {
+    fn attach(child:&Child)->Result<Self,String> {
+        use std::os::windows::io::AsRawHandle;
+        use windows::Win32::{Foundation::{HANDLE,CloseHandle},System::JobObjects::*};
+        unsafe {
+            let job=CreateJobObjectW(None,None).map_err(|_|"Cannot create local speech process job")?;
+            let mut limits=JOBOBJECT_EXTENDED_LIMIT_INFORMATION::default();
+            limits.BasicLimitInformation.LimitFlags=JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+            let result=SetInformationJobObject(job,JobObjectExtendedLimitInformation,(&limits as *const JOBOBJECT_EXTENDED_LIMIT_INFORMATION).cast(),std::mem::size_of_val(&limits) as u32)
+                .and_then(|_|AssignProcessToJobObject(job,HANDLE(child.as_raw_handle())));
+            if result.is_err(){let _=CloseHandle(job);return Err("Cannot contain the local speech process lifetime".into());}
+            Ok(Self(job.0 as usize))
+        }
+    }
+}
+#[cfg(windows)]
+impl Drop for ProcessJob {fn drop(&mut self){unsafe{let _=windows::Win32::Foundation::CloseHandle(windows::Win32::Foundation::HANDLE(self.0 as *mut _));}}}
 impl Drop for Service {
     fn drop(&mut self) {
         if let Ok(child) = self.child.get_mut() {
@@ -51,9 +73,11 @@ impl Service {
         runtime: &str,
         model: &str,
         chunk_ms: u32,
+        device: u32,
         cancel: &CancellationToken,
     ) -> Result<Arc<Self>, String> {
         let context = right_context(chunk_ms)?;
+        let backend = format!("vulkan:{device}");
         let runtime = Path::new(runtime)
             .canonicalize()
             .map_err(|_| "Choose the installed local nemo-speech.exe runtime".to_string())?;
@@ -82,8 +106,13 @@ impl Service {
                 "--asr-model",
                 &model.to_string_lossy(),
                 "--backend",
-                "vulkan:0",
+                &backend,
                 "--no-ui",
+                "--asr.batching.enabled=false",
+                "--asr.batching.max_batch_size",
+                "2",
+                "--asr.batching.state_arena_slots",
+                "2",
                 "--asr.streaming.rnnt_right_context",
                 &context.to_string(),
                 "--asr.endpointing.enable=true",
@@ -99,12 +128,13 @@ impl Service {
             use std::os::windows::process::CommandExt;
             command.creation_flags(0x08000000);
         }
+        let mut child=command.spawn().map_err(|_|"Cannot launch the local Nemotron runtime".to_string())?;
+        #[cfg(windows)]
+        let job=match ProcessJob::attach(&child){Ok(job)=>job,Err(error)=>{let _=child.kill();let _=child.wait();return Err(error);}};
         let service = Arc::new(Self {
-            child: Mutex::new(
-                command
-                    .spawn()
-                    .map_err(|_| "Cannot launch the local Nemotron runtime".to_string())?,
-            ),
+            child: Mutex::new(child),
+            #[cfg(windows)]
+            _job: job,
             url: format!("ws://127.0.0.1:{port}/v1/audio/transcriptions/realtime"),
             key,
             chunk_ms,
@@ -137,7 +167,7 @@ impl Service {
                 if response.status().is_success() {
                     if let Ok(body) = response.json::<Value>().await {
                         if body["ready"] == true
-                            && body["device"] == "vulkan:0"
+                        && body["device"] == backend
                             && body["capabilities"]
                                 .as_array()
                                 .is_some_and(|a| a.iter().any(|v| v == "asr"))

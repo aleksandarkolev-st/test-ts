@@ -29,14 +29,20 @@ let existingEndpoint = false;
 try { existingEndpoint = (await fetch('http://127.0.0.1:9557/json/version')).ok; } catch {}
 assert.equal(existingEndpoint, false, 'CDP port 9557 is already owned; close the verified idle app before checking a new package');
 const app=spawn(path.join(dir,'meeting-copilot.exe'),[],{cwd:dir,detached:keep,windowsHide:true,env:{...process.env,WEBVIEW2_USER_DATA_FOLDER:path.join(root,'.local/packaged-webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9557'},stdio:'ignore'});
-let browser;
+let browser,succeeded=false;
 try{
   for(let i=0;i<150;i++){try{browser=await chromium.connectOverCDP('http://127.0.0.1:9557');break;}catch{assert.equal(app.exitCode,null,`Packaged executable exited ${app.exitCode}`);await new Promise(r=>setTimeout(r,100));}}
   assert(browser,'Packaged WebView2 did not initialize');let page;
   for(let i=0;i<100;i++){page=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));if(page)break;await new Promise(r=>setTimeout(r,100));}
   assert(page,'Packaged main window did not load');
   const invoke=(name,args={})=>page.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
-  const b=await invoke('bootstrap');assert.equal(b.debug,false);assert(b.devices.length>1);assert(b.snapshot.protection);await access(b.settings.modelPath);
+  let b=await invoke('bootstrap');assert.equal(b.debug,false);assert(b.devices.length>1);assert(b.snapshot.protection);
+  if(process.argv.includes('--use-bundled-speech')){
+    assert.equal(b.snapshot.active,false);
+    await invoke('save_settings',{settings:{...b.settings,speechBackend:'nemotron',speechChunkMs:160,nemotronDevice:1,modelPath:path.join(dir,'models/nemotron-speech-streaming-en-0.6b.q8_0.gguf'),nemotronRuntime:path.join(dir,'nemotron/nemo-speech.exe')}});
+    b=await invoke('bootstrap');
+  }
+  await access(b.settings.modelPath);
   assert.equal(b.settings.speechBackend,'nemotron');await access(b.settings.nemotronRuntime);assert.equal(b.settings.speechChunkMs,160);
   const cameraDevices=await invoke('gaze_devices');assert(cameraDevices.cameras.some(c=>c.allowed));const gpu=cameraDevices.gpus.find(g=>/RX 9070 XT/.test(g.name));assert(gpu);
   const input=cameraDevices.cameras.find(c=>c.allowed);
@@ -49,5 +55,6 @@ try{
     await assert.rejects(invoke(name,args));
   }
   const result={pass:true,packagedFiles:required.length,verifiedSidecarResources:resourceFiles,runtimeHashesMatchBuild:true,modelChecksumVerified:true,nemotronDefault:true,frozenCameraPreview:true,productionDebugDisabled:true,acceptanceHooksDisabled:true,captureProtectionReadback:true,audioDeviceCount:b.devices.length,completedAt:new Date().toISOString()};await writeFile(path.join(root,'artifacts/package/results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+  succeeded=true;
   if(keep){console.log('Packaged app remains open for the live ChatGPT sign-in check.');app.unref();}
-}finally{if(browser){const main=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));try{await main?.evaluate(()=>window.__TAURI_INTERNALS__.invoke('gaze_stop'));}catch{}}await browser?.close();if(!keep)app.kill();}
+}finally{if(browser){const main=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));try{await main?.evaluate(()=>window.__TAURI_INTERNALS__.invoke('gaze_stop'));}catch{}}await browser?.close();if(!keep||!succeeded)app.kill();}

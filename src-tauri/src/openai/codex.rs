@@ -96,7 +96,7 @@ impl Codex {
         let mut layers=vec![&loaded["config"]];
         if let Some(raw)=loaded["layers"].as_array(){layers.extend(raw.iter().map(|layer|&layer["config"]));}
         for layer in layers {
-            disable_integrations(&mut config,layer);
+            disable_integrations(&mut config,layer)?;
         }
         let started = service.rpc("thread/start", json!({"model":model,"modelProvider":"openai","serviceTier":tier,
             "ephemeral":true,"cwd":self.cwd,"approvalPolicy":"never","sandbox":"read-only",
@@ -146,15 +146,19 @@ fn check_completion(turn: &Value) -> Result<(), String> {
 fn is_tool(item: &Value) -> bool {
     !matches!(item["type"].as_str(), Some("userMessage" | "agentMessage" | "reasoning" | "contextCompaction"))
 }
-fn disable_integrations(config: &mut Value, layer: &Value) {
+fn disable_integrations(config: &mut Value, layer: &Value) -> Result<(), String> {
     for section in ["mcp_servers", "plugins"] {
         if let Some(entries)=layer[section].as_object() {
             for key in entries.keys() {
-                let quoted=serde_json::to_string(key).unwrap();
-                config[format!("{section}.{quoted}.enabled")]=json!(false);
+                // RPC override keys are split on dots, rather than parsed as
+                // quoted TOML paths. Refuse an ambiguous identifier instead
+                // of silently leaving an inherited integration enabled.
+                if key.contains('.') { return Err("Cannot isolate a Codex integration with a dotted identifier".into()); }
+                config[format!("{section}.{key}.enabled")]=json!(false);
             }
         }
     }
+    Ok(())
 }
 
 struct Service {
@@ -218,9 +222,33 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     #[test] fn only_completed_turns_succeed() { assert!(check_completion(&json!({"status":"completed"})).is_ok());for status in ["failed","interrupted","inProgress"]{assert!(check_completion(&json!({"status":status})).is_err());} }
     #[test] fn unexpected_tools_are_rejected() { for kind in ["commandExecution","fileChange","mcpToolCall","webSearch","dynamicToolCall"]{assert!(is_tool(&json!({"type":kind})));}assert!(!is_tool(&json!({"type":"agentMessage"}))); }
     #[test] fn inherited_integrations_are_disabled_without_copying_secrets() {
-        let mut config=json!({});disable_integrations(&mut config,&json!({"mcp_servers":{"server.with.dots":{"env":{"TOKEN":"private-fixture"}}},"plugins":{"plugin@catalog":{"enabled":true}}}));
-        assert_eq!(config["mcp_servers.\"server.with.dots\".enabled"],false);
-        assert_eq!(config["plugins.\"plugin@catalog\".enabled"],false);
+        let mut config=json!({});disable_integrations(&mut config,&json!({"mcp_servers":{"node_repl":{"env":{"TOKEN":"private-fixture"}}},"plugins":{"plugin@catalog":{"enabled":true}}})).unwrap();
+        assert_eq!(config["mcp_servers.node_repl.enabled"],false);
+        assert_eq!(config["plugins.plugin@catalog.enabled"],false);
         assert!(!config.to_string().contains("private-fixture"));
+        assert!(disable_integrations(&mut config,&json!({"mcp_servers":{"server.with.dots":{"enabled":true}}})).is_err());
+    }
+    #[tokio::test]
+    #[ignore = "Uses the signed-in Codex account for one controlled live inference"]
+    async fn live_fast_stream_cancels_and_stop_releases_the_process() {
+        let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
+        let cwd=binary.parent().unwrap().join("test-work");
+        let codex=Codex::new(binary,cwd);
+        assert!(codex.account().await.unwrap().is_some());
+        assert!(codex.models().await.unwrap().iter().any(|m|m.slug=="gpt-6-luna"));
+        let service=codex.ready(&CancellationToken::new()).await.unwrap();
+        let cancel=CancellationToken::new();let abort=cancel.clone();let mut deltas=0;
+        let result=codex.stream("gpt-6-luna",Some("fast"),Some("xhigh"),"Use only supplied context. Do not use tools.",
+            "Synthetic meeting: the target is February 19. Explain the target in three short sentences.",None,cancel,|event| {
+                if let StreamEvent::Delta(_)=event {deltas+=1;abort.cancel();}
+                std::future::ready(Ok(()))
+            }).await;
+        assert!(deltas>0,"Actual native stream must deliver text before cancellation: {result:?}");
+        assert_eq!(result.unwrap_err(),"cancelled");
+        codex.close();
+        assert!(codex.service.lock().unwrap().is_none());
+        assert!(service.dead.is_cancelled());
+        let deadline=tokio::time::Instant::now()+Duration::from_secs(5);
+        loop {if service.child.lock().unwrap().try_wait().unwrap().is_some(){break;}assert!(tokio::time::Instant::now()<deadline,"Codex child survived Stop");tokio::time::sleep(Duration::from_millis(25)).await;}
     }
 }

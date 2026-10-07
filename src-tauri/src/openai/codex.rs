@@ -1,6 +1,8 @@
 //! Codex owns its authentication and native inference route. Meeting text lives
 //! only in ephemeral threads; the contained process is released on meeting Stop.
 use super::client::{Model, StreamEvent};
+use super::timing::{Stage, Trace};
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::{collections::HashMap, io::{BufRead, BufReader, Read, Write}, path::PathBuf,
     process::{Child, Command, Stdio}, sync::{Arc, Mutex, Weak, atomic::{AtomicU64, Ordering}}, time::Duration};
@@ -9,6 +11,11 @@ use tokio_util::sync::CancellationToken;
 
 type Reply = oneshot::Sender<Result<Value, String>>;
 const RPC_TIMEOUT: Duration = Duration::from_secs(30);
+const PREPARED_POOL_SIZE: usize = 3;
+#[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all="snake_case")]
+pub enum RefillPolicy { Immediate, #[default] FirstToken, Disabled }
+struct PreparedThread { key: String, id: String, acknowledged: std::time::Instant }
 
 pub struct Codex {
     binary: PathBuf,
@@ -17,16 +24,16 @@ pub struct Codex {
     starting: tokio::sync::Mutex<()>,
     epoch: AtomicU64,
     warming: tokio::sync::Mutex<()>,
-    warm: Mutex<Vec<(String, String)>>,
+    prepared: Mutex<Vec<PreparedThread>>,
     slots: tokio::sync::Semaphore,
 }
 impl Codex {
     pub fn new(binary: PathBuf, cwd: PathBuf) -> Arc<Self> {
-        Arc::new(Self { binary, cwd, service: Mutex::new(None), starting: tokio::sync::Mutex::new(()), epoch: AtomicU64::new(0), warming: tokio::sync::Mutex::new(()), warm: Mutex::new(Vec::new()), slots:tokio::sync::Semaphore::new(2) })
+        Arc::new(Self { binary, cwd, service: Mutex::new(None), starting: tokio::sync::Mutex::new(()), epoch: AtomicU64::new(0), warming: tokio::sync::Mutex::new(()), prepared: Mutex::new(Vec::new()), slots:tokio::sync::Semaphore::new(2) })
     }
     pub fn close(&self) {
         self.epoch.fetch_add(1, Ordering::AcqRel);
-        self.warm.lock().unwrap().clear();
+        self.prepared.lock().unwrap().clear();
         if let Some(service) = self.service.lock().unwrap().take() { service.shutdown(); }
     }
     async fn ready(&self, cancel: &CancellationToken) -> Result<Arc<Service>, String> {
@@ -35,7 +42,7 @@ impl Codex {
         let _start = tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), lock=self.starting.lock()=>lock };
         if self.epoch.load(Ordering::Acquire) != epoch { return Err("cancelled".into()); }
         if let Some(service) = self.service.lock().unwrap().as_ref().filter(|s| !s.dead.is_cancelled()) { return Ok(service.clone()); }
-        self.warm.lock().unwrap().clear();
+        self.prepared.lock().unwrap().clear();
         let service = Service::launch(&self.binary, &self.cwd)?;
         // Register before awaiting the handshake, so Stop can kill a loading
         // process immediately as well as one serving an established session.
@@ -110,39 +117,59 @@ impl Codex {
         Ok(started["thread"]["id"].as_str().ok_or("Codex returned no thread ID")?.to_string())
     }
     pub async fn prewarm(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str, cancel: &CancellationToken) -> Result<(), String> {
+        self.prepare_pool(model,tier,effort,instructions,cancel,None).await
+    }
+    async fn prepare_pool(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str, cancel: &CancellationToken, trace: Option<&Trace>) -> Result<(), String> {
         let epoch = self.epoch.load(Ordering::Acquire);
         let _lock = tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), lock=self.warming.lock()=>lock };
         let service = self.ready(cancel).await?;
         let key = json!([model,tier,effort,instructions]).to_string();
-        while self.warm.lock().unwrap().iter().filter(|(k,_)|k==&key).count() < 2 {
+        while self.prepared.lock().unwrap().iter().filter(|t|t.key==key).count() < PREPARED_POOL_SIZE {
+            if let Some(trace)=trace {trace.mark(Stage::RefillStarted);}
             let id = self.prepare(&service,model,tier,effort,instructions,cancel).await?;
-            let mut warm = self.warm.lock().unwrap();
+            let mut prepared = self.prepared.lock().unwrap();
             if cancel.is_cancelled() || epoch != self.epoch.load(Ordering::Acquire) { return Err("cancelled".into()); }
-            warm.push((key.clone(),id));
+            // thread/start acknowledges a session, not internal WS readiness.
+            prepared.push(PreparedThread {key:key.clone(),id,acknowledged:std::time::Instant::now()});
+            if let Some(trace)=trace {trace.refill_thread_created();}
         }
+        if let Some(trace)=trace {trace.mark(Stage::RefillCompleted);}
         Ok(())
+    }
+    fn spawn_refill(self:&Arc<Self>, service:&Arc<Service>, model:&str, tier:Option<&str>, effort:Option<&str>, instructions:&str, trace:Option<&Trace>) {
+        let codex=self.clone(); let model=model.to_string(); let tier=tier.map(String::from); let effort=effort.map(String::from); let instructions=instructions.to_string();
+        let dead=service.dead.clone();let trace=trace.cloned();
+        tokio::spawn(async move {if codex.prepare_pool(&model,tier.as_deref(),effort.as_deref(),&instructions,&dead,trace.as_ref()).await.is_err(){if let Some(trace)=trace{trace.refill_failed();}}});
     }
     #[allow(clippy::too_many_arguments)]
     pub async fn stream<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
-        input: &str, image: Option<&str>, cancel: CancellationToken, mut event: F) -> Result<(), String>
+        input: &str, image: Option<&str>, cancel: CancellationToken, event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
+        self.stream_traced(model,tier,effort,instructions,input,image,cancel,RefillPolicy::FirstToken,None,event).await
+    }
+    #[allow(clippy::too_many_arguments)]
+    pub async fn stream_traced<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
+        input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut event: F) -> Result<(), String>
+    where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
+        if let Some(trace)=&trace {trace.mark(Stage::StreamEntered);}
         let _slot=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),slot=self.slots.acquire()=>slot.map_err(|_|"Codex scheduler closed")?};
+        if let Some(trace)=&trace {trace.mark(Stage::SemaphoreAcquired);}
         let service = self.ready(&cancel).await?;
         let key = json!([model,tier,effort,instructions]).to_string();
         let answer = instructions == super::prompts::answer_instructions(super::prompts::ANSWER);
         let wait_deadline=tokio::time::Instant::now()+RPC_TIMEOUT;
         let warm = loop {
-            let warm={ let mut pool=self.warm.lock().unwrap(); pool.iter().position(|(k,_)|k==&key).map(|i|pool.remove(i).1) };
+            let warm={ let mut pool=self.prepared.lock().unwrap(); pool.iter().position(|t|t.key==key).map(|i|pool.remove(i)) };
             if warm.is_some() || !answer {break warm;}
             if tokio::time::Instant::now()>=wait_deadline{return Err("No prepared Codex answer thread is available".into());}
             tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),_=service.dead.cancelled()=>return Err("Codex connection closed".into()),_=tokio::time::sleep(Duration::from_millis(10))=>{}}
         };
-        let id = match warm {Some(id)=>id,None=>self.prepare(&service,model,tier,effort,instructions,&cancel).await?};
-        if answer {
-            let codex=self.clone(); let model=model.to_string(); let tier=tier.map(String::from); let effort=effort.map(String::from); let instructions=instructions.to_string();
-            let dead=service.dead.clone();
-            tokio::spawn(async move { let _=codex.prewarm(&model,tier.as_deref(),effort.as_deref(),&instructions,&dead).await; });
+        let id = match warm {Some(thread)=>{if let Some(trace)=&trace{trace.mark(Stage::WarmThreadTaken);trace.prepared_age(thread.acknowledged.elapsed().as_millis()as u64);}thread.id},None=>self.prepare(&service,model,tier,effort,instructions,&cancel).await?};
+        let mut refill_requested=false;
+        if answer && policy==RefillPolicy::Immediate {
+            self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());refill_requested=true;
         }
+        if let Some(trace)=&trace { service.traces.lock().unwrap().insert(id.clone(),trace.clone()); }
         let (tx, mut events) = mpsc::channel(256);
         service.events.lock().unwrap().insert(id.clone(), tx);
         let mut turn_input = vec![json!({"type":"text","text":input})];
@@ -152,12 +179,14 @@ impl Codex {
             // Keep the acknowledgement even if speech resumes during the RPC:
             // we need its turn id to interrupt before releasing the slot.
             let turn=service.rpc("turn/start", json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":turn_input}), &service.dead).await?;
+            if let Some(trace)=&trace {trace.mark(Stage::TurnStartAck);}
             turn_id=turn["turn"]["id"].as_str().map(String::from);
             let deadline = tokio::time::sleep(Duration::from_secs(120));tokio::pin!(deadline);
             loop {
                 let message = tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), _=service.dead.cancelled()=>return Err("Codex connection closed".into()), _=&mut deadline=>return Err("Codex answer timed out".into()), msg=events.recv()=>msg.ok_or("Codex stream ended")? };
                 match message["method"].as_str() {
                     Some("item/agentMessage/delta") => {
+                        if answer && policy==RefillPolicy::FirstToken && !refill_requested {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());refill_requested=true;}
                         let delta = message["params"]["delta"].as_str().ok_or("Invalid Codex text delta")?;
                         tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(StreamEvent::Delta(delta.into()))=>result? }
                     }
@@ -174,7 +203,10 @@ impl Codex {
         service.events.lock().unwrap().remove(&id);
         // Interrupt on failure/cancellation before dropping the ephemeral state.
         if result.is_err() { if let Some(turn_id)=turn_id { let _=service.rpc("turn/interrupt",json!({"threadId":id,"turnId":turn_id}),&service.dead).await; } }
+        if cancel.is_cancelled(){if let Some(trace)=&trace{trace.cancelled();}}
+        if answer && policy==RefillPolicy::FirstToken && !refill_requested && !service.dead.is_cancelled() {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());}
         let _=service.send(json!({"id":service.next_id(),"method":"thread/unsubscribe","params":{"threadId":id}})).await;
+        service.traces.lock().unwrap().remove(&id);
         result
     }
 }
@@ -201,6 +233,7 @@ fn disable_integrations(config: &mut Value, layer: &Value) -> Result<(), String>
 }
 
 struct Service {
+    traces: Mutex<HashMap<String, Trace>>,
     config: tokio::sync::OnceCell<Value>,
     child: Mutex<Child>,
     #[cfg(windows)] _job: crate::process::ProcessJob,
@@ -221,9 +254,11 @@ impl Service {
         let stdout=child.stdout.take().ok_or("Codex output pipe missing")?;
         let mut stdin=child.stdin.take().ok_or("Codex input pipe missing")?;
         let (outgoing, mut queue)=mpsc::channel::<Value>(16);
-        let service=Arc::new(Self {config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()});
+        let service=Arc::new(Self {traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()});
         let writer=Arc::downgrade(&service);
-        std::thread::spawn(move||{while let Some(message)=queue.blocking_recv(){if serde_json::to_writer(&mut stdin,&message).is_err()||stdin.write_all(b"\n").is_err()||stdin.flush().is_err(){break;}}if let Some(s)=writer.upgrade(){s.shutdown();}});
+        std::thread::spawn(move||{while let Some(message)=queue.blocking_recv(){
+            if message["method"]=="turn/start" {if let Some(s)=writer.upgrade(){if let Some(id)=message["params"]["threadId"].as_str(){if let Some(trace)=s.traces.lock().unwrap().get(id){trace.mark(Stage::TurnStartSent);}}}}
+            if serde_json::to_writer(&mut stdin,&message).is_err()||stdin.write_all(b"\n").is_err()||stdin.flush().is_err(){break;}}if let Some(s)=writer.upgrade(){s.shutdown();}});
         let reader=Arc::downgrade(&service);
         std::thread::spawn(move||{let mut lines=BufReader::new(stdout);loop{let mut line=Vec::new();match lines.by_ref().take(64*1024*1024).read_until(b'\n',&mut line){Ok(0)|Err(_)=>break,Ok(_)=>{if line.last()!=Some(&b'\n'){break;}}}let Ok(message)=serde_json::from_slice::<Value>(&line)else{break;};if !dispatch(&reader,message){break;}}if let Some(s)=reader.upgrade(){s.shutdown();}});
         Ok(service)
@@ -250,6 +285,7 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
             let result=if message.get("error").is_some(){Err(message["error"]["message"].as_str().unwrap_or("Codex request failed").into())}else{Ok(message["result"].clone())};let _=reply.send(result);
         }else if message.get("method").is_some(){let _=service.outgoing.blocking_send(json!({"id":id,"error":{"code":-32601,"message":"Meeting answers do not execute tools"}}));}
     }else if let Some(id)=message["params"]["threadId"].as_str() {
+        if message["method"]=="item/agentMessage/delta" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}
         let sender=service.events.lock().unwrap().get(id).cloned();
         if let Some(sender)=sender { let _=sender.blocking_send(message); }
     }

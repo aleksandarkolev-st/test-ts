@@ -2,6 +2,7 @@ pub mod auth;
 pub mod client;
 pub mod codex;
 pub mod prompts;
+pub mod timing;
 
 pub fn acceptance_mode() -> bool {
     #[cfg(all(feature = "acceptance", debug_assertions))]

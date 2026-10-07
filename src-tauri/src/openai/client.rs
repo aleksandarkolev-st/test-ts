@@ -43,6 +43,8 @@ pub fn preferred(models: &[Model]) -> Option<&Model> {
 }
 #[derive(Clone)]
 pub struct Client {
+    trace: Option<super::timing::Trace>,
+    refill_policy: super::codex::RefillPolicy,
     pub http: reqwest::Client,
     base: String,
     reasoning_effort: Option<String>,
@@ -56,6 +58,8 @@ pub enum AnswerBackend { #[default] Chatgpt, Codex }
 impl Default for Client {
     fn default() -> Self {
         Self {
+            trace: None,
+            refill_policy: super::codex::RefillPolicy::default(),
             http: reqwest::Client::builder()
                 .connect_timeout(std::time::Duration::from_secs(10))
                 .timeout(std::time::Duration::from_secs(120))
@@ -70,6 +74,8 @@ impl Default for Client {
                     let u = url::Url::parse(&base).expect("Test API URL");
                     assert!(u.scheme() == "http" && u.host_str() == Some("127.0.0.1"));
                     return Self {
+                        trace: None,
+                        refill_policy: super::codex::RefillPolicy::default(),
                         http: reqwest::Client::new(),
                         base,
                         reasoning_effort: None,
@@ -106,6 +112,8 @@ pub fn request_body_with_image(model: &str, instructions: &str, input: &str, ima
     body
 }
 impl Client {
+    pub fn with_trace(mut self, trace: super::timing::Trace) -> Self { self.trace=Some(trace);self }
+    pub fn with_refill(mut self, policy: super::codex::RefillPolicy) -> Self { self.refill_policy=policy;self }
     pub fn with_backend(mut self, backend: AnswerBackend, tier: Option<&str>) -> Self {
         self.backend = backend;
         self.service_tier = tier.map(String::from);
@@ -167,7 +175,7 @@ impl Client {
     {
         if self.backend == AnswerBackend::Codex {
             return self.codex.as_ref().ok_or("Codex runtime is unavailable")?
-                .stream(model, self.service_tier.as_deref(), self.reasoning_effort.as_deref(), instructions, input, image, cancel, event).await;
+                .stream_traced(model, self.service_tier.as_deref(), self.reasoning_effort.as_deref(), instructions, input, image, cancel, self.refill_policy, self.trace.clone(), event).await;
         }
         let request = self
             .http
@@ -365,6 +373,8 @@ mod tests {
         });
         (
             Client {
+                trace: None,
+                refill_policy: super::super::codex::RefillPolicy::default(),
                 http: reqwest::Client::new(),
                 base,
                 reasoning_effort: None,

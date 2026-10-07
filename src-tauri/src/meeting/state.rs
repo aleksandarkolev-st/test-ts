@@ -10,6 +10,13 @@ pub struct CurrentQuestion {
 #[derive(Clone, Default, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Latency {
+    #[serde(default)]
+    pub pipeline: crate::openai::timing::Timeline,
+    pub remote_speech_started_at: Option<u64>,
+    pub first_remote_partial_at: Option<u64>,
+    pub first_credible_candidate_at: Option<u64>,
+    #[serde(default)]
+    pub remote_partial_updates: usize,
     pub speech_stopped_at: u64,
     pub transcript_final_at: u64,
     pub question_confirmed_at: u64,

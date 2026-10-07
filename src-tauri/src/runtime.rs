@@ -53,10 +53,12 @@ pub struct Settings {
     #[serde(default)]
     pub service_tier: Option<String>,
     #[serde(default)]
+    pub codex_refill_policy: crate::openai::codex::RefillPolicy,
+    #[serde(default)]
     pub project_path: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,answer_backend:AnswerBackend::Chatgpt,service_tier:None,project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,answer_backend:AnswerBackend::Chatgpt,service_tier:None,codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -127,6 +129,7 @@ enum Work {
     Screenshot(String, String, Result<crate::attachments::screenshot::Screenshot, String>),
 }
 pub struct Runtime {
+    timings: crate::openai::timing::Registry,
     tx: mpsc::Sender<Control>,
     view: Arc<Mutex<Snapshot>>,
     auth: Arc<Auth>,
@@ -201,6 +204,7 @@ async fn actor(
     db: Arc<Database>,
     client: Client,
     hidden: Arc<AtomicBool>,
+    timings: crate::openai::timing::Registry,
 ) {
     let mut engine = Engine::default();
     engine.view.protection = view.lock().unwrap().protection;
@@ -217,6 +221,7 @@ async fn actor(
     let mut summary_retry_at = 0;
     let mut project_request: Option<String> = None;
     let mut screenshot_request: Option<String> = None;
+    let mut speech_metrics = Latency::default();
     loop {
         tokio::select! {
             control=controls.recv()=>{let Some(control)=control else{break};if starting.is_some()&&!matches!(&control,Control::Start(..)|Control::Stop(..)){continue;}match control {
@@ -232,6 +237,7 @@ async fn actor(
                     tauri::async_runtime::spawn(async move{let result=start_session(settings,ev,lv,cancel,startup_client).await;let _=tx.send(Work::Started(id,result)).await;});
                 },
                 Control::Stop(reply)=>{project_request=None;screenshot_request=None;
+                    timings.lock().unwrap().clear();
                     if let Some(pending)=starting.take(){pending.cancel.cancel();let _=pending.reply.send(Err("Speech startup cancelled".into()));}
                     answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
                     if let Some(codex)=&client.codex { codex.close(); }
@@ -245,9 +251,9 @@ async fn actor(
                     publish(&app,&mut engine,&view);
                 }},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
-                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),question,now,now,prompts::ANSWER));publish(&app,&mut engine,&view);}}},
+                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),question,now,now,prompts::ANSWER));publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
-                Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),q.text,now,now,prompts::EXPAND));publish(&app,&mut engine,&view);}}},
+                Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),q.text,now,now,prompts::EXPAND));publish(&app,&mut engine,&view);}}},
                 Control::Project(path)=>{if let Some(s)=session.as_ref(){
                     let path=path.unwrap_or_else(||s.settings.project_path.clone());
                     if path.trim().is_empty(){engine.view.error=Some("Choose a project folder in the main window first".into());publish(&app,&mut engine,&view);continue;}
@@ -266,6 +272,7 @@ async fn actor(
             event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;if engine.view.paused{continue;}
                 match event {
                     InputEvent::SpeechStarted(source,t)=>{
+                        if source==SpeakerSource::Remote {speech_metrics=Latency{remote_speech_started_at:Some(t),..Default::default()};}
                         emit(&app,"speech.started",serde_json::json!({"source":source,"timestamp":t}));
                         if source==SpeakerSource::Remote || source==SpeakerSource::Self_ {answers.resumed();}
                         engine.detector.speech_started(source,now);
@@ -273,11 +280,12 @@ async fn actor(
                     },
                     InputEvent::SpeechEnded(source,t)=>{engine.detector.speech_ended(source,t);emit(&app,"speech.ended",serde_json::json!({"source":source,"timestamp":t}));},
                     InputEvent::Transcript(segment)=>{
+                        if segment.source==SpeakerSource::Remote && !segment.final_ {speech_metrics.first_remote_partial_at.get_or_insert(now);speech_metrics.remote_partial_updates+=1;}
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
                         if engine.detector.transcript(&segment) {
-                            if let Some(question)=engine.detector.candidate(){cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}answers.propose(question,now,engine.detector.stopped_at.unwrap_or(segment.ended_at),now);emit(&app,"question.candidate",());
-                                drive_answers(&app,&engine,s,&auth,&client,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
+                            if let Some(question)=engine.detector.candidate(){speech_metrics.first_credible_candidate_at.get_or_insert(now);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let candidate_id=answers.propose(question,now,engine.detector.stopped_at.unwrap_or(segment.ended_at),now);if let Some(job)=answers.find_mut(&candidate_id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;}emit(&app,"question.candidate",());
+                                drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                         } else if segment.source==SpeakerSource::Remote {answers.resumed();sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                     },
                     InputEvent::Failure(error)=>{
@@ -323,19 +331,19 @@ async fn actor(
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
                 Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
                     project_request=None;engine.view.attachment_busy=screenshot_request.is_some();
-                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),"Give a concise overview of this project and explain its main architecture.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),"Give a concise overview of this project and explain its main architecture.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
                     publish(&app,&mut engine,&view);
                 }},
                 Work::Screenshot(session_id,id,result)=>{if session.is_some(){window::show(&app,&hidden);}if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&screenshot_request.as_ref()==Some(&id)){
                     screenshot_request=None;engine.view.attachment_busy=project_request.is_some();
-                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),"Explain what is on this screen and help me with the visible task.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),"Explain what is on this screen and help me with the visible task.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
             }},
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
                 if !engine.view.paused&&engine.view.status!="error" {
-                    if let Some((question,stopped))=engine.detector.confirm(now){answers.confirm(question,now,stopped,transcript_at);emit(&app,"question.confirmed",());sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
-                    if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
+                    if let Some((question,stopped))=engine.detector.confirm(now){let id=answers.confirm(question,now,stopped,transcript_at);if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);}emit(&app,"question.confirmed",());sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
+                    if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                     if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
                 }
                 let (remote,self_)=*levels.lock().unwrap();if (engine.view.remote_level-remote).abs()>0.002||(engine.view.self_level-self_).abs()>0.002{engine.view.remote_level=remote;engine.view.self_level=self_;publish(&app,&mut engine,&view);}
@@ -356,6 +364,7 @@ fn generate(
     s: &Session,
     auth: &Arc<Auth>,
     client: &Client,
+    timings: &crate::openai::timing::Registry,
     tx: mpsc::Sender<Work>,
     question: String,
     stopped: u64,
@@ -394,6 +403,8 @@ fn generate(
         .with_reasoning(s.settings.reasoning_effort.as_deref());
     let model = s.settings.model.clone();
     let clock = s.clock;
+    let trace=crate::openai::timing::Trace::new(clock,now);trace.confirmed_at(now);crate::openai::timing::register(timings,id.clone(),trace.clone());
+    let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
     tauri::async_runtime::spawn(async move {
         let result=async{let token=answer_token(&auth,&client,&abort).await?;if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
         if !abort.is_cancelled() {
@@ -437,7 +448,20 @@ async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
 }
 #[tauri::command]
 fn get_snapshot(rt: State<'_, Runtime>) -> Snapshot {
-    rt.view.lock().unwrap().clone()
+    let mut snapshot=rt.view.lock().unwrap().clone();
+    if let Some(question)=&snapshot.question {if let Some(trace)=rt.timings.lock().unwrap().get(&question.id){if let Some(latency)=snapshot.latency.as_mut(){latency.pipeline=trace.snapshot();}}}
+    snapshot
+}
+#[tauri::command]
+fn get_answer_timings(rt:State<'_,Runtime>)->Vec<(String,crate::openai::timing::Timeline)> {
+    rt.timings.lock().unwrap().iter().map(|(id,t)|(id.clone(),t.snapshot())).collect()
+}
+#[tauri::command]
+fn answer_visible(rt:State<'_,Runtime>,id:String) {
+    let view=rt.view.lock().unwrap();
+    if view.active && !view.answer.is_empty() && view.question.as_ref().is_some_and(|q|q.id==id) {
+        if let Some(trace)=rt.timings.lock().unwrap().get(&id){trace.mark(crate::openai::timing::Stage::FirstVisible);}
+    }
 }
 #[tauri::command]
 async fn acceptance_event(
@@ -538,12 +562,14 @@ fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}
 }
 #[allow(clippy::too_many_arguments)]
-fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>,client:&Client,tx:mpsc::Sender<Work>,answers:&mut meeting::scheduler::Scheduler,now:u64) {
+fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>,client:&Client,timings:&crate::openai::timing::Registry,tx:mpsc::Sender<Work>,answers:&mut meeting::scheduler::Scheduler,now:u64) {
     while let Some(id)=answers.next(now) {
         let job=answers.find_mut(&id).unwrap();let cancel=job.cancel.clone();
         let mut input=engine.context.prompt(&job.question.text);if let Some(project)=&engine.project{input.push_str(&project.prompt());}
         let image=engine.screenshot_data.clone();let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
+        let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
+        crate::openai::timing::register(timings,id.clone(),trace.clone());let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
         emit(app,"answer.started",serde_json::json!({"id":id,"speculative":!job.confirmed}));
         tauri::async_runtime::spawn(async move {
             let result=async {let token=answer_token(&auth,&client,&cancel).await?;
@@ -794,6 +820,8 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(plugin)
         .invoke_handler(tauri::generate_handler![
+            answer_visible,
+            get_answer_timings,
             get_snapshot,
             acceptance_event,
             acceptance_protection,
@@ -854,7 +882,9 @@ pub fn run() {
             for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
+            let timings:crate::openai::timing::Registry=Default::default();
             app.manage(Runtime {
+                timings:timings.clone(),
                 tx,
                 view: view.clone(),
                 auth: auth.clone(),
@@ -877,6 +907,7 @@ pub fn run() {
                 db,
                 client,
                 hidden,
+                timings,
             ));
             Ok(())
         })

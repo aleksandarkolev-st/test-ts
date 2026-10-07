@@ -1,7 +1,14 @@
 export type SpeakerSource = 'self' | 'remote';
 export interface TranscriptSegment { id: string; source: SpeakerSource; text: string; startedAt: number; endedAt: number; final: boolean }
 export interface CurrentQuestion { id: string; text: string; detectedAt: number }
-export interface Latency { speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; completedAt: number | null }
+export interface PipelineTimeline {
+  candidateDetected: number | null; codexStreamEntered: number | null; semaphoreAcquired: number | null;
+  warmThreadTaken: number | null; preparedThreadAgeMs: number | null; refillStarted: number | null;
+  turnStartSent: number | null; turnStartAck: number | null; firstAgentDelta: number | null;
+  questionConfirmed: number | null; firstVisible: number | null; refillCompleted: number | null;
+  refillThreadsCreated: number; refillError: boolean; cancelled: boolean;
+}
+export interface Latency { speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; completedAt: number | null; pipeline?: PipelineTimeline; remoteSpeechStartedAt?: number | null; firstRemotePartialAt?: number | null; firstCredibleCandidateAt?: number | null; remotePartialUpdates?: number }
 export interface Snapshot {
   questions?: { id: string; text: string; state: 'speculative' | 'confirmed' | 'superseded' | 'cancelled' | 'complete'; queued: boolean }[];
   revision: number; active: boolean; paused: boolean;
@@ -13,7 +20,7 @@ export interface Snapshot {
   attachmentBusy: boolean;
   screenshot: { width: number; height: number } | null;
 }
-export interface Settings { microphone: string; output: string; modelPath: string; model: string; speechBackend?: 'nemotron' | 'whisper'; speechChunkMs?: 80 | 160 | 560 | 1120; nemotronRuntime?: string; nemotronDevice?: number; projectPath?: string; reasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh' | null; answerBackend?: 'chatgpt' | 'codex'; serviceTier?: 'default' | 'fast' | null }
+export interface Settings { microphone: string; output: string; modelPath: string; model: string; speechBackend?: 'nemotron' | 'whisper'; speechChunkMs?: 80 | 160 | 560 | 1120; nemotronRuntime?: string; nemotronDevice?: number; projectPath?: string; reasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh' | null; answerBackend?: 'chatgpt' | 'codex'; serviceTier?: 'default' | 'fast' | null; codexRefillPolicy?: 'immediate' | 'first_token' | 'disabled' }
 export interface AudioDevice { id: string; name: string; source: SpeakerSource; default: boolean }
 export interface Account { clientId: string; email: string | null; name: string | null; planEnabled: boolean }
 export interface Model { slug: string; display_name: string }

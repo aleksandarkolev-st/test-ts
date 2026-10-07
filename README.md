@@ -27,7 +27,7 @@ Drag the overlay by its status header. Automatic answers do not request focus; m
 
 The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send the chosen effort explicitly. [GPT-6 Luna supports low and xhigh](https://developers.openai.com/api/docs/models/gpt-6-luna). Account model availability comes from the live catalog. Codex **Fast** speed is independent of effort and uses the account's Fast allowance.
 
-The updated release starts answers speculatively on local question candidates, using two already prepared Codex threads. It buffers text until confirmation, runs at most two answers, holds one pending burst, and merges explicit follow-ups. See [scheduler behavior and verification](docs/speculative-answering.md).
+The current source starts answers speculatively on local question candidates, using three prepared Codex threads and refilling after the first agent text delta. It buffers text until confirmation, runs at most two answers, holds one pending burst, and merges explicit follow-ups. See [scheduler behavior and verification](docs/speculative-answering.md).
 
 Final five-sample Codex/GPT-6 Luna/Fast medians from speech end to visible text were **3.234 s at low** and **2.001 s at xhigh**, with seeded context recall **5/5 each**. Preliminary measurements were 1.812 s and 2.4165 s and included a 9.9815 s low outlier. The reversed ordering shows substantial service variability; these samples do not establish a reliable effort speed advantage. The two-second target remains unmet in the final runs. Both complete runs are retained.
 

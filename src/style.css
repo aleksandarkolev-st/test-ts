@@ -11,3 +11,7 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
  .camera-status { font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
  .camera-toggle { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
  .camera-toggle input { width: auto; }
+
+.question-queue { padding-top: 12px; font-size: 11px; color: var(--muted); }
+.question-queue > div { display: flex; gap: 6px; padding: 4px 0; }
+.question-queue > div > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }

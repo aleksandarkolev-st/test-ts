@@ -3,6 +3,7 @@ export interface TranscriptSegment { id: string; source: SpeakerSource; text: st
 export interface CurrentQuestion { id: string; text: string; detectedAt: number }
 export interface Latency { speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; completedAt: number | null }
 export interface Snapshot {
+  questions?: { id: string; text: string; state: 'speculative' | 'confirmed' | 'superseded' | 'cancelled' | 'complete'; queued: boolean }[];
   revision: number; active: boolean; paused: boolean;
   status: 'off' | 'loading' | 'listening' | 'question' | 'thinking' | 'answer' | 'error';
   question: CurrentQuestion | null; answer: string; error: string | null;

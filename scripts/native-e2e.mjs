@@ -8,14 +8,15 @@ const root=process.cwd(); const soakMinutes=Number(process.env.COPILOT_SOAK_MINU
 const artifactName=process.env.COPILOT_NATIVE_ARTIFACT_NAME||(soakMinutes?'soak':'native');
 assert.match(artifactName,/^[A-Za-z0-9_-]+$/,'Native artifact name must be a simple folder name');
 const artifact=path.join(root,'artifacts',artifactName); await mkdir(artifact,{recursive:true});
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));let requests=[];let cancelled=0;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));let requests=[];let cancelled=0;let activeResponses=0,maxActiveResponses=0;
 const server=createServer(async(req,res)=>{
   if(req.headers.authorization!=='Bearer fixture-token'){res.writeHead(401).end();return;}
   if(req.url==='/v1/models'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({models:[{slug:'fixture-mini',display_name:'Native fixture model',visibility:'list'}]}));return;}
   if(req.url!=='/v1/responses'){res.writeHead(404).end();return;}
   let body='';for await(const chunk of req)body+=chunk;let parsed=JSON.parse(body);assert.equal(parsed.store,false);assert.equal(parsed.stream,true);assert.equal(parsed.model,'fixture-mini');assert.equal(Object.hasOwn(parsed,'temperature'),false);assert.equal(Object.hasOwn(parsed,'max_output_tokens'),false);assert.equal(parsed.input[0].role,'user');requests.push(parsed);
   res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache'});
-  let completed=false;res.on('close',()=>{if(!completed)cancelled++;});
+  activeResponses++;maxActiveResponses=Math.max(maxActiveResponses,activeResponses);
+  let completed=false;res.on('close',()=>{activeResponses--;if(!completed)cancelled++;});
   const requestText=typeof parsed.input[0].content==='string'?parsed.input[0].content:parsed.input[0].content.find(c=>c.type==='input_text').text;
   const slow=requestText.includes('first target');
   const deltas=parsed.instructions.includes('JSON')?[JSON.stringify({summary:'Synthetic fixture discussion',facts:[],decisions:[],dates:[],people:[],open_questions:[]})]:['The launch ','target is ','October 28.'];
@@ -72,13 +73,30 @@ try{
   await invoke('acceptance_event',{kind:'started',source:'self',text:null});await invoke('acceptance_event',{kind:'ended',source:'self',text:null});await invoke('acceptance_event',{kind:'transcript',source:'self',text:'What is our own launch date?'});await sleep(700);assert.equal(requests.length,0);passed('SELF speech never starts an automatic answer');
   await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text:'What is the first target?'});
   const first=await until(s=>s.answer.length>0);assert.equal(first.latency.completedAt,null);passed('Automatic remote question streams useful text before completion');
-  await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await until(s=>s.answer===''&&s.question===null);await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text:'Assuming approval next week'});
+  await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await sleep(50);assert.equal((await invoke('get_snapshot')).question.id,first.question.id);await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text:'Assuming approval next week'});
   await until(s=>s.question?.text.includes('Assuming approval next week')&&s.answer.length>0);assert(requests[1].input[0].content.includes('What is the first target? Assuming approval next week'));assert(cancelled>=1);passed('Continued question cancels HTTP stream and regenerates with appended context');
   await until(s=>s.latency&&s.latency.completedAt!==null);
   await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text:'With the customer approval included'});
   await until(s=>s.question?.text.includes('With the customer approval included')&&s.answer.length>0);passed('Short continuation regenerates even after a fast answer has completed');
   await invoke('action',{action:'dismiss'});await until(s=>!s.question&&s.answer==='');await sleep(800);assert.equal((await invoke('get_snapshot')).answer,'');passed('Dismiss ignores all late tokens from cancelled generation');
   await invoke('ask',{question:'What did we decide?'});await until(s=>s.latency&&s.latency.completedAt!==null&&s.answer.includes('October'));assert(requests.at(-1).input[0].content.includes('SELF: What is our own launch date?'));passed('Manual ask shares meeting context and completes streaming');
+  await invoke('action',{action:'dismiss'});await until(s=>!s.question);
+  const questionEvent=async text=>{await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text});};
+  const burstBefore=requests.length;await questionEvent('What is our first target for alpha?');await sleep(150);
+  assert.equal(requests.length,burstBefore+1);assert.equal((await invoke('get_snapshot')).answer,'');passed('Candidate starts inference before confirmation and buffers early text');
+  const alpha=await until(s=>s.question?.text.includes('alpha')&&s.answer);
+  await questionEvent('What is the budget for beta?');await until(s=>s.questions?.filter(q=>q.state==='confirmed').length===2);
+  assert.equal((await invoke('get_snapshot')).question.id,alpha.question.id);
+  await questionEvent('Who owns delivery for gamma?');const queued=await until(s=>s.questions?.some(q=>q.queued&&q.state==='confirmed'));
+  assert.equal(queued.questions.filter(q=>q.queued).length,1);assert.equal(requests.length,burstBefore+2);
+  await until(s=>s.question?.text.includes('gamma')&&s.latency?.completedAt!=null,12000);
+  assert.equal(maxActiveResponses,2);results.maxActiveAnswers=maxActiveResponses;passed('Two independent generations and one queued burst drain in order with one visible answer');
+  await invoke('action',{action:'dismiss'});await until(s=>!s.question&&s.answer==='');
+  if (process.argv.includes('--scheduler-only')) {
+    await invoke('stop_meeting');const stopped=await until(s=>!s.active);
+    assert.equal(stopped.answer,'');assert.equal(stopped.questions.length,0);await sleep(700);assert.equal(activeResponses,0);
+    passed('Stop cancels all speculative and queued work and clears scheduler state');results.pass=true;
+  } else {
   const projectPath=path.join(root,'.local/context-fixture');await mkdir(path.join(projectPath,'src'),{recursive:true});
   await writeFile(path.join(projectPath,'.gitignore'),'ignored.txt\n');await writeFile(path.join(projectPath,'ignored.txt'),'ignored fixture');
   await writeFile(path.join(projectPath,'.env'),'SYNTHETIC_SECRET=exclude_me');await writeFile(path.join(projectPath,'src/main.ts'),'export const projectFact = "synthetic-cobalt-719";\n');
@@ -215,7 +233,8 @@ try{
     passed('Unexpected parent termination releases actual Nemotron and camera sidecars');
   }
   results.pass=true;
-}catch(e){results.pass=false;results.failure=String(e);throw e;}finally{
+  }
+}catch(e){results.pass=false;results.failure=String(e);if(main){try{const s=await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('get_snapshot'));results.failureState={status:s.status,project:s.project,attachmentBusy:s.attachmentBusy,error:s.error,questions:s.questions?.map(q=>({state:q.state,queued:q.queued})),answerCharacters:s.answer.length};}catch{}}throw e;}finally{
   if(main){try{await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}catch{}}
   results.completedAt=new Date().toISOString();for(const line of stderr.split(/\r?\n/)){if(line.startsWith('local_stt ')){try{const v=JSON.parse(line.slice(10));results.localTranscription.push({source:v.source,kind:v.kind,previewReused:v.preview_reused,queueWaitMs:v.queue_wait_ms,inferenceMs:v.inference_ms});}catch{}}}await writeFile(path.join(artifact,'results.json'),JSON.stringify(results,null,2));await browser?.close();app?.kill();vite?.kill();server.closeAllConnections();server.close();
 }

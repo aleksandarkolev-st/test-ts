@@ -20,6 +20,7 @@ pub struct Latency {
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Snapshot {
+    pub questions: Vec<super::scheduler::Row>,
     pub revision: u64,
     pub active: bool,
     pub paused: bool,
@@ -40,6 +41,7 @@ pub struct Snapshot {
 impl Default for Snapshot {
     fn default() -> Self {
         Self {
+            questions: Vec::new(),
             revision: 0,
             active: false,
             paused: false,

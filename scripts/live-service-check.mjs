@@ -301,7 +301,9 @@ try {
       if (![t0, t1, t2, t3, t4, t5].every(Number.isFinite)) {
         throw new Error('The production snapshot is missing one or more latency timestamps');
       }
-      if (t1 < t0 || t2 < t1 || t3 < t2 || t4 < t3 || t5 < t4) {
+      // Inference now overlaps final transcription and confirmation. First
+      // tokens can precede confirmation; only each independent chain is ordered.
+      if (t2 < t0 || t2 < t1 || t4 < t3 || t5 < t4) {
         throw new Error('The production latency timestamps were not monotonic');
       }
       const speechStoppedHostEstimateMs = clockOffsetMs + t0;
@@ -409,8 +411,11 @@ try {
   if (meetingStarted) {
     try {
       await main?.evaluate(() => window.__TAURI_INTERNALS__.invoke('stop_meeting'));
-      if (originalSettings) await main?.evaluate(settings => window.__TAURI_INTERNALS__.invoke('save_settings', { settings }), originalSettings);
     } catch { process.exitCode = 1; }
+  }
+  if (originalSettings) {
+    try { await main?.evaluate(settings => window.__TAURI_INTERNALS__.invoke('save_settings', { settings }), originalSettings); }
+    catch { process.exitCode = 1; }
   }
   await browser.close();
 }

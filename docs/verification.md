@@ -1,6 +1,10 @@
 # Implementation and verification ledger
 
-## Native Codex upgrade (2026-10-07 local time)
+## Speculative scheduler (2026-10-07 local time)
+
+The new loose release implements warm-thread speculation, two active answers, one pending burst, local follow-up supersession and buffered confirmation. Final actual-audio medians: low 3,234 ms, xhigh 2,001 ms, five seeded context recalls per effort all correct. Preliminary effort ordering was reversed, so no reliable speed advantage is established. Source tests, browser/timing tests, 13 native scheduler checks and the opt-in live Codex cancellation/Stop check pass. Broader native acceptance timed out at injected Ctrl+Shift+P and is not claimed green. The prior MSI is unchanged. See [full scheduler evidence](speculative-answering.md).
+
+## Previous native Codex upgrade (2026-10-07 local time)
 
 Production 0.2.2 bundles the official Codex runtime and uses the authenticated native Codex backend with exact GPT-6 Luna and acknowledged Fast mode. Actual-audio seeded-context tests passed at both xhigh and low effort (3/3 each), with speech-end-to-visible medians 3,381.5 ms and 3,326 ms respectively. The small difference is inconclusive; both miss the two-second target. Actual project and full-resolution screenshot shortcuts also passed with the same production model/backend. Stop and live stream cancellation release the owned broker. The production app is open and idle with Codex/Fast/xhigh restored. See [Codex evidence](codex-verification.md) and [0.2.2 package checks](package-verification.md).
 

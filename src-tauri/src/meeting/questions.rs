@@ -79,6 +79,7 @@ pub struct QuestionDetector {
     pub last_question: String,
     awaiting_final: bool,
     final_through: Option<u64>,
+    partial: String,
 }
 impl QuestionDetector {
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) {
@@ -92,6 +93,7 @@ impl QuestionDetector {
                     self.text.clear();
                 }
                 self.remote_speaking = true;
+                self.partial.clear();
                 self.stopped_at = None;
                 self.final_through = None;
             }
@@ -112,9 +114,11 @@ impl QuestionDetector {
         }
     }
     pub fn transcript(&mut self, segment: &TranscriptSegment) -> bool {
-        if segment.source != SpeakerSource::Remote || !segment.final_ {
+        if segment.source != SpeakerSource::Remote {
             return false;
         }
+        if !segment.final_ { self.partial=segment.text.trim().into(); return self.candidate().is_some(); }
+        self.partial.clear();
         self.final_through = Some(self.final_through.unwrap_or(0).max(segment.ended_at));
         if self.stopped_at.is_some_and(|t| segment.ended_at >= t) {
             self.awaiting_final = false;
@@ -127,7 +131,11 @@ impl QuestionDetector {
             self.text.push_str(text);
         }
         // A follow-up need not itself contain a question mark.
-        self.continued || score(&self.text, false) >= 4
+        self.candidate().is_some()
+    }
+    pub fn candidate(&self) -> Option<String> {
+        let text=format!("{} {}",self.text,self.partial).trim().to_string();
+        if !self.self_speaking && !text.is_empty() && (self.continued || score(&text,false)>=4 || (!self.last_question.is_empty() && super::scheduler::related(&text))) {Some(text)} else {None}
     }
     pub fn confirm(&mut self, now: u64) -> Option<(String, u64)> {
         if self.remote_speaking
@@ -139,10 +147,11 @@ impl QuestionDetector {
         {
             return None;
         }
-        if self.text.is_empty() || (!self.continued && score(&self.text, false) < 4) {
+        if self.text.is_empty() || (!self.continued && score(&self.text, false) < 4 && !( !self.last_question.is_empty() && super::scheduler::related(&self.text))) {
             return None;
         }
         let text = std::mem::take(&mut self.text);
+        self.partial.clear();
         self.last_question = text.clone();
         self.continued = false;
         Some((text, self.stopped_at.unwrap()))
@@ -174,6 +183,22 @@ mod tests {
             ended_at: 100,
             final_: true,
         }
+    }
+    #[test]
+    fn partial_candidates_never_bypass_final_confirmation_and_false_final_retracts() {
+        let mut q=QuestionDetector::default();q.speech_started(SpeakerSource::Remote,0);
+        let mut partial=s("What is our target");partial.final_=false;
+        assert!(q.transcript(&partial));assert_eq!(q.candidate().unwrap(),"What is our target");
+        q.speech_ended(SpeakerSource::Remote,100);assert!(q.confirm(600).is_none());
+        assert!(!q.transcript(&s("What we need is another review")));assert!(q.candidate().is_none());assert!(q.confirm(600).is_none());
+    }
+    #[test]
+    fn changed_final_replaces_partial_and_self_speech_blocks_speculation() {
+        let mut q=QuestionDetector::default();q.speech_started(SpeakerSource::Remote,0);
+        let mut partial=s("What is our target");partial.final_=false;q.transcript(&partial);
+        q.speech_started(SpeakerSource::Self_,50);assert!(q.candidate().is_none());q.speech_ended(SpeakerSource::Self_,80);
+        q.speech_ended(SpeakerSource::Remote,100);q.transcript(&s("What is our budget"));
+        assert_eq!(q.candidate().unwrap(),"What is our budget");assert_eq!(q.confirm(600).unwrap().0,"What is our budget");
     }
     #[test]
     fn scoring_and_rhetorical_filter() {

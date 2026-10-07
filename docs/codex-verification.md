@@ -4,7 +4,11 @@ Production 0.2.2 uses the signed-in native Codex account through the bundled off
 
 Fast mode was requested and acknowledged as `priority`, the native protocol's accepted alias. See [OpenAI's Fast mode documentation](https://learn.chatgpt.com/docs/agent-configuration/speed). The app rejects an unacknowledged Fast selection instead of silently falling back.
 
-## Production timing, 2026-10-07
+## Speculative scheduler checkpoint, 2026-10-07
+
+The updated release uses two prepared ephemeral answer threads, speculative local candidates, buffered output and a two-active/one-pending scheduler. Final five-sample speech-end-to-visible medians are **3,234 ms at low** and **2,001 ms at xhigh**, with seeded context recall 5/5 at each effort. Preliminary measurements reversed the effort ordering (1,812 / 2,416.5 ms), so these checks do not establish a reliable speed advantage. The two-second target remains unmet in the final runs. See [scheduler behavior, complete samples and limitations](speculative-answering.md).
+
+## Previous production timing, 2026-10-07
 
 Both runs used GPT-6 Luna, Codex, Fast mode, Nemotron English Q8, 160 ms chunks and Vulkan GPU 1. A synthetic meeting statement was played through actual WASAPI capture before three spoken questions. Every answer recalled the seeded date. Measurement starts at native speech end and ends at the first observed DOM answer text.
 
@@ -28,7 +32,7 @@ After the low-effort test, the meeting was stopped and Codex/GPT-6 Luna/Fast/xhi
 
 ## Lifecycle and validation
 
-Every answer and summary starts an ephemeral thread with history persistence disabled. Inherited MCP servers and plugins are disabled, as are shell, browsing and agent tools. Stop cancels generation and closes the owned Codex broker; a Windows job also cleans up descendants on parent exit. Codex manages native account credentials; the app does not copy them into packaged resources or logs. Meeting text and selected attachments still reach OpenAI for generation, subject to service data policies.
+Answer turns consume the prepared ephemeral ring; summaries and expanded answers prepare their own ephemeral threads. History persistence is disabled. Inherited MCP servers and plugins are disabled, as are shell, browsing and agent tools. Stop cancels generation and closes the owned Codex broker; a Windows job also cleans up descendants on parent exit. Codex manages native account credentials; the app does not copy them into packaged resources or logs. Meeting text and selected attachments still reach OpenAI for generation, subject to service data policies.
 
 The source suite passed 47 Rust tests (three intentional opt-in tests skipped), two state tests and six browser tests. The opt-in live Codex test separately passed real streaming, cancellation and owned-process exit after Stop. Production model/context checks and extracted MSI resource checks passed; see [package verification](package-verification.md).
 

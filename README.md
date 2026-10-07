@@ -4,7 +4,7 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 ## Run
 
-The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.2_x64_en-US.msi`. It bundles the official native Codex runtime, Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
+The existing x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.2_x64_en-US.msi`. It bundles the official native Codex runtime, Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
 
 1. Open Meeting Copilot, set **Answer backend** to **Codex**, then reconnect the native Codex account or complete sign-in. Choose **GPT-6 Luna** from the account's live catalog and **Fast** under **Answer speed**. Reasoning effort is a separate setting. The alternative ChatGPT-plan API backend retains its own browser sign-in flow.
 2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose the Vulkan GPU index (1 is the RX 9070 XT on this computer). The default chunk is 160 ms.
@@ -27,13 +27,15 @@ Drag the overlay by its status header. Automatic answers do not request focus; m
 
 The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send the chosen effort explicitly. [GPT-6 Luna supports low and xhigh](https://developers.openai.com/api/docs/models/gpt-6-luna). Account model availability comes from the live catalog. Codex **Fast** speed is independent of effort and uses the account's Fast allowance.
 
-Production Codex/GPT-6 Luna/Fast measured **3.382 seconds at xhigh** and **3.326 seconds at low** median from speech ending to the first visible answer. Each effort recalled the seeded meeting fact in all three actual-audio samples. The small difference does not establish a reliable speed advantage, and the two-second target remains unmet. The prior ChatGPT-plan API GPT-5.6 Luna/xhigh result was 2.326 seconds; its different model, route and time prevent isolating backend performance. See [Codex timing and verification](docs/codex-verification.md) and the [verification ledger](docs/verification.md).
+The updated release starts answers speculatively on local question candidates, using two already prepared Codex threads. It buffers text until confirmation, runs at most two answers, holds one pending burst, and merges explicit follow-ups. See [scheduler behavior and verification](docs/speculative-answering.md).
+
+Final five-sample Codex/GPT-6 Luna/Fast medians from speech end to visible text were **3.234 s at low** and **2.001 s at xhigh**, with seeded context recall **5/5 each**. Preliminary measurements were 1.812 s and 2.4165 s and included a 9.9815 s low outlier. The reversed ordering shows substantial service variability; these samples do not establish a reliable effort speed advantage. The two-second target remains unmet in the final runs. Both complete runs are retained.
+
+The updated loose release executable `.local/msi-upgrade-0.2.2/PFiles/Meeting Copilot/meeting-copilot-speculative-final.exe` is running with Codex/Fast/xhigh restored. The previously listed MSI contains the earlier pipeline and has not been rebuilt for this change.
 
 ### Reducing first-answer delay
 
-Stop the meeting, keep your selected model, change **Reasoning effort** from **xhigh** to **low**, then start the meeting again. Choose **none** to prioritize speed further. Lower effort can reduce reasoning quality; measure the result with the same audio and meeting context before treating it as an improvement. A setting change does not guarantee the two-second target.
-
-The latest xhigh benchmark spends most of its time waiting for the first model token. The app streams text as it arrives and requests at most three short sentences. Local finalization takes about 0.66 seconds in these samples. The new low-effort check uses the same production Codex/Fast audio and context setup; earlier Whisper low/none trials remain historical comparisons.
+Meeting startup prepares two ephemeral threads for the selected model, speed and effort. Candidate inference overlaps the existing 500 ms confirmation window. Consuming a prepared thread triggers background replenishment; confirmed questions release their buffered tokens. Stop clears all work and closes the broker. The final runs started generation 279-677 ms before confirmation. Lower effort alone did not produce a consistent latency advantage.
 
 ## Privacy and capture protection
 

@@ -1,6 +1,7 @@
 import type { Snapshot } from '../state/model';
 export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
   return <div className="answer-content">
+    {!!s.questions?.length && <div className="question-queue" aria-label="Question queue">{s.questions.map((q, i) => <div key={q.id}><span>Q{i + 1}</span> {q.queued ? 'queued' : q.state === 'complete' ? 'complete' : q.state === 'speculative' ? 'confirming…' : 'answering…'}<span title={q.text}> {q.text}</span></div>)}</div>}
     {s.question && <div className="question"><div className="section-label">QUESTION</div><p>{s.question.text}</p></div>}
     {s.answer && <div className="answer"><div className="section-label">SUGGESTED ANSWER</div><p aria-live="polite" aria-atomic="false">{s.answer}<span className={s.latency?.completedAt == null && s.status === 'answer' ? 'caret' : ''} /></p></div>}
     {s.status === 'thinking' && !s.answer && <div className="thinking" role="status">Finding the useful words<span>•••</span></div>}

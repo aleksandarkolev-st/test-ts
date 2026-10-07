@@ -1,6 +1,7 @@
 pub mod context;
 pub mod questions;
 pub mod state;
+pub mod scheduler;
 
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]

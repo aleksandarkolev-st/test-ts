@@ -52,6 +52,12 @@ try{
     await invoke('save_settings',{settings:{...b.settings,answerBackend:'codex',model:'gpt-6-luna',serviceTier:'fast',reasoningEffort:'xhigh'}});
     b=await invoke('bootstrap');assert(b.selected?.planEnabled,'The native Codex account must be signed in');
     assert((await invoke('list_models')).some(m=>m.slug==='gpt-6-luna'),'GPT-6 Luna must be in the Codex catalog');
+    await page.reload();
+    await page.getByLabel('Answer backend').waitFor();
+    await page.waitForFunction(()=>document.querySelector('select[aria-label="Answer backend"]')?.value==='codex'&&document.querySelector('select[aria-label="Answer model"]')?.value==='gpt-6-luna');
+    assert.equal(await page.getByLabel('Answer model').inputValue(),'gpt-6-luna');
+    assert.equal(await page.getByLabel('Answer speed').inputValue(),'fast');
+    assert.equal(await page.getByLabel('Reasoning effort').inputValue(),'xhigh');
   }
   await access(b.settings.modelPath);
   assert.equal(b.settings.speechBackend,'nemotron');await access(b.settings.nemotronRuntime);assert.equal(b.settings.speechChunkMs,160);

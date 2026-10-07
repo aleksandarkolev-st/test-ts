@@ -7,12 +7,13 @@ import path from 'node:path';
 // Only deliberately generated source and a fullscreen synthetic page are
 // attached. Reports contain verdicts/metadata, never account credentials.
 const root=process.cwd(),port=Number(process.env.COPILOT_CDP_PORT||9557);
-const project=path.join(root,'.local/live-context-project'),artifact=path.join(root,'artifacts/live-context');
+const artifactName=process.env.COPILOT_CONTEXT_ARTIFACT_NAME||'live-context';assert.match(artifactName,/^[A-Za-z0-9_-]+$/);
+const project=path.join(root,'.local/live-context-project'),artifact=path.join(root,'artifacts',artifactName);
 await mkdir(path.join(project,'src/deep'),{recursive:true});await mkdir(artifact,{recursive:true});
 await writeFile(path.join(project,'README.md'),'Synthetic deployment fixture. See the nested source for the release configuration.\n');
 await writeFile(path.join(project,'src/deep/release.ts'),"export const release = { code: 'CEDAR-782', date: '2032-04-17', owner: 'Mira' };\n");
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const report={passed:false,model:'gpt-5.6-luna',reasoningEffort:'xhigh',checks:[],scope:'Actual signed-in production Responses with controlled synthetic project and screen'};
+const report={passed:false,model:process.env.COPILOT_LIVE_MODEL||'gpt-5.6-luna',reasoningEffort:'xhigh',checks:[],scope:'Actual signed-in production answer backend with controlled synthetic project and screen'};
 let browser,desktop,main,started=false,original;
 const stopFile=path.join(root,'.local',`context-screen-stop-${process.pid}-${Date.now()}`);
 async function shortcut(key){await new Promise((resolve,reject)=>{const child=spawn('powershell.exe',['-NoProfile','-Command',`${key==='{F8}'?"Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class CopilotTestPointer { [DllImport(\"user32.dll\")] public static extern bool SetCursorPos(int x,int y); }'; [CopilotTestPointer]::SetCursorPos(300,250) | Out-Null; ":''}$copilotKeys=New-Object -ComObject WScript.Shell; $copilotKeys.SendKeys('^+${key}')`],{windowsHide:true,stdio:'ignore'});child.on('error',reject);child.on('exit',code=>code===0?resolve():reject(Error('Shortcut injection failed')));});}
@@ -21,7 +22,8 @@ try{
  main=browser.contexts()[0].pages().find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));assert(main);
  const invoke=(name,args={})=>main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
  async function until(predicate,ms=90000){const end=Date.now()+ms;while(Date.now()<end){const state=await invoke('get_snapshot');if(state.error)throw Error(state.error);if(predicate(state))return state;await sleep(30);}throw Error('Production context check timed out');}
- const boot=await invoke('bootstrap');assert.equal(boot.debug,false);assert.equal(boot.snapshot.active,false);assert(boot.selected?.planEnabled);assert(boot.models.some(m=>m.slug===report.model));
+ const boot=await invoke('bootstrap');assert.equal(boot.debug,false);assert.equal(boot.snapshot.active,false);assert(boot.selected?.planEnabled);assert((await invoke('list_models')).some(m=>m.slug===report.model));
+ report.answerBackend=boot.settings.answerBackend||'chatgpt';report.serviceTier=boot.settings.serviceTier||null;
  assert(!boot.shortcutErrors.some(e=>e.startsWith('Ctrl+Shift+P is unavailable;')||e.startsWith('Ctrl+Shift+F8 is unavailable;')));
  original=boot.settings;
  await invoke('start_meeting',{settings:{...original,projectPath:project,model:report.model,reasoningEffort:report.reasoningEffort}});started=true;

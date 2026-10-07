@@ -90,11 +90,13 @@ impl Codex {
         let mut config = json!({"features.shell_tool":false,"features.unified_exec":false,"features.js_repl":false,
             "features.multi_agent":false,"features.apps":false,"features.code_mode":false,"features.skills":false,
             "web_search":"disabled","tools.view_image":false,"project_doc_max_bytes":0,"history.persistence":"none"});
-        let loaded = service.rpc("config/read", json!({"includeLayers":false}), &cancel).await?;
-        for (section, field) in [("mcp_servers", "enabled"), ("plugins", "enabled")] {
-            if let Some(entries) = loaded["config"][section].as_object() {
-                for key in entries.keys() { config[format!("{section}.{key}.{field}")] = json!(false); }
-            }
+        let loaded = service.rpc("config/read", json!({"includeLayers":true}), &cancel).await?;
+        // The public effective config omits MCP/plugin tables. The raw layers
+        // expose their names; only use those names, never forward their values.
+        let mut layers=vec![&loaded["config"]];
+        if let Some(raw)=loaded["layers"].as_array(){layers.extend(raw.iter().map(|layer|&layer["config"]));}
+        for layer in layers {
+            disable_integrations(&mut config,layer);
         }
         let started = service.rpc("thread/start", json!({"model":model,"modelProvider":"openai","serviceTier":tier,
             "ephemeral":true,"cwd":self.cwd,"approvalPolicy":"never","sandbox":"read-only",
@@ -143,6 +145,16 @@ fn check_completion(turn: &Value) -> Result<(), String> {
 }
 fn is_tool(item: &Value) -> bool {
     !matches!(item["type"].as_str(), Some("userMessage" | "agentMessage" | "reasoning" | "contextCompaction"))
+}
+fn disable_integrations(config: &mut Value, layer: &Value) {
+    for section in ["mcp_servers", "plugins"] {
+        if let Some(entries)=layer[section].as_object() {
+            for key in entries.keys() {
+                let quoted=serde_json::to_string(key).unwrap();
+                config[format!("{section}.{quoted}.enabled")]=json!(false);
+            }
+        }
+    }
 }
 
 struct Service {
@@ -205,4 +217,10 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     use super::*;
     #[test] fn only_completed_turns_succeed() { assert!(check_completion(&json!({"status":"completed"})).is_ok());for status in ["failed","interrupted","inProgress"]{assert!(check_completion(&json!({"status":status})).is_err());} }
     #[test] fn unexpected_tools_are_rejected() { for kind in ["commandExecution","fileChange","mcpToolCall","webSearch","dynamicToolCall"]{assert!(is_tool(&json!({"type":kind})));}assert!(!is_tool(&json!({"type":"agentMessage"}))); }
+    #[test] fn inherited_integrations_are_disabled_without_copying_secrets() {
+        let mut config=json!({});disable_integrations(&mut config,&json!({"mcp_servers":{"server.with.dots":{"env":{"TOKEN":"private-fixture"}}},"plugins":{"plugin@catalog":{"enabled":true}}}));
+        assert_eq!(config["mcp_servers.\"server.with.dots\".enabled"],false);
+        assert_eq!(config["plugins.\"plugin@catalog\".enabled"],false);
+        assert!(!config.to_string().contains("private-fixture"));
+    }
 }

@@ -5,6 +5,7 @@ export interface PipelineTimeline {
   candidateDetected: number | null; codexStreamEntered: number | null; semaphoreAcquired: number | null;
   warmThreadTaken: number | null; preparedThreadAgeMs: number | null; refillStarted: number | null;
   turnStartSent: number | null; turnStartAck: number | null; firstAgentDelta: number | null;
+  turnCompleted: number | null;
   questionConfirmed: number | null; firstVisible: number | null; refillCompleted: number | null;
   refillThreadsCreated: number; refillError: boolean; cancelled: boolean;
 }

@@ -14,6 +14,7 @@ pub struct Timeline {
     pub turn_start_sent: Option<u64>,
     pub turn_start_ack: Option<u64>,
     pub first_agent_delta: Option<u64>,
+    pub turn_completed: Option<u64>,
     pub question_confirmed: Option<u64>,
     pub first_visible: Option<u64>,
     pub refill_completed: Option<u64>,
@@ -22,7 +23,7 @@ pub struct Timeline {
     pub cancelled: bool,
 }
 #[derive(Clone, Copy)]
-pub enum Stage { StreamEntered, SemaphoreAcquired, WarmThreadTaken, RefillStarted, TurnStartSent, TurnStartAck, FirstAgentDelta, QuestionConfirmed, FirstVisible, RefillCompleted }
+pub enum Stage { StreamEntered, SemaphoreAcquired, WarmThreadTaken, RefillStarted, TurnStartSent, TurnStartAck, FirstAgentDelta, TurnCompleted, QuestionConfirmed, FirstVisible, RefillCompleted }
 #[derive(Clone, Debug)]
 pub struct Trace { clock: Instant, data: Arc<Mutex<Timeline>> }
 impl Trace {
@@ -40,6 +41,7 @@ impl Trace {
             Stage::TurnStartSent => &mut t.turn_start_sent,
             Stage::TurnStartAck => &mut t.turn_start_ack,
             Stage::FirstAgentDelta => &mut t.first_agent_delta,
+            Stage::TurnCompleted => &mut t.turn_completed,
             Stage::QuestionConfirmed => &mut t.question_confirmed,
             Stage::FirstVisible => &mut t.first_visible,
             Stage::RefillCompleted => &mut t.refill_completed,

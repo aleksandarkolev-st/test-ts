@@ -175,6 +175,7 @@ impl Codex {
         let mut turn_input = vec![json!({"type":"text","text":input})];
         if let Some(image) = image { turn_input.push(json!({"type":"image","url":image})); }
         let mut turn_id = None;
+        let mut turn_finished = false;
         let result = async {
             // Keep the acknowledgement even if speech resumes during the RPC:
             // we need its turn id to interrupt before releasing the slot.
@@ -191,6 +192,7 @@ impl Codex {
                         tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(StreamEvent::Delta(delta.into()))=>result? }
                     }
                     Some("turn/completed") => {
+                        turn_finished = true;
                         check_completion(&message["params"]["turn"])?;
                         tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(StreamEvent::Completed)=>result? }
                         return Ok(());
@@ -200,11 +202,20 @@ impl Codex {
                 }
             }
         }.await;
-        service.events.lock().unwrap().remove(&id);
         // Interrupt on failure/cancellation before dropping the ephemeral state.
         if result.is_err() { if let Some(turn_id)=turn_id { let _=service.rpc("turn/interrupt",json!({"threadId":id,"turnId":turn_id}),&service.dead).await; } }
+        if result.is_err() && !turn_finished {
+            // An interrupt acknowledgement is not the terminal notification.
+            // Keep the event receiver and slot until termination is observed.
+            let deadline=tokio::time::sleep(Duration::from_secs(5));tokio::pin!(deadline);
+            loop {
+                let message=tokio::select!{_=service.dead.cancelled()=>break,_=&mut deadline=>break,message=events.recv()=>match message{Some(message)=>message,None=>break}};
+                if message["method"]=="turn/completed" {turn_finished=true;break;}
+            }
+        }
+        service.events.lock().unwrap().remove(&id);
         if cancel.is_cancelled(){if let Some(trace)=&trace{trace.cancelled();}}
-        if answer && policy==RefillPolicy::FirstToken && !refill_requested && !service.dead.is_cancelled() {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());}
+        if answer && policy==RefillPolicy::FirstToken && !refill_requested && turn_finished && !service.dead.is_cancelled() {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());}
         let _=service.send(json!({"id":service.next_id(),"method":"thread/unsubscribe","params":{"threadId":id}})).await;
         service.traces.lock().unwrap().remove(&id);
         result
@@ -286,6 +297,7 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
         }else if message.get("method").is_some(){let _=service.outgoing.blocking_send(json!({"id":id,"error":{"code":-32601,"message":"Meeting answers do not execute tools"}}));}
     }else if let Some(id)=message["params"]["threadId"].as_str() {
         if message["method"]=="item/agentMessage/delta" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}
+        if message["method"]=="turn/completed" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::TurnCompleted);}}
         let sender=service.events.lock().unwrap().get(id).cloned();
         if let Some(sender)=sender { let _=sender.blocking_send(message); }
     }
@@ -313,14 +325,21 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         assert!(codex.account().await.unwrap().is_some());
         assert!(codex.models().await.unwrap().iter().any(|m|m.slug=="gpt-6-luna"));
         let service=codex.ready(&CancellationToken::new()).await.unwrap();
+        let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
+        codex.prewarm("gpt-6-luna",Some("fast"),Some("xhigh"),&instructions,&CancellationToken::new()).await.unwrap();
+        assert_eq!(codex.prepared.lock().unwrap().len(),PREPARED_POOL_SIZE);
+        let trace=Trace::new(std::time::Instant::now(),0);
         let cancel=CancellationToken::new();let abort=cancel.clone();let mut deltas=0;
-        let result=codex.stream("gpt-6-luna",Some("fast"),Some("xhigh"),"Use only supplied context. Do not use tools.",
-            "Synthetic meeting: the target is February 19. Explain the target in three short sentences.",None,cancel,|event| {
+        let result=codex.stream_traced("gpt-6-luna",Some("fast"),Some("xhigh"),&instructions,
+            "Synthetic meeting: the target is February 19. Explain the target in three short sentences.",None,cancel,RefillPolicy::FirstToken,Some(trace.clone()),|event| {
                 if let StreamEvent::Delta(_)=event {deltas+=1;abort.cancel();}
                 std::future::ready(Ok(()))
             }).await;
         assert!(deltas>0,"Actual native stream must deliver text before cancellation: {result:?}");
         assert_eq!(result.unwrap_err(),"cancelled");
+        let timeline=trace.snapshot();
+        assert!(timeline.first_agent_delta.is_some());
+        assert!(timeline.turn_completed.is_some(),"Cancellation must observe the terminal notification before cleanup");
         codex.close();
         assert!(codex.service.lock().unwrap().is_none());
         assert!(service.dead.is_cancelled());

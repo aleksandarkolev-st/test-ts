@@ -23,6 +23,32 @@ use tokio_util::sync::CancellationToken;
 use crate::process::ProcessJob;
 
 type Socket = WebSocketStream<MaybeTlsStream<tokio::net::TcpStream>>;
+#[derive(Clone,Debug,serde::Serialize)]
+#[serde(rename_all="camelCase")]
+pub struct Device { pub index:u32, pub name:String, pub kind:String, pub memory_total:u64 }
+pub async fn devices(runtime:&str,cancel:&CancellationToken)->Result<Vec<Device>,String> {
+    let runtime=Path::new(runtime).canonicalize().map_err(|_|"Choose the installed local nemo-speech.exe runtime")?;
+    let mut command=tokio::process::Command::new(&runtime);
+    command.args(["doctor","--json"]).current_dir(runtime.parent().unwrap()).stdin(Stdio::null()).stderr(Stdio::null()).kill_on_drop(true);
+    #[cfg(windows)] command.creation_flags(0x08000000);
+    let output=tokio::select!{_=cancel.cancelled()=>return Err("Speech startup cancelled".into()),output=tokio::time::timeout(Duration::from_secs(5),command.output())=>output.map_err(|_|"Local speech GPU discovery timed out")?.map_err(|_|"Cannot inspect local speech GPUs")?};
+    if !output.status.success() || output.stdout.len()>128*1024{return Err("Cannot inspect local speech GPUs".into());}
+    let value:Value=serde_json::from_slice(&output.stdout).map_err(|_|"Invalid local speech GPU catalog")?;
+    let devices=value["devices"].as_array().ok_or("Local speech runtime returned no GPU catalog")?.iter().filter_map(|device|{
+        let kind=device["type"].as_str()?;
+        if !matches!(kind,"gpu"|"integrated-gpu") || !device["name"].as_str()?.starts_with("Vulkan"){return None;}
+        Some(Device{index:u32::try_from(device["index"].as_u64()?).ok()?,name:device["description"].as_str()?.into(),kind:kind.into(),memory_total:device["memory_total"].as_u64().unwrap_or(0)})
+    }).collect::<Vec<_>>();
+    if devices.is_empty(){return Err("No Vulkan GPU is available for local speech".into());}Ok(devices)
+}
+pub fn select_device<'a>(devices:&'a[Device],index:u32,name:Option<&str>)->Result<&'a Device,String> {
+    if let Some(name)=name.filter(|name|!name.is_empty()) {
+        return devices.iter().find(|d|d.name==name && d.index==index).or_else(||devices.iter().find(|d|d.name==name)).ok_or_else(||"The selected speech GPU is unavailable; choose an available GPU".into());
+    }
+    // Legacy numeric indices cannot identify an adapter after a driver or
+    // display change. Migrate to a named discrete GPU, then persist its name.
+    devices.iter().max_by_key(|d|(d.kind=="gpu",d.memory_total)).ok_or_else(||"No Vulkan GPU is available for local speech".into())
+}
 
 pub fn right_context(chunk_ms: u32) -> Result<u32, String> {
     match chunk_ms {
@@ -312,39 +338,63 @@ async fn stream(
     cancel: CancellationToken,
 ) -> Result<(), String> {
     let (mut write, mut read) = socket.split();
-    let mut text = String::new();
-    let mut id = uuid::Uuid::new_v4().to_string();
-    let mut started = 0;
-    let mut ended = 0;
-    loop {
-        tokio::select! {
-            _=cancel.cancelled()=>return Ok(()),
-            chunk=chunks.recv()=>{let Some(chunk)=chunk else{return Ok(())}; if text.is_empty(){started=chunk.started;} ended=chunk.ended;
-                tokio::time::timeout(Duration::from_secs(2),write.send(Message::Binary(chunk.bytes.into()))).await.map_err(|_|"Local speech stream stalled")?.map_err(|_|"Local speech stream disconnected")?;
-            },
-            message=read.next()=>{let message=message.ok_or("Local speech stream disconnected")?.map_err(|_|"Local speech stream disconnected")?;
-                match message {
-                    Message::Text(data)=>{let event:Value=serde_json::from_str(&data).map_err(|_|"Invalid local speech event")?;
-                        let final_=match event["type"].as_str(){
-                            Some("conversation.item.input_audio_transcription.delta")=>{text.push_str(event["delta"].as_str().ok_or("Missing streaming transcript")?);false},
-                            Some("conversation.item.input_audio_transcription.completed")=>{text=event["transcript"].as_str().ok_or("Missing final transcript")?.into();true},
-                            Some("error")=>return Err("Nemotron rejected the live audio stream".into()), _=>continue,
-                        };
-                        if text.len()>32000{return Err("Local transcript exceeds the utterance limit".into());}
-                        events.send(InputEvent::Transcript(TranscriptSegment{id:format!("{source:?}-{id}"),source,text:text.trim().into(),started_at:started,ended_at:ended,final_})).await.map_err(|_|"Meeting receiver closed")?;
-                        if final_ {text.clear();id=uuid::Uuid::new_v4().to_string();}
-                    },
-                    Message::Ping(data)=>{write.send(Message::Pong(data)).await.map_err(|_|"Local speech stream disconnected")?;},
-                    Message::Close(_)=>return Err("Local speech stream closed unexpectedly".into()), _=>{},
-                }
+    // Poll both directions independently. Waiting for a write inside the read
+    // loop can deadlock when the peer also waits for its outgoing data to drain.
+    let timing=Arc::new(Mutex::new((0_u64,0_u64,false)));
+    let sending=async {
+        loop {
+            let chunk=tokio::select!{_=cancel.cancelled()=>return Ok::<(),String>(()),chunk=chunks.recv()=>match chunk{Some(chunk)=>chunk,None=>return Ok(())}};
+            {let mut clock=timing.lock().unwrap();if !clock.2{clock.0=chunk.started;}clock.1=chunk.ended;}
+            tokio::select!{
+                _=cancel.cancelled()=>return Ok(()),
+                sent=tokio::time::timeout(Duration::from_secs(2),write.send(Message::Binary(chunk.bytes.into())))=>sent.map_err(|_|"Local speech stream stalled")?.map_err(|_|"Local speech stream disconnected")?
             }
         }
-    }
+    };
+    let receiving=async {
+        let mut text=String::new();let mut id=uuid::Uuid::new_v4().to_string();
+        loop {
+            let message=tokio::select!{_=cancel.cancelled()=>return Ok::<(),String>(()),message=read.next()=>message.ok_or("Local speech stream disconnected")?.map_err(|_|"Local speech stream disconnected")?};
+            match message {
+                Message::Text(data)=>{
+                    let event:Value=serde_json::from_str(&data).map_err(|_|"Invalid local speech event")?;
+                    let final_=match event["type"].as_str(){
+                        Some("conversation.item.input_audio_transcription.delta")=>{text.push_str(event["delta"].as_str().ok_or("Missing streaming transcript")?);false},
+                        Some("conversation.item.input_audio_transcription.completed")=>{text=event["transcript"].as_str().ok_or("Missing final transcript")?.into();true},
+                        Some("error")=>return Err("Nemotron rejected the live audio stream".into()),_=>continue,
+                    };
+                    if text.len()>32000{return Err("Local transcript exceeds the utterance limit".into());}
+                    let (started,ended)={let mut clock=timing.lock().unwrap();clock.2=!final_;(clock.0,clock.1)};
+                    let segment=TranscriptSegment{id:format!("{source:?}-{id}"),source,text:text.trim().into(),started_at:started,ended_at:ended,final_};
+                    tokio::select!{_=cancel.cancelled()=>return Ok(()),sent=events.send(InputEvent::Transcript(segment))=>sent.map_err(|_|"Meeting receiver closed")?};
+                    if final_{text.clear();id=uuid::Uuid::new_v4().to_string();}
+                },
+                // Tungstenite queues and flushes automatic Pong replies while
+                // polling the stream/sink; a second custom Pong is unnecessary.
+                Message::Ping(_)|Message::Pong(_)=>{},
+                Message::Close(_)=>return Err("Local speech stream closed unexpectedly".into()),_=>{},
+            }
+        }
+    };
+    tokio::select!{result=sending=>result,result=receiving=>result}
+
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn named_gpu_survives_reordering_and_legacy_indices_prefer_discrete() {
+        let before=vec![Device{index:0,name:"Integrated".into(),kind:"integrated-gpu".into(),memory_total:16},Device{index:1,name:"Discrete".into(),kind:"gpu".into(),memory_total:8}];
+        let after=vec![Device{index:1,name:"Integrated".into(),kind:"integrated-gpu".into(),memory_total:16},Device{index:0,name:"Discrete".into(),kind:"gpu".into(),memory_total:8}];
+        assert_eq!(select_device(&before,1,None).unwrap().name,"Discrete");
+        assert_eq!(select_device(&after,1,None).unwrap().index,0);
+        assert_eq!(select_device(&after,1,Some("Discrete")).unwrap().index,0);
+        assert_eq!(select_device(&after,0,Some("Integrated")).unwrap().index,1);
+        assert!(select_device(&after,0,Some("Missing")).is_err());
+        assert_eq!(select_device(&after[..1],0,None).unwrap().name,"Integrated");
+        assert!(select_device(&[],0,None).is_err());
+    }
     #[test]
     fn native_cache_contexts_match_all_requested_chunks() {
         for (ms, r) in [(80, 0), (160, 1), (560, 6), (1120, 13)] {
@@ -358,6 +408,24 @@ mod tests {
         assert_eq!(pcm16(-2.), -32767);
         assert_eq!(pcm16(1.), 32767);
         assert_eq!(pcm16(0.5).to_le_bytes(), [0, 64]);
+    }
+    #[tokio::test]
+    async fn receives_transcripts_while_audio_write_is_backpressured() {
+        let listener=tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();let address=listener.local_addr().unwrap();
+        let server=tokio::spawn(async move {
+            let (tcp,_)=listener.accept().await.unwrap();let mut socket=tokio_tungstenite::accept_async(tcp).await.unwrap();
+            let filler=json!({"type":"fixture.keepalive","padding":"x".repeat(256*1024)}).to_string();
+            for _ in 0..100 {socket.send(Message::Text(filler.clone().into())).await.unwrap();}
+            assert_eq!(socket.next().await.unwrap().unwrap().into_data().len(),16*1024*1024);
+            socket.send(Message::Text(json!({"type":"conversation.item.input_audio_transcription.completed","transcript":"What is our launch target?"}).to_string().into())).await.unwrap();
+            std::future::pending::<()>().await;
+        });
+        let (socket,_)=connect_async(format!("ws://{address}")).await.unwrap();let (tx,rx)=mpsc::channel(2);let (events,mut received)=mpsc::channel(4);
+        let cancel=CancellationToken::new();let job=tokio::spawn(stream(SpeakerSource::Remote,socket,rx,events,cancel.clone()));
+        tx.send(Chunk{bytes:vec![0;16*1024*1024],started:100,ended:600}).await.unwrap();
+        let event=tokio::time::timeout(Duration::from_secs(4),received.recv()).await.unwrap().unwrap();
+        assert!(matches!(event,InputEvent::Transcript(segment) if segment.final_ && segment.text=="What is our launch target?"));
+        cancel.cancel();assert!(tokio::time::timeout(Duration::from_secs(1),job).await.unwrap().unwrap().is_ok());server.abort();
     }
     #[tokio::test]
     async fn two_sockets_keep_sources_separate_and_cancel_idle_reads() {

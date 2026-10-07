@@ -21,6 +21,11 @@ pub struct Timeline {
     pub refill_threads_created: usize,
     pub refill_error: bool,
     pub cancelled: bool,
+    #[serde(default)] pub steering_count: usize,
+    #[serde(default)] pub followup_count: usize,
+    #[serde(default)] pub prompt_chars: usize,
+    #[serde(default)] pub refinement_chars: usize,
+    #[serde(default)] pub retained_first_delta: Option<u64>,
 }
 #[derive(Clone, Copy)]
 pub enum Stage { StreamEntered, SemaphoreAcquired, WarmThreadTaken, RefillStarted, TurnStartSent, TurnStartAck, FirstAgentDelta, TurnCompleted, QuestionConfirmed, FirstVisible, RefillCompleted }
@@ -46,13 +51,18 @@ impl Trace {
             Stage::FirstVisible => &mut t.first_visible,
             Stage::RefillCompleted => &mut t.refill_completed,
         };
-        slot.get_or_insert(now);
+        if matches!(stage,Stage::TurnCompleted) {*slot=Some(now);} else {slot.get_or_insert(now);}
     }
     pub fn confirmed_at(&self, now: u64) { self.data.lock().unwrap().question_confirmed = Some(now); }
     pub fn prepared_age(&self, age: u64) { self.data.lock().unwrap().prepared_thread_age_ms = Some(age); }
     pub fn refill_thread_created(&self) { self.data.lock().unwrap().refill_threads_created += 1; }
     pub fn refill_failed(&self) { self.data.lock().unwrap().refill_error = true; }
     pub fn cancelled(&self) { self.data.lock().unwrap().cancelled = true; }
+    pub fn steered(&self) { self.data.lock().unwrap().steering_count += 1; }
+    pub fn followup(&self) { self.data.lock().unwrap().followup_count += 1; }
+    pub fn prompt_chars(&self, count:usize) { self.data.lock().unwrap().prompt_chars=count; }
+    pub fn refinement_chars(&self, count:usize) { self.data.lock().unwrap().refinement_chars+=count; }
+    pub fn retained_delta_at(&self, now:u64) { self.data.lock().unwrap().retained_first_delta=Some(now); }
     pub fn snapshot(&self) -> Timeline { self.data.lock().unwrap().clone() }
 }
 pub type Registry = Arc<Mutex<HashMap<String, Trace>>>;

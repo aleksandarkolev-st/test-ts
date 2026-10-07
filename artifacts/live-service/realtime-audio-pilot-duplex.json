@@ -1,0 +1,55 @@
+{
+  "status": "failed",
+  "mode": "audio",
+  "requestedSamplesPerConfiguration": 1,
+  "samples": [],
+  "startedAt": "2026-10-07T16:22:56.812Z",
+  "metadata": {
+    "model": "gpt-6-luna",
+    "serviceTier": "fast",
+    "reasoningEffort": "low",
+    "preparedStartupPoolSize": 3,
+    "freshSessionPerSample": true,
+    "startupSettleMs": 1000,
+    "order": "rotating configurations each round",
+    "productionBuild": true,
+    "embeddedAssets": true,
+    "mainUrl": "http://tauri.localhost/",
+    "executableSha256": "ba36df0cfe04e918f57d1bfa74aaa81392400a788679d5273e35bafd77be35e3",
+    "sourceSha256": {
+      "src-tauri/src/openai/codex.rs": "8e77b9c478c5077ae3f59d485e4f4bb7d597c81b450944163e378e7d0791dabf",
+      "src-tauri/src/openai/timing.rs": "5186983ef2c9c56f8ba2ff6a84734160f7c382cb1f03fd2208242f5e711ad881",
+      "src-tauri/src/runtime.rs": "9a8e9c88ec8b8cb6b63f30d644afd68f55232732c2433866af796f8466a2179e",
+      "src-tauri/src/meeting/context.rs": "3f6cf449cfac46f9d48aa8c65a5a89d4b01304df768b03fc18ae0ab187e4e223",
+      "src-tauri/src/meeting/scheduler.rs": "1902a4eb8fe2d07838bfb83708bcb3e968bac291781f8186b30caa6fc711c22b",
+      "src-tauri/src/meeting/questions.rs": "a23804b66227d1ac80c5d4792912a4d1e06406a01778453218773a1a5755466f",
+      "src-tauri/src/openai/client.rs": "8aa2f60600e305b76fafb8158cb763161bb28ec53c08a990c7a82ea140a91b82",
+      "src-tauri/src/transcription/nemotron.rs": "aab1c06ea56a7ce0d8cca196e030ba3ea2cad7ed062ee9468666ca38ed4e86a5",
+      "src-tauri/src/transcription/mod.rs": "cf836b6a471ad2c0d5f814db8c99adff3b4304d4fb02b18ac9ca16cd6db014b0",
+      "src/overlay/Answer.tsx": "15a35a5c5bc37d6d11afbb4ea94a2d2970db0db183a5fdad26272bfe5e1266d6"
+    },
+    "promptSha256": null,
+    "timing": "Native timestamps share the meeting clock. FirstVisible is native receipt after two overlay animation frames, an upper bound on paint. Turn send to delta includes unobserved Codex prewarm/transport/server work. DOM bounds are observed separately."
+  },
+  "failureSnapshot": {
+    "active": true,
+    "status": "error",
+    "error": "Local speech stream stalled",
+    "answerLength": 0,
+    "latency": null,
+    "attempts": []
+  },
+  "failure": {
+    "stage": "80ms_1_answer",
+    "message": "Native app reported an error"
+  },
+  "completedAt": "2026-10-07T16:23:23.953Z",
+  "restored": {
+    "idle": true,
+    "model": "gpt-6-luna",
+    "serviceTier": "fast",
+    "reasoningEffort": "low",
+    "refillPolicy": "first_token",
+    "speechChunkMs": 160
+  }
+}

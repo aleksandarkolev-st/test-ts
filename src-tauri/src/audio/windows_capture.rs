@@ -6,10 +6,39 @@ use windows::{
             Audio::*, KernelStreaming::KSDATAFORMAT_SUBTYPE_PCM,
             Multimedia::KSDATAFORMAT_SUBTYPE_IEEE_FLOAT,
         },
-        System::Com::*,
+        System::{Com::*, Power::{SetThreadExecutionState, EXECUTION_STATE, ES_CONTINUOUS, ES_SYSTEM_REQUIRED, ES_DISPLAY_REQUIRED}},
     },
 };
 struct Com;
+// This guard lives on the capture thread: Windows execution requirements are
+// thread-local, so restoring them from an async task's thread would leak them.
+struct CaptureWake(EXECUTION_STATE);
+impl CaptureWake {
+    fn enter() -> Self { Self(unsafe { SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED) }) }
+}
+impl Drop for CaptureWake {
+    fn drop(&mut self) { if self.0.0 != 0 { unsafe { SetThreadExecutionState(self.0); } } }
+}
+#[cfg(test)]
+mod power_tests {
+    use super::*;
+    #[test]
+    fn capture_wake_request_is_released_on_its_own_thread() {
+        std::thread::spawn(|| unsafe {
+            let previous=SetThreadExecutionState(ES_CONTINUOUS);
+            assert_ne!(previous.0,0);
+            let required=ES_CONTINUOUS|ES_SYSTEM_REQUIRED|ES_DISPLAY_REQUIRED;
+            {
+                let guard=CaptureWake::enter();assert_ne!(guard.0.0,0);
+                let held=SetThreadExecutionState(required);
+                assert_eq!(held.0&required.0,required.0);
+            }
+            let released=SetThreadExecutionState(ES_CONTINUOUS);
+            assert_eq!(released.0,ES_CONTINUOUS.0);
+            SetThreadExecutionState(previous);
+        }).join().unwrap();
+    }
+}
 impl Com {
     fn enter() -> Result<Self, String> {
         unsafe {
@@ -145,6 +174,7 @@ pub fn capture(
                 return Err(e);
             }
         };
+        let _wake = (source == SpeakerSource::Remote).then(CaptureWake::enter);
         let mut resampler = resampler::Resampler::new(rate);
         let mut last = clock.elapsed().as_millis() as u64;
         let mut sample_time = last as f64;

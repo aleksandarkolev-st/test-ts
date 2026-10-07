@@ -5,6 +5,7 @@ use crate::{
     audio::AudioFrame,
     meeting::{InputEvent, SpeakerSource, TranscriptSegment},
 };
+use std::io::Write;
 use std::{
     sync::{
         atomic::{AtomicBool, Ordering},
@@ -177,7 +178,7 @@ pub fn start(
                         whisper::transcribe_interruptible(&mut state, samples, Some(&stopping), Some(&superseded))
                     });
                 if log_timing && !stopping.load(Ordering::Acquire) {
-                    eprintln!(
+                    let _=writeln!(std::io::stderr(),
                         "local_stt {}",
                         serde_json::json!({
                             "source": source,

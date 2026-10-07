@@ -96,6 +96,7 @@ impl Default for Client {
 #[derive(Debug)]
 pub enum StreamEvent {
     Delta(String),
+    QuestionDelta { question: String, text: String },
     Completed,
 }
 pub fn request_body(model: &str, instructions: &str, input: &str) -> serde_json::Value {
@@ -219,6 +220,14 @@ impl Client {
             }
         }
         Err("Answer stream ended before response.completed".into())
+    }
+    #[allow(clippy::too_many_arguments)]
+    pub async fn stream_question<F, Fut>(&self, token: &str, model: &str, instructions: &str, input: &str,
+        image: Option<&str>, cancel: CancellationToken, updates: tokio::sync::watch::Receiver<super::codex::QuestionUpdate>, initial_question:String, event: F) -> Result<(), String>
+    where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
+        if self.backend == AnswerBackend::Codex {
+            self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,input,image,cancel,self.refill_policy,self.trace.clone(),updates,initial_question,event).await
+        } else { self.stream_with_image(token,model,instructions,input,image,cancel,event).await }
     }
     pub async fn text(
         &self,

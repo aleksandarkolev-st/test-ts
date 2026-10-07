@@ -15,10 +15,12 @@ pub struct Job {
     pub confirmed: bool, pub buffer: String, pub latency: Latency,
     pub error: Option<String>, pub cancel: CancellationToken, pub ready_at: u64,
     source_text: String,
+    pub updates: tokio::sync::watch::Sender<crate::openai::codex::QuestionUpdate>,
+    pub steer_supported: bool,
 }
 #[derive(Default)]
 pub struct Scheduler { pub jobs: Vec<Job>, pub candidate: Option<String> }
-fn normalized(text: &str) -> String {
+pub(crate) fn normalized(text: &str) -> String {
     text.to_lowercase().chars().map(|c|if c.is_alphanumeric(){c}else{' '}).collect::<String>().split_whitespace().collect::<Vec<_>>().join(" ")
 }
 pub fn related(text: &str) -> bool {
@@ -34,9 +36,29 @@ impl Scheduler {
         if let Some(id)=self.candidate.take() {if let Some(j)=self.find_mut(&id){if !j.confirmed {j.phase=Phase::Cancelled;j.cancel.cancel();}}}
     }
     pub fn propose(&mut self, text: String, now: u64, stopped: u64, transcript: u64) -> String {
+        self.propose_inner(text, now, stopped, transcript, false)
+    }
+    fn propose_inner(&mut self, text: String, now: u64, stopped: u64, transcript: u64, final_: bool) -> String {
         let mut prefix=None;
         if let Some(id)=self.candidate.clone() {if let Some(j)=self.find_mut(&id) {
             if normalized(&j.source_text)==normalized(&text) {return id;}
+            let old=normalized(&j.source_text);
+            let new=normalized(&text);
+            // Streaming RNNT deltas can finish a word ("la" -> "launch").
+            // Requiring a space after the previous text cancels valid growth.
+            let correction=new.split_whitespace().any(|word|
+                ["actually","instead","rather","not"].contains(&word)
+                && !old.split_whitespace().any(|previous|previous==word));
+            let growing=!old.is_empty() && new.starts_with(&old) && !correction;
+            if growing && (!j.running || j.steer_supported || !final_) && j.latency.completed_at.is_none() {
+                if !j.running || j.steer_supported {
+                    let prefix=j.question.text.strip_suffix(&j.source_text).unwrap_or("").to_owned();
+                    j.question.text=format!("{prefix}{text}");j.source_text=text;
+                    j.buffer.clear();j.latency.first_token_at=None;
+                    j.updates.send_replace(crate::openai::codex::QuestionUpdate{question:j.question.text.clone(),confirmed:false,context:None});
+                }
+                return id;
+            }
             prefix=j.question.text.strip_suffix(&j.source_text).map(str::trim).filter(|s|!s.is_empty()).map(String::from);
             j.phase=Phase::Superseded; j.cancel.cancel();
         }}
@@ -53,18 +75,23 @@ impl Scheduler {
         for j in &mut self.jobs {if !j.running && matches!(j.phase,Phase::Speculative|Phase::Confirmed){j.phase=Phase::Superseded;j.cancel.cancel();}}
         let id=uuid::Uuid::new_v4().to_string();
         let ready_at=if self.active()==0 {now}else{now+BURST_MS};
-        self.jobs.push(Job {source_text,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
+        let (updates,_)=tokio::sync::watch::channel(crate::openai::codex::QuestionUpdate{question:text.clone(),confirmed:false,context:None});
+        self.jobs.push(Job {source_text,updates,steer_supported:false,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
             latency:Latency{speech_stopped_at:stopped,transcript_final_at:transcript,request_sent_at:now,..Default::default()}});
         self.candidate=Some(id.clone());self.prune();id
     }
     pub fn confirm(&mut self,text:String,now:u64,stopped:u64,transcript:u64)->String {
+        self.confirm_with_context(text,now,stopped,transcript,None)
+    }
+    pub fn confirm_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
         let id=if let Some(id)=self.candidate.clone() {
             if self.jobs.iter().any(|j|j.question.id==id && normalized(&j.source_text)==normalized(&text)) {id}
-            else {self.propose(text,now,stopped,transcript)}
-        } else {self.propose(text,now,stopped,transcript)};
+            else {self.propose_inner(text,now,stopped,transcript,true)}
+        } else {self.propose_inner(text,now,stopped,transcript,true)};
         let j=self.find_mut(&id).unwrap(); j.confirmed=true;
         j.phase=if j.latency.completed_at.is_some(){Phase::Complete}else{Phase::Confirmed};
         j.latency.question_confirmed_at=now;j.latency.speech_stopped_at=stopped;j.latency.transcript_final_at=transcript;
+        j.updates.send_replace(crate::openai::codex::QuestionUpdate{question:j.question.text.clone(),confirmed:true,context});
         self.candidate=None;id
     }
     pub fn next(&mut self,now:u64)->Option<String>{
@@ -78,11 +105,44 @@ impl Scheduler {
 }
 #[cfg(test)] mod tests {
     use super::*;
+    #[test] fn codex_growth_preserves_one_turn_and_confirms_latest_input() {
+        let mut s=Scheduler::default();let id=s.propose("What is our".into(),0,0,0);
+        s.next(0);s.find_mut(&id).unwrap().steer_supported=true;
+        let updates=s.find_mut(&id).unwrap().updates.subscribe();
+        for (i,text) in ["What is our revenue","What is our revenue target"].iter().enumerate(){assert_eq!(s.propose((*text).into(),i as u64+10,0,0),id);}
+        assert_eq!(s.confirm("What is our revenue target?".into(),200,0,100),id);
+        assert_eq!(s.jobs.len(),1);assert!(!s.find_mut(&id).unwrap().cancel.is_cancelled());
+        assert!(updates.borrow().confirmed);assert_eq!(normalized(&updates.borrow().question),"what is our revenue target");
+    }
+    #[test] fn changed_intent_cancels_even_when_it_appends_a_correction() {
+        for text in ["Actually what is our hiring target", "What is our revenue target actually our hiring target"] {
+            let mut s=Scheduler::default();let id=s.propose("What is our revenue target".into(),0,0,0);s.next(0);s.find_mut(&id).unwrap().steer_supported=true;
+            assert_ne!(s.propose(text.into(),10,0,0),id);assert!(s.find_mut(&id).unwrap().cancel.is_cancelled());
+        }
+    }
+    #[test] fn subword_asr_growth_preserves_the_running_turn() {
+        let mut s=Scheduler::default();let id=s.propose("What is our la".into(),0,0,0);
+        s.next(0);s.find_mut(&id).unwrap().steer_supported=true;
+        for text in ["What is our launch", "What is our launch targ", "What is our launch target"] {
+            assert_eq!(s.propose(text.into(),10,0,0),id);
+        }
+        assert_eq!(s.confirm("What is our launch target?".into(),200,0,100),id);
+        assert_eq!(s.jobs.len(),1);assert!(!s.find_mut(&id).unwrap().cancel.is_cancelled());
+        assert_ne!(s.propose("What is our hiring target".into(),210,0,0),id);
+    }
+    #[test] fn http_growth_restarts_only_once_at_confirmation() {
+        let mut s=Scheduler::default();let id=s.propose("What is our".into(),0,0,0);s.next(0);
+        assert_eq!(s.propose("What is our revenue".into(),10,0,0),id);
+        assert_eq!(s.propose("What is our revenue target".into(),20,0,0),id);
+        assert!(!s.find_mut(&id).unwrap().cancel.is_cancelled());
+        assert_ne!(s.confirm("What is our revenue target".into(),200,0,100),id);
+        assert!(s.find_mut(&id).unwrap().cancel.is_cancelled());
+    }
     #[test] fn growing_followup_preserves_original_question_and_early_completion_releases(){
         let mut s=Scheduler::default();let a=s.propose("What's our revenue growth?".into(),0,0,0);s.next(0);s.confirm("What's our revenue growth?".into(),500,0,0);
         let b=s.propose("And actually break that down".into(),600,0,0);
         let c=s.propose("And actually break that down by Europe versus the US".into(),650,0,0);
-        assert!(s.find_mut(&b).is_none() || s.find_mut(&b).unwrap().cancel.is_cancelled());
+        assert_eq!(b,c);
         assert_eq!(s.find_mut(&c).unwrap().question.text,"What's our revenue growth? And actually break that down by Europe versus the US");
         s.find_mut(&a).unwrap().running=false;s.next(1000);s.find_mut(&c).unwrap().latency.completed_at=Some(1050);
         s.confirm("And actually break that down by Europe versus the US".into(),1100,0,0);

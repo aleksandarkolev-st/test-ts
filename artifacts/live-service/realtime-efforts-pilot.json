@@ -1,0 +1,38 @@
+{
+  "status": "failed",
+  "mode": "efforts",
+  "requestedSamplesPerConfiguration": 1,
+  "samples": [],
+  "startedAt": "2026-10-07T16:08:55.672Z",
+  "metadata": {
+    "model": "gpt-6-luna",
+    "serviceTier": "fast",
+    "reasoningEffort": "low",
+    "preparedStartupPoolSize": 3,
+    "freshSessionPerSample": true,
+    "startupSettleMs": 1000,
+    "order": "rotating configurations each round",
+    "productionBuild": true,
+    "embeddedAssets": true,
+    "mainUrl": "http://tauri.localhost/",
+    "executableSha256": "1ba99c2d9bc737b9078ec8fee3e75ed8c72a6f26a935b4ca964c3a0d45b0e1f4",
+    "sourceSha256": {
+      "src-tauri/src/openai/codex.rs": "8e77b9c478c5077ae3f59d485e4f4bb7d597c81b450944163e378e7d0791dabf",
+      "src-tauri/src/openai/timing.rs": "5186983ef2c9c56f8ba2ff6a84734160f7c382cb1f03fd2208242f5e711ad881",
+      "src-tauri/src/runtime.rs": "2b2ab6a17618dd558b598e4d80330e175fbdc21039f837a7a409b2e866cce1cf",
+      "src-tauri/src/meeting/context.rs": "3f6cf449cfac46f9d48aa8c65a5a89d4b01304df768b03fc18ae0ab187e4e223",
+      "src-tauri/src/meeting/scheduler.rs": "1902a4eb8fe2d07838bfb83708bcb3e968bac291781f8186b30caa6fc711c22b",
+      "src-tauri/src/meeting/questions.rs": "a23804b66227d1ac80c5d4792912a4d1e06406a01778453218773a1a5755466f",
+      "src-tauri/src/openai/client.rs": "8aa2f60600e305b76fafb8158cb763161bb28ec53c08a990c7a82ea140a91b82",
+      "src/overlay/Answer.tsx": "15a35a5c5bc37d6d11afbb4ea94a2d2970db0db183a5fdad26272bfe5e1266d6"
+    },
+    "promptSha256": "7ba19acf2dcbca265f4e61f12f04535e5f6878a0cecc2683b9e92d58485956ed",
+    "timing": "Native timestamps share the meeting clock. FirstVisible is native receipt after two overlay animation frames, an upper bound on paint. Turn send to delta includes unobserved Codex prewarm/transport/server work. DOM bounds are observed separately."
+  },
+  "failure": {
+    "stage": "none_1_answer",
+    "message": "Timed out at none_1_answer"
+  },
+  "completedAt": "2026-10-07T16:10:06.920Z",
+  "cleanupFailed": true
+}

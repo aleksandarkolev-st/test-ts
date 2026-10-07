@@ -1,0 +1,139 @@
+{
+  "kind": "native acceptance with local HTTP fixture",
+  "checks": [
+    {
+      "name": "WASAPI enumerates independent remote and microphone devices",
+      "pass": true
+    },
+    {
+      "name": "Native HWND affinity readback, topmost and no-activate styles",
+      "pass": true
+    },
+    {
+      "name": "Cancel during Nemotron loading stays responsive and late startup cannot reactivate capture",
+      "pass": true
+    },
+    {
+      "name": "Real WASAPI and nemotron start with visible non-focused overlay",
+      "pass": true
+    },
+    {
+      "name": "Real direct_wh speech → WASAPI loopback → local VAD/nemotron → detected question → HTTP stream → overlay",
+      "pass": true
+    },
+    {
+      "name": "Real yes_no speech → WASAPI loopback → local VAD/nemotron → detected question → HTTP stream → overlay",
+      "pass": true
+    },
+    {
+      "name": "Real quantity speech → WASAPI loopback → local VAD/nemotron → detected question → HTTP stream → overlay",
+      "pass": true
+    },
+    {
+      "name": "SELF speech never starts an automatic answer",
+      "pass": true
+    },
+    {
+      "name": "Automatic remote question streams useful text before completion",
+      "pass": true
+    },
+    {
+      "name": "Continued question cancels HTTP stream and regenerates with appended context",
+      "pass": true
+    },
+    {
+      "name": "Short continuation regenerates even after a fast answer has completed",
+      "pass": true
+    },
+    {
+      "name": "Dismiss ignores all late tokens from cancelled generation",
+      "pass": true
+    },
+    {
+      "name": "Manual ask shares meeting context and completes streaming",
+      "pass": true
+    },
+    {
+      "name": "Candidate starts inference before confirmation and buffers early text",
+      "pass": true
+    },
+    {
+      "name": "Two independent generations and one queued burst drain in order with one visible answer",
+      "pass": true
+    },
+    {
+      "name": "Actual Windows Ctrl Shift P shortcut sends the selected project",
+      "pass": true
+    },
+    {
+      "name": "Complete nested project contents reach Responses, ignored and credential files excluded, binary omission reported",
+      "pass": true
+    },
+    {
+      "name": "Follow-up answer retains project source in RAM",
+      "pass": true
+    },
+    {
+      "name": "Remove project excludes source from subsequent requests",
+      "pass": true
+    },
+    {
+      "name": "Actual Windows Ctrl Shift F8 shortcut captures a screenshot",
+      "pass": true
+    },
+    {
+      "name": "Real native monitor capture sends a full-size lossless PNG through Responses without stealing focus",
+      "pass": true
+    },
+    {
+      "name": "Follow-up answer retains the latest screenshot in RAM",
+      "pass": true
+    },
+    {
+      "name": "Remove screenshot excludes image data from subsequent requests",
+      "pass": true
+    },
+    {
+      "name": "More regenerates the same question with the expanded prompt",
+      "pass": true
+    },
+    {
+      "name": "Pause releases capture and resume reopens both devices",
+      "pass": true
+    },
+    {
+      "name": "Native overlay hide/show",
+      "pass": true
+    },
+    {
+      "name": "Stop clears project and screenshot context, ignores late capture work, cancels requests and hides overlay",
+      "pass": true
+    }
+  ],
+  "localTranscription": [],
+  "startedAt": "2026-10-07T19:46:40.679Z",
+  "speechBackend": "nemotron",
+  "speechChunkMs": 160,
+  "speechGpu": 0,
+  "realAudioSamples": [
+    {
+      "index": 1,
+      "category": "direct_wh",
+      "speechEndToFirstTokenMs": 291
+    },
+    {
+      "index": 2,
+      "category": "yes_no",
+      "speechEndToFirstTokenMs": 547
+    },
+    {
+      "index": 3,
+      "category": "quantity",
+      "speechEndToFirstTokenMs": 208
+    }
+  ],
+  "realAudioLatencyMs": 208,
+  "maxActiveAnswers": 2,
+  "pass": true,
+  "completedAt": "2026-10-07T19:47:52.412Z"
+}

@@ -15,6 +15,7 @@ use crate::{
     transcription,
 };
 use serde::{Deserialize, Serialize};
+use std::io::Write;
 use std::{
     sync::{
         atomic::{AtomicBool, Ordering},
@@ -31,6 +32,7 @@ use tokio_util::sync::CancellationToken;
 pub enum SpeechBackend { #[default] Nemotron, Whisper }
 fn default_chunk() -> u32 { 160 }
 fn default_gpu() -> u32 { 1 }
+fn default_reasoning() -> Option<String> { Some("low".into()) }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Settings {
@@ -45,8 +47,10 @@ pub struct Settings {
     pub nemotron_runtime: String,
     #[serde(default = "default_gpu")]
     pub nemotron_device: u32,
-    pub model: String,
     #[serde(default)]
+    pub nemotron_device_name: Option<String>,
+    pub model: String,
+    #[serde(default = "default_reasoning")]
     pub reasoning_effort: Option<String>,
     #[serde(default)]
     pub answer_backend: AnswerBackend,
@@ -58,13 +62,15 @@ pub struct Settings {
     pub project_path: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,answer_backend:AnswerBackend::Chatgpt,service_tier:None,codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Bootstrap {
     settings: Settings,
     devices: Vec<audio::AudioDevice>,
+    speech_devices: Vec<transcription::nemotron::Device>,
+    speech_device_error: Option<String>,
     accounts: Vec<Account>,
     selected: Option<Account>,
     models: Vec<Model>,
@@ -121,6 +127,7 @@ enum Work {
     Started(String, Result<Session, String>),
     Sent(String, u64),
     Delta(String, String),
+    QuestionDelta(String, String, String),
     Complete(String),
     Error(String, String),
     Summary(String, meeting::context::Memory),
@@ -183,9 +190,14 @@ async fn pipeline(
     })
 }
 struct Starting { id:String, cancel:CancellationToken, reply:oneshot::Sender<Result<(),String>> }
-async fn start_session(settings:Settings, events:mpsc::Sender<InputEvent>, levels:Arc<Mutex<(f32,f32)>>, cancel:CancellationToken, client:Client)->Result<Session,String> {
+async fn start_session(mut settings:Settings, events:mpsc::Sender<InputEvent>, levels:Arc<Mutex<(f32,f32)>>, cancel:CancellationToken, client:Client)->Result<Session,String> {
     if settings.answer_backend==AnswerBackend::Codex {
         client.codex.as_ref().ok_or("Codex runtime unavailable")?.prewarm(&settings.model,settings.service_tier.as_deref(),settings.reasoning_effort.as_deref(),&prompts::answer_instructions(prompts::ANSWER),&cancel).await?;
+    }
+    if settings.speech_backend==SpeechBackend::Nemotron {
+        let devices=transcription::nemotron::devices(&settings.nemotron_runtime,&cancel).await?;
+        let device=transcription::nemotron::select_device(&devices,settings.nemotron_device,settings.nemotron_device_name.as_deref())?;
+        settings.nemotron_device=device.index;settings.nemotron_device_name=Some(device.name.clone());
     }
     let model=match settings.speech_backend {
         SpeechBackend::Nemotron=>SpeechModel::Nemotron(transcription::nemotron::Service::load(&settings.nemotron_runtime,&settings.model_path,settings.speech_chunk_ms,settings.nemotron_device,&cancel).await?),
@@ -274,7 +286,7 @@ async fn actor(
                     InputEvent::SpeechStarted(source,t)=>{
                         if source==SpeakerSource::Remote {speech_metrics=Latency{remote_speech_started_at:Some(t),..Default::default()};}
                         emit(&app,"speech.started",serde_json::json!({"source":source,"timestamp":t}));
-                        if source==SpeakerSource::Remote || source==SpeakerSource::Self_ {answers.resumed();}
+                        if source==SpeakerSource::Self_ {answers.resumed();}
                         engine.detector.speech_started(source,now);
                         sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
                     },
@@ -284,7 +296,7 @@ async fn actor(
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
                         if engine.detector.transcript(&segment) {
-                            if let Some(question)=engine.detector.candidate(){speech_metrics.first_credible_candidate_at.get_or_insert(now);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let candidate_id=answers.propose(question,now,engine.detector.stopped_at.unwrap_or(segment.ended_at),now);if let Some(job)=answers.find_mut(&candidate_id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;}emit(&app,"question.candidate",());
+                            if let Some(question)=engine.detector.candidate(){speech_metrics.first_credible_candidate_at.get_or_insert(now);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let candidate_id=answers.propose(question,now,engine.detector.stopped_at.unwrap_or(segment.ended_at),now);if let Some(job)=answers.find_mut(&candidate_id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;refresh_question_context(job,&engine.context);}emit(&app,"question.candidate",());
                                 drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                         } else if segment.source==SpeakerSource::Remote {answers.resumed();sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                     },
@@ -299,13 +311,18 @@ async fn actor(
                 }
             },
             w=work.recv()=>{let Some(w)=w else{continue};
-                let answer_id=match &w {Work::Sent(id,_)|Work::Delta(id,_)|Work::Complete(id)|Work::Error(id,_)|Work::Finished(id)=>Some(id.clone()),_=>None};
+                let answer_id=match &w {Work::Sent(id,_)|Work::Delta(id,_)|Work::QuestionDelta(id,_,_)|Work::Complete(id)|Work::Error(id,_)|Work::Finished(id)=>Some(id.clone()),_=>None};
                 if let Some(id)=answer_id {if let Some(job)=answers.find_mut(&id) {
                     let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);
                     let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
+                    let w=match w {
+                        Work::QuestionDelta(id,question,text) if meeting::scheduler::normalized(&question)==meeting::scheduler::normalized(&job.question.text)=>Work::Delta(id,text),
+                        Work::QuestionDelta(_,_,_)=>continue,
+                        other=>other,
+                    };
                     match w {
                         Work::Sent(_,t) if valid=>job.latency.request_sent_at=t,
-                        Work::Delta(_,delta) if valid=>{if job.latency.first_token_at.is_none(){job.latency.first_token_at=Some(now);}if job.buffer.len()+delta.len()>32_000 {job.cancel.cancel();job.error=Some("Answer exceeds display size limit".into());job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}}else{job.buffer.push_str(&delta);}},
+                        Work::Delta(_,delta) if valid=>{if job.latency.first_token_at.is_none(){job.latency.first_token_at=Some(now);if let Some(trace)=timings.lock().unwrap().get(&id){trace.retained_delta_at(now);}}if job.buffer.len()+delta.len()>32_000 {job.cancel.cancel();job.error=Some("Answer exceeds display size limit".into());job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}}else{job.buffer.push_str(&delta);}},
                         Work::Complete(_) if valid=>{job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}emit(&app,"answer.completed",serde_json::json!({"id":id}));},
                         Work::Error(_,e) if valid=>{job.error=Some(e);job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}},
                         Work::Finished(_)=>{job.running=false;},_=>{}
@@ -313,7 +330,7 @@ async fn actor(
                     sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);continue;
                 }}
                 match w {
-                Work::Finished(_)=>{},
+                Work::Finished(_)|Work::QuestionDelta(_,_,_)=>{},
                 Work::Started(id,result)=>{if starting.as_ref().is_some_and(|pending|pending.id==id){let pending=starting.take().unwrap();
                     match result {
                         Ok(s)=>{match db.start(&s.id,crate::openai::auth::now()){
@@ -324,8 +341,8 @@ async fn actor(
                     }publish(&app,&mut engine,&view);
                 }},
                 Work::Sent(id,time)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){if let Some(l)=engine.view.latency.as_mut(){l.request_sent_at=time;}}},
-                Work::Delta(id,delta)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);if let Some(l)=engine.view.latency.as_mut(){if l.first_token_at.is_none(){l.first_token_at=Some(now)}}if engine.view.answer.len()+delta.len()>32_000{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.error=Some("Answer exceeds display size limit".into());engine.view.status="error".into();publish(&app,&mut engine,&view);continue;}engine.view.answer.push_str(&delta);engine.view.status="answer".into();emit(&app,"answer.delta",serde_json::json!({"id":id,"delta":delta}));publish(&app,&mut engine,&view);}},
-                Work::Complete(id)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;if let Some(l)=engine.view.latency.as_mut(){l.completed_at=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);let metrics=serde_json::json!({"speech_to_transcript":l.transcript_final_at.saturating_sub(l.speech_stopped_at),"question_detection":l.question_confirmed_at.saturating_sub(l.transcript_final_at),"request_to_first_token":l.first_token_at.map(|t|t.saturating_sub(l.request_sent_at)),"total_to_first_answer":l.first_token_at.map(|t|t.saturating_sub(l.speech_stopped_at))});emit(&app,"latency.measured",metrics.clone());eprintln!("latency {metrics}");}emit(&app,"answer.completed",serde_json::json!({"id":id}));publish(&app,&mut engine,&view);}},
+                Work::Delta(id,delta)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);if let Some(l)=engine.view.latency.as_mut(){if l.first_token_at.is_none(){l.first_token_at=Some(now);if let Some(trace)=timings.lock().unwrap().get(&id){trace.retained_delta_at(now);}}}if engine.view.answer.len()+delta.len()>32_000{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.error=Some("Answer exceeds display size limit".into());engine.view.status="error".into();publish(&app,&mut engine,&view);continue;}engine.view.answer.push_str(&delta);engine.view.status="answer".into();emit(&app,"answer.delta",serde_json::json!({"id":id,"delta":delta}));publish(&app,&mut engine,&view);}},
+                Work::Complete(id)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;if let Some(l)=engine.view.latency.as_mut(){l.completed_at=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);let metrics=serde_json::json!({"speech_to_transcript":l.transcript_final_at.saturating_sub(l.speech_stopped_at),"question_detection":l.question_confirmed_at.saturating_sub(l.transcript_final_at),"request_to_first_token":l.first_token_at.map(|t|t.saturating_sub(l.request_sent_at)),"total_to_first_answer":l.first_token_at.map(|t|t.saturating_sub(l.speech_stopped_at))});emit(&app,"latency.measured",metrics.clone());let _=writeln!(std::io::stderr(),"latency {metrics}");}emit(&app,"answer.completed",serde_json::json!({"id":id}));publish(&app,&mut engine,&view);}},
                 Work::Error(id,error)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;engine.view.status="error".into();engine.view.error=Some(error);publish(&app,&mut engine,&view);}},
                 Work::Summary(id,memory)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.complete_summary(memory);summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;}},
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
@@ -342,7 +359,7 @@ async fn actor(
             }},
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
                 if !engine.view.paused&&engine.view.status!="error" {
-                    if let Some((question,stopped))=engine.detector.confirm(now){let id=answers.confirm(question,now,stopped,transcript_at);if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);}emit(&app,"question.confirmed",());sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
+                    if let Some((question,stopped))=engine.detector.confirm(now){let excerpts=engine.context.answer_context(&question);let id=answers.confirm_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);}emit(&app,"question.confirmed",());sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                     if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
                     if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
                 }
@@ -403,10 +420,10 @@ fn generate(
         .with_reasoning(s.settings.reasoning_effort.as_deref());
     let model = s.settings.model.clone();
     let clock = s.clock;
-    let trace=crate::openai::timing::Trace::new(clock,now);trace.confirmed_at(now);crate::openai::timing::register(timings,id.clone(),trace.clone());
+    let trace=crate::openai::timing::Trace::new(clock,now);trace.prompt_chars(input.chars().count());trace.confirmed_at(now);crate::openai::timing::register(timings,id.clone(),trace.clone());
     let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
     tauri::async_runtime::spawn(async move {
-        let result=async{let token=answer_token(&auth,&client,&abort).await?;if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
+        let result=async{let token=answer_token(&auth,&client,&abort).await?;if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::QuestionDelta{question,text}=>Work::QuestionDelta(id.clone(),question,text),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
         if !abort.is_cancelled() {
             if let Err(error) = result {
                 let _ = tx.send(Work::Error(id, error)).await;
@@ -425,6 +442,15 @@ async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
     } else if settings.model_path.is_empty() {
         settings.model_path=rt.default_model.clone();
     }
+    let (speech_devices,speech_device_error)=if settings.speech_backend==SpeechBackend::Nemotron {
+        match transcription::nemotron::devices(&settings.nemotron_runtime,&CancellationToken::new()).await {
+            Ok(devices)=>{
+                let error=match transcription::nemotron::select_device(&devices,settings.nemotron_device,settings.nemotron_device_name.as_deref()) {
+                    Ok(device)=>{settings.nemotron_device=device.index;settings.nemotron_device_name=Some(device.name.clone());None},Err(error)=>Some(error),
+                };(devices,error)
+            },Err(error)=>(vec![],Some(error)),
+        }
+    } else {(vec![],None)};
     let devices = tokio::task::spawn_blocking(audio::devices)
         .await
         .map_err(|e| e.to_string())??;
@@ -437,6 +463,8 @@ async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
     Ok(Bootstrap {
         settings,
         devices,
+        speech_devices,
+        speech_device_error,
         accounts,
         selected,
         models: rt.models.lock().await.clone(),
@@ -552,7 +580,10 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
     db.get("audio_settings")?
         .map(|s| serde_json::from_str(&s).map_err(|e| e.to_string()))
         .transpose()
-        .map(|s| s.unwrap_or_default())
+        .map(|s| { let mut settings:Settings=s.unwrap_or_default();
+            if settings.answer_backend==AnswerBackend::Codex && settings.reasoning_effort.as_deref()==Some("xhigh") {settings.reasoning_effort=default_reasoning();}
+            settings
+        })
 }
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
@@ -561,20 +592,27 @@ fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
         engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}
 }
+fn refresh_question_context(job:&mut meeting::scheduler::Job,context:&meeting::context::MeetingContext) {
+    let mut update=job.updates.borrow().clone();
+    update.context=Some(context.answer_context(&job.question.text));
+    job.updates.send_replace(update);
+}
 #[allow(clippy::too_many_arguments)]
 fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>,client:&Client,timings:&crate::openai::timing::Registry,tx:mpsc::Sender<Work>,answers:&mut meeting::scheduler::Scheduler,now:u64) {
     while let Some(id)=answers.next(now) {
         let job=answers.find_mut(&id).unwrap();let cancel=job.cancel.clone();
+        job.steer_supported=s.settings.answer_backend==AnswerBackend::Codex;
+        let updates=job.updates.subscribe();let initial_question=job.question.text.clone();
         let mut input=engine.context.prompt(&job.question.text);if let Some(project)=&engine.project{input.push_str(&project.prompt());}
         let image=engine.screenshot_data.clone();let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
-        let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
+        let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);trace.prompt_chars(input.chars().count());if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
         crate::openai::timing::register(timings,id.clone(),trace.clone());let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
         emit(app,"answer.started",serde_json::json!({"id":id,"speculative":!job.confirmed}));
         tauri::async_runtime::spawn(async move {
             let result=async {let token=answer_token(&auth,&client,&cancel).await?;
                 tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed".to_string())?;
-                client.stream_with_image(&token,&model,&prompts::answer_instructions(prompts::ANSWER),&input,image.as_deref(),cancel.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Completed=>Work::Complete(id.clone())};let tx=tx.clone();async move{tx.send(event).await.map_err(|_|"Meeting receiver closed".to_string())}}).await
+                client.stream_question(&token,&model,&prompts::answer_instructions(prompts::ANSWER),&input,image.as_deref(),cancel.clone(),updates,initial_question,|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::QuestionDelta{question,text}=>Work::QuestionDelta(id.clone(),question,text),StreamEvent::Completed=>Work::Complete(id.clone())};let tx=tx.clone();async move{tx.send(event).await.map_err(|_|"Meeting receiver closed".to_string())}}).await
             }.await;
             if !cancel.is_cancelled(){if let Err(e)=result{let _=tx.send(Work::Error(id.clone(),e)).await;}}
             let _=tx.send(Work::Finished(id)).await;

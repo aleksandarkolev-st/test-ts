@@ -1,0 +1,12 @@
+[
+    {
+        "eventId":  42,
+        "utc":  "2026-10-07T17:19:46.5775098Z",
+        "reason":  "System Idle"
+    },
+    {
+        "eventId":  42,
+        "utc":  "2026-10-07T16:55:59.0201625Z",
+        "reason":  "System Idle"
+    }
+]

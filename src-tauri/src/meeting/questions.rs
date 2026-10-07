@@ -1,5 +1,5 @@
 use super::{SpeakerSource, TranscriptSegment};
-pub const END_WAIT_MS: u64 = 500;
+pub const END_WAIT_MS: u64 = 200;
 
 pub fn score(text: &str, self_speaking: bool) -> i32 {
     let t = text.trim().to_lowercase();
@@ -88,7 +88,7 @@ impl QuestionDetector {
                 if !self.continued
                     && self
                         .stopped_at
-                        .is_some_and(|t| now.saturating_sub(t) > 1500)
+                        .is_some_and(|t| now.saturating_sub(t) > 1500 || score(&self.text,false)<4)
                 {
                     self.text.clear();
                 }
@@ -135,7 +135,11 @@ impl QuestionDetector {
     }
     pub fn candidate(&self) -> Option<String> {
         let text=format!("{} {}",self.text,self.partial).trim().to_string();
-        if !self.self_speaking && !text.is_empty() && (self.continued || score(&text,false)>=4 || (!self.last_question.is_empty() && super::scheduler::related(&text))) {Some(text)} else {None}
+        // An interrogative opening has no answerable topic yet. Starting on
+        // "What is our" spends a turn before any useful intent is available.
+        let informative=super::scheduler::normalized(&text).split_whitespace().any(|word|
+            !["what","why","how","when","where","who","which","is","are","was","were","will","would","should","could","can","do","does","did","have","has","had","we","our","us","you","your","the","a","an","it","this","that","there","think","tell","me","about","please","and","also","actually"].contains(&word));
+        if !self.self_speaking && informative && (self.continued || score(&text,false)>=4 || (!self.last_question.is_empty() && super::scheduler::related(&text))) {Some(text)} else {None}
     }
     pub fn confirm(&mut self, now: u64) -> Option<(String, u64)> {
         if self.remote_speaking
@@ -185,12 +189,31 @@ mod tests {
         }
     }
     #[test]
+    fn incomplete_openings_wait_for_a_topic_but_final_vague_questions_still_confirm() {
+        let mut q=QuestionDetector::default();q.speech_started(SpeakerSource::Remote,0);
+        let mut partial=s("What is our");partial.final_=false;
+        assert!(!q.transcript(&partial));partial.text="What is our revenue".into();assert!(q.transcript(&partial));
+        q.speech_ended(SpeakerSource::Remote,100);q.transcript(&s("What is our?"));
+        assert!(q.confirm(300).is_some());
+    }
+    #[test]
+    fn recent_statement_does_not_hide_the_next_partial_question() {
+        let mut q=QuestionDetector::default();q.speech_started(SpeakerSource::Remote,0);
+        q.speech_ended(SpeakerSource::Remote,100);q.transcript(&s("The launch target is February 19"));
+        q.speech_started(SpeakerSource::Remote,1000);
+        let mut partial=s("What is our launch target");partial.final_=false;
+        assert!(q.transcript(&partial));assert_eq!(q.candidate().unwrap(),"What is our launch target");
+        q.speech_ended(SpeakerSource::Remote,1100);
+        let mut final_=s("What is our launch target for next quarter");final_.ended_at=1100;
+        q.transcript(&final_);assert_eq!(q.confirm(1300).unwrap().0,final_.text);
+    }
+    #[test]
     fn partial_candidates_never_bypass_final_confirmation_and_false_final_retracts() {
         let mut q=QuestionDetector::default();q.speech_started(SpeakerSource::Remote,0);
         let mut partial=s("What is our target");partial.final_=false;
         assert!(q.transcript(&partial));assert_eq!(q.candidate().unwrap(),"What is our target");
-        q.speech_ended(SpeakerSource::Remote,100);assert!(q.confirm(600).is_none());
-        assert!(!q.transcript(&s("What we need is another review")));assert!(q.candidate().is_none());assert!(q.confirm(600).is_none());
+        q.speech_ended(SpeakerSource::Remote,100);assert!(q.confirm(300).is_none());
+        assert!(!q.transcript(&s("What we need is another review")));assert!(q.candidate().is_none());assert!(q.confirm(300).is_none());
     }
     #[test]
     fn changed_final_replaces_partial_and_self_speech_blocks_speculation() {
@@ -198,7 +221,7 @@ mod tests {
         let mut partial=s("What is our target");partial.final_=false;q.transcript(&partial);
         q.speech_started(SpeakerSource::Self_,50);assert!(q.candidate().is_none());q.speech_ended(SpeakerSource::Self_,80);
         q.speech_ended(SpeakerSource::Remote,100);q.transcript(&s("What is our budget"));
-        assert_eq!(q.candidate().unwrap(),"What is our budget");assert_eq!(q.confirm(600).unwrap().0,"What is our budget");
+        assert_eq!(q.candidate().unwrap(),"What is our budget");assert_eq!(q.confirm(300).unwrap().0,"What is our budget");
     }
     #[test]
     fn scoring_and_rhetorical_filter() {
@@ -229,8 +252,8 @@ mod tests {
         q.speech_started(SpeakerSource::Remote, 0);
         q.speech_ended(SpeakerSource::Remote, 100);
         q.transcript(&s("What is our launch target?"));
-        assert!(q.confirm(599).is_none());
-        assert!(q.confirm(600).is_some());
+        assert!(q.confirm(299).is_none());
+        assert!(q.confirm(300).is_some());
         q.continue_question();
         q.speech_started(SpeakerSource::Remote, 700);
         q.speech_ended(SpeakerSource::Remote, 900);
@@ -252,16 +275,16 @@ mod tests {
         let mut earlier_chunk = s("What is our launch target?");
         earlier_chunk.ended_at = 99;
         q.transcript(&earlier_chunk);
-        assert!(q.confirm(600).is_none());
+        assert!(q.confirm(300).is_none());
         q.speech_ended(SpeakerSource::Remote, 100);
-        assert!(q.confirm(600).is_none());
+        assert!(q.confirm(300).is_none());
         q.transcript(&s(""));
-        assert_eq!(q.confirm(600).unwrap().0, "What is our launch target?");
+        assert_eq!(q.confirm(300).unwrap().0, "What is our launch target?");
         let mut empty = QuestionDetector::default();
         empty.speech_started(SpeakerSource::Remote, 0);
         empty.speech_ended(SpeakerSource::Remote, 100);
         empty.transcript(&s(""));
-        assert!(empty.confirm(600).is_none());
+        assert!(empty.confirm(300).is_none());
     }
     #[test]
     fn streaming_final_before_vad_end_confirms_without_another_final() {
@@ -269,8 +292,8 @@ mod tests {
         q.speech_started(SpeakerSource::Remote, 0);
         q.transcript(&s("What is our launch target"));
         q.speech_ended(SpeakerSource::Remote, 100);
-        assert!(q.confirm(599).is_none());
-        assert_eq!(q.confirm(600).unwrap().0, "What is our launch target");
+        assert!(q.confirm(299).is_none());
+        assert_eq!(q.confirm(300).unwrap().0, "What is our launch target");
         // The previous final cannot satisfy a subsequent utterance's fence.
         q.speech_started(SpeakerSource::Remote, 2000);
         q.speech_ended(SpeakerSource::Remote, 2200);

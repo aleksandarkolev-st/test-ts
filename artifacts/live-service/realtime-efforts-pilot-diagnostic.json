@@ -1,0 +1,89 @@
+{
+  "status": "failed",
+  "mode": "efforts",
+  "requestedSamplesPerConfiguration": 1,
+  "samples": [],
+  "startedAt": "2026-10-07T16:10:39.668Z",
+  "failureSnapshot": {
+    "active": true,
+    "status": "answer",
+    "error": null,
+    "answerLength": 31,
+    "latency": {
+      "pipeline": {
+        "candidateDetected": 1069,
+        "codexStreamEntered": 1070,
+        "semaphoreAcquired": 1070,
+        "warmThreadTaken": 1070,
+        "preparedThreadAgeMs": 10894,
+        "refillStarted": 2699,
+        "turnStartSent": 1070,
+        "turnStartAck": 1087,
+        "firstAgentDelta": 2699,
+        "turnCompleted": 2905,
+        "questionConfirmed": 1069,
+        "firstVisible": 2708,
+        "refillCompleted": 2790,
+        "refillThreadsCreated": 1,
+        "refillError": false,
+        "cancelled": false,
+        "steeringCount": 0,
+        "followupCount": 0,
+        "promptChars": 309,
+        "retainedFirstDelta": 2699
+      },
+      "remoteSpeechStartedAt": null,
+      "firstRemotePartialAt": null,
+      "firstCredibleCandidateAt": null,
+      "remotePartialUpdates": 0,
+      "speechStoppedAt": 1069,
+      "transcriptFinalAt": 1069,
+      "questionConfirmedAt": 1069,
+      "requestSentAt": 1070,
+      "firstTokenAt": 2699,
+      "completedAt": null
+    },
+    "attempts": [
+      [
+        "9d7b9ae3-6226-4bc2-8034-78bf4786eea8",
+        {
+          "candidateDetected": 1069,
+          "codexStreamEntered": 1070,
+          "semaphoreAcquired": 1070,
+          "warmThreadTaken": 1070,
+          "preparedThreadAgeMs": 10894,
+          "refillStarted": 2699,
+          "turnStartSent": 1070,
+          "turnStartAck": 1087,
+          "firstAgentDelta": 2699,
+          "turnCompleted": 2905,
+          "questionConfirmed": 1069,
+          "firstVisible": 2708,
+          "refillCompleted": 2790,
+          "refillThreadsCreated": 1,
+          "refillError": false,
+          "cancelled": false,
+          "steeringCount": 0,
+          "followupCount": 0,
+          "promptChars": 309,
+          "retainedFirstDelta": 2699
+        }
+      ]
+    ]
+  },
+  "failure": {
+    "stage": "bootstrap",
+    "message": "An idle release app is required"
+  },
+  "completedAt": "2026-10-07T16:10:39.693Z",
+  "restored": {
+    "idle": false,
+    "model": "gpt-6-luna",
+    "serviceTier": "fast",
+    "reasoningEffort": "none",
+    "refillPolicy": "first_token",
+    "speechChunkMs": 160
+  },
+  "cleanupFailed": true,
+  "cleanupError": "Native page evaluation failed"
+}

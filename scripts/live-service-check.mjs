@@ -209,6 +209,8 @@ try {
     const samples = sampleRecords;
     runMetadata = {
       productionBuild: !boot.debug,
+      answerBackend: settings.answerBackend ?? 'chatgpt',
+      serviceTier: settings.serviceTier ?? null,
       speechBackend: settings.speechBackend ?? 'whisper',
       speechChunkMs: settings.speechChunkMs ?? null,
       speechGpu: settings.nemotronDevice ?? null,

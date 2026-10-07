@@ -7,7 +7,7 @@ use crate::{
     },
     openai::{
         auth::{Account, Auth},
-        client::{Client, Model, StreamEvent},
+        client::{AnswerBackend, Client, Model, StreamEvent},
         prompts,
     },
     overlay::window,
@@ -49,10 +49,14 @@ pub struct Settings {
     #[serde(default)]
     pub reasoning_effort: Option<String>,
     #[serde(default)]
+    pub answer_backend: AnswerBackend,
+    #[serde(default)]
+    pub service_tier: Option<String>,
+    #[serde(default)]
     pub project_path: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:None,answer_backend:AnswerBackend::Chatgpt,service_tier:None,project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1 } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -65,6 +69,7 @@ pub struct Bootstrap {
     snapshot: Snapshot,
     debug: bool,
     shortcut_errors: Vec<String>,
+    connection_error: Option<String>,
 }
 struct Pipeline {
     capture: audio::Capture,
@@ -224,6 +229,7 @@ async fn actor(
                 Control::Stop(reply)=>{automatic=false;project_request=None;screenshot_request=None;
                     if let Some(pending)=starting.take(){pending.cancel.cancel();let _=pending.reply.send(Err("Speech startup cancelled".into()));}
                     cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
+                    if let Some(codex)=&client.codex { codex.close(); }
                     let result=if let Some(mut s)=session.take(){if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;}db.stop(&s.id,crate::openai::auth::now())}else{Ok(())};
                     let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; while work.try_recv().is_ok(){}*levels.lock().unwrap()=(0.,0.);engine.clear_meeting();window::set_manual(&app,false);window::hide(&app);publish(&app,&mut engine,&view);emit(&app,"meeting.stopped",());let _=reply.send(result);
                 },
@@ -305,7 +311,7 @@ async fn actor(
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
                 if !engine.view.paused&&engine.view.status!="error" {
                     if let Some((question,stopped))=engine.detector.confirm(now){automatic=true;cancel_answer(&app,&mut generation);emit(&app,"question.confirmed",());generation=Some(generate(&app,&mut engine,s,&auth,&client,work_tx.clone(),question,stopped,transcript_at,prompts::ANSWER));publish(&app,&mut engine,&view);}
-                    if generation.is_none()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone();let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),r=auth.token()=>r?};let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
+                    if generation.is_none()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
                 }
                 let (remote,self_)=*levels.lock().unwrap();if (engine.view.remote_level-remote).abs()>0.002||(engine.view.self_level-self_).abs()>0.002{engine.view.remote_level=remote;engine.view.self_level=self_;publish(&app,&mut engine,&view);}
             }}
@@ -359,11 +365,12 @@ fn generate(
     let auth = auth.clone();
     let client = client
         .clone()
+        .with_backend(s.settings.answer_backend, s.settings.service_tier.as_deref())
         .with_reasoning(s.settings.reasoning_effort.as_deref());
     let model = s.settings.model.clone();
     let clock = s.clock;
     tauri::async_runtime::spawn(async move {
-        let result=async{let token=tokio::select!{_=abort.cancelled()=>return Err("cancelled".into()),r=auth.token()=>r?};if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
+        let result=async{let token=answer_token(&auth,&client,&abort).await?;if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
         if !abort.is_cancelled() {
             if let Err(error) = result {
                 let _ = tx.send(Work::Error(id, error)).await;
@@ -385,15 +392,22 @@ async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
     let devices = tokio::task::spawn_blocking(audio::devices)
         .await
         .map_err(|e| e.to_string())??;
+    let (accounts, selected, connection_error) = if settings.answer_backend == AnswerBackend::Codex {
+        match rt.client.codex.as_ref().ok_or("Codex runtime is unavailable")?.account().await {
+            Ok(account) => (account.clone().into_iter().collect(), account, None),
+            Err(error) => (vec![], None, Some(error)),
+        }
+    } else { (rt.auth.accounts().await, rt.auth.selected_account().await, None) };
     Ok(Bootstrap {
         settings,
         devices,
-        accounts: rt.auth.accounts().await,
-        selected: rt.auth.selected_account().await,
+        accounts,
+        selected,
         models: rt.models.lock().await.clone(),
         snapshot: rt.view.lock().unwrap().clone(),
         debug: cfg!(debug_assertions),
         shortcut_errors: rt.shortcut_errors.clone(),
+        connection_error,
     })
 }
 #[tauri::command]
@@ -491,19 +505,35 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
         .transpose()
         .map(|s| s.unwrap_or_default())
 }
+async fn answer_token(auth: &Arc<Auth>, client: &Client, cancel: &CancellationToken) -> Result<String, String> {
+    if cancel.is_cancelled() { return Err("cancelled".into()); }
+    if !client.requires_token() { return Ok(String::new()); }
+    tokio::select! { _=cancel.cancelled()=>Err("cancelled".into()), token=auth.token()=>token }
+}
+fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
+    if settings.service_tier.as_deref().is_some_and(|tier| !["fast", "default"].contains(&tier)) {
+        return Err("Choose Standard or Fast answer speed".into());
+    }
+    Ok(())
+}
 #[tauri::command]
 async fn sign_in(rt: State<'_, Runtime>, client_id: Option<String>) -> Result<Account, String> {
     let _lock = rt.lifecycle.lock().await;
     if rt.view.lock().unwrap().active {
         return Err("Stop the meeting before changing accounts".into());
     }
-    let a = rt.auth.sign_in(client_id).await?;
+    let a = if load_settings(&rt.db)?.answer_backend == AnswerBackend::Codex {
+        let codex=rt.client.codex.as_ref().ok_or("Codex runtime is unavailable")?;
+        codex.sign_in().await?;
+        codex.account().await?.ok_or("Codex sign-in did not complete")?
+    } else { rt.auth.sign_in(client_id).await? };
     rt.models.lock().await.clear();
     Ok(a)
 }
 #[tauri::command]
 async fn cancel_sign_in(rt: State<'_, Runtime>) -> Result<(), String> {
     rt.auth.cancel_sign_in().await;
+    if let Some(codex)=&rt.client.codex { codex.close(); }
     Ok(())
 }
 #[tauri::command]
@@ -528,8 +558,10 @@ async fn sign_out(rt: State<'_, Runtime>, client_id: String) -> Result<Option<St
 }
 #[tauri::command]
 async fn list_models(rt: State<'_, Runtime>) -> Result<Vec<Model>, String> {
-    let token = rt.auth.token().await?;
-    let models = rt.client.models(&token).await?;
+    let settings=load_settings(&rt.db)?;
+    let client=rt.client.clone().with_backend(settings.answer_backend, settings.service_tier.as_deref());
+    let token = if client.requires_token() { rt.auth.token().await? } else { String::new() };
+    let models = client.models(&token).await?;
     *rt.models.lock().await = models.clone();
     Ok(models)
 }
@@ -538,6 +570,8 @@ async fn save_settings(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
     if rt.view.lock().unwrap().active {
         return Err("Stop the meeting before changing devices".into());
     }
+    validate_answer_settings(&settings)?;
+    rt.models.lock().await.clear();
     rt.db.set(
         "audio_settings",
         &serde_json::to_string(&settings).map_err(|e| e.to_string())?,
@@ -545,6 +579,7 @@ async fn save_settings(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
 }
 #[tauri::command]
 async fn start_meeting(rt: State<'_, Runtime>, settings: Settings) -> Result<(), String> {
+    validate_answer_settings(&settings)?;
     if settings.speech_backend==SpeechBackend::Nemotron {transcription::nemotron::right_context(settings.speech_chunk_ms)?;}
     if settings
         .reasoning_effort
@@ -557,8 +592,12 @@ async fn start_meeting(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
     if rt.view.lock().unwrap().active {
         return Err("A meeting is already active".into());
     }
-    let token = rt.auth.token().await?;
-    let models = rt.client.models(&token).await?;
+    let client=rt.client.clone().with_backend(settings.answer_backend, settings.service_tier.as_deref());
+    let token = if client.requires_token() { rt.auth.token().await? } else {
+        if rt.client.codex.as_ref().ok_or("Codex runtime is unavailable")?.account().await?.is_none(){return Err("Sign in to Codex before starting a meeting".into());}
+        String::new()
+    };
+    let models = client.models(&token).await?;
     if !models.iter().any(|m| m.slug == settings.model) {
         return Err("Choose a model from the account catalog".into());
     }
@@ -749,7 +788,9 @@ pub fn run() {
             );
             let auth = Arc::new(Auth::new(db.clone()).map_err(std::io::Error::other)?);
             #[cfg(debug_assertions)] eprintln!("runtime: local storage ready");
-            let client = Client::default();
+            let mut client = Client::default();
+            let codex_binary=asset("codex/codex.exe","../.local/codex/codex.exe")?;
+            client.codex=Some(crate::openai::codex::Codex::new(std::path::PathBuf::from(codex_binary),dir.join("codex-work")));
             let hidden = Arc::new(AtomicBool::new(false));
             let protection = window::create(app.handle()).map_err(std::io::Error::other)?;
             #[cfg(debug_assertions)] eprintln!("runtime: overlay ready");

@@ -18,7 +18,7 @@ export default function App() {
     useMeeting.getState().apply(b.snapshot);
     if (b.selected?.planEnabled) {
       const ms = await command<Model[]>('list_models'); setModels(ms);
-      setSettings(s => ({ ...s, model: ms.some(m => m.slug === s.model) ? s.model : ms.find(m => /mini|nano|luna/.test(m.slug) && !/pro/.test(m.slug))?.slug || ms.find(m => /sol/.test(m.slug) && !/pro/.test(m.slug))?.slug || ms[0]?.slug || '' }));
+      setSettings(s => ({ ...s, model: ms.some(m => m.slug === s.model) ? s.model : (s.answerBackend === 'codex' ? ms.find(m => m.slug === 'gpt-6-luna')?.slug : null) || ms.find(m => /mini|nano|luna/.test(m.slug) && !/pro/.test(m.slug))?.slug || ms.find(m => /sol/.test(m.slug) && !/pro/.test(m.slug))?.slug || ms[0]?.slug || '' }));
     } else setModels([]);
   }
   useEffect(() => { let dispose: (() => void) | undefined; let disposed = false;
@@ -29,19 +29,24 @@ export default function App() {
   async function run(label: string, action: () => Promise<unknown>) { setError(''); setBusy(label); try { await action(); } catch (e) { setError(errorText(e)); } finally { setBusy(''); } }
   async function signIn(account?: Account) { await command('sign_in', { clientId: account?.clientId ?? null }); await refresh(); }
   const nemotron = (settings.speechBackend || 'nemotron') === 'nemotron';
+  const codex = settings.answerBackend === 'codex';
   const loading = snapshot.status === 'loading';
   const canStart = native() && data?.selected?.planEnabled && settings.microphone && settings.output && settings.modelPath && settings.model && (!nemotron || settings.nemotronRuntime);
   return <main className="setup">
     <header className="brand"><div className="brand-mark" aria-hidden="true">m</div><div><h1>Meeting Copilot</h1><p>A little help, when it’s your turn.</p></div></header>
     {!native() && <div className="notice">This app captures audio and protects its overlay through Windows. Open the desktop app to start a meeting.</div>}
     {data?.shortcutErrors?.map(e=><div className="notice" key={e}>{e}</div>)}
-    <section className="account-section"><div className="section-label">YOUR CHATGPT ACCOUNT</div>
+    <section className="account-section"><label>Answer backend<select aria-label="Answer backend" value={settings.answerBackend || 'chatgpt'} disabled={!!busy || snapshot.active} onChange={e => { const backend = e.target.value as Settings['answerBackend']; run('Connecting…', async () => { await command('save_settings', { settings: { ...settings, answerBackend: backend, model: backend === 'codex' ? 'gpt-6-luna' : '', serviceTier: backend === 'codex' ? 'fast' : null } }); await refresh(); }); }}><option value="codex">Codex</option><option value="chatgpt">ChatGPT plan API</option></select></label><div className="section-label">{codex ? 'YOUR CODEX ACCOUNT' : 'YOUR CHATGPT ACCOUNT'}</div>
+      {data?.connectionError && <div className="notice">{data.connectionError}</div>}
+      {codex ? <><div className="account-row"><div><strong>{data?.selected?.email || 'Codex account'}</strong><p>{data?.selected ? 'Signed in to Codex' : 'Sign in to connect your Codex models'}</p></div>{data?.selected && <span className="account-dot" />}</div><div className="account-actions"><button disabled={!!busy || snapshot.active} onClick={() => run('Connecting…', refresh)}>Reconnect Codex</button><button className="text-button" disabled={!!busy || snapshot.active} onClick={() => run('Waiting for sign-in…', () => signIn())}>Sign in to Codex ↗</button></div></> : <>
       {data?.selected ? <><div className="account-row"><div><strong>{data.selected.email || data.selected.name || 'ChatGPT account'}</strong><p>{data.selected.planEnabled ? 'ChatGPT plan usage enabled' : 'ChatGPT plan usage is disabled'}</p></div><span className="account-dot" /></div>
         <div className="account-actions"><button disabled={!!busy || snapshot.active} onClick={() => run('Signing in…', () => signIn(data.selected!))}>Continue with ChatGPT</button><button className="text-button" disabled={!!busy} onClick={() => run('Opening…', () => command('manage_usage'))}>Manage usage ↗</button><button className="text-button" disabled={!!busy || snapshot.active} onClick={() => run('Signing out…', async () => { const warning = await command<string | null>('sign_out', { clientId: data.selected!.clientId }); await refresh(); if (warning) setError(warning); })}>Sign out</button></div>
       </> : <button className="chatgpt-button" disabled={!!busy || !native()} onClick={() => run('Waiting for sign-in…', () => signIn())}>Continue with ChatGPT <span>↗</span></button>}
       {data && data.accounts.length > 0 && <label className="account-picker">Saved account<select value={data.selected?.clientId || ''} disabled={!!busy || snapshot.active} onChange={e => run('Switching…', async () => { await command('select_account', { clientId: e.target.value }); await refresh(); })}><option value="" disabled>Choose account</option>{data.accounts.map(a => <option value={a.clientId} key={a.clientId}>{a.email || a.name || 'ChatGPT'} · {a.clientId.slice(-6)}</option>)}</select></label>}
       {data?.selected && <button className="text-button" disabled={!!busy || snapshot.active} onClick={() => run('Waiting for sign-in…', () => signIn())}>Add another account</button>}
       {busy.includes('sign-in') && <button className="text-button" onClick={() => command('cancel_sign_in')}>Cancel sign-in</button>}
+      </>}
+      {codex && busy.includes('sign-in') && <button className="text-button" onClick={() => command('cancel_sign_in')}>Cancel sign-in</button>}
     </section>
     <section className="device-section"><div className="section-label">READY FOR THE MEETING</div>
       <fieldset disabled={!!busy || snapshot.active}>
@@ -58,6 +63,8 @@ export default function App() {
         </>}
         <label>Answer model<select aria-label="Answer model" value={settings.model} onChange={e => setSettings(s => ({ ...s, model: e.target.value }))}><option value="">Sign in to load available models</option>{models.map(m => <option key={m.slug} value={m.slug}>{m.display_name}</option>)}</select></label>
         <label>Reasoning effort<select aria-label="Reasoning effort" value={settings.reasoningEffort || ''} onChange={e => setSettings(s => ({ ...s, reasoningEffort: (e.target.value || null) as Settings['reasoningEffort'] }))}><option value="">Model default</option>{['none', 'low', 'medium', 'high', 'xhigh'].map(e => <option key={e} value={e}>{e}</option>)}</select></label>
+        {codex && <label>Answer speed<select aria-label="Answer speed" value={settings.serviceTier || 'default'} onChange={e => setSettings(s => ({ ...s, serviceTier: e.target.value as Settings['serviceTier'] }))}><option value="default">Standard</option><option value="fast">Fast</option></select></label>}
+        {codex && <p className="field-note">Fast mode uses more of your Codex allowance. It keeps the selected model and reasoning effort.</p>}
         <p className="field-note">Higher reasoning effort can increase the time to the first answer. Available levels depend on the selected model.</p>
       </fieldset>
     </section>

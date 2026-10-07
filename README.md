@@ -4,9 +4,9 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 ## Run
 
-The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.1_x64_en-US.msi`. It bundles the Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
+The updated x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.2_x64_en-US.msi`. It bundles the official native Codex runtime, Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. Select the appropriate GPU on your machine; on this computer the RX 9070 XT is index 1. OBS Virtual Camera's driver must already be installed for camera output.
 
-1. Open Meeting Copilot and choose **Continue with ChatGPT**. Complete the browser sign-in and grant plan usage. Available answer models are loaded from the account's catalog.
+1. Open Meeting Copilot, set **Answer backend** to **Codex**, then reconnect the native Codex account or complete sign-in. Choose **GPT-6 Luna** from the account's live catalog and **Fast** under **Answer speed**. Reasoning effort is a separate setting. The alternative ChatGPT-plan API backend retains its own browser sign-in flow.
 2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose the Vulkan GPU index (1 is the RX 9070 XT on this computer). The default chunk is 160 ms.
 3. Click **Start meeting**. Questions from the playback stream trigger answers automatically. **Stop meeting** releases capture and clears meeting content held in memory.
 4. For eye contact, select your input camera under **Eye contact**, start preview, calibrate looking at the camera, then calibrate looking at notes below it. Select **OBS Virtual Camera** in your call. Start around 10–12°; the maximum is 15°. **Stop camera** closes video and clears calibration. See [camera verification and current input limitations](docs/camera-verification.md).
@@ -25,15 +25,15 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 
 Drag the overlay by its status header. Automatic answers do not request focus; manual input explicitly does. If another app owns a shortcut, startup reports the conflict and the corresponding on-screen control remains available.
 
-The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send `reasoning.effort` explicitly. For example, [GPT-5.6 Luna supports xhigh](https://developers.openai.com/api/docs/models/gpt-5.6-luna). Account model availability still comes from the live catalog; higher effort can increase first-answer latency.
+The optional **Reasoning effort** selector uses the model default unless you choose a level. Answer requests then send the chosen effort explicitly. [GPT-6 Luna supports low and xhigh](https://developers.openai.com/api/docs/models/gpt-6-luna). Account model availability comes from the live catalog. Codex **Fast** speed is independent of effort and uses the account's Fast allowance.
 
-The upgraded Nemotron/160 ms production check measured GPT-5.6 Luna/xhigh at **2.326 seconds median from speech ending to the first visible answer** across three real-audio samples. All three answers recalled a synthetic fact captured before the question. Median request-to-first-token time was **1.712 seconds**; local finalization was **591 ms**. The two-second target remains unmet. The historical Whisper/xhigh run measured 5.79 seconds; three variable cloud samples do not isolate the cause of that difference. See [signed-in upgrade evidence](docs/live-upgrade-verification.md) and the [verification ledger](docs/verification.md).
+Production Codex/GPT-6 Luna/Fast measured **3.382 seconds at xhigh** and **3.326 seconds at low** median from speech ending to the first visible answer. Each effort recalled the seeded meeting fact in all three actual-audio samples. The small difference does not establish a reliable speed advantage, and the two-second target remains unmet. The prior ChatGPT-plan API GPT-5.6 Luna/xhigh result was 2.326 seconds; its different model, route and time prevent isolating backend performance. See [Codex timing and verification](docs/codex-verification.md) and the [verification ledger](docs/verification.md).
 
 ### Reducing first-answer delay
 
 Stop the meeting, keep your selected model, change **Reasoning effort** from **xhigh** to **low**, then start the meeting again. Choose **none** to prioritize speed further. Lower effort can reduce reasoning quality; measure the result with the same audio and meeting context before treating it as an improvement. A setting change does not guarantee the two-second target.
 
-The latest xhigh benchmark spends most of its time waiting for the first model token. The app streams text as it arrives and requests at most three short sentences. Local finalization takes about 0.59 seconds in these samples. Earlier low/none trials used Whisper and different context/timing bounds; they are historical comparisons, not predictions for the new pipeline.
+The latest xhigh benchmark spends most of its time waiting for the first model token. The app streams text as it arrives and requests at most three short sentences. Local finalization takes about 0.66 seconds in these samples. The new low-effort check uses the same production Codex/Fast audio and context setup; earlier Whisper low/none trials remain historical comparisons.
 
 ## Privacy and capture protection
 
@@ -44,8 +44,8 @@ Choose a **Project folder** before starting the meeting. During a meeting, **Ctr
 Project collection respects `.gitignore`, `.ignore`, and Git exclusions; generated folders, repository metadata, and common credential files are excluded. Binary/non-UTF-8 files and symbolic links appear in the skipped-file list. Limits are 2 MiB per file, 4 MiB total text, and 4000 scanned files. Exceeding a limit fails the attachment instead of silently truncating it. These local limits do not guarantee the selected answer model can accept the project's full context; a model/service context-limit error is shown normally.
 
 - Raw audio is processed locally. No audio upload, recording library, or transcript database is implemented.
-- Recent transcript and compact meeting memory are sent to OpenAI when answering questions or compressing context. Responses requests use `store:false` and `stream:true`. This does not imply that text never reaches OpenAI or override the service's data policies.
-- SQLite stores settings, host registration ID, selected account ID, and meeting start/end metadata. Access tokens, refresh tokens, identity tokens, and account metadata are stored in Windows Credential Manager.
+- Recent transcript and compact meeting memory are sent to OpenAI when answering questions or compressing context. Codex uses ephemeral threads with history persistence disabled; the ChatGPT-plan API uses `store:false` and `stream:true`. These settings do not override the service's data policies.
+- SQLite stores settings, host registration ID, selected account ID, and meeting start/end metadata. The native Codex runtime manages its own account credentials. ChatGPT-plan API tokens and account metadata are stored in Windows Credential Manager.
 - Stop clears transcript, memory, question, answer, and latency state. Debug transcript display exists only in development builds and clears on Stop. Application logs contain numeric latency measurements, not meeting text.
 - **Share protection active** means `SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)` succeeded and `GetWindowDisplayAffinity` confirmed it. It is not a security guarantee for every capture app. Consult [verification status](docs/verification.md) before relying on a capture path.
 
@@ -60,6 +60,7 @@ Prerequisites: Windows x64, Node.js 22 or newer, Rust, Visual Studio C++ Build T
 ```powershell
 .\scripts\setup.ps1
 .\scripts\setup-nemotron.ps1
+.\scripts\setup-codex.ps1
 .\scripts\setup-gaze.ps1
 npm run desktop
 ```

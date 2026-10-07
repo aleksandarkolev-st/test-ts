@@ -1,4 +1,6 @@
-# Signed-in upgrade checks
+# Historical ChatGPT-plan API upgrade checks
+
+Current production 0.2.2 uses native Codex/GPT-6 Luna/Fast. Its xhigh and low tests and actual shortcut checks are recorded in [Codex verification](codex-verification.md). The results below retain the previous backend/model checkpoint.
 
 The extracted production 0.2.0 app retained the saved ChatGPT account and its four-model catalog. Controlled tests used the previously approved GPT-5.6 Luna/xhigh. Production acceptance hooks remain disabled; actual Windows shortcuts and WASAPI audio were used.
 

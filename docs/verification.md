@@ -1,6 +1,10 @@
 # Implementation and verification ledger
 
-## Latest Nemotron and camera upgrade (2026-10-07 local time)
+## Native Codex upgrade (2026-10-07 local time)
+
+Production 0.2.2 bundles the official Codex runtime and uses the authenticated native Codex backend with exact GPT-6 Luna and acknowledged Fast mode. Actual-audio seeded-context tests passed at both xhigh and low effort (3/3 each), with speech-end-to-visible medians 3,381.5 ms and 3,326 ms respectively. The small difference is inconclusive; both miss the two-second target. Actual project and full-resolution screenshot shortcuts also passed with the same production model/backend. Stop and live stream cancellation release the owned broker. The production app is open and idle with Codex/Fast/xhigh restored. See [Codex evidence](codex-verification.md) and [0.2.2 package checks](package-verification.md).
+
+## Previous Nemotron and camera checkpoint (2026-10-07 local time)
 
 The 0.2.1 MSI now includes Nemotron English Q8/Vulkan with independent cached SELF/REMOTE streams, all four requested chunk choices, screenshot/project shortcuts and the frozen FLX/DirectML camera pipeline. Actual native tests pass, including all 40 synthetic audio clips, ten minutes/127 negative clips with zero false answers, a completed 3,600,000 ms periodic WASAPI speech soak with 57 question cycles and all 23 checks, forced speech/camera parent-exit cleanup, and both real global shortcuts. The one-hour soak used local HTTP answers and both owned test processes exited; it does not certify human meetings or cloud latency. Production resource/model hashes, frozen camera preview and disabled debug hooks pass. The signed-in model recalls all nested synthetic project facts and understands the controlled screenshot code and diagram.
 
@@ -21,7 +25,7 @@ At this historical checkpoint, the Nemotron and camera integrations and updated 
 
 Updated 2026-10-06. The app implements the scope in all 31 sections of `text.txt`. The user authorized leaving unavailable service checks clearly marked. Real ChatGPT sign-in, account model discovery, streaming and account persistence across process restart passed. Live first-visible latency was measured; the two-second target was not met.
 
-Current approved app model: **GPT-5.6 Luna / xhigh**. The user accepted this model on 2026-10-06 after the GPT-6 Luna availability checks. The final rebuilt package's saved account and settings survived restart at **12:06 UTC**; a fresh authenticated model-catalog request also passed, with the meeting stopped. Exact GPT-6 Luna availability is no longer a blocker for the current selection. The latency acceptance gate and the verification gaps below remain open.
+At this historical checkpoint, the approved app model was **GPT-5.6 Luna / xhigh**. The user accepted this model on 2026-10-06 after the GPT-6 Luna availability checks. That rebuilt package's saved account and settings survived restart at **12:06 UTC**; a fresh authenticated model-catalog request also passed, with the meeting stopped. The later Codex upgrade above establishes exact GPT-6 Luna availability. The latency acceptance gate and the verification gaps below remain open.
 
 ## Plan coverage
 

@@ -1,5 +1,7 @@
 # Implementation and verification ledger
 
+Current realtime work and its updated tests and measurements are recorded in [realtime optimization](realtime-optimization.md). The checkpoints below retain their historical results, settings and limitations.
+
 ## Speculative scheduler (2026-10-07 local time)
 
 The new loose release implements warm-thread speculation, two active answers, one pending burst, local follow-up supersession and buffered confirmation. Final actual-audio medians: low 3,234 ms, xhigh 2,001 ms, five seeded context recalls per effort all correct. Preliminary effort ordering was reversed, so no reliable speed advantage is established. Source tests, browser/timing tests, 13 native scheduler checks and the opt-in live Codex cancellation/Stop check pass. Broader native acceptance timed out at injected Ctrl+Shift+P and is not claimed green. The prior MSI is unchanged. See [full scheduler evidence](speculative-answering.md).

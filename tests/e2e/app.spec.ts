@@ -23,7 +23,7 @@ async function nativeFixture(page: Page) {
         if (cmd === 'gaze_start') { camera = { ...camera, running: true, face: true, camera: 'Fixture webcam', device: 'Fixture AMD GPU', fps: 30, message: 'Look at the camera and calibrate.' }; cameraBroadcast(); return; }
         if (cmd === 'gaze_control') { if (args.action === 'calibrate_camera') camera.cameraCalibrated = true; if (args.action === 'calibrate_notes') { camera.calibrated = true; camera.correcting = true; } cameraBroadcast(); return; }
         if (cmd === 'gaze_stop') { camera = { ...camera, running: false, preview: null, calibrated: false, cameraCalibrated: false, correcting: false }; cameraBroadcast(); return; }
-        if (cmd === 'bootstrap') return { settings: { ...settings }, devices: [{ id: 'mic', name: 'Fixture microphone', source: 'self', default: true }, { id: 'speaker', name: 'Fixture headphones', source: 'remote', default: true }], accounts: signedIn ? [account] : [], selected: signedIn ? account : null, models: [], snapshot: { ...state }, debug: false };
+        if (cmd === 'bootstrap') return { settings: { ...settings }, speechDevices: [{ index: 1, name: 'Fixture discrete GPU', kind: 'gpu', memoryTotal: 16000000000 }, { index: 0, name: 'Fixture integrated GPU', kind: 'integrated-gpu', memoryTotal: 512000000 }], devices: [{ id: 'mic', name: 'Fixture microphone', source: 'self', default: true }, { id: 'speaker', name: 'Fixture headphones', source: 'remote', default: true }], accounts: signedIn ? [account] : [], selected: signedIn ? account : null, models: [], snapshot: { ...state }, debug: false };
         if (cmd === 'sign_in') { signedIn = true; return account; }
         if (cmd === 'save_settings') { settings = { ...args.settings }; if (settings.answerBackend === 'codex') signedIn = true; return; }
         if (cmd === 'list_models') return settings.answerBackend === 'codex' ? [{ slug: 'gpt-6-luna', display_name: 'GPT-6-Luna' }] : [{ slug: 'fixture-mini', display_name: 'Fixture model' }];
@@ -58,12 +58,13 @@ test('Codex discovers its model and passes Fast mode separately from reasoning e
   await expect(page.getByText('Signed in to Codex', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Answer model')).toHaveValue('gpt-6-luna');
   await expect(page.getByLabel('Answer speed')).toHaveValue('fast');
-  await page.getByLabel('Reasoning effort').selectOption('xhigh');
+  await expect(page.getByLabel('Reasoning effort')).toHaveValue('low');
+  await page.getByLabel('Speech GPU').selectOption('Fixture discrete GPU');
   await page.getByLabel('Local speech model').fill('C:\\fixture\\speech.gguf');
   await page.getByRole('button', { name: 'Start meeting' }).click();
   await expect(page.getByText('Listening', { exact: true })).toBeVisible();
   const settings = await page.evaluate(() => (window as any).fixtureStartedSettings);
-  expect(settings).toMatchObject({ answerBackend: 'codex', model: 'gpt-6-luna', serviceTier: 'fast', reasoningEffort: 'xhigh' });
+  expect(settings).toMatchObject({ answerBackend: 'codex', model: 'gpt-6-luna', serviceTier: 'fast', reasoningEffort: 'low', nemotronDevice: 1, nemotronDeviceName: 'Fixture discrete GPU' });
   await expect(page.getByLabel('Answer backend')).toBeDisabled();
 });
 test('camera uses named input and GPU, calibrates in order and clears on stop', async ({ page }) => {

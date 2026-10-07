@@ -43,7 +43,10 @@ try{
   const until=async(predicate,timeout=8000)=>{const start=Date.now();while(Date.now()-start<timeout){const s=await invoke('get_snapshot');if(predicate(s))return s;await sleep(30);}throw Error('Native state condition timed out');};
   const b=await invoke('bootstrap');assert(b.debug);assert(b.devices.some(d=>d.source==='remote'));assert(b.devices.some(d=>d.source==='self'));passed('WASAPI enumerates independent remote and microphone devices');
   const before=await invoke('native_diagnostics');assert(before.affinityRead&&before.affinity===17);assert(before.noActivate&&before.alwaysOnTop);passed('Native HWND affinity readback, topmost and no-activate styles');
-  const settings={...b.settings,microphone:b.devices.find(d=>d.source==='self'&&d.default)?.id||b.devices.find(d=>d.source==='self').id,output:b.devices.find(d=>d.source==='remote'&&d.default)?.id||b.devices.find(d=>d.source==='remote').id,model:'fixture-mini',projectPath:path.join(root,'.local/context-fixture')};
+  const requestedOutput=process.env.COPILOT_NATIVE_OUTPUT;
+  const playbackDevice=requestedOutput ? b.devices.find(d=>d.source==='remote'&&d.name.toLowerCase().includes(requestedOutput.toLowerCase())) : b.devices.find(d=>d.source==='remote'&&d.default)||b.devices.find(d=>d.source==='remote');
+  assert(playbackDevice,'Requested native playback output must be available');
+  const settings={...b.settings,answerBackend:'chatgpt',serviceTier:null,microphone:b.devices.find(d=>d.source==='self'&&d.default)?.id||b.devices.find(d=>d.source==='self').id,output:playbackDevice.id,model:'fixture-mini',projectPath:path.join(root,'.local/context-fixture')};
   results.speechBackend=settings.speechBackend;results.speechChunkMs=settings.speechChunkMs;results.speechGpu=settings.nemotronDevice;
   if(settings.speechBackend==='nemotron'){
     const pending=invoke('start_meeting',{settings}).then(()=>({started:true}),error=>({error:String(error)}));
@@ -63,7 +66,7 @@ try{
     results.realAudioSamples=[];
     for(let sample=0;sample<audioCases.length;sample++){
     const audioCase=audioCases[sample];const audioPath=path.join(root,'.local/audio',audioCase.file);
-    await new Promise((resolve,reject)=>{const playback=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath],{windowsHide:true,stdio:'ignore'});playback.on('error',reject);playback.on('exit',code=>code===0?resolve():reject(Error(`Fixture playback failed: ${code}`)));});
+    await new Promise((resolve,reject)=>{const playback=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath,'-OutputName',playbackDevice.name],{windowsHide:true,stdio:'ignore'});playback.on('error',reject);playback.on('exit',code=>code===0?resolve():reject(Error(`Fixture playback failed: ${code}`)));});
     try{await until(s=>s.question?.text.toLowerCase().includes(audioCase.word)&&s.answer.length>0,15000);}catch(e){results.realAudioFailureState=await invoke('get_snapshot');results.syntheticAudioTranscripts=await main.evaluate(()=>window.fixtureTranscripts);throw e;}const real=await until(s=>s.latency&&s.latency.completedAt!==null,15000);results.realAudioLatencyMs=real.latency.firstTokenAt-real.latency.speechStoppedAt;passed(`Real ${audioCase.category} speech → WASAPI loopback → local VAD/${settings.speechBackend} → detected question → HTTP stream → overlay`);
     results.realAudioSamples.push({index:sample+1,category:audioCase.category,speechEndToFirstTokenMs:real.latency.firstTokenAt-real.latency.speechStoppedAt});
     await invoke('action',{action:'dismiss'});await until(s=>!s.question);requests=[];

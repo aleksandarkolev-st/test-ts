@@ -80,3 +80,10 @@ the OpenAI Whisper source and model weights.
 Dependency versions are recorded in Cargo.lock and package-lock.json. Each
 third-party source package retains its original license; this notice does not
 replace those licenses. The application source is distributed under LICENSE.
+
+OpenAI Codex CLI 0.160.1 is bundled as an isolated native process under the
+Apache License 2.0. Its original LICENSE and NOTICE are included in codex/.
+Source: https://github.com/openai/codex/tree/rust-v0.160.1
+Binary SHA-256: 9e7c59c05cc1ce5677b1f94e835b2ac038ca3be14504e78d558eacdb0ea3f55d
+Codex owns its sign-in and native inference route; no account credentials
+are included in the installer.

@@ -1,5 +1,6 @@
 pub mod auth;
 pub mod client;
+pub mod codex;
 pub mod prompts;
 
 pub fn acceptance_mode() -> bool {

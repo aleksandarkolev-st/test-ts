@@ -46,7 +46,13 @@ pub struct Client {
     pub http: reqwest::Client,
     base: String,
     reasoning_effort: Option<String>,
+    backend: AnswerBackend,
+    service_tier: Option<String>,
+    pub codex: Option<std::sync::Arc<super::codex::Codex>>,
 }
+#[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum AnswerBackend { #[default] Chatgpt, Codex }
 impl Default for Client {
     fn default() -> Self {
         Self {
@@ -67,11 +73,17 @@ impl Default for Client {
                         http: reqwest::Client::new(),
                         base,
                         reasoning_effort: None,
+                        backend: AnswerBackend::Chatgpt,
+                        service_tier: None,
+                        codex: None,
                     };
                 }
                 "https://api.openai.com/v1".into()
             },
             reasoning_effort: None,
+            backend: AnswerBackend::Chatgpt,
+            service_tier: None,
+            codex: None,
         }
     }
 }
@@ -94,6 +106,12 @@ pub fn request_body_with_image(model: &str, instructions: &str, input: &str, ima
     body
 }
 impl Client {
+    pub fn with_backend(mut self, backend: AnswerBackend, tier: Option<&str>) -> Self {
+        self.backend = backend;
+        self.service_tier = tier.map(String::from);
+        self
+    }
+    pub fn requires_token(&self) -> bool { self.backend == AnswerBackend::Chatgpt }
     pub fn with_reasoning(mut self, effort: Option<&str>) -> Self {
         self.reasoning_effort = effort.map(String::from);
         self
@@ -106,6 +124,9 @@ impl Client {
         body
     }
     pub async fn models(&self, token: &str) -> Result<Vec<Model>, String> {
+        if self.backend == AnswerBackend::Codex {
+            return self.codex.as_ref().ok_or("Codex runtime is unavailable")?.models().await;
+        }
         let r = self
             .http
             .get(format!("{}/models", self.base))
@@ -144,6 +165,10 @@ impl Client {
         F: FnMut(StreamEvent) -> Fut + Send,
         Fut: std::future::Future<Output = Result<(), String>> + Send,
     {
+        if self.backend == AnswerBackend::Codex {
+            return self.codex.as_ref().ok_or("Codex runtime is unavailable")?
+                .stream(model, self.service_tier.as_deref(), self.reasoning_effort.as_deref(), instructions, input, image, cancel, event).await;
+        }
         let request = self
             .http
             .post(format!("{}/responses", self.base))
@@ -343,6 +368,9 @@ mod tests {
                 http: reqwest::Client::new(),
                 base,
                 reasoning_effort: None,
+                backend: AnswerBackend::Chatgpt,
+                service_tier: None,
+                codex: None,
             },
             task,
         )

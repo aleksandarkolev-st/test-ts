@@ -1,0 +1,5 @@
+{
+  "name": "graph-paths",
+  "seed": "Implement shortest paths from one vertex in a directed graph with signed integer edge weights. Some vertices are unreachable. Explain the algorithm and return distances and a reconstructable predecessor chain, or identify a reachable negative cycle.",
+  "rubric": "Check negative edge handling, reachable versus unreachable negative cycles, overflow and sentinel arithmetic, predecessor chains, parallel edges, self loops, graph size boundaries, path reconstruction and changed constraints. Derive concrete counterexamples to claims using the actual code. Ask unanticipated constraints and do not reuse the same predetermined follow-up sequence."
+}

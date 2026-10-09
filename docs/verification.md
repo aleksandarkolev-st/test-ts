@@ -1,6 +1,6 @@
 # Implementation and verification ledger
 
-Current realtime work and its updated tests and measurements are recorded in [realtime optimization](realtime-optimization.md). The checkpoints below retain their historical results, settings and limitations.
+Current realtime work is recorded in [adaptive interview verification](adaptive-interview.md) and the [latency audit](latency-audit.md): 102 library tests pass and six generated remote-audio questions completed, while near-instant latency and broad hard-interview correctness remain unmet. The earlier [realtime optimization](realtime-optimization.md) benchmark and checkpoints below retain their historical results, settings and limitations.
 
 ## Speculative scheduler (2026-10-07 local time)
 

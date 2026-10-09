@@ -71,6 +71,22 @@ mod native {
     pub fn delete(_: &str) {}
 }
 const ROOT: &str = "local.meeting.copilot/oauth";
+const API_ROOT: &str = "local.meeting.copilot/openai-api";
+pub fn api_key() -> Result<String, String> {
+    if let Ok(key) = std::env::var("OPENAI_API_KEY") {
+        if !key.trim().is_empty() { return Ok(key.trim().into()); }
+    }
+    load_from(API_ROOT)?.filter(|key| !key.is_empty())
+        .ok_or_else(|| "Configure an OpenAI API key before using the API backend".into())
+}
+pub fn save_api_key(key: &str) -> Result<(), String> {
+    let key = key.trim();
+    if key.is_empty() { return clear_from(API_ROOT); }
+    if key.len() > 2048 || key.chars().any(char::is_whitespace) {
+        return Err("Invalid API key".into());
+    }
+    save_to(API_ROOT, key)
+}
 #[derive(serde::Serialize, serde::Deserialize)]
 struct Manifest {
     version: String,

@@ -1,0 +1,160 @@
+{
+  "source": "Recorded real-audio occupancy question, October 9; events preserve delivery order and capture timestamps.",
+  "expected": "assume a two SMGPU has no other cooperative launch limit occupancy for kernel K is two block slash SM at sixty four KB shared memory and three blocks slash SM after a change to forty eight kB A five block cooperative launch calls grid sync unconditionally for each resource configuration determine whether that grid can be launched with all blocks resident and explain why lowering shared memory use can change the answer what additional control flow condition must hold for the barrier to be safe",
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "source": "remote",
+        "timestamp": 76995
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-eacc0739-2bc6-4840-8af4-c49fde4729be",
+        "source": "remote",
+        "text": "assume a two SMGPU has no other cooperative launch limit",
+        "startedAt": 76995,
+        "endedAt": 81803,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 90045
+      }
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "source": "remote",
+        "timestamp": 90705
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-81636973-1132-4eaa-accd-222e33424565",
+        "source": "remote",
+        "text": "occupancy for kernel K is two block slash SM at sixty four KB shared memory and three blocks slash SM after a change to forty eight kB",
+        "startedAt": 76995,
+        "endedAt": 91083,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 95265
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c57bc70a-09cf-487a-ae3e-3640e9e72305",
+        "source": "remote",
+        "text": "A five block cooperative launch calls grid sync unconditionally",
+        "startedAt": 90705,
+        "endedAt": 96043,
+        "final": true
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "e62c7e4c-a3c0-44f5-8a9c-2b5f4b139437",
+        "timestamp": 96119
+      }
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "source": "remote",
+        "timestamp": 95985
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-54282de6-954f-4a07-b25a-06d663d80e5d",
+        "source": "remote",
+        "text": "for each resource configuration",
+        "startedAt": 95985,
+        "endedAt": 98603,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-bf8bc069-ecb0-4d6b-ac74-2010cd3dd8d4",
+        "source": "remote",
+        "text": "determine whether that grid can be launched with all blocks resident",
+        "startedAt": 95985,
+        "endedAt": 102763,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 105675
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-e0a2b916-cb93-40ed-a7d2-351fe6b2e6f0",
+        "source": "remote",
+        "text": "and explain why lowering shared memory use can change the answer",
+        "startedAt": 95985,
+        "endedAt": 106443,
+        "final": true
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "6784b11b-95f3-4a37-aea5-0525358ca6b0",
+        "timestamp": 106520
+      }
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "source": "remote",
+        "timestamp": 106335
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 110475
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-2fce1e46-2c6a-4442-8cd4-2d8fb5503ae7",
+        "source": "remote",
+        "text": "what additional control flow condition must hold for the barrier to be safe",
+        "startedAt": 106335,
+        "endedAt": 111083,
+        "final": true
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "20848b18-29d8-4b15-9ea3-5d33a05253ba",
+        "timestamp": 111120
+      }
+    }
+  ]
+}

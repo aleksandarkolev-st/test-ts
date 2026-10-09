@@ -252,6 +252,9 @@ pub fn start(
                     VadEvent::Ended(t) => {
                         let _ = events.send(InputEvent::SpeechEnded(frame.source, t)).await;
                     }
+                    VadEvent::Activity { quiet, timestamp } => {
+                        let _ = events.send(InputEvent::SpeechActivity(frame.source, timestamp, quiet)).await;
+                    }
                     VadEvent::Preview { .. } if frame.source == SpeakerSource::Self_ => {}
                     VadEvent::Preview {
                         samples,

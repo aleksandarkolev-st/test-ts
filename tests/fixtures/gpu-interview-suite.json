@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "roundsPerScenario": 12,
+  "cases": [
+    {
+      "name": "undefined-x",
+      "seed": "A GPU suddenly becomes x. What do you do?",
+      "examinerOnly": "The initial x is deliberately undefined. Reward a precise clarifying question; penalize an invented meaning or diagnosis. After clarification, reveal that one GPU's p99 kernel latency rose from 2 ms to 19 ms while median stayed at 2 ms. Later reveal another tenant, unchanged input, and no clock or temperature change. Do not reveal the cause. Introduce conflicting utilization counters and require discriminating measurements.",
+      "rubric": "Clarification, tail latency versus median, context interference, experimental isolation, correlated versus causal evidence, falsifiable hypotheses, safe mitigation and subsequent changed constraints."
+    },
+    {
+      "name": "suddenly-slow",
+      "seed": "The GPU suddenly gets slow, but the code did not change. Why?",
+      "examinerOnly": "No initial timing definition or environment is provided. Reveal measurements in response to questions: end-to-end latency doubled but device event duration did not; host enqueue gaps increased. Later the host gaps disappear while device time becomes input-dependent. Demand a new diagnosis rather than repeating the original one.",
+      "rubric": "Timing domains, asynchronous execution, warmup, host scheduling, transfer versus kernel time, input distribution, cache effects and evidence-based revision."
+    },
+    {
+      "name": "memory-became-small",
+      "seed": "A GPU suddenly has less memory. Our allocation starts failing. Fix it.",
+      "examinerOnly": "Clarify capacity versus available space versus largest allocatable block. Reveal that physical capacity is unchanged, free space fluctuates, and another process is present. Later free space is sufficient but a graph capture allocation fails. Require distinguishing fragmentation, lifetime, stream ordering, pool limits and external reservations without assuming any one cause.",
+      "rubric": "Allocation accounting, fragmentation versus exhaustion, stream-ordered allocation lifetimes, graphs, bounded retry, concurrency and avoiding destructive recovery guesses."
+    },
+    {
+      "name": "device-disappeared",
+      "seed": "A GPU disappears halfway through a long job. Can we continue from the last completed batch?",
+      "examinerOnly": "The device reports an asynchronous error before disappearing. Batch completion was recorded by the CPU at enqueue time, not by a successful event. Later require recovery onto another device while preserving exactly-once external effects and explaining which buffers and contexts remain trustworthy.",
+      "rubric": "Asynchronous error attribution, context loss, durable checkpoints, completion versus submission, replay/idempotence, poisoned device state, recovery boundaries and heterogeneous-device portability."
+    },
+    {
+      "name": "wrong-once-a-million",
+      "seed": "The kernel is correct almost every time. One result in a million is wrong, and adding a print makes it disappear. What is your first move?",
+      "examinerOnly": "Do not confirm a race or hardware fault without evidence. Supply a minimal inter-block producer/consumer example only when requested. The original flag is atomic but payload ordering is absent. Later add reuse of the slot and wraparound to expose ABA/lifetime issues.",
+      "rubric": "Heisenbugs, minimal reproductions, race and memory tools, atomicity versus ordering, acquire/release and scope, ownership, ABA, reproducible evidence and avoiding certainty from a print-induced change."
+    },
+    {
+      "name": "thermal-or-not",
+      "seed": "The GPU gets hot and throughput drops. Should I lower the batch size?",
+      "examinerOnly": "Device model, safe thermal thresholds and clock telemetry are unknown. Reveal power-limit telemetry, stable temperature and falling clocks under a different kernel mix. Later temperature rises without throttling. Require metric-driven decisions rather than a universal temperature threshold.",
+      "rubric": "Thermal versus power constraints, clock telemetry, workload changes, batch tradeoffs, throughput versus latency and safe interpretation without invented hardware limits."
+    },
+    {
+      "name": "utilization-contradiction",
+      "seed": "GPU utilization is 100 percent, but our application is mostly waiting. How is that possible?",
+      "examinerOnly": "Reveal sampling-window utilization first, then separate compute, copy and memory counters. Introduce overlapping unrelated work and stale monitoring windows. Later show low SM activity with high memory traffic. Require timeline interpretation and a measurement that separates competing explanations.",
+      "rubric": "Metric definitions, sampling aliasing, copy engines, bandwidth, synchronization, unrelated contexts, timeline correlation and bottleneck identification."
+    },
+    {
+      "name": "bandwidth-halved",
+      "seed": "A GPU suddenly has half the bandwidth. Does our kernel get twice as slow?",
+      "examinerOnly": "Bandwidth could mean HBM, PCIe, peer interconnect or measured application throughput. Force clarification. Then disclose arithmetic intensity near the roofline knee, cache reuse changing with input and transfers overlapping compute. Require equations with explicit assumptions and counterexamples.",
+      "rubric": "Roofline reasoning, effective versus peak bandwidth, arithmetic intensity, caching, overlap, end-to-end Amdahl effects and unsupported proportionality claims."
+    },
+    {
+      "name": "more-sms-less-speed",
+      "seed": "We moved the same kernel to a GPU with more SMs and it got slower. Explain that, then fix it.",
+      "examinerOnly": "Do not provide architecture, clock, memory subsystem or problem size initially. Later reveal too few blocks, then a larger problem with register spills, then numerical constraints that prevent a suggested transformation. Require profiling evidence and launch/resource reasoning.",
+      "rubric": "Work distribution, architecture portability, occupancy versus utilization, registers and spills, memory bottlenecks, launch overhead and correctness-preserving optimization."
+    },
+    {
+      "name": "partition-changed",
+      "seed": "Our GPU suddenly becomes a smaller GPU while the service is running. What assumptions break?",
+      "examinerOnly": "Do not assume MIG or a specific vendor. Clarify whether the observable change is logical partition, available memory, scheduling quota or device identity. Later reveal a changed logical device identity after reconfiguration and then a quota-only change without a reset.",
+      "rubric": "Device identity, partitioning versus scheduling quotas, resource discovery, reset/reconfiguration boundaries, context and cache invalidation, portable code and explicit uncertainty."
+    },
+    {
+      "name": "peer-link-degraded",
+      "seed": "One GPU-to-GPU link gets slow halfway through an all-reduce. What should the runtime do?",
+      "examinerOnly": "Initially omit topology and failure versus slowdown. Reveal asymmetric throughput without errors, then a stalled collective, then a topology change during a retry. Require progress/failure semantics and collective ordering; no imaginary global barrier or guaranteed transparent retry.",
+      "rubric": "Topology, peer access, collective progress and ordering, timeout uncertainty, communicator recovery, consistency, checkpoint/replay and contention-aware diagnostics."
+    },
+    {
+      "name": "occupancy-went-up",
+      "seed": "I doubled occupancy and the kernel got slower. Your optimization made it worse. Why?",
+      "examinerOnly": "Reveal that the block size changed first. Later disclose spills and reduced per-thread register allocation, then a case with no spills but lower instruction-level parallelism. Demand a concrete discriminating experiment and explain why occupancy alone is insufficient.",
+      "rubric": "Register pressure, spills, latency hiding, instruction-level parallelism, shared memory, occupancy versus performance and measured tradeoffs."
+    },
+    {
+      "name": "warp-becomes-x",
+      "seed": "Suppose a warp suddenly becomes x. Is your reduction still correct?",
+      "examinerOnly": "x is undefined; require clarification rather than invented warp semantics. Then set x to a sparse set of surviving lanes, not a contiguous prefix. Later distinguish physically present lanes from predicate-selected participants and require compilable code or a justified library primitive.",
+      "rubric": "Caller masks, sparse participation, active sources, pre-divergence ballots, lane rank mapping, architecture guarantees and refusal to assume a changing hardware warp width."
+    },
+    {
+      "name": "barrier-only-under-load",
+      "seed": "The kernel deadlocks only when we launch enough blocks. The small test passed. Where do you look?",
+      "examinerOnly": "Reveal a spin-based grid barrier inside an ordinary kernel, then residency limits, then a proposed cooperative launch with changing resource use. Require a proof of progress and alternatives; later introduce cross-stream dependencies.",
+      "rubric": "Scheduling and residency, lack of ordinary grid-wide synchronization, cooperative launch constraints, forward progress, block-wide participation and dependency cycles."
+    },
+    {
+      "name": "graph-replay-stale",
+      "seed": "Graph replay gets faster, but sometimes it uses the previous batch's data. Why?",
+      "examinerOnly": "Omit ownership and stream ordering initially. Reveal reused host buffers and changed pointers, then stream-ordered allocation and graph updates under concurrent replay. Require distinguishing parameter capture, transfer lifetime and dependency errors.",
+      "rubric": "Graph parameter capture, buffer ownership and lifetime, async transfers, event dependencies, update/replay concurrency and minimal reproducible ordering."
+    },
+    {
+      "name": "managed-memory-thrash",
+      "seed": "The GPU suddenly starts behaving like it has no cache after a CPU thread touches the data. How do you explain it?",
+      "examinerOnly": "The initial cache wording is a hypothesis, not a measurement. Reveal managed allocations and page migration counters, then oversubscription, then a system with different coherency capabilities. Ask for a portability-aware mitigation and evidence.",
+      "rubric": "Unified memory migration, page faults, ownership, oversubscription, prefetch/advice limitations, system capabilities and separating a symptom from a presumed cause."
+    },
+    {
+      "name": "precision-changed",
+      "seed": "A GPU suddenly starts returning slightly different answers after an upgrade. Which results can we still trust?",
+      "examinerOnly": "Clarify magnitude, repeatability and acceptance criteria. Reveal changed reduction grouping, then mixed precision and fused operations, then a demand for bitwise reproducibility across architectures. Require concrete cancellation examples and realistic limits.",
+      "rubric": "Floating-point non-associativity, deterministic grouping, precision and overflow, FMA, error bounds, conditioning, reproducibility versus accuracy and unsupported guarantees."
+    },
+    {
+      "name": "stream-priority-starvation",
+      "seed": "High-priority GPU work suddenly misses deadlines even though low-priority work is still making progress. Can priorities fix it?",
+      "examinerOnly": "Initially omit device and preemption capabilities. Reveal a long resident kernel, then copy engine contention, then dependencies on low-priority producers. Require distinguishing scheduling hints from hard real-time guarantees.",
+      "rubric": "Stream priority semantics, preemption capabilities, dependency inversion, residency, copy engines, admission control and measured deadline guarantees."
+    },
+    {
+      "name": "input-shape-shift",
+      "seed": "The GPU is unchanged, but one input suddenly makes the kernel ten times slower. What do you investigate?",
+      "examinerOnly": "Reveal an irregular sparse workload, skewed degree distribution and atomics to a few hot addresses. Later remove atomic contention but retain load imbalance, then impose stable output order. Demand concrete algorithm changes and correctness arguments.",
+      "rubric": "Input-sensitive complexity, divergence, memory locality, atomic contention, work partitioning, stable ordering and evidence distinguishing bottlenecks."
+    },
+    {
+      "name": "clock-speed-doubled",
+      "seed": "A GPU suddenly runs at twice the clock speed. Should every kernel finish in half the time? Prove your answer.",
+      "examinerOnly": "Clarify which clock and whether the value is requested or measured. Reveal independent memory and SM clocks, a memory-bound kernel, launch overhead, then voltage/power constraints and a compute-bound kernel. Require equations and limitations rather than a single proportionality claim.",
+      "rubric": "Clock domains, compute versus bandwidth bounds, launch/host overhead, Amdahl reasoning, actual versus requested clocks and empirical validation."
+    },
+    {
+      "name": "device-changed-during-checkpoint",
+      "seed": "A GPU resets just as we are copying a checkpoint to the host. Is the checkpoint valid?",
+      "examinerOnly": "Submission occurred but completion evidence is missing. Later reveal a partial host buffer, an event error, concurrent updates and an external acknowledgement already sent. Require a validity protocol and explicit recovery ordering.",
+      "rubric": "Transfer completion, coherent snapshots, epochs/checksums, durable commit, asynchronous errors, exactly-once effects and replay safety."
+    },
+    {
+      "name": "cuda-reduction",
+      "seed": "Implement a CUDA block sum for arbitrary block sizes, including 1, 7, 17, 33, 45 and 1024, and arbitrary input tails. Then justify every synchronization and source lane.",
+      "examinerOnly": "Drill from complete working code into sparse lane masks, divergence, independent thread scheduling, numerical cancellation and multi-block determinism. Introduce corrections to previously supplied dimensions. Ask why or prove it without restating the preceding code.",
+      "rubric": "Exact code continuity, odd reductions, masks and participation, barriers, numerical examples, grid synchronization, changed assumptions and corrective reasoning."
+    },
+    {
+      "name": "host-device-ordering",
+      "seed": "The CPU sees a ready flag from the GPU but sometimes reads an old payload. The flag is atomic. Why is this possible?",
+      "examinerOnly": "Architecture, host memory type and atomic capabilities are unspecified. Require clarification. Later reveal relaxed ordering and device scope, then add a supported system-scope path and buffer reuse under multiple producers. Demand proof and fallback behavior.",
+      "rubric": "Atomicity versus ordering, scope, coherence and supported memory types, acquire/release, ownership, buffer lifetime, multiple producers and portable fallback."
+    },
+    {
+      "name": "heterogeneous-failover",
+      "seed": "We lose a GPU and fail over to a different vendor's GPU. Can we keep the same kernel and correctness guarantees?",
+      "examinerOnly": "No portability layer or device capabilities are specified. Reveal a source translation path, subgroup-size differences, library substitution and different precision behavior. Require identifying assumptions, testing and safe degradation without assuming CUDA binaries run elsewhere.",
+      "rubric": "Binary versus source portability, subgroup and memory semantics, capability discovery, numerical contracts, runtime/library differences and evidence-based validation."
+    }
+  ]
+}

@@ -5,6 +5,7 @@ use std::collections::VecDeque;
 pub const RECENT_MS: u64 = 300_000;
 const RECENT_CHARS: usize = 24_000;
 const MAX_PENDING_CHARS: usize = 32_000;
+const MAX_ANSWER_HISTORY_CHARS: usize = 64_000;
 pub const ANSWER_CONTEXT_CHARS: usize = 8_000;
 
 #[derive(Clone, Default, Debug, Serialize, Deserialize)]
@@ -42,8 +43,40 @@ pub struct MeetingContext {
     older: VecDeque<TranscriptSegment>,
     in_flight: Vec<TranscriptSegment>,
     chars: usize,
+    answers: VecDeque<(u64,String,String,String)>,
+    visible_answer: Option<(String,String,String)>,
+    // The working implementation outlives a short history of explanations.
+    // Keep its exact text until a later complete code answer replaces it.
+    working_code: Option<(u64,String,String,String)>,
 }
 impl MeetingContext {
+    pub fn forget_visible_answer(&mut self,id:&str) {
+        if self.visible_answer.as_ref().is_some_and(|(previous,_,_)|previous==id){self.visible_answer=None;}
+    }
+    /// A follow-up can refer to text already shown before generation completes.
+    /// Preserve that exact snapshot without treating unfinished code as complete.
+    pub fn remember_visible_answer(&mut self,id:&str,question:&str,answer:&str) {
+        if answer.trim().is_empty() || answer.chars().count()>32_000{return;}
+        if self.answers.iter().any(|(_,previous,_,_)|previous==id){return;}
+        self.visible_answer=Some((id.into(),question.into(),answer.into()));
+    }
+    /// Preserve complete suggested answers, including code, independently of
+    /// transcript compression. Suggestions are never promoted to meeting facts.
+    #[cfg(test)]
+    pub fn remember_answer(&mut self,id:&str,question:&str,answer:&str) {
+        let order=self.answers.back().map_or(0,|(order,_,_,_)|order+1);
+        self.remember_answer_at(id,question,answer,order);
+    }
+    pub fn remember_answer_at(&mut self,id:&str,question:&str,answer:&str,order:u64) {
+        if answer.trim().is_empty() || answer.chars().count()>32_000{return;}
+        self.forget_visible_answer(id);
+        let fences=answer.matches("```").count();
+        if fences>=2 && fences%2==0 && self.working_code.as_ref().is_none_or(|(previous,_,_,_)|order>=*previous) {self.working_code=Some((order,id.into(),question.into(),answer.into()));}
+        self.answers.retain(|(_,previous,_,_)|previous!=id);
+        self.answers.push_back((order,id.into(),question.into(),answer.into()));
+        self.answers.make_contiguous().sort_by_key(|(order,_,_,_)|*order);
+        while self.answers.len()>8 || self.answers.iter().map(|(_,_,q,a)|q.chars().count()+a.chars().count()).sum::<usize>()>MAX_ANSWER_HISTORY_CHARS {self.answers.pop_front();}
+    }
     pub fn push(&mut self, segment: TranscriptSegment) {
         if !segment.final_ || segment.text.trim().is_empty() {
             return;
@@ -93,6 +126,12 @@ impl MeetingContext {
         format!("{}\n\nCURRENT QUESTION\n{question}",self.answer_context(question))
     }
     pub fn answer_context(&self, question:&str)->String {
+        self.answer_context_for_utterance(question,None)
+    }
+    /// The current remote utterance is supplied as CURRENT QUESTION. Excluding
+    /// its transcript fragments avoids treating their finalization as new facts.
+    /// Other speakers, earlier turns, and exact suggested code remain available.
+    pub fn answer_context_for_utterance(&self, question:&str,started:Option<u64>)->String {
         // Keep the archive and summary retry behavior intact; retrieval bounds
         // apply only to the latency-sensitive answer prompt.
         let mut memory=vec![format!("Summary: {}",self.memory.summary)];
@@ -103,13 +142,21 @@ impl MeetingContext {
             .in_flight
             .iter()
             .chain(self.older.iter())
+            .filter(|segment|!started.is_some_and(|start|segment.source==super::SpeakerSource::Remote&&segment.started_at>=start))
             .cloned()
             .collect();
-        let recent: Vec<_> = self.recent.iter().cloned().collect();
+        let recent: Vec<_> = self.recent.iter().filter(|segment|!started.is_some_and(|start|segment.source==super::SpeakerSource::Remote&&segment.started_at>=start)).cloned().collect();
         let memory=select_lines(&memory,2_000,question);
         let pending=select_lines(&conversation(&pending).lines().map(String::from).collect::<Vec<_>>(),1_500,question);
         let recent=select_lines(&conversation(&recent).lines().map(String::from).collect::<Vec<_>>(),4_000,question);
-        format!("MEETING SUMMARY (selected relevant memory)\n{memory}\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\n{pending}\n\nRECENT CONVERSATION (selected excerpts)\n{recent}")
+        let mut selected=std::collections::BTreeSet::new();
+        for index in self.answers.len().saturating_sub(2)..self.answers.len(){selected.insert(index);}
+        let included_code=self.working_code.as_ref().is_some_and(|(_,code_id,_,_)|selected.iter().any(|i|self.answers[*i].1==*code_id));
+        let mut answers=selected.into_iter().map(|i|{let (_,_,q,a)=&self.answers[i];format!("QUESTION: {q}\nSUGGESTED ANSWER:\n{a}")}).collect::<Vec<_>>().join("\n\n");
+        if !included_code {if let Some((_,_,q,a))=&self.working_code{answers.push_str(&format!("\n\nLATEST COMPLETE SUGGESTED IMPLEMENTATION\nQUESTION: {q}\n{a}"));}}
+        if let Some((_,q,a))=&self.visible_answer{answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
+        let history=if answers.is_empty(){String::new()}else{format!("\n\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\n{answers}")};
+        format!("MEETING SUMMARY (selected relevant memory)\n{memory}\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\n{pending}\n\nRECENT CONVERSATION (selected excerpts)\n{recent}{history}")
     }
     pub fn clear(&mut self) {
         *self = Self::default();
@@ -156,6 +203,79 @@ pub fn conversation(segments: &[TranscriptSegment]) -> String {
 mod tests {
     use super::*;
     use crate::meeting::SpeakerSource;
+    #[test]
+    fn current_utterance_fragments_do_not_change_selected_context_but_other_speakers_do() {
+        let mut c=MeetingContext::default();c.push(seg(1,"Earlier launch date: February 19."));
+        c.remember_answer("code","Implement","```rust\nlet exact=17;\n```");
+        let before=c.answer_context_for_utterance("What is the launch date?",Some(10));
+        let mut first=seg(11,"What is the");first.started_at=10;c.push(first);
+        let mut second=seg(12,"launch date?");second.started_at=10;c.push(second);
+        assert_eq!(before,c.answer_context_for_utterance("What is the launch date?",Some(10)));
+        let mut correction=seg(13,"The launch date changed to March 22.");correction.source=SpeakerSource::Self_;c.push(correction);
+        let refreshed=c.answer_context_for_utterance("What is the launch date?",Some(10));
+        assert_ne!(before,refreshed);assert!(refreshed.contains("March 22"));assert!(refreshed.contains("let exact=17;"));
+        assert!(c.answer_context("What is the launch date?").contains("REMOTE: launch date?"));
+    }
+    #[test]
+    fn late_completion_of_an_older_turn_does_not_replace_the_newer_implementation() {
+        let mut c=MeetingContext::default();
+        c.remember_answer_at("new","Revise","```rust\nlet newest=2;\n```",20);
+        c.remember_answer_at("old","Implement","```rust\nlet oldest=1;\n```",10);
+        c.remember_answer_at("followup","Explain","The latest invariant.",30);
+        let prompt=c.prompt("Which code are we using?");
+        assert!(prompt.contains("let newest=2"));assert!(!prompt.contains("let oldest=1"));
+        for order in 31..50{c.remember_answer_at(&order.to_string(),"Why","An explanation.",order);}
+        let prompt=c.prompt("Prove it");
+        assert!(prompt.contains("let newest=2"));assert!(!prompt.contains("let oldest=1"));
+    }
+    #[test]
+    fn followup_retains_visible_unfinished_code_without_replacing_complete_code() {
+        let mut c=MeetingContext::default();
+        c.remember_answer("complete","Implement","```rust\nlet complete=1;\n```");
+        let visible="Revise it this way.\n```rust\nlet unfinished=2;";
+        c.remember_visible_answer("stream","Revise",visible);
+        let prompt=c.prompt("Why did you change that line?");
+        assert!(prompt.contains(visible));assert!(prompt.contains("may be unfinished"));
+        assert!(prompt.contains("let complete=1"));
+        let completed="```rust\nlet unfinished=2;\n```";
+        c.remember_answer("stream","Revise",completed);
+        assert!(!c.prompt("Why?").contains("STILL STREAMING"));
+        assert_eq!(c.prompt("Why?").matches("let unfinished=2").count(),1);
+        c.remember_visible_answer("stream","Revise",completed);
+        assert!(!c.prompt("Why?").contains("STILL STREAMING"));
+        c.clear();assert!(!c.prompt("Why?").contains("unfinished=2"));
+    }
+    #[test]
+    fn exact_code_survives_compression_and_short_followups() {
+        let mut c=MeetingContext::default();
+        let code=format!("Use this kernel.\n```cuda\n{}\nunsigned mask = 0x1ffff;\n```","// preserve this line\n".repeat(400));
+        c.remember_answer("code","Implement the reduction",&code);
+        for i in 0..40{c.remember_answer(&format!("q{i}"),"Why?",&format!("Explanation {i}"));}
+        c.push(seg(1,"Actually use 7 threads and 3 valid elements."));
+        c.complete_summary(Memory::default());
+        let prompt=c.prompt("Is that mask valid?");
+        assert!(prompt.contains(&code));assert!(prompt.contains("Explanation 39"));
+        assert!(prompt.contains("7 threads"));assert!(prompt.contains("may contain mistakes"));
+        c.clear();assert!(!c.prompt("Why?").contains("0x1ffff"));
+    }
+    #[test]
+    fn latest_complete_code_replaces_prior_code_and_is_not_duplicated() {
+        let mut c=MeetingContext::default();
+        c.remember_answer("first","Implement","```rust\nlet old=1;\n```");
+        c.remember_answer("new","Revise","```rust\nlet revised=2;\n```");
+        assert_eq!(c.prompt("Prove it").matches("let revised=2").count(),1);
+        c.remember_answer("partial","Revise","```rust\nlet truncated");
+        for i in 0..12{c.remember_answer(&format!("later{i}"),"Why","An explanation.");}
+        assert!(!c.prompt("Prove it").contains("let old=1"));
+        assert!(c.prompt("Prove it").contains("let revised=2"));
+    }
+    #[test]
+    fn answer_history_is_bounded_without_cutting_code() {
+        let mut c=MeetingContext::default();
+        for i in 0..10 {c.remember_answer(&i.to_string(),"Explain",&format!("```cuda\n{}\n```","x".repeat(30_000)));}
+        assert_eq!(c.answers.len(),2);
+        assert!(c.answers.iter().all(|(_,_,_,a)|a.ends_with("```")));
+    }
     fn seg(i: u64, text: &str) -> TranscriptSegment {
         TranscriptSegment {
             id: i.to_string(),

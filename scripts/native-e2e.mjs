@@ -8,7 +8,9 @@ const root=process.cwd(); const soakMinutes=Number(process.env.COPILOT_SOAK_MINU
 const artifactName=process.env.COPILOT_NATIVE_ARTIFACT_NAME||(soakMinutes?'soak':'native');
 assert.match(artifactName,/^[A-Za-z0-9_-]+$/,'Native artifact name must be a simple folder name');
 const artifact=path.join(root,'artifacts',artifactName); await mkdir(artifact,{recursive:true});
+const isSummary=instructions=>instructions.startsWith('Compress the prior meeting memory');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));let requests=[];let cancelled=0;let activeResponses=0,maxActiveResponses=0;
+let burstGate=null,releaseBurst=()=>{};
 const server=createServer(async(req,res)=>{
   if(req.headers.authorization!=='Bearer fixture-token'){res.writeHead(401).end();return;}
   if(req.url==='/v1/models'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({models:[{slug:'fixture-mini',display_name:'Native fixture model',visibility:'list'}]}));return;}
@@ -19,8 +21,9 @@ const server=createServer(async(req,res)=>{
   let completed=false;res.on('close',()=>{activeResponses--;if(!completed)cancelled++;});
   const requestText=typeof parsed.input[0].content==='string'?parsed.input[0].content:parsed.input[0].content.find(c=>c.type==='input_text').text;
   const slow=requestText.includes('first target');
-  const deltas=parsed.instructions.includes('JSON')?[JSON.stringify({summary:'Synthetic fixture discussion',facts:[],decisions:[],dates:[],people:[],open_questions:[]})]:['The launch ','target is ','October 28.'];
-  for(const delta of deltas){if(res.destroyed)return;res.write(`data: ${JSON.stringify({type:'response.output_text.delta',delta})}\r\n\r\n`);await sleep(slow?700:80);}
+  const deltas=isSummary(parsed.instructions)?[JSON.stringify({summary:'Synthetic fixture discussion',facts:[],decisions:[],dates:[],people:[],open_questions:[]})]:['The launch ','target is ','October 28.'];
+  const heldBurst=burstGate;
+  for(const delta of deltas){if(res.destroyed)return;res.write(`data: ${JSON.stringify({type:'response.output_text.delta',delta})}\r\n\r\n`);if(heldBurst)await heldBurst;await sleep(slow?700:80);}
   if(!res.destroyed){completed=true;res.end(`data: ${JSON.stringify({type:'response.completed'})}\r\n\r\n`);}
 });await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const port=server.address().port; const debugPort=Number(process.env.COPILOT_CDP_PORT||9227);
@@ -85,6 +88,9 @@ try{
   await invoke('ask',{question:'What did we decide?'});await until(s=>s.latency&&s.latency.completedAt!==null&&s.answer.includes('October'));assert(requests.at(-1).input[0].content.includes('SELF: What is our own launch date?'));passed('Manual ask shares meeting context and completes streaming');
   await invoke('action',{action:'dismiss'});await until(s=>!s.question);
   const questionEvent=async text=>{await invoke('acceptance_event',{kind:'started',source:'remote',text:null});await invoke('acceptance_event',{kind:'ended',source:'remote',text:null});await invoke('acceptance_event',{kind:'transcript',source:'remote',text});};
+  // Keep both fixture streams open until the queued third turn is observed.
+  // Fixed delays can miss this state on a loaded Windows/WebView2 process.
+  burstGate=new Promise(resolve=>{releaseBurst=resolve;});
   const burstBefore=requests.length;await questionEvent('What is our first target for alpha?');await sleep(150);
   assert.equal(requests.length,burstBefore+1);assert.equal((await invoke('get_snapshot')).answer,'');passed('Candidate starts inference before confirmation and buffers early text');
   const alpha=await until(s=>s.question?.text.includes('alpha')&&s.answer);
@@ -92,6 +98,7 @@ try{
   assert.equal((await invoke('get_snapshot')).question.id,alpha.question.id);
   await questionEvent('Who owns delivery for gamma?');const queued=await until(s=>s.questions?.some(q=>q.queued&&q.state==='confirmed'));
   assert.equal(queued.questions.filter(q=>q.queued).length,1);assert.equal(requests.length,burstBefore+2);
+  releaseBurst();burstGate=null;
   await until(s=>s.question?.text.includes('gamma')&&s.latency?.completedAt!=null,12000);
   assert.equal(maxActiveResponses,2);results.maxActiveAnswers=maxActiveResponses;passed('Two independent generations and one queued burst drain in order with one visible answer');
   await invoke('action',{action:'dismiss'});await until(s=>!s.question&&s.answer==='');
@@ -139,7 +146,7 @@ try{
       await sleep(1600);
       const state=await invoke('get_snapshot');assert(state.active&&!state.paused&&!state.error);
       const finals=await main.evaluate(offset=>window.fixtureTranscripts.slice(offset).filter(s=>s.source==='remote'&&s.final&&s.text.trim()),offset);
-      const automatic=requests.some(r=>!r.instructions.includes('JSON'));
+      const automatic=requests.some(r=>!isSummary(r.instructions));
       corpus.speechDetected+=Number(finals.length>0);
       if(labels[index].question)corpus.questionsDetected+=Number(automatic);else corpus.negativeFalseTriggers+=Number(automatic);
       // Only public synthetic fixture transcripts are retained by this opt-in
@@ -165,7 +172,7 @@ try{
       await new Promise((resolve,reject)=>{const player=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audio],{windowsHide:true,stdio:'ignore'});player.on('error',reject);player.on('exit',c=>c===0?resolve():reject(Error('Negative fixture playback failed')));});
       await sleep(1200);clips++;
       const s=await invoke('get_snapshot');assert(s.active&&!s.paused&&!s.error,`Capture failed during negative playback: ${s.error || s.status}`);
-      const answers=requests.filter(r=>!r.instructions.includes('JSON'));assert.equal(answers.length,0,'A controlled negative speech clip triggered an automatic answer');summaryRequests+=requests.length;requests=[];
+      const answers=requests.filter(r=>!isSummary(r.instructions));assert.equal(answers.length,0,'A controlled negative speech clip triggered an automatic answer');summaryRequests+=requests.length;requests=[];
       if(clips%10===0)console.log(`NEGATIVE AUDIO ${Math.round((Date.now()-started)/60_000)} / ${negativeMinutes} min: zero false answer requests`);
     }
     assert(summaryRequests>0,'The long-context test did not exercise summarization');assert(summaryRequests<=Math.ceil(negativeMinutes*2)+2,'Summarization ran more often than the thirty-second cadence');
@@ -188,7 +195,7 @@ try{
         const audioPath=path.join(root,'.local/audio',audioCase.file);
         await new Promise((resolve,reject)=>{const player=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture.ps1'),'-InputPath',audioPath],{windowsHide:true,stdio:'ignore'});player.on('error',reject);player.on('exit',c=>c===0?resolve():reject(Error('Soak audio playback failed')));});
         await until(s=>s.question?.text.toLowerCase().includes(audioCase.word)&&s.latency?.completedAt!==null&&s.answer.length>0,15000);
-        assert(requests.some(r=>!r.instructions.includes('JSON')),'Replayed question must automatically generate an answer');
+        assert(requests.some(r=>!isSummary(r.instructions)),'Replayed question must automatically generate an answer');
       }else{
         await invoke('ask',{question:'What is the launch target?'});await until(s=>s.latency&&s.latency.completedAt!==null&&s.answer.length>0);
       }
@@ -238,6 +245,7 @@ try{
   results.pass=true;
   }
 }catch(e){results.pass=false;results.failure=String(e);if(main){try{const s=await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('get_snapshot'));results.failureState={status:s.status,project:s.project,attachmentBusy:s.attachmentBusy,error:s.error,questions:s.questions?.map(q=>({state:q.state,queued:q.queued})),answerCharacters:s.answer.length};}catch{}}throw e;}finally{
+  releaseBurst();
   if(main){try{await main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}catch{}}
   results.completedAt=new Date().toISOString();for(const line of stderr.split(/\r?\n/)){if(line.startsWith('local_stt ')){try{const v=JSON.parse(line.slice(10));results.localTranscription.push({source:v.source,kind:v.kind,previewReused:v.preview_reused,queueWaitMs:v.queue_wait_ms,inferenceMs:v.inference_ms});}catch{}}}await writeFile(path.join(artifact,'results.json'),JSON.stringify(results,null,2));await browser?.close();app?.kill();vite?.kill();server.closeAllConnections();server.close();
 }

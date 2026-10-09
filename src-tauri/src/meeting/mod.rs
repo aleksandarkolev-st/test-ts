@@ -28,6 +28,7 @@ pub struct TranscriptSegment {
 pub enum InputEvent {
     SpeechStarted(SpeakerSource, u64),
     SpeechEnded(SpeakerSource, u64),
+    SpeechActivity(SpeakerSource, u64, bool),
     Transcript(TranscriptSegment),
     Manual(String),
     Dismiss,

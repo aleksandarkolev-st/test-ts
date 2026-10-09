@@ -1,6 +1,6 @@
 # Speculative meeting answers
 
-This document records the earlier scheduler checkpoint. See [realtime optimization](realtime-optimization.md) for the current 200 ms confirmation fence, preserved ASR growth, bounded answer retrieval and 100-sample benchmark.
+This document records the earlier scheduler checkpoint. The subsequent [realtime optimization](realtime-optimization.md) checkpoint records its 100-sample benchmark. Current first-word measurements and exact-context behavior are documented in [adaptive interview verification](adaptive-interview.md) and the [latency audit](latency-audit.md).
 
 The two attached scheduler briefs were implemented on 2026-10-07. Question detection stays local. Remote partial and final transcripts can start a speculative answer, while the existing 500 ms silence and final-transcript fence still control confirmation. Model text stays buffered until confirmation. SELF speech suppresses candidates; resumed speech and a non-question final retract speculative work. Punctuation-only transcript changes retain the turn; material corrections cancel and replace it.
 

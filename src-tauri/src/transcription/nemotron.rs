@@ -130,7 +130,7 @@ impl Service {
             .env("NEMO_SPEECH_HTTP_API_KEY", &key)
             .stdin(Stdio::null())
             .stdout(Stdio::null())
-            .stderr(Stdio::null());
+            .stderr(if cfg!(feature="acceptance") && std::env::var("COPILOT_NEMO_DIAGNOSTICS").as_deref()==Ok("1"){Stdio::inherit()}else{Stdio::null()});
         #[cfg(windows)]
         {
             use std::os::windows::process::CommandExt;
@@ -157,15 +157,14 @@ impl Service {
             if cancel.is_cancelled() {
                 return Err("Speech startup cancelled".into());
             }
-            if service
+            if let Some(status)=service
                 .child
                 .lock()
                 .unwrap()
                 .try_wait()
                 .map_err(|e| e.to_string())?
-                .is_some()
             {
-                return Err("Nemotron exited while loading. Check the runtime, GGUF model and Vulkan driver".into());
+                return Err(format!("Nemotron exited while loading ({status}). Check the runtime, GGUF model and Vulkan driver"));
             }
             if let Ok(response) = http
                 .get(format!("http://127.0.0.1:{port}/ready"))
@@ -299,6 +298,7 @@ pub async fn start(
                 let event = match event {
                     super::vad::VadEvent::Started(t) => { timing[i] = (t,t); Some(InputEvent::SpeechStarted(frame.source,t)) },
                     super::vad::VadEvent::Ended(t) => { timing[i].1=t; Some(InputEvent::SpeechEnded(frame.source,t)) },
+                    super::vad::VadEvent::Activity{quiet,timestamp} => Some(InputEvent::SpeechActivity(frame.source,timestamp,quiet)),
                     _=>None,
                 };
                 if let Some(event)=event { if events.send(event).await.is_err(){return;} }

@@ -1,0 +1,198 @@
+{
+  "scope": "Recorded final ASR delivery before the next VAD Started, with two confirmations inside the same remote question. Public words and capture timestamps only; no answer rubric.",
+  "source": "artifacts/native-interview/luna-acoustic-occupancy-probe-v9/event-log.json",
+  "turnStartedAt": 59766,
+  "expected": "now a replace grid sync with this barrier in an ordinary five block launch each block does atomic add and count one while atomic add and count zero five at sixty four kB construct a valid execution schedule in which it fails to make progress then give two correct alternatives and the key condition each requires",
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": false,
+        "source": "remote",
+        "timestamp": 59766,
+        "turnStartedAt": 59766
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-7390b0c0-4e4d-4fe4-9bd7-effa57baa27b",
+        "source": "remote",
+        "text": "now a replace grid",
+        "startedAt": 59766,
+        "endedAt": 61787,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3af27061-a060-4c71-b773-56058e0614f1",
+        "source": "remote",
+        "text": "sync with this barrier in an ordinary five block launch",
+        "startedAt": 59766,
+        "endedAt": 65627,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-72335514-e776-4dee-8b82-1f3dcc810179",
+        "source": "remote",
+        "text": "each block does atomic add",
+        "startedAt": 59766,
+        "endedAt": 67547,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-10e59061-28a5-499d-9038-99a8545bf85c",
+        "source": "remote",
+        "text": "and count",
+        "startedAt": 59766,
+        "endedAt": 68667,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-a55b9d4f-3e23-4d21-a423-04ca62f18845",
+        "source": "remote",
+        "text": "one",
+        "startedAt": 59766,
+        "endedAt": 69787,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-13be58f4-ef86-439b-b303-01acf4e570ed",
+        "source": "remote",
+        "text": "while atomic add and count",
+        "startedAt": 59766,
+        "endedAt": 72187,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 72516
+      }
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 72996,
+        "turnStartedAt": 59766
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-687275e5-3643-4587-9561-f15d3ad315a4",
+        "source": "remote",
+        "text": "zero",
+        "startedAt": 59766,
+        "endedAt": 73307,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 73296
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "11006002-1453-4663-ba3c-20cc79a9da34",
+        "timestamp": 73841
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9a15e3f-d4a1-46eb-8ffd-b51fb8ea5b60",
+        "source": "remote",
+        "text": "five",
+        "startedAt": 72996,
+        "endedAt": 74107,
+        "final": true
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "44ac6fa1-cfd6-41a9-aa1d-8d04d5b60149",
+        "timestamp": 74161
+      }
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 74016,
+        "turnStartedAt": 59766
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-7b6ba9e4-3fa3-4aa7-85c9-92bc3ccdf008",
+        "source": "remote",
+        "text": "at sixty four kB",
+        "startedAt": 74016,
+        "endedAt": 76507,
+        "final": true
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3a548426-96e1-44e0-8ef7-38ddf111d3e5",
+        "source": "remote",
+        "text": "construct a valid execution schedule in which it fails to make progress",
+        "startedAt": 74016,
+        "endedAt": 80347,
+        "final": true
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 84006
+      }
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-a17ab196-4493-464d-8afb-ca02cc3a6a02",
+        "source": "remote",
+        "text": "then give two correct alternatives and the key condition each requires",
+        "startedAt": 74016,
+        "endedAt": 84507,
+        "final": true
+      }
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "d23eee2f-6e17-4317-857e-e5775490a526",
+        "timestamp": 84561
+      }
+    }
+  ]
+}

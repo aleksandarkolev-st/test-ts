@@ -11,6 +11,8 @@ pub struct CurrentQuestion {
 #[serde(rename_all = "camelCase")]
 pub struct Latency {
     #[serde(default)]
+    pub response_revision: u64,
+    #[serde(default)]
     pub pipeline: crate::openai::timing::Timeline,
     pub remote_speech_started_at: Option<u64>,
     pub first_remote_partial_at: Option<u64>,
@@ -22,7 +24,29 @@ pub struct Latency {
     pub question_confirmed_at: u64,
     pub request_sent_at: u64,
     pub first_token_at: Option<u64>,
+    #[serde(default)]
+    pub first_word_at: Option<u64>,
     pub completed_at: Option<u64>,
+}
+impl Latency {
+    /// Arrival of the first character of an answer word, without waiting for
+    /// its completion or a sentence. Protocol framing is removed upstream.
+    pub fn observe_answer_delta(&mut self,delta:&str,now:u64) {
+        if !delta.is_empty(){self.first_token_at.get_or_insert(now);}
+        if delta.chars().any(char::is_alphanumeric){self.first_word_at.get_or_insert(now);}
+    }
+}
+#[cfg(test)] mod latency_tests {
+    use super::Latency;
+    #[test]
+    fn first_word_starts_before_word_or_sentence_completion_and_skips_formatting() {
+        let mut l=Latency::default();l.observe_answer_delta("",1);
+        assert!(l.first_token_at.is_none());
+        l.observe_answer_delta("**",2);assert_eq!(l.first_token_at,Some(2));assert!(l.first_word_at.is_none());
+        l.observe_answer_delta("A",3);assert_eq!(l.first_word_at,Some(3));
+        l.observe_answer_delta("t 64 KiB",20);assert_eq!(l.first_word_at,Some(3));
+        for word in ["4","Δ","是"]{let mut l=Latency::default();l.observe_answer_delta(word,5);assert_eq!(l.first_word_at,Some(5));}
+    }
 }
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]

@@ -1,0 +1,9 @@
+{
+  "name": "cuda-reduction",
+  "seed": "Implement a CUDA block reduction for float sum with arbitrary blockDim.x from 1 to 1024 and arbitrary n, including partial final blocks. Start with the correctness argument and give compilable device code.",
+  "rubric": "Check block-wide barrier participation, shuffle caller masks and active sources, independent thread scheduling, non-power-of-two reductions, numerical error and exact arithmetic examples, measured occupancy and spills, grid-level synchronization, and explicit atomic ordering and scope. Ask unanticipated changes to constraints. Do not reject correct code simply because it differs from an expected implementation.",
+  "sources": [
+    "https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html",
+    "https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/"
+  ]
+}

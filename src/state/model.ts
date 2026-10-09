@@ -9,8 +9,12 @@ export interface PipelineTimeline {
   questionConfirmed: number | null; firstVisible: number | null; refillCompleted: number | null;
   refillThreadsCreated: number; refillError: boolean; cancelled: boolean;
   steeringCount?: number; followupCount?: number; promptChars?: number; refinementChars?: number; retainedFirstDelta?: number | null;
+  latestInputSent?: number | null; latestInputAck?: number | null; latestInputConsumed?: number | null;
+  refinementRestartCount?: number; restartPromptChars?: number | null; acousticRefinementCount?: number; eagerFinalReplacement?: boolean;
+  confirmedQuestionRefinements?: boolean;
+  cleanupStartedAt?: number | null; interruptAckAt?: number | null; cleanupTerminalAt?: number | null; cleanupMaxQueuedEvents?: number;
 }
-export interface Latency { speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; completedAt: number | null; pipeline?: PipelineTimeline; remoteSpeechStartedAt?: number | null; firstRemotePartialAt?: number | null; firstCredibleCandidateAt?: number | null; remotePartialUpdates?: number }
+export interface Latency { responseRevision?: number; speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; firstWordAt?: number | null; completedAt: number | null; pipeline?: PipelineTimeline; remoteSpeechStartedAt?: number | null; firstRemotePartialAt?: number | null; firstCredibleCandidateAt?: number | null; remotePartialUpdates?: number }
 export interface Snapshot {
   questions?: { id: string; text: string; state: 'speculative' | 'confirmed' | 'superseded' | 'cancelled' | 'complete'; queued: boolean }[];
   revision: number; active: boolean; paused: boolean;

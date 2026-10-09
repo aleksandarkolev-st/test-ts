@@ -154,7 +154,7 @@ impl Auth {
             .collect()
     }
     pub async fn selected_account(&self) -> Option<Account> {
-        if super::acceptance_mode() {
+        if super::http_fixture_mode() {
             return Some(Account {
                 client_id: "fixture-client".into(),
                 email: Some("fixture@example.invalid".into()),
@@ -373,7 +373,7 @@ impl Auth {
         if self.closing.load(Ordering::Acquire) {
             return Err("Meeting Copilot is closing".into());
         }
-        if super::acceptance_mode() {
+        if super::http_fixture_mode() {
             return Ok("fixture-token".into());
         }
         let auth = self.clone();

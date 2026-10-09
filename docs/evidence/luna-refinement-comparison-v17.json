@@ -1,0 +1,302 @@
+{
+  "scope": "Two four-waveform comparisons, control first then probe first, eight paired separate service samples. Identical binary and public audio, different actual generated meeting contexts. Remote-only synthetic audio. Descriptive medians, not causal or broad p95/correctness certification.",
+  "pairs": [
+    {
+      "file": "luna-confirmed-refinement-v16-comparison.json",
+      "rows": [
+        {
+          "round": 1,
+          "waveSha256": "5e2d02ee35cd5784c815bcb6a9a3bb1d9c03817d6c0c9ef20678feabfe289054",
+          "control": {
+            "firstWordMs": 3489,
+            "renderMs": 3498,
+            "asrFinalizationMs": 665,
+            "confirmationMs": 704,
+            "latestInputSentMs": 704,
+            "latestInputConsumedMs": 916,
+            "firstWordFromLatestInputMs": 2785,
+            "restarts": 0,
+            "steers": 1,
+            "followups": 1,
+            "promptChars": 981,
+            "refinementChars": 577,
+            "modelGrade": "incomplete"
+          },
+          "probe": {
+            "firstWordMs": 2252,
+            "renderMs": 2269,
+            "asrFinalizationMs": 835,
+            "confirmationMs": 876,
+            "latestInputSentMs": 877,
+            "latestInputConsumedMs": 940,
+            "firstWordFromLatestInputMs": 1375,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 2,
+            "promptChars": 966,
+            "refinementChars": 577,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -1237
+        },
+        {
+          "round": 2,
+          "waveSha256": "8d29890892e5b84f9fb07b5c3214fa27ac92d76e52271f6ded23c30b331cbf23",
+          "control": {
+            "firstWordMs": 2866,
+            "renderMs": 2877,
+            "asrFinalizationMs": 721,
+            "confirmationMs": 722,
+            "latestInputSentMs": 1129,
+            "latestInputConsumedMs": 1680,
+            "firstWordFromLatestInputMs": 1737,
+            "restarts": 1,
+            "steers": 3,
+            "followups": 2,
+            "promptChars": 1481,
+            "refinementChars": 1755,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 1899,
+            "renderMs": 1908,
+            "asrFinalizationMs": 744,
+            "confirmationMs": 752,
+            "latestInputSentMs": 753,
+            "latestInputConsumedMs": 820,
+            "firstWordFromLatestInputMs": 1146,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 2,
+            "promptChars": 1602,
+            "refinementChars": 768,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -967
+        },
+        {
+          "round": 3,
+          "waveSha256": "ba4f7d454d64c299466328c32cdf5565c9975c5dc60e5215905b9a39c51b4405",
+          "control": {
+            "firstWordMs": 2967,
+            "renderMs": 2979,
+            "asrFinalizationMs": 561,
+            "confirmationMs": 598,
+            "latestInputSentMs": 1005,
+            "latestInputConsumedMs": 1844,
+            "firstWordFromLatestInputMs": 1962,
+            "restarts": 1,
+            "steers": 4,
+            "followups": 3,
+            "promptChars": 2239,
+            "refinementChars": 3581,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 1868,
+            "renderMs": 1877,
+            "asrFinalizationMs": 492,
+            "confirmationMs": 534,
+            "latestInputSentMs": 535,
+            "latestInputConsumedMs": 605,
+            "firstWordFromLatestInputMs": 1333,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 3,
+            "promptChars": 2415,
+            "refinementChars": 1659,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -1099
+        },
+        {
+          "round": 4,
+          "waveSha256": "5eaaf8bc98df51a3d73adcf57ebaa09e7bfc4cf7b9e6920e3cc4a81479b2028a",
+          "control": {
+            "firstWordMs": 2012,
+            "renderMs": 2023,
+            "asrFinalizationMs": 767,
+            "confirmationMs": 791,
+            "latestInputSentMs": 736,
+            "latestInputConsumedMs": 796,
+            "firstWordFromLatestInputMs": 1276,
+            "restarts": 0,
+            "steers": 6,
+            "followups": 5,
+            "promptChars": 4692,
+            "refinementChars": 5033,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 2079,
+            "renderMs": 2085,
+            "asrFinalizationMs": 706,
+            "confirmationMs": 720,
+            "latestInputSentMs": 722,
+            "latestInputConsumedMs": 781,
+            "firstWordFromLatestInputMs": 1357,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 4,
+            "promptChars": 4501,
+            "refinementChars": 2224,
+            "modelGrade": "incorrect"
+          },
+          "firstWordDifferenceMs": 67
+        }
+      ]
+    },
+    {
+      "file": "luna-confirmed-refinement-v17-reverse-comparison.json",
+      "rows": [
+        {
+          "round": 1,
+          "waveSha256": "5e2d02ee35cd5784c815bcb6a9a3bb1d9c03817d6c0c9ef20678feabfe289054",
+          "control": {
+            "firstWordMs": 2593,
+            "renderMs": 2608,
+            "asrFinalizationMs": 776,
+            "confirmationMs": 780,
+            "latestInputSentMs": 781,
+            "latestInputConsumedMs": 850,
+            "firstWordFromLatestInputMs": 1812,
+            "restarts": 0,
+            "steers": 1,
+            "followups": 2,
+            "promptChars": 971,
+            "refinementChars": 801,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 1878,
+            "renderMs": 1888,
+            "asrFinalizationMs": 711,
+            "confirmationMs": 725,
+            "latestInputSentMs": 726,
+            "latestInputConsumedMs": 787,
+            "firstWordFromLatestInputMs": 1152,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 2,
+            "promptChars": 986,
+            "refinementChars": 577,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -715
+        },
+        {
+          "round": 2,
+          "waveSha256": "8d29890892e5b84f9fb07b5c3214fa27ac92d76e52271f6ded23c30b331cbf23",
+          "control": {
+            "firstWordMs": 2809,
+            "renderMs": 2820,
+            "asrFinalizationMs": 660,
+            "confirmationMs": 683,
+            "latestInputSentMs": 1089,
+            "latestInputConsumedMs": 1662,
+            "firstWordFromLatestInputMs": 1720,
+            "restarts": 1,
+            "steers": 4,
+            "followups": 2,
+            "promptChars": 1463,
+            "refinementChars": 1991,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 2163,
+            "renderMs": 2173,
+            "asrFinalizationMs": 664,
+            "confirmationMs": 680,
+            "latestInputSentMs": 682,
+            "latestInputConsumedMs": 757,
+            "firstWordFromLatestInputMs": 1481,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 2,
+            "promptChars": 1487,
+            "refinementChars": 768,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -646
+        },
+        {
+          "round": 3,
+          "waveSha256": "ba4f7d454d64c299466328c32cdf5565c9975c5dc60e5215905b9a39c51b4405",
+          "control": {
+            "firstWordMs": 2950,
+            "renderMs": 2964,
+            "asrFinalizationMs": 515,
+            "confirmationMs": 530,
+            "latestInputSentMs": 936,
+            "latestInputConsumedMs": 1473,
+            "firstWordFromLatestInputMs": 2014,
+            "restarts": 1,
+            "steers": 3,
+            "followups": 4,
+            "promptChars": 2333,
+            "refinementChars": 3601,
+            "modelGrade": "incomplete"
+          },
+          "probe": {
+            "firstWordMs": 1989,
+            "renderMs": 2001,
+            "asrFinalizationMs": 530,
+            "confirmationMs": 540,
+            "latestInputSentMs": 542,
+            "latestInputConsumedMs": 629,
+            "firstWordFromLatestInputMs": 1447,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 3,
+            "promptChars": 2246,
+            "refinementChars": 1659,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": -961
+        },
+        {
+          "round": 4,
+          "waveSha256": "5eaaf8bc98df51a3d73adcf57ebaa09e7bfc4cf7b9e6920e3cc4a81479b2028a",
+          "control": {
+            "firstWordMs": 1863,
+            "renderMs": 1875,
+            "asrFinalizationMs": 638,
+            "confirmationMs": 670,
+            "latestInputSentMs": 672,
+            "latestInputConsumedMs": 741,
+            "firstWordFromLatestInputMs": 1191,
+            "restarts": 0,
+            "steers": 4,
+            "followups": 7,
+            "promptChars": 4940,
+            "refinementChars": 5033,
+            "modelGrade": "correct"
+          },
+          "probe": {
+            "firstWordMs": 2066,
+            "renderMs": 2084,
+            "asrFinalizationMs": 664,
+            "confirmationMs": 666,
+            "latestInputSentMs": 668,
+            "latestInputConsumedMs": 757,
+            "firstWordFromLatestInputMs": 1398,
+            "restarts": 0,
+            "steers": 0,
+            "followups": 4,
+            "promptChars": 4098,
+            "refinementChars": 2239,
+            "modelGrade": "correct"
+          },
+          "firstWordDifferenceMs": 203
+        }
+      ]
+    }
+  ],
+  "medianControlMs": 2837.5,
+  "medianProbeMs": 2027.5,
+  "fasterPairs": 6,
+  "totalPairs": 8,
+  "allSamplesAbove800ms": true,
+  "targetAchieved": false,
+  "enabledInRelease": false
+}

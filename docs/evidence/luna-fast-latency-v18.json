@@ -1,0 +1,197 @@
+{
+  "status": "complete",
+  "stoppedCleanly": true,
+  "model": "gpt-6-luna",
+  "effort": "low",
+  "tier": "fast",
+  "speechConfiguration": {
+    "backend": "nemotron",
+    "chunkMs": 160,
+    "device": 0,
+    "deviceName": "AMD Radeon RX 9070 XT",
+    "acousticRefinements": false,
+    "eagerFinalReplacement": false,
+    "confirmedQuestionRefinements": false,
+    "remoteOnly": true
+  },
+  "scope": "Recorded client-received retained first word, not whole-answer completion or internal generation. Stages can overlap under speculation; negative input-after-confirmation values indicate input sent earlier. These intervals must not be summed as independent costs. The post-consumption interval includes cloud inference, transport, framing and local delivery; it does not isolate model compute. Small descriptive samples, not broad p95 or correctness certification.",
+  "rows": [
+    {
+      "round": 1,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 2866,
+      "asrFinalizationFromSpeechEndMs": 618,
+      "confirmationAfterAsrMs": 28,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 16,
+      "latestInputSentAfterConfirmationMs": 405,
+      "latestInputConsumptionWaitMs": 572,
+      "firstWordAfterLatestInputConsumptionMs": 1243,
+      "renderAfterFirstWordMs": 9,
+      "cleanupMs": 1,
+      "restarts": 1,
+      "steers": 4,
+      "followups": 0,
+      "promptChars": 985,
+      "refinementChars": 1102
+    },
+    {
+      "round": 2,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 2494,
+      "asrFinalizationFromSpeechEndMs": 737,
+      "confirmationAfterAsrMs": 17,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 18,
+      "latestInputSentAfterConfirmationMs": 1,
+      "latestInputConsumptionWaitMs": 76,
+      "firstWordAfterLatestInputConsumptionMs": 1663,
+      "renderAfterFirstWordMs": 8,
+      "cleanupMs": null,
+      "restarts": 0,
+      "steers": 0,
+      "followups": 1,
+      "promptChars": 1835,
+      "refinementChars": 393
+    },
+    {
+      "round": 3,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 2328,
+      "asrFinalizationFromSpeechEndMs": 722,
+      "confirmationAfterAsrMs": 4,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 14,
+      "latestInputSentAfterConfirmationMs": 1,
+      "latestInputConsumptionWaitMs": 54,
+      "firstWordAfterLatestInputConsumptionMs": 1547,
+      "renderAfterFirstWordMs": 9,
+      "cleanupMs": null,
+      "restarts": 0,
+      "steers": 2,
+      "followups": 2,
+      "promptChars": 2674,
+      "refinementChars": 1421
+    },
+    {
+      "round": 4,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 3388,
+      "asrFinalizationFromSpeechEndMs": 883,
+      "confirmationAfterAsrMs": 35,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 17,
+      "latestInputSentAfterConfirmationMs": 403,
+      "latestInputConsumptionWaitMs": 518,
+      "firstWordAfterLatestInputConsumptionMs": 1549,
+      "renderAfterFirstWordMs": 13,
+      "cleanupMs": 2,
+      "restarts": 1,
+      "steers": 5,
+      "followups": 1,
+      "promptChars": 3100,
+      "refinementChars": 2398
+    },
+    {
+      "round": 5,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 3325,
+      "asrFinalizationFromSpeechEndMs": 742,
+      "confirmationAfterAsrMs": 39,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 16,
+      "latestInputSentAfterConfirmationMs": 404,
+      "latestInputConsumptionWaitMs": 711,
+      "firstWordAfterLatestInputConsumptionMs": 1429,
+      "renderAfterFirstWordMs": 10,
+      "cleanupMs": 2,
+      "restarts": 1,
+      "steers": 6,
+      "followups": 0,
+      "promptChars": 3770,
+      "refinementChars": 2291
+    },
+    {
+      "round": 6,
+      "fullRecognizedClauses": true,
+      "firstWordFromSpeechEndMs": 2207,
+      "asrFinalizationFromSpeechEndMs": 735,
+      "confirmationAfterAsrMs": 2,
+      "foregroundSlotWaitMs": 0,
+      "preparedThreadWaitMs": 0,
+      "initialStartAcknowledgementMs": 16,
+      "latestInputSentAfterConfirmationMs": -26,
+      "latestInputConsumptionWaitMs": 69,
+      "firstWordAfterLatestInputConsumptionMs": 1427,
+      "renderAfterFirstWordMs": 13,
+      "cleanupMs": null,
+      "restarts": 0,
+      "steers": 2,
+      "followups": 5,
+      "promptChars": 4883,
+      "refinementChars": 3185
+    }
+  ],
+  "summary": {
+    "firstWordFromSpeechEndMs": {
+      "count": 6,
+      "median": 2680,
+      "max": 3388
+    },
+    "asrFinalizationFromSpeechEndMs": {
+      "count": 6,
+      "median": 736,
+      "max": 883
+    },
+    "confirmationAfterAsrMs": {
+      "count": 6,
+      "median": 22.5,
+      "max": 39
+    },
+    "foregroundSlotWaitMs": {
+      "count": 6,
+      "median": 0,
+      "max": 0
+    },
+    "preparedThreadWaitMs": {
+      "count": 6,
+      "median": 0,
+      "max": 0
+    },
+    "initialStartAcknowledgementMs": {
+      "count": 6,
+      "median": 16,
+      "max": 18
+    },
+    "latestInputSentAfterConfirmationMs": {
+      "count": 6,
+      "median": 202,
+      "max": 405
+    },
+    "latestInputConsumptionWaitMs": {
+      "count": 6,
+      "median": 297,
+      "max": 711
+    },
+    "firstWordAfterLatestInputConsumptionMs": {
+      "count": 6,
+      "median": 1488,
+      "max": 1663
+    },
+    "renderAfterFirstWordMs": {
+      "count": 6,
+      "median": 9.5,
+      "max": 13
+    },
+    "cleanupMs": {
+      "count": 3,
+      "median": 2,
+      "max": 2
+    }
+  }
+}

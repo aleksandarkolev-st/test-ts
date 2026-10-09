@@ -21,11 +21,31 @@ pub struct Timeline {
     pub refill_threads_created: usize,
     pub refill_error: bool,
     pub cancelled: bool,
-    #[serde(default)] pub steering_count: usize,
+    pub backend: Option<String>,
+    pub model_request_sent: Option<u64>,
+    pub response_created: Option<u64>,
+    pub cached_input_tokens: Option<u64>,
+    pub actual_service_tier: Option<String>,
+    pub response_count: usize,
+    pub steering_count: usize,
+    pub warm_state_used: bool,
+
     #[serde(default)] pub followup_count: usize,
     #[serde(default)] pub prompt_chars: usize,
     #[serde(default)] pub refinement_chars: usize,
     #[serde(default)] pub retained_first_delta: Option<u64>,
+    #[serde(default)] pub latest_input_sent: Option<u64>,
+    #[serde(default)] pub latest_input_ack: Option<u64>,
+    #[serde(default)] pub latest_input_consumed: Option<u64>,
+    #[serde(default)] pub refinement_restart_count: usize,
+    #[serde(default)] pub restart_prompt_chars: Option<usize>,
+    #[serde(default)] pub acoustic_refinement_count: usize,
+    #[serde(default)] pub eager_final_replacement: bool,
+    #[serde(default)] pub confirmed_question_refinements: bool,
+    #[serde(default)] pub cleanup_started_at: Option<u64>,
+    #[serde(default)] pub interrupt_ack_at: Option<u64>,
+    #[serde(default)] pub cleanup_terminal_at: Option<u64>,
+    #[serde(default)] pub cleanup_max_queued_events: usize,
 }
 #[derive(Clone, Copy)]
 pub enum Stage { StreamEntered, SemaphoreAcquired, WarmThreadTaken, RefillStarted, TurnStartSent, TurnStartAck, FirstAgentDelta, TurnCompleted, QuestionConfirmed, FirstVisible, RefillCompleted }
@@ -61,9 +81,33 @@ impl Trace {
     pub fn steered(&self) { self.data.lock().unwrap().steering_count += 1; }
     pub fn followup(&self) { self.data.lock().unwrap().followup_count += 1; }
     pub fn prompt_chars(&self, count:usize) { self.data.lock().unwrap().prompt_chars=count; }
+    pub fn restart_prompt_chars(&self,count:usize) {self.data.lock().unwrap().restart_prompt_chars=Some(count);}
     pub fn refinement_chars(&self, count:usize) { self.data.lock().unwrap().refinement_chars+=count; }
     pub fn retained_delta_at(&self, now:u64) { self.data.lock().unwrap().retained_first_delta=Some(now); }
+    pub fn reset_answer(&self) {let mut data=self.data.lock().unwrap();data.retained_first_delta=None;data.first_visible=None;}
+    pub fn input_sent(&self) {let mut data=self.data.lock().unwrap();data.latest_input_sent=Some(self.clock.elapsed().as_millis()as u64);data.latest_input_ack=None;data.latest_input_consumed=None;}
+    pub fn input_ack(&self) {self.data.lock().unwrap().latest_input_ack=Some(self.clock.elapsed().as_millis()as u64);}
+    pub fn input_consumed(&self) {self.data.lock().unwrap().latest_input_consumed=Some(self.clock.elapsed().as_millis()as u64);}
+    pub fn refinement_restarted(&self) {self.data.lock().unwrap().refinement_restart_count+=1;}
+    pub fn acoustic_refined(&self) {self.data.lock().unwrap().acoustic_refinement_count+=1;}
+    pub fn eager_final_replacement(&self, enabled:bool) {self.data.lock().unwrap().eager_final_replacement=enabled;}
+    pub fn confirmed_question_refinements(&self, enabled:bool) {self.data.lock().unwrap().confirmed_question_refinements=enabled;}
+    pub fn cleanup_started(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_started_at=Some(self.clock.elapsed().as_millis()as u64);t.interrupt_ack_at=None;t.cleanup_terminal_at=None;t.cleanup_max_queued_events=queued;}
+    pub fn cleanup_queue_depth(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_max_queued_events=t.cleanup_max_queued_events.max(queued);}
+    pub fn interrupt_ack(&self) {self.data.lock().unwrap().interrupt_ack_at=Some(self.clock.elapsed().as_millis()as u64);}
+    pub fn cleanup_terminal(&self) {self.data.lock().unwrap().cleanup_terminal_at=Some(self.clock.elapsed().as_millis()as u64);}
     pub fn snapshot(&self) -> Timeline { self.data.lock().unwrap().clone() }
+    pub fn backend(&self, backend: &str) { self.data.lock().unwrap().backend = Some(backend.into()); }
+    pub fn request_sent(&self) { self.data.lock().unwrap().model_request_sent.get_or_insert(self.clock.elapsed().as_millis() as u64); }
+    pub fn created(&self) { let mut t=self.data.lock().unwrap(); t.response_created.get_or_insert(self.clock.elapsed().as_millis() as u64); t.response_count+=1; }
+    pub fn warmed(&self) { self.data.lock().unwrap().warm_state_used=true; }
+    pub fn response_metadata(&self, response: &serde_json::Value) {
+        let mut t=self.data.lock().unwrap();
+        if let Some(tier)=response["service_tier"].as_str() { t.actual_service_tier=Some(tier.into()); }
+        if let Some(tokens)=response["usage"]["input_tokens_details"]["cached_tokens"].as_u64() {
+            t.cached_input_tokens=Some(t.cached_input_tokens.unwrap_or(0)+tokens);
+        }
+    }
 }
 pub type Registry = Arc<Mutex<HashMap<String, Trace>>>;
 pub fn register(registry: &Registry, id: String, trace: Trace) {

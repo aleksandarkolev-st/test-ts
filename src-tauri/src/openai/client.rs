@@ -43,6 +43,7 @@ pub fn preferred(models: &[Model]) -> Option<&Model> {
 }
 #[derive(Clone)]
 pub struct Client {
+    pub responses_ws: std::sync::Arc<super::responses_ws::ResponsesSocket>,
     trace: Option<super::timing::Trace>,
     refill_policy: super::codex::RefillPolicy,
     pub http: reqwest::Client,
@@ -54,10 +55,14 @@ pub struct Client {
 }
 #[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
-pub enum AnswerBackend { #[default] Chatgpt, Codex }
+pub enum AnswerBackend { #[default] Chatgpt, Codex, Api, Websocket, Realtime }
+impl AnswerBackend {
+    pub fn is_api(self) -> bool { matches!(self, Self::Api | Self::Websocket | Self::Realtime) }
+}
 impl Default for Client {
     fn default() -> Self {
         Self {
+            responses_ws: Default::default(),
             trace: None,
             refill_policy: super::codex::RefillPolicy::default(),
             http: reqwest::Client::builder()
@@ -68,12 +73,13 @@ impl Default for Client {
                 .expect("HTTP client"),
             base: {
                 #[cfg(all(feature = "acceptance", debug_assertions))]
-                if super::acceptance_mode() {
+                if super::http_fixture_mode() {
                     let base =
                         std::env::var("COPILOT_TEST_API").expect("Local test server required");
                     let u = url::Url::parse(&base).expect("Test API URL");
                     assert!(u.scheme() == "http" && u.host_str() == Some("127.0.0.1"));
                     return Self {
+                        responses_ws: Default::default(),
                         trace: None,
                         refill_policy: super::codex::RefillPolicy::default(),
                         http: reqwest::Client::new(),
@@ -96,7 +102,10 @@ impl Default for Client {
 #[derive(Debug)]
 pub enum StreamEvent {
     Delta(String),
-    QuestionDelta { question: String, text: String },
+    Revision(String),
+    QuestionDelta { question: String, context_key:[u8;32], text: String },
+    NoReply { question: String, context_key:[u8;32] },
+    QuestionCompleted { question:String, context_key:[u8;32] },
     Completed,
 }
 pub fn request_body(model: &str, instructions: &str, input: &str) -> serde_json::Value {
@@ -121,14 +130,18 @@ impl Client {
         self
     }
     pub fn requires_token(&self) -> bool { self.backend == AnswerBackend::Chatgpt }
+    pub fn backend(&self) -> AnswerBackend { self.backend }
     pub fn with_reasoning(mut self, effort: Option<&str>) -> Self {
         self.reasoning_effort = effort.map(String::from);
         self
     }
-    fn body(&self, model: &str, instructions: &str, input: &str, image: Option<&str>) -> serde_json::Value {
+    pub(super) fn body(&self, model: &str, instructions: &str, input: &str, image: Option<&str>) -> serde_json::Value {
         let mut body = request_body_with_image(model, instructions, input, image);
         if let Some(effort) = &self.reasoning_effort {
             body["reasoning"] = serde_json::json!({"effort": effort});
+        }
+        if let Some(tier) = &self.service_tier {
+            body["service_tier"] = serde_json::json!(tier);
         }
         body
     }
@@ -144,11 +157,15 @@ impl Client {
             .await
             .map_err(|_| "Model discovery connection failed".to_string())?;
         let r = check_http(r).await?;
-        parse_models(
-            r.json()
-                .await
-                .map_err(|_| "Invalid model catalog".to_string())?,
-        )
+        let value: serde_json::Value = r.json().await.map_err(|_| "Invalid model catalog".to_string())?;
+        if self.backend.is_api() {
+            let models = value["data"].as_array().ok_or("API returned no model catalog")?
+                .iter().filter_map(|row| row["id"].as_str())
+                .filter(|id| if self.backend == AnswerBackend::Realtime { id.starts_with("gpt-realtime") } else { id.starts_with("gpt-") && !id.contains("realtime") && !id.contains("audio") && !id.contains("transcribe") && !id.contains("image") })
+                .map(|id| Model { slug:id.into(),display_name:id.into() }).collect::<Vec<_>>();
+            if models.is_empty() { return Err("No answer models are available for this API key".into()); }
+            Ok(models)
+        } else { parse_models(value) }
     }
     pub async fn stream<F, Fut>(
         &self,
@@ -174,10 +191,17 @@ impl Client {
         F: FnMut(StreamEvent) -> Fut + Send,
         Fut: std::future::Future<Output = Result<(), String>> + Send,
     {
+        if self.backend == AnswerBackend::Realtime {
+            return super::realtime::stream(token,model,instructions,input,cancel,event).await;
+        }
+        if self.backend == AnswerBackend::Websocket {
+            return self.responses_ws.stream(self.body(model,instructions,input,image), token, cancel, None, self.trace.clone(), event).await;
+        }
         if self.backend == AnswerBackend::Codex {
             return self.codex.as_ref().ok_or("Codex runtime is unavailable")?
                 .stream_traced(model, self.service_tier.as_deref(), self.reasoning_effort.as_deref(), instructions, input, image, cancel, self.refill_policy, self.trace.clone(), event).await;
         }
+        if let Some(trace)=&self.trace { trace.backend("http"); trace.mark(super::timing::Stage::StreamEntered); trace.request_sent(); }
         let request = self
             .http
             .post(format!("{}/responses", self.base))
@@ -200,12 +224,15 @@ impl Client {
                 let value: serde_json::Value = serde_json::from_str(&data)
                     .map_err(|_| "Invalid answer stream event".to_string())?;
                 match value["type"].as_str().unwrap_or("") {
+                    "response.created" => { if let Some(trace)=&self.trace { trace.created(); } }
                     "response.output_text.delta" => {
+                        if let Some(trace)=&self.trace { trace.mark(super::timing::Stage::FirstAgentDelta); }
                         if let Some(d) = value["delta"].as_str() {
                             tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Delta(d.into()))=>r?};
                         }
                     }
                     "response.completed" => {
+                        if let Some(trace)=&self.trace { trace.response_metadata(&value["response"]); trace.mark(super::timing::Stage::TurnCompleted); }
                         complete = true;
                         tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Completed)=>r?};
                     }
@@ -222,12 +249,22 @@ impl Client {
         Err("Answer stream ended before response.completed".into())
     }
     #[allow(clippy::too_many_arguments)]
-    pub async fn stream_question<F, Fut>(&self, token: &str, model: &str, instructions: &str, input: &str,
-        image: Option<&str>, cancel: CancellationToken, updates: tokio::sync::watch::Receiver<super::codex::QuestionUpdate>, initial_question:String, event: F) -> Result<(), String>
+    pub async fn stream_updates<F,Fut>(&self, token:&str, model:&str, instructions:&str, input:&str, image:Option<&str>, cancel:CancellationToken, updates:tokio::sync::watch::Receiver<super::responses_ws::Update>, event:F) -> Result<(),String>
+    where F:FnMut(StreamEvent)->Fut+Send, Fut:std::future::Future<Output=Result<(),String>>+Send {
+        if self.backend == AnswerBackend::Websocket {
+            self.responses_ws.stream(self.body(model,instructions,input,image),token,cancel,Some(updates),self.trace.clone(),event).await
+        } else { self.stream_with_image(token,model,instructions,input,image,cancel,event).await }
+    }
+    pub async fn prewarm(&self, token:&str, model:&str, instructions:&str, context:&str, cancel:&CancellationToken) -> Result<(),String> {
+        self.responses_ws.prewarm(self.body(model,instructions,context,None),token,cancel).await
+    }
+    #[allow(clippy::too_many_arguments)]
+    pub async fn stream_question<F, Fut>(&self, token: &str, model: &str, instructions: &str, prompt: &super::codex::QuestionPrompt,
+        image: Option<&str>, cancel: CancellationToken, updates: tokio::sync::watch::Receiver<super::codex::QuestionUpdate>, event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         if self.backend == AnswerBackend::Codex {
-            self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,input,image,cancel,self.refill_policy,self.trace.clone(),updates,initial_question,event).await
-        } else { self.stream_with_image(token,model,instructions,input,image,cancel,event).await }
+            self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,prompt,image,cancel,self.refill_policy,self.trace.clone(),updates,event).await
+        } else { self.stream_with_image(token,model,instructions,&prompt.render(),image,cancel,event).await }
     }
     pub async fn text(
         &self,
@@ -239,6 +276,10 @@ impl Client {
     ) -> Result<String, String> {
         let mut result = String::new();
         self.stream(token, model, instructions, input, cancel, |event| {
+            if let StreamEvent::Revision(text) = &event {
+                if text.len()>65_536{return std::future::ready(Err("Meeting memory response exceeds size limit".into()));}
+                result=text.clone();
+            }
             if let StreamEvent::Delta(d) = event {
                 if result.len() + d.len() > 65_536 {
                     return std::future::ready(Err(
@@ -382,6 +423,7 @@ mod tests {
         });
         (
             Client {
+                responses_ws: Default::default(),
                 trace: None,
                 refill_policy: super::super::codex::RefillPolicy::default(),
                 http: reqwest::Client::new(),
@@ -413,6 +455,22 @@ mod tests {
             b,
             request_body("account-model", "instructions", "REMOTE: fixture context")
         );
+    }
+    #[tokio::test]
+    async fn requested_service_tier_reaches_http_request() {
+        for tier in ["fast", "priority"] {
+            let (client, server) = server("data: {\"type\":\"response.completed\"}\n\n", 0).await;
+            client
+                .with_backend(AnswerBackend::Chatgpt, Some(tier))
+                .text("fixture-token", "account-model", "instructions", "fixture", CancellationToken::new())
+                .await
+                .unwrap();
+            let body = server.await.unwrap();
+            assert_eq!(body["service_tier"], tier);
+            assert_eq!(body["store"], false);
+            assert_eq!(body["stream"], true);
+        }
+        assert!(Client::default().body("m", "i", "q", None).get("service_tier").is_none());
     }
     #[tokio::test]
     async fn requested_reasoning_effort_reaches_http_request() {

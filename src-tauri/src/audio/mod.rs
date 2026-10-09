@@ -60,6 +60,10 @@ pub fn start(
     let stop = Arc::new(AtomicBool::new(false));
     let mut threads = vec![];
     for (id, source) in [(remote, SpeakerSource::Remote), (mic, SpeakerSource::Self_)] {
+        // Isolate remote latency experiments from uncontrolled room audio.
+        // Release capture always initializes both configured sources.
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        if source==SpeakerSource::Self_ && std::env::var("COPILOT_ACCEPTANCE_REMOTE_ONLY").as_deref()==Ok("1") {continue;}
         let stopping = stop.clone();
         let tx = frames.clone();
         let errors = events.clone();

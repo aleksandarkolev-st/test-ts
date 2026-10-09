@@ -7,6 +7,7 @@ const MAX_SAMPLES: usize = 16000 * 15;
 pub enum VadEvent {
     Started(u64),
     Ended(u64),
+    Activity { quiet: bool, timestamp: u64 },
     Preview {
         samples: Vec<f32>,
         started: u64,
@@ -32,6 +33,7 @@ pub struct Vad {
     noise: f32,
     last_partial: u64,
     preview_sent: bool,
+    quiet_sent: bool,
 }
 impl Default for Vad {
     fn default() -> Self {
@@ -48,14 +50,16 @@ impl Default for Vad {
             noise: 0.001,
             last_partial: 0,
             preview_sent: false,
+            quiet_sent: false,
         }
     }
 }
 impl Vad {
     pub fn process(&mut self, samples: &[f32], timestamp: u64) -> Vec<VadEvent> {
-        if self.frame_time.is_none() {
-            self.frame_time = Some(timestamp);
-        }
+        // Capture timestamps own the clock. Counting samples forever drifts
+        // when WASAPI resumes after injected silence or packet gaps, which can
+        // put VAD end beyond the recognizer's final audio and stall confirmation.
+        self.frame_time = Some(timestamp.saturating_sub((self.pending.len()/16) as u64));
         self.pending.extend_from_slice(samples);
         let mut events = vec![];
         while self.pending.len() >= FRAME {
@@ -80,6 +84,7 @@ impl Vad {
                 if self.voiced >= MIN_VOICED {
                     self.active = true;
                     self.preview_sent = false;
+                    self.quiet_sent = false;
                     self.last_partial = t;
                     self.start = t.saturating_sub((self.pre.len() / 16) as u64);
                     self.speech = std::mem::take(&mut self.pre);
@@ -91,10 +96,18 @@ impl Vad {
                 self.speech.extend_from_slice(&f);
             }
             if voiced {
+                if self.quiet_sent {
+                    events.push(VadEvent::Activity { quiet: false, timestamp: t });
+                    self.quiet_sent = false;
+                }
                 self.last_voice = t + 30;
                 self.silent = 0;
             } else {
                 self.silent += 1;
+            }
+            if self.silent >= PREVIEW_SILENCE_FRAMES && !self.quiet_sent {
+                self.quiet_sent = true;
+                events.push(VadEvent::Activity { quiet: true, timestamp: self.last_voice });
             }
             if self.silent >= SILENCE_FRAMES {
                 events.push(VadEvent::Ended(self.last_voice));
@@ -150,6 +163,37 @@ impl Vad {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn acoustic_pause_is_provisional_and_retracted_on_the_first_voiced_frame() {
+        let mut v=Vad::default();
+        v.process(&vec![0.1;FRAME*20],0);
+        // Quiet can contain background noise; this is independent of the
+        // exact-zero optimization used by the batch-transcription preview.
+        let quiet=v.process(&vec![0.001;FRAME*5],600);
+        assert_eq!(quiet.iter().filter(|e|matches!(e,VadEvent::Activity{quiet:true,timestamp:600})).count(),1);
+        assert!(!quiet.iter().any(|e|matches!(e,VadEvent::Ended(_))));
+        assert!(!v.process(&vec![0.001;FRAME*3],750).iter().any(|e|matches!(e,VadEvent::Activity{quiet:true,..})));
+        let resumed=v.process(&vec![0.1;FRAME],840);
+        assert!(resumed.iter().any(|e|matches!(e,VadEvent::Activity{quiet:false,timestamp:840})));
+        let next=v.process(&vec![0.001;FRAME*5],870);
+        assert!(next.iter().any(|e|matches!(e,VadEvent::Activity{quiet:true,timestamp:870})));
+    }
+    #[test]
+    fn capture_clock_changes_do_not_leave_the_end_ahead_of_final_audio() {
+        let mut vad=Vad::default();
+        vad.process(&vec![0.;FRAME*100],0);
+        // A resumed packet is timestamped earlier than the sample-count cursor.
+        vad.process(&vec![0.1;FRAME*20],2000);
+        let events=vad.process(&vec![0.;FRAME*SILENCE_FRAMES],2600);
+        assert!(events.iter().any(|e|matches!(e,VadEvent::Ended(2600))));
+        let mut vad=Vad::default();
+        vad.process(&vec![0.;FRAME*10],0);
+        // A packet gap must not timestamp new speech at the old cursor.
+        let events=vad.process(&vec![0.1;FRAME*20],5000);
+        assert!(events.iter().any(|e|matches!(e,VadEvent::Started(t) if *t>=4700)));
+        let events=vad.process(&vec![0.;FRAME*SILENCE_FRAMES],5600);
+        assert!(events.iter().any(|e|matches!(e,VadEvent::Ended(5600))));
+    }
     #[test]
     fn skips_silence_and_detects_end_within_target() {
         let mut v = Vad::default();

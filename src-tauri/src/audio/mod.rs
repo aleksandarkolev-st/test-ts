@@ -27,9 +27,13 @@ pub struct AudioFrame {
 pub struct Capture {
     stop: Arc<AtomicBool>,
     threads: Vec<JoinHandle<()>>,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    injected_input: Option<mpsc::Sender<AudioFrame>>,
 }
 impl Capture {
     pub fn stop(&mut self) {
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        {self.injected_input=None;}
         self.stop.store(true, Ordering::Release);
         for t in self.threads.drain(..) {
             let _ = t.join();
@@ -59,6 +63,10 @@ pub fn start(
 ) -> Result<Capture, String> {
     let stop = Arc::new(AtomicBool::new(false));
     let mut threads = vec![];
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    if crate::openai::acceptance_mode() && std::env::var("COPILOT_ACCEPTANCE_INPUT_ONLY").as_deref()==Ok("1") {
+        return Ok(Capture{stop,threads,injected_input:Some(frames)});
+    }
     for (id, source) in [(remote, SpeakerSource::Remote), (mic, SpeakerSource::Self_)] {
         // Isolate remote latency experiments from uncontrolled room audio.
         // Release capture always initializes both configured sources.
@@ -79,12 +87,12 @@ pub fn start(
             .map_err(|_| "Audio initialization timed out".to_string())
             .and_then(|r| r)
         {
-            let mut c = Capture { stop, threads };
+            let mut c = Capture { stop, threads, #[cfg(all(feature="acceptance",debug_assertions))] injected_input:None };
             c.stop();
             return Err(e);
         }
     }
-    Ok(Capture { stop, threads })
+    Ok(Capture { stop, threads, #[cfg(all(feature="acceptance",debug_assertions))] injected_input:None })
 }
 #[cfg(not(windows))]
 pub fn start(

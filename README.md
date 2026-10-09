@@ -99,6 +99,8 @@ The complete acceptance ledger is in [docs/verification.md](docs/verification.md
 
 The [adaptive GPU interview evaluation](docs/adaptive-interview.md) runs 24 scenarios with progressively deeper follow-ups through signed-in Codex, using Luna by default. It records exact questions, answers, timing, reviews, and resumable checkpoints; the near-instant latency target remains unmet in the live evidence collected so far.
 
+The [learned local intent-gate experiment](docs/intent-gate-experiment.md) measures CPU classification and early-versus-final sending without canned answers or phrase routing. It remains disabled in release builds: the corrected audio comparison showed insufficient readiness coverage and no demonstrated latency improvement.
+
 For ten minutes of controlled negative speech playback through WASAPI, set `COPILOT_NEGATIVE_MINUTES=10`. The harness checks false answer requests and context-compression cadence. Synthetic corpus fixtures can be generated with `scripts/create-corpus.ps1` and checked with the ignored `speech_corpus` integration test.
 
 Live account latency checks use `scripts/live-service-check.mjs` against an already signed-in production app exposed on a local WebView2 CDP port. They save numeric measurements only. Manual request latency and speech-end-to-visible-answer latency are reported separately. The helper brackets both question confirmation and DOM appearance across polling round trips; four offline tests cover these bounds. `scripts/combine-live-service-results.mjs` selects the latest approved Luna/xhigh real-audio run and retains earlier trials and diagnostics.

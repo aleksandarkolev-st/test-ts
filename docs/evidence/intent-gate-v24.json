@@ -1,0 +1,248 @@
+{
+  "scope": "Experimental, disabled in release. Synthetic model-labeled data and controlled native tests; target remains unmet. No corrected real-audio gating comparison.",
+  "model": "gpt-6-luna",
+  "effort": "low",
+  "tier": "fast",
+  "classifier": {
+    "encoder": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+    },
+    "latencyMs": {
+      "median": 1.604400051292032,
+      "p95": 2.218299894593656,
+      "max": 2.546599949710071
+    },
+    "thresholds": [
+      {
+        "threshold": 0.5,
+        "selected": 25,
+        "falseEarly": 5,
+        "missedReadyRequests": 5
+      },
+      {
+        "threshold": 0.7,
+        "selected": 17,
+        "falseEarly": 3,
+        "missedReadyRequests": 11
+      },
+      {
+        "threshold": 0.8,
+        "selected": 11,
+        "falseEarly": 1,
+        "missedReadyRequests": 15
+      },
+      {
+        "threshold": 0.9,
+        "selected": 4,
+        "falseEarly": 0,
+        "missedReadyRequests": 21
+      },
+      {
+        "threshold": 0.95,
+        "selected": 1,
+        "falseEarly": 0,
+        "missedReadyRequests": 24
+      }
+    ],
+    "trainingCount": 160,
+    "validationCount": 60,
+    "heldoutCount": 80,
+    "exactTextOverlap": 0,
+    "alternativeSequenceHead": {
+      "latencyMs": {
+        "median": 1.7101999837905169,
+        "p95": 2.4305999977514148,
+        "max": 2.782299998216331
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 24,
+          "falseEarly": 3,
+          "missedReadyRequests": 4
+        },
+        {
+          "threshold": 0.7,
+          "selected": 17,
+          "falseEarly": 1,
+          "missedReadyRequests": 9
+        },
+        {
+          "threshold": 0.8,
+          "selected": 14,
+          "falseEarly": 1,
+          "missedReadyRequests": 12
+        },
+        {
+          "threshold": 0.9,
+          "selected": 6,
+          "falseEarly": 0,
+          "missedReadyRequests": 19
+        },
+        {
+          "threshold": 0.95,
+          "selected": 1,
+          "falseEarly": 0,
+          "missedReadyRequests": 24
+        }
+      ],
+      "promoted": false
+    }
+  },
+  "baseline": {
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+    "status": "complete",
+    "stoppedCleanly": true,
+    "binarySha256": "11ec09366902dac0611b3f1adb02714341f0169f67fa9dde3bd0cf8215215b26",
+    "rows": [
+      {
+        "round": 1,
+        "wordFromSpeechEndMs": 2121,
+        "asrFinalizationMs": 606,
+        "preservesRecognizedClauses": true,
+        "restarts": 0
+      },
+      {
+        "round": 2,
+        "wordFromSpeechEndMs": 2044,
+        "asrFinalizationMs": 781,
+        "preservesRecognizedClauses": true,
+        "restarts": 0
+      },
+      {
+        "round": 3,
+        "wordFromSpeechEndMs": 1798,
+        "asrFinalizationMs": 797,
+        "preservesRecognizedClauses": true,
+        "restarts": 0
+      },
+      {
+        "round": 4,
+        "wordFromSpeechEndMs": 3074,
+        "asrFinalizationMs": 838,
+        "preservesRecognizedClauses": true,
+        "restarts": 0
+      }
+    ]
+  },
+  "invalidGatingComparison": {
+    "status": "complete",
+    "reason": "Classifier Unicode failure after first turn; no early sends. No latency benefit claim.",
+    "earlySends": 0
+  },
+  "correctedAudioAttempt": {
+    "status": "failed",
+    "failure": "AssertionError [ERR_ASSERTION]: Requested native interview playback output must be available"
+  },
+  "probes": [
+    {
+      "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing. Questions are fixed public replays, not newly adaptive follow-ups; recorded audio is not played.",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "binarySha256": "791f79e430d453b83f4545716dc4d8baf62c3edaa236a3d91d88a62203b9a4e1",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "ac4553d11bfec18bdf83ed4ec2c0eae890424211a3c9e7cd6a2e9293bf6505c8",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "484b57f8c00bc507d007e8345145e92fd0b02cc79b7f4582824b836fac79d283",
+        "src-tauri/src/runtime.rs": "939b6afa2d3d9aec8caaf3823bd60f7272a95031f0faa3099952c65cf18b6766"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "0feb1f924285d52b15ae09719eb6a420cd991d9bd7202574cf6c31fb3427781a",
+        "src-tauri/src/meeting/context.rs": "2e6e222087aa3950d7133f23d15a329f0138d52d9fb480b561bf1772b7259fc4",
+        "scripts/intent-encoder-worker.py": "4c4a5571fae9a152bca4d12b429a6c874747d9b25e051e6829495fbb46fb24cc"
+      },
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+      "background": null,
+      "pause": {
+        "hidden": true,
+        "earlySends": 1,
+        "conditionPreservedExactly": true,
+        "wordFromFinalSimulatedSpeechEndMs": 1312,
+        "requiredCompletedEarlyTurn": false,
+        "completedBeforeContinuation": false
+      },
+      "cudaTranscriptWordMs": 1647
+    },
+    {
+      "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing. Questions are fixed public replays, not newly adaptive follow-ups; recorded audio is not played.",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "binarySha256": "4d3066cf162b1ea7735fe7a2615691b070635ea76268319467ac5c49d6d9370c",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "ac4553d11bfec18bdf83ed4ec2c0eae890424211a3c9e7cd6a2e9293bf6505c8",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "484b57f8c00bc507d007e8345145e92fd0b02cc79b7f4582824b836fac79d283",
+        "src-tauri/src/runtime.rs": "f1d0ba826c6ac3e954fcf4f0582fa107e7c1b14ad11f4462903bb74b47fd812a"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "c5bbc120171421d549ff1f467048e4a805497aa1f1df696712be69582ff5957b",
+        "src-tauri/src/meeting/context.rs": "2e6e222087aa3950d7133f23d15a329f0138d52d9fb480b561bf1772b7259fc4",
+        "scripts/intent-encoder-worker.py": "9afc2df929ee8d1b09954d26298d5a58248740d9cce0249f3c30bea3202cc6ad"
+      },
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+      "background": {
+        "locallyIgnored": true,
+        "answerTurnStarts": 0
+      },
+      "pause": {
+        "hidden": true,
+        "earlySends": 1,
+        "conditionPreservedExactly": true,
+        "wordFromFinalSimulatedSpeechEndMs": 2782,
+        "requiredCompletedEarlyTurn": false,
+        "completedBeforeContinuation": false
+      },
+      "cudaTranscriptWordMs": 1797
+    },
+    {
+      "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing. Questions are fixed public replays, not newly adaptive follow-ups; recorded audio is not played.",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "binarySha256": "4d3066cf162b1ea7735fe7a2615691b070635ea76268319467ac5c49d6d9370c",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "ac4553d11bfec18bdf83ed4ec2c0eae890424211a3c9e7cd6a2e9293bf6505c8",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "484b57f8c00bc507d007e8345145e92fd0b02cc79b7f4582824b836fac79d283",
+        "src-tauri/src/runtime.rs": "f1d0ba826c6ac3e954fcf4f0582fa107e7c1b14ad11f4462903bb74b47fd812a"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "c5bbc120171421d549ff1f467048e4a805497aa1f1df696712be69582ff5957b",
+        "src-tauri/src/meeting/context.rs": "2e6e222087aa3950d7133f23d15a329f0138d52d9fb480b561bf1772b7259fc4",
+        "scripts/intent-encoder-worker.py": "9afc2df929ee8d1b09954d26298d5a58248740d9cce0249f3c30bea3202cc6ad"
+      },
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+      "background": null,
+      "pause": {
+        "hidden": true,
+        "earlySends": 1,
+        "conditionPreservedExactly": true,
+        "wordFromFinalSimulatedSpeechEndMs": 1298,
+        "requiredCompletedEarlyTurn": true,
+        "completedBeforeContinuation": true
+      },
+      "cudaTranscriptWordMs": 2142
+    }
+  ],
+  "checks": {
+    "rustPassed": 109,
+    "rustIgnored": 14,
+    "workerUtf8OversizeContractPassed": true
+  },
+  "goalAchieved": false
+}

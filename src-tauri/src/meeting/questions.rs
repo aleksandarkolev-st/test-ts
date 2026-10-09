@@ -101,7 +101,9 @@ impl QuestionDetector {
                 if resumed {
                     // A VAD pause is not a semantic turn boundary. Final ASR
                     // segments may arrive on either side of the next Started.
-                    if self.text.is_empty(){self.text=self.last_question.clone();}
+                    if self.text.is_empty() && self.last_question_turn_started_at==self.remote_turn_started_at {
+                        self.text=self.last_question.clone();
+                    }
                     self.continued=true;
                 } else if self.semantic_intent || (!self.continued
                     && self
@@ -147,7 +149,9 @@ impl QuestionDetector {
             && !self.remote_turn_interrupted && self.remote_turn_started_at.is_some_and(|start|segment.started_at>=start)
             && self.last_question_turn_started_at==self.remote_turn_started_at
             && self.stopped_at.is_some_and(|stop|segment.started_at.saturating_sub(stop)<=REMOTE_CLAUSE_GAP_MS
-                &&segment.ended_at.saturating_sub(stop)<=REMOTE_CLAUSE_GAP_MS) {
+                // A tail from already observed audio can finalize late. Its
+                // recognition end time is not a new acoustic turn boundary.
+                &&(segment.started_at<=stop || segment.ended_at.saturating_sub(stop)<=REMOTE_CLAUSE_GAP_MS)) {
             self.text=self.last_question.clone();self.continued=true;
         }
         if !segment.final_ { self.partial=segment.text.trim().into(); return self.candidate().is_some(); }
@@ -187,10 +191,17 @@ impl QuestionDetector {
             !["what","why","how","when","where","who","which","is","are","was","were","will","would","should","could","can","do","does","did","have","has","had","we","our","us","you","your","the","a","an","it","this","that","there","think","tell","me","about","please","and","also","actually"].contains(&word));
         if !self.self_speaking && informative && (self.continued || score(&text,false)>=4 || (!self.last_question.is_empty() && super::scheduler::related(&text))) {Some(text)} else {None}
     }
+    /// The learned gate decides completeness; short contextual utterances must
+    /// reach it without a word-count or phrase filter.
+    pub fn classifier_text(&self)->Option<String> {
+        let text=format!("{} {}",self.text,self.partial).trim().to_string();
+        (!self.self_speaking&&!text.is_empty()).then_some(text)
+    }
     pub fn confirm(&mut self, now: u64) -> Option<(String, u64)> {
         if self.remote_speaking
             || self.self_speaking
             || self.awaiting_final
+            || !self.partial.is_empty()
             || !self
                 .stopped_at
                 .is_some_and(|t| now.saturating_sub(t) >= END_WAIT_MS)
@@ -226,6 +237,43 @@ impl QuestionDetector {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn an_unfinalized_tail_cannot_reconfirm_and_erase_the_same_floor_prefix() {
+        let mut q=QuestionDetector{semantic_intent:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut initial=s("Which output receives that");initial.started_at=100;initial.ended_at=1100;
+        q.transcript(&initial);q.speech_ended(SpeakerSource::Remote,1000);q.confirm(1200).unwrap();
+        let mut tail=s("sum");tail.started_at=100;tail.ended_at=2300;tail.final_=false;
+        q.transcript(&tail);assert!(q.confirm(2400).is_none());
+        tail.final_=true;tail.ended_at=2700;q.transcript(&tail);
+        assert_eq!(q.confirm(2800).unwrap().0,"Which output receives that sum");
+    }
+    #[test]
+    fn same_clause_finalization_delay_does_not_expire_its_confirmed_prefix() {
+        let mut q=QuestionDetector{semantic_intent:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut initial=s("Explain the constraint");initial.started_at=100;initial.ended_at=1100;
+        q.transcript(&initial);q.speech_ended(SpeakerSource::Remote,1000);q.confirm(1200).unwrap();
+        let mut tail=s("including its boundary cases");tail.started_at=100;tail.ended_at=3000;
+        q.transcript(&tail);
+        assert_eq!(q.confirm(3100).unwrap().0,format!("{} {}",initial.text,tail.text));
+    }
+    #[test]
+    fn new_floor_pause_before_first_asr_final_never_restores_previous_question() {
+        let mut q=QuestionDetector{semantic_intent:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut previous=s("Explain the earlier observation");previous.started_at=100;previous.ended_at=200;
+        q.transcript(&previous);q.speech_ended(SpeakerSource::Remote,200);q.confirm(400).unwrap();
+        q.speech_started(SpeakerSource::Remote,3000);
+        q.speech_ended(SpeakerSource::Remote,4000);
+        assert!(q.speech_started(SpeakerSource::Remote,4500));
+        let mut first=s("Compare the two configurations");first.started_at=3000;first.ended_at=4700;
+        q.transcript(&first);
+        let mut second=s("with the original synchronization preserved");second.started_at=4500;second.ended_at=5100;
+        q.transcript(&second);q.speech_ended(SpeakerSource::Remote,5000);
+        assert_eq!(q.confirm(5200).unwrap().0,format!("{} {}",first.text,second.text));
+        assert_eq!(q.remote_turn_started_at,Some(3000));
+    }
     #[test]
     fn recorded_asr_final_before_vad_start_keeps_the_confirmed_prefix() {
         let fixture:serde_json::Value=serde_json::from_str(include_str!("../../../tests/fixtures/asr-before-vad-start.json")).unwrap();

@@ -128,6 +128,17 @@ impl MeetingContext {
     pub fn answer_context(&self, question:&str)->String {
         self.answer_context_for_utterance(question,None)
     }
+    /// Short, plain conversation for intent classification only. This does not
+    /// replace or truncate the exact context/code supplied to the answer model.
+    pub fn classifier_context(&self,started:u64)->String {
+        let mut parts=self.recent.iter().rev().filter(|segment|segment.started_at<started).take(4)
+            .map(|segment|segment.text.chars().rev().take(300).collect::<String>().chars().rev().collect::<String>()).collect::<Vec<_>>();
+        parts.reverse();
+        let suggestion=self.visible_answer.as_ref().map(|(_,_,answer)|answer)
+            .or_else(||self.answers.back().filter(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer));
+        if let Some(answer)=suggestion {parts.push(answer.chars().rev().take(600).collect::<String>().chars().rev().collect::<String>());}
+        parts.join("\n").chars().rev().take(1200).collect::<String>().chars().rev().collect()
+    }
     /// The current remote utterance is supplied as CURRENT QUESTION. Excluding
     /// its transcript fragments avoids treating their finalization as new facts.
     /// Other speakers, earlier turns, and exact suggested code remain available.

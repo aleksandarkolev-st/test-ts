@@ -31,11 +31,14 @@ if(seedWave){
 }
 const rounds=Number(process.env.COPILOT_NATIVE_INTERVIEW_ROUNDS||12);assert(Number.isInteger(rounds)&&rounds>0&&rounds<=100);
 const recordedDir=process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR):null;
+const replayRounds=Number(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS??rounds);
+assert(Number.isInteger(replayRounds)&&replayRounds>0&&replayRounds<=rounds,'Replay prefix must be within the requested round count');
+assert(recordedDir||process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS===undefined,'Replay prefix requires recorded questions and audio');
 const recorded=[];
 assert(!(!scenario&&(seedFile||recordedDir)),'Fixed regression replays must specify their examiner scenario');
 if(recordedDir){
   assert(!seedFile&&!seedWave&&recordedDir.toLowerCase().startsWith(root.toLowerCase()+path.sep),'Choose a workspace recorded replay or a seed replay, not both');
-  for(let round=1;round<=rounds;round++){
+  for(let round=1;round<=replayRounds;round++){
     const base=path.join(recordedDir,`round-${String(round).padStart(2,'0')}`);
     const question=(await readFile(`${base}.txt`,'utf8')).trim();
     assert(question.length>0&&question.length<=12000,'Recorded questions must contain 1–12000 characters');
@@ -45,6 +48,8 @@ if(recordedDir){
   }
 }
 const realAudio=process.env.COPILOT_NATIVE_INTERVIEW_AUDIO==='1';
+const inputOnly=process.env.COPILOT_ACCEPTANCE_INPUT_ONLY==='1';
+assert(!(inputOnly&&realAudio),'Injected-input-only mode cannot measure capture or ASR');
 const remoteOnly=process.env.COPILOT_ACCEPTANCE_REMOTE_ONLY==='1';
 const requestedChunk=process.env.COPILOT_NATIVE_SPEECH_CHUNK_MS===undefined?null:Number(process.env.COPILOT_NATIVE_SPEECH_CHUNK_MS);
 assert(requestedChunk===null||[80,160,560,1120].includes(requestedChunk),'Choose a supported speech chunk size');
@@ -58,15 +63,23 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let app,vite,connection,invoke,started=false,appError='';
 const result={status:'in_progress',model:'gpt-6-luna',effort:'low',tier:'fast',scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
+result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
+if(result.intentMode==='early'){
+  const profile=await readFile('.local/intent-encoder/profile.json');
+  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),threshold:0.9,changedTextCadenceMs:250};
+}
 if(remoteOnly)result.measurement+=' Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions.';
+if(inputOnly)result.measurement+=' Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing.';
 if(scenarioFile)result.providedScenario={file:path.relative(root,scenarioFile),sha256:hash(await readFile(scenarioFile))};
 if(seedFile)result.seedReplay={file:path.relative(root,seedFile),sha256:hash(Buffer.from(seedQuestion))};
 if(seedWave)result.seedWaveReplay={file:path.relative(root,seedWave),sha256:hash(await readFile(seedWave))};
 if(recordedDir){
-  result.measurement+=' Questions and audio are fixed public replays, not newly adaptive follow-ups.';
+  result.measurement+=replayRounds<rounds?` First ${replayRounds} questions are fixed public regression replays; remaining questions adapt to the actual answers. ${realAudio?'The prefix uses saved waveforms.':'Recorded audio is not played.'}`:realAudio?' Questions and audio are fixed public replays, not newly adaptive follow-ups.':' Questions are fixed public replays, not newly adaptive follow-ups; recorded audio is not played.';
+  result.replayPrefixRounds=replayRounds;
   result.recordedReplay=recorded.map(({question,waveFile,waveSha256})=>({questionSha256:hash(Buffer.from(question)),waveFile:path.relative(root,waveFile),waveSha256}));
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
+result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -87,6 +100,11 @@ async function outcome(question,offset,stopped) {
     const lastEnd=turnEvents.filter(e=>e.name==='speech.ended'&&e.payload?.source==='remote').at(-1)?.payload.timestamp;
     const finals=turnEvents.filter(e=>e.name==='transcript'&&e.payload?.source==='remote'&&e.payload.final);
     const finalThrough=finals.at(-1)?.payload.endedAt;
+    const lastStarted=turnEvents.filter(e=>e.name==='speech.started'&&e.payload?.source==='remote').at(-1)?.payload;
+    const learnedBackground=turnEvents.findLast(e=>e.name==='intent.background_ignored'&&e.payload?.floor===lastStarted?.turnStartedAt&&e.payload.timestamp>=(finalThrough??Infinity));
+    if(learnedBackground&&lastEnd!=null&&lastStarted?.timestamp<=lastEnd&&finalThrough>=lastEnd){
+      return {answer:'',inputTranscript:realAudio?finals.map(e=>e.payload.text).join(' '):question,ignored:true,localIntentIgnored:true,firstWordFromSpeechEndMs:null,firstWordFromLatestInputMs:null,firstTokenFromSpeechEndMs:null,firstVisibleHostMs:null,samples};
+    }
     const confirmed=turnEvents.filter(e=>e.name==='question.confirmed').at(-1)?.payload;
     const audioDrained=lastEnd!=null&&finalThrough>=lastEnd&&confirmed?.timestamp>=lastEnd;
     if(realAudio&&!audioDrained){await sleep(20);continue;}
@@ -118,7 +136,7 @@ async function outcome(question,offset,stopped) {
         return {answer:snapshot.answer,responseVersion,recognizedQuestion:snapshot.question.text,inputTranscript:realAudio?finals.map(e=>e.payload.text).join(' '):question,ignored:false,firstWordFromSpeechEndMs:firstWord==null?null:firstWord-speechEnd,firstWordFromLatestInputMs:firstWord==null||snapshot.latency.pipeline?.latestInputSent==null?null:firstWord-snapshot.latency.pipeline.latestInputSent,firstTokenFromSpeechEndMs:first==null?null:first-speechEnd,firstVisibleHostMs:firstVisible,firstRenderedFromSpeechEndMs:snapshot.latency.pipeline?.firstVisible==null?null:snapshot.latency.pipeline.firstVisible-speechEnd,latency:snapshot.latency,timings,samples};
       }
     }
-    if(turnEvents.some(e=>e.name==='question.ignored'&&(!realAudio||e.payload?.id===confirmed?.id)))return {answer:'',inputTranscript:realAudio?finals.map(e=>e.payload.text).join(' '):question,ignored:true,firstWordFromSpeechEndMs:null,firstWordFromLatestInputMs:null,firstTokenFromSpeechEndMs:null,firstVisibleHostMs:null,samples};
+    if(turnEvents.some(e=>e.name==='question.ignored'&&e.payload?.id===confirmed?.id))return {answer:'',inputTranscript:realAudio?finals.map(e=>e.payload.text).join(' '):question,ignored:true,firstWordFromSpeechEndMs:null,firstWordFromLatestInputMs:null,firstTokenFromSpeechEndMs:null,firstVisibleHostMs:null,samples};
     await sleep(20);
   }
   throw Error('Native interview turn did not complete');
@@ -181,6 +199,56 @@ try {
   result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:process.env.COPILOT_ACOUSTIC_REFINE==='1',eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
   assert(settings.microphone&&settings.output);await invoke('start_meeting',{settings});started=true;
+  if(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE){
+    assert.equal(result.intentMode,'early');
+    const file=path.resolve(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE);
+    assert(file.toLowerCase().startsWith(root.toLowerCase()+path.sep));
+    const probe=JSON.parse(await readFile(file,'utf8'));assert(typeof probe.text==='string');
+    const probeOffset=(await events()).length;
+    await event('started');await event('transcript',probe.text,false);await sleep(800);
+    const stopped=await event('ended');await event('transcript',probe.text,true);
+    const answer=await outcome(probe.text,probeOffset,stopped);
+    assert(answer.localIntentIgnored,'High-confidence learned background must exercise local suppression');
+    const timings=await invoke('get_answer_timings');
+    assert(timings.every(([,trace])=>trace.turnStartSent==null),'Background probe must not start an answer-model turn');
+    result.backgroundProbe={...probe,answer,timings,events:(await events()).slice(probeOffset)};
+    await persist();await invoke('stop_meeting');started=false;
+    await invoke('start_meeting',{settings});started=true;
+  }
+  if(process.env.COPILOT_NATIVE_INTENT_PAUSE_FILE){
+    assert.equal(result.intentMode,'early','Pause probe requires the learned gate');
+    const file=path.resolve(process.env.COPILOT_NATIVE_INTENT_PAUSE_FILE);
+    assert(file.toLowerCase().startsWith(root.toLowerCase()+path.sep));
+    const probe=JSON.parse(await readFile(file,'utf8'));
+    assert(typeof probe.initial==='string'&&typeof probe.continuation==='string');
+    const probeOffset=(await events()).length;
+    await event('started');await event('transcript',probe.initial,false);await sleep(500);
+    const quietResult=await invoke('acceptance_event',{kind:'quiet',source:'remote'});
+    await sleep(1800);
+    if(process.env.COPILOT_NATIVE_INTENT_REQUIRE_GENERATED==='1'){
+      const deadline=Date.now()+20000;let completed=false;
+      while(Date.now()<deadline){
+        const state=await invoke('get_snapshot');assert(!state.question&&!state.answer,'An already generated speculative answer must remain hidden');
+        const traces=await invoke('get_answer_timings');
+        if(traces.some(([,trace])=>trace.turnStartSent!=null&&trace.turnCompleted!=null)){completed=true;break;}
+        await sleep(50);
+      }
+      assert(completed,'Pause probe must exercise a completed early model turn, not merely a pending request');
+    }
+    const duringPause=await invoke('get_snapshot');
+    const timingsDuringPause=await invoke('get_answer_timings');
+    assert(!duringPause.question&&!duringPause.answer,'Speculative answer must stay hidden during an unfinished acoustic floor');
+    const resumedAt=await invoke('acceptance_event',{kind:'active',source:'remote'});
+    const full=`${probe.initial} ${probe.continuation}`;
+    await event('transcript',full,false);await sleep(300);const probeEnd=await event('ended');await event('transcript',full,true);
+    const answer=await outcome(full,probeOffset,probeEnd);
+    assert.equal(answer.recognizedQuestion,full,'Trailing condition must reach the current question exactly');
+    const probeEvents=(await events()).slice(probeOffset);
+    assert.equal(probeEvents.filter(e=>e.name==='intent.early_sent').length,1,'Probe must actually exercise one learned early send');
+    result.pauseProbe={...probe,quietResult,resumedAt,timingsDuringPause,answer,events:probeEvents,hiddenDuringPause:true,requiredCompletedEarlyTurn:process.env.COPILOT_NATIVE_INTENT_REQUIRE_GENERATED==='1'};
+    await persist();await invoke('stop_meeting');started=false;
+    await invoke('start_meeting',{settings});started=true;
+  }
   const intro='This is a technical interview. I will present hypothetical systems problems, ask you to analyze them, and keep drilling into your reasoning. Some challenges will be intentionally vague; ask for missing information rather than inventing it.';
   let offset=(await events()).length;await event('started');const introEnd=await event('ended');await event('transcript',intro);
   result.introduction=await outcome(intro,offset,introEnd);await invoke('action',{action:'dismiss'});
@@ -195,12 +263,13 @@ try {
     stoppedHostMs=Date.now();stopped=await event('ended');await sleep(50);await event('transcript',question);
     }
     const answer=await outcome(question,offset,stopped);
-    const row={round,question,speechEndNativeMs:stopped??answer.latency?.speechStoppedAt,speechEndHostMs:stoppedHostMs,audio,...answer,speechMarkers:(await events()).slice(offset).filter(e=>e.name==='speech.started'||e.name==='speech.ended')};
+    const turnEvents=(await events()).slice(offset);
+    const row={round,question,speechEndNativeMs:stopped??answer.latency?.speechStoppedAt,speechEndHostMs:stoppedHostMs,audio,...answer,speechMarkers:turnEvents.filter(e=>e.name==='speech.started'||e.name==='speech.ended'),intentEvents:turnEvents.filter(e=>e.name.startsWith('intent.'))};
     if(realAudio){row.preservesAllRecognizedClauses=normalize(row.recognizedQuestion??'')===normalize(row.inputTranscript??'');}
     row.firstVisibleFromSpeechEndMs=stoppedHostMs==null?answer.firstRenderedFromSpeechEndMs:answer.firstVisibleHostMs==null?null:answer.firstVisibleHostMs-stoppedHostMs;
     result.rows.push(row);await persist();
     if(remoteOnly)assert(!row.speechMarkers.some(e=>e.payload?.source==='self'),'Remote-only capture must not emit microphone speech markers');
-    if(realAudio&&process.env.COPILOT_NATIVE_REQUIRE_FULL_TURN==='1')assert(row.preservesAllRecognizedClauses,'Confirmed question lost recognized clauses');
+    if(realAudio&&process.env.COPILOT_NATIVE_REQUIRE_FULL_TURN==='1')assert(row.preservesAllRecognizedClauses,'Confirmed question differs from the current turn\'s recognized clauses');
     console.log(`Native round ${round}: ignored=${row.ignored}, first answer word ${row.firstWordFromSpeechEndMs} ms, first text ${row.firstTokenFromSpeechEndMs} ms, rendered ${row.firstVisibleFromSpeechEndMs} ms`);
     history+=`\nINTERVIEWER: ${question}\nSUGGESTED ANSWER (not necessarily correct): ${answer.answer}\n`;
     const request=path.join(output,`round-${String(round).padStart(2,'0')}.json`);

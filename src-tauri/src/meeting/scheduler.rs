@@ -111,6 +111,9 @@ impl Scheduler {
         self.confirm_with_context(text,now,stopped,transcript,None)
     }
     pub fn confirm_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
+        // An early intent-only no-reply verdict is not a final-text verdict.
+        // Re-submit the final request if that speculative job was cancelled.
+        if self.candidate.as_ref().is_some_and(|id|self.jobs.iter().any(|job|job.question.id==*id&&(job.cancel.is_cancelled()||matches!(job.phase,Phase::Cancelled|Phase::Superseded)))) {self.candidate=None;}
         let id=if let Some(id)=self.candidate.clone() {
             if self.jobs.iter().any(|j|j.question.id==id && if self.semantic_intent{same_question(&j.source_text,&text)}else{normalized(&j.source_text)==normalized(&text)}) {id}
             else {self.propose_inner(text,now,stopped,transcript,true)}
@@ -160,6 +163,14 @@ impl Scheduler {
     fn prune(&mut self){let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed) || latest.as_ref()==Some(&j.question.id));}
 }
 #[cfg(test)] mod tests {
+    #[test] fn final_request_survives_an_early_no_reply_verdict() {
+        let mut scheduler=Scheduler::default();scheduler.semantic_intent=true;
+        let early=scheduler.propose("Explain the invariant".into(),0,0,0);
+        scheduler.next(0);let job=scheduler.find_mut(&early).unwrap();job.phase=Phase::Cancelled;job.latency.completed_at=Some(30);job.running=false;
+        let final_id=scheduler.confirm("Explain the invariant".into(),300,200,280);
+        assert_ne!(early,final_id);assert_eq!(scheduler.next(300),Some(final_id.clone()));
+        assert!(scheduler.find_mut(&final_id).unwrap().confirmed);
+    }
     use super::*;
     #[test]
     fn acoustic_pause_survives_late_partial_growth_without_confirming_a_job() {

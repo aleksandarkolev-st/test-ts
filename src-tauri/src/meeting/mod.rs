@@ -1,4 +1,5 @@
 pub mod context;
+pub mod intent;
 pub mod questions;
 pub mod state;
 pub mod scheduler;

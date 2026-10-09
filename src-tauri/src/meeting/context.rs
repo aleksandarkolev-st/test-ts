@@ -44,21 +44,25 @@ pub struct MeetingContext {
     in_flight: Vec<TranscriptSegment>,
     chars: usize,
     answers: VecDeque<(u64,String,String,String)>,
-    visible_answer: Option<(String,String,String)>,
+    visible_answer: Option<(u64,String,String,String)>,
     // The working implementation outlives a short history of explanations.
     // Keep its exact text until a later complete code answer replaces it.
     working_code: Option<(u64,String,String,String)>,
 }
 impl MeetingContext {
     pub fn forget_visible_answer(&mut self,id:&str) {
-        if self.visible_answer.as_ref().is_some_and(|(previous,_,_)|previous==id){self.visible_answer=None;}
+        if self.visible_answer.as_ref().is_some_and(|(_,previous,_,_)|previous==id){self.visible_answer=None;}
     }
     /// A follow-up can refer to text already shown before generation completes.
     /// Preserve that exact snapshot without treating unfinished code as complete.
+    #[cfg(test)]
     pub fn remember_visible_answer(&mut self,id:&str,question:&str,answer:&str) {
+        self.remember_visible_answer_at(id,question,answer,0);
+    }
+    pub fn remember_visible_answer_at(&mut self,id:&str,question:&str,answer:&str,started:u64) {
         if answer.trim().is_empty() || answer.chars().count()>32_000{return;}
         if self.answers.iter().any(|(_,previous,_,_)|previous==id){return;}
-        self.visible_answer=Some((id.into(),question.into(),answer.into()));
+        self.visible_answer=Some((started,id.into(),question.into(),answer.into()));
     }
     /// Preserve complete suggested answers, including code, independently of
     /// transcript compression. Suggestions are never promoted to meeting facts.
@@ -131,11 +135,11 @@ impl MeetingContext {
     /// Short, plain conversation for intent classification only. This does not
     /// replace or truncate the exact context/code supplied to the answer model.
     pub fn classifier_context(&self,started:u64)->String {
-        let mut parts=self.recent.iter().rev().filter(|segment|segment.started_at<started).take(4)
+        let mut parts=self.recent.iter().rev().filter(|segment|segment.source!=super::SpeakerSource::Remote||segment.started_at<started).take(4)
             .map(|segment|segment.text.chars().rev().take(300).collect::<String>().chars().rev().collect::<String>()).collect::<Vec<_>>();
         parts.reverse();
-        let suggestion=self.visible_answer.as_ref().map(|(_,_,answer)|answer)
-            .or_else(||self.answers.back().filter(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer));
+        let suggestion=self.visible_answer.as_ref().filter(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer)
+            .or_else(||self.answers.iter().rev().find(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer));
         if let Some(answer)=suggestion {parts.push(answer.chars().rev().take(600).collect::<String>().chars().rev().collect::<String>());}
         parts.join("\n").chars().rev().take(1200).collect::<String>().chars().rev().collect()
     }
@@ -165,7 +169,7 @@ impl MeetingContext {
         let included_code=self.working_code.as_ref().is_some_and(|(_,code_id,_,_)|selected.iter().any(|i|self.answers[*i].1==*code_id));
         let mut answers=selected.into_iter().map(|i|{let (_,_,q,a)=&self.answers[i];format!("QUESTION: {q}\nSUGGESTED ANSWER:\n{a}")}).collect::<Vec<_>>().join("\n\n");
         if !included_code {if let Some((_,_,q,a))=&self.working_code{answers.push_str(&format!("\n\nLATEST COMPLETE SUGGESTED IMPLEMENTATION\nQUESTION: {q}\n{a}"));}}
-        if let Some((_,q,a))=&self.visible_answer{answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
+        if let Some((_,_,q,a))=&self.visible_answer{answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
         let history=if answers.is_empty(){String::new()}else{format!("\n\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\n{answers}")};
         format!("MEETING SUMMARY (selected relevant memory)\n{memory}\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\n{pending}\n\nRECENT CONVERSATION (selected excerpts)\n{recent}{history}")
     }
@@ -214,6 +218,29 @@ pub fn conversation(segments: &[TranscriptSegment]) -> String {
 mod tests {
     use super::*;
     use crate::meeting::SpeakerSource;
+    #[test]
+    fn classifier_reference_excludes_its_own_draft_without_losing_prior_answers() {
+        let mut c=MeetingContext::default();
+        c.remember_answer_at("prior","Earlier request","Earlier exact explanation",10);
+        let prior=c.classifier_context(20);
+        c.remember_visible_answer_at("current","Current request","New streaming draft",20);
+        assert_eq!(c.classifier_context(20),prior);
+        c.remember_visible_answer_at("current","Current request","New streaming draft grows",20);
+        assert_eq!(c.classifier_context(20),prior);
+        c.remember_answer_at("current","Current request","Completed current draft",25);
+        assert_eq!(c.classifier_context(20),prior);
+        c.remember_visible_answer_at("next","Next request","Earlier visible reference",30);
+        assert!(c.classifier_context(40).contains("Earlier visible reference"));
+    }
+    #[test]
+    fn classifier_reference_retains_other_speaker_corrections_on_the_current_floor() {
+        let mut c=MeetingContext::default();
+        let mut remote=seg(21,"Current remote words");remote.started_at=20;c.push(remote);
+        let mut correction=seg(22,"Use the corrected constraint");correction.source=SpeakerSource::Self_;c.push(correction);
+        let context=c.classifier_context(20);
+        assert!(context.contains("Use the corrected constraint"));
+        assert!(!context.contains("Current remote words"));
+    }
     #[test]
     fn current_utterance_fragments_do_not_change_selected_context_but_other_speakers_do() {
         let mut c=MeetingContext::default();c.push(seg(1,"Earlier launch date: February 19."));

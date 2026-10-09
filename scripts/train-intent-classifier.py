@@ -18,14 +18,16 @@ def main():
     parser.add_argument("--train", default="artifacts/intent-classifier/generated-training.json")
     parser.add_argument("--validation", default="artifacts/intent-classifier/generated-validation.json")
     parser.add_argument("--output", default=".local/intent-encoder/profile.json")
-    parser.add_argument("--lexical", action="store_true")
+    features = parser.add_mutually_exclusive_group()
+    features.add_argument("--lexical", action="store_true")
+    features.add_argument("--joint", action="store_true")
     args = parser.parse_args()
     encoder = load(args.models)
     training = json.loads(Path(args.train).read_text(encoding="utf-8"))["cases"]
     validation = json.loads(Path(args.validation).read_text(encoding="utf-8"))["cases"]
     assert not {row["text"] for row in training} & {row["text"] for row in validation}, "Training/validation overlap"
     def vectorize(rows):
-        x = np.asarray([encoder.features(row["text"], row.get("context", ""), args.lexical)[0] for row in rows])
+        x = np.asarray([encoder.features(row["text"], row.get("context", ""), args.lexical, args.joint)[0] for row in rows])
         y = np.asarray([2 if row["ready"] else 1 if row["request"] else 0 for row in rows])
         return x, y
     x, y = vectorize(training)
@@ -49,6 +51,8 @@ def main():
     result = {"encoder": encoder.identity["revision"], "featureSchema":"mean-last-context-untruncated-v1", "classes":["background","unfinished_request","ready_request"], "weights":weights.tolist(), "bias":bias.tolist(), "regularization":regularization, "validationLoss":loss, "trainingSha256":hashlib.sha256(Path(args.train).read_bytes()).hexdigest(), "validationSha256":hashlib.sha256(Path(args.validation).read_bytes()).hexdigest(), "trainingCount":len(y), "validationCount":len(vy), "scope":"Synthetic model-labeled training; not human accuracy certification. Learned weights only, no training examples in production."}
     if args.lexical:
         result["featureSchema"]="mean-last-context-sequence-untruncated-v1"
+    if args.joint:
+        result["featureSchema"]="joint-current-last-context-untruncated-v1"
     Path(args.output).write_text(json.dumps(result), encoding="utf-8")
     print(json.dumps({"profile":args.output, "validationLoss":loss, "regularization":regularization, "accuracy":float((probability.argmax(axis=1)==vy).mean())}), flush=True)
 

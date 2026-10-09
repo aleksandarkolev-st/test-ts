@@ -65,8 +65,10 @@ const result={status:'in_progress',model:'gpt-6-luna',effort:'low',tier:'fast',s
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
 result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
 if(result.intentMode==='early'){
+  const threshold=Number(process.env.COPILOT_INTENT_READY_THRESHOLD??0.9);
+  assert(Number.isFinite(threshold)&&threshold>=0&&threshold<=1,'Intent readiness threshold must be a bounded probability');
   const profile=await readFile('.local/intent-encoder/profile.json');
-  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),threshold:0.9,changedTextCadenceMs:250};
+  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),threshold,changedTextCadenceMs:250};
 }
 if(remoteOnly)result.measurement+=' Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions.';
 if(inputOnly)result.measurement+=' Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing.';

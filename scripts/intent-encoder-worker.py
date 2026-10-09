@@ -32,9 +32,41 @@ class Encoder:
         self.names = {item.name for item in self.session.get_inputs()}
         self.identity = {"model": manifest["model"], "revision": manifest["revision"], "provider": "CPUExecutionProvider", "threads": threads}
 
-    def features(self, text, context="", lexical=False):
+    def features(self, text, context="", lexical=False, joint=False):
         if not isinstance(text, str) or not text.strip() or len(text) > 32000 or not isinstance(context, str):
             raise ValueError("Invalid utterance")
+        if joint:
+            # One attention pass learns the relationship between the utterance
+            # and conversation, instead of adding two independent embeddings.
+            # Only classifier history is bounded; current words are never cut.
+            current = self.tokenizer.encode(text, add_special_tokens=False)
+            if not current.ids or len(current.ids) > 254:
+                raise ValueError("input_limit")
+            previous = self.tokenizer.encode(context[-1200:], add_special_tokens=False)
+            budget = 253-len(current.ids)
+            history = previous.ids[-budget:] if budget>0 else []
+            cls = self.tokenizer.token_to_id("[CLS]")
+            sep = self.tokenizer.token_to_id("[SEP]")
+            if cls is None or sep is None:
+                raise ValueError("Unsupported encoder tokenizer")
+            if history:
+                ids = [cls]+history+[sep]+current.ids+[sep]
+                split = len(history)+2
+                types = [0]*split+[1]*(len(current.ids)+1)
+            else:
+                ids = [cls]+current.ids+[sep]
+                split = 1
+                types = [0]*len(ids)
+            feeds = {"input_ids":np.asarray([ids],dtype=np.int64),
+                "attention_mask":np.ones((1,len(ids)),dtype=np.int64),
+                "token_type_ids":np.asarray([types],dtype=np.int64)}
+            hidden = self.session.run(None,{name:feeds[name] for name in self.names})[0][0]
+            def unit(vector):
+                return vector/max(float(np.linalg.norm(vector)),1e-12)
+            current_mean = unit(hidden[split:-1].mean(axis=0))
+            last = unit(hidden[-2])
+            context_mean = unit(hidden[1:split-1].mean(axis=0)) if history else np.zeros_like(last)
+            return np.concatenate([current_mean,last,context_mean]),len(current.ids)+2
         encoded = self.tokenizer.encode_batch([text, context[-1200:] or " "])
         # Publisher trained this encoder on <=256 tokens. Abstain on the current
         # utterance rather than truncating away an important trailing condition.
@@ -72,17 +104,38 @@ class Classifier:
         data = Path(profile).read_bytes()
         head = json.loads(data)
         self.lexical = head["featureSchema"] == "mean-last-context-sequence-untruncated-v1"
-        if head["encoder"] != self.encoder.identity["revision"] or head["featureSchema"] not in ("mean-last-context-untruncated-v1", "mean-last-context-sequence-untruncated-v1"):
+        self.joint = head["featureSchema"] == "joint-current-last-context-untruncated-v1"
+        if head["encoder"] != self.encoder.identity["revision"] or head["featureSchema"] not in ("mean-last-context-untruncated-v1", "mean-last-context-sequence-untruncated-v1", "joint-current-last-context-untruncated-v1"):
             raise ValueError("Classifier profile does not match encoder")
+        if head["classes"] != ["background","unfinished_request","ready_request"]:
+            raise ValueError("Classifier profile class order is invalid")
         self.weights = np.asarray(head["weights"], dtype=np.float32)
         self.bias = np.asarray(head["bias"], dtype=np.float32)
-        if self.weights.shape != (3200 if self.lexical else 1152, 3) or self.bias.shape != (3,) or not np.isfinite(self.weights).all() or not np.isfinite(self.bias).all():
+        width = 3200 if self.lexical else 1152
+        self.hidden = None
+        if head.get("headKind","linear") == "mlp-tanh-v1":
+            self.hidden = np.asarray(head["hiddenWeights"],dtype=np.float32)
+            self.hidden_bias = np.asarray(head["hiddenBias"],dtype=np.float32)
+            self.mean = np.asarray(head["featureMean"],dtype=np.float32)
+            self.scale = np.asarray(head["featureScale"],dtype=np.float32)
+            if self.hidden.ndim!=2 or self.hidden.shape[0]!=width or not 1<=self.hidden.shape[1]<=256:
+                raise ValueError("Invalid hidden classifier dimensions")
+            if self.mean.shape!=(width,) or self.scale.shape!=(width,) or self.hidden_bias.shape!=(self.hidden.shape[1],):
+                raise ValueError("Invalid classifier normalization")
+            if not all(np.isfinite(item).all() for item in [self.hidden,self.hidden_bias,self.mean,self.scale]) or not (self.scale>0).all():
+                raise ValueError("Invalid hidden classifier weights")
+            width = self.hidden.shape[1]
+        elif head.get("headKind","linear") != "linear":
+            raise ValueError("Unknown classifier head")
+        if self.weights.shape != (width, 3) or self.bias.shape != (3,) or not np.isfinite(self.weights).all() or not np.isfinite(self.bias).all():
             raise ValueError("Invalid classifier weights")
         self.identity = {**self.encoder.identity, "profileSha256": hashlib.sha256(data).hexdigest()}
     def classify(self, text, context=""):
         started = time.perf_counter()
         try:
-            features, tokens = self.encoder.features(text, context, self.lexical)
+            features, tokens = self.encoder.features(text, context, self.lexical, self.joint)
+            if self.hidden is not None:
+                features = np.tanh(((features-self.mean)/self.scale)@self.hidden+self.hidden_bias)
             logits = features @ self.weights + self.bias
             exp = np.exp(logits - logits.max())
             probability = exp / exp.sum()

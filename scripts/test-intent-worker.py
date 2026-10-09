@@ -16,7 +16,8 @@ class WorkerContract(unittest.TestCase):
             {"id":3,"text":"Explain that again.","context":""},
         ]
         env={**os.environ,"PYTHONIOENCODING":"cp1252","PYTHONUTF8":"0"}
-        result=subprocess.run([sys.executable,str(ROOT/'scripts/intent-encoder-worker.py'),'--models',str(ROOT/'.local/intent-encoder'),'--profile',str(ROOT/'.local/intent-encoder/profile.json')], input=('\n'.join(json.dumps(item,ensure_ascii=False) for item in requests)+'\n').encode('utf-8'),capture_output=True,timeout=10,env=env)
+        profile=Path(os.environ.get('COPILOT_INTENT_TEST_PROFILE',ROOT/'.local/intent-encoder/profile.json'))
+        result=subprocess.run([sys.executable,str(ROOT/'scripts/intent-encoder-worker.py'),'--models',str(ROOT/'.local/intent-encoder'),'--profile',str(profile)], input=('\n'.join(json.dumps(item,ensure_ascii=False) for item in requests)+'\n').encode('utf-8'),capture_output=True,timeout=10,env=env)
         self.assertEqual(result.returncode,0,result.stderr.decode('utf-8',errors='replace'))
         lines=[json.loads(line) for line in result.stdout.decode('utf-8').splitlines()]
         self.assertEqual(lines[0]['event'],'ready')

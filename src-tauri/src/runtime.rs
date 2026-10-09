@@ -234,6 +234,7 @@ async fn actor(
     let mut answers = meeting::scheduler::Scheduler::default();
     let intent_mode=meeting::intent::Mode::configured();
     let mut intent_gate=meeting::intent::Gate::default();
+    let intent_threshold=meeting::intent::ready_threshold();
     let mut summary: Option<CancellationToken> = None;
     let (mut events_tx, mut events) = mpsc::channel(256);
     let (work_tx, mut work) = mpsc::channel(256);
@@ -394,12 +395,16 @@ async fn actor(
                                 let payload=serde_json::json!({"id":prediction.id,"abstained":prediction.abstained,"scores":prediction.scores.as_ref().map(|scores|serde_json::json!({"request":scores.request,"ready":scores.ready})),"elapsedMs":prediction.elapsed_ms,"observedAt":now});
                                 let accepted=intent_gate.accept(prediction);emit(&app,"intent.predicted",serde_json::json!({"accepted":accepted,"prediction":payload}));
                             }
-                            if let Some(input)=intent_gate.early(now,engine.detector.remote_quiet,engine.detector.self_speaking,0.9) {
+                            if let Some(input)=intent_threshold.and_then(|threshold|intent_gate.early(now,engine.detector.remote_quiet,engine.detector.self_speaking,threshold)) {
+                                #[cfg(all(feature="acceptance",debug_assertions))]
+                                let early_text=input.text.clone();
                                 speech_metrics.first_credible_candidate_at.get_or_insert(now);cancel_answer(&app,&mut generation);
                                 if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
                                 let id=answers.propose(input.text,now,engine.detector.stopped_at.unwrap_or(now),transcript_at);
                                 if let Some(job)=answers.find_mut(&id) {job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;refresh_question_context(job,&engine.context);}
-                                emit(&app,"intent.early_sent",serde_json::json!({"id":id,"timestamp":now,"floor":input.floor}));
+                                emit(&app,"intent.early_sent",serde_json::json!({"id":id,"timestamp":now,"floor":input.floor,"threshold":intent_threshold}));
+                                #[cfg(all(feature="acceptance",debug_assertions))]
+                                if crate::openai::acceptance_mode(){emit(&app,"intent.early_input",serde_json::json!({"id":id,"timestamp":now,"floor":input.floor,"text":early_text}));}
                             }
                         } else {intent_gate.invalidate();}
                     }
@@ -643,7 +648,7 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
     if let Some(j)=answers.visible() {
-        if j.error.is_none() && j.latency.completed_at.is_none(){engine.context.remember_visible_answer(&j.question.id,&j.question.text,&j.buffer);}
+        if j.error.is_none() && j.latency.completed_at.is_none(){engine.context.remember_visible_answer_at(&j.question.id,&j.question.text,&j.buffer,j.latency.remote_speech_started_at.unwrap_or(j.question.detected_at));}
         engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=j.error.clone();
         engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}

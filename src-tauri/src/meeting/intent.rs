@@ -32,6 +32,16 @@ impl Mode {
         }
     }
 }
+/// Experimental control policy, never a semantic phrase or domain rule.
+/// Invalid configuration disables early sending; final inference still runs.
+pub fn ready_threshold() -> Option<f64> {
+    if !cfg!(debug_assertions) {return Some(0.9);}
+    match std::env::var("COPILOT_INTENT_READY_THRESHOLD") {
+        Err(std::env::VarError::NotPresent)=>Some(0.9),
+        Ok(value)=>value.parse::<f64>().ok().filter(|value|value.is_finite()&&(0.0..=1.0).contains(value)),
+        _=>None,
+    }
+}
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Input {
     pub id: u64,

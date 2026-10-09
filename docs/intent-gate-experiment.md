@@ -136,6 +136,52 @@ by Git. The idle production app was rebuilt and refreshed with the transcript
 fixes and general reasoning instruction; all saved settings were preserved.
 The classifier remains disabled in release builds.
 
+## Further readiness experiments
+
+The [readiness and matched audio evidence](evidence/intent-gate-v34.json)
+records joint-attention and small neural-head alternatives, neither promoted.
+The joint head selected no ready requests at 0.8 on a freshly generated,
+assistant-reviewed 60-case set. The neural alternative made high-confidence
+false early classifications. This set was subsequently reused for diagnostics;
+it is not a fresh test set for later head selection.
+
+Training texts had a punctuation bias: unfinished requests lacked terminal
+punctuation, while most complete requests had it. Offline augmentation adds
+unpunctuated variants without changing live transcript text, code, or identifiers.
+On the same 90-case ASR-style validation set, loss fell from 1.68 for the original
+head to 0.73 with 340 original examples and 518 correlated training variants.
+Coverage and precision remain inadequate: at 0.8, three of 16 selected validation
+requests were false early classifications; at 0.9, 33 of 36 ready requests were
+missed. Synthetic labels were reviewed by the assistant, not certified by humans.
+The generator also failed its requested long-speech lengths: the additional
+60 examples averaged 25 words, with none reaching 50 words. New generator
+metadata records actual length compliance rather than assuming prompt compliance.
+
+Classifier context now excludes its current acoustic floor's own answer draft.
+It retains earlier answers after the current answer completes and includes
+other-speaker corrections on the current floor. Exact code context supplied to
+Luna remains intact. All 114 active Rust library tests pass, with 14 ignored.
+
+A lower-threshold audio run with the original head produced no early sends.
+The extended ASR-trained head, at 0.8 with corrected context, triggered twice in
+four fixed remote-audio turns. One trigger was the incomplete fragment
+"what exact". Final recognized questions retained every clause. A matched
+final-only run used the same binary, sources, waveforms, monitor and 160 ms
+Nemotron chunks:
+
+| Mode | First word after final speech end, ms | Mean, ms |
+| --- | --- | --- |
+| Learned gate | 1751, 1806, 1947, 2308 | 1953 |
+| Finalized transcripts only | 2003, 1903, 1792, 1927 | 1906 |
+
+These measurements include ASR and refer to the retained answer version. They
+show no demonstrated improvement and cannot establish a population p95. They
+exclude real microphone interruptions and are fixed replays, not fresh adaptive
+interviews. The original local profile was restored and the gate remains disabled
+in release. No semantic word lists, domain routing, canned replies, or interview
+solutions were added to the live assistant. Regenerate this evidence with
+`node scripts/summarize-intent-readiness.mjs`.
+
 ## Reproduction
 
 The current development worker uses the workspace's existing Python 3.11 runtime
@@ -152,6 +198,11 @@ Download the data-only model with `python scripts/setup-intent-classifier.py
 `scripts/test-intent-worker.py` using that Python runtime.
 
 Debug native acceptance modes are `COPILOT_INTENT_MODE=early` and `final`.
+`COPILOT_INTENT_READY_THRESHOLD` controls the debug readiness threshold, default
+0.9. Invalid configuration disables early sending without delaying final inference.
+Offline head alternatives are `train-intent-classifier.py --joint` and
+`train-intent-mlp.py`; `augment-intent-data.py` produces ASR-style training
+variants. None is automatically promoted to the runtime profile.
 `COPILOT_ACCEPTANCE_INPUT_ONLY=1` explicitly disables device capture for injected
 transcript tests; the harness rejects using it with real-audio measurement.
 Real-audio comparisons require the chosen monitor output to be present, the same

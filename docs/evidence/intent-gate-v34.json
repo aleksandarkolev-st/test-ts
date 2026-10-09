@@ -1,0 +1,527 @@
+{
+  "scope": "Experimental readiness work. No classifier promotion, no demonstrated audio latency gain, no population p95 or correctness certification. Assistant-reviewed synthetic labels are not human certification.",
+  "matchedAudio": {
+    "sameBinarySourcesWaveformsAndSpeechConfiguration": true,
+    "learned": {
+      "status": "complete",
+      "stoppedCleanly": true,
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "binarySha256": "b51464fc621afef359261c3ee21ed4815892b6d323dee87346465feb6dfb6717",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "a74b03683df6120e495cb04cd3d5f12a2b3005ae1e17e787ca05cb6992ca3776"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "8c487d729f507a4e9e3d2c60110bafeb3630c7891f7921b2bf2f36b0820ba323"
+      },
+      "classifier": {
+        "profileSha256": "55c632e299c0aa4473ad96ff6da6043f44a0deb3904e4c27d62819e547e66bd5",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "threshold": 0.8,
+        "changedTextCadenceMs": 250
+      },
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 1751,
+          "firstWordFromLatestInputMs": 1079,
+          "asrFinalizationMs": 639,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1806,
+          "firstWordFromLatestInputMs": 1043,
+          "asrFinalizationMs": 730,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [
+            "what exact"
+          ],
+          "earlySends": 1
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 1947,
+          "firstWordFromLatestInputMs": 1164,
+          "asrFinalizationMs": 765,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 2308,
+          "firstWordFromLatestInputMs": 1420,
+          "asrFinalizationMs": 873,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [
+            "suppose you add a global progress counter in device memory and want the host to sample it before the kernel completes"
+          ],
+          "earlySends": 1
+        }
+      ],
+      "meanFirstWordMs": 1953
+    },
+    "finalOnly": {
+      "status": "complete",
+      "stoppedCleanly": true,
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "binarySha256": "b51464fc621afef359261c3ee21ed4815892b6d323dee87346465feb6dfb6717",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "a74b03683df6120e495cb04cd3d5f12a2b3005ae1e17e787ca05cb6992ca3776"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "8c487d729f507a4e9e3d2c60110bafeb3630c7891f7921b2bf2f36b0820ba323"
+      },
+      "classifier": null,
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 2003,
+          "firstWordFromLatestInputMs": 1254,
+          "asrFinalizationMs": 727,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1903,
+          "firstWordFromLatestInputMs": 1125,
+          "asrFinalizationMs": 750,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 1792,
+          "firstWordFromLatestInputMs": 1084,
+          "asrFinalizationMs": 706,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 1927,
+          "firstWordFromLatestInputMs": 1074,
+          "asrFinalizationMs": 847,
+          "preservesRecognizedClauses": true,
+          "earlyInputs": [],
+          "earlySends": 0
+        }
+      ],
+      "meanFirstWordMs": 1906.25
+    },
+    "conclusion": "Two early sends, including the incomplete fragment \"what exact\". The learned gate was not faster on average in this four-turn run. All recognized final clauses were retained. No causal benefit or population statistic is established."
+  },
+  "lowerThresholdBeforeContextFix": {
+    "status": "complete",
+    "stoppedCleanly": true,
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+    "binarySha256": "02fbe7e241c109c681d0ef8cfeb81e533766b024a1b020c2ba86322bba8c014a",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+      "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+      "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+      "src-tauri/src/runtime.rs": "7d6f0759761c4dfc6ba7f55aeff74384faa87dfc2f37645523dfbd5b31b5a2b0"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+      "src-tauri/src/meeting/context.rs": "2e6e222087aa3950d7133f23d15a329f0138d52d9fb480b561bf1772b7259fc4",
+      "scripts/intent-encoder-worker.py": "8c487d729f507a4e9e3d2c60110bafeb3630c7891f7921b2bf2f36b0820ba323"
+    },
+    "classifier": {
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "threshold": 0.8,
+      "changedTextCadenceMs": 250
+    },
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 1868,
+        "firstWordFromLatestInputMs": 1125,
+        "asrFinalizationMs": 722,
+        "preservesRecognizedClauses": true,
+        "earlyInputs": [],
+        "earlySends": 0
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 2030,
+        "firstWordFromLatestInputMs": 1176,
+        "asrFinalizationMs": 816,
+        "preservesRecognizedClauses": true,
+        "earlyInputs": [],
+        "earlySends": 0
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 2533,
+        "firstWordFromLatestInputMs": 1822,
+        "asrFinalizationMs": 682,
+        "preservesRecognizedClauses": true,
+        "earlyInputs": [],
+        "earlySends": 0
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 1981,
+        "firstWordFromLatestInputMs": 1182,
+        "asrFinalizationMs": 778,
+        "preservesRecognizedClauses": true,
+        "earlyInputs": [],
+        "earlySends": 0
+      }
+    ],
+    "meanFirstWordMs": 2103
+  },
+  "training": {
+    "profileSha256": "55c632e299c0aa4473ad96ff6da6043f44a0deb3904e4c27d62819e547e66bd5",
+    "trainingSha256": "91172a3d6bc2eaa0f04a9bd03d42eec8a8a2b9d684cdee6e74d86256f029cead",
+    "validationSha256": "44b0211fc5dcc83e5836141b5ebd60b2fb0364b79a124088037d0582aa483f43",
+    "originalCases": 340,
+    "augmentedVariants": 518,
+    "validationCases": 90,
+    "validationLoss": 0.7255085894201249,
+    "augmentationScope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+    "generatorLengthFailure": {
+      "requestedReadyAndBackgroundWords": [
+        50,
+        110
+      ],
+      "requestedUnfinishedWords": [
+        20,
+        70
+      ],
+      "observedMeanWords": 25.333333333333332,
+      "observedMaxWords": 38,
+      "observedCasesAtLeast50Words": 0
+    },
+    "promoted": false
+  },
+  "validation": {
+    "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "55c632e299c0aa4473ad96ff6da6043f44a0deb3904e4c27d62819e547e66bd5"
+    },
+    "latencyMs": {
+      "median": 1.6105500399135053,
+      "p95": 2.4055999238044024,
+      "max": 3.077500034123659
+    },
+    "thresholds": [
+      {
+        "threshold": 0.5,
+        "selected": 44,
+        "falseEarly": 16,
+        "missedReadyRequests": 8
+      },
+      {
+        "threshold": 0.7,
+        "selected": 25,
+        "falseEarly": 6,
+        "missedReadyRequests": 17
+      },
+      {
+        "threshold": 0.8,
+        "selected": 16,
+        "falseEarly": 3,
+        "missedReadyRequests": 23
+      },
+      {
+        "threshold": 0.9,
+        "selected": 3,
+        "falseEarly": 0,
+        "missedReadyRequests": 33
+      },
+      {
+        "threshold": 0.95,
+        "selected": 2,
+        "falseEarly": 0,
+        "missedReadyRequests": 34
+      }
+    ]
+  },
+  "reusedDiagnostic": {
+    "scope": "Fresh synthetic held-out data, generated after joint feature selection; assistant label review before inference. Exact normalized train/validation text overlaps excluded. Not human certification or production routing.",
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "55c632e299c0aa4473ad96ff6da6043f44a0deb3904e4c27d62819e547e66bd5"
+    },
+    "latencyMs": {
+      "median": 1.4085500151850283,
+      "p95": 2.231899998150766,
+      "max": 2.373899915255606
+    },
+    "thresholds": [
+      {
+        "threshold": 0.5,
+        "selected": 19,
+        "falseEarly": 5,
+        "missedReadyRequests": 7
+      },
+      {
+        "threshold": 0.7,
+        "selected": 9,
+        "falseEarly": 1,
+        "missedReadyRequests": 13
+      },
+      {
+        "threshold": 0.8,
+        "selected": 4,
+        "falseEarly": 0,
+        "missedReadyRequests": 17
+      },
+      {
+        "threshold": 0.9,
+        "selected": 2,
+        "falseEarly": 0,
+        "missedReadyRequests": 19
+      },
+      {
+        "threshold": 0.95,
+        "selected": 1,
+        "falseEarly": 0,
+        "missedReadyRequests": 20
+      }
+    ]
+  },
+  "alternatives": {
+    "jointFreshHeldout": {
+      "scope": "Fresh synthetic held-out data, generated after joint feature selection; assistant label review before inference. Exact normalized train/validation text overlaps excluded. Not human certification or production routing.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "1e614311c9bb37b6800898a6e22120449c767f328fa246af8f6342a77b10ee24"
+      },
+      "latencyMs": {
+        "median": 0.9191000135615468,
+        "p95": 1.488200039602816,
+        "max": 1.8334999913349748
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 11,
+          "falseEarly": 3,
+          "missedReadyRequests": 13
+        },
+        {
+          "threshold": 0.7,
+          "selected": 6,
+          "falseEarly": 0,
+          "missedReadyRequests": 15
+        },
+        {
+          "threshold": 0.8,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 21
+        },
+        {
+          "threshold": 0.9,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 21
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 21
+        }
+      ]
+    },
+    "jointValidation": {
+      "scope": "Synthetic examples with explicit assistant label review against response-needed/current-completeness semantics. Not human accuracy certification; never production routing.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "1e614311c9bb37b6800898a6e22120449c767f328fa246af8f6342a77b10ee24"
+      },
+      "latencyMs": {
+        "median": 0.922849983908236,
+        "p95": 1.694600097835064,
+        "max": 1.9648000597953796
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 33,
+          "falseEarly": 11,
+          "missedReadyRequests": 14
+        },
+        {
+          "threshold": 0.7,
+          "selected": 14,
+          "falseEarly": 3,
+          "missedReadyRequests": 25
+        },
+        {
+          "threshold": 0.8,
+          "selected": 6,
+          "falseEarly": 0,
+          "missedReadyRequests": 30
+        },
+        {
+          "threshold": 0.9,
+          "selected": 2,
+          "falseEarly": 0,
+          "missedReadyRequests": 34
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 36
+        }
+      ]
+    },
+    "neuralJointValidation": {
+      "scope": "Synthetic examples with explicit assistant label review against response-needed/current-completeness semantics. Not human accuracy certification; never production routing.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "9de7370c902eded7ed0c69d0c739fd69bf1f9409cfd1147904f62c5c847ac021"
+      },
+      "latencyMs": {
+        "median": 1.1563000152818859,
+        "p95": 1.8481999868527055,
+        "max": 2.44309997651726
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 43,
+          "falseEarly": 14,
+          "missedReadyRequests": 7
+        },
+        {
+          "threshold": 0.7,
+          "selected": 32,
+          "falseEarly": 9,
+          "missedReadyRequests": 13
+        },
+        {
+          "threshold": 0.8,
+          "selected": 27,
+          "falseEarly": 6,
+          "missedReadyRequests": 15
+        },
+        {
+          "threshold": 0.9,
+          "selected": 16,
+          "falseEarly": 4,
+          "missedReadyRequests": 24
+        },
+        {
+          "threshold": 0.95,
+          "selected": 11,
+          "falseEarly": 2,
+          "missedReadyRequests": 27
+        }
+      ]
+    },
+    "promoted": false
+  },
+  "contextFix": "Exclude this acoustic floor's own answer draft, retain previous answers even after a current answer completes, and retain other-speaker corrections on the current floor. Full Luna code context is preserved.",
+  "checks": {
+    "rustPassed": 114,
+    "rustIgnored": 14,
+    "utf8OversizeWorkerContractPassed": true
+  },
+  "runtimeProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "classifierEnabledInRelease": false,
+  "goalAchieved": false
+}

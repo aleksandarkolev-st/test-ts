@@ -32,8 +32,11 @@ if(seedWave){
   assert.equal((await readFile(seedWave.replace(/\.wav$/i,'.txt'),'utf8')).trim(),seedQuestion,'Saved waveform question must match the replay seed');
 }
 const budget=interviewBudget(process.env),rounds=budget.rounds;
+const model=process.env.COPILOT_NATIVE_ANSWER_MODEL||process.env.COPILOT_INTERVIEW_MODEL||'gpt-6.1-sol';
+const examinerModel=process.env.COPILOT_INTERVIEW_EXAMINER_MODEL||model;
+const examinerEffort=process.env.COPILOT_INTERVIEW_EXAMINER_EFFORT||'low';
 const effort=process.env.COPILOT_NATIVE_ANSWER_EFFORT||'low';
-assert(['low','medium','high'].includes(effort),'Choose a supported Luna candidate reasoning effort');
+assert(['low','medium','high'].includes(effort),'Choose a supported candidate reasoning effort');
 const recordedDir=process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR):null;
 const replayRounds=Number(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS??rounds);
 assert(Number.isInteger(replayRounds)&&replayRounds>0&&replayRounds<=rounds,'Replay prefix must be within the requested round count');
@@ -69,7 +72,7 @@ const examiner=path.join(root,'src-tauri/target/debug/examples/adaptive-intervie
 await mkdir(output,{recursive:true});await mkdir(appDir,{recursive:true});await mkdir(dataDir,{recursive:true});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let app,vite,connection,invoke,started=false,appError='';
-const result={status:'in_progress',model:'gpt-6-luna',effort,tier:'fast',scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
+const result={status:'in_progress',model,effort,tier:'fast',examinerModel,examinerEffort,scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
 result.interviewPlan={runId:randomUUID(),brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||null,requestedDurationMs:budget.durationMs,questionDelivery:realAudio?'synthetic spoken audio':'text'};
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
 result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
@@ -183,7 +186,7 @@ try {
     const request=path.join(output,'scenario-request.json');
     await writeFile(request,JSON.stringify({runId:result.interviewPlan.runId,brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||'CUDA and GPU systems: vague unexpected behavior, followed by increasingly difficult quantitative reasoning, concurrency, memory ordering and exact code. Require clarification and revise hypotheses as new evidence arrives.'},null,2));
     result.scenarioGenerationAttempts=[];
-    await gradeWithRetry(()=>runChild(examiner,['--generate-scenario',request],{...process.env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'}),
+    await gradeWithRetry(()=>runChild(examiner,['--generate-scenario',request],{...process.env,COPILOT_INTERVIEW_EXAMINER_MODEL:examinerModel,COPILOT_INTERVIEW_EXAMINER_EFFORT:examinerEffort}),
       {attempts:reviewAttempts,onAttempt:async attempt=>{result.scenarioGenerationAttempts.push(attempt);await persist();}});
     const generated=JSON.parse(await readFile(request.replace(/\.json$/,'.scenario.json'),'utf8'));
     scenario={...generated.scenario,name:'generated'};seedQuestion=scenario.seed;
@@ -216,12 +219,13 @@ try {
     await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event:'copilot:transcript',target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>window.nativeInterviewEvents.push({name:'transcript',payload:e.payload}))});
   });
   const boot=await invoke('bootstrap');assert(boot.debug);assert(!boot.snapshot.active);assert(boot.selected?.planEnabled,'Signed-in Codex account required');
-  const models=await invoke('list_models');assert(models.some(m=>m.slug==='gpt-6-luna'));
+  const models=await invoke('list_models');assert(models.some(m=>m.slug===model),'Requested candidate model unavailable in signed-in catalog');
+  assert(models.some(m=>m.slug===examinerModel),'Requested examiner model unavailable in signed-in catalog');
   const requestedOutput=process.env.COPILOT_NATIVE_OUTPUT;
   const outputDevice=requestedOutput?boot.devices.find(d=>d.source==='remote'&&d.name.toLowerCase().includes(requestedOutput.toLowerCase())):boot.devices.find(d=>d.source==='remote'&&d.id===boot.settings.output)||boot.devices.find(d=>d.source==='remote'&&d.default)||boot.devices.find(d=>d.source==='remote');
   assert(outputDevice,'Requested native interview playback output must be available');
   result.outputDevice=outputDevice.name;
-  const settings={...boot.settings,answerBackend:'codex',model:'gpt-6-luna',reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
+  const settings={...boot.settings,answerBackend:'codex',model,reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
   if(requestedChunk!==null)settings.speechChunkMs=requestedChunk;
   result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',agedFinalWait:process.env.COPILOT_AGE_FINAL_WAIT==='1',settledUpdate:process.env.COPILOT_SETTLED_UPDATE==='1',completedDraftReplacement:process.env.COPILOT_REPLACE_COMPLETED_DRAFT==='1',remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
@@ -309,7 +313,7 @@ try {
     if(skipReview){row.reviewSkipped=true;row.review=null;}
     else {
       row.examinerAttempts=[];
-      await gradeWithRetry(()=>runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'}),
+      await gradeWithRetry(()=>runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:examinerModel,COPILOT_INTERVIEW_EXAMINER_EFFORT:examinerEffort}),
         {attempts:reviewAttempts,onAttempt:async attempt=>{row.examinerAttempts.push(attempt);await persist();}});
       const judged=JSON.parse(await readFile(request.replace(/\.json$/,'.review.json'),'utf8'));row.review=judged.review;
     }

@@ -16,10 +16,10 @@ const cases=requested?suite.cases.filter(c=>requested.includes(c.name)):suite.ca
 if(requested)assert.equal(cases.length,requested.length,'Every requested case must exist');
 const rounds=Number(process.env.COPILOT_INTERVIEW_ROUNDS||suite.roundsPerScenario);
 assert(Number.isInteger(rounds)&&rounds>=1&&rounds<=100);
-const model=process.env.COPILOT_INTERVIEW_MODEL||'gpt-6-luna';
+const model=process.env.COPILOT_INTERVIEW_MODEL||'gpt-6.1-sol';
 const effort=process.env.COPILOT_INTERVIEW_EFFORT||'low';
-const examinerModel=process.env.COPILOT_INTERVIEW_EXAMINER_MODEL||'gpt-6-luna';
-const examinerEffort=process.env.COPILOT_INTERVIEW_EXAMINER_EFFORT||'high';
+const examinerModel=process.env.COPILOT_INTERVIEW_EXAMINER_MODEL||'gpt-6.1-sol';
+const examinerEffort=process.env.COPILOT_INTERVIEW_EXAMINER_EFFORT||'low';
 const output=path.resolve(process.env.COPILOT_INTERVIEW_OUTPUT||`artifacts/adaptive-interview/${new Date().toISOString().replace(/[:.]/g,'-')}`);
 await mkdir(output,{recursive:true});
 const binary=path.resolve(process.env.COPILOT_INTERVIEW_BINARY||'src-tauri/target/debug/examples/adaptive-interview.exe');

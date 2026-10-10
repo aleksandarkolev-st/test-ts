@@ -69,10 +69,10 @@ async fn run(codex:&Arc<Codex>,root:&std::path::Path)->Result<(),String> {
     };
     let scenario:Value=serde_json::from_str(&scenario).map_err(|e|e.to_string())?;
     let scenario_name=scenario["name"].as_str().filter(|s|!s.is_empty()&&s.chars().all(|c|c.is_ascii_alphanumeric()||c=='-')).ok_or("Scenario needs a simple name")?;
-    let model=std::env::var("COPILOT_INTERVIEW_MODEL").unwrap_or("gpt-6-luna".into());
+    let model=std::env::var("COPILOT_INTERVIEW_MODEL").unwrap_or("gpt-6.1-sol".into());
     let effort=std::env::var("COPILOT_INTERVIEW_EFFORT").unwrap_or("low".into());
-    let examiner_model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6-luna".into());
-    let examiner_effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("high".into());
+    let examiner_model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6.1-sol".into());
+    let examiner_effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("low".into());
     let rounds=std::env::var("COPILOT_INTERVIEW_ROUNDS").ok().and_then(|s|s.parse::<usize>().ok()).unwrap_or(12);
     let instructions=prompts::answer_instructions(prompts::ANSWER);
     let examiner=examiner_instructions(scenario["rubric"].as_str().unwrap_or("Assess technical correctness and increasingly deep reasoning."));
@@ -181,8 +181,8 @@ fn examiner_schema()->Value {
 async fn generate_scenario(codex:&Arc<Codex>,path:&std::path::Path)->Result<(),String> {
     let request:Value=serde_json::from_slice(&std::fs::read(path).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
     let brief=request["brief"].as_str().filter(|s|!s.trim().is_empty()).ok_or("Scenario generation needs an interview brief")?;
-    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6-luna".into());
-    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("high".into());
+    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6.1-sol".into());
+    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("low".into());
     let instructions="Create a fresh, very hard technical interview scenario from the supplied brief. Return JSON with seed (one concise public opening question), examinerOnly (private hypothetical evidence to reveal incrementally), and rubric (areas for increasingly deep probes). Begin with an underspecified symptom that requires clarification. Prepare a technically consistent hypothetical case with quantitative evidence and exact code challenges for subsequent probes. Do not give the public question an answer or a diagnosis. Avoid assuming unknown device facts. Future questions will be generated from the candidate's actual answers; do not script a fixed sequence. Never use tools.";
     let schema=json!({"type":"object","properties":{"seed":{"type":"string"},"examinerOnly":{"type":"string"},"rubric":{"type":"string"}},"required":["seed","examinerOnly","rubric"],"additionalProperties":false});
     let input=format!("RUN VARIATION IDENTIFIER\n{}\n\nINTERVIEW BRIEF\n{brief}\n\nCreate fresh facts, constraints and challenges for this run. For a broad brief, prepare multiple unrelated problem families across its requested areas, not only one opening case. They are private evidence for adaptive selection, never a fixed question sequence.",request["runId"].as_str().unwrap_or("unspecified"));
@@ -201,8 +201,8 @@ async fn grade_request(codex:&Arc<Codex>,path:&std::path::Path)->Result<(),Strin
     let scenario=&request["scenario"];
     let history=request["history"].as_str().ok_or("Native grade request needs actual interview history")?;
     let round=request["round"].as_u64().ok_or("Native grade request needs its round")?;
-    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6-luna".into());
-    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("high".into());
+    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6.1-sol".into());
+    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("low".into());
     let instructions=format!("{} Include currentTopic and nextTopic as concise descriptive strings for the actual current and next questions, not the entire rubric. Derive these freely from the questions; no fixed topic labels. The current topic is not evidence that other topics in the brief were covered.",examiner_instructions(scenario["rubric"].as_str().ok_or("Native grade request needs a rubric")?));
     let schema=examiner_schema();
     let input=format!("EXAMINER-ONLY EVIDENCE (never shown directly to candidate)\n{}\n\n{}\nRound {round}.\n{history}",scenario["examinerOnly"].as_str().ok_or("Native grade request needs private evidence")?,interview_plan_context(&request));
@@ -219,8 +219,8 @@ fn interview_plan_context(request:&Value)->String {
 }
 
 async fn check_examiner(codex:&Arc<Codex>,root:&std::path::Path)->Result<(),String> {
-    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6-luna".into());
-    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("high".into());
+    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6.1-sol".into());
+    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("low".into());
     let instructions=format!("{} In this transport control, include the literal characters \\( and \\) around an expression in your next question, with valid JSON escaping.",examiner_instructions("Probe progressively deeper into asynchronous execution, multiple streams, durable checkpoint ordering, external effects and device portability. These are future probes, not unstated requirements of a current answer."));
     let schema=examiner_schema();
     let mut rows=Vec::new();

@@ -6,6 +6,8 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import readline from 'node:readline';
 
+const model=process.env.COPILOT_INTENT_LABEL_MODEL||process.env.COPILOT_INTERVIEW_MODEL||'gpt-6.1-sol';
+const effort=process.env.COPILOT_INTENT_LABEL_EFFORT||'low';
 const root=process.cwd();
 const inside=file=>{const resolved=path.resolve(file);assert(resolved.toLowerCase().startsWith(root.toLowerCase()+path.sep));return resolved;};
 assert(process.argv[2]&&process.argv[3],'Usage: node scripts/label-intent-prefixes.mjs INPUT OUTPUT');
@@ -27,16 +29,16 @@ const instructions='Classify whether the current speaker expects a reply now, us
 const batches=[];
 for(const row of data.cases){let batch=batches.find(items=>items.length<20&&!items.some(item=>item.sourceGroup===row.sourceGroup));if(!batch){batch=[];batches.push(batch);}batch.push(row);}
 const labels=[],attempts=[];
-const persist=()=>writeFile(destination,JSON.stringify({status:labels.length===data.cases.length?'complete':'in_progress',scope:'Offline signed-in Luna Fast/low annotations, using current prefix and prior context only. Synthetic model labels require independent review; not human ground truth. Ambiguous cases are excluded from supervised training. No runtime rules or answers.',source:process.argv[2],sourceSha256:createHash('sha256').update(raw).digest('hex'),instructions,model:'gpt-6-luna',tier:'fast',effort:'low',attempts,originalCases:data.originalCases,cases:data.cases.map(row=>({...row,...labels.find(label=>label.id===row.id)}))},null,2));
+const persist=()=>writeFile(destination,JSON.stringify({status:labels.length===data.cases.length?'complete':'in_progress',scope:`Offline signed-in ${model} Fast/${effort} annotations, using current prefix and prior context only. Synthetic model labels require independent review; not human ground truth. Ambiguous cases are excluded from supervised training. No runtime rules or answers.`,source:process.argv[2],sourceSha256:createHash('sha256').update(raw).digest('hex'),instructions,model,tier:'fast',effort,attempts,originalCases:data.originalCases,cases:data.cases.map(row=>({...row,...labels.find(label=>label.id===row.id)}))},null,2));
 await mkdir(path.dirname(destination),{recursive:true});
 try{
  await rpc('initialize',{clientInfo:{name:'intent_prefix_labeler',version:'0.2.2'},capabilities:{experimentalApi:true}});send({method:'initialized',params:{}});
  for(const [index,batch] of batches.entries()){
-  const thread=await rpc('thread/start',{model:'gpt-6-luna',modelProvider:'openai',serviceTier:'fast',ephemeral:true,cwd,approvalPolicy:'never',sandbox:'read-only',baseInstructions:instructions,developerInstructions:'Use no files, commands, network, or tools. Return only the requested JSON.',config:{mcp_servers:{},'features.shell_tool':false,'features.apps':false,'features.multi_agent':false,'project_doc_max_bytes':0}});
+  const thread=await rpc('thread/start',{model,modelProvider:'openai',serviceTier:'fast',ephemeral:true,cwd,approvalPolicy:'never',sandbox:'read-only',baseInstructions:instructions,developerInstructions:'Use no files, commands, network, or tools. Return only the requested JSON.',config:{mcp_servers:{},'features.shell_tool':false,'features.apps':false,'features.multi_agent':false,'project_doc_max_bytes':0}});
   const threadId=thread.thread.id;let output='';const started=Date.now();
   const schema={type:'object',additionalProperties:false,properties:{labels:{type:'array',minItems:batch.length,maxItems:batch.length,items:{type:'object',additionalProperties:false,properties:{id:{type:'integer',enum:batch.map(row=>row.id)},label:{type:'string',enum:['background','unfinished_request','ready_request','ambiguous']},reason:{type:'string'}},required:['id','label','reason']}}},required:['labels']};
   const completed=new Promise((resolve,reject)=>{turnTimer=setTimeout(()=>reject(Error('Labeling timed out')),120000);onEvent=message=>{if(message.params?.threadId!==threadId)return;if(message.method==='item/agentMessage/delta')output+=message.params.delta;if(message.method==='turn/completed'){clearTimeout(turnTimer);message.params.turn.status==='completed'?resolve():reject(Error(JSON.stringify(message.params.turn.error)));}};});
-  await rpc('turn/start',{threadId,model:'gpt-6-luna',serviceTier:'fast',effort:'low',input:[{type:'text',text:JSON.stringify(batch.map(({id,text,context})=>({id,currentWords:text,previousContext:context})))}],outputSchema:schema});await completed;
+  await rpc('turn/start',{threadId,model,serviceTier:'fast',effort,input:[{type:'text',text:JSON.stringify(batch.map(({id,text,context})=>({id,currentWords:text,previousContext:context})))}],outputSchema:schema});await completed;
   const judged=JSON.parse(output).labels;assert.deepEqual(judged.map(row=>row.id).sort((a,b)=>a-b),batch.map(row=>row.id).sort((a,b)=>a-b));
   labels.push(...judged);attempts.push({batch:index+1,ids:batch.map(row=>row.id),elapsedMs:Date.now()-started});await persist();
   console.log(JSON.stringify(attempts.at(-1)));await rpc('thread/unsubscribe',{threadId});

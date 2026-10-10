@@ -218,3 +218,103 @@ test genuine pause/condition
 and microphone interruption cases, and verify useful phrases and code through
 fresh adaptive deep interviews. Current evidence does not meet 200–400 ms or
 p95 below 800 ms.
+
+## Encoder fine-tuning and coalesced updates
+
+`train-intent-encoder.py` now fine-tunes the six-layer encoder with a three-class
+head, using pinned safetensors assets and no downloaded executable model code.
+Training and inference share `intent_tokens.py`. Current utterance tokens,
+including code operators and identifiers, take priority over history; inputs
+above 254 current tokens abstain instead of silently losing a condition. History
+uses the remaining sequence budget. The worker verifies graph and tokenizer
+identities and uses two CPU inference threads.
+
+The trainer samples one ASR variant per source case per epoch, selects an epoch
+and temperature on validation data, and exports FP32 and INT8 profiles. FP32
+export must match native logits within 0.001 with no changed validation labels.
+For the paired-data model, the observed maximum FP32 difference was 0.00000525.
+INT8 changed three validation decisions, reducing accuracy from 86.7% to 83.3%.
+FP32 validation inference had a 1.93 ms median and 3.54 ms sample p95, compared
+with 1.04 ms and 1.76 ms for INT8. These CPU measurements are not end-to-end
+speech or answer latency.
+
+The added training data contain 90 correlated variants from 30 matched episodes.
+Review corrected two complete requests incorrectly labeled unfinished and removed
+context from all variants after finding that context presence nearly determined
+the generated class. Original contexts remain in audit metadata. This is offline
+data review, not live text normalization or semantic routing. Neither these labels
+nor validation accuracy constitute human certification. A fresh 30-case long set
+was reviewed before testing the initial fine-tuned model; it became a reused
+diagnostic for subsequent models. Long-form generation now checks actual word
+counts, and augmentation rejects contradictory labels for identical transformed
+text and context.
+
+Lower validation loss did not make background suppression safe: a complete
+imperative was still assigned background probability above 0.95. Consequently,
+background suppression is disabled by default, even in learned experiments.
+`COPILOT_INTENT_BACKGROUND_IGNORE=1` separately enables that unpromoted debug
+experiment. Finalized inference never waits for the CPU classifier.
+
+The scheduler can now deliver an exact updated request to an existing speculative
+job without allocating another job or foreground slot. The gate continues
+classifying changed input every 250 ms after the first speculative send, but only
+a current, high-confidence readiness prediction authorizes a speculative update.
+There is still at most one initial speculative send per acoustic floor. A changed
+request clears stale answer text and timing; wrong-floor and already-confirmed
+requests cannot be rewritten this way. Final confirmation remains authoritative.
+
+Forwarding every partial unconditionally was rejected. Its four replay turns
+produced first words at 1442, 1381, 2515 and 3010 ms after speech end; longer
+questions caused many updates and multiple model follow-ups. Readiness-gated
+updates reduced that churn but did not demonstrate the target: the corresponding
+four-turn run measured 2706, 1878, 1755 and 2050 ms. These runs used different
+native builds and are diagnostic experiments, not a controlled causal comparison.
+The unconditional trial's top-level acoustic refinement flag reflected runtime;
+its nested speech configuration incorrectly recorded the flag as false. The
+harness now records the automatic learned-mode policy consistently; the original
+artifact is preserved.
+
+For offline fine-tuning, download assets using `setup-intent-classifier.py
+--training`, install the separate pinned `intent-training-requirements.txt`
+dependencies (CPU Torch index is listed there), and run:
+
+```text
+python scripts/train-intent-encoder.py --train TRAIN.json --validation VALIDATION.json --output .local/intent-encoder/EXPERIMENT
+```
+
+Evaluate either generated profile with `evaluate-intent-classifier.py --profile`.
+No profile is automatically installed as the runtime profile. All 116 active
+Rust library tests and the three shared-token boundary tests pass; the FP32 worker
+also passes the UTF-8, oversized-input abstention, and continued-worker contract.
+The classifier remains disabled in release builds. No canned responses, semantic
+keyword rules, CUDA-specific routing, or interview answers were added to inference.
+
+The [fine-tuning and native evidence](evidence/intent-gate-v44.json) also records
+a fresh six-turn adaptive interview, followed by a final-only replay of its exact
+public questions and saved waveforms. Both use the same native binary, sources,
+T24E390 monitor output, and 160 ms Nemotron chunks. The early run additionally
+enables acoustic refinement; the final-only replay's questions cannot adapt to
+its different answers.
+
+| Mode | First word after speech end, ms | Mean, ms |
+| --- | --- | --- |
+| Learned FP32 gate, fresh adaptive | 2106, 2592, 1341, 2074, 2843, 2789 | 2291 |
+| Final-only, same public audio replay | 2420, 1649, 1917, 2148, 1812, 1715 | 1944 |
+
+This small comparison demonstrates no latency advantage and no population p95.
+Early-run ASR finalization took 570–823 ms. All recognized clauses were retained,
+but recognition did not preserve every intended numerical fact: a completion
+ratio became an ambiguous string of numbers, and Luna repeated it as a large
+count. This is an accuracy failure, not a successful exact-context proof.
+
+The final early-run answer also left the exact payload-visibility question
+unsettled. A producer fence orders that thread's accesses; the documented legacy
+atomics use relaxed ordering. The answer needs a valid consumer synchronization
+argument, separately from liveness. See NVIDIA's [memory fence documentation](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#memory-fence-functions)
+and [atomic ordering documentation](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#atomic-functions).
+The model examiner marked that answer incomplete. This experiment excludes
+microphone interruptions, physical CUDA execution, and human certification.
+
+The original profile was restored after the early run. Reproduce the summarized
+evidence from the preserved local artifacts with
+`node scripts/summarize-intent-finetuning.mjs`. The goal remains unmet.

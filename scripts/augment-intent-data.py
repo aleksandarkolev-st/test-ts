@@ -23,15 +23,18 @@ def main():
     excluded=set()
     if args.validation:
         excluded={key(r['text']) for r in json.loads(Path(args.validation).read_text(encoding='utf-8'))['cases']}
-    rows=[];seen=set();overlap=0
+    rows=[];seen={};overlap=0
     for index,row in enumerate(data['cases']):
         texts=[without_terminal_punctuation(row['text'])] if args.asr_only else [row['text'],without_terminal_punctuation(row['text'])]
         for text in texts:
             if not text.strip():continue
             if key(text) in excluded:overlap+=1;continue
             identity=(text,row.get('context',''))
-            if identity in seen:continue
-            seen.add(identity)
+            labels=(row['request'],row['ready'])
+            if identity in seen:
+                if seen[identity]!=labels:raise ValueError(f'Augmentation creates conflicting labels at source case {index}')
+                continue
+            seen[identity]=labels
             rows.append({**row,'text':text,'sourceCase':index})
     result={'scope':'Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.',
         'source':str(source),'sourceSha256':hashlib.sha256(raw).hexdigest(),'sourceScope':data['scope'],

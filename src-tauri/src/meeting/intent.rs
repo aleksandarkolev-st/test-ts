@@ -42,6 +42,11 @@ pub fn ready_threshold() -> Option<f64> {
         _=>None,
     }
 }
+/// Suppression requires separate precision evidence. Readiness improvements
+/// alone must not silently discard finalized requests.
+pub fn background_enabled()->bool {
+    cfg!(debug_assertions)&&std::env::var("COPILOT_INTENT_BACKGROUND_IGNORE").as_deref()==Ok("1")
+}
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Input {
     pub id: u64,
@@ -103,8 +108,7 @@ impl Gate {
     }
     pub fn request(&mut self, now: u64) -> Option<Input> {
         let input = self.latest.as_ref()?;
-        if self.spent_floor == Some(input.floor)
-            || self.sent_id == Some(input.id)
+        if self.sent_id == Some(input.id)
             || self.sent_at.is_some_and(|at| now.saturating_sub(at) < 250)
         {
             return None;
@@ -161,11 +165,18 @@ impl Gate {
         self_speaking: bool,
         threshold: f64,
     ) -> Option<Input> {
+        let input=self.ready_input(now,quiet,self_speaking,threshold)?;
+        if self.spent_floor==Some(input.floor){return None;}
+        self.spent_floor=Some(input.floor);
+        Some(input)
+    }
+    /// An exact available prediction may also authorize a coalesced update to
+    /// existing work. It never authorizes another speculative job on this floor.
+    pub fn ready_input(&self,now:u64,quiet:bool,self_speaking:bool,threshold:f64)->Option<Input> {
         let input = self.latest.as_ref()?;
         if !quiet
             || self_speaking
             || now.saturating_sub(self.changed_at) < 100
-            || self.spent_floor == Some(input.floor)
         {
             return None;
         }
@@ -184,7 +195,6 @@ impl Gate {
         {
             return None;
         }
-        self.spent_floor = Some(input.floor);
         Some(input.clone())
     }
 }
@@ -425,7 +435,11 @@ mod tests {
             "corrected reference".into(),
             300,
         );
-        assert!(gate.request(600).is_none());
+        let next=gate.request(600).unwrap();
+        assert!(gate.ready_input(600,true,false,0.9).is_none());
+        gate.accept(prediction(next.id));
+        assert_eq!(gate.ready_input(600,true,false,0.9).unwrap().text,"Explain that more");
+        assert!(gate.early(600,true,false,0.9).is_none());
     }
     #[test]
     fn only_an_exact_existing_background_prediction_can_skip_final_inference() {

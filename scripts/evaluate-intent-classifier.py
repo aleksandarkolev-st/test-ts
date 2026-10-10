@@ -11,21 +11,32 @@ def main():
     parser.add_argument("--cases", default="tests/fixtures/intent-gate-cases.json")
     parser.add_argument("--output", default="artifacts/intent-classifier/nli-probe.json")
     parser.add_argument("--profile")
+    parser.add_argument('--rescore',help='Recompute policy metrics from saved predictions without model inference')
     args = parser.parse_args()
-    script = "intent-encoder-worker.py" if args.profile else "intent-classifier-worker.py"
-    spec = importlib.util.spec_from_file_location("intent_worker", Path(__file__).with_name(script))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    model = module.Classifier(args.models, args.profile) if args.profile else module.Classifier(args.models)
-    model.classify("Warm up the local classifier.")
-    suite = json.loads(Path(args.cases).read_text(encoding="utf-8"))
-    rows = [{**case, **model.classify(case["text"], case.get("context", ""))} for case in suite["cases"]]
+    if args.rescore:
+        saved=json.loads(Path(args.rescore).read_text(encoding='utf-8'))
+        suite={'scope':saved['scope']};rows=saved['rows'];identity=saved['identity']
+    else:
+        script = "intent-encoder-worker.py" if args.profile else "intent-classifier-worker.py"
+        spec = importlib.util.spec_from_file_location("intent_worker", Path(__file__).with_name(script))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        model = module.Classifier(args.models, args.profile) if args.profile else module.Classifier(args.models)
+        model.classify("Warm up the local classifier.")
+        suite = json.loads(Path(args.cases).read_text(encoding="utf-8"))
+        rows = [{**case, **model.classify(case["text"], case.get("context", ""))} for case in suite["cases"]]
+        identity=model.identity
     durations = sorted(row["elapsedMs"] for row in rows)
     thresholds = []
     for threshold in [0.5, 0.7, 0.8, 0.9, 0.95]:
         selected = [row for row in rows if not row["abstained"] and row["scores"]["request"] >= threshold and row["scores"]["ready"] >= threshold]
-        thresholds.append({"threshold": threshold, "selected": len(selected), "falseEarly": sum(not row["request"] or not row["ready"] for row in selected), "missedReadyRequests": sum(row["request"] and row["ready"] and row not in selected for row in rows)})
-    report = {"scope": suite["scope"], "identity": model.identity, "rows": rows, "thresholds": thresholds, "latencyMs": {"median": statistics.median(durations), "p95": durations[int((len(durations)-1)*.95)], "max": max(durations)}}
+        background=[row for row in rows if not row['abstained'] and row['scores'].get('background',0)>=threshold
+            and row['scores']['request']<=1-threshold+1e-6 and row['scores']['ready']<=1-threshold+1e-6]
+        thresholds.append({"threshold": threshold, "selected": len(selected), "falseEarly": sum(not row["request"] or not row["ready"] for row in selected), "missedReadyRequests": sum(row["request"] and row["ready"] and row not in selected for row in rows),
+            'ignoredBackground':len(background),'falseBackgroundIgnore':sum(row['request'] for row in background),
+            'missedBackground':sum(not row['request'] and row not in background for row in rows)})
+    report = {"scope": suite["scope"], "identity": identity, "rows": rows, "thresholds": thresholds, "latencyMs": {"median": statistics.median(durations), "p95": durations[int((len(durations)-1)*.95)], "max": max(durations)}}
+    if args.rescore:report['rescoredFrom']=args.rescore
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")

@@ -317,7 +317,8 @@ async fn actor(
                         if segment.source==SpeakerSource::Remote && !segment.final_ {speech_metrics.first_remote_partial_at.get_or_insert(now);speech_metrics.remote_partial_updates+=1;}
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
-                        if engine.detector.transcript(&segment) && intent_mode==meeting::intent::Mode::Existing {
+                        let candidate_changed=engine.detector.transcript(&segment);
+                        if candidate_changed && intent_mode==meeting::intent::Mode::Existing {
                             if answers.candidate.is_none() && engine.detector.continued {
                                 if let Some(id)=resume_answer_question(&mut answers,&mut engine.context,&engine.detector.last_question,engine.detector.remote_turn_started_at){if let Some(trace)=timings.lock().unwrap().get(&id){trace.reset_answer();}}
                             }
@@ -395,6 +396,14 @@ async fn actor(
                                 let payload=serde_json::json!({"id":prediction.id,"abstained":prediction.abstained,"scores":prediction.scores.as_ref().map(|scores|serde_json::json!({"request":scores.request,"ready":scores.ready})),"elapsedMs":prediction.elapsed_ms,"observedAt":now});
                                 let accepted=intent_gate.accept(prediction);emit(&app,"intent.predicted",serde_json::json!({"accepted":accepted,"prediction":payload}));
                             }
+                            if let Some(input)=intent_threshold.and_then(|threshold|intent_gate.ready_input(now,engine.detector.remote_quiet,engine.detector.self_speaking,threshold)) {
+                                if let Some(id)=answers.update_speculative_question(input.floor,input.text) {
+                                    if let Some(job)=answers.find_mut(&id){refresh_question_context(job,&engine.context);}
+                                    if let Some(trace)=timings.lock().unwrap().get(&id){trace.reset_answer();}
+                                    update_acoustic_quiet(&mut answers,&engine.detector);
+                                    emit(&app,"intent.early_updated",serde_json::json!({"id":id,"timestamp":now,"floor":input.floor}));
+                                }
+                            }
                             if let Some(input)=intent_threshold.and_then(|threshold|intent_gate.early(now,engine.detector.remote_quiet,engine.detector.self_speaking,threshold)) {
                                 #[cfg(all(feature="acceptance",debug_assertions))]
                                 let early_text=input.text.clone();
@@ -409,7 +418,7 @@ async fn actor(
                         } else {intent_gate.invalidate();}
                     }
                     if let Some((question,stopped))=engine.detector.confirm(now) {
-                        let background=intent_mode==meeting::intent::Mode::Learned&&engine.detector.remote_turn_started_at.is_some_and(|floor|intent_gate.background(floor,&question,&engine.context.classifier_context(floor),0.95));
+                        let background=intent_mode==meeting::intent::Mode::Learned&&meeting::intent::background_enabled()&&engine.detector.remote_turn_started_at.is_some_and(|floor|intent_gate.background(floor,&question,&engine.context.classifier_context(floor),0.95));
                         if background {
                             answers.resumed();emit(&app,"intent.background_ignored",serde_json::json!({"timestamp":now,"floor":engine.detector.remote_turn_started_at}));
                             sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
@@ -767,8 +776,9 @@ fn resume_answer_question(answers:&mut meeting::scheduler::Scheduler,context:&mu
 }
 fn update_acoustic_quiet(answers:&mut meeting::scheduler::Scheduler,detector:&meeting::questions::QuestionDetector) {
     // Evaluate on the isolated acceptance app before changing the release policy.
-    let enabled=cfg!(all(feature="acceptance",debug_assertions))
-        &&std::env::var("COPILOT_ACOUSTIC_REFINE").as_deref()==Ok("1");
+    let enabled=meeting::intent::Mode::configured()==meeting::intent::Mode::Learned
+        || (cfg!(all(feature="acceptance",debug_assertions))
+        &&std::env::var("COPILOT_ACOUSTIC_REFINE").as_deref()==Ok("1"));
     if let Some(id)=answers.candidate.clone(){if let Some(job)=answers.find_mut(&id){
         if job.latency.remote_speech_started_at==detector.remote_turn_started_at {
             job.set_acoustic_quiet(enabled&&detector.remote_quiet);

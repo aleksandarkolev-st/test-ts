@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import onnxruntime as ort
 from tokenizers import Tokenizer
+from intent_tokens import joint_inputs
 
 class Encoder:
     def __init__(self, models, threads=2):
@@ -98,11 +99,60 @@ class Encoder:
             feature = np.concatenate([feature, hashed])
         return feature, sum(encoded[0].attention_mask)
 
+class FineTunedClassifier:
+    def __init__(self,models,head,digest,threads):
+        root=Path(models).resolve()
+        manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
+        if head['encoder']!=manifest['revision']:
+            raise ValueError('Fine-tuned model does not match tokenizer revision')
+        records=[next(asset for asset in manifest['assets'] if asset['file']=='tokenizer.json'),head['trainedModel']]
+        for asset in records:
+            path=(root/asset['file']).resolve()
+            if root not in path.parents:
+                raise ValueError('Invalid fine-tuned asset path')
+            raw=path.read_bytes()
+            if len(raw)!=asset['bytes'] or hashlib.sha256(raw).hexdigest()!=asset['sha256']:
+                raise ValueError('Fine-tuned asset verification failed')
+        self.temperature=float(head['temperature'])
+        if not np.isfinite(self.temperature) or not 0.01<=self.temperature<=100:
+            raise ValueError('Invalid classifier temperature')
+        self.tokenizer=Tokenizer.from_file(str(root/'tokenizer.json'))
+        self.tokenizer.no_truncation();self.tokenizer.no_padding()
+        options=ort.SessionOptions();options.intra_op_num_threads=threads;options.inter_op_num_threads=1
+        options.execution_mode=ort.ExecutionMode.ORT_SEQUENTIAL
+        self.session=ort.InferenceSession(str(root/head['trainedModel']['file']),options,providers=['CPUExecutionProvider'])
+        if {item.name for item in self.session.get_inputs()}!={'input_ids','attention_mask','token_type_ids','current_mask'}:
+            raise ValueError('Invalid fine-tuned input contract')
+        self.identity={'model':manifest['model'],'revision':manifest['revision'],'provider':'CPUExecutionProvider',
+            'threads':threads,'profileSha256':digest,'trainedModelSha256':head['trainedModel']['sha256']}
+
+    def classify(self,text,context=''):
+        started=time.perf_counter()
+        try:
+            inputs=joint_inputs(self.tokenizer,text,context)
+            logits=self.session.run(None,inputs)[0]
+            if logits.shape!=(1,3) or not np.isfinite(logits).all():
+                raise ValueError('Invalid classifier logits')
+            logits=logits[0]/self.temperature
+            exp=np.exp(logits-logits.max());probability=exp/exp.sum()
+            return {'abstained':False,'scores':{'request':float(1-probability[0]),'background':float(probability[0]),
+                'ready':float(probability[2]),'unfinished':float(probability[1])},
+                'tokens':int(inputs['current_mask'].sum())+2,'elapsedMs':(time.perf_counter()-started)*1000}
+        except (ValueError,RuntimeError):
+            return {'abstained':True,'reason':'input_limit_or_failure','elapsedMs':(time.perf_counter()-started)*1000}
+
 class Classifier:
     def __init__(self, models, profile, threads=2):
-        self.encoder = Encoder(models, threads)
         data = Path(profile).read_bytes()
         head = json.loads(data)
+        if head['classes']!=['background','unfinished_request','ready_request']:
+            raise ValueError('Classifier profile class order is invalid')
+        self.tuned=None
+        if head['featureSchema']=='finetuned-joint-readiness-v1':
+            self.tuned=FineTunedClassifier(models,head,hashlib.sha256(data).hexdigest(),threads)
+            self.identity=self.tuned.identity
+            return
+        self.encoder = Encoder(models, threads)
         self.lexical = head["featureSchema"] == "mean-last-context-sequence-untruncated-v1"
         self.joint = head["featureSchema"] == "joint-current-last-context-untruncated-v1"
         if head["encoder"] != self.encoder.identity["revision"] or head["featureSchema"] not in ("mean-last-context-untruncated-v1", "mean-last-context-sequence-untruncated-v1", "joint-current-last-context-untruncated-v1"):
@@ -131,6 +181,8 @@ class Classifier:
             raise ValueError("Invalid classifier weights")
         self.identity = {**self.encoder.identity, "profileSha256": hashlib.sha256(data).hexdigest()}
     def classify(self, text, context=""):
+        if self.tuned is not None:
+            return self.tuned.classify(text,context)
         started = time.perf_counter()
         try:
             features, tokens = self.encoder.features(text, context, self.lexical, self.joint)

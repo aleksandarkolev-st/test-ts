@@ -1,0 +1,8 @@
+# Offline training only. Live inference keeps the existing CPU ONNX runtime.
+# Install torch from https://download.pytorch.org/whl/cpu separately.
+torch==2.6.0
+transformers==4.49.0
+onnx==1.17.0
+safetensors==0.5.3
+numpy==1.26.4
+ml_dtypes==0.5.3

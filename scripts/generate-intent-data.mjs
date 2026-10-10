@@ -19,10 +19,27 @@ const rpc=(method,params)=>new Promise((resolve,reject)=>{const id=++sequence,ti
 readline.createInterface({input:child.stdout}).on('line',line=>{let message;try{message=JSON.parse(line);}catch{return;}if(message.id!=null&&pending.has(message.id)){const item=pending.get(message.id);pending.delete(message.id);clearTimeout(item.timer);message.error?item.reject(Error(message.error.message)):item.resolve(message.result);}else if(message.id!=null&&message.method){send({id:message.id,error:{code:-32601,message:'Tools disabled'}});}else onEvent(message);});
 child.on('exit',()=>{for(const item of pending.values()){clearTimeout(item.timer);item.reject(Error('Generator exited'));}pending.clear();});
 const balanced=process.env.COPILOT_INTENT_BALANCED==='1'&&role!=='pause';
+const longForm=process.env.COPILOT_INTENT_LONG_FORM==='1'&&role!=='pause';
+const paired=process.env.COPILOT_INTENT_PAIRED==='1'&&role!=='pause';
+assert(!longForm||balanced,'Long-form label-specific length checks require balanced groups');
+assert(!paired||(balanced&&count%3===0),'Matched episodes require balanced groups and a count divisible by three');
 const classes=[['background',false,false],['unfinished',true,false],['ready',true,true]];
 const counts=classes.map((_,i)=>Math.floor(count/3)+(i<count%3?1:0));
 const sample={type:'object',additionalProperties:false,properties:{text:{type:'string'},context:{type:'string'}},required:['text','context']};
-const schema=balanced?{type:'object',additionalProperties:false,properties:Object.fromEntries(classes.map(([name],i)=>[name,{type:'array',minItems:counts[i],maxItems:counts[i],items:sample}])),required:classes.map(([name])=>name)}:{type:'object',additionalProperties:false,properties:{cases:{type:'array',minItems:count,maxItems:count,items:{type:'object',additionalProperties:false,properties:{text:{type:'string'},context:{type:'string'},request:{type:'boolean'},ready:{type:'boolean'}},required:['text','context','request','ready']}}},required:['cases']};
+const lengthRange=name=>name==='unfinished'?[20,70]:[50,110];
+const groupSample=name=>{
+ if(!longForm)return sample;
+ const [min,max]=lengthRange(name);
+ return {...sample,properties:{...sample.properties,text:{type:'string',pattern:`^(?:\\S+\\s+){${min-1},${max-1}}\\S+$`}}};
+};
+const episodeSample=name=>{
+ const definition=groupSample(name);
+ return {...definition,properties:{text:definition.properties.text},required:['text']};
+};
+const episode={type:'object',additionalProperties:false,
+ properties:{context:{type:'string'},...Object.fromEntries(classes.map(([name])=>[name,episodeSample(name)]))},
+ required:['context',...classes.map(([name])=>name)]};
+const schema=paired?{type:'object',additionalProperties:false,properties:{episodes:{type:'array',minItems:count/3,maxItems:count/3,items:episode}},required:['episodes']}:balanced?{type:'object',additionalProperties:false,properties:Object.fromEntries(classes.map(([name],i)=>[name,{type:'array',minItems:counts[i],maxItems:counts[i],items:groupSample(name)}])),required:classes.map(([name])=>name)}:{type:'object',additionalProperties:false,properties:{cases:{type:'array',minItems:count,maxItems:count,items:{type:'object',additionalProperties:false,properties:{text:{type:'string'},context:{type:'string'},request:{type:'boolean'},ready:{type:'boolean'}},required:['text','context','request','ready']}}},required:['cases']};
 try{
  await rpc('initialize',{clientInfo:{name:'intent_training',version:'0.2.2'},capabilities:{experimentalApi:true}});send({method:'initialized',params:{}});
  const thread=await rpc('thread/start',{model:'gpt-6-luna',modelProvider:'openai',serviceTier:'fast',ephemeral:true,cwd,approvalPolicy:'never',sandbox:'read-only',baseInstructions:'Generate labeled synthetic classification data. Use no tools. Return only the requested JSON.',developerInstructions:'Use no files, commands, network, or tools.',config:{mcp_servers:{},'features.shell_tool':false,'features.apps':false,'features.multi_agent':false,'project_doc_max_bytes':0}});
@@ -34,12 +51,13 @@ try{
  // keyword rules in the live classifier. Missing facts do not make a complete
  // request unfinished, and an operational wait differs from deferring a reply.
  const labelClarifications=role==='pause'?'':`\nResolve labels from conversational meaning, not individual words. A complete request with unspecified facts remains ready: the appropriate response may be a clarification. A complete answer to an active clarification may require the listener to continue solving the problem. Only a request to withhold the listener's reply while the speaker continues is background; an instruction to perform a task involving waiting, synchronization, or a delayed action can still require a response. Preserve this distinction in every schema group.`;
- const longForm=process.env.COPILOT_INTENT_LONG_FORM==='1'&&role!=='pause';
  const longInstructions=longForm?`\nUse longer natural speech, unlike isolated short commands. Ready and background texts should normally have 50–110 words; unfinished requests should have 20–70 words and end before an important clause is supplied. Include multi-clause setups followed by a complete request, self-corrections, multiple linked requests, exact constraints, and technically consistent hypothetical challenges. Use varied domains, not only technical interviews. Most text should be punctuation-free ASR style. Include short prior exchanges with speaker roles in context for at least half the examples, including earlier responses where needed to identify an implied request. Prior context is classification data, not a reference answer to the current question or a live canned reply. Do not reveal the current challenge's solution. Do not mark a complete request unfinished just because its answer needs missing facts. Preserve the difference between the speaker deferring a reply and a task containing an operational wait.`:'';
- const instructions=prompt+balancePrompt+labelClarifications+longInstructions;
+ const pairInstructions=paired?`\nReturn ${count/3} matched episodes instead of independent schema groups. Each episode has background, unfinished, and ready versions of the SAME underlying situation with closely matched topic, facts, notation and vocabulary. This prevents learning that a subject itself determines intent. Vary conversational purpose and completion while preserving the situation. For at least half the unfinished versions, include an initially COMPLETE request followed by a NEW unfinished condition or a second unfinished request; the current whole utterance is ready=false. Its ready partner finishes that same condition or request without changing the earlier facts. A complete request that merely needs missing facts remains ready. Background versions should mix reports, quoted questions, acknowledgments, and explicit reply deferral, rather than always saying to wait. Use many unrelated domains, indirect requests and imperatives as well as grammatical questions. Mix very short contextual probes with long multi-clause speech. Include prior speaker exchanges where needed. No answers to the current challenge, canned replies, production routing rules, or identical texts across labels.`:'';
+ const sharedContextInstructions=paired?'\nEach episode has ONE shared context string, identical for all three variants. Use a prior conversational exchange compatible with each variant, or an empty string for the whole episode. Do not correlate context presence or content with the label. Only the current text varies across the three versions.':'';
+ const instructions=prompt+balancePrompt+labelClarifications+longInstructions+pairInstructions+sharedContextInstructions;
  await rpc('turn/start',{threadId,model:'gpt-6-luna',serviceTier:'fast',effort:'low',input:[{type:'text',text:instructions}],outputSchema:schema});await completed;
  const generated=JSON.parse(output);
- const result=balanced?{cases:classes.flatMap(([name,request,ready],i)=>{assert.equal(generated[name].length,counts[i]);return generated[name].map(item=>({...item,request,ready}));})}:generated;
+ const result=paired?{cases:generated.episodes.flatMap((item,episode)=>classes.map(([name,request,ready])=>({...item[name],context:item.context,request,ready,episode})))}:balanced?{cases:classes.flatMap(([name,request,ready],i)=>{assert.equal(generated[name].length,counts[i]);return generated[name].map(item=>({...item,request,ready}));})}:generated;
  assert.equal(result.cases.length,count);assert.equal(new Set(result.cases.map(item=>item.text)).size,count);assert(result.cases.every(item=>!item.ready||item.request));
  const wordCounts=result.cases.map(item=>item.text.trim().split(/\s+/u).length);
  const lengthAudit={min:Math.min(...wordCounts),max:Math.max(...wordCounts),mean:wordCounts.reduce((a,b)=>a+b,0)/count};
@@ -48,7 +66,8 @@ try{
      const [min,max]=item.request&&!item.ready?[20,70]:[50,110];
      return wordCounts[index]<min||wordCounts[index]>max?[{index,words:wordCounts[index],min,max}]:[];
    });
+   assert.equal(lengthAudit.outsideRequestedRange.length,0,'Generated long-form texts violate requested word counts');
  }
- await mkdir(path.dirname(destination),{recursive:true});await writeFile(destination,JSON.stringify({scope:`Synthetic ${role} data generated by signed-in Luna Fast, low reasoning. Model labels require human review; not certification. Never production routing.`,model:'gpt-6-luna',tier:'fast',effort:'low',role,balanced,longForm,lengthAudit,prompt:instructions,...result},null,2));
+ await mkdir(path.dirname(destination),{recursive:true});await writeFile(destination,JSON.stringify({scope:`Synthetic ${role} data generated by signed-in Luna Fast, low reasoning. Model labels require human review; not certification. Never production routing.`,model:'gpt-6-luna',tier:'fast',effort:'low',role,balanced,longForm,paired,lengthAudit,prompt:instructions,...result},null,2));
  console.log(JSON.stringify({output:destination,count,role,longForm}));await rpc('thread/unsubscribe',{threadId});
 }finally{clearTimeout(turnTimer);child.kill();}

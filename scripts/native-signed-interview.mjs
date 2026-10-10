@@ -68,8 +68,11 @@ if(result.intentMode==='early'){
   const threshold=Number(process.env.COPILOT_INTENT_READY_THRESHOLD??0.9);
   assert(Number.isFinite(threshold)&&threshold>=0&&threshold<=1,'Intent readiness threshold must be a bounded probability');
   const profile=await readFile('.local/intent-encoder/profile.json');
-  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),threshold,changedTextCadenceMs:250};
+  const head=JSON.parse(profile);
+  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),featureSchema:head.featureSchema,trainedModel:head.trainedModel??null,threshold,changedTextCadenceMs:250};
 }
+result.acousticRefinements=result.intentMode==='early'||process.env.COPILOT_ACOUSTIC_REFINE==='1';
+result.backgroundSuppression=result.intentMode==='early'&&process.env.COPILOT_INTENT_BACKGROUND_IGNORE==='1';
 if(remoteOnly)result.measurement+=' Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions.';
 if(inputOnly)result.measurement+=' Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing.';
 if(scenarioFile)result.providedScenario={file:path.relative(root,scenarioFile),sha256:hash(await readFile(scenarioFile))};
@@ -81,7 +84,7 @@ if(recordedDir){
   result.recordedReplay=recorded.map(({question,waveFile,waveSha256})=>({questionSha256:hash(Buffer.from(question)),waveFile:path.relative(root,waveFile),waveSha256}));
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
-result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py'].map(async file=>[file,hash(await readFile(file))])));
+result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -198,7 +201,7 @@ try {
   result.outputDevice=outputDevice.name;
   const settings={...boot.settings,answerBackend:'codex',model:'gpt-6-luna',reasoningEffort:'low',serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
   if(requestedChunk!==null)settings.speechChunkMs=requestedChunk;
-  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:process.env.COPILOT_ACOUSTIC_REFINE==='1',eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',remoteOnly};
+  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
   assert(settings.microphone&&settings.output);await invoke('start_meeting',{settings});started=true;
   if(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE){

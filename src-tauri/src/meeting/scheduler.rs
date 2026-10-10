@@ -60,6 +60,22 @@ impl Scheduler {
     pub fn resumed(&mut self) {
         if let Some(id)=self.candidate.take() {if let Some(j)=self.find_mut(&id){if !j.confirmed {j.phase=Phase::Cancelled;j.cancel.cancel();}}}
     }
+    /// The intent gate controls starting work, not delivery of later words to
+    /// that same request. Corrections are exact watch updates, never a new job.
+    pub fn update_speculative_question(&mut self,floor:u64,text:String)->Option<String> {
+        if !self.semantic_intent || text.trim().is_empty(){return None;}
+        let id=self.candidate.clone()?;let job=self.find_mut(&id)?;
+        if job.latency.remote_speech_started_at!=Some(floor) || job.confirmed
+            || job.phase!=Phase::Speculative || job.cancel.is_cancelled()
+            || job.latency.completed_at.is_some() || (job.running&&!job.steer_supported)
+            || same_question(&job.question.text,&text){return None;}
+        job.question.text=text.clone();job.source_text=text;
+        job.buffer.clear();job.latency.first_token_at=None;job.latency.first_word_at=None;
+        job.latency.response_revision+=1;
+        let mut update=job.updates.borrow().clone();update.question=job.question.text.clone();update.confirmed=false;
+        job.updates.send_replace(update);
+        Some(id)
+    }
     pub fn propose(&mut self, text: String, now: u64, stopped: u64, transcript: u64) -> String {
         self.propose_inner(text, now, stopped, transcript, false)
     }
@@ -163,6 +179,34 @@ impl Scheduler {
     fn prune(&mut self){let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed) || latest.as_ref()==Some(&j.question.id));}
 }
 #[cfg(test)] mod tests {
+    #[test]
+    fn gated_request_receives_exact_corrections_without_starting_another_job() {
+        let mut s=Scheduler::default();s.semantic_intent=true;
+        let id=s.propose("Explain result_A >= 17".into(),10,10,10);
+        s.next(10);let job=s.find_mut(&id).unwrap();job.steer_supported=true;
+        job.latency.remote_speech_started_at=Some(5);job.set_context("Exact preceding implementation".into());
+        job.buffer="Obsolete answer".into();job.latency.first_word_at=Some(11);
+        let before=job.updates.subscribe();
+        assert_eq!(s.update_speculative_question(5,"Explain result_B < 17".into()),Some(id.clone()));
+        assert_eq!(s.jobs.len(),1);assert_eq!(s.active(),1);assert!(!s.jobs[0].cancel.is_cancelled());
+        assert!(s.visible().is_none());assert!(s.jobs[0].buffer.is_empty());assert!(s.jobs[0].latency.first_word_at.is_none());
+        assert_eq!(before.borrow().question,"Explain result_B < 17");
+        assert_eq!(before.borrow().context.as_deref(),Some("Exact preceding implementation"));
+        assert!(!before.borrow().confirmed);
+        assert_eq!(s.confirm("Explain result_B < 17".into(),20,18,19),id);
+        assert!(before.borrow().confirmed);
+    }
+    #[test]
+    fn gated_updates_cannot_rewrite_a_different_floor_or_a_confirmed_request() {
+        let mut s=Scheduler::default();s.semantic_intent=true;
+        let id=s.propose("Current request".into(),10,10,10);
+        s.find_mut(&id).unwrap().latency.remote_speech_started_at=Some(5);
+        assert!(s.update_speculative_question(6,"Different floor".into()).is_none());
+        assert_eq!(s.jobs[0].question.text,"Current request");
+        s.confirm("Current request".into(),20,18,19);
+        assert!(s.update_speculative_question(5,"Late obsolete update".into()).is_none());
+        assert_eq!(s.jobs[0].question.text,"Current request");
+    }
     #[test] fn final_request_survives_an_early_no_reply_verdict() {
         let mut scheduler=Scheduler::default();scheduler.semantic_intent=true;
         let early=scheduler.propose("Explain the invariant".into(),0,0,0);

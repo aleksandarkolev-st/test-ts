@@ -19,10 +19,12 @@ ASSETS = {
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--encoder", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--encoder", action="store_true")
+    mode.add_argument("--training", action="store_true")
     args = parser.parse_args()
     dest, model, revision, assets = DEST, MODEL, REVISION, ASSETS
-    if args.encoder:
+    if args.encoder or args.training:
         dest = ROOT / ".local" / "intent-encoder"
         model = "sentence-transformers/all-MiniLM-L6-v2"
         revision = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
@@ -32,6 +34,10 @@ def main():
             "config.json": (612, "72b987fd805cfa2b58c4c8c952b274a11bfd5a00", "git"),
             "README.md": (10502, "44af2e3b0fa3a0b6239e48422972bf755f28fde0", "git"),
         }
+        if args.training:
+            dest = ROOT / ".local" / "intent-training-model"
+            assets.pop("onnx/model_quint8_avx2.onnx")
+            assets["model.safetensors"] = (90868376, "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db", "sha256")
     records = []
     for name, (size, expected, kind) in assets.items():
         target = dest / name

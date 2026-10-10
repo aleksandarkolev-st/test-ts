@@ -1,0 +1,1643 @@
+{
+  "scope": "Experimental learned readiness and native audio evidence. No promotion or demonstrated near-instant latency. Synthetic labels and model grades need independent review; real microphone interruptions are excluded.",
+  "metric": "Client receipt of first alphanumeric character of retained decoded and validated answer, measured from final speech end. Includes capture/ASR; rendering is separate. Does not wait for sentence completion.",
+  "training": {
+    "first": {
+      "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+      "trainedModel": {
+        "file": "finetuned-v35/model.int8.onnx",
+        "bytes": 58743106,
+        "sha256": "a17e78880e9cf9df1dd4a8fa726a4db9fa3761c64510ad0d9901c5a455353065"
+      },
+      "trainingSha256": "91172a3d6bc2eaa0f04a9bd03d42eec8a8a2b9d684cdee6e74d86256f029cead",
+      "validationSha256": "44b0211fc5dcc83e5836141b5ebd60b2fb0364b79a124088037d0582aa483f43",
+      "trainingVariants": 518,
+      "trainingOriginalGroups": 340,
+      "selectedEpoch": 5,
+      "temperature": 1.25,
+      "validationLoss": 0.45602738857269287,
+      "validationAccuracy": 0.8333333333333334,
+      "maxExportLogitDifference": 0.7389616966247559,
+      "exportPredictionDisagreements": 3,
+      "promoted": false
+    },
+    "paired": {
+      "profileSha256": "3011ff05a92d30ec1f25f7953a5505f3a1ef0885b4657fac80764ca2433ee4f8",
+      "trainedModel": {
+        "file": "finetuned-v41/model.int8.onnx",
+        "bytes": 58743106,
+        "sha256": "cbf339a8742fc9a139ce422dfa46e3f9d9abd78f3d9a08554ddecd6396b54f9a"
+      },
+      "trainingSha256": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30",
+      "validationSha256": "44b0211fc5dcc83e5836141b5ebd60b2fb0364b79a124088037d0582aa483f43",
+      "trainingVariants": 666,
+      "trainingOriginalGroups": 430,
+      "selectedEpoch": 5,
+      "temperature": 1.4,
+      "validationLoss": 0.42861583828926086,
+      "validationAccuracy": 0.8333333333333334,
+      "maxExportLogitDifference": 0.7057140469551086,
+      "exportPredictionDisagreements": 3,
+      "promoted": false
+    },
+    "pairedReview": {
+      "sourceSha256": "d0b9002b46411bd96b9fee5d36a784b03e22ecc2c403dfebcef2cba34b864e2a",
+      "reviewedCases": 90,
+      "labelChanges": [
+        {
+          "index": 19,
+          "reason": "The request including its conditional clause is already complete; adding question punctuation does not change readiness."
+        },
+        {
+          "index": 73,
+          "reason": "The request including its conditional clause is already complete; adding question punctuation does not change readiness."
+        }
+      ],
+      "contextsRemoved": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11,
+        13,
+        14,
+        16,
+        17,
+        19,
+        20,
+        22,
+        23,
+        25,
+        26,
+        28,
+        29,
+        31,
+        32,
+        34,
+        35,
+        37,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46,
+        47,
+        49,
+        50,
+        52,
+        53,
+        55,
+        56,
+        58,
+        59,
+        61,
+        62,
+        64,
+        65,
+        67,
+        68,
+        70,
+        71,
+        73,
+        74,
+        76,
+        77,
+        79,
+        80,
+        82,
+        83,
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "correlationInSource": "All foreground examples had context; almost all backgrounds did not. Their current explicit requests remain requests without that context."
+    },
+    "correlatedVariants": "90 added variants belong to 30 matched episodes; source grouping does not make them independent situations."
+  },
+  "exportVerification": {
+    "int8": {
+      "profileSha256": "8f8df2b4464f1356cf176743273f0efac2d249e89676e08e424c3492643856d8",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.int8.onnx",
+        "bytes": 58743106,
+        "sha256": "cbf339a8742fc9a139ce422dfa46e3f9d9abd78f3d9a08554ddecd6396b54f9a"
+      },
+      "trainingSha256": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30",
+      "validationSha256": "44b0211fc5dcc83e5836141b5ebd60b2fb0364b79a124088037d0582aa483f43",
+      "trainingVariants": 666,
+      "trainingOriginalGroups": 430,
+      "selectedEpoch": 5,
+      "temperature": 1.4,
+      "validationLoss": 0.42861583828926086,
+      "validationAccuracy": 0.8333333333333334,
+      "maxExportLogitDifference": 0.7057140469551086,
+      "exportPredictionDisagreements": 3,
+      "promoted": false
+    },
+    "fp32": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "temperature": 1.35,
+      "validationLoss": 0.4144161343574524,
+      "validationAccuracy": 0.8666666666666667,
+      "maxExportLogitDifference": 0.000005245208740234375,
+      "exportPredictionDisagreements": 0
+    }
+  },
+  "diagnostics": {
+    "initialValidation": {
+      "file": "artifacts/intent-classifier/finetuned-validation-policy-v40.json",
+      "sha256": "502ad7a4821ddc24eb932558c6a0c018477a2df7b86d410d08044665a266158f",
+      "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+        "trainedModelSha256": "a17e78880e9cf9df1dd4a8fa726a4db9fa3761c64510ad0d9901c5a455353065"
+      },
+      "latencyMs": {
+        "median": 0.9002999868243933,
+        "p95": 1.654899911954999,
+        "max": 1.8623999785631895
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 40,
+          "falseEarly": 9,
+          "missedReadyRequests": 5,
+          "ignoredBackground": 25,
+          "falseBackgroundIgnore": 3,
+          "missedBackground": 4
+        },
+        {
+          "threshold": 0.7,
+          "selected": 26,
+          "falseEarly": 4,
+          "missedReadyRequests": 14,
+          "ignoredBackground": 20,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 7
+        },
+        {
+          "threshold": 0.8,
+          "selected": 22,
+          "falseEarly": 4,
+          "missedReadyRequests": 18,
+          "ignoredBackground": 18,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.9,
+          "selected": 15,
+          "falseEarly": 3,
+          "missedReadyRequests": 24,
+          "ignoredBackground": 15,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 12
+        },
+        {
+          "threshold": 0.95,
+          "selected": 6,
+          "falseEarly": 0,
+          "missedReadyRequests": 30,
+          "ignoredBackground": 13,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 14
+        }
+      ]
+    },
+    "freshLongForInitialModel": {
+      "file": "artifacts/intent-classifier/finetuned-long-policy-v40.json",
+      "sha256": "9bb20962c4213c7fbbece83ebf6a5799d366ef1eeceb9be61176dd80db6f93c3",
+      "scope": "Fresh 30-example synthetic long-speech held-out set, reviewed by the assistant before classifier inference with no label changes. Generated after the v35 checkpoint was selected. Zero normalized text overlaps with train/validation. Not human certification; backgrounds mostly explicitly defer a response.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+        "trainedModelSha256": "a17e78880e9cf9df1dd4a8fa726a4db9fa3761c64510ad0d9901c5a455353065"
+      },
+      "latencyMs": {
+        "median": 2.9601500718854368,
+        "p95": 3.9100999711081386,
+        "max": 4.101000027731061
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 16,
+          "falseEarly": 6,
+          "missedReadyRequests": 0,
+          "ignoredBackground": 2,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 8
+        },
+        {
+          "threshold": 0.7,
+          "selected": 12,
+          "falseEarly": 3,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.8,
+          "selected": 8,
+          "falseEarly": 1,
+          "missedReadyRequests": 3,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.9,
+          "selected": 6,
+          "falseEarly": 1,
+          "missedReadyRequests": 5,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.95,
+          "selected": 1,
+          "falseEarly": 0,
+          "missedReadyRequests": 9,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 10
+        }
+      ]
+    },
+    "pairedValidation": {
+      "file": "artifacts/intent-classifier/paired-finetuned-validation-v41.json",
+      "sha256": "fa96a4b4541f8b1b6f7d51a43747fc225666d586fdf198d61ff9f953b48d3a90",
+      "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "3011ff05a92d30ec1f25f7953a5505f3a1ef0885b4657fac80764ca2433ee4f8",
+        "trainedModelSha256": "cbf339a8742fc9a139ce422dfa46e3f9d9abd78f3d9a08554ddecd6396b54f9a"
+      },
+      "latencyMs": {
+        "median": 1.0397500009275973,
+        "p95": 1.7553999787196517,
+        "max": 2.5292999343946576
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 32,
+          "falseEarly": 5,
+          "missedReadyRequests": 9,
+          "ignoredBackground": 27,
+          "falseBackgroundIgnore": 4,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.7,
+          "selected": 22,
+          "falseEarly": 3,
+          "missedReadyRequests": 17,
+          "ignoredBackground": 23,
+          "falseBackgroundIgnore": 2,
+          "missedBackground": 5
+        },
+        {
+          "threshold": 0.8,
+          "selected": 20,
+          "falseEarly": 3,
+          "missedReadyRequests": 19,
+          "ignoredBackground": 21,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 6
+        },
+        {
+          "threshold": 0.9,
+          "selected": 8,
+          "falseEarly": 1,
+          "missedReadyRequests": 29,
+          "ignoredBackground": 17,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 36,
+          "ignoredBackground": 13,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 14
+        }
+      ]
+    },
+    "reusedLongForPairedModel": {
+      "file": "artifacts/intent-classifier/paired-finetuned-long-diagnostic-v41.json",
+      "sha256": "f1dccb999d1b6c865972384f4ffd42974b4c62b3559a3c823d927d8f1050e837",
+      "scope": "Reused 30-case long-speech diagnostic set. It was freshly generated and reviewed before v35 inference, but its v35 results were inspected before developing v41. Not an untouched test set for v41; not human certification.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "3011ff05a92d30ec1f25f7953a5505f3a1ef0885b4657fac80764ca2433ee4f8",
+        "trainedModelSha256": "cbf339a8742fc9a139ce422dfa46e3f9d9abd78f3d9a08554ddecd6396b54f9a"
+      },
+      "latencyMs": {
+        "median": 3.4452000400051475,
+        "p95": 4.279299988411367,
+        "max": 4.31900005787611
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 16,
+          "falseEarly": 8,
+          "missedReadyRequests": 2,
+          "ignoredBackground": 2,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 8
+        },
+        {
+          "threshold": 0.7,
+          "selected": 11,
+          "falseEarly": 3,
+          "missedReadyRequests": 2,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.8,
+          "selected": 9,
+          "falseEarly": 2,
+          "missedReadyRequests": 3,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.9,
+          "selected": 5,
+          "falseEarly": 1,
+          "missedReadyRequests": 6,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.95,
+          "selected": 2,
+          "falseEarly": 0,
+          "missedReadyRequests": 8,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 10
+        }
+      ]
+    },
+    "fp32Validation": {
+      "file": "artifacts/intent-classifier/fp32-validation-v42.json",
+      "sha256": "0b1916269e8363c0a6e08986b94e7a625db947aa2045f733987e69de1b18ab26",
+      "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "trainedModelSha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "latencyMs": {
+        "median": 1.9339999998919666,
+        "p95": 3.544700099155307,
+        "max": 4.086200031451881
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 33,
+          "falseEarly": 4,
+          "missedReadyRequests": 7,
+          "ignoredBackground": 27,
+          "falseBackgroundIgnore": 4,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.7,
+          "selected": 24,
+          "falseEarly": 3,
+          "missedReadyRequests": 15,
+          "ignoredBackground": 22,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 5
+        },
+        {
+          "threshold": 0.8,
+          "selected": 22,
+          "falseEarly": 3,
+          "missedReadyRequests": 17,
+          "ignoredBackground": 21,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 6
+        },
+        {
+          "threshold": 0.9,
+          "selected": 13,
+          "falseEarly": 1,
+          "missedReadyRequests": 24,
+          "ignoredBackground": 18,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.95,
+          "selected": 1,
+          "falseEarly": 0,
+          "missedReadyRequests": 35,
+          "ignoredBackground": 15,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 12
+        }
+      ]
+    }
+  },
+  "backgroundSuppression": "Disabled by default, including learned experiments. A complete imperative was classified as background above 0.95. Finalized inference never waits for this classifier. Debug COPILOT_INTENT_BACKGROUND_IGNORE=1 is a separate unpromoted experiment.",
+  "initialMatchedAudio": {
+    "early": {
+      "file": "artifacts/native-interview/luna-local-intent-finetuned-v35/interview.json",
+      "sha256": "2c3efbf1fd16291b1b17c468ab0a57febd3df82152163b8d05ebeea2bbee4a29",
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "binarySha256": "b51464fc621afef359261c3ee21ed4815892b6d323dee87346465feb6dfb6717",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "a74b03683df6120e495cb04cd3d5f12a2b3005ae1e17e787ca05cb6992ca3776"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a"
+      },
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "remoteOnly": true
+      },
+      "backgroundSuppression": "not recorded",
+      "classifier": {
+        "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "threshold": 0.9,
+        "changedTextCadenceMs": 250
+      },
+      "classifierElapsedMs": {
+        "count": 108,
+        "median": 7.841300102882087,
+        "sampleP95": 10.328899952583017,
+        "max": 13.2348999613896
+      },
+      "meanFirstWordMs": 1918,
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 1856,
+          "firstWordFromLatestInputMs": 1133,
+          "asrFinalizationMs": 712,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 2,
+            "incorrectClaims": [],
+            "issue": "The answer clarifies what “stale” and “doesn’t finish” mean and requests a trace, but omits other initial clarifications: reproducibility, output validation, launch configuration, and synchronization.",
+            "missingInformationHandled": true,
+            "omissions": [
+              "Ask whether each symptom reproduces and under what conditions.",
+              "Clarify how output correctness is validated.",
+              "Ask for launch configuration and relevant synchronization points."
+            ],
+            "question": "Before attributing either symptom to the kernel, what exact output-validation procedure, launch metadata, synchronization boundaries, and repeatability data would you request?",
+            "requiredParts": [
+              "Clarify what “old” or stale values mean.",
+              "Clarify what failure to finish looks like and its duration or timeout behavior.",
+              "Request evidence or traces to investigate the symptoms."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "incomplete"
+          }
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1745,
+          "firstWordFromLatestInputMs": 1085,
+          "asrFinalizationMs": 655,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 4,
+            "incorrectClaims": [],
+            "issue": "The answer requests an expected result and a validation mechanism, but does not specify the output oracle or how “old” values are identified (for example, reference comparison and tolerance, or comparison with a prior value).",
+            "missingInformationHandled": true,
+            "omissions": [
+              "Specific output-validation criteria for detecting and characterizing stale values."
+            ],
+            "question": "Instrument one failing launch: what exact host/API and GPU trace events would prove the target kernel completed rather than merely becoming inactive, and what output oracle would you capture to identify stale values?",
+            "requiredParts": [
+              "Request launch configuration and dependencies.",
+              "Request host/device synchronization details.",
+              "Request output-validation details.",
+              "Request reproducibility information.",
+              "Describe trace evidence that distinguishes a running kernel from a synchronization or dependency wait."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "incomplete"
+          }
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 1918,
+          "firstWordFromLatestInputMs": 1169,
+          "asrFinalizationMs": 733,
+          "preservesRecognizedClauses": true,
+          "earlySends": 1,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 4,
+            "incorrectClaims": [],
+            "issue": "The answer directly distinguishes kernel activity from useful progress, proposes minimally perturbing evidence, and states what observations would shift its conclusion.",
+            "missingInformationHandled": true,
+            "omissions": [],
+            "question": "Suppose the only existing progress counter increments once per CTA after its polling loop exits. Two samples show no counter change and the same PC at the polling loop. What can you infer—and what additional minimally perturbing observation would distinguish normal polling while producers are delayed from resident consumers preventing unscheduled producers from running? State what evidence would change your view.",
+            "requiredParts": [
+              "Propose minimally perturbing evidence that distinguishes useful progress from a spin.",
+              "Identify what evidence would support each interpretation and what would change the conclusion."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "correct"
+          }
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 2153,
+          "firstWordFromLatestInputMs": 1313,
+          "asrFinalizationMs": 802,
+          "preservesRecognizedClauses": true,
+          "earlySends": 1,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 5,
+            "incorrectClaims": [],
+            "issue": "The answer covers the requested sampling protocol, conditions, ordering, and limitation of unchanged samples; no current-question requirement is omitted.",
+            "missingInformationHandled": true,
+            "omissions": [],
+            "question": "Assume the platform documents interoperable system-scope atomics for mapped pinned memory. Give the exact host and device atomic operations for a counter update and poll, then state precisely what synchronization is established if the host observes the new value—and whether that also makes unrelated non-atomic payload reads safe.",
+            "requiredParts": [
+              "Specify suitable memory and initialization before launch.",
+              "Specify system-scope atomic operations and ordering for device updates and host polling.",
+              "State platform and interoperability assumptions.",
+              "Explain why unchanged samples alone do not prove deadlock."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "correct"
+          }
+        }
+      ]
+    },
+    "finalOnly": {
+      "file": "artifacts/native-interview/luna-local-intent-finetuned-final-v36/interview.json",
+      "sha256": "340bc810926d9a46fd6538098cf762aca59b093e81b0f3a3f0eb422f8eac7da2",
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "binarySha256": "b51464fc621afef359261c3ee21ed4815892b6d323dee87346465feb6dfb6717",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "92f312089f0d357bf5b2b9531b9c1c90b4c201cf789cd2ceaff816a6a5282518",
+        "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "a74b03683df6120e495cb04cd3d5f12a2b3005ae1e17e787ca05cb6992ca3776"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a"
+      },
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "remoteOnly": true
+      },
+      "backgroundSuppression": "not recorded",
+      "classifier": null,
+      "classifierElapsedMs": null,
+      "meanFirstWordMs": 2011.75,
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 2298,
+          "firstWordFromLatestInputMs": 1614,
+          "asrFinalizationMs": 657,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 2,
+            "incorrectClaims": [],
+            "issue": "The answer clarifies what “old” and “doesn’t finish” mean and asks about reproducibility, but omits key first-pass questions about output validation, launch configuration, synchronization, and available traces.",
+            "missingInformationHandled": true,
+            "omissions": [
+              "How outputs are validated against an expected result.",
+              "Launch configuration and relevant synchronization details.",
+              "What traces or diagnostics are available."
+            ],
+            "question": "What output oracle and timeout/synchronization boundary would you use to distinguish a wrong result from an incomplete run, and which launch details or traces would you collect before forming a cause?",
+            "requiredParts": [
+              "Clarify what counts as a stale value and how that is established.",
+              "Clarify what “doesn’t finish” means and whether the symptoms reproduce or co-occur.",
+              "Ask about output validation, launch configuration, synchronization, and available traces before proposing a cause."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "incomplete"
+          }
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1953,
+          "firstWordFromLatestInputMs": 1133,
+          "asrFinalizationMs": 789,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 3,
+            "incorrectClaims": [],
+            "issue": "The answer does not specify how output correctness is validated, such as the expected-result oracle and comparison criteria.",
+            "missingInformationHandled": true,
+            "omissions": [
+              "State what reference or invariant output values are compared against and how mismatches are detected (for example, tolerance or exact comparison)."
+            ],
+            "question": "For a completed run, what minimal output oracle and comparison would reliably distinguish a retained prior payload from ordinary floating-point error?",
+            "requiredParts": [
+              "Request exact launch and input details, including grid/block dimensions and stream/device context.",
+              "Request synchronization and result-observation details, including ordering and asynchronous error handling.",
+              "Request reproducibility details such as a minimal failing case, frequency, and relevant run variations.",
+              "Describe trace evidence that separates an active kernel, a kernel making no progress, and a host blocked at synchronization.",
+              "Request how output correctness is validated."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "incomplete"
+          }
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 1762,
+          "firstWordFromLatestInputMs": 934,
+          "asrFinalizationMs": 810,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 4,
+            "incorrectClaims": [],
+            "issue": "The answer correctly distinguishes kernel activity from useful progress and proposes low-overhead evidence, with appropriate caveats about instrumentation.",
+            "missingInformationHandled": true,
+            "omissions": [],
+            "question": "Suppose you add one global counter incremented once by each CTA at entry and exit. What can successive snapshots establish—and what can’t they distinguish between CTAs spinning and CTAs never being scheduled? Propose a less perturbing test that separates those cases.",
+            "requiredParts": [
+              "Clarify that an active kernel trace does not prove useful progress",
+              "Propose minimally perturbing evidence to assess progress",
+              "Explain what observations would support progress versus a stall and note instrumentation limitations"
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "correct"
+          }
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 2034,
+          "firstWordFromLatestInputMs": 1211,
+          "asrFinalizationMs": 792,
+          "preservesRecognizedClauses": true,
+          "earlySends": 0,
+          "earlyUpdates": 0,
+          "review": {
+            "constraintTracking": true,
+            "difficulty": 4,
+            "incorrectClaims": [
+              "The proposed device-scope atomic update and host-scope atomic load do not provide a CUDA-valid cross-device/host atomic protocol: those scopes do not include both participants, so the host is not guaranteed to observe the device’s update atomically. The later suggestion to use supported system-scope atomics does not repair the protocol as initially specified."
+            ],
+            "issue": "The required sampling protocol must use compatible scope covering both host and device; the specified device-scope/host-scope accesses do not meet that requirement.",
+            "missingInformationHandled": true,
+            "omissions": [
+              "A valid protocol using matching system-scope atomic accesses for both device updates and host samples, or a different explicitly valid mechanism."
+            ],
+            "question": "Rewrite the sampling protocol with exact device and host atomic operations and ordering, and state what you do if system-scope atomics are unsupported.",
+            "requiredParts": [
+              "Specify suitable memory for concurrent host/device access.",
+              "Give a CUDA-valid atomic scope and ordering for the device update and host sample.",
+              "Specify how the host reads without waiting for kernel completion.",
+              "State assumptions and explain why unchanged samples alone do not prove deadlock."
+            ],
+            "unsupportedAssumption": false,
+            "verdict": "incorrect"
+          }
+        }
+      ]
+    },
+    "conclusion": "Small four-turn replay; no causal benefit or population p95 established."
+  },
+  "unconditionalUpdates": {
+    "file": "artifacts/native-interview/luna-local-intent-coalesced-v37/interview.json",
+    "sha256": "68bd5a0bd451399786b91ead41d34f001a329aba9a5bc3209c86ed1cf6fe25ea",
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+    "binarySha256": "57510f05917f8e735e35ed9e74e6e7bb17ab202ad64a8f6f7ec0d6f998839825",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+      "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+      "src-tauri/src/runtime.rs": "a09e89eaa78dda143940ae98b391fdea23e54ed6da579d4d21af9021a2663355"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "a14595b7da6ff48268600d7d39e94e954ac5ad2e5b0517b0306f8a31109dc383",
+      "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "remoteOnly": true
+    },
+    "acousticRefinements": true,
+    "backgroundSuppression": "not recorded",
+    "classifier": {
+      "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-v35/model.int8.onnx",
+        "bytes": 58743106,
+        "sha256": "a17e78880e9cf9df1dd4a8fa726a4db9fa3761c64510ad0d9901c5a455353065"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "classifierElapsedMs": {
+      "count": 107,
+      "median": 8.376599987968802,
+      "sampleP95": 9.358200011774898,
+      "max": 12.66790006775409
+    },
+    "meanFirstWordMs": 2087,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 1442,
+        "firstWordFromLatestInputMs": 1287,
+        "asrFinalizationMs": 635,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 8,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 2,
+          "incorrectClaims": [],
+          "issue": "The answer clarifies what “old” and “doesn’t finish” mean, but omits other requested first-step clarifications: output validation, launch configuration, synchronization, reproducibility, and available traces.",
+          "missingInformationHandled": false,
+          "omissions": [
+            "How outputs are validated and what specifically counts as an old value",
+            "Launch configuration and synchronization boundaries",
+            "Whether and how the issue reproduces",
+            "What traces or other diagnostic evidence are available"
+          ],
+          "question": "Before proposing a cause, what exact questions would you ask about output validation, launch configuration, synchronization, reproducibility, and available traces—and how would each help distinguish stale data from lack of progress?",
+          "requiredParts": [
+            "Clarify what “old” values mean",
+            "Clarify what “sometimes” means and where or how execution stops",
+            "Ask about output validation, launch configuration, synchronization, reproducibility, and available traces before proposing a cause"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 1381,
+        "firstWordFromLatestInputMs": 973,
+        "asrFinalizationMs": 716,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "The answer covers the requested launch, synchronization, validation, reproducibility, and trace details, and correctly notes that a blocked host synchronization alone does not prove the kernel completed.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "For a minimal reproduction, assume one stream runs `cudaMemsetAsync(ready, 0, N*sizeof(int))` then one kernel with 2N CTAs: the first N spin on legacy `atomicAdd(&ready[j], 0)` before reading `payload[j]`; the other N write `payload[j]` then signal with legacy `atomicExch(&ready[j], 1)`. What distinct correctness and progress questions does this raise, and what evidence would falsify each explanation?",
+          "requiredParts": [
+            "Request exact launch configuration and dependencies",
+            "Request synchronization and error-checking details",
+            "Request output validation and reproducibility information",
+            "Describe traces that distinguish ongoing kernel execution from a blocked synchronization, with appropriate qualification"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 2515,
+        "firstWordFromLatestInputMs": 1396,
+        "asrFinalizationMs": 702,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 30,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer distinguishes kernel activity from useful progress, proposes low-overhead measurements, and explains what would change its conclusion and the limits of flat signals.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Suppose sampled instruction counts rise while a sparse device-side heartbeat stays flat. Design a minimally perturbing test to distinguish useful progress from repeated polling, and state exactly what each possible result would establish—and what it would not.",
+          "requiredParts": [
+            "Explain why an active kernel bar does not establish useful forward progress",
+            "Propose minimally perturbing evidence to distinguish progress from spinning",
+            "State what evidence would change the conclusion and acknowledge measurement limits"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 3010,
+        "firstWordFromLatestInputMs": 1665,
+        "asrFinalizationMs": 905,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 42,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [
+            "The asynchronous-copy alternative is not a valid sampling protocol as stated: a separate stream/event that only orders the host read after the copy completes does not order the copy against the kernel’s concurrent counter writes, so it does not guarantee a coherent or fresh sample."
+          ],
+          "issue": "The mapped pinned-memory, system-scope atomic protocol is conditionally valid and the answer handles its assumptions and the limits of unchanged samples. However, the proposed asynchronous-copy alternative lacks synchronization with the still-running kernel’s writes.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "For your asynchronous-copy alternative, give an exact protocol that produces meaningful intermediate samples while the kernel continues: specify the device-to-host ordering or publication mechanism and stream/event dependencies. If that cannot be guaranteed under the stated constraints, explain why and revise the alternative.",
+          "requiredParts": [
+            "Specify memory type, atomic scope and ordering, and host-read mechanism.",
+            "State validity assumptions.",
+            "Explain why unchanged samples alone do not prove deadlock."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "unconditionalMetadataIssue": "v37 top-level acousticRefinements=true reflected runtime, but speechConfiguration.acousticRefinements incorrectly recorded false. Fixed prospectively; raw artifact retained.",
+  "readinessGatedUpdates": {
+    "file": "artifacts/native-interview/luna-local-intent-ready-updates-v39/interview.json",
+    "sha256": "bf4297009422f74a87575c0a58dffeecc435250505fddba601335c9ab32943c3",
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+    "binarySha256": "39263e0ee9a2877d0304fd89ee81db20466a24971b409a44d08c88b47384c879",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+      "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+      "src-tauri/src/runtime.rs": "0ca52ae289aa7f0967b37b9644a03260d30df9e62affbb5c1bf6ce6df3102bbc"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "0aacee82ebaa4fa381f9f923b189f1425b48eb8b712c1e42d80d0d87e668400c",
+      "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "remoteOnly": true
+    },
+    "acousticRefinements": true,
+    "backgroundSuppression": "not recorded",
+    "classifier": {
+      "profileSha256": "c348c3adac23e1a7ed8a38321730778252d1a4fcbcd8973f39ddfd9ba4cc59ac",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-v35/model.int8.onnx",
+        "bytes": 58743106,
+        "sha256": "a17e78880e9cf9df1dd4a8fa726a4db9fa3761c64510ad0d9901c5a455353065"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "classifierElapsedMs": {
+      "count": 164,
+      "median": 9.7119000274688,
+      "sampleP95": 11.978099937550724,
+      "max": 16.060400055721402
+    },
+    "meanFirstWordMs": 2097.25,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2706,
+        "firstWordFromLatestInputMs": 1537,
+        "asrFinalizationMs": 726,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 2,
+          "incorrectClaims": [],
+          "issue": "The answer appropriately asks what “old” and “doesn’t finish” mean, but it omits several requested first-step clarifications: how output correctness is validated, the CUDA launch configuration and synchronization boundaries, reproducibility, and available traces.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "How outputs are validated against an expected value or version.",
+            "The launch configuration and what synchronizes host/device work.",
+            "Whether the issue is reproducible and under what conditions.",
+            "What traces or minimal reproduction are available."
+          ],
+          "question": "What exact output check, launch topology, synchronization boundaries, reproduction rate, and trace would you request first—and what observation would distinguish a genuinely stale device result from a delayed or unsynchronized host observation?",
+          "requiredParts": [
+            "Clarify what “old” values mean and how they are detected.",
+            "Clarify what “doesn’t finish” means.",
+            "Ask about output validation, launch configuration, synchronization, reproducibility, and available traces before proposing a cause."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 1878,
+        "firstWordFromLatestInputMs": 1062,
+        "asrFinalizationMs": 786,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "The answer requests the launch, synchronization, validation inputs, and reproducibility context, and proposes a trace distinction between ongoing execution and a synchronization stall. It does not assert a diagnosis from the vague report.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "A profiler shows the kernel active until timeout, but gives no per-CTA progress data. What minimal instrumentation or controlled experiment would distinguish slow work from a device-side wait, and what result would falsify each explanation?",
+          "requiredParts": [
+            "Request exact launch configuration, stream dependencies, synchronization and error-checking details.",
+            "Request validation inputs and expected outputs, plus reproducibility details.",
+            "Identify trace evidence that could distinguish ongoing kernel execution from a synchronization stall."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 1755,
+        "firstWordFromLatestInputMs": 999,
+        "asrFinalizationMs": 738,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer correctly distinguishes an active kernel from useful progress, proposes evidence that could discriminate progress from spinning, and states what would change its conclusion.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Make the progress-counter proposal operational: how would you publish and observe counters without synchronizing away the behavior, what ordering would make each observation meaningful, and how would you distinguish slow progress from a spin loop while accounting for instrumentation changing scheduling?",
+          "requiredParts": [
+            "State that an active kernel does not establish useful forward progress.",
+            "Suggest minimally perturbing evidence that distinguishes progress from spinning.",
+            "Identify evidence that would change the conclusion and acknowledge instrumentation limits."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 2050,
+        "firstWordFromLatestInputMs": 1722,
+        "asrFinalizationMs": 830,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 5,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer gives a valid sampling protocol under explicit mapped-memory, system-atomic, and host/device compatibility assumptions, and correctly explains why unchanged samples do not establish deadlock.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now let each GPU update publish a payload that the host reads after observing the counter. Specify the exact system-scope device store and host polling/load operations, their memory orders, and the allocation/alignment assumptions needed to make that payload read valid.",
+          "requiredParts": [
+            "Specify memory suitable for concurrent host/device access and the required platform support.",
+            "Use system-scope atomic updates and a compatible host atomic load with appropriate ordering.",
+            "Explain why unchanged samples alone cannot prove deadlock."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      }
+    ]
+  },
+  "freshAdaptive": {
+    "file": "artifacts/native-interview/luna-fp32-adaptive-v43/interview.json",
+    "sha256": "58bbd7332633b505c99fda64f774d2f237bb2593e8458d768b6164d9b4bbd601",
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions.",
+    "binarySha256": "2251b4fe4b6c2d48f3c11fc871bf66a58da3b7128491b26cabdd300f5663e244",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+      "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+      "src-tauri/src/runtime.rs": "c4ec6054d1bc446672a161493af1a6065d29be19d250d31c08de230a72dde6c2"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "remoteOnly": true
+    },
+    "acousticRefinements": true,
+    "backgroundSuppression": false,
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "classifierElapsedMs": {
+      "count": 389,
+      "median": 20.972699974663556,
+      "sampleP95": 26.29000006709248,
+      "max": 37.1708000311628
+    },
+    "meanFirstWordMs": 2290.8333333333335,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2106,
+        "firstWordFromLatestInputMs": 1398,
+        "asrFinalizationMs": 681,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "The answer identifies the key initial triage questions: what changed, what “different” means, and how to compare against known-good behavior.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "The report is: “The same application sometimes produces a different result or stops making progress. We have not established whether the change is in output, latency, or both.” What specific questions and evidence would you request to distinguish those cases and make the behavior reproducible, without assuming a cause?",
+          "requiredParts": [
+            "Clarify what “behaving differently” means",
+            "Ask what changed",
+            "Establish reproducibility and request evidence before proposing a cause"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 2592,
+        "firstWordFromLatestInputMs": 1478,
+        "asrFinalizationMs": 702,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 2,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "The answer asks how to distinguish output changes from latency or lack of progress, and proposes evidence collection and repeatable testing without asserting a cause.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "A controlled test on one lab system uses an 8192-block grid (256 threads per block); the compiled kernel’s occupancy query reports at most four such blocks per SM. With a 2-second external process-kill timeout, it completes 163/200 runs; a 128-block grid completes 200/200. What do these observations establish—and not establish—and what would you test next to distinguish an output problem from a liveness problem?",
+          "requiredParts": [
+            "Clarify what “different result” and “stops making progress” mean",
+            "Request evidence and conditions that distinguish outcomes",
+            "Propose a reproducible characterization without assuming a cause"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 1341,
+        "firstWordFromLatestInputMs": 1111,
+        "asrFinalizationMs": 700,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 7,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [
+            "It says the tests completed “163,200 and 200,200 runs,” but only 200 runs were performed per configuration; the evidence is 163/200 and 200/200 completions within the harness’s 2-second limit."
+          ],
+          "issue": "The answer misstates the observed completion counts, though its proposed checks and caveats otherwise address the question.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "A progress counter can perturb scheduling, and a flat counter alone does not prove a deadlock. For the 8192-block test, specify a bounded measurement protocol and explain which observations would support an output-correctness problem versus a liveness problem—without treating the harness kill as a CUDA timeout guarantee.",
+          "requiredParts": [
+            "State what the two completion-rate observations establish and do not establish.",
+            "Propose tests that separately validate output and measure completion or progress to distinguish output problems from liveness problems."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 2074,
+        "firstWordFromLatestInputMs": 1212,
+        "asrFinalizationMs": 823,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 4,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer gives a bounded protocol, distinguishes output mismatches from incomplete runs, and correctly treats the external kill as a cutoff rather than a CUDA timeout guarantee.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "With 8,192 blocks and at most four resident blocks per SM, could consumer blocks spin while block 8,191 remains unscheduled? Explain the liveness risk without claiming that this schedule is guaranteed.",
+          "requiredParts": [
+            "Specify a bounded measurement protocol.",
+            "Identify observations supporting output-correctness problems versus liveness concerns.",
+            "Do not treat the harness kill as a CUDA timeout guarantee."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 5,
+        "firstWordFromSpeechEndMs": 2843,
+        "firstWordFromLatestInputMs": 1653,
+        "asrFinalizationMs": 769,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 4,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer correctly identifies a conditional liveness hazard and does not treat the occupancy data or observed runs as proof of a particular schedule.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now consider the supplied kernel: block 8191 writes `payload[0] = 42`, calls `__threadfence()`, then `atomicExch(flag, 1)`; every other block spins on `atomicAdd(flag, 0)` and then reads the payload. Analyze separately whether a consumer can see stale payload and whether the kernel is guaranteed to complete. What guarantees do the fence and legacy atomics provide, and what do they not provide?",
+          "requiredParts": [
+            "Explain the conditional inter-block liveness risk without claiming a guaranteed schedule.",
+            "Recognize that the occupancy limit alone does not establish that all resident slots are occupied by waiting consumers.",
+            "Distinguish a possible prolonged wait from a guaranteed deadlock."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 6,
+        "firstWordFromSpeechEndMs": 2789,
+        "firstWordFromLatestInputMs": 1807,
+        "asrFinalizationMs": 570,
+        "preservesRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyUpdates": 8,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer identifies the producer-side ordering and the liveness hazard, but does not settle whether this exact fence-and-legacy-atomic protocol rules out a stale payload read after a consumer observes the flag.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A definite visibility conclusion for the supplied code: whether observing the flag, given the producer’s __threadfence(), guarantees the consumer sees the preceding payload write."
+          ],
+          "question": "For this exact payload/flag protocol, replace the legacy atomics with a device-scope release store and acquire polling load. State the synchronization argument that rules out a stale payload read, then explain why this change still does or does not guarantee completion for the 8192-block ordinary grid.",
+          "requiredParts": [
+            "Analyze payload visibility separately from kernel completion.",
+            "Explain what __threadfence() and the device-scope legacy atomics guarantee and do not guarantee.",
+            "Assess whether the kernel is guaranteed to complete."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      }
+    ]
+  },
+  "finalOnlyReplay": {
+    "file": "artifacts/native-interview/luna-fp32-final-replay-v44/interview.json",
+    "sha256": "0e491a67fa2cb89a1155293aaf94ed8299fa9bffb83b51af1702fb4bdf4f50ed",
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+    "binarySha256": "2251b4fe4b6c2d48f3c11fc871bf66a58da3b7128491b26cabdd300f5663e244",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "7ef03e5f1ab8e74231b018bebdff13a96f992197024df3028412cdded932c22a",
+      "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+      "src-tauri/src/runtime.rs": "c4ec6054d1bc446672a161493af1a6065d29be19d250d31c08de230a72dde6c2"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "remoteOnly": true
+    },
+    "acousticRefinements": false,
+    "backgroundSuppression": false,
+    "classifier": null,
+    "classifierElapsedMs": null,
+    "meanFirstWordMs": 1943.5,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2420,
+        "firstWordFromLatestInputMs": 1679,
+        "asrFinalizationMs": 719,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 2,
+          "incorrectClaims": [],
+          "issue": "The answer identifies useful initial questions, but does not specify how to reproduce the behavior or what evidence to collect before drawing a causal conclusion.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A concrete reproduction plan and the evidence to capture, such as errors, launch parameters, and whether the operation completes."
+          ],
+          "question": "Turn that into a minimal reproduction and evidence plan: what exact inputs, launch and environment details, errors, and completion behavior would you capture, and how would you distinguish incorrect output from a hang before proposing a cause?",
+          "requiredParts": [
+            "Clarify what “behaving differently” means.",
+            "Ask what changed and whether the behavior is reproducible.",
+            "Establish what evidence is needed before proposing a cause."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 1649,
+        "firstWordFromLatestInputMs": 996,
+        "asrFinalizationMs": 650,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "The response distinguishes output changes from lack of progress and proposes useful repeatable tests, but it does not explicitly capture launch geometry or concurrent GPU activity—conditions needed to reproduce and compare this CUDA workload.",
+          "missingInformationHandled": false,
+          "omissions": [
+            "Explicitly compare launch parameters and concurrent GPU workload between successful and failing runs."
+          ],
+          "question": "For your controlled reruns, which exact launch, concurrency, binary/input, and environment fields would you freeze and record, and how would you tell a true lack of progress from high latency without assuming its cause?",
+          "requiredParts": [
+            "Clarify what differs in output and what “stops making progress” means.",
+            "Request evidence and controlled repetitions that distinguish output variation from latency or a stall without assuming a cause."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 1917,
+        "firstWordFromLatestInputMs": 1238,
+        "asrFinalizationMs": 669,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "None: the answer correctly states what the completion counts do and do not establish, and proposes checks to distinguish output errors from delayed or stalled runs.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "No output comparison or pre-timeout progress data was recorded; both remain unknown. Specify a bounded follow-up experiment that distinguishes right-censored slow completions from apparent stalls, and explain what its timeouts can—and cannot—establish.",
+          "requiredParts": [
+            "State what the completion and timeout observations establish.",
+            "Avoid treating the timeouts or grid-size comparison as proof of deadlock, incorrect output, or causation.",
+            "Propose evidence and tests that distinguish output variation from latency or lack of progress."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 2148,
+        "firstWordFromLatestInputMs": 1227,
+        "asrFinalizationMs": 900,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer meets the current request: it proposes bounded measurements, treats deadline hits as censored observations rather than CUDA timeouts, and distinguishes output errors from noncompletion without claiming either proves a cause.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Suppose a timed-out run has an unchanged progress counter, but the process is killed before synchronization returns. What additional bounded evidence would distinguish a kernel still running slowly from a forward-progress hazard, and what would remain unproven?",
+          "requiredParts": [
+            "Specify bounded measurements for the test",
+            "Identify observations supporting output-correctness versus liveness concerns",
+            "Avoid treating the harness kill as a CUDA timeout guarantee"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 5,
+        "firstWordFromSpeechEndMs": 1812,
+        "firstWordFromLatestInputMs": 1107,
+        "asrFinalizationMs": 698,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer correctly identifies a conditional liveness hazard without claiming that the schedule is guaranteed; it also treats the occupancy limit as plausibility evidence, not proof.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "What additional facts about SM count, block resource usage, and launch configuration would let you show that spinning consumers could fill all residency slots before block 8,191 is scheduled—and why would that still not guarantee this schedule?",
+          "requiredParts": [
+            "Explain that consumers may wait for an unscheduled producer and thereby create a liveness hazard.",
+            "State the conditions under which waiting consumers could prevent the producer from becoming resident.",
+            "Distinguish a plausible hazard from a guaranteed schedule or deadlock."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 6,
+        "firstWordFromSpeechEndMs": 1715,
+        "firstWordFromLatestInputMs": 1037,
+        "asrFinalizationMs": 638,
+        "preservesRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyUpdates": 0,
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "No material error: the answer separates the visibility protocol from the liveness hazard and avoids claiming completion is guaranteed.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "For this exact kernel, would replacing only the consumer’s `atomicAdd(flag, 0)` poll with a `volatile` load preserve the payload-visibility guarantee? Explain the ordering argument and whether additional synchronization is required; set liveness aside.",
+          "requiredParts": [
+            "Analyze whether the fence and legacy atomic flag protocol makes the payload visible after a consumer observes the flag.",
+            "Separately assess whether the kernel is guaranteed to complete.",
+            "State what the fence and legacy atomics guarantee and what they do not guarantee."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      }
+    ]
+  },
+  "freshAccuracyReview": {
+    "scope": "Assistant review against intended public questions, recognized transcripts, and NVIDIA documentation. Not CUDA hardware execution or human certification.",
+    "countFailure": "Round 3: speech recognition lost completion-ratio notation; Luna asserted large counts instead of asking about the consequential ambiguity.",
+    "visibilityFailure": "Round 6: the answer did not establish a valid consumer-side visibility guarantee for the exact producer-fence/relaxed-legacy-atomic protocol. Model examiner marked it incomplete. Ordering and liveness caveats do not settle this question.",
+    "references": [
+      "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#memory-fence-functions",
+      "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#atomic-functions",
+      "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#thread-hierarchy"
+    ],
+    "exactCodeThroughAudioCertified": false,
+    "realMicrophoneInterruptionsTested": false
+  },
+  "comparisonScope": "The early run is freshly adaptive. Final-only replays its saved public questions/waveforms; follow-ups cannot adapt to final-only answers. Binary/source/ASR settings match, but early acoustic refinement policy intentionally differs. No population p95 claim.",
+  "checks": {
+    "rustPassed": 116,
+    "rustIgnored": 14,
+    "tokenBoundaryTestsPassed": 3,
+    "fp32Utf8OversizeWorkerContractPassed": true
+  },
+  "runtimeProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "classifierEnabledInRelease": false,
+  "goalAchieved": false
+}

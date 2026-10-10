@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage} from '../lib/interview-metrics.mjs';
+import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage,exactTranscriptAvailability} from '../lib/interview-metrics.mjs';
 
 test('missing observations stay unknown and early overlap remains negative',()=>{
   assert.equal(difference(null,10),null);
@@ -57,4 +57,20 @@ test('question coverage preserves code operators and case, and missing topic ass
   assert.equal(result.knownTopics,2);
   assert.equal(result.unknownTopics,3);
   assert.deepEqual(result.modelTopicCounts,{ordering:2});
+});
+
+test('transcript availability excludes another floor and separates retracted exact text from its last stable suffix',()=>{
+  const row={recognizedQuestion:'x < y',speechEndNativeMs:100,
+    latency:{remoteSpeechStartedAt:1,pipeline:{latestInputSent:220}},
+    candidateObservations:[
+      {payload:{floor:2,text:'x < y',observedAt:5}},
+      {payload:{floor:1,text:'x < y',observedAt:70}},
+      {payload:{floor:1,text:'x > y',observedAt:120}},
+      {payload:{floor:1,text:' x  < y ',observedAt:150}},
+      {payload:{floor:1,text:'x < y',observedAt:180}},
+    ]};
+  assert.deepEqual(exactTranscriptAvailability(row),{candidateObservations:4,
+    firstExactTextFromSpeechEndMs:-30,lastStableExactTextFromSpeechEndMs:50,stableExactTextToRequestMs:70});
+  assert.equal(exactTranscriptAvailability({...row,candidateObservations:[]}).lastStableExactTextFromSpeechEndMs,null);
+  assert.equal(exactTranscriptAvailability({...row,recognizedQuestion:null}).firstExactTextFromSpeechEndMs,null);
 });

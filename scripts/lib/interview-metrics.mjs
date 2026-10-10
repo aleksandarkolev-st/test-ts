@@ -79,6 +79,24 @@ export function interviewCoverage(rows) {
     scope:'Exact question repetitions normalize whitespace only. Unique strings do not establish semantic novelty or uniform randomness. Topic descriptions are free-form model assessments of actual questions, not independently certified coverage.'};
 }
 
+export function exactTranscriptAvailability(row) {
+  const floor=row.latency?.remoteSpeechStartedAt;
+  const text=value=>typeof value==='string'&&value.trim()?value.trim().replace(/\s+/gu,' '):null;
+  const finalText=text(row.recognizedQuestion);
+  const observations=Number.isFinite(floor)&&Array.isArray(row.candidateObservations)
+    ? row.candidateObservations.map(event=>event.payload)
+      .filter(event=>event?.floor===floor&&Number.isFinite(event.observedAt))
+      .sort((a,b)=>a.observedAt-b.observedAt) : [];
+  const matches=event=>finalText!==null&&text(event.text)===finalText;
+  const first=observations.find(matches);
+  let stable=null;
+  for (let i=observations.length-1;i>=0&&matches(observations[i]);i--) stable=observations[i];
+  return {candidateObservations:observations.length,
+    firstExactTextFromSpeechEndMs:difference(first?.observedAt,row.speechEndNativeMs),
+    lastStableExactTextFromSpeechEndMs:difference(stable?.observedAt,row.speechEndNativeMs),
+    stableExactTextToRequestMs:difference(row.latency?.pipeline?.latestInputSent,stable?.observedAt)};
+}
+
 export function verifiedReviewFindings(report, review) {
   if (!review) return null;
   const hash = text => createHash('sha256').update(text).digest('hex');

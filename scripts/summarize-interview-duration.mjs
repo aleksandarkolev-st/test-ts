@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage} from './lib/interview-metrics.mjs';
+import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage,exactTranscriptAvailability} from './lib/interview-metrics.mjs';
 
 const directory=path.resolve(process.argv[2]??'');
 assert(process.argv[2]&&directory.toLowerCase().startsWith(process.cwd().toLowerCase()+path.sep));
@@ -29,7 +29,7 @@ const rows=report.rows.map(row=>{
   }
   return {round:row.round,ignored:row.ignored,preservesRecognizedClauses:row.preservesAllRecognizedClauses,
     firstWordFromSpeechEndMs:row.firstWordFromSpeechEndMs,firstWordFromLatestInputMs:row.firstWordFromLatestInputMs,
-    firstRenderedFromSpeechEndMs:row.firstRenderedFromSpeechEndMs??null,
+    firstRenderedFromSpeechEndMs:row.firstRenderedFromSpeechEndMs??null,...exactTranscriptAvailability(row),
     asrFinalizationFromSpeechEndMs:difference(l?.transcriptFinalAt,row.speechEndNativeMs),
     confirmationAfterAsrMs:difference(l?.questionConfirmedAt,l?.transcriptFinalAt),
     latestInputConsumptionWaitMs:difference(p?.latestInputConsumed,p?.latestInputSent),
@@ -59,6 +59,11 @@ const value={status:report.status,durationVerified,requestedDurationMs:report.re
     firstHalfFirstWordMs:words(rows.slice(0,mid)),secondHalfFirstWordMs:words(rows.slice(mid)),
     ignored:rows.filter(row=>row.ignored).length,
     ...qualitySummary(rows),coverage:interviewCoverage(report.rows),
+    exactTranscriptAvailability:{
+      firstExactTextFromSpeechEndMs:distribution(rows.map(row=>row.firstExactTextFromSpeechEndMs)),
+      lastStableExactTextFromSpeechEndMs:distribution(rows.map(row=>row.lastStableExactTextFromSpeechEndMs)),
+      stableExactTextToRequestMs:distribution(rows.map(row=>row.stableExactTextToRequestMs)),
+      scope:'Equality with the eventual recognized question after whitespace normalization only. This is retrospective text availability, not semantic completeness, intended-speech fidelity, classifier confidence, or a counterfactual latency improvement. The last matching suffix excludes earlier exact text subsequently revised.'},
     stages:Object.fromEntries(['asrFinalizationFromSpeechEndMs','confirmationAfterAsrMs','latestInputConsumptionWaitMs',
       'firstWordAfterLatestInputConsumptionMs','renderAfterFirstWordMs','completedFromSpeechEndMs'].map(key=>[key,distribution(rows.map(row=>row[key]))])),
     counters:Object.fromEntries(['restarts','steers','followups','completedDraftReplacements'].map(key=>[key,counterSummary(rows,key)])),
@@ -72,7 +77,8 @@ if(!snapshot){
     'asrFinalizationFromSpeechEndMs','confirmationAfterAsrMs','latestInputConsumptionWaitMs','firstWordAfterLatestInputConsumptionMs',
     'renderAfterFirstWordMs','completedFromSpeechEndMs','promptChars','restarts','steers','followups','completedDraftReplacements',
     'cancelled','modelGrade','constraintTracking','missingInformationHandled','unsupportedAssumption','preservesRecognizedClauses',
-    'asrReferenceWords','asrWordEdits','asrNormalizedWordErrorRate'];
+    'asrReferenceWords','asrWordEdits','asrNormalizedWordErrorRate',
+    'candidateObservations','firstExactTextFromSpeechEndMs','lastStableExactTextFromSpeechEndMs','stableExactTextToRequestMs'];
   const csv=[fields.join(','),...rows.map(row=>fields.map(key=>row[key]??'').join(','))].join('\n')+'\n';
   await writeFile(path.join(directory,'round-metrics.csv'),csv);
 }

@@ -47,6 +47,8 @@ def main():
                         help='One variant per group, or one per available class in each group')
     args=parser.parse_args()
     assert 1<=args.epochs<=50 and 1<=args.batch<=64 and 1<=args.threads<=16
+    trainer_sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+                     for name in ('train-intent-encoder.py','intent_sampling.py','intent_tokens.py')}
     torch.set_num_threads(args.threads);torch.set_num_interop_threads(1)
     torch.manual_seed(42);random.seed(42);np.random.seed(42)
     model_dir=Path(args.model);manifest=json.loads((model_dir/'manifest.json').read_text(encoding='utf-8'))
@@ -148,7 +150,8 @@ def main():
         'fp32ExportMaxLogitDifference':full_difference,'fp32ExportPredictionDisagreements':full_disagreements,
         'trainingSha256':train_sha,'validationSha256':val_sha,'trainingVariants':len(train),
         'trainingOriginalGroups':len(groups),'validationCount':len(valid),'seed':42,'selectedEpoch':selected_epoch,
-        'trainingThreads':args.threads,'sampling':args.sampling,'epochs':epochs,'torch':torch.__version__,'transformers':transformers.__version__,
+        'trainingThreads':args.threads,'batchSize':args.batch,'epochsMaximum':args.epochs,
+        'trainerSourceSha256':trainer_sources,'sampling':args.sampling,'epochs':epochs,'torch':torch.__version__,'transformers':transformers.__version__,
         'sourceModelManifest':manifest,'scope':'Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. '
             + ('One variant per original group per epoch. ' if args.sampling=='group' else 'One variant per available class in each original group per epoch. ')
             + 'No phrase rules or answers in inference.'}

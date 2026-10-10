@@ -41,6 +41,10 @@ fn confirmed_question_refinements() -> bool {
     #[cfg(not(all(feature="acceptance",debug_assertions)))]
     false
 }
+fn completed_draft_replacement()->bool {
+    cfg!(all(feature="acceptance",debug_assertions))
+        &&std::env::var("COPILOT_REPLACE_COMPLETED_DRAFT").as_deref()==Ok("1")
+}
 fn partial_refinement_deadline(stable_since:tokio::time::Instant,context_dirty_since:Option<tokio::time::Instant>,last_sent:Option<tokio::time::Instant>,acoustic_pause:Option<tokio::time::Instant>)->tokio::time::Instant {
     // Prioritize changed facts; coalesce question-only growth until it is quiet.
     let quiet=stable_since+PARTIAL_QUIET;
@@ -429,6 +433,14 @@ impl Codex {
                     let partial_budget_available=prior_chars+history_chars+latest.question.chars().count()+selected_context.chars().count()+512<MAX_REUSABLE_HISTORY_CHARS;
                     let question_changed=!crate::meeting::scheduler::same_question(&latest.question,&active_question);
                     let context_changed=selected_context!=active_context;
+                    // A completed obsolete answer can anchor a follow-up even
+                    // though its text was hidden. Compare a separate prepared
+                    // thread with explicit current context, after terminal proof.
+                    if completed_draft_replacement()&&restart_stalled&&latest.confirmed
+                        &&turn_finished&&pending_question.is_none()&&(question_changed||context_changed) {
+                        if let Some(trace)=&trace{trace.completed_draft_replaced();}
+                        return Err(REFINEMENT_STALLED.into());
+                    }
                     // A new turn already started with this exact final frame
                     // may not have emitted its userMessage event yet. It is
                     // current work, not an obsolete draft to interrupt.
@@ -982,7 +994,9 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             let (result,sender)=tokio::join!(result,update);result.unwrap();drop(sender.unwrap());
             assert!(text.to_lowercase().contains("february") && text.contains("19"),"Final answer: {text}");
             let timeline=trace.snapshot();assert!(!timeline.cancelled);
-            assert_eq!(timeline.followup_count,usize::from(early_completion));
+            let retired_completed=completed_draft_replacement()&&early_completion;
+            assert_eq!(timeline.followup_count,usize::from(early_completion&&!retired_completed));
+            if retired_completed {assert_eq!(timeline.refinement_restart_count,1);assert_eq!(timeline.completed_draft_replacement_count,1);}
             if !early_completion {assert_eq!(timeline.steering_count,1);}
             assert!(timeline.latest_input_sent>=timeline.turn_start_ack);
             assert!(timeline.latest_input_ack>=timeline.latest_input_sent);

@@ -208,7 +208,7 @@ try {
   result.outputDevice=outputDevice.name;
   const settings={...boot.settings,answerBackend:'codex',model:'gpt-6-luna',reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
   if(requestedChunk!==null)settings.speechChunkMs=requestedChunk;
-  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',agedFinalWait:process.env.COPILOT_AGE_FINAL_WAIT==='1',settledUpdate:process.env.COPILOT_SETTLED_UPDATE==='1',remoteOnly};
+  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',agedFinalWait:process.env.COPILOT_AGE_FINAL_WAIT==='1',settledUpdate:process.env.COPILOT_SETTLED_UPDATE==='1',completedDraftReplacement:process.env.COPILOT_REPLACE_COMPLETED_DRAFT==='1',remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
   assert(settings.microphone&&settings.output);await invoke('start_meeting',{settings});started=true;
   if(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE){

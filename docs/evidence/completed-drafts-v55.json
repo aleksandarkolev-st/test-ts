@@ -1,0 +1,455 @@
+{
+  "scope": "Same-build six-question public audio replay comparing completed provisional draft retirement. Questions cannot adapt to different answers; generated answer contexts can differ. No population latency estimate, CUDA execution or real microphone-interruption claim.",
+  "metric": "Client receipt of the first alphanumeric character of the retained decoded/validated answer, from speech end including ASR. Rendering and whole-answer completion are separate. Stages overlap and must not be summed.",
+  "policy": "Acceptance/debug COPILOT_REPLACE_COMPLETED_DRAFT=1 retires a terminal completed draft when the confirmed question or selected context differs and no update is pending. The existing single retry submits the explicit latest question, context and reference to a separate prepared thread; it cannot loop. Active streams and identical completed frames preserve their current behavior. No semantic keyword rules or expected answers are used.",
+  "baseline": {
+    "file": "artifacts/native-interview/luna-completed-baseline-v54/interview.json",
+    "sha256": "d34658df85e2ba768131a08bd4b7b99f55813ee98118064f039e4f1220ea40d6",
+    "binarySha256": "d81df31414b746b25a6d6181b0db1893ca74f38d6dde5d89785d48eb4f7e8a2d",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "91bb11fae27cf7068a5ebde628569fade1e561280633f265e6a10f3deafe7749"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "da16db28eec76cecdb0b4135d714e05ac71c53a063859eae64cf48a80725b666",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+      "scripts/native-signed-interview.mjs": "fc065e9382d2ff277bda1726bd80dd09d209a8a76a10f836e2745d6e0c04a254"
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true
+    },
+    "stageSummary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 6,
+        "median": 2320.5,
+        "max": 6971
+      },
+      "asrFinalizationFromSpeechEndMs": {
+        "count": 6,
+        "median": 764.5,
+        "max": 906
+      },
+      "confirmationAfterAsrMs": {
+        "count": 6,
+        "median": 15.5,
+        "max": 40
+      },
+      "foregroundSlotWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 0
+      },
+      "preparedThreadWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 1
+      },
+      "initialStartAcknowledgementMs": {
+        "count": 6,
+        "median": 11,
+        "max": 11
+      },
+      "latestInputSentAfterConfirmationMs": {
+        "count": 6,
+        "median": 1,
+        "max": 404
+      },
+      "latestInputConsumptionWaitMs": {
+        "count": 6,
+        "median": 80,
+        "max": 457
+      },
+      "pendingAgeAtConfirmationMs": {
+        "count": 4,
+        "median": 239.5,
+        "max": 2268
+      },
+      "finalPendingBudgetMs": {
+        "count": 4,
+        "median": 199,
+        "max": 398
+      },
+      "firstWordAfterLatestInputConsumptionMs": {
+        "count": 6,
+        "median": 1162.5,
+        "max": 5570
+      },
+      "renderAfterFirstWordMs": {
+        "count": 6,
+        "median": 5.5,
+        "max": 9
+      },
+      "cleanupMs": {
+        "count": 3,
+        "median": 1,
+        "max": 2
+      }
+    },
+    "meanFirstWordMs": 2955,
+    "medianFirstWordMs": 2320.5,
+    "rows": [
+      {
+        "round": 1,
+        "question": "A GPU pipeline intermittently produces mixed or stale batches under load, while isolated runs look correct. What would you clarify first?",
+        "recognizedQuestion": "A GPU pipeline intermittently produces mixed or stale batches under load while isolated runs look correct What would you clarify first",
+        "answer": "I’d first clarify what “mixed or stale” means and where it’s observed: are inputs, outputs, or batch IDs crossing between batches, and how is that detected? Then I’d ask what changes under load—concurrency, streams, buffer reuse, or batching—and whether the issue reproduces on a specific device or workload.",
+        "firstWordFromSpeechEndMs": 2629,
+        "completedDraftReplacements": 0,
+        "restarts": 0,
+        "followups": 0,
+        "latestInputSentAfterConfirmationMs": 1
+      },
+      {
+        "round": 2,
+        "question": "Before proposing a fix, what exact trace fields and controlled reproduction would you request to distinguish a staging-buffer overwrite from a batch-to-input association bug, without treating correlation as proof?",
+        "recognizedQuestion": "before proposing a fix What exact trace fields and controlled reproduction would you request to distinguish a staging buffer override from a batch to input association bug without treating correlation as proof",
+        "answer": "I’d request a per-item trace keyed by a unique request and batch ID, captured at each ownership boundary: input identity and checksum when enqueued, staging-buffer ID plus allocation and reuse generation when filled, copy/stream/event IDs and completion times, and the input-to-batch mapping at enqueue, launch, and output collection. I’d also record timestamps, thread or worker IDs, buffer offsets, and synchronization decisions, so we can reconstruct ordering rather than infer it from nearby events.\n\nFor reproduction, use deterministic, uniquely tagged inputs and force two batches to overlap while varying only one factor at a time: buffer reuse or staging capacity, then association and batching logic. Add controlled delays around fill, copy completion, launch, and collection; repeat under load and with synchronization as a comparison, while preserving the same inputs. A staging-buffer override is supported only if the trace shows a buffer generation or contents changed before its consuming copy or kernel read; an association bug is supported only if intact input identities are mapped to the wrong batch at an explicit mapping boundary. If neither causal sequence is demonstrated, the logs show correlation, not proof.",
+        "firstWordFromSpeechEndMs": 6971,
+        "completedDraftReplacements": 0,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 2
+      },
+      {
+        "round": 3,
+        "question": "With pinned staging memory and asynchronous HtoD, design a controlled experiment that causally tests whether overwriting the host buffer before copy completion corrupts a batch. Specify the ordering, controls, and observations that would distinguish this cause from an association bug; do not infer the DMA’s sampled bytes from timings alone.",
+        "recognizedQuestion": "with pin staging memory and asynchronous HOD design a controlled experiment that causally tests whether overwriting the host buffer before copy completion corrupts a batch specify the ordering controls and observations that would distinguish the cause from an association bug do not infer the DMA's sampled bytes from timings alone",
+        "answer": "I’d hold the input-to-batch mapping fixed and use uniquely tagged payloads, with a control that waits for the copy-completion event before buffer reuse and a treatment that overwrites the pinned buffer after submission but before that event. Record buffer address and generation, copy and event IDs, and mappings at enqueue, launch, and collection; verify the event ordering explicitly. Crucially, timings only establish that overwrite and copy overlapped—they do not show which bytes DMA sampled. Capture the device buffer immediately after the copy and before the kernel reads it, then compare its contents with both the original and replacement payloads; use a device-side snapshot or checksum with suitable synchronization. Overwrite is implicated if that snapshot contains replacement or mixed bytes while the recorded mappings remain correct; an association bug is implicated if the copied payload is intact but its input is mapped to the wrong batch at a recorded boundary. If the snapshot cannot resolve the bytes, the experiment is inconclusive, not proof from timing.",
+        "firstWordFromSpeechEndMs": 2012,
+        "completedDraftReplacements": 0,
+        "restarts": 1,
+        "followups": 2,
+        "latestInputSentAfterConfirmationMs": 1
+      },
+      {
+        "round": 4,
+        "question": "Without timing as proof, give an exact CUDA stream/event protocol that deterministically holds the HtoD until after the CPU overwrites the pinned buffer. Then specify how you verify the destination only after copy completion, and state the resulting happens-before edges.",
+        "recognizedQuestion": "without timing as proof Give an exact CUDA stream slash event protocol that deterministically holds the HOD until after the CPU overwrites the pinned buffer then specify how you verify the destination only after copy completion and state the resulting happens before edges",
+        "answer": "Use one non-default CUDA stream, `s`, and a pinned host buffer `h`. First enqueue `cudaMemcpyAsync(d, h, n, cudaMemcpyHostToDevice, s)`, then record event `copy_done` on `s`; return to the CPU without synchronizing. The CPU waits until that enqueue-and-record call has returned, overwrites `h` with a distinct tagged pattern, and signals a CPU latch. A separate CPU thread waits on that latch, then calls `cudaEventSynchronize(copy_done)`; this deliberately permits the overwrite before the H2D copy has completed, though it cannot guarantee the DMA samples the replacement bytes rather than the original or a mixture.\n\nAfter `cudaEventSynchronize` returns, enqueue a device-to-host copy of `d` into a separate pinned buffer `snapshot` on `s`, record `snapshot_done`, and synchronize that event before the CPU reads and compares the snapshot against the original and replacement patterns. The resulting happens-before edges are: H2D enqueue and event record precede the CPU overwrite; the overwrite precedes the CPU latch signal and the event-waiting thread’s wait; stream order places the H2D copy before `copy_done`; successful event synchronization establishes copy completion before snapshot enqueue; stream order places the snapshot copy before `snapshot_done`; and synchronizing `snapshot_done` precedes CPU inspection. There is intentionally no ordering edge forcing the overwrite before or after the DMA’s sampling of host bytes, so the observed destination bytes—not timing—determine the outcome.",
+        "firstWordFromSpeechEndMs": 2788,
+        "completedDraftReplacements": 0,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 404
+      },
+      {
+        "round": 5,
+        "question": "Give a two-stream protocol where the copy stream waits on a gate event before HtoD, and the CPU overwrites the pinned buffer before releasing that gate. State the exact happens-before edges and explain whether this proves corruption during an already-running DMA transfer.",
+        "recognizedQuestion": "give a two stream protocol where the copy stream waits on a gate event before COD and the CPU overwrites the pinned buffer before releasing that gate State the exact happens before edges and explain whether this proves corruption during an already running DMA transfer",
+        "answer": "Assuming “COD” means the H2D copy: record an initially-unrecorded `gate` event on a control stream `s_gate`, then enqueue `cudaStreamWaitEvent(s_copy, gate, 0)` on `s_copy`, followed by `cudaMemcpyAsync(d, h, n, cudaMemcpyHostToDevice, s_copy)` and a `copy_done` event. After those calls return, the CPU overwrites pinned buffer `h`, then records `gate` on `s_gate` to release the copy stream. Once `cudaEventSynchronize(copy_done)` returns, copy `d` to a separate pinned snapshot buffer and synchronize that D2H copy before inspecting the bytes.\n\nThe happens-before edges are: initial gate record → copy-stream wait → H2D copy → `copy_done`; CPU overwrite → gate-release record → wait completion → H2D copy; and H2D completion → `copy_done` synchronization return → snapshot copy → snapshot completion → CPU inspection. Therefore this protocol orders the overwrite before the H2D begins; it tests whether the copy sees the replacement payload, not corruption during an already-running DMA transfer. To test that race, the overwrite must occur after H2D submission but without a gate that prevents the copy from starting; observing the resulting destination bytes can establish what was copied, while timing alone cannot.",
+        "firstWordFromSpeechEndMs": 1531,
+        "completedDraftReplacements": 0,
+        "restarts": 0,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": -399
+      },
+      {
+        "round": 6,
+        "question": "At the instant `cudaStreamWaitEvent(S, gate, 0)` is called, which event record does it wait for if none has yet been issued? Give a corrected host/API call order that guarantees overwrite-before-HtoD, and state the resulting happens-before edges.",
+        "recognizedQuestion": "at the instant CUDA stream weight event. Is called which event record does it wait for if none has yet been issued Give a corrected host slash API call order that guarantees overwrite before DOD and state the resulting happens before edges",
+        "answer": "Assuming “DOD” means the H2D copy: use two streams, `s_gate` and `s_copy`, and an initially-unrecorded event `gate`. First enqueue `cudaStreamWaitEvent(s_copy, gate, 0)`; with no prior record, this wait does not hold the stream for a future record, so don’t use that order. Instead, have `s_gate` enqueue a blocking host function that waits on a CPU latch, then record `gate` after that host function. Next enqueue the wait on `s_copy`, then the H2D copy and `copy_done`. The CPU overwrites `h` and releases the latch only after the wait, copy, and event calls have been issued.\n\nThe edges are: CPU overwrite → latch release → host function returns → `gate` record completes → copy-stream wait completes → H2D begins → `copy_done`. The H2D therefore starts only after overwrite; this does not demonstrate overwrite during an already-running transfer. Avoid calling CUDA APIs from the host function.",
+        "firstWordFromSpeechEndMs": 1799,
+        "completedDraftReplacements": 0,
+        "restarts": 0,
+        "followups": 2,
+        "latestInputSentAfterConfirmationMs": 1
+      }
+    ]
+  },
+  "experiment": {
+    "file": "artifacts/native-interview/luna-completed-experiment-v55/interview.json",
+    "sha256": "ddd820873b30c6f605425507c3da29e2c132e8b4151c9b47939b8ab055417cf8",
+    "binarySha256": "d81df31414b746b25a6d6181b0db1893ca74f38d6dde5d89785d48eb4f7e8a2d",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "91bb11fae27cf7068a5ebde628569fade1e561280633f265e6a10f3deafe7749"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "da16db28eec76cecdb0b4135d714e05ac71c53a063859eae64cf48a80725b666",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+      "scripts/native-signed-interview.mjs": "fc065e9382d2ff277bda1726bd80dd09d209a8a76a10f836e2745d6e0c04a254"
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "settledUpdate": false,
+      "completedDraftReplacement": true,
+      "remoteOnly": true
+    },
+    "stageSummary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 6,
+        "median": 2342,
+        "max": 3055
+      },
+      "asrFinalizationFromSpeechEndMs": {
+        "count": 6,
+        "median": 759.5,
+        "max": 885
+      },
+      "confirmationAfterAsrMs": {
+        "count": 6,
+        "median": 8,
+        "max": 27
+      },
+      "foregroundSlotWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 0
+      },
+      "preparedThreadWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 1
+      },
+      "initialStartAcknowledgementMs": {
+        "count": 6,
+        "median": 11,
+        "max": 12
+      },
+      "latestInputSentAfterConfirmationMs": {
+        "count": 6,
+        "median": 1,
+        "max": 405
+      },
+      "latestInputConsumptionWaitMs": {
+        "count": 6,
+        "median": 299.5,
+        "max": 757
+      },
+      "pendingAgeAtConfirmationMs": {
+        "count": 5,
+        "median": 1,
+        "max": 319
+      },
+      "finalPendingBudgetMs": {
+        "count": 5,
+        "median": 398,
+        "max": 398
+      },
+      "firstWordAfterLatestInputConsumptionMs": {
+        "count": 6,
+        "median": 1296.5,
+        "max": 1774
+      },
+      "renderAfterFirstWordMs": {
+        "count": 6,
+        "median": 10,
+        "max": 10
+      },
+      "cleanupMs": {
+        "count": 2,
+        "median": 2.5,
+        "max": 3
+      }
+    },
+    "meanFirstWordMs": 2418.5,
+    "medianFirstWordMs": 2342,
+    "rows": [
+      {
+        "round": 1,
+        "question": "A GPU pipeline intermittently produces mixed or stale batches under load, while isolated runs look correct. What would you clarify first?",
+        "recognizedQuestion": "A GPU pipeline intermittently produces mixed or stale batches under load while isolated runs look correct What would you clarify first",
+        "answer": "I’d first clarify exactly what “mixed or stale” means: are samples from different batch IDs appearing together, or is a batch internally consistent but older than expected? I’d also ask how batches are identified and what correctness and freshness guarantees are expected, including whether reordering or delayed results are allowed. Those answers distinguish a data-integrity bug from a timing or ordering issue.",
+        "firstWordFromSpeechEndMs": 2213,
+        "completedDraftReplacements": 0,
+        "restarts": 0,
+        "followups": 0,
+        "latestInputSentAfterConfirmationMs": 1
+      },
+      {
+        "round": 2,
+        "question": "Before proposing a fix, what exact trace fields and controlled reproduction would you request to distinguish a staging-buffer overwrite from a batch-to-input association bug, without treating correlation as proof?",
+        "recognizedQuestion": "before proposing a fix What exact trace fields and controlled reproduction would you request to distinguish a staging buffer override from a batch to input association bug without treating correlation as proof",
+        "answer": "I’d ask for records at each ownership and handoff boundary, plus a deterministic test that changes one suspected cause at a time. For every batch, log a unique batch and sample ID, input-content hash, enqueue/dequeue sequence, timestamps, stream and device, buffer address and allocation generation, copy or DMA completion event, and the mapping from batch ID to input IDs at submission and GPU consumption. Include buffer lease or reuse events and the consumer’s observed IDs and hashes; don’t rely on timestamps or pointer values alone.\n\nFor reproduction, use a small fixed set of uniquely tagged inputs and force overlap with multiple in-flight batches, then repeat with synchronization that prevents buffer reuse while leaving batch-to-input mapping unchanged. Separately hold buffer ownership stable while varying concurrency or mapping paths. Capture the trace through completion and compare IDs and hashes at each boundary: an overwrite is supported if a buffer’s contents change after reuse or before its consumer finishes; an association bug is supported if the contents remain intact but the recorded or consumed batch-to-input mapping is wrong. Treat either as a hypothesis until the controlled intervention makes the failure appear or disappear reproducibly.",
+        "firstWordFromSpeechEndMs": 2697,
+        "completedDraftReplacements": 0,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 85
+      },
+      {
+        "round": 3,
+        "question": "With pinned staging memory and asynchronous HtoD, design a controlled experiment that causally tests whether overwriting the host buffer before copy completion corrupts a batch. Specify the ordering, controls, and observations that would distinguish this cause from an association bug; do not infer the DMA’s sampled bytes from timings alone.",
+        "recognizedQuestion": "with pinned staging memory and asynchronous HOD design a controlled experiment that causally tests whether overwriting the host buffer before copy completion corrupts a batch specify the ordering controls and observations that would distinguish this cause from an association bug do not infer the DMA's sampled bytes from timings alone",
+        "answer": "Use two pinned host buffers and two uniquely tagged batches, and record each batch’s expected hash and ID. In the test arm, submit an asynchronous H2D copy from buffer A, then deliberately wait for that copy’s completion event before allowing the producer to overwrite A or reuse it; keep batch-to-input mappings fixed. In the intervention arm, submit the same copy but gate the overwrite so it occurs before completion, while preserving the same mappings and workload. Record submission and completion events, buffer lease and reuse transitions, and the device-side copied bytes or hash after the copy has completed and before the kernel consumes them; compare those bytes to the expected batch hash. If only the early-overwrite arm reproducibly yields bytes matching the replacement contents or otherwise differs, that supports overwrite corruption; if the device bytes are correct but the consumed batch ID maps to the wrong input, that supports an association bug. Do not infer what DMA read from timestamps: establish it by observing the completed device-side data, and repeat with the overwrite timing varied while all other controls stay fixed.",
+        "firstWordFromSpeechEndMs": 3055,
+        "completedDraftReplacements": 0,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 405
+      },
+      {
+        "round": 4,
+        "question": "Without timing as proof, give an exact CUDA stream/event protocol that deterministically holds the HtoD until after the CPU overwrites the pinned buffer. Then specify how you verify the destination only after copy completion, and state the resulting happens-before edges.",
+        "recognizedQuestion": "without timing as proof Give an exact CUDA stream slash event protocol that deterministically holds the HOD until after the CPU overwrites the pinned buffer then specify how you verify the destination only after copy completion and state the resulting happens before edges",
+        "answer": "Assuming “HOD” means the asynchronous host-to-device copy, use a producer thread and a copy-submission thread, plus CUDA events to control device ordering. First, synchronize the stream and initialize pinned buffer A with batch X; submit `cudaMemcpyAsync(d, A, size, cudaMemcpyHostToDevice, s)` on stream `s`, then record event `copy_done` on `s`. Have the CPU overwrite A with a distinct pattern only after the copy has been submitted but before allowing `s` to progress: gate `s` behind a not-yet-recorded event, overwrite A, then record that gate event from a control stream. After `copy_done` completes, copy `d` to a separate verification buffer, synchronize that verification copy, and compare its bytes or hash against X and the replacement pattern; don’t read the destination earlier.\n\nThe intended edges are: copy submission precedes the stream gate; CPU overwrite completes before the gate is recorded; the gate precedes the H2D copy; the H2D copy precedes `copy_done`; and `copy_done` precedes the verification D2H copy and its CPU inspection. But note this protocol does **not** test “overwrite after submission but before copy completion”: the gate makes the overwrite happen before the H2D copy starts. To test that narrower race causally, CUDA stream/event ordering alone is insufficient because it cannot pause a DMA midway. You need a controlled mechanism that establishes overwrite during the copy’s execution, or a documented test hook in the transfer path; then verify only after its completion event. A result showing replacement bytes is evidence of overwrite impact, while unchanged expected bytes does not prove the race impossible.",
+        "firstWordFromSpeechEndMs": 2471,
+        "completedDraftReplacements": 1,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 1
+      },
+      {
+        "round": 5,
+        "question": "Give a two-stream protocol where the copy stream waits on a gate event before HtoD, and the CPU overwrites the pinned buffer before releasing that gate. State the exact happens-before edges and explain whether this proves corruption during an already-running DMA transfer.",
+        "recognizedQuestion": "Give a two stream protocol where the copy stream waits on a gate event before HOD and the CPU overwrites the pinned buffer before releasing that gate State the exact happens before edges and explain whether this proves corruption during an already running DMA transfer",
+        "answer": "Assuming HOD means host-to-device, initialize pinned buffer A with pattern X, then record `gate` on control stream `s_gate`. On copy stream `s_copy`, enqueue `cudaStreamWaitEvent(s_copy, gate, 0)`, then `cudaMemcpyAsync(d, A, size, cudaMemcpyHostToDevice, s_copy)`, followed by recording `copy_done`. The CPU overwrites A with distinct pattern Y and completes the write before re-recording `gate` on `s_gate`; after `cudaEventSynchronize(copy_done)`, verify d by copying it to a separate pinned buffer, synchronizing that copy, and inspecting its bytes.\n\nThe happens-before edges are: initial `gate` record → `s_copy` wait completes → H2D begins; CPU overwrite completes → second `gate` record → wait releases → H2D; H2D completes → `copy_done` → verification D2H completes → CPU inspection. This does not prove corruption during an already-running DMA transfer: the gate ensures the overwrite finishes before the H2D starts, so it tests only pre-copy overwrite.",
+        "firstWordFromSpeechEndMs": 2200,
+        "completedDraftReplacements": 0,
+        "restarts": 0,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": -359
+      },
+      {
+        "round": 6,
+        "question": "At the instant `cudaStreamWaitEvent(S, gate, 0)` is called, which event record does it wait for if none has yet been issued? Give a corrected host/API call order that guarantees overwrite-before-HtoD, and state the resulting happens-before edges.",
+        "recognizedQuestion": "at the instant CUDA stream wait event is called which event record does it wait for if none has yet been issued give a corrected host slash API call order that guarantees overwrite before DOD and state the resulting happens before edges",
+        "answer": "Assuming “DOD” means the H2D copy, record the gate event before enqueueing the wait: initialize pinned buffer A with X; record `gate` on a control stream; enqueue `cudaStreamWaitEvent(copy, gate, 0)` on the copy stream; then on the host overwrite A with Y and finish that write; finally enqueue a later operation on the control stream that releases the gate, such as waiting on a host-signaled event if supported by the chosen CUDA version, or use a host function/explicit synchronization arrangement that does not block the host before the overwrite. Then enqueue `cudaMemcpyAsync(d, A, ..., cudaMemcpyHostToDevice, copy)` after the wait and record `copy_done`. The edges are: initial gate record → copy-stream wait → H2D; host overwrite complete → gate release → wait completion → H2D; H2D completion → `copy_done` → any verification copy and inspection. Ensure the release mechanism is genuinely host-controlled and doesn’t deadlock the submitting thread; a CUDA event wait cannot be “released” merely by recording the same event again after the wait, because the wait captures the record that existed when it was enqueued.",
+        "firstWordFromSpeechEndMs": 1875,
+        "completedDraftReplacements": 1,
+        "restarts": 1,
+        "followups": 1,
+        "latestInputSentAfterConfirmationMs": 1
+      }
+    ]
+  },
+  "experimentMinusBaselineMeanMs": -536.5,
+  "result": "The median was essentially unchanged; the lower experimental mean includes disappearance of a baseline 6971 ms outlier whose post-consumption interval was 5570 ms. Two rounds exercised retirement, but the changed-thread answers still failed ordering requirements. This does not establish a general latency or accuracy benefit. No samples are discarded.",
+  "independentReview": {
+    "baselineRound4": "Submitting H2D before the CPU overwrite does not deterministically hold the copy until the overwrite. Its own explanation admits no such ordering edge.",
+    "experimentRound4": "The answer submits H2D first, then describes a not-yet-recorded gate as if it could hold that copy. Neither that call order nor waiting before a first event record establishes the claimed gate-before-copy edge.",
+    "round5Both": "Both answers claim a second gate record releases an existing wait on the first record. Later records do not retarget an existing CUDA event wait.",
+    "baselineRound6": "It finally records the gate behind a host function waiting on a CPU latch before submitting the copy-stream wait. Its dependency structure addresses the earlier missing-record error, assuming successful API calls and a CPU latch independent of unfinished CUDA work. No device execution or general callback-liveness certificate is claimed.",
+    "experimentRound6": "The final H2D submission comes after the overwrite, so that host call order can establish overwrite-before-copy. However, the answer invents an unspecified later gate-release mechanism and claims it releases a wait already capturing an earlier record. It does not supply the exact valid gate protocol it claims. Do not mistake the valid host submission order for validation of the gate mechanism.",
+    "eventSource": "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html",
+    "hostFunctionSource": "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EXECUTION.html",
+    "scope": "Independent review of the recorded answers, not model grades or a population correctness estimate. Answers contain protocols rather than complete programs; no compiler or device execution claim."
+  },
+  "checks": {
+    "rustDefaultPassed": 121,
+    "rustAcceptancePassed": 122,
+    "rustIgnored": 14,
+    "liveQuestionGrowthAndCompletedCorrectionPassed": true,
+    "liveCompletedRetirementCounterAsserted": true
+  },
+  "classifierProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "policyEnabledInRelease": false,
+  "goalAchieved": false
+}

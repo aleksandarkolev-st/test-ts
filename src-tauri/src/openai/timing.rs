@@ -38,6 +38,7 @@ pub struct Timeline {
     #[serde(default)] pub latest_input_ack: Option<u64>,
     #[serde(default)] pub latest_input_consumed: Option<u64>,
     #[serde(default)] pub refinement_restart_count: usize,
+    #[serde(default)] pub completed_draft_replacement_count: usize,
     #[serde(default)] pub restart_prompt_chars: Option<usize>,
     #[serde(default)] pub acoustic_refinement_count: usize,
     #[serde(default)] pub eager_final_replacement: bool,
@@ -92,6 +93,7 @@ impl Trace {
     pub fn input_ack(&self) {self.data.lock().unwrap().latest_input_ack=Some(self.clock.elapsed().as_millis()as u64);}
     pub fn input_consumed(&self) {self.data.lock().unwrap().latest_input_consumed=Some(self.clock.elapsed().as_millis()as u64);}
     pub fn refinement_restarted(&self) {self.data.lock().unwrap().refinement_restart_count+=1;}
+    pub fn completed_draft_replaced(&self) {self.data.lock().unwrap().completed_draft_replacement_count+=1;}
     pub fn acoustic_refined(&self) {self.data.lock().unwrap().acoustic_refinement_count+=1;}
     pub fn eager_final_replacement(&self, enabled:bool) {self.data.lock().unwrap().eager_final_replacement=enabled;}
     pub fn confirmed_question_refinements(&self, enabled:bool) {self.data.lock().unwrap().confirmed_question_refinements=enabled;}

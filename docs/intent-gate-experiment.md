@@ -495,3 +495,64 @@ The release build with `tauri/custom-protocol` passed. The idle release app was
 refreshed with every saved setting preserved: signed-in Codex, Luna Fast/low,
 Nemotron 160 ms and T24E390. Experimental update and trace paths are excluded
 from this release.
+
+## Completed provisional draft retirement (v54–v55)
+
+Even after excluding current-floor suggestions from selected context, a finished
+provisional answer can remain in the Codex thread used for its correction. The
+acceptance/debug-only `COPILOT_REPLACE_COMPLETED_DRAFT=1` experiment retires that
+thread when the confirmed question or selected context changes, the old turn is
+terminal, and no update is pending. The existing single retry submits the latest
+explicit question, context and reference to a separate prepared thread. Active
+streams and identical completed frames retain their behavior. A numeric
+`completedDraftReplacementCount` identifies actual policy use.
+
+The signed-in live transport test checked both question growth and a correction
+after provisional completion. It verified the final answer, one completed-draft
+replacement, no same-thread follow-up on that path, and retirement of the obsolete
+thread. These are transport and context checks, not technical-answer certification.
+
+Six fixed public questions and waveforms from the fresh transfer interview were
+then replayed on the same binary, source hashes, classifier and monitor. Both
+runs used Luna Fast/low, Nemotron 160 ms and the age-aware pending budget, and
+skipped model grading between turns.
+
+| Policy | First word after speech end, ms | Median, ms |
+| --- | --- | --- |
+| Baseline | 2629, 6971, 2012, 2788, 1531, 1799 | 2320.5 |
+| Retire completed draft | 2213, 2697, 3055, 2471, 2200, 1875 | 2342 |
+
+Retirement actually ran in rounds 4 and 6. The lower experimental mean
+(2418.5 versus 2955 ms) includes the disappearance of a baseline round-2 outlier
+with 5570 ms after input consumption. No samples are discarded; the nearly
+unchanged medians and mixed per-round results do not demonstrate a general
+latency benefit. ASR, generated answer histories and selected contexts can differ
+despite identical source audio. The fixed questions cannot adapt to different
+answers, and neither run establishes a population p95.
+
+Independent review still found failures. The retired-draft round-4 answer
+submitted H2D first, then claimed a not-yet-recorded gate held that copy. Both
+round-5 answers claimed a later record released a wait capturing the earlier
+event state. NVIDIA's [event contract](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html)
+does not support either claimed edge. Baseline round 6 finally recorded an
+event behind a CPU-latch host function before submitting the copy-stream wait;
+its dependency structure addresses the missing-record error, assuming successful
+calls and a latch independent of unfinished CUDA work. The experimental round 6
+submitted H2D after the CPU overwrite, which can establish overwrite-before-copy
+directly, but still supplied an unspecified later gate-release mechanism and
+claimed a false release edge for the existing wait. That valid host submission
+order does not validate the claimed gate protocol. Host functions must obey
+NVIDIA's [execution restrictions](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EXECUTION.html).
+No CUDA execution, callback-liveness or complete-program compilation claim is
+made for these protocol answers.
+
+The [completed-draft evidence](evidence/completed-drafts-v55.json) is reproduced
+with `node scripts/summarize-completed-drafts.mjs` after the usual stage audits.
+The original classifier profile is restored. Completed-draft retirement remains
+disabled in release; the near-instant latency and deep-correctness goals remain
+unmet.
+
+Default Rust tests passed 121, acceptance tests 122, with 14 live tests ignored
+in each; the signed-in correction test was also run explicitly. The release
+build with `tauri/custom-protocol` passed, and the idle app was refreshed with
+all saved settings preserved. No experimental policy was enabled in release.

@@ -39,6 +39,8 @@ impl Memory {
 
 #[derive(Default)]
 pub struct MeetingContext {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub frozen_acceptance_context: Option<String>,
     pub recent: VecDeque<TranscriptSegment>,
     pub memory: Memory,
     older: VecDeque<TranscriptSegment>,
@@ -167,6 +169,8 @@ impl MeetingContext {
     /// Suggestions created on that same floor are not their own reference data.
     /// Other speakers, earlier turns, and exact suggested code remain available.
     pub fn answer_context_for_utterance(&self, question:&str,started:Option<u64>)->String {
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        if let Some(context)=&self.frozen_acceptance_context {return context.clone();}
         // Keep the archive and summary retry behavior intact; retrieval bounds
         // apply only to the latency-sensitive answer prompt.
         let mut memory=vec![format!("Summary: {}",self.memory.summary)];
@@ -251,6 +255,18 @@ pub fn conversation(segments: &[TranscriptSegment]) -> String {
 mod tests {
     use super::*;
     use crate::meeting::SpeakerSource;
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[test]
+    fn frozen_replay_preserves_exact_prior_context_across_audio_and_answers() {
+        let mut c=MeetingContext::default();
+        let prior="REMOTE: Public prior question\nCOPILOT SUGGESTION: Exact prior answer\n";
+        c.frozen_acceptance_context=Some(prior.into());
+        c.push(seg(1,"A new audio fragment"));
+        c.remember_answer_at("current","New question","New streaming answer",2);
+        assert_eq!(c.answer_context_for_utterance("Different recognized words",Some(1)),prior);
+        c.frozen_acceptance_context=None;
+        assert!(c.answer_context("New question").contains("A new audio fragment"));
+    }
     #[test]
     fn classifier_context_keeps_earlier_setup_and_tail_with_speaker_provenance() {
         let mut c=MeetingContext::default();

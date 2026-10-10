@@ -113,6 +113,8 @@ enum Control {
     Inject(InputEvent, oneshot::Sender<u64>),
     #[cfg(all(feature = "acceptance", debug_assertions))]
     InspectJobs(oneshot::Sender<serde_json::Value>),
+    #[cfg(all(feature = "acceptance", debug_assertions))]
+    FreezeContext(String, String, oneshot::Sender<Result<(), String>>),
     Start(Settings, oneshot::Sender<Result<(), String>>),
     Stop(oneshot::Sender<Result<(), String>>),
     Pause,
@@ -234,7 +236,8 @@ async fn actor(
     let mut starting: Option<Starting> = None;
     let mut generation: Option<CancellationToken> = None;
     let mut answers = meeting::scheduler::Scheduler::default();
-    let intent_mode=meeting::intent::Mode::configured();
+    #[allow(unused_mut)]
+    let mut intent_mode=meeting::intent::Mode::configured();
     let mut intent_gate=meeting::intent::Gate::default();
     let intent_threshold=meeting::intent::ready_threshold();
     let quiet_priority=meeting::intent::quiet_priority_enabled();
@@ -259,9 +262,18 @@ async fn actor(
                         if let Some(trace)=traces.get(&job.question.id){latency.pipeline=trace.snapshot();}
                         serde_json::json!({"question":job.question,"phase":job.phase,"confirmed":job.confirmed,
                             "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
-                            "error":job.error,"latency":latency})
+                            "error":job.error,"latency":latency,"selectedContext":job.updates.borrow().context.clone()})
                     }).collect::<Vec<_>>();
                     let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs}));
+                },
+                #[cfg(all(feature="acceptance",debug_assertions))] Control::FreezeContext(context,policy,reply)=>{
+                    if !engine.view.active || !answers.jobs.is_empty() || generation.is_some() {
+                        let _=reply.send(Err("Frozen replay context requires an active, dismissed meeting".into()));
+                    } else {
+                        engine.context.frozen_acceptance_context=Some(context);
+                        intent_mode=if policy=="final" {meeting::intent::Mode::FinalOnly}else{meeting::intent::Mode::Existing};
+                        let _=reply.send(Ok(()));
+                    }
                 },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Protection(enabled,reply)=>{engine.view.protection=enabled;publish(&app,&mut engine,&view);let _=reply.send(());},
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Inject(mut event,reply)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);match &mut event{InputEvent::SpeechStarted(_,t)|InputEvent::SpeechEnded(_,t)|InputEvent::SpeechActivity(_,t,_)=>*t=now,InputEvent::Transcript(s)=>{s.started_at=now;s.ended_at=now;},_=>{}}let _=events_tx.send(event).await;let _=reply.send(now);}, Control::Start(settings,reply)=>{
@@ -621,6 +633,19 @@ async fn acceptance_jobs(rt:State<'_,Runtime>)->Result<serde_json::Value,String>
     }
     let _=rt;
     Err("Scheduler inspection is available only in acceptance/debug mode".into())
+}
+// Evaluation-only replay of an already captured public context. It cannot be
+// accessed in release builds and never installs future questions or rubrics.
+#[tauri::command]
+async fn acceptance_freeze_context(rt:State<'_,Runtime>,context:String,policy:String)->Result<(),String> {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    if crate::openai::acceptance_mode() {
+        if context.len()>160_000{return Err("Frozen context is oversized".into());}
+        if policy!="final"&&policy!="existing" {return Err("Choose final or existing replay policy".into());}
+        let (tx,rx)=oneshot::channel();send(&rt,Control::FreezeContext(context,policy,tx)).await?;
+        return rx.await.map_err(|_|"Frozen context cancelled".to_string())?;
+    }
+    let _=(rt,context,policy);Err("Frozen context is available only in acceptance/debug mode".into())
 }
 #[tauri::command]
 fn answer_visible(rt:State<'_,Runtime>,id:String,revision:Option<u64>) {
@@ -1141,6 +1166,7 @@ pub fn run() {
             get_snapshot,
             acceptance_event,
             acceptance_jobs,
+            acceptance_freeze_context,
             acceptance_protection,
             native_diagnostics,
             bootstrap,

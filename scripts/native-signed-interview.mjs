@@ -64,8 +64,9 @@ if(recordedDir){
 const realAudio=process.env.COPILOT_NATIVE_INTERVIEW_AUDIO==='1';
 const inputOnly=process.env.COPILOT_ACCEPTANCE_INPUT_ONLY==='1';
 assert(!(inputOnly&&realAudio),'Injected-input-only mode cannot measure capture or ASR');
-const remoteOnly=process.env.COPILOT_ACCEPTANCE_REMOTE_ONLY==='1';
-const selfLoopback=realAudio&&process.env.COPILOT_DEEP_AUDIO==='1'&&process.env.COPILOT_ACCEPTANCE_SELF_LOOPBACK!=='0';
+const selfLoopback=realAudio&&process.env.COPILOT_ACCEPTANCE_SELF_LOOPBACK==='1';
+const remoteOnly=process.env.COPILOT_ACCEPTANCE_REMOTE_ONLY==='1'||
+  (realAudio&&process.env.COPILOT_DEEP_AUDIO==='1'&&process.env.COPILOT_ACCEPTANCE_REMOTE_ONLY!=='0'&&!selfLoopback);
 assert(!(selfLoopback&&remoteOnly),'SELF output loopback requires both labeled capture channels');
 const requestedChunk=process.env.COPILOT_NATIVE_SPEECH_CHUNK_MS===undefined?null:Number(process.env.COPILOT_NATIVE_SPEECH_CHUNK_MS);
 assert(requestedChunk===null||[80,160,560,1120].includes(requestedChunk),'Choose a supported speech chunk size');
@@ -211,6 +212,7 @@ try {
     for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');break;}catch{await sleep(100);}}
   }
   const env={...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_DATA_DIR:dataDir,WEBVIEW2_USER_DATA_FOLDER:path.join(root,'.local/native-interview-webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:`--remote-debugging-port=${port}`};
+  if(remoteOnly)env.COPILOT_ACCEPTANCE_REMOTE_ONLY='1';
   if(selfLoopback)env.COPILOT_ACCEPTANCE_SELF_LOOPBACK='1';
   delete env.COPILOT_TEST_API;delete env.COPILOT_INTERVIEW_RESUME;
   app=spawn(path.join(appDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});
@@ -236,7 +238,7 @@ try {
   const outputDevice=requestedOutput?boot.devices.find(d=>d.source==='remote'&&d.name.toLowerCase().includes(requestedOutput.toLowerCase())):boot.devices.find(d=>d.source==='remote'&&d.id===boot.settings.output)||boot.devices.find(d=>d.source==='remote'&&d.default)||boot.devices.find(d=>d.source==='remote');
   assert(outputDevice,'Requested native interview playback output must be available');
   result.outputDevice=outputDevice.name;
-  const settings={...boot.settings,answerBackend:'codex',model,reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
+  const settings={...boot.settings,answerBackend:'codex',model,reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:remoteOnly?'':boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id||'',output:outputDevice.id};
   if(selfLoopback){
     const selfOutput=process.env.COPILOT_DEEP_SELF_OUTPUT||'T24E390';
     const device=boot.devices.find(d=>d.source==='remote'&&d.name.toLowerCase().includes(selfOutput.toLowerCase()));
@@ -245,10 +247,11 @@ try {
   }
   if(requestedChunk!==null)settings.speechChunkMs=requestedChunk;
   result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',agedFinalWait:process.env.COPILOT_AGE_FINAL_WAIT==='1',settledUpdate:process.env.COPILOT_SETTLED_UPDATE==='1',completedDraftReplacement:process.env.COPILOT_REPLACE_COMPLETED_DRAFT==='1',remoteOnly};
-  result.speechConfiguration.selfCapture={kind:selfLoopback?'synthetic_labeled_output_loopback':'physical_microphone',
+  result.speechConfiguration.selfCapture={kind:remoteOnly?'disabled':selfLoopback?'synthetic_labeled_output_loopback':'physical_microphone',
     device:boot.devices.find(d=>d.id===settings.microphone)?.name,physicalMicrophoneUsed:!selfLoopback&&!remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
-  assert(settings.microphone&&settings.output);await invoke('start_meeting',{settings});started=true;
+  assert(settings.output&&(remoteOnly||settings.microphone),'Capture requires an output; a microphone is required only when SELF capture is enabled');
+  await invoke('start_meeting',{settings});started=true;
   if(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE){
     assert.equal(result.intentMode,'early');
     const file=path.resolve(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE);

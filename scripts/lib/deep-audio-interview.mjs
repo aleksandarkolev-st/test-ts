@@ -126,7 +126,7 @@ export async function runDeepAudioInterview(ctx){
     recognizedQuestion:job?.question.text??null,latency:job?.latency??null,phase:job?.phase??'no_job',
     selectedContext:job?.selectedContext??null,error:job?.error??null,cancelled:job?.cancelled??false});await persist();
    let next=null;
-   if(!trial&&[6,9].includes(round)&&process.env.COPILOT_DEEP_SELF_OUTPUT){
+   if(!trial&&!result.speechConfiguration.remoteOnly&&[6,9].includes(round)&&process.env.COPILOT_DEEP_SELF_OUTPUT){
      const selfOffset=await eventCount();
      const selfText='Hold on. I want to check the assumptions before we continue.';
      const selfAudio=await prepareAudio(selfText,label+'-self');

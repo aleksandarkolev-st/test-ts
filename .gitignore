@@ -9,6 +9,7 @@ models/gaze/*.task
 native/*.dll
 artifacts/
 .local/
+.arun/
 __pycache__/
 *.log
 test-results/

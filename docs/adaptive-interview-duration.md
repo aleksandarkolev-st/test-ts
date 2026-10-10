@@ -9,6 +9,20 @@ generate a fresh opening and private examiner rubric. Each next question is
 generated from the actual candidate answer and interview history. The assistant
 receives public questions and conversation, never the private examiner rubric.
 
+Each new native run records a random run identifier and supplies it with the
+brief to scenario generation. Every grading request also supplies the examiner
+with the original brief, elapsed time and requested duration. This preserves the
+scope of a broad interview after its first opening and encourages fresh problem
+families when a line of reasoning is established, while retaining deeper
+follow-ups from actual answers. These fields are examiner-only data; they add no
+topic routing or question bank to the live assistant. Repeated errors should be
+recorded before moving to another problem family, rather than spending the whole
+interview restating a failed exercise. A run identifier is a
+variation prompt, not proof that questions are unique or uniformly random.
+Inspect the recorded questions to verify diversity. Examiner reviews describe
+the actual current and next topics using free-form labels, rather than a fixed
+topic vocabulary; these descriptions also require review before coverage claims.
+
 The duration uses a monotonic clock starting after setup and the introduction.
 It includes spoken questions, candidate responses and examiner grading, and
 finishes the active round after reaching the requested duration. It adds no
@@ -23,6 +37,15 @@ separately. Changed current-turn event slices avoid copying the growing complete
 event history on every timing poll. Raw recognized clauses and ASR finalization
 markers remain available for diagnosis; their preservation does not establish
 speech recognition accuracy.
+
+The audit also reports when a changed transcript first matched the eventual
+recognized question, and when its last uninterrupted matching suffix began.
+Matching preserves case and code operators and normalizes whitespace only.
+Observations from other speech floors are excluded. The interval from that
+stable text to the latest model request identifies possible early-send lead
+time retrospectively; it does not establish semantic completeness, classifier
+confidence, or an achievable latency reduction. Missing observations stay
+unknown, and overlaps before speech end remain negative.
 
 `node scripts/summarize-interview-duration.mjs DIRECTORY` verifies terminal
 duration and first-word identities and writes `duration-audit.json` plus

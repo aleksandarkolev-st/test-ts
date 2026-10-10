@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { connectNativePages } from './lib/native-cdp.mjs';
 import { gradeWithRetry } from './lib/examiner-retry.mjs';
 import { interviewBudget,continueInterview,interviewStopReason } from './lib/interview-duration.mjs';
@@ -70,6 +70,7 @@ await mkdir(output,{recursive:true});await mkdir(appDir,{recursive:true});await 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let app,vite,connection,invoke,started=false,appError='';
 const result={status:'in_progress',model:'gpt-6-luna',effort,tier:'fast',scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
+result.interviewPlan={runId:randomUUID(),brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||null,requestedDurationMs:budget.durationMs,questionDelivery:realAudio?'synthetic spoken audio':'text'};
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
 result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
 result.reviewMode=skipReview?'No model grading: fixed public replay, independent answer review required':'Model examiner; grades require independent review';
@@ -100,7 +101,7 @@ if(recordedDir){
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
-result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs'].map(async file=>[file,hash(await readFile(file))])));
+result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -180,7 +181,7 @@ async function speak(question,label){
 try {
   if(!scenario){
     const request=path.join(output,'scenario-request.json');
-    await writeFile(request,JSON.stringify({brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||'CUDA and GPU systems: vague unexpected behavior, followed by increasingly difficult quantitative reasoning, concurrency, memory ordering and exact code. Require clarification and revise hypotheses as new evidence arrives.'},null,2));
+    await writeFile(request,JSON.stringify({runId:result.interviewPlan.runId,brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||'CUDA and GPU systems: vague unexpected behavior, followed by increasingly difficult quantitative reasoning, concurrency, memory ordering and exact code. Require clarification and revise hypotheses as new evidence arrives.'},null,2));
     result.scenarioGenerationAttempts=[];
     await gradeWithRetry(()=>runChild(examiner,['--generate-scenario',request],{...process.env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'}),
       {attempts:reviewAttempts,onAttempt:async attempt=>{result.scenarioGenerationAttempts.push(attempt);await persist();}});
@@ -304,7 +305,7 @@ try {
     console.log(`Native round ${round}: ignored=${row.ignored}, first answer word ${row.firstWordFromSpeechEndMs} ms, first text ${row.firstTokenFromSpeechEndMs} ms, rendered ${row.firstVisibleFromSpeechEndMs} ms`);
     history+=`\nINTERVIEWER: ${question}\nSUGGESTED ANSWER (not necessarily correct): ${answer.answer}\n`;
     const request=path.join(output,`round-${String(round).padStart(2,'0')}.json`);
-    await writeFile(request,JSON.stringify({scenario,round,history},null,2));
+    await writeFile(request,JSON.stringify({scenario,round,history,interviewPlan:{...result.interviewPlan,elapsedMs:performance.now()-sessionClock}},null,2));
     if(skipReview){row.reviewSkipped=true;row.review=null;}
     else {
       row.examinerAttempts=[];

@@ -115,6 +115,7 @@ pub fn devices() -> Result<Vec<AudioDevice>, String> {
 pub fn capture(
     id: &str,
     source: SpeakerSource,
+    loopback: bool,
     clock: Instant,
     stop: &AtomicBool,
     tx: &mpsc::Sender<AudioFrame>,
@@ -151,7 +152,7 @@ pub fn capture(
                 CoTaskMemFree(Some(format.cast()));
                 return Err("Unsupported WASAPI mix format".into());
             }
-            let flags = if source == SpeakerSource::Remote {
+            let flags = if loopback {
                 AUDCLNT_STREAMFLAGS_LOOPBACK
             } else {
                 0
@@ -174,7 +175,7 @@ pub fn capture(
                 return Err(e);
             }
         };
-        let _wake = (source == SpeakerSource::Remote).then(CaptureWake::enter);
+        let _wake = loopback.then(CaptureWake::enter);
         let mut resampler = resampler::Resampler::new(rate);
         let mut last = clock.elapsed().as_millis() as u64;
         let mut sample_time = last as f64;

@@ -72,12 +72,17 @@ pub fn start(
         // Release capture always initializes both configured sources.
         #[cfg(all(feature="acceptance",debug_assertions))]
         if source==SpeakerSource::Self_ && std::env::var("COPILOT_ACCEPTANCE_REMOTE_ONLY").as_deref()==Ok("1") {continue;}
+        let loopback=source==SpeakerSource::Remote;
+        // Synthetic evaluation may label a separate output loopback as SELF.
+        // Release builds always capture SELF from the configured microphone.
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        let loopback=loopback||(crate::openai::acceptance_mode()&&std::env::var("COPILOT_ACCEPTANCE_SELF_LOOPBACK").as_deref()==Ok("1"));
         let stopping = stop.clone();
         let tx = frames.clone();
         let errors = events.clone();
         let (ready_tx, ready_rx) = std::sync::mpsc::channel();
         let thread = std::thread::spawn(move || {
-            if let Err(e) = windows_capture::capture(&id, source, clock, &stopping, &tx, ready_tx) {
+            if let Err(e) = windows_capture::capture(&id, source, loopback, clock, &stopping, &tx, ready_tx) {
                 let _ = errors.try_send(crate::meeting::InputEvent::Failure(e));
             }
         });

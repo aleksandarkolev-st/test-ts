@@ -126,13 +126,13 @@ export async function runDeepAudioInterview(ctx){
     recognizedQuestion:job?.question.text??null,latency:job?.latency??null,phase:job?.phase??'no_job',
     selectedContext:job?.selectedContext??null,error:job?.error??null,cancelled:job?.cancelled??false});await persist();
    let next=null;
-   if(!trial&&round<rounds&&[3,6,9].includes(round)&&job?.running){
-    if([6,9].includes(round)&&process.env.COPILOT_DEEP_SELF_OUTPUT){
+   if(!trial&&[6,9].includes(round)&&process.env.COPILOT_DEEP_SELF_OUTPUT){
      const selfOffset=await eventCount();
      const selfText='Hold on. I want to check the assumptions before we continue.';
      const selfAudio=await prepareAudio(selfText,label+'-self');
      row.selfPlayback={text:selfText,audio:await play(selfAudio,label+'-self',process.env.COPILOT_DEEP_SELF_OUTPUT),events:await events(selfOffset)};
-    }
+   }
+   if(!trial&&round<rounds&&[3,6,9].includes(round)&&job?.running){
     row.followupBasis={partialAnswer:row.answer,responseVersion:row.responseVersion,hostMs:Date.now()};
     row.provisionalReview=await examine(row,label+'-partial',true);next=row.provisionalReview.review.question;
     prepared=await prepareAudio(next,`round-${String(round+1).padStart(2,'0')}`);

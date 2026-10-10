@@ -358,6 +358,8 @@ async fn stream(
             match message {
                 Message::Text(data)=>{
                     let event:Value=serde_json::from_str(&data).map_err(|_|"Invalid local speech event")?;
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    let first_piece=text.is_empty();
                     let final_=match event["type"].as_str(){
                         Some("conversation.item.input_audio_transcription.delta")=>{text.push_str(event["delta"].as_str().ok_or("Missing streaming transcript")?);false},
                         Some("conversation.item.input_audio_transcription.completed")=>{text=event["transcript"].as_str().ok_or("Missing final transcript")?.into();true},
@@ -365,6 +367,11 @@ async fn stream(
                     };
                     if text.len()>32000{return Err("Local transcript exceeds the utterance limit".into());}
                     let (started,ended)={let mut clock=timing.lock().unwrap();clock.2=!final_;(clock.0,clock.1)};
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    if (first_piece||final_)&&std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
+                        tokio::select!{_=cancel.cancelled()=>return Ok(()),
+                            sent=events.send(InputEvent::RawTranscriptBoundary(source,final_,text.clone(),started,ended))=>sent.map_err(|_|"Meeting receiver closed")?};
+                    }
                     let segment=TranscriptSegment{id:format!("{source:?}-{id}"),source,text:text.trim().into(),started_at:started,ended_at:ended,final_};
                     tokio::select!{_=cancel.cancelled()=>return Ok(()),sent=events.send(InputEvent::Transcript(segment))=>sent.map_err(|_|"Meeting receiver closed")?};
                     if final_{text.clear();id=uuid::Uuid::new_v4().to_string();}

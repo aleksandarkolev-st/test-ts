@@ -12,6 +12,7 @@ export interface PipelineTimeline {
   latestInputSent?: number | null; latestInputAck?: number | null; latestInputConsumed?: number | null;
   refinementRestartCount?: number; restartPromptChars?: number | null; acousticRefinementCount?: number; eagerFinalReplacement?: boolean;
   confirmedQuestionRefinements?: boolean;
+  agedFinalWait?: boolean; pendingAgeAtConfirmationMs?: number | null; finalPendingBudgetMs?: number | null;
   cleanupStartedAt?: number | null; interruptAckAt?: number | null; cleanupTerminalAt?: number | null; cleanupMaxQueuedEvents?: number;
 }
 export interface Latency { responseRevision?: number; speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; firstWordAt?: number | null; completedAt: number | null; pipeline?: PipelineTimeline; remoteSpeechStartedAt?: number | null; firstRemotePartialAt?: number | null; firstCredibleCandidateAt?: number | null; remotePartialUpdates?: number }

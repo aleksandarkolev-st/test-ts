@@ -42,6 +42,9 @@ pub struct Timeline {
     #[serde(default)] pub acoustic_refinement_count: usize,
     #[serde(default)] pub eager_final_replacement: bool,
     #[serde(default)] pub confirmed_question_refinements: bool,
+    #[serde(default)] pub aged_final_wait: bool,
+    #[serde(default)] pub pending_age_at_confirmation_ms: Option<u64>,
+    #[serde(default)] pub final_pending_budget_ms: Option<u64>,
     #[serde(default)] pub cleanup_started_at: Option<u64>,
     #[serde(default)] pub interrupt_ack_at: Option<u64>,
     #[serde(default)] pub cleanup_terminal_at: Option<u64>,
@@ -92,6 +95,8 @@ impl Trace {
     pub fn acoustic_refined(&self) {self.data.lock().unwrap().acoustic_refinement_count+=1;}
     pub fn eager_final_replacement(&self, enabled:bool) {self.data.lock().unwrap().eager_final_replacement=enabled;}
     pub fn confirmed_question_refinements(&self, enabled:bool) {self.data.lock().unwrap().confirmed_question_refinements=enabled;}
+    pub fn aged_final_wait(&self,enabled:bool){self.data.lock().unwrap().aged_final_wait=enabled;}
+    pub fn pending_at_confirmation(&self,age:Option<u64>,budget:u64){let mut t=self.data.lock().unwrap();t.pending_age_at_confirmation_ms=age;t.final_pending_budget_ms=Some(budget);}
     pub fn cleanup_started(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_started_at=Some(self.clock.elapsed().as_millis()as u64);t.interrupt_ack_at=None;t.cleanup_terminal_at=None;t.cleanup_max_queued_events=queued;}
     pub fn cleanup_queue_depth(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_max_queued_events=t.cleanup_max_queued_events.max(queued);}
     pub fn interrupt_ack(&self) {self.data.lock().unwrap().interrupt_ack_at=Some(self.clock.elapsed().as_millis()as u64);}

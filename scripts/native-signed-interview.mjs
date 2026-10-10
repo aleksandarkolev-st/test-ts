@@ -30,11 +30,15 @@ if(seedWave){
   assert.equal((await readFile(seedWave.replace(/\.wav$/i,'.txt'),'utf8')).trim(),seedQuestion,'Saved waveform question must match the replay seed');
 }
 const rounds=Number(process.env.COPILOT_NATIVE_INTERVIEW_ROUNDS||12);assert(Number.isInteger(rounds)&&rounds>0&&rounds<=100);
+const effort=process.env.COPILOT_NATIVE_ANSWER_EFFORT||'low';
+assert(['low','medium','high'].includes(effort),'Choose a supported Luna candidate reasoning effort');
 const recordedDir=process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_DIR):null;
 const replayRounds=Number(process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS??rounds);
 assert(Number.isInteger(replayRounds)&&replayRounds>0&&replayRounds<=rounds,'Replay prefix must be within the requested round count');
 assert(recordedDir||process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS===undefined,'Replay prefix requires recorded questions and audio');
 const recorded=[];
+const skipReview=process.env.COPILOT_NATIVE_SKIP_REVIEW==='1';
+assert(!skipReview||(recordedDir&&replayRounds===rounds),'Skipping model review requires a completely fixed replay; adaptive follow-ups need the examiner');
 assert(!(!scenario&&(seedFile||recordedDir)),'Fixed regression replays must specify their examiner scenario');
 if(recordedDir){
   assert(!seedFile&&!seedWave&&recordedDir.toLowerCase().startsWith(root.toLowerCase()+path.sep),'Choose a workspace recorded replay or a seed replay, not both');
@@ -61,9 +65,11 @@ const examiner=path.join(root,'src-tauri/target/debug/examples/adaptive-intervie
 await mkdir(output,{recursive:true});await mkdir(appDir,{recursive:true});await mkdir(dataDir,{recursive:true});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let app,vite,connection,invoke,started=false,appError='';
-const result={status:'in_progress',model:'gpt-6-luna',effort:'low',tier:'fast',scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
+const result={status:'in_progress',model:'gpt-6-luna',effort,tier:'fast',scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
 result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
+result.reviewMode=skipReview?'No model grading: fixed public replay, independent answer review required':'Model examiner; grades require independent review';
+result.provisionalDiagnostics={enabled:process.env.COPILOT_TRACE_PROVISIONAL==='1',scope:'Acceptance-only bounded unvalidated decoded prefixes and raw ASR segment boundaries. Does not authorize display or semantic reuse; primary retained first-word metric is unchanged.'};
 if(result.intentMode==='early'){
   const threshold=Number(process.env.COPILOT_INTENT_READY_THRESHOLD??0.9);
   assert(Number.isFinite(threshold)&&threshold>=0&&threshold<=1,'Intent readiness threshold must be a bounded probability');
@@ -85,6 +91,7 @@ if(recordedDir){
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
+result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','scripts/native-signed-interview.mjs'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -199,9 +206,9 @@ try {
   const outputDevice=requestedOutput?boot.devices.find(d=>d.source==='remote'&&d.name.toLowerCase().includes(requestedOutput.toLowerCase())):boot.devices.find(d=>d.source==='remote'&&d.id===boot.settings.output)||boot.devices.find(d=>d.source==='remote'&&d.default)||boot.devices.find(d=>d.source==='remote');
   assert(outputDevice,'Requested native interview playback output must be available');
   result.outputDevice=outputDevice.name;
-  const settings={...boot.settings,answerBackend:'codex',model:'gpt-6-luna',reasoningEffort:'low',serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
+  const settings={...boot.settings,answerBackend:'codex',model:'gpt-6-luna',reasoningEffort:effort,serviceTier:'fast',projectPath:'',microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id||boot.devices.find(d=>d.source==='self')?.id,output:outputDevice.id};
   if(requestedChunk!==null)settings.speechChunkMs=requestedChunk;
-  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',remoteOnly};
+  result.speechConfiguration={backend:settings.speechBackend,chunkMs:settings.speechChunkMs,device:settings.nemotronDevice,deviceName:settings.nemotronDeviceName,acousticRefinements:result.acousticRefinements,eagerFinalReplacement:process.env.COPILOT_EAGER_FINAL_REPLACEMENT==='1',confirmedQuestionRefinements:process.env.COPILOT_CONFIRM_QUESTION_REFINEMENTS==='1',agedFinalWait:process.env.COPILOT_AGE_FINAL_WAIT==='1',remoteOnly};
   playbackName=boot.devices.find(d=>d.id===settings.output)?.name;assert(playbackName);
   assert(settings.microphone&&settings.output);await invoke('start_meeting',{settings});started=true;
   if(process.env.COPILOT_NATIVE_INTENT_BACKGROUND_FILE){
@@ -269,7 +276,8 @@ try {
     }
     const answer=await outcome(question,offset,stopped);
     const turnEvents=(await events()).slice(offset);
-    const row={round,question,speechEndNativeMs:stopped??answer.latency?.speechStoppedAt,speechEndHostMs:stoppedHostMs,audio,...answer,speechMarkers:turnEvents.filter(e=>e.name==='speech.started'||e.name==='speech.ended'),intentEvents:turnEvents.filter(e=>e.name.startsWith('intent.'))};
+    const row={round,question,speechEndNativeMs:stopped??answer.latency?.speechStoppedAt,speechEndHostMs:stoppedHostMs,audio,...answer,speechMarkers:turnEvents.filter(e=>e.name==='speech.started'||e.name==='speech.ended'),intentEvents:turnEvents.filter(e=>e.name.startsWith('intent.')),
+      provisionalPrefixes:turnEvents.filter(e=>e.name==='answer.provisional_prefix'),rawAsrBoundaries:turnEvents.filter(e=>e.name==='asr.raw_boundary')};
     if(realAudio){row.preservesAllRecognizedClauses=normalize(row.recognizedQuestion??'')===normalize(row.inputTranscript??'');}
     row.firstVisibleFromSpeechEndMs=stoppedHostMs==null?answer.firstRenderedFromSpeechEndMs:answer.firstVisibleHostMs==null?null:answer.firstVisibleHostMs-stoppedHostMs;
     result.rows.push(row);await persist();
@@ -279,8 +287,12 @@ try {
     history+=`\nINTERVIEWER: ${question}\nSUGGESTED ANSWER (not necessarily correct): ${answer.answer}\n`;
     const request=path.join(output,`round-${String(round).padStart(2,'0')}.json`);
     await writeFile(request,JSON.stringify({scenario,round,history},null,2));
-    await runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'});
-    const judged=JSON.parse(await readFile(request.replace(/\.json$/,'.review.json'),'utf8'));row.review=judged.review;await persist();
+    if(skipReview){row.reviewSkipped=true;row.review=null;}
+    else {
+      await runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'});
+      const judged=JSON.parse(await readFile(request.replace(/\.json$/,'.review.json'),'utf8'));row.review=judged.review;
+    }
+    await persist();
     if(round<rounds){question=recorded[round]?.question??row.review.question;assert(typeof question==='string'&&question.length);}
   }
   result.status='complete';result.targetAchieved=false; // Broad audio/interruption target requires further evidence.

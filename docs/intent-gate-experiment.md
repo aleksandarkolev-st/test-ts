@@ -318,3 +318,111 @@ microphone interruptions, physical CUDA execution, and human certification.
 The original profile was restored after the early run. Reproduce the summarized
 evidence from the preserved local artifacts with
 `node scripts/summarize-intent-finetuning.mjs`. The goal remains unmet.
+
+The next experiment counts the age of an already-pending Codex steer against
+the 400 ms final-consumption budget, instead of starting the entire budget again
+at confirmation. It is acceptance/debug-only (`COPILOT_AGE_FINAL_WAIT=1`). The
+transport reader records the current turn's exact input fingerprint before a
+full output queue can delay delivery of its consumption event. An expired age
+budget cannot restart work whose matching consumption is already known. The
+existing terminal cleanup and single fresh retry still apply. Release defaults
+retain the original wait policy.
+
+Two six-turn runs replayed the same public audio on the same build, classifier,
+T24E390 output and 160 ms Nemotron configuration. Model grading was skipped
+between these fixed replay turns, reducing extra calls and inter-turn gaps.
+Adaptive interviews still require their examiner; the harness rejects skipping
+review when any question must adapt.
+
+| Pending-wait policy | First word after speech end, ms | Mean, ms |
+| --- | --- | --- |
+| Original budget | 2022, 1950, 2138, 1621, 2628, 3997 | 2393 |
+| Age-aware budget | 1879, 1652, 2133, 1414, 2140, 2126 | 1891 |
+
+These small samples do not establish a causal 502 ms gain. Most pending inputs
+were newly sent at confirmation; some corresponding turns followed different
+completion paths, and recognition and cloud timing varied. One experimental
+turn recorded a 440 ms pending age and zero remaining wait budget. Recognition
+also lost an intended thread-count detail in the baseline, despite retaining
+all *recognized* clauses. No population p95 or general accuracy claim follows.
+
+A fresh 12-round adaptive audio interview then drilled from an underspecified
+deployment symptom into complete reduction code, 64-bit indexing, shared scratch,
+multiple consumers, event-handle generations and numerical correctness. Its
+first-word median was **2255 ms**, range **1614–3551 ms**. ASR finalization had
+a 788 ms median; the interval from latest input consumption to retained first
+word had a 1176 ms median. That latter interval includes cloud inference,
+transport, decoding and delivery. Rendering added 5–12 ms. Stages overlap and
+their medians must not be summed as independent costs.
+
+New opt-in acceptance diagnostics (`COPILOT_TRACE_PROVISIONAL=1`) record up to
+256 Unicode characters per speculative revision and raw ASR segment boundaries.
+They do not authorize display or prefix reuse. The offline audit observed 37
+different-question prefixes before speech ended and zero longest bounded
+prefixes per revision that literally matched the retained answer. Shorter
+cumulative snapshots were not tested for literal matching. Nonmatch does not prove semantic
+invalidity, and matching question text would not prove matching context. Host
+text-update intervals reached 583 ms; these are polling observations, not proof
+that a person could speak continuously. Raw segment timestamps refer to submitted
+audio chunks, not aligned word times.
+
+Independent review found substantive failures. The event counterexample claimed
+premature overwrite even though both waited-on later records remained ordered
+after the corresponding earlier reads on the same consumer streams. CUDA waits
+capture event state at the call and later records do not alter that wait; see
+NVIDIA's [event-record semantics](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html).
+The numerical answer also substituted sequential additions for the actual
+shared-memory reduction tree. For its three-element input, the supplied tree
+combines lanes 0 and 2 before lane 1 and produces one, not zero.
+
+Both complete code answers were independently compiled unchanged with NVIDIA
+NVCC 12.9.86, C++17 and `sm_80`: round 2 linked an executable; round 3 produced
+an object file. Source and output hashes and the verified official compiler
+archive provenance are included in the evidence. No CUDA device execution was
+performed, and these checks do not cover later illustrative usage snippets.
+
+The investigation also found a structural context bug: every closed code fence
+could replace the single preserved implementation, so a usage snippet could
+discard earlier definitions from a fresh context. Code-bearing answers now have
+a chronological 32,000-character archive with whole-entry eviction; the latest
+two answers and visible unfinished answer remain included without duplicates.
+A single individually accepted answer can exceed the archive budget with its
+question. Closed fences identify text worth preserving, not semantic completeness
+or which code is active. The model must resolve versions using conversation and
+later constraints. Tests cover usage snippets after many follow-ups, ordering
+of late completions, bounds, deduplication and reset. This adds relevant context
+and may increase prompt size; it is not a demonstrated latency improvement.
+
+Generic instructions now require tracing the actual supplied code, checking
+whether a requested counterexample is possible, and distinguishing illustrative
+usage from complete implementations. There are no domain-specific diagnoses,
+semantic keyword routes, cached interview answers or canned response prefixes.
+The exact public transcript replay separately checks the revised context and
+instructions without audio or ASR. Its answers differ from the original audio
+run, so it cannot be used as an audio latency comparison or adaptive certification.
+
+That replay still failed important questions with exact source text: its
+explanation misstated the block count despite a correct ceiling calculation;
+it repeated the impossible same-consumer-stream schedule; and it again traced
+the wrong reduction tree despite retained definitions. The examiner incorrectly
+marked one impossible schedule correct. Model grades are therefore stored
+separately from independent findings. A separate exact replay of the earlier
+named-actor counterexample checks the generic claim instruction, without
+including any expected answer in the candidate's input.
+
+The named-actor case failed at low reasoning: Luna repeatedly made B the finalizer
+and then wrongly declared A's finalization impossible. With the same question,
+binary and runtime sources, Luna Fast at high reasoning gave a correct trace,
+but its first word took **5767 ms**, compared with **1462 ms** at low. Both runs
+used exact transcript injection and exclude ASR. This single diagnostic shows
+a relevant quality/latency tradeoff, not general high-reasoning accuracy. The
+harness now accepts `COPILOT_NATIVE_ANSWER_EFFORT=low|medium|high` for isolated
+comparisons; its default and the live app's saved setting remain low.
+
+The [experiment evidence](evidence/prefix-experiment-v48.json) is reproduced with
+`node scripts/summarize-prefix-experiment.mjs`; per-run stage and prefix audits
+use `summarize-latency-stages.mjs DIRECTORY` and
+`analyze-provisional-prefixes.mjs DIRECTORY`. The classifier profile was restored
+and remains disabled in release. Real microphone interruptions, CUDA execution,
+near-instant response timing and general deep-interview correctness remain
+unverified or unmet.

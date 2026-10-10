@@ -21,6 +21,14 @@ const PARTIAL_MAX_WAIT: Duration = Duration::from_millis(800);
 const MAX_REUSABLE_HISTORY_CHARS: usize = 80_000;
 const FINAL_CONSUMPTION_WAIT: Duration = Duration::from_millis(400);
 const REFINEMENT_STALLED: &str = "__codex_final_refinement_wait__";
+fn aged_final_wait_enabled()->bool {
+    cfg!(all(feature="acceptance",debug_assertions))
+        &&std::env::var("COPILOT_AGE_FINAL_WAIT").as_deref()==Ok("1")
+}
+fn final_refinement_deadline(confirmed:tokio::time::Instant,pending_sent:Option<tokio::time::Instant>,aged:bool)->tokio::time::Instant {
+    let normal=confirmed+FINAL_CONSUMPTION_WAIT;
+    if aged {pending_sent.map(|sent|normal.min(sent+FINAL_CONSUMPTION_WAIT)).unwrap_or(normal)}else{normal}
+}
 fn eager_final_replacement() -> bool {
     #[cfg(all(feature="acceptance",debug_assertions))]
     { return std::env::var("COPILOT_EAGER_FINAL_REPLACEMENT").as_deref()==Ok("1"); }
@@ -357,7 +365,9 @@ impl Codex {
         let mut turn_id = None;
         let mut turn_finished = false;
         let mut pending_question:Option<(String,String,Option<String>)>=None;
-        let mut pending_confirmed_since:Option<tokio::time::Instant>=None;
+        let mut pending_final_deadline:Option<tokio::time::Instant>=None;
+        let mut pending_sent_at:Option<tokio::time::Instant>=None;
+        let mut pending_input_key:Option<[u8;32]>=None;
         let mut pending_steer=false;
         let mut active_context=initial_context.unwrap_or_else(||input.to_owned());
         let mut active_context_key=context_key(&active_context);
@@ -372,6 +382,8 @@ impl Codex {
         let mut context_dirty_since:Option<tokio::time::Instant>=None;
         let mut partial_deadline:Option<tokio::time::Instant>=None;
         let replace_final=eager_final_replacement();
+        let aged_final_wait=aged_final_wait_enabled();
+        if let Some(trace)=&trace{trace.aged_final_wait(aged_final_wait);}
         if let Some(trace)=&trace{trace.eager_final_replacement(replace_final);}
         let confirm_question_refinements=confirmed_question_refinements();
         if let Some(trace)=&trace{trace.confirmed_question_refinements(confirm_question_refinements);}
@@ -390,6 +402,11 @@ impl Codex {
                 // replacement. An active output stream never takes this path.
                 let terminal_pending=!turn_finished && turn_id.as_ref().is_some_and(|turn|
                     service.completed_turns.lock().unwrap().get(&id)==Some(turn));
+                // The reader may already have received the consumption event
+                // while this task is still draining preceding output. Preserve
+                // that current work rather than racing an expired age budget.
+                let consumption_pending=aged_final_wait&&pending_steer&&turn_id.as_ref().zip(pending_input_key.as_ref())
+                    .is_some_and(|(turn,key)|service.input_received(&id,turn,key));
                 if !terminal_pending {
                 // Coalesce ASR/context changes, with one pending update and a
                 // minimum cadence. Changed context has a maximum wait; plain
@@ -398,8 +415,15 @@ impl Codex {
                     let latest=receiver.borrow_and_update().clone();
                     if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
                     if latest.confirmed && pending_question.is_some() && pending_steer {
-                        pending_confirmed_since.get_or_insert_with(tokio::time::Instant::now);
-                    } else if !latest.confirmed {pending_confirmed_since=None;}
+                        if pending_final_deadline.is_none(){
+                            let now=tokio::time::Instant::now();
+                            let deadline=final_refinement_deadline(now,pending_sent_at,aged_final_wait);
+                            pending_final_deadline=Some(deadline);
+                            if let Some(trace)=&trace{trace.pending_at_confirmation(
+                                pending_sent_at.map(|sent|now.saturating_duration_since(sent).as_millis()as u64),
+                                deadline.saturating_duration_since(now).as_millis()as u64);}
+                        }
+                    } else if !latest.confirmed {pending_final_deadline=None;}
                     let selected_context=latest.context.clone().or_else(||retry_context.clone()).unwrap_or_else(||active_context.clone());
                     if stable_question!=latest.question || stable_context!=selected_context {stable_question=latest.question.clone();stable_context=selected_context.clone();stable_since=tokio::time::Instant::now();}
                     let partial_budget_available=prior_chars+history_chars+latest.question.chars().count()+selected_context.chars().count()+512<MAX_REUSABLE_HISTORY_CHARS;
@@ -433,6 +457,7 @@ impl Codex {
                         let text=format!("AUTOMATIC REMOTE TURN\n{context}The latest CURRENT QUESTION is:\n{}\nDecide reply intent and answer this latest utterance using the supplied meeting context. Disregard your earlier answer to the provisional question.",latest.question);
                         if turn_finished {
                             pending_steer=false;
+                            pending_sent_at=None;pending_input_key=None;
                             if let Some(trace)=&trace{trace.input_sent();}
                             let turn=service.rpc("turn/start",json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":[{"type":"text","text":text}],"outputSchema":output_schema}),&service.dead).await?;
                             if let Some(trace)=&trace{trace.input_ack();}
@@ -442,13 +467,15 @@ impl Codex {
                             if !latest.confirmed && latest.acoustic_quiet{if let Some(trace)=&trace{trace.acoustic_refined();}}
                             if !latest.confirmed{last_partial_sent=Some(tokio::time::Instant::now());context_dirty_since=None;}
                         } else {
+                            let sent_at=tokio::time::Instant::now();
+                            service.received_inputs.lock().unwrap().remove(&id);
                             if let Some(trace)=&trace{trace.input_sent();}
                             let steer=service.rpc("turn/steer",json!({"threadId":id,"expectedTurnId":turn_id,"input":[{"type":"text","text":text}]}),&service.dead).await;
                             if steer.is_ok(){if let Some(trace)=&trace{trace.input_ack();}}
                             // Completion may race the RPC. Observe its terminal
                             // event, then retry as a turn on the same thread.
-                            if steer.is_err() {pending_question=None;pending_steer=false;}
-                            else {history_chars+=text.chars().count();if let Some(trace)=&trace{trace.steered();trace.refinement_chars(text.chars().count());if !latest.confirmed && latest.acoustic_quiet{trace.acoustic_refined();}}if !latest.confirmed{last_partial_sent=Some(tokio::time::Instant::now());context_dirty_since=None;}pending_question=Some((text,latest.question,refreshed));pending_steer=true;}
+                            if steer.is_err() {pending_question=None;pending_steer=false;pending_sent_at=None;pending_input_key=None;}
+                            else {pending_sent_at=Some(sent_at);pending_input_key=Some(context_key(&text));history_chars+=text.chars().count();if let Some(trace)=&trace{trace.steered();trace.refinement_chars(text.chars().count());if !latest.confirmed && latest.acoustic_quiet{trace.acoustic_refined();}}if !latest.confirmed{last_partial_sent=Some(tokio::time::Instant::now());context_dirty_since=None;}pending_question=Some((text,latest.question,refreshed));pending_steer=true;}
                             if steer.is_err(){
                                 let wait=tokio::time::sleep(Duration::from_secs(1));tokio::pin!(wait);
                                 loop {
@@ -473,8 +500,8 @@ impl Codex {
                 }
                 let message = tokio::select! {
                     _=cancel.cancelled()=>return Err("cancelled".into()), _=service.dead.cancelled()=>return Err("Codex connection closed".into()), _=&mut deadline=>return Err("Codex answer timed out".into()),
-                    _=async {match pending_confirmed_since{Some(start)=>tokio::time::sleep_until(start+FINAL_CONSUMPTION_WAIT).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending=>{
-                        if updates.as_ref().is_some_and(|receiver|!receiver.borrow().confirmed){pending_confirmed_since=None;continue;}
+                    _=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{
+                        if updates.as_ref().is_some_and(|receiver|!receiver.borrow().confirmed){pending_final_deadline=None;continue;}
                         return Err(REFINEMENT_STALLED.into());
                     },
                     changed=async {match updates.as_mut(){Some(receiver)=>receiver.changed().await.map_err(|_|"Question update channel closed"),None=>std::future::pending().await}},if !terminal_pending=>{changed?;continue;},
@@ -496,7 +523,7 @@ impl Codex {
                         let item=&message["params"]["item"];
                         if pending_question.as_ref().is_some_and(|(text,_,_)|item["content"].as_array().is_some_and(|content|content.iter().any(|part|part["text"].as_str()==Some(text)))) {
                             if let Some(trace)=&trace{trace.input_consumed();}
-                            pending_confirmed_since=None;
+                            pending_final_deadline=None;pending_sent_at=None;pending_input_key=None;
                             pending_steer=false;
                             let (_,question,context)=pending_question.take().unwrap();active_question=question;
                             if let Some(context)=context{active_context=context;active_context_key=context_key(&active_context);}
@@ -545,6 +572,7 @@ impl Codex {
         }
         service.events.lock().unwrap().remove(&id);
         service.completed_turns.lock().unwrap().remove(&id);
+        service.received_inputs.lock().unwrap().remove(&id);
         // Remove the old trace before publishing this thread for reuse; the
         // next request can register its trace as soon as it takes the thread.
         service.traces.lock().unwrap().remove(&id);
@@ -626,6 +654,7 @@ fn disable_integrations(config: &mut Value, layer: &Value) -> Result<(), String>
 
 struct Service {
     completed_turns: Mutex<HashMap<String,String>>,
+    received_inputs: Mutex<HashMap<String,(String,Vec<[u8;32]>)>>,
     traces: Mutex<HashMap<String, Trace>>,
     config: tokio::sync::OnceCell<Value>,
     child: Mutex<Child>,
@@ -647,7 +676,7 @@ impl Service {
         let stdout=child.stdout.take().ok_or("Codex output pipe missing")?;
         let mut stdin=child.stdin.take().ok_or("Codex input pipe missing")?;
         let (outgoing, mut queue)=mpsc::channel::<Value>(16);
-        let service=Arc::new(Self {completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()});
+        let service=Arc::new(Self {received_inputs:Mutex::new(HashMap::new()),completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()});
         let writer=Arc::downgrade(&service);
         std::thread::spawn(move||{while let Some(message)=queue.blocking_recv(){
             if message["method"]=="turn/start" {if let Some(s)=writer.upgrade(){if let Some(id)=message["params"]["threadId"].as_str(){if let Some(trace)=s.traces.lock().unwrap().get(id){trace.mark(Stage::TurnStartSent);}}}}
@@ -657,6 +686,9 @@ impl Service {
         Ok(service)
     }
     fn next_id(&self) -> u64 { self.sequence.fetch_add(1, Ordering::Relaxed) }
+    fn input_received(&self,thread:&str,turn:&str,key:&[u8;32])->bool {
+        self.received_inputs.lock().unwrap().get(thread).is_some_and(|(received,keys)|received==turn&&keys.contains(key))
+    }
     async fn send(&self, message: Value) -> Result<(), String> {
         tokio::select! { _=self.dead.cancelled()=>Err("Codex connection closed".into()), result=self.outgoing.send(message)=>result.map_err(|_|"Codex connection closed".into()) }
     }
@@ -684,6 +716,12 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
             if sender.is_some() && message["method"]=="turn/completed" {
                 if let Some(turn)=message["params"]["turn"]["id"].as_str(){service.completed_turns.lock().unwrap().insert(id.to_owned(),turn.to_owned());}
             }
+            if sender.is_some() && message["method"]=="item/completed" && message["params"]["item"]["type"]=="userMessage" {
+                if let (Some(turn),Some(content))=(message["params"]["turnId"].as_str(),message["params"]["item"]["content"].as_array()) {
+                    let keys=content.iter().filter_map(|part|part["text"].as_str()).map(context_key).collect();
+                    service.received_inputs.lock().unwrap().insert(id.to_owned(),(turn.to_owned(),keys));
+                }
+            }
             sender
         };
         if message["method"]=="item/agentMessage/delta" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}
@@ -704,7 +742,25 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let child=command.stdin(Stdio::piped()).stdout(Stdio::null()).stderr(Stdio::null()).spawn().unwrap();
         #[cfg(windows)] let job=crate::process::ProcessJob::attach(&child).unwrap();
         let (outgoing,receiver)=mpsc::channel(16);
-        (Arc::new(Service{completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()}),receiver)
+        (Arc::new(Service{received_inputs:Mutex::new(HashMap::new()),completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()}),receiver)
+    }
+    #[tokio::test]
+    async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
+        let (service,_requests)=transport_fixture();let (output,mut events)=mpsc::channel(1);
+        output.try_send(json!({"method":"precedingOutput"})).unwrap();
+        service.events.lock().unwrap().insert("thread".into(),output);
+        let weak=Arc::downgrade(&service);
+        let reader=std::thread::spawn(move||dispatch(&weak,json!({"method":"item/completed","params":{
+            "threadId":"thread","turnId":"current","item":{"type":"userMessage","content":[{"text":"Exact corrected input"}]}}})));
+        let deadline=tokio::time::Instant::now()+Duration::from_secs(1);
+        while !service.input_received("thread","current",&context_key("Exact corrected input")) {
+            assert!(tokio::time::Instant::now()<deadline);tokio::task::yield_now().await;
+        }
+        assert!(!service.input_received("thread","older",&context_key("Exact corrected input")));
+        assert!(!service.input_received("thread","current",&context_key("Obsolete input")));
+        assert_eq!(events.recv().await.unwrap()["method"],"precedingOutput");
+        assert_eq!(events.recv().await.unwrap()["params"]["turnId"],"current");
+        assert!(reader.join().unwrap());service.shutdown();
     }
     #[tokio::test]
     async fn full_output_queue_blocks_interrupt_ack_until_the_receiver_drains() {
@@ -782,6 +838,16 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         assert!(!revised.render().contains("February 19"));assert!(!revised.render().contains(question));
         assert_eq!(context_key(&revised.context),context_key(corrected));
         let retained=frame.revised(latest,None);assert_eq!(retained.context,context);assert_eq!(retained.reference,reference);
+    }
+    #[test]
+    fn pending_final_budget_counts_existing_queue_age_without_extending_it() {
+        let sent=tokio::time::Instant::now();
+        let recent=sent+Duration::from_millis(100);
+        assert_eq!(final_refinement_deadline(recent,Some(sent),true),sent+FINAL_CONSUMPTION_WAIT);
+        let old=sent+Duration::from_millis(900);
+        assert!(final_refinement_deadline(old,Some(sent),true)<old);
+        assert_eq!(final_refinement_deadline(old,Some(sent),false),old+FINAL_CONSUMPTION_WAIT);
+        assert_eq!(final_refinement_deadline(old,None,true),old+FINAL_CONSUMPTION_WAIT);
     }
     #[test]
     fn changed_context_has_a_deadline_while_question_growth_waits_for_quiet() {

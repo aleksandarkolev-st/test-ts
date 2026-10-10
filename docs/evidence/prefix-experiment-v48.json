@@ -1,0 +1,1357 @@
+{
+  "scope": "Experimental signed-in Luna Fast evidence; no demonstrated near-instant latency. Fixed replays cannot adapt to different answers. Model grades and compilation do not certify runtime correctness.",
+  "metric": "Client receipt of the first alphanumeric character of the retained decoded/validated answer, from final speech end; audio runs include capture/ASR, rendering is separate. Exact-transcript replay excludes audio and ASR. Does not wait for sentence completion.",
+  "agedWait": {
+    "baseline": {
+      "file": "artifacts/native-interview/luna-pending-age-baseline-v45/interview.json",
+      "sha256": "f13786b0b8a62c22b0b275087994819d8c490510f9ab6314ac967cffdeb85340",
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "binarySha256": "2ad622fe86e564032dde1a2024aecda035b1090b45a249144b5913f77516683b",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "c4ec6054d1bc446672a161493af1a6065d29be19d250d31c08de230a72dde6c2"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+        "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+      },
+      "diagnosticSourceHashes": null,
+      "reviewMode": "No model grading: fixed public replay, independent answer review required",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": true,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "remoteOnly": true
+      },
+      "classifier": {
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "featureSchema": "finetuned-joint-readiness-v1",
+        "trainedModel": {
+          "file": "finetuned-parity-v42/model.fp32.onnx",
+          "bytes": 90403057,
+          "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+        },
+        "threshold": 0.9,
+        "changedTextCadenceMs": 250
+      },
+      "meanFirstWordMs": 2392.6666666666665,
+      "medianFirstWordMs": 2080,
+      "minFirstWordMs": 1621,
+      "maxFirstWordMs": 3997,
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 2022,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 1087,
+          "modelReview": null
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1950,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 1749,
+          "modelReview": null
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 2138,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 2902,
+          "modelReview": null
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 1621,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 4433,
+          "modelReview": null
+        },
+        {
+          "round": 5,
+          "firstWordFromSpeechEndMs": 2628,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": 1,
+          "finalPendingBudgetMs": 400,
+          "restarts": 1,
+          "promptChars": 5193,
+          "modelReview": null
+        },
+        {
+          "round": 6,
+          "firstWordFromSpeechEndMs": 3997,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": 0,
+          "finalPendingBudgetMs": 400,
+          "restarts": 1,
+          "promptChars": 4621,
+          "modelReview": null
+        }
+      ]
+    },
+    "experiment": {
+      "file": "artifacts/native-interview/luna-pending-age-experiment-v46/interview.json",
+      "sha256": "4e155b3bfa57df8feb2b32dd565e322d71d8f7f40b005319ec451cbebd2b8454",
+      "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions. Questions and audio are fixed public replays, not newly adaptive follow-ups.",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "binarySha256": "2ad622fe86e564032dde1a2024aecda035b1090b45a249144b5913f77516683b",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "43acb96fab45563a757a15329204f6edb5c9a16b2cd7b5b935563cbab9eb78a9",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+        "src-tauri/src/openai/prompts.rs": "06f15f98e1df572f2c8f0db8ad41905bc9f2cd7edffbf4ea93e5088fb74ba641",
+        "src-tauri/src/runtime.rs": "c4ec6054d1bc446672a161493af1a6065d29be19d250d31c08de230a72dde6c2"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+        "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+        "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+      },
+      "diagnosticSourceHashes": null,
+      "reviewMode": "No model grading: fixed public replay, independent answer review required",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": true,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": true,
+        "remoteOnly": true
+      },
+      "classifier": {
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "featureSchema": "finetuned-joint-readiness-v1",
+        "trainedModel": {
+          "file": "finetuned-parity-v42/model.fp32.onnx",
+          "bytes": 90403057,
+          "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+        },
+        "threshold": 0.9,
+        "changedTextCadenceMs": 250
+      },
+      "meanFirstWordMs": 1890.6666666666667,
+      "medianFirstWordMs": 2002.5,
+      "minFirstWordMs": 1414,
+      "maxFirstWordMs": 2140,
+      "rows": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 1879,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 1098,
+          "modelReview": null
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1652,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 1828,
+          "modelReview": null
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 2133,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": null,
+          "finalPendingBudgetMs": null,
+          "restarts": 0,
+          "promptChars": 2965,
+          "modelReview": null
+        },
+        {
+          "round": 4,
+          "firstWordFromSpeechEndMs": 1414,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": 440,
+          "finalPendingBudgetMs": 0,
+          "restarts": 1,
+          "promptChars": 4122,
+          "modelReview": null
+        },
+        {
+          "round": 5,
+          "firstWordFromSpeechEndMs": 2140,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": 1,
+          "finalPendingBudgetMs": 398,
+          "restarts": 0,
+          "promptChars": 4801,
+          "modelReview": null
+        },
+        {
+          "round": 6,
+          "firstWordFromSpeechEndMs": 2126,
+          "preservesRecognizedClauses": true,
+          "pendingAgeAtConfirmationMs": 1,
+          "finalPendingBudgetMs": 398,
+          "restarts": 1,
+          "promptChars": 4519,
+          "modelReview": null
+        }
+      ]
+    },
+    "interpretation": "Same binary, public waveforms and settings except age-aware pending budget. Descriptive six-turn samples, not a causal gain or population p95. Many pending inputs were newly sent at confirmation; only some waits exercised an aged budget. No model grading calls between replay turns; independent correctness review remains necessary."
+  },
+  "freshAdaptive": {
+    "file": "artifacts/native-interview/luna-deep-prefix-diagnostics-v47/interview.json",
+    "sha256": "9499bec8a47573ebf4b13414b1435fc06079d25ebd63c3cdf322732d8ae78ce4",
+    "scope": "Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review. Acceptance/debug-only remote capture; room microphone capture is excluded. This does not test real microphone interruptions.",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "binarySha256": "92569259f1c86b8228aa1744d23bf9e72eaeb1bdae6d200e019c87c3c4be8674",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "5077858316ac8771f182590bb1b3ba3bdb71b9d661f11f9a7212990cb802919f",
+      "src-tauri/src/runtime.rs": "b9c7f53a565efcabada5b73a5df2931b20cef6deeec31a9d148ece283d202925"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "7162a287fa840b27f948704a0a437b0b6310707f98e64ad4fffdb56678e44da9",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "97ec674c812ec802762da52da57b050a01cc215485569b90d758207e2da4ff4c"
+    },
+    "reviewMode": "Model examiner; grades require independent review",
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "remoteOnly": true
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "meanFirstWordMs": 2346,
+    "medianFirstWordMs": 2254.5,
+    "minFirstWordMs": 1614,
+    "maxFirstWordMs": 3551,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 1777,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 1043,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 1,
+          "incorrectClaims": [],
+          "issue": "The answer addresses the requested initial clarification: it distinguishes runtime from output changes, asks about reproducibility, identifies deployment changes, and proposes an old-versus-new comparison on the same inputs and hardware.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Suppose you confirm this is a hang: for N = 1,048,579 floats, each CTA writes a partial sum, calls `__threadfence()`, increments a device-global arrival counter, then spins until the counter equals the grid size. A separate kernel zeroes the counter in the same stream; the sum kernel is an ordinary, non-cooperative launch. Give complete, compilable replacement device code and host launch code, including bounds handling, initialization and launch ordering, error handling, and your stream/overlapping-call contract. State any assumptions your implementation needs.",
+          "requiredParts": [
+            "Clarify whether the change is runtime, output correctness, or both",
+            "Clarify the frequency and reproducibility of the issue",
+            "Identify deployment changes that could explain the difference",
+            "Compare old and new versions on the same inputs and hardware"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 3551,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 1,
+        "finalPendingBudgetMs": 398,
+        "restarts": 1,
+        "promptChars": 1758,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The replacement removes the unsafe grid-wide spin barrier and meets the requested implementation, ordering, error-checking, and stream/overlap-contract requirements for the stated N.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now generalize this routine to accept any `size_t N`, including zero, while supporting 64-bit indexing and respecting the device’s grid-x limit. Show the exact dispatch and kernel changes, including overflow-safe launch arithmetic and the zero-length output path.",
+          "requiredParts": [
+            "Complete replacement device and host code",
+            "Bounds handling for the stated input",
+            "Initialization and launch ordering",
+            "Launch and asynchronous error handling",
+            "A stated stream and overlapping-call contract",
+            "Explicit implementation assumptions"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 2684,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 150,
+        "finalPendingBudgetMs": 249,
+        "restarts": 1,
+        "promptChars": 6833,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "No identified defect: the grid-stride indexing, overflow guards, grid-x cap, zero-length path, and stream-ordered launches satisfy the requested requirements under the stated buffer-capacity and device-accessibility assumptions.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Late constraint: calls A and B run concurrently on different streams with distinct inputs and outputs but share `d_partial`. Give a concrete interleaving showing whether the two-kernel design can mix partials, then state the exact storage or event changes that make it safe while preserving concurrency.",
+          "requiredParts": [
+            "64-bit grid-stride indexing with overflow-safe advancement",
+            "Grid size bounded by the active device’s grid-x limit",
+            "Overflow-safe ceiling and launch arithmetic",
+            "Zero-length path writes zero and skips reduction launches",
+            "Dispatch and kernel changes, with required partial-buffer capacity stated"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 1614,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 10741,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer gives a concrete overwrite interleaving and specifies separate or disjoint scratch regions, with event ordering when a region is reused.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Each reduction now uses a private scratch region, and its output must be consumed asynchronously. Show the exact event and stream operations needed when the consumer runs first on the caller’s stream, then on a different stream; include when each scratch region may safely be reused.",
+          "requiredParts": [
+            "Give a concrete interleaving showing shared partial storage can mix results.",
+            "Specify storage or event changes that prevent mixing while preserving concurrency."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 5,
+        "firstWordFromSpeechEndMs": 1838,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 7291,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly distinguishes same-stream ordering from cross-stream event dependencies and identifies when scratch and output may be reused.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now A and B intentionally share one scratch region: A reduces on stream P, its consumer on stream C reads only A’s output, and B wants to overwrite the scratch on stream Q. Give the exact event-record/wait DAG that permits B to reuse scratch as soon as A’s reduction is done, while keeping A’s output valid through its consumer. What dependency must change if A’s consumer also reads the scratch?",
+          "requiredParts": [
+            "Use caller-stream ordering when reduction and consumer are on that same stream.",
+            "Record an event after reduction and make a different consumer stream wait before consuming the output.",
+            "State when scratch is safe to reuse, separately from when output is safe to reuse."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 6,
+        "firstWordFromSpeechEndMs": 2680,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 1,
+        "finalPendingBudgetMs": 398,
+        "restarts": 1,
+        "promptChars": 4793,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer covers the required event dependencies: B waits for A’s reduction before overwriting scratch, A’s consumer waits for reduction completion and retains its output until consumption finishes, and scratch reuse waits for consumer completion if that consumer reads scratch.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now let two consumers, C1 and C2, on separate nonblocking streams both read A’s scratch. Give the exact event record/wait calls that let Q overwrite scratch only after both reads finish; is a single done event recorded after C1 sufficient? Trace a concrete schedule if not.",
+          "requiredParts": [
+            "Order B’s scratch overwrite after A’s reduction completes",
+            "Keep A’s output valid through its consumer",
+            "If the consumer reads scratch, delay overwrite until those reads finish"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 7,
+        "firstWordFromSpeechEndMs": 2633,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 679,
+        "finalPendingBudgetMs": 0,
+        "restarts": 1,
+        "promptChars": 5563,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now pipeline A0 and A1 through the same P, C1, C2, and Q streams, reusing the same three event handles (`a_ready`, `c1_done`, `c2_done`). The host may enqueue A1’s event records before Q’s waits for A0. Give a concrete enqueue order that is safe, or explain why this reuse is unsafe; account precisely for which event record each `cudaStreamWaitEvent` waits on and prove Q cannot overwrite A0’s scratch before both A0 reads finish.",
+          "requiredParts": [
+            "Specify readiness dependencies from A’s reduction to both consumers.",
+            "Specify a join on both consumers’ completion before Q overwrites scratch.",
+            "Answer whether one completion event suffices and give a concrete failing schedule if not."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 8,
+        "firstWordFromSpeechEndMs": 2332,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 2,
+        "finalPendingBudgetMs": 397,
+        "restarts": 0,
+        "promptChars": 6296,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer gives a valid ordering that protects A0’s scratch, but does not show A1’s consumer launches or its c1_done/c2_done records, so it does not specify the full two-iteration pipeline using the reused handles.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A1’s C1 and C2 consumers and the corresponding completion-event records needed to complete the pipeline."
+          ],
+          "question": "If the host records A1’s a_ready before enqueueing Q’s waits on c1_done and c2_done for A0, which records do those waits bind to? Trace a concrete stream schedule and give a safe ordering using the same handles.",
+          "requiredParts": [
+            "Give a concrete safe enqueue order or explain why reuse is unsafe.",
+            "Identify which event record each stream wait binds to.",
+            "Prove Q cannot overwrite A0’s scratch before both A0 consumers finish."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 9,
+        "firstWordFromSpeechEndMs": 2004,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 8104,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly distinguishes the separate event handles: recording A1's a_ready does not change which c1_done/c2_done records Q's waits bind to. It gives a concrete unsafe queue order and a safe ordering that protects A0's scratch reads.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now suppose the host records A1’s c1_done on C1 and c2_done on C2 before Q enqueues waits intended to protect A0’s scratch. Identify exactly which records those waits bind to, give a concrete schedule where A0’s scratch is overwritten too early, and show a safe event-handle or enqueue-order design that preserves overlap.",
+          "requiredParts": [
+            "State which records Q’s waits bind to based on the latest c1_done/c2_done records at wait-call time.",
+            "Trace a concrete stream schedule and resulting scratch hazard.",
+            "Give a safe design or enqueue order using the same event handles."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 10,
+        "firstWordFromSpeechEndMs": 1999,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 8830,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "The proposed counterexample says Q may proceed while C2 is still reading A0 after waiting on C2’s A1 `c2_done` record. If that A1 record was enqueued on C2 after C2’s A0 read, C2 stream order places the A0 read before the A1 record; Q’s wait therefore cannot pass that record before the A0 read finishes. The stated schedule does not demonstrate premature overwrite."
+          ],
+          "issue": "The answer gives an invalid concrete schedule for premature overwrite: a later done-event record on the same consumer stream is ordered after that stream’s earlier A0 read, so waiting on it still protects that read.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Suppose the host re-records `c1_done` for A1 on an unrelated stream R before Q enqueues its wait, while C1 is still reading A0 scratch. Trace a legal schedule: which record does Q’s wait bind to, and can Q overwrite A0 scratch before C1 finishes? State the exact event/stream dependencies needed to make reuse safe.",
+          "requiredParts": [
+            "Identify which event records Q’s waits bind to under the stated enqueue order.",
+            "Give a concrete legal schedule that can permit premature overwrite, or establish why it cannot occur.",
+            "Provide a safe event-handle or enqueue-order design that preserves overlap."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 11,
+        "firstWordFromSpeechEndMs": 2177,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 8409,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly identifies which event record Q's wait captures and gives a safe dependency chain preventing scratch overwrite during A0's reads.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "New contract: for N = 3, `x = {2^24, 1, -2^24}`, the output must be the correctly rounded exact real sum. Trace your reduction’s actual float additions for this input and explain what algorithmic change would guarantee that contract for every supported input.",
+          "requiredParts": [
+            "Identify the event record Q’s wait binds to when `c1_done` is re-recorded on R before the wait is enqueued.",
+            "Give a legal schedule in which Q can overwrite A0 scratch before C1 finishes reading it.",
+            "Specify the event and stream dependencies that make reuse safe."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 12,
+        "firstWordFromSpeechEndMs": 2863,
+        "preservesRecognizedClauses": true,
+        "pendingAgeAtConfirmationMs": 1,
+        "finalPendingBudgetMs": 398,
+        "restarts": 1,
+        "promptChars": 9411,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "The answer traces `(2^24 + 1)` followed by `-2^24` and says the supplied reduction can return 0. For N=3 the supplied kernel uses one block; its shared-memory tree combines lane 0 with lane 2 at stride 2, yielding 0, then combines lane 1 at stride 1, yielding 1. The actual result is 1."
+          ],
+          "issue": "The required trace is of the supplied reduction’s actual additions, but the answer substitutes a different addition order. Its exact/superaccumulator recommendation is sound, but does not fix that trace error.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Specify an exact accumulator for summing any supported number of binary32 inputs: map each finite input to signed integer units of 2^-149, derive the required accumulator width for N up to SIZE_MAX, and give the round-to-nearest-even conversion back to binary32, including subnormals and overflow.",
+          "requiredParts": [
+            "Trace the supplied reduction’s actual float additions for {2^24, 1, -2^24}.",
+            "Explain what algorithmic change guarantees correctly rounded exact sums for every supported input."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "stageSummary": {
+    "firstWordFromSpeechEndMs": {
+      "count": 12,
+      "median": 2254.5,
+      "max": 3551
+    },
+    "asrFinalizationFromSpeechEndMs": {
+      "count": 12,
+      "median": 788,
+      "max": 935
+    },
+    "confirmationAfterAsrMs": {
+      "count": 12,
+      "median": 16.5,
+      "max": 34
+    },
+    "foregroundSlotWaitMs": {
+      "count": 12,
+      "median": 0,
+      "max": 0
+    },
+    "preparedThreadWaitMs": {
+      "count": 12,
+      "median": 0,
+      "max": 1
+    },
+    "initialStartAcknowledgementMs": {
+      "count": 12,
+      "median": 11,
+      "max": 13
+    },
+    "latestInputSentAfterConfirmationMs": {
+      "count": 12,
+      "median": 2,
+      "max": 406
+    },
+    "latestInputConsumptionWaitMs": {
+      "count": 12,
+      "median": 53.5,
+      "max": 479
+    },
+    "pendingAgeAtConfirmationMs": {
+      "count": 6,
+      "median": 1.5,
+      "max": 679
+    },
+    "finalPendingBudgetMs": {
+      "count": 6,
+      "median": 397.5,
+      "max": 398
+    },
+    "firstWordAfterLatestInputConsumptionMs": {
+      "count": 12,
+      "median": 1175.5,
+      "max": 2030
+    },
+    "renderAfterFirstWordMs": {
+      "count": 12,
+      "median": 7.5,
+      "max": 12
+    },
+    "cleanupMs": {
+      "count": 5,
+      "median": 1,
+      "max": 2
+    }
+  },
+  "prefixObservations": {
+    "scope": "Longest bounded unvalidated decoded prefix per job/revision/question/context frame; shorter cumulative snapshots are not tested for literal matching. Matching question text does not establish matching context or correctness; matching final text does not certify either answer. Update intervals are host polling observations, not a human speaking-gap measurement. Raw ASR timestamps refer to the latest submitted chunk, not word alignment. No prefix reuse is authorized by this report.",
+    "differentQuestionPrefixesBeforeEnd": 37,
+    "literalMatchingPrefixesBeforeEnd": 0,
+    "largestHostTextUpdateIntervalMs": 583,
+    "interpretation": "Literal nonmatch does not establish semantic invalidity. Question-text matching does not establish context identity. No speculative prefix is authorized for display or reuse."
+  },
+  "independentReview": {
+    "scope": "Assistant review of public questions, actual suggested code and NVIDIA event semantics. No physical CUDA execution or human interview certification.",
+    "round10": "The premature-overwrite trace is invalid: Q waits on both later done records on the same consumer streams, which remain ordered after both earlier A0 reads. A later record can add dependencies or create a cycle; it cannot remove those earlier reads under the stated stream order.",
+    "round12": "For the actual 256-lane shared reduction and N=3, stride 2 combines lane 0 with lane 2 to obtain zero; stride 1 adds lane 1 to obtain one. The answer substituted a sequential addition order. The exact/superaccumulator recommendation does not settle the requested actual trace.",
+    "codeContextFinding": "The old single code slot treated every closed fence as a replacement implementation. Later usage snippets could discard earlier definitions from a fresh answer context. The bounded chronological archive fixes that structural loss; this does not establish that context loss alone caused model failures.",
+    "reference": "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html",
+    "completeCodeCompilerCheck": {
+      "scope": "Actual NVIDIA NVCC compilation of unchanged extracted model answers. No execution on a CUDA device; excludes illustrative usage snippets and runtime correctness.",
+      "compilerVersion": "CUDA 12.9 NVCC V12.9.86",
+      "architecture": "sm_80",
+      "standard": "c++17",
+      "exitCode": 0,
+      "driverSha256": "a72e33684ce229db0876d0321d56a7c52219326b2c56db6234847dda95e2eefa",
+      "sdkProvenance": {
+        "manifest": "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1.json",
+        "components": [
+          {
+            "component": "cuda_nvcc",
+            "relative_path": "cuda_nvcc/windows-x86_64/cuda_nvcc-windows-x86_64-12.9.86-archive.zip",
+            "sha256": "227b109663b5e57d2718bcabb24a4ba0d9d4e52d958e327dc476f7c28691be85",
+            "md5": "ff9b2942aaa3a1dfb487da6767bc689f",
+            "size": "126917884"
+          },
+          {
+            "component": "cuda_cudart",
+            "relative_path": "cuda_cudart/windows-x86_64/cuda_cudart-windows-x86_64-12.9.79-archive.zip",
+            "sha256": "179e9c43b0735ffe67207b3da556eb5a0c50f3047961882b7657d3b822d34ef8",
+            "md5": "22e500ce68dc9e099ec18f57e1309808",
+            "size": "3521238"
+          },
+          {
+            "component": "cuda_cccl",
+            "relative_path": "cuda_cccl/windows-x86_64/cuda_cccl-windows-x86_64-12.9.27-archive.zip",
+            "sha256": "17aaa7c6b8f94a417d8f3261780b7e34b9cbdfab7513bce86768623b06aa28b5",
+            "md5": "afdfa89a35951f67b5bd70c513f5ef09",
+            "size": "3127658"
+          }
+        ]
+      },
+      "rows": [
+        {
+          "round": 2,
+          "operation": "compile and link executable",
+          "sourceSha256": "526dc54f74e54c3bdffe7bcae20f825b29f865d0c4b3aaab25657c787618c031",
+          "artifactSha256": "aed8e0ce1b6b3c08d227cae660d29c75ee8094911980590e9cdc25ba1c8c3d8a"
+        },
+        {
+          "round": 3,
+          "operation": "compile object",
+          "sourceSha256": "b7a3621fe60dab892eb42ea48eb507409e4911847359217a3f709918308e7c48",
+          "artifactSha256": "4211b50bad20df290ba6517dd43dd98612542b43ba137b40c7cae53fd03df89c"
+        }
+      ]
+    },
+    "usageSnippetLimitation": "Later snippets include ellipses and illustrative kernel names; compilation of rounds 2 and 3 does not certify those snippets."
+  },
+  "exactTranscriptReplay": {
+    "file": "artifacts/native-interview/luna-code-history-replay-v48/interview.json",
+    "sha256": "7b107ac301968095c33cddf8776d4246fc1aebc0a089b1741020b88868e147b5",
+    "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing. Questions are fixed public replays, not newly adaptive follow-ups; recorded audio is not played.",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "binarySha256": "fe5760dea7a411f0144a15705995e0162b5fce2435529fcf587d0a114688819b",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "b9c7f53a565efcabada5b73a5df2931b20cef6deeec31a9d148ece283d202925"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "47b3ab41cef525091ce7c36da7e5edfa76f4582d12579c7e74e7eab8a75c3be2",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "97ec674c812ec802762da52da57b050a01cc215485569b90d758207e2da4ff4c"
+    },
+    "reviewMode": "Model examiner; grades require independent review",
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "remoteOnly": false
+    },
+    "classifier": null,
+    "meanFirstWordMs": 1989.3333333333333,
+    "medianFirstWordMs": 1955,
+    "minFirstWordMs": 1434,
+    "maxFirstWordMs": 2739,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2505,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 1073,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 1,
+          "incorrectClaims": [],
+          "issue": "No material issue: the answer asks for the deployment changes, the nature and reproducibility of output differences, and relevant environment and workload details before diagnosing.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Here are the details for a hypothetical reproduction: CUDA 12.4, a 4-SM compute-capability-8.0 GPU, and a 1,048,579-float sum using 256 threads per block (4,097 blocks). An ordinary launch usually stops progressing; an 8-block grid finishes. The kernel writes each block’s partial sum, fences, increments a global counter, spins until the counter equals the grid size, then block 0 sums the partials. It is not a cooperative launch. The changed helper reduces reported occupancy from 4 to 2 active blocks per SM. Provide complete, compilable replacement device code and host launch path, including bounds handling, initialization and launch ordering, error handling, and your contract for streams and overlapping calls.",
+          "requiredParts": [
+            "Ask what deployment components changed",
+            "Clarify what differs in the output and how often or by how much",
+            "Clarify environment, workload, and whether the behavior reproduces"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 1551,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 2225,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [
+            "For N=1,048,579 and 256 threads, ceil(N/256)=4,097, not 4,096: 4,096 blocks cover 1,048,576 elements, leaving three for block 4,096. The code computes and launches 4,097 blocks, but the explanation says it launches 4,096 and reduces only 4,096 partials."
+          ],
+          "issue": "The stated CTA and partial counts are wrong for the specified N, although the code’s size_t ceiling calculation produces the correct 4,097-block launch.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Your code synchronizes the caller’s stream before returning. If the result must instead feed a following kernel on that stream without host synchronization, give the exact launch, lifetime, and error-checking changes; then state the dependency required if that consumer runs on another stream.",
+          "requiredParts": [
+            "Provide a replacement reduction and host launch path for the stated sum.",
+            "Handle input bounds, including the final partial block.",
+            "Handle initialization and launch ordering.",
+            "Check launch and execution errors.",
+            "State assumptions and a contract for streams and overlapping calls."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 2287,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 6369,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer provides 64-bit grid-stride indexing, caps the grid at the device’s grid-x limit, avoids overflow in ceil-division and loop increments, and launches a zero-result path for N=0. Its stated allocation and synchronization assumptions cover the requested contract.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Late constraint: two calls may overlap on distinct streams with distinct inputs and outputs but share this `partials` allocation. Trace a concrete interleaving that can corrupt a result, then give exact changes that make both calls correct without host synchronization, including scratch lifetime and any event dependencies.",
+          "requiredParts": [
+            "64-bit indexing and bounds handling for arbitrary size_t N",
+            "Overflow-safe launch arithmetic and grid-x-limit enforcement",
+            "A zero-length path that writes the zero sum without reading input",
+            "Exact dispatch and kernel changes, with stated assumptions"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 2444,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 10923,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "No material issue: the answer gives a valid interleaving that can corrupt A’s reduction and identifies disjoint per-call scratch as the concurrency-preserving fix; its event alternative correctly orders the full scratch lifetime.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "With per-call scratch, enqueue a consumer kernel on the caller’s stream immediately after the reduction, without host synchronization; give the exact ordering/error-handling contract, then state the dependency needed if that consumer instead runs on another stream.",
+          "requiredParts": [
+            "Show how shared scratch can mix partials across calls.",
+            "Specify safe storage or event ordering that preserves concurrency."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 5,
+        "firstWordFromSpeechEndMs": 1694,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 12462,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer correctly uses same-stream ordering, a completion event for cross-stream consumption, and orders cross-stream scratch reuse after the final reduction kernel.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "A consumer on another stream waits for `done` and reads `output`. The next reduction is then enqueued on the reduction stream and overwrites that same output before the consumer finishes. Give a concrete stream/event ordering that prevents the overwrite, and state when the output becomes reusable.",
+          "requiredParts": [
+            "Same-stream consumer ordering",
+            "Cross-stream consumer dependency",
+            "Scratch reuse only after the final reduction kernel has completed"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 6,
+        "firstWordFromSpeechEndMs": 2104,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 14995,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer gives the required event dependencies: Q waits until A’s reduction finishes before overwriting scratch; if C reads scratch, Q instead waits until C’s read finishes.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Suppose the API now requires the correctly rounded-to-nearest-even `float` result of the exact sum. For the stated 256-thread tree, trace `[16777216.0f, -16777216.0f, 1.0f, 1.0f]`: what does the implementation produce, what is the required result, and what algorithmic change can guarantee that contract for all finite `float` inputs?",
+          "requiredParts": [
+            "Record A’s reduction-complete event after its final reduction kernel.",
+            "Make C wait before consuming A’s output and Q wait before overwriting shared scratch.",
+            "If C also reads scratch, make Q wait until C has finished that read."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 7,
+        "firstWordFromSpeechEndMs": 1434,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 15795,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly establishes a reduction-complete event, makes both consumers wait on it, records a completion event after each consumer’s final scratch read, and makes Q wait on both before overwriting the scratch.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "You reuse the same `c1_done` event handle across invocations. Host order is: enqueue C1’s final A-scratch read, record `c1_done` on C1, enqueue `cudaStreamWaitEvent(Q, c1_done, 0)`, then enqueue a B-scratch read and record `c1_done` again on C1. Can Q’s wait be retargeted to the second record or otherwise fail to protect A’s scratch? Trace a concrete schedule and state the safe event-reuse rule.",
+          "requiredParts": [
+            "Ensure Q cannot overwrite A’s scratch until both C1 and C2 finish their final reads.",
+            "Explain why waiting only for C1 is insufficient and provide a concrete interleaving."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 8,
+        "firstWordFromSpeechEndMs": 2739,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 17851,
+        "modelReview": {
+          "constraintTracking": false,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "The claimed counterexample—that Q can wait on A1's `c2_done` record yet overwrite A0's scratch while A0's C2 read is still running—is false for the stated same C2 stream. A1's C2 work and its later event record are ordered after A0's already-enqueued C2 read, so a wait binding to that newer record also waits for the earlier A0 read."
+          ],
+          "issue": "The proposed Q waits correctly protect A0's readers only when they bind to A0's completion records. The answer's alleged failure when they bind to newer records is incorrect: same-stream order means the newer C1/C2 completion records follow the A0 reads. Also, the shown ordering does not make the whole pipeline safe: enqueueing A1 on P after Q's waits are enqueued does not make P wait for Q's scratch use to finish.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A complete safe pipeline ordering for A1's scratch write relative to both A0's readers and Q's scratch use; merely enqueueing Q's waits before A1 does not order P after Q."
+          ],
+          "question": "With A0's read kernels already enqueued on C1/C2, A1's completion records then enqueued on those same streams, and Q's waits issued afterward, identify exactly which records the waits bind to and prove whether Q can overwrite before either A0 read finishes. Then give the additional dependency that prevents A1 on P from racing Q's scratch use.",
+          "requiredParts": [
+            "Give a concrete safe enqueue order or explain why event-handle reuse is unsafe.",
+            "State which event record each `cudaStreamWaitEvent` binds to.",
+            "Prove Q cannot overwrite A0's scratch before both A0 reads finish."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 9,
+        "firstWordFromSpeechEndMs": 1928,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 20973,
+        "modelReview": {
+          "constraintTracking": false,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "The proposed race schedule is impossible as described: if A1’s consumer kernels and done-event records are enqueued after A0’s on the same C1 and C2 streams, each later event completes only after the earlier read on that stream. In particular, if A0’s C2 read ends at time 8 and A1’s C2 done event completes at time 9, Q waiting on both A1 done events cannot overwrite at time 5.",
+            "The suggested safe ordering moves Q’s waits before A1’s a_ready record, so it does not give a safe ordering under the question’s stated condition that A1’s a_ready is recorded first. It also does not establish that A1’s reduction cannot overwrite shared scratch before A0’s readers finish."
+          ],
+          "issue": "The answer correctly says that waits on c1_done/c2_done bind to the latest records of those respective events issued when the waits are enqueued, and that a_ready is a separate event. However, its concrete race contradicts same-stream ordering, and its safe ordering does not honor the stated enqueue condition.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "Give a safe ordering that records A1’s a_ready before Q’s waits while ensuring those waits still bind to A0’s c1_done and c2_done records; address how A1’s reduction itself is prevented from overwriting A0’s shared scratch too early."
+          ],
+          "question": "Assume A0’s reads are enqueued on C1/C2, then A1’s a_ready is recorded on P, and Q subsequently waits on c1_done/c2_done. Give the exact event-record order that makes those waits bind to A0’s records, and prove whether a later A1 done-event record on each consumer stream can permit Q to pass before A0’s read on that stream completes. Separately account for A1’s scratch writes.",
+          "requiredParts": [
+            "Identify which c1_done and c2_done records the waits bind to, given the enqueue order.",
+            "Trace a concrete stream schedule and explain its possible outcomes.",
+            "Give a safe ordering using the same event handles that satisfies the stated condition that A1’s a_ready is recorded before Q’s waits."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 10,
+        "firstWordFromSpeechEndMs": 1699,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 22589,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly identifies which event records the waits bind to, gives a concrete unsafe schedule, and offers safe per-generation events or enqueue ordering before handle reuse.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now A1’s reduction on P and B’s reduction on Q both write the same scratch used by A0. Give the minimal event dependency DAG that lets A1’s reduction and A0’s two readers overlap as much as safely possible, and state whether A1 and B can write that scratch concurrently.",
+          "requiredParts": [
+            "Identify the latest-record binding of each wait",
+            "Give a concrete early-overwrite schedule",
+            "Provide a safe event-handle or enqueue-order design that preserves overlap"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 11,
+        "firstWordFromSpeechEndMs": 1982,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 24838,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer correctly identifies that Q's wait binds to the latest c1_done record issued when the wait is enqueued, and gives a valid early-overwrite schedule and safe dependency choices.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "A0 and A1 share scratch; Q overwrites it for B0 only after A0’s C1/C2 readers finish, while P wants to enqueue A1’s reduction as early as possible. Give a precise event/stream DAG and enqueue order that prevents both A0 readers racing with B0 and A1’s writes racing with B0, while allowing all work that is safe to overlap. Which event records must Q wait on?",
+          "requiredParts": [
+            "Identify which c1_done record Q’s wait binds to when R re-records it before the wait",
+            "Give a concrete legal schedule where Q can overwrite A0 scratch before C1 finishes",
+            "Specify dependencies that make scratch reuse safe, including waits following the actual C1 and C2 reads"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 12,
+        "firstWordFromSpeechEndMs": 1505,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 25533,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [
+            "The stated reduction returns 0 for {2^24, 1, -2^24}. With the specified stride-halving tree, stride 2 first combines lanes 0 and 2 to 0; stride 1 then adds lane 1, producing 1. The exact sum is also 1, so this input does not show a rounding error."
+          ],
+          "issue": "The required trace of the implementation’s float additions is wrong: this reduction produces 1, not 0, for the specified input.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "For the same stride-halving reduction, trace every lane and stride for {2^24, -2^24, 1, 1}; then explain whether its result is correctly rounded and why.",
+          "requiredParts": [
+            "Trace the actual float additions for the specified three-element input.",
+            "Explain an algorithmic change that guarantees correctly rounded exact sums for the supported inputs."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "replayIndependentReview": {
+    "round2": "The explanation says 4,096 blocks; ceil(1,048,579 / 256) is 4,097. Its host expression computes the correct count. This is an explanation error even without ASR.",
+    "round10": "Model examiner false positive: its correct grade accepts A1 C2 completion at time 6 while A0 C2 read ends at time 8. Both are ordered on C2; the stated schedule is impossible, and Q waits on both done events.",
+    "round12": "The actual stride-halving code remains in the bounded code archive, but the answer still claims lane 0 combines with lane 1 first. It produces one for this input. Preserving definitions and generic trace instructions did not fix this model error.",
+    "correctnessCertified": false
+  },
+  "exactCounterexample": {
+    "file": "artifacts/native-interview/luna-claim-check-counterexample-v49/interview.json",
+    "sha256": "8c185d1b822f8ebc86498c7bb1b9cd82ddab72f13a67e6670c29e6fa00c2edc4",
+    "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing.",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "binarySha256": "fe5760dea7a411f0144a15705995e0162b5fce2435529fcf587d0a114688819b",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "b9c7f53a565efcabada5b73a5df2931b20cef6deeec31a9d148ece283d202925"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "47b3ab41cef525091ce7c36da7e5edfa76f4582d12579c7e74e7eab8a75c3be2",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "97ec674c812ec802762da52da57b050a01cc215485569b90d758207e2da4ff4c"
+    },
+    "reviewMode": "Model examiner; grades require independent review",
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "remoteOnly": false
+    },
+    "classifier": null,
+    "meanFirstWordMs": 1462,
+    "medianFirstWordMs": 1462,
+    "minFirstWordMs": 1462,
+    "maxFirstWordMs": 1462,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 1462,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 1583,
+        "modelReview": {
+          "constraintTracking": false,
+          "difficulty": 4,
+          "incorrectClaims": [
+            "The requested A-finalizing interleaving is not impossible. For G=2, B0 can write partial[0]=b0 and atomicAdd count from 0 to 1 (old=0); then A1 can write partial[1]=a1 and atomicAdd count from 1 to 2 (old=1). A1 finalizes A by summing b0 and a1, then writes A's out and resets count. A0 need not have run."
+          ],
+          "issue": "The answer incorrectly says A cannot receive old==1 and therefore supplies no valid interleaving, despite the question allowing any block of A to be the second incrementer.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A legal interleaving in which A finalizes a mixed partial array.",
+            "Identification of A's output pointer as the destination of the mixed sum.",
+            "The exact G=2 partial writes and atomic returns, and whether A's other block must have run."
+          ],
+          "question": "Replace the shared-counter protocol with a correct two-stage reduction for two overlapping calls on separate streams. Give a minimal host launch/API outline that specifies per-call scratch sizing and ownership, whether scratch needs initialization, stream ordering, and how you prevent scratch or output reuse until each call completes.",
+          "requiredParts": [
+            "Give a legal interleaving where A receives old==G-1 and finalizes a mixed array.",
+            "Identify which call's output pointer receives the sum.",
+            "For G=2, track the two partial writes and atomic return values in an interleaving where A gets old==1.",
+            "State whether A's other block must have run before A finalizes."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "exactCounterexampleIndependentReview": "Low reasoning repeats schedules where B is the second incrementer, then wrongly declares the A-finalizing case impossible. Under the question’s operational assumptions, B block 1 can increment first and A block 0 second, making A finalize the mixed array. Actual unsynchronized CUDA code is not certified as race-free by an operational interleaving.",
+  "highReasoningDiagnostic": {
+    "file": "artifacts/native-interview/luna-high-counterexample-v50/interview.json",
+    "sha256": "75af3262e91152cb04953961f1ee1e8bd07ee64129022baa5cd437a36e4e9248",
+    "scope": "Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review. Acceptance/debug-only injected input: no device capture, no real acoustic endpointing, and no ASR timing.",
+    "model": "gpt-6-luna",
+    "effort": "high",
+    "tier": "fast",
+    "binarySha256": "fe5760dea7a411f0144a15705995e0162b5fce2435529fcf587d0a114688819b",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "b9c7f53a565efcabada5b73a5df2931b20cef6deeec31a9d148ece283d202925"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "47b3ab41cef525091ce7c36da7e5edfa76f4582d12579c7e74e7eab8a75c3be2",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "672f033f11b3b1f9f239dfb96047ede820d818c31cd504ebb59a8d3cab2e5acc"
+    },
+    "reviewMode": "Model examiner; grades require independent review",
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "remoteOnly": false
+    },
+    "classifier": null,
+    "meanFirstWordMs": 5767,
+    "medianFirstWordMs": 5767,
+    "minFirstWordMs": 5767,
+    "maxFirstWordMs": 5767,
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 5767,
+        "preservesRecognizedClauses": null,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "restarts": 0,
+        "promptChars": 1591,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The interleaving meets the requested trace: A’s block 0 receives old==1, sums partial[0]=A0 with partial[1]=B1, writes A’s out, and need not wait for A’s block 1.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Give a minimal two-stage CUDA launch/API outline that permits calls A and B to overlap on separate streams. Specify scratch ownership and sizing, whether scratch needs initialization, stream ordering, and how you prevent scratch from being freed or reused before each call completes.",
+          "requiredParts": [
+            "Trace the two atomic return values and counter transitions",
+            "Identify the mixed partial indices and values summed",
+            "Identify which call’s output pointer receives the sum",
+            "State whether A’s other block must have run"
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      }
+    ]
+  },
+  "highReasoningIndependentReview": "Under the stated operational assumptions, the answer correctly makes B block 1 publish index 1 and receive old=0, then A block 0 publish index 0 and receive old=1; A writes A0+B1 to its own output and resets the counter. A’s other block need not have run. This one successful trace is not general interview or CUDA runtime certification.",
+  "reasoningComparisonScope": "Same public exact question, binary and runtime sources; isolated transcript injection with candidate effort changed from low to high, still Luna Fast. Harness source metadata differs because effort became configurable. Single-case diagnostic, no general accuracy or latency conclusion; live settings stay low.",
+  "comparisonScope": "v47 precedes the code-history fix and stronger generic trace instruction. v48 uses exact public transcript injection and changed candidate answers; its latency cannot be compared directly with audio v47. No claim that prompts or context archive satisfy all difficult traces.",
+  "checks": {
+    "rustDefaultPassed": 119,
+    "rustAcceptancePassed": 120,
+    "rustIgnored": 14,
+    "typescriptChecked": true
+  },
+  "runtimeProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "agedWaitEnabledInRelease": false,
+  "diagnosticsEnabledInRelease": false,
+  "classifierEnabledInRelease": false,
+  "realMicrophoneInterruptionsTested": false,
+  "goalAchieved": false
+}

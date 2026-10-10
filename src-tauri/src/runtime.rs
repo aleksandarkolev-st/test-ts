@@ -295,6 +295,11 @@ async fn actor(
             }},
             event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=s.settings.answer_backend==AnswerBackend::Codex;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
                 match event {
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    InputEvent::RawTranscriptBoundary(source,final_,text,started,ended)=>{
+                        emit(&app,"asr.raw_boundary",serde_json::json!({"source":source,"final":final_,"text":text,
+                            "startedAt":started,"endedAt":ended,"observedAt":now}));
+                    },
                     InputEvent::SpeechStarted(source,t)=>{
                         intent_gate.invalidate();
                         if source==SpeakerSource::Self_ {answers.resumed();}
@@ -799,10 +804,26 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
         let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);trace.prompt_chars(input.render().chars().count());if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
         crate::openai::timing::register(timings,id.clone(),trace.clone());let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
         emit(app,"answer.started",serde_json::json!({"id":id,"speculative":!job.confirmed}));
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        let diagnostic_app=app.clone();
         tauri::async_runtime::spawn(async move {
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            let mut prefix=meeting::provisional::Prefix::default();
             let result=async {let token=answer_token(&auth,&client,&cancel).await?;
                 tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed".to_string())?;
-                client.stream_question(&token,&model,&prompts::answer_instructions(prompts::ANSWER),&input,image.as_deref(),cancel.clone(),updates,|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Revision(text)=>Work::Revision(id.clone(),text),StreamEvent::QuestionDelta{question,context_key,text}=>Work::QuestionDelta(id.clone(),question,context_key,text),StreamEvent::NoReply{question,context_key}=>Work::NoReply(id.clone(),question,context_key),StreamEvent::QuestionCompleted{question,context_key}=>Work::QuestionComplete(id.clone(),question,context_key),StreamEvent::Completed=>Work::Complete(id.clone())};let tx=tx.clone();async move{tx.send(event).await.map_err(|_|"Meeting receiver closed".to_string())}}).await
+                client.stream_question(&token,&model,&prompts::answer_instructions(prompts::ANSWER),&input,image.as_deref(),cancel.clone(),updates,|event|{
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    if std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
+                        match &event {
+                            StreamEvent::Revision(_)=>prefix.reset(),
+                            StreamEvent::QuestionDelta{question,context_key,text}=>{
+                                if let Some(mut observation)=prefix.observe(question,*context_key,text,clock.elapsed().as_millis()as u64){
+                                    observation["id"]=serde_json::json!(id);emit(&diagnostic_app,"answer.provisional_prefix",observation);
+                                }
+                            },_=>{}
+                        }
+                    }
+                    let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Revision(text)=>Work::Revision(id.clone(),text),StreamEvent::QuestionDelta{question,context_key,text}=>Work::QuestionDelta(id.clone(),question,context_key,text),StreamEvent::NoReply{question,context_key}=>Work::NoReply(id.clone(),question,context_key),StreamEvent::QuestionCompleted{question,context_key}=>Work::QuestionComplete(id.clone(),question,context_key),StreamEvent::Completed=>Work::Complete(id.clone())};let tx=tx.clone();async move{tx.send(event).await.map_err(|_|"Meeting receiver closed".to_string())}}).await
             }.await;
             if !cancel.is_cancelled(){if let Err(e)=result{let _=tx.send(Work::Error(id.clone(),e)).await;}}
             let _=tx.send(Work::Finished(id)).await;

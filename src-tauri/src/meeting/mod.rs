@@ -3,6 +3,8 @@ pub mod intent;
 pub mod questions;
 pub mod state;
 pub mod scheduler;
+#[cfg(all(feature="acceptance",debug_assertions))]
+pub mod provisional;
 
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -31,6 +33,8 @@ pub enum InputEvent {
     SpeechEnded(SpeakerSource, u64),
     SpeechActivity(SpeakerSource, u64, bool),
     Transcript(TranscriptSegment),
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    RawTranscriptBoundary(SpeakerSource,bool,String,u64,u64),
     Manual(String),
     Dismiss,
     Pause(bool),

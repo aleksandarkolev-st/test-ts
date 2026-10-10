@@ -19,6 +19,8 @@ const rows=report.rows.filter(row=>row.latency&&Number.isFinite(row.latency.firs
     initialStartAcknowledgementMs:difference(p.turnStartAck,p.turnStartSent),
     latestInputSentAfterConfirmationMs:difference(p.latestInputSent,l.questionConfirmedAt),
     latestInputConsumptionWaitMs:difference(p.latestInputConsumed,p.latestInputSent),
+    pendingAgeAtConfirmationMs:p.pendingAgeAtConfirmationMs??null,
+    finalPendingBudgetMs:p.finalPendingBudgetMs??null,
     firstWordAfterLatestInputConsumptionMs:difference(l.firstWordAt,p.latestInputConsumed),
     renderAfterFirstWordMs:difference(p.firstVisible,l.firstWordAt),
     cleanupMs:difference(p.cleanupTerminalAt,p.cleanupStartedAt),

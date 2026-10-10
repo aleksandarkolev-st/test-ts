@@ -75,6 +75,9 @@ pub struct QuestionDetector {
     /// Signed-in streaming inference decides reply intent in the same turn.
     /// Local grammar remains a fallback for transports without intent framing.
     pub semantic_intent: bool,
+    /// Cache-aware ASR endpoints independently of our acoustic VAD. Whisper's
+    /// audio-chunk finalization instead requires the full VAD endpoint fence.
+    pub independent_asr_endpoint: bool,
     pub remote_speaking: bool,
     pub remote_quiet: bool,
     pub self_speaking: bool,
@@ -87,6 +90,8 @@ pub struct QuestionDetector {
     last_question_turn_started_at: Option<u64>,
     awaiting_final: bool,
     final_through: Option<u64>,
+    last_remote_activity: Option<u64>,
+    asr_pending: bool,
     partial: String,
 }
 impl QuestionDetector {
@@ -119,6 +124,8 @@ impl QuestionDetector {
                 self.partial.clear();
                 self.stopped_at = None;
                 self.final_through = None;
+                self.last_remote_activity = Some(now);
+                self.asr_pending = true;
             }
             SpeakerSource::Self_ => {self.self_speaking = true;self.remote_turn_interrupted=true;},
         }
@@ -130,10 +137,10 @@ impl QuestionDetector {
                 self.remote_speaking = false;
                 self.remote_quiet = true;
                 self.stopped_at = Some(now);
-                // Streaming recognizers may finalize before our independent
-                // VAD delivers Ended. A final covering this audio endpoint
-                // already satisfies the finalization fence.
-                self.awaiting_final = !self.final_through.is_some_and(|t| t >= now);
+                // ASR and independent VAD can disagree about the acoustic tail.
+                // Require an ASR final since the latest renewed voice activity,
+                // rather than pretending its chunk timestamp is a VAD endpoint.
+                self.awaiting_final = !self.finalization_ready();
             }
             SpeakerSource::Self_ => self.self_speaking = false,
         }
@@ -154,11 +161,12 @@ impl QuestionDetector {
                 &&(segment.started_at<=stop || segment.ended_at.saturating_sub(stop)<=REMOTE_CLAUSE_GAP_MS)) {
             self.text=self.last_question.clone();self.continued=true;
         }
-        if !segment.final_ { self.partial=segment.text.trim().into(); return self.candidate().is_some(); }
+        if !segment.final_ { self.asr_pending=true;self.awaiting_final=true;self.partial=segment.text.trim().into(); return self.candidate().is_some(); }
         self.partial.clear();
+        self.asr_pending = false;
         self.final_through = Some(self.final_through.unwrap_or(0).max(segment.ended_at));
-        if self.stopped_at.is_some_and(|t| segment.ended_at >= t) {
-            self.awaiting_final = false;
+        if self.stopped_at.is_some() {
+            self.awaiting_final = !self.finalization_ready();
         }
         let text = segment.text.trim();
         if !text.is_empty() {
@@ -174,8 +182,24 @@ impl QuestionDetector {
         if source==SpeakerSource::Remote && self.remote_speaking
             && self.remote_turn_started_at.is_some_and(|start|timestamp>=start) {
             self.remote_quiet=quiet;
+            if !quiet {
+                self.last_remote_activity=Some(timestamp);
+                // A receive-time audio timestamp can run ahead of recognition.
+                // Renewed voice requires a new final, even if the old timestamp
+                // happens to cover this activity.
+                self.asr_pending=true;
+                self.awaiting_final=true;
+            }
         }
     }
+    /// Protocol completion since the latest acoustic activity, not a claim that
+    /// ASR and VAD agree on the last voiced sample or that recognition is correct.
+    pub fn finalization_ready(&self)->bool {
+        let required=if self.independent_asr_endpoint {self.last_remote_activity}else{self.stopped_at.or(self.last_remote_activity)};
+        !self.asr_pending && self.partial.is_empty()
+            && self.final_through.is_some_and(|end|required.is_some_and(|start|end>=start))
+    }
+    pub fn last_remote_activity(&self)->Option<u64> {self.last_remote_activity}
     pub fn candidate(&self) -> Option<String> {
         let text=format!("{} {}",self.text,self.partial).trim().to_string();
         if self.semantic_intent {
@@ -230,12 +254,49 @@ impl QuestionDetector {
     }
     pub fn clear(&mut self) {
         let semantic_intent=self.semantic_intent;
-        *self = Self {semantic_intent,..Self::default()};
+        let independent_asr_endpoint=self.independent_asr_endpoint;
+        *self = Self {semantic_intent,independent_asr_endpoint,..Self::default()};
     }
 }
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn independent_asr_final_does_not_wait_for_a_second_final_after_vad_tail() {
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,0);
+        q.speech_activity(SpeakerSource::Remote,4950,false);
+        let mut final_=s("Explain the current request");final_.ended_at=5110;q.transcript(&final_);
+        q.speech_ended(SpeakerSource::Remote,5280);
+        assert!(q.finalization_ready());
+        assert_eq!(q.confirm(5781).unwrap().0,final_.text);
+    }
+    #[test]
+    fn renewed_voice_requires_a_new_final_even_when_old_audio_clock_is_ahead() {
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,0);
+        let mut old=s("Original request");old.ended_at=500;q.transcript(&old);
+        q.speech_activity(SpeakerSource::Remote,100,true);
+        q.speech_activity(SpeakerSource::Remote,200,false);
+        q.speech_ended(SpeakerSource::Remote,300);
+        assert!(!q.finalization_ready());assert!(q.confirm(800).is_none());
+        let mut next=s("Additional condition");next.ended_at=600;q.transcript(&next);
+        assert_eq!(q.confirm(800).unwrap().0,"Original request Additional condition");
+    }
+    #[test]
+    fn renewed_voice_and_even_empty_partial_require_another_asr_final() {
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,0);q.transcript(&s("Original request"));
+        q.speech_activity(SpeakerSource::Remote,90,true);
+        q.speech_activity(SpeakerSource::Remote,200,false);
+        q.speech_ended(SpeakerSource::Remote,300);assert!(q.confirm(800).is_none());
+        let mut tail=s("Additional condition");tail.final_=false;tail.ended_at=310;q.transcript(&tail);
+        assert!(q.confirm(800).is_none());tail.final_=true;q.transcript(&tail);
+        let mut empty=s("");empty.final_=false;q.transcript(&empty);
+        assert!(!q.finalization_ready());assert!(q.confirm(800).is_none());
+        empty.final_=true;empty.ended_at=320;q.transcript(&empty);
+        assert_eq!(q.confirm(800).unwrap().0,"Original request Additional condition");
+    }
     use super::*;
     #[test]
     fn an_unfinalized_tail_cannot_reconfirm_and_erase_the_same_floor_prefix() {

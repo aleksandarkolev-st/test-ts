@@ -245,6 +245,13 @@ pub struct Classifier {
     stop: Arc<AtomicBool>,
     status: mpsc::Receiver<&'static str>,
 }
+fn selected_profile(root:&std::path::Path,override_path:Option<std::ffi::OsString>)->Result<std::path::PathBuf,&'static str> {
+    let models=root.join(".local/intent-encoder").canonicalize().map_err(|_|"invalid_profile")?;
+    let selected=override_path.map(|path|root.join(path)).unwrap_or_else(||models.join("profile.json"));
+    let selected=selected.canonicalize().map_err(|_|"invalid_profile")?;
+    if !selected.starts_with(&models)||!selected.is_file(){return Err("invalid_profile");}
+    Ok(selected)
+}
 impl Classifier {
     pub fn start() -> Self {
         let (input, mut pending) = tokio::sync::watch::channel::<Option<Input>>(None);
@@ -254,13 +261,22 @@ impl Classifier {
         let cancelled = stop.clone();
         std::thread::spawn(move || {
             let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..");
+            // Isolated acceptance probes may choose a verified profile without
+            // replacing the user's default file. Release always uses the default.
+            let override_path=if cfg!(all(feature="acceptance",debug_assertions)) {
+                std::env::var_os("COPILOT_INTENT_PROFILE")
+            }else{None};
+            let profile=match selected_profile(&root,override_path) {
+                Ok(profile)=>profile,
+                Err(error)=>{let _=status_tx.try_send(error);return;}
+            };
             let mut command = Command::new(root.join(".local/gaze-runtime/Scripts/python.exe"));
             command
                 .arg(root.join("scripts/intent-encoder-worker.py"))
                 .arg("--models")
                 .arg(root.join(".local/intent-encoder"))
                 .arg("--profile")
-                .arg(root.join(".local/intent-encoder/profile.json"))
+                .arg(profile)
                 .env("PYTHONPATH", root.join(".local/intent-deps"))
                 .env("PYTHONUNBUFFERED", "1")
                 .env("PYTHONUTF8", "1")
@@ -396,6 +412,27 @@ impl Drop for Classifier {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn isolated_profile_selection_rejects_missing_and_escaped_paths() {
+        let root=std::env::temp_dir().join(format!("copilot-profile-{}",uuid::Uuid::new_v4()));
+        let models=root.join(".local/intent-encoder");
+        std::fs::create_dir_all(models.join("candidate")).unwrap();
+        std::fs::write(models.join("profile.json"),"{}").unwrap();
+        std::fs::write(models.join("candidate/profile.json"),"{}").unwrap();
+        std::fs::write(root.join("outside.json"),"{}").unwrap();
+        assert_eq!(selected_profile(&root,None).unwrap(),models.join("profile.json").canonicalize().unwrap());
+        assert_eq!(selected_profile(&root,Some(".local/intent-encoder/candidate/profile.json".into())).unwrap(),models.join("candidate/profile.json").canonicalize().unwrap());
+        assert!(selected_profile(&root,Some("outside.json".into())).is_err());
+        assert!(selected_profile(&root,Some(".local/intent-encoder/missing.json".into())).is_err());
+        assert!(selected_profile(&root,Some(".local/intent-encoder/candidate".into())).is_err());
+        // Verify the resolved deletion target is the unique test-owned child.
+        let resolved=root.canonicalize().unwrap();
+        let temp=std::env::temp_dir().canonicalize().unwrap();
+        assert_eq!(resolved.parent(),Some(temp.as_path()));
+        assert_eq!(resolved.file_name(),root.file_name());
+        assert!(resolved.file_name().unwrap().to_string_lossy().starts_with("copilot-profile-"));
+        std::fs::remove_dir_all(resolved).unwrap();
+    }
     #[test]
     fn acoustic_end_updates_existing_hidden_work_once_without_an_intent_prediction() {
         use crate::meeting::scheduler::Scheduler;

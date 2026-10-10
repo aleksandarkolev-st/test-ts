@@ -4,7 +4,7 @@ export async function gradeWithRetry(run,{attempts=1,onAttempt=async()=>{}}={}) 
   for(let attempt=1;attempt<=attempts;attempt++){
     const started=Date.now();let failure;
     try{await run();}catch(error){failure=error;}
-    const retryable=failure instanceof Error&&/Codex answer timed out/.test(failure.message);
+    const retryable=failure instanceof Error&&/Codex answer timed out|workspace routing discovery timed out/.test(failure.message);
     await onAttempt({attempt,elapsedMs:Date.now()-started,status:failure?'failed':'complete',
       failure:failure?String(failure):null,retryable:Boolean(retryable)});
     if(!failure)return;

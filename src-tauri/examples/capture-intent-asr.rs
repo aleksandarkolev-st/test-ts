@@ -121,6 +121,7 @@ async fn capture(service: Arc<nemotron::Service>, row: &Utterance, samples: Vec<
     tokio::pin!(feed);
     let mut detector = QuestionDetector::default();
     detector.semantic_intent = true;
+    detector.independent_asr_endpoint = true;
     let mut feeding = true;
     let mut deadline = tokio::time::Instant::now() + Duration::from_secs(86400);
     let (mut speech_end, mut final_end, mut pending_partial) = (None, None, false);
@@ -173,7 +174,7 @@ async fn capture(service: Arc<nemotron::Service>, row: &Utterance, samples: Vec<
                 }
             }
         }
-        if !feeding && !pending_partial && speech_end.is_some_and(|end| final_end.is_some_and(|last| last >= end)) {
+        if !feeding && !pending_partial && speech_end.is_some() && final_end.is_some() && detector.finalization_ready() {
             // Drain already queued events before closing the owned stream.
             if received.is_empty() { break Ok(()); }
         }
@@ -181,6 +182,7 @@ async fn capture(service: Arc<nemotron::Service>, row: &Utterance, samples: Vec<
     stream.stop();
     record(output,json!({"type":"utterance.finished","id":row.id,"complete":result.is_ok(),
         "eventCount":event_count,"lastSpeechEndMs":speech_end,"lastFinalEndMs":final_end,
+        "lastRemoteActivityMs":detector.last_remote_activity(),"finalizedCurrentActivity":detector.finalization_ready(),
         "error":result.as_ref().err()}))?;
     result
 }
@@ -210,7 +212,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         waves.push((wave,format!("{:x}",Sha256::digest(&bytes)),pcm(&bytes)?));
     }
     let mut output = OpenOptions::new().write(true).create_new(true).open(&output_path)?;
-    record(&mut output,json!({"type":"capture.started","schemaVersion":1,
+    record(&mut output,json!({"type":"capture.started","schemaVersion":2,
         "scope":"Offline ASR data, no answer or classifier inference. Real-time paced recorded PCM through production Nemotron and VAD; excludes WASAPI, microphone, monitor rendering, answer latency and full application-state parity. Context is caller-supplied previous conversation and never sent to ASR. No labels are inherited from future words.",
         "manifestSha256":format!("{:x}",Sha256::digest(&raw)),"runtimeSha256":sha(&runtime)?,"modelSha256":sha(&model)?,
         "collectorSha256":format!("{:x}",Sha256::digest(include_bytes!("capture-intent-asr.rs"))),

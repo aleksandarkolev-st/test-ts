@@ -43,6 +43,21 @@ class PrepareTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 self.prepare(rows)
 
+    def test_independent_endpoint_is_checked_against_renewed_activity_without_rewriting_vad_time(self):
+        rows = self.records()
+        rows[0]['schemaVersion'] = 2
+        rows[-2].update(lastSpeechEndMs=700, lastRemoteActivityMs=590, finalizedCurrentActivity=True)
+        self.assertEqual(len(self.prepare(rows)['cases']), 1)
+        rows[-2]['lastRemoteActivityMs'] = 611
+        with self.assertRaises(AssertionError):
+            self.prepare(rows)
+
+    def test_latest_fragment_is_preserved_when_words_arrive_inside_spacing_interval(self):
+        rows = self.records()
+        rows.insert(3, {**rows[2], 'text': 'Later available words', 'observedAtMs': 450})
+        result = self.prepare(rows)
+        self.assertEqual([row['text'] for row in result['cases']], ['Later available words'])
+
 
 if __name__ == '__main__':
     unittest.main()

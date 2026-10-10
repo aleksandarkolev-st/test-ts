@@ -8,7 +8,7 @@ from pathlib import Path
 
 def prepare(raw, per_utterance, spacing_ms, seed):
     records = [json.loads(line) for line in raw.decode('utf-8-sig').splitlines() if line]
-    assert records[0]['type'] == 'capture.started' and records[0]['schemaVersion'] == 1
+    assert records[0]['type'] == 'capture.started' and records[0]['schemaVersion'] in (1, 2)
     assert records[-1]['type'] == 'capture.finished' and records[-1]['complete'] is True
     utterances, active = {}, None
     for row in records[1:-1]:
@@ -25,7 +25,11 @@ def prepare(raw, per_utterance, spacing_ms, seed):
                 utterances[active]['candidates'].append(row)
             elif kind == 'utterance.finished':
                 assert row['complete'] is True and row['lastSpeechEndMs'] is not None
-                assert row['lastFinalEndMs'] >= row['lastSpeechEndMs']
+                if records[0]['schemaVersion'] == 1:
+                    assert row['lastFinalEndMs'] >= row['lastSpeechEndMs']
+                else:
+                    assert row['finalizedCurrentActivity'] is True
+                    assert row['lastRemoteActivityMs'] is not None and row['lastFinalEndMs'] >= row['lastRemoteActivityMs']
                 active = None
         else:
             assert kind == 'device.selected', f'Unexpected record type: {kind}'
@@ -34,16 +38,18 @@ def prepare(raw, per_utterance, spacing_ms, seed):
     for identifier, utterance in utterances.items():
         metadata = utterance['metadata']
         eligible, seen = [], set()
-        for candidate in utterance['candidates']:
+        # Work backwards so the last available fragment is represented even
+        # when its final words arrived inside a normal spacing interval.
+        for candidate in reversed(utterance['candidates']):
             if candidate['text'] in seen:
                 continue
             seen.add(candidate['text'])
-            if eligible and candidate['observedAtMs'] - eligible[-1]['observedAtMs'] < spacing_ms:
+            if eligible and eligible[-1]['observedAtMs'] - candidate['observedAtMs'] < spacing_ms:
                 continue
             eligible.append(candidate)
         assert eligible, f'No nonempty candidates captured for {identifier}'
         # Sample for offline supervision; this never changes live cadence.
-        selected = rng.sample(eligible, min(per_utterance, len(eligible)))
+        selected = [eligible[0]] + rng.sample(eligible[1:], min(per_utterance-1, len(eligible)-1))
         for candidate in sorted(selected, key=lambda item: item['observedAtMs']):
             cases.append({'id': len(cases), 'text': candidate['text'], 'context': metadata['context'],
                           'sourceGroup': metadata['sourceGroup'], 'sourceUtterance': identifier,
@@ -53,6 +59,7 @@ def prepare(raw, per_utterance, spacing_ms, seed):
     return {'scope': 'Unlabeled real Nemotron fragments of recorded speech. Offline data only, not answer latency or full application-state parity. Labels must see only the selected current words and previous context. Never inherit source utterance intent, completion, future words or answer text. Related variants retain caller-supplied source groups across train/validation splits.',
             'sourceSha256': hashlib.sha256(raw).hexdigest(), 'seed': seed,
             'perUtterance': per_utterance, 'minimumObservationSpacingMs': spacing_ms,
+            'selection': 'Last observed candidate plus seeded earlier spaced candidates; offline sampling only',
             'originalCases': [], 'cases': cases}
 
 

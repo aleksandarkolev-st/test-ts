@@ -14,6 +14,13 @@ variants and existing training data, so subsequent splits cannot separate them.
 GPU selection uses the production device catalog; it is not tied to an adapter
 index. Output must be a new file inside the workspace.
 
+`prepare-intent-asr-manifest.py` can prepare a new workspace directory from one
+or more offline source datasets. It writes current utterance text files and a
+neutral manifest without copying source intent labels. Related episode variants
+share a namespaced source group. Synthesize the text files to WAV before capture.
+Freeze group splits and evaluation policy before collecting labels; evaluate
+fresh ASR groups independently of epoch, temperature and threshold selection.
+
 Build with `cargo build --example capture-intent-asr` from `src-tauri`. On Windows,
 include `src-tauri/target/debug` in the process DLL search path when launching the
 example directly. Run the executable with the manifest and a new JSONL output
@@ -23,20 +30,39 @@ streaming sockets while the GPU service remains loaded.
 
 The JSONL journal records source and asset hashes, acoustic events, exact ASR
 segments, and changed text assembled by the production semantic question detector.
-It records success only after a nonempty final transcript covers the last VAD
-endpoint. Streaming failures and incomplete journals cannot become training data.
+Schema 2 records success only after a nonempty ASR final has arrived since the
+latest renewed voice activity and no partial remains pending. Nemotron endpoints
+independently of the local VAD: its final can precede the VAD tail without another
+final ever arriving. Both timestamps remain recorded unchanged. Renewed voice,
+including activity covered by an earlier receive-time audio timestamp, requires
+a new final. Whisper retains the full VAD endpoint fence. Schema 1 journals retain
+the original strict timestamp check. Streaming failures and incomplete journals
+cannot become training data.
 The owned service shuts down when the collector exits normally; Windows process
 job ownership also prevents its child from surviving collector termination.
 
 Run `python scripts/prepare-intent-asr.py --capture CAPTURE --output UNLABELED` to
-sample changed candidates at least 250 ms apart, preserving exact words and source
-groups. Sampling is offline and does not change live classifier cadence. The
+retain the latest candidate and sample earlier changed candidates at least 250 ms
+apart, preserving exact words and source groups. The seeded sampling is offline
+and does not change live classifier cadence. The
 existing `label-intent-prefixes.mjs` annotates these isolated candidates using
 signed-in Luna Fast/low. Its fresh-thread batches never contain two candidates
 from the same source group. It sends only current words and previous context,
 excluding full source text, future words and source intent labels. Review the
 annotations, exclude ambiguous samples, and use `assemble-intent-prefixes.py`
 with `--prefixes-only` before supervised training.
+
+`split-intent-asr.py` assembles reviewed fragments with an existing training
+corpus according to frozen source roles. It reserves complete fresh evaluation
+groups, rejects groups already used by the base or development corpus, and
+excludes training text overlaps with development or fresh evaluation. Its output
+audit records source identities and excluded overlaps. Fresh evaluation must
+remain separate from epoch and temperature selection.
+
+Acceptance/debug builds may use `COPILOT_INTENT_PROFILE` to choose a profile
+inside `.local/intent-encoder` for a live experiment without replacing the
+default file. The native journal records the selected profile identity. Release
+builds ignore this override and retain the default profile.
 
 The v61 check captured six contrastive utterances from two existing training
 episodes: 237 ASR/acoustic events and 125 changed candidates. Twelve sampled

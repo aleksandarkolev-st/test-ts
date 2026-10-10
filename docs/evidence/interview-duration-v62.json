@@ -1,0 +1,395 @@
+{
+  "scope": "Interrupted signed-in Luna Fast probes. Neither requested hour completed. Exact answers, transcripts, audio, event logs and per-round metrics are retained locally in the identified artifact directories. Model grades are separate from selective independent findings; no runtime scenarios or answers are derived from this evidence.",
+  "runs": {
+    "cuda-hour-retry-v62": {
+      "status": "failed",
+      "durationVerified": false,
+      "requestedDurationMs": 3600000,
+      "actualInterviewDurationMs": 2126866.3831,
+      "stopReason": null,
+      "recordedRounds": 58,
+      "stoppedCleanly": true,
+      "failure": "Error: Codex answer failed: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 6:30 PM.",
+      "identity": {
+        "file": "artifacts\\native-interview\\cuda-hour-retry-v62\\interview.json",
+        "sha256": "f659a0b3946705d705b9cc6bedd23ce00ad55bbf8021be496843ba6b3f8ed766",
+        "binarySha256": "60acffecdbd1a13b2077bff1b7caf5afe254f6b74130a502389f1b69047f4e7f",
+        "sourceHashes": {
+          "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+          "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+          "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+          "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+          "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+          "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+          "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+          "src-tauri/src/runtime.rs": "484c17683fb95450305c7c3a72b6acfdf891d4c2db669720c40e4f3bcf319e73"
+        }
+      },
+      "scope": "Real elapsed interview duration includes spoken questions, candidate generation and separate examiner grading; startup and scenario preparation are excluded. Latency is client receipt of the first retained alphanumeric answer character after speech end, including ASR. Rendering and completion are separate. Percentiles describe this correlated synthetic interview sample, not a population guarantee. Model grades are not independent correctness certification. Lexical ASR word error ignores punctuation/case and may count harmless spoken numerals or code spellings as differences. Preserved recognized clauses do not prove intended speech was recognized correctly. Missing counters remain unknown. Stage intervals can overlap and must not be summed.",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "intentMode": "existing",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "settledUpdate": false,
+        "completedDraftReplacement": false,
+        "remoteOnly": true
+      },
+      "independentReview": {
+        "scope": "Independent assistant review of exact recorded answers, including integer arithmetic evaluated with arbitrary-precision Python. Not human certification or CUDA execution. Offline evidence only; never used as runtime routing or answers.",
+        "findings": [
+          {
+            "round": 7,
+            "questionSha256": "250f512c0c262372609e318cf51751b4f04a110ba24115ba52a3ece52a335fd6",
+            "answerSha256": "36df7dd031cb3af05e0b33093e68c56b2007fc2ce26dc5e86d0cdc7ec51617da",
+            "finding": "Actual ASR changed the event after the first write from E to Z. The answer treated that as a distinct event and falsely alleged missing producer ordering in the intended question. This is an end-to-end correctness failure; preserving recognized clauses did not establish correct speech recognition.",
+            "category": "ASR ambiguity not handled",
+            "modelVerdict": "incorrect"
+          },
+          {
+            "round": 25,
+            "questionSha256": "70263c4c7ab1188fc50d128844bfa0a982579d951e7dc9eed750c77e4d0ab6aa",
+            "answerSha256": "320e5ee70ecb4ca5eb7e50e80a358ec506a3b11f7400d06cbf321c93a726f50d",
+            "finding": "The code maps complete chunks correctly, but the prose claims the last full chunk ends at UINT64_MAX-1. For n=UINT64_MAX it actually ends at UINT64_MAX-4; the three tail elements occupy UINT64_MAX-3 through UINT64_MAX-1. The supplied explanation contradicts its non-overlap claim.",
+            "category": "arithmetic explanation error missed by examiner",
+            "modelVerdict": "correct",
+            "independentArithmetic": {
+              "n": "18446744073709551615",
+              "fullChunks": "4611686018427387903",
+              "tailElements": 3,
+              "lastFullChunkEnd": "18446744073709551611",
+              "tailStart": "18446744073709551612"
+            }
+          },
+          {
+            "round": 35,
+            "category": "Numerical condition changed by answer model",
+            "questionSha256": "b572cf4c2d97ab7175a2b893960c4d2b4ba68ddaa03b57abbb1abc75a91a2c14",
+            "answerSha256": "80df6647cecd776bf96256debdfe149c43f1410b609033882440fe44d40d638d",
+            "modelVerdict": "incorrect",
+            "finding": "The recognized transcript retains zero point zero two as the run-to-run spread and one times ten to the power of fourth as the result scale. The answer invents a tolerance of 0.02 and a scale of 10^-4. No negative exponent or acceptance tolerance was supplied. This is not explained by the recorded ASR text."
+          },
+          {
+            "round": 40,
+            "questionSha256": "b96bf52ac6a4ad1cf5b290997df9311d0def5210dfbe389a14b5b4cf4edc116a",
+            "answerSha256": "fce93b0a25a1e50dc87a5e6f8ded41316d32c5f73722a52ff9450bbaf2ff9268",
+            "category": "Incorrect warp rank and participation contract",
+            "modelVerdict": "incorrect",
+            "finding": "The answer counts all lower participating lanes instead of only lower predicate-true lanes. For false lane 0 and true lanes 5,17,31, lane 17 receives rank 2 instead of 1. Other active but nonparticipating lanes do not invalidate a mask whose named participants all execute the same operation.",
+            "independentTrace": {
+              "mask": "0x80020021",
+              "matches": "0x80020020",
+              "lane": 17,
+              "actualRank": 2,
+              "expectedRank": 1
+            }
+          }
+        ],
+        "roundsWithFindings": 4,
+        "scopeLimit": "Recorded findings are a selective review, not a correctness rate for every round.",
+        "sha256": "9e521f8d5baff271c868764e3d1b96b81ad4052cbf66165f1cc4938e5864b5af"
+      },
+      "summary": {
+        "firstWordFromSpeechEndMs": {
+          "count": 58,
+          "median": 2378,
+          "sampleP95": 3916,
+          "max": 5115
+        },
+        "firstWordFromLatestInputMs": {
+          "count": 58,
+          "median": 1482,
+          "sampleP95": 2958,
+          "max": 3933
+        },
+        "firstHalfFirstWordMs": {
+          "count": 29,
+          "median": 3070,
+          "sampleP95": 4846,
+          "max": 5115
+        },
+        "secondHalfFirstWordMs": {
+          "count": 29,
+          "median": 2284,
+          "sampleP95": 3659,
+          "max": 3846
+        },
+        "ignored": 0,
+        "modelGrades": {
+          "correct": 38,
+          "incorrect": 8,
+          "incomplete": 12
+        },
+        "graded": 58,
+        "ungraded": 0,
+        "modelGradedCorrectRate": 0.6551724137931034,
+        "constraintTracking": {
+          "assessed": 58,
+          "true": 52,
+          "false": 6
+        },
+        "missingInformationHandled": {
+          "assessed": 58,
+          "true": 56,
+          "false": 2
+        },
+        "unsupportedAssumption": {
+          "assessed": 58,
+          "true": 5,
+          "false": 53
+        },
+        "recognizedClausePreservation": {
+          "assessed": 58,
+          "true": 58,
+          "false": 0
+        },
+        "lexicalAsr": {
+          "assessed": 58,
+          "referenceWords": 2329,
+          "edits": 388,
+          "normalizedWordErrorRate": 0.16659510519536283
+        },
+        "stages": {
+          "asrFinalizationFromSpeechEndMs": {
+            "count": 58,
+            "median": 788,
+            "sampleP95": 1022,
+            "max": 1405
+          },
+          "confirmationAfterAsrMs": {
+            "count": 58,
+            "median": 17.5,
+            "sampleP95": 38,
+            "max": 40
+          },
+          "latestInputConsumptionWaitMs": {
+            "count": 58,
+            "median": 62,
+            "sampleP95": 642,
+            "max": 815
+          },
+          "firstWordAfterLatestInputConsumptionMs": {
+            "count": 58,
+            "median": 1355.5,
+            "sampleP95": 2897,
+            "max": 3405
+          },
+          "renderAfterFirstWordMs": {
+            "count": 58,
+            "median": 8,
+            "sampleP95": 13,
+            "max": 16
+          },
+          "completedFromSpeechEndMs": {
+            "count": 58,
+            "median": 4096,
+            "sampleP95": 8763,
+            "max": 14654
+          }
+        },
+        "counters": {
+          "restarts": {
+            "assessed": 58,
+            "total": 19,
+            "roundsWithAny": 19
+          },
+          "steers": {
+            "assessed": 58,
+            "total": 129,
+            "roundsWithAny": 53
+          },
+          "followups": {
+            "assessed": 58,
+            "total": 109,
+            "roundsWithAny": 57
+          },
+          "completedDraftReplacements": {
+            "assessed": 58,
+            "total": 0,
+            "roundsWithAny": 0
+          }
+        },
+        "cancellation": {
+          "assessed": 58,
+          "retainedPipelineCancelled": 0
+        },
+        "interruptionCoverage": {
+          "realMicrophone": false,
+          "pauseProbe": null,
+          "scope": "Retained pipeline cancellation is not a count of all discarded speculative turns. Sequential questions alone do not exercise human interruption handling."
+        }
+      },
+      "requestedHourCompleted": false
+    },
+    "algorithms-hour-retry-v62": {
+      "status": "failed",
+      "durationVerified": false,
+      "requestedDurationMs": 3600000,
+      "actualInterviewDurationMs": null,
+      "stopReason": null,
+      "recordedRounds": 0,
+      "stoppedCleanly": null,
+      "failure": "Error: Examiner exited 1: Error: \"Codex answer failed: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 6:30 PM.\"\n",
+      "identity": {
+        "file": "artifacts\\native-interview\\algorithms-hour-retry-v62\\interview.json",
+        "sha256": "d60cb4d5db70d0ccb93a06b26fdd8545e976e63749085c3b885b356534548280",
+        "sourceHashes": {
+          "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+          "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+          "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+          "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+          "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+          "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+          "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+          "src-tauri/src/runtime.rs": "484c17683fb95450305c7c3a72b6acfdf891d4c2db669720c40e4f3bcf319e73"
+        }
+      },
+      "scope": "Real elapsed interview duration includes spoken questions, candidate generation and separate examiner grading; startup and scenario preparation are excluded. Latency is client receipt of the first retained alphanumeric answer character after speech end, including ASR. Rendering and completion are separate. Percentiles describe this correlated synthetic interview sample, not a population guarantee. Model grades are not independent correctness certification. Lexical ASR word error ignores punctuation/case and may count harmless spoken numerals or code spellings as differences. Preserved recognized clauses do not prove intended speech was recognized correctly. Missing counters remain unknown. Stage intervals can overlap and must not be summed.",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "intentMode": "existing",
+      "independentReview": null,
+      "summary": {
+        "firstWordFromSpeechEndMs": {
+          "count": 0,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        },
+        "firstWordFromLatestInputMs": {
+          "count": 0,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        },
+        "firstHalfFirstWordMs": {
+          "count": 0,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        },
+        "secondHalfFirstWordMs": {
+          "count": 0,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        },
+        "ignored": 0,
+        "modelGrades": {
+          "correct": 0,
+          "incorrect": 0,
+          "incomplete": 0
+        },
+        "graded": 0,
+        "ungraded": 0,
+        "modelGradedCorrectRate": null,
+        "constraintTracking": {
+          "assessed": 0,
+          "true": 0,
+          "false": 0
+        },
+        "missingInformationHandled": {
+          "assessed": 0,
+          "true": 0,
+          "false": 0
+        },
+        "unsupportedAssumption": {
+          "assessed": 0,
+          "true": 0,
+          "false": 0
+        },
+        "recognizedClausePreservation": {
+          "assessed": 0,
+          "true": 0,
+          "false": 0
+        },
+        "lexicalAsr": {
+          "assessed": 0,
+          "referenceWords": 0,
+          "edits": 0,
+          "normalizedWordErrorRate": null
+        },
+        "stages": {
+          "asrFinalizationFromSpeechEndMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "confirmationAfterAsrMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "latestInputConsumptionWaitMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "firstWordAfterLatestInputConsumptionMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "renderAfterFirstWordMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "completedFromSpeechEndMs": {
+            "count": 0,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "counters": {
+          "restarts": {
+            "assessed": 0,
+            "total": null,
+            "roundsWithAny": 0
+          },
+          "steers": {
+            "assessed": 0,
+            "total": null,
+            "roundsWithAny": 0
+          },
+          "followups": {
+            "assessed": 0,
+            "total": null,
+            "roundsWithAny": 0
+          },
+          "completedDraftReplacements": {
+            "assessed": 0,
+            "total": null,
+            "roundsWithAny": 0
+          }
+        },
+        "cancellation": {
+          "assessed": 0,
+          "retainedPipelineCancelled": 0
+        },
+        "interruptionCoverage": {
+          "realMicrophone": false,
+          "pauseProbe": null,
+          "scope": "Retained pipeline cancellation is not a count of all discarded speculative turns. Sequential questions alone do not exercise human interruption handling."
+        }
+      },
+      "requestedHourCompleted": false
+    }
+  }
+}

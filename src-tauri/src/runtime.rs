@@ -294,7 +294,7 @@ async fn actor(
                 }}},
                 Control::ClearScreenshot=>{screenshot_request=None;engine.screenshot_data=None;engine.view.screenshot=None;engine.view.attachment_busy=project_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();if session.is_some(){window::show(&app,&hidden);}publish(&app,&mut engine,&view);},
             }},
-            event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=s.settings.answer_backend==AnswerBackend::Codex;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
+            event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=s.settings.answer_backend==AnswerBackend::Codex;engine.detector.independent_asr_endpoint=s.settings.speech_backend==SpeechBackend::Nemotron;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
                 match event {
                     #[cfg(all(feature="acceptance",debug_assertions))]
                     InputEvent::RawTranscriptBoundary(source,final_,text,started,ended)=>{
@@ -461,6 +461,8 @@ async fn actor(
                         } else {intent_gate.invalidate();}
                     }
                     if let Some((question,stopped))=engine.detector.confirm(now) {
+                        emit(&app,"asr.finalization_ready",serde_json::json!({"floor":engine.detector.remote_turn_started_at,
+                            "speechStoppedAt":stopped,"lastRemoteActivity":engine.detector.last_remote_activity(),"timestamp":now}));
                         let background=intent_mode==meeting::intent::Mode::Learned&&meeting::intent::background_enabled()&&engine.detector.remote_turn_started_at.is_some_and(|floor|intent_gate.background(floor,&question,&engine.context.classifier_context(floor),0.95));
                         if background {
                             answers.resumed();emit(&app,"intent.background_ignored",serde_json::json!({"timestamp":now,"floor":engine.detector.remote_turn_started_at}));

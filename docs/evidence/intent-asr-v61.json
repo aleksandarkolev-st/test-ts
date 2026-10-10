@@ -1,0 +1,232 @@
+{
+  "scope": "Offline real-time-paced synthetic PCM through the actual production Nemotron service and VAD. Six contrastive utterances from two previously used training episodes. Isolated model annotations plus independent model review, not human ground truth or held-out certification. No answer generation, WASAPI, microphone, monitor or full application-state parity; no first-word latency measurement.",
+  "capture": {
+    "audioFrameMs": 10,
+    "chunkMs": 160,
+    "collectorSha256": "4cb4b3106f0a48261fe55673181bc23ad4a39a67025b89311bc8ad876b33e9e2",
+    "detectorSourceSha256": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+    "manifestSha256": "d826060a1ccfd72836d7900516c3df51c9280eaa8049e8a57be3bc945b4ec844",
+    "modelSha256": "d9a01898d2a611c8764e23a1c2f45e70bbd5a425dc4de93692ac951dd603812d",
+    "nemotronSourceSha256": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+    "runtimeSha256": "2ac2e3d697399fdbc6965a6e59ec3324a4f78b811af8015590e343e292691f19",
+    "schemaVersion": 1,
+    "scope": "Offline ASR data, no answer or classifier inference. Real-time paced recorded PCM through production Nemotron and VAD; excludes WASAPI, microphone, monitor rendering, answer latency and full application-state parity. Context is caller-supplied previous conversation and never sent to ASR. No labels are inherited from future words.",
+    "type": "capture.started",
+    "utteranceCount": 6,
+    "vadSourceSha256": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+    "captureSha256": "4f4355eb99ebc9407d838d6eaf4a32a428e931c1bdfa2557620c8162d59f4523",
+    "executableSha256": "e33cc45e862b491cd6fb5db6a6ea312a98dc1a6bd2eca0fd04a68b840d7b08a8",
+    "device": {
+      "index": 0,
+      "kind": "gpu",
+      "memoryTotal": 17095983104,
+      "name": "AMD Radeon RX 9070 XT"
+    },
+    "complete": true,
+    "sourceGroups": 2,
+    "events": 237,
+    "changedCandidates": 125,
+    "maxFrameLatenessMs": 3,
+    "utterances": [
+      {
+        "id": "case-406",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:22",
+        "waveSha256": "221b43eee6bee8085c10eebe29fe0b05b116fe3dfb12c4fe4824786b106f76b7",
+        "originalSamples": 86960
+      },
+      {
+        "id": "case-407",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:22",
+        "waveSha256": "328e27488d8bbec7d616e1d189803cb295ca3f127df467a3b2ff5b7c27284d2c",
+        "originalSamples": 87520
+      },
+      {
+        "id": "case-408",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:22",
+        "waveSha256": "828a1fd8d5a6216e4464a380af832052b05a849974d2c76ac3cf4e0798a3d05a",
+        "originalSamples": 106240
+      },
+      {
+        "id": "case-379",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:13",
+        "waveSha256": "e7fad78c90297151c4ae8da15b77f9d90e406cc0a494d4bff339d45860e4ae2a",
+        "originalSamples": 88320
+      },
+      {
+        "id": "case-380",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:13",
+        "waveSha256": "1f5ca12f8c7efcae550b64dde4364ee5438c14c8edb0b028f9db7a34394501c1",
+        "originalSamples": 113280
+      },
+      {
+        "id": "case-381",
+        "sourceGroup": "46247a230ef50411f189979378c13aa389ddb91c8cc55244a26c797e029c3d30:episode:13",
+        "waveSha256": "551b88508b0a675083ce2d578a139462a8b86b01d7655996e38fbad56d4ead62",
+        "originalSamples": 138640
+      }
+    ]
+  },
+  "annotation": {
+    "sourceSha256": "a1840acc43f987b736eb9e6d5a0a255c8ceebfc43725ca29232cee4d4b94b1f0",
+    "labelsSha256": "ebf2f9e2dfa94b1c430391b3bb3df492bc5a0e3ad0d5fe83f78d4e91d8bbeb8d",
+    "reviewSha256": "becf8639f711f3c7b1545500eed98d2e2e1c362aa33378f8c04659f030f21921",
+    "reviewedSha256": "749421819edf9a89b5b24a57f32da8abcfd3c2a6e17713833748818c7688f7c2",
+    "preparerSha256": "7ad414aeffe908d31197fa14725cdc9ecdca4a548cbd47c0c8e8c54d5620c3bb",
+    "labelerSha256": "36d3cd25df1cb0893cb91f90b59d9f60b044271b20338ed53e838b3500147074",
+    "model": "gpt-6-luna",
+    "tier": "fast",
+    "effort": "low",
+    "sampledFragments": 12,
+    "annotationCalls": 6,
+    "reviewCorrections": [
+      {
+        "id": 2,
+        "text": "Calculate the internal rate",
+        "label": "ambiguous",
+        "reason": "The available words could be a complete request with missing facts or an ASR fragment. No prior context resolves that ambiguity; missing inputs alone do not establish unfinished syntax."
+      },
+      {
+        "id": 10,
+        "text": "Please sum",
+        "label": "ambiguous",
+        "reason": "Sum is itself a complete verb. The available words could request a sum with missing inputs or end mid-word; do not infer a longer word from future speech."
+      }
+    ],
+    "ambiguousExcluded": [
+      2,
+      10
+    ],
+    "retainedFragments": 10,
+    "readyRequests": 1,
+    "background": 4,
+    "unfinishedRequests": 5
+  },
+  "diagnostic": {
+    "original": {
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.7,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.8,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 4
+        },
+        {
+          "threshold": 0.9,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 4
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 0,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 4
+        }
+      ],
+      "scoresSha256": "0e7f9694211e87ff2c36f524df23968b4c6e37bfea74e254a2279e7e2e5f9e60"
+    },
+    "v57": {
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 1,
+          "falseEarly": 1,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 0
+        },
+        {
+          "threshold": 0.7,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 0
+        },
+        {
+          "threshold": 0.8,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 0
+        },
+        {
+          "threshold": 0.9,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 0
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 3,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 1
+        }
+      ],
+      "scoresSha256": "3b0f84d7795eca89e2d8029338985935637928b3f9329bca1c8a6e9a64cb1e3e"
+    },
+    "limitation": "One complete request among ten fragments from two related training groups cannot establish population accuracy, useful speculation or end-to-end latency. Both profiles miss it at 0.95. No model trained or promoted."
+  },
+  "verification": {
+    "rustExampleTestsPassed": 1,
+    "pythonDataContractTestsPassed": 2,
+    "exampleBuild": "passed",
+    "nativeCaptureComplete": true,
+    "ownedCollectorAndASRProcessesStopped": true,
+    "runtimeProfileUnchanged": true,
+    "productionCodeChanged": false,
+    "targetMet": false
+  }
+}

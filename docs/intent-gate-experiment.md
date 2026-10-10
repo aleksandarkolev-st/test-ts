@@ -730,3 +730,14 @@ disabled in release. The [evidence report](evidence/quiet-cadence-v60.json) is
 reproduced by `node scripts/summarize-quiet-cadence.mjs` after the input, cadence
 and stage audits. The near-instant and deep-interview requirements remain unmet
 or unverified.
+
+### v61: actual ASR fragments without candidate answer calls
+
+The [ASR capture utility](intent-asr-capture.md) collects changed Nemotron text
+through the production transport and VAD, without invoking an answer backend.
+The first check captured six utterances from two existing training episodes,
+with 125 changed candidates. Ten isolated annotations remained after two
+ambiguous fragments were excluded. Both classifier profiles missed the sole
+complete request at confidence 0.95. This small correlated diagnostic provides
+no held-out accuracy or latency improvement claim. No model was promoted;
+the original runtime profile and release configuration remain unchanged.

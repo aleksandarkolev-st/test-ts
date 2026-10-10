@@ -5,6 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {installPaintedAnswerRecorder} from './painted-answer-recorder.mjs';
 import {publicContextCheckpoint,replayContextCheckpoint} from './deep-replay-context.mjs';
+import {streamedWordLatency} from './streamed-word-latency.mjs';
 
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -26,7 +27,8 @@ export async function runDeepAudioInterview(ctx){
  const source=replayFile?JSON.parse(await readFile(path.resolve(replayFile),'utf8')):null;
  if(source)assert(source.status==='complete'&&source.rows.length>=12,'Replay requires a completed adaptive pilot');
  result.evaluationKind=source?'paired_fixed_audio_replay':'answer_adaptive_audio_pilot';
- result.primaryLatencyMetric='First correct useful retained phrase in actually painted overlay text, independently selected after execution. Missing or wrong answers remain failures. Raw character latency is diagnostic only.';
+ result.primaryLatencyMetric='Last voiced playback sample to first complete streamed word visibly rendered in the actual overlay. No wait for answer completion or grading. Correctness and retention are reported separately.';
+ result.secondaryLatencyMetric='First correct useful retained phrase in actually painted overlay text, independently selected after execution.';
  result.endpointDefinition='Last nonzero PCM frame of synthetic question observed via waveOut device position. Position-crossing host interval is retained; native/host clock calibration and painted-text observations preserve timing uncertainty. This is synthetic playback, not human speech or an acoustic-room measurement.';
  result.classifierTrainingStopped=true;
  result.deepObservations=[];result.overlayPaintSamples=[];result.pollErrors=[];
@@ -48,6 +50,14 @@ export async function runDeepAudioInterview(ctx){
   const painted=await connection.overlay.evaluate(()=>window.deepPaintSamples);
   assert(Array.isArray(painted),'Overlay recorder lost its page context; visible timing is unavailable');
   result.overlayPaintSamples=painted;
+  const current=result.rows.at(-1);
+  if(current?.audio?.playback&&!current.firstStreamedWordMeasurement){
+   const measurement=streamedWordLatency(result,current);
+   if(measurement.firstVisibleStreamedWord){
+    current.firstStreamedWordMeasurement=measurement;
+    console.log(`FIRST STREAMED WORD round-${current.round}: ${JSON.stringify(measurement.firstVisibleStreamedWord.word)}, ${measurement.firstVisibleStreamedWord.latencyMs.high} ms after playback speech end`);
+   }
+  }
   if(Date.now()-lastSave>2000){lastSave=Date.now();await persist();}
   return record;
  };
@@ -171,6 +181,7 @@ export async function runDeepAudioInterview(ctx){
    const id=row.responseVersion?.split(':')[0],job=latest.get(id);
    if(job){row.answer=job.answer;row.latency=job.latency;row.phase=job.phase;row.cancelled=job.cancelled;row.error=job.error;
     row.selectedContext=job.selectedContext;row.responseVersion=`${id}:${job.latency.responseRevision??0}`;}
+   row.firstStreamedWordMeasurement=streamedWordLatency(result,row);
   }
   result.status='complete';result.targetAchieved=false;result.evaluatedTurnCount=result.rows.length;
  }finally{sampling=false;await sampler;await poll();await persist();}

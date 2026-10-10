@@ -24,9 +24,9 @@ export function installPaintedAnswerRecorder(){
   }
   const visible=Boolean(p&&rect.width>0&&rect.height>0&&style.visibility!=='hidden'&&style.display!=='none'&&document.visibilityState==='visible'&&visibleEnd>visibleStart);
   const record={recorderVersion:2,hostMs:Date.now(),questionId:content?.dataset.questionId??null,
-   revision:Number(content?.dataset.responseRevision??0),text,visible,visibleStart,visibleEnd,clip,
+   revision:Number(content?.dataset.responseRevision??0),text,visible,visibleStart,visibleEnd,clip,streaming:Boolean(p?.querySelector('.caret')),
    paragraphRect:rect&&{top:rect.top,bottom:rect.bottom,left:rect.left,right:rect.right},scrollTop:content?.scrollTop??null};
-  const key=JSON.stringify([record.questionId,record.revision,text,visible,visibleStart,visibleEnd]);
+  const key=JSON.stringify([record.questionId,record.revision,text,visible,visibleStart,visibleEnd,record.streaming]);
   if(key!==last){window.deepPaintSamples.push(record);last=key;}
  };
  const observer=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>requestAnimationFrame(sample));}});

@@ -43,6 +43,10 @@ def main():
     parser.add_argument('--epochs',type=int,default=10)
     parser.add_argument('--batch',type=int,default=8)
     parser.add_argument('--threads',type=int,default=4)
+    parser.add_argument('--warm-start',help='Trusted local weights-only checkpoint from this trainer; fresh optimizer and development selection')
+    parser.add_argument('--checkpoint-output',help='Save selected weights and provenance for future supervised continuation')
+    parser.add_argument('--encoder-lr',type=float,default=2e-5)
+    parser.add_argument('--head-lr',type=float,default=2e-4)
     parser.add_argument('--context-window',choices=['tail','head-tail'],default='tail',
                         help='Versioned token allocation for history; current utterance is never truncated')
     parser.add_argument('--sampling',choices=['group','group-class'],default='group',
@@ -50,6 +54,13 @@ def main():
     args=parser.parse_args()
     feature_schema='finetuned-joint-readiness-v2' if args.context_window=='head-tail' else 'finetuned-joint-readiness-v1'
     assert 1<=args.epochs<=50 and 1<=args.batch<=64 and 1<=args.threads<=16
+    assert np.isfinite(args.encoder_lr) and 0<args.encoder_lr<=1e-3
+    assert np.isfinite(args.head_lr) and 0<args.head_lr<=1e-2
+    output=Path(args.output)
+    assert not output.exists() or not any(output.iterdir()), 'Refusing to overwrite fit evidence'
+    if args.checkpoint_output:
+        checkpoint_path=Path(args.checkpoint_output).resolve()
+        assert Path.cwd().resolve() in checkpoint_path.parents and not checkpoint_path.exists()
     trainer_sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                      for name in ('train-intent-encoder.py','intent_sampling.py','intent_tokens.py')}
     torch.set_num_threads(args.threads);torch.set_num_interop_threads(1)
@@ -87,9 +98,23 @@ def main():
         tensors={name:torch.as_tensor(np.concatenate([np.pad(items[i][0][name],((0,0),(0,width-items[i][0][name].shape[1]))) for i in indices],axis=0)) for name in items[0][0]}
         return tensors,torch.tensor([items[i][1] for i in indices])
     model=Readiness(str(model_dir))
+    warm_start=None
+    if args.warm_start:
+        checkpoint_path=Path(args.warm_start).resolve()
+        assert Path.cwd().resolve() in checkpoint_path.parents, 'Checkpoint must stay in this workspace'
+        checkpoint_sha=hashlib.sha256(checkpoint_path.read_bytes()).hexdigest()
+        checkpoint=torch.load(checkpoint_path,map_location='cpu',weights_only=True)
+        assert checkpoint['format']=='intent-readiness-weights-v1'
+        assert checkpoint['featureSchema'] in ('finetuned-joint-readiness-v1','finetuned-joint-readiness-v2')
+        assert checkpoint['encoderRevision']==manifest['revision']
+        model.load_state_dict(checkpoint['stateDict'],strict=True)
+        warm_start={'file':str(checkpoint_path),'sha256':checkpoint_sha,
+                    'featureSchema':checkpoint['featureSchema'],'contextWindow':checkpoint.get('contextWindow','tail'),
+                    'trainingSha256':checkpoint['trainingSha256'],'validationSha256':checkpoint['validationSha256'],
+                    'selectedEpoch':checkpoint['selectedEpoch']}
     optimizer=torch.optim.AdamW([
-        {'params':model.encoder.parameters(),'lr':2e-5},
-        {'params':model.head.parameters(),'lr':2e-4}],weight_decay=0.01)
+        {'params':model.encoder.parameters(),'lr':args.encoder_lr},
+        {'params':model.head.parameters(),'lr':args.head_lr}],weight_decay=0.01)
     def predictions():
         model.eval();result=[]
         with torch.inference_mode():
@@ -99,6 +124,13 @@ def main():
         return torch.cat(result)
     labels=torch.tensor([item[1] for item in valid])
     best_loss=float('inf');best=None;stale=0;epochs=[];started=time.monotonic()
+    if warm_start:
+        logits=predictions();best_loss=float(torch.nn.functional.cross_entropy(logits,labels))
+        best=copy.deepcopy(model.state_dict());selected_epoch=0
+        row={'epoch':0,'sampledTrainingVariants':0,'trainingLoss':None,'validationLoss':best_loss,
+             'validationAccuracy':float((logits.argmax(dim=1)==labels).float().mean()),
+             'elapsedSeconds':time.monotonic()-started,'scope':'Warm-start weights before continuation'}
+        epochs.append(row);print(json.dumps(row),flush=True)
     for epoch in range(args.epochs):
         indices=sample_epoch(training['cases'],random,args.sampling)
         model.train();total=0
@@ -119,7 +151,16 @@ def main():
             stale+=1
             if stale>=3:break
     model.load_state_dict(best);model.eval()
-    output=Path(args.output);output.mkdir(parents=True,exist_ok=True)
+    output.mkdir(parents=True,exist_ok=True)
+    checkpoint_identity=None
+    if args.checkpoint_output:
+        checkpoint_path=Path(args.checkpoint_output).resolve()
+        assert Path.cwd().resolve() in checkpoint_path.parents and not checkpoint_path.exists()
+        checkpoint_path.parent.mkdir(parents=True,exist_ok=True)
+        torch.save({'format':'intent-readiness-weights-v1','featureSchema':feature_schema,'contextWindow':args.context_window,
+            'encoderRevision':manifest['revision'],'stateDict':model.state_dict(),'trainingSha256':train_sha,
+            'validationSha256':val_sha,'selectedEpoch':selected_epoch,'trainerSourceSha256':trainer_sources},checkpoint_path)
+        checkpoint_identity={'file':str(checkpoint_path),'sha256':hashlib.sha256(checkpoint_path.read_bytes()).hexdigest()}
     sample,_=batch(valid,[0])
     names=list(sample);full=output/'model.fp32.onnx';quantized=output/'model.int8.onnx'
     torch.onnx.export(model,tuple(sample.values()),str(full),input_names=names,output_names=['logits'],
@@ -154,6 +195,8 @@ def main():
         'trainingSha256':train_sha,'validationSha256':val_sha,'trainingVariants':len(train),
         'trainingOriginalGroups':len(groups),'validationCount':len(valid),'seed':42,'selectedEpoch':selected_epoch,
         'trainingThreads':args.threads,'batchSize':args.batch,'epochsMaximum':args.epochs,
+        'encoderLearningRate':args.encoder_lr,'headLearningRate':args.head_lr,
+        'warmStart':warm_start,'checkpoint':checkpoint_identity,
         'trainerSourceSha256':trainer_sources,'sampling':args.sampling,'epochs':epochs,'torch':torch.__version__,'transformers':transformers.__version__,
         'sourceModelManifest':manifest,'scope':'Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. '
             + ('One variant per original group per epoch. ' if args.sampling=='group' else 'One variant per available class in each original group per epoch. ')

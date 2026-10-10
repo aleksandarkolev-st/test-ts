@@ -422,5 +422,14 @@
     "The evaluator p95 uses sorted[int((n-1)*.95)], not the interview reporter nearest-rank quantile.",
     "A CPU release build overlapped part of capture; max frame lateness was 40 ms.",
     "The fixed 0.95 readiness threshold misses 23 of 24 ready fragments. Lower reported thresholds are descriptive, not selected deployment policies."
-  ]
+  ],
+  "captureSummary": {
+    "complete": true,
+    "finishedUtterances": 90,
+    "failedUtterances": 0,
+    "changedCandidates": 1480,
+    "events": 3165,
+    "maxFrameLatenessMs": 40,
+    "medianUtteranceMaxFrameLatenessMs": 3.0
+  }
 }

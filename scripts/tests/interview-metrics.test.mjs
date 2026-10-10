@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings} from '../lib/interview-metrics.mjs';
+import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage} from '../lib/interview-metrics.mjs';
 
 test('missing observations stay unknown and early overlap remains negative',()=>{
   assert.equal(difference(null,10),null);
@@ -40,4 +40,21 @@ test('a selective review cannot silently attach to a different recorded answer',
   assert.equal(verifiedReviewFindings(report,review).roundsWithFindings,1);
   assert.equal(verifiedReviewFindings(report,null),null);
   assert.throws(()=>verifiedReviewFindings({...report,rows:[{round:1,question:'q',answer:'changed'}]},review),/identity mismatch/);
+});
+
+test('question coverage preserves code operators and case, and missing topic assessments remain unknown',()=>{
+  const result=interviewCoverage([
+    {round:1,question:' Trace x < y ',review:{currentTopic:'ordering'}},
+    {round:2,question:'Trace  x < y',review:{currentTopic:'ordering'}},
+    {round:3,question:'Trace x > y'},
+    {round:4,question:'Trace X < y',review:{currentTopic:' ' }},
+    {round:5,question:null},
+  ]);
+  assert.equal(result.knownQuestions,4);
+  assert.equal(result.uniqueQuestions,3);
+  assert.deepEqual(result.repeatedQuestionGroups,[[1,2]]);
+  assert.equal(result.unknownQuestions,1);
+  assert.equal(result.knownTopics,2);
+  assert.equal(result.unknownTopics,3);
+  assert.deepEqual(result.modelTopicCounts,{ordering:2});
 });

@@ -56,6 +56,29 @@ export function counterSummary(rows, key) {
     roundsWithAny:known.filter(value=>value>0).length};
 }
 
+export function interviewCoverage(rows) {
+  const questions=new Map(),topics=new Map();
+  let knownQuestions=0,knownTopics=0;
+  for (const row of rows) {
+    if (typeof row.question==='string' && row.question.trim()) {
+      // Case and operators can change a coding question's meaning.
+      const key=row.question.trim().replace(/\s+/gu,' ');
+      questions.set(key,[...(questions.get(key)??[]),row.round]);
+      knownQuestions++;
+    }
+    const topic=row.review?.currentTopic;
+    if (typeof topic==='string' && topic.trim()) {
+      const key=topic.trim();
+      topics.set(key,(topics.get(key)??0)+1);
+      knownTopics++;
+    }
+  }
+  return {knownQuestions,unknownQuestions:rows.length-knownQuestions,uniqueQuestions:questions.size,
+    repeatedQuestionGroups:[...questions.values()].filter(rounds=>rounds.length>1),
+    knownTopics,unknownTopics:rows.length-knownTopics,modelTopicCounts:Object.fromEntries(topics),
+    scope:'Exact question repetitions normalize whitespace only. Unique strings do not establish semantic novelty or uniform randomness. Topic descriptions are free-form model assessments of actual questions, not independently certified coverage.'};
+}
+
 export function verifiedReviewFindings(report, review) {
   if (!review) return null;
   const hash = text => createHash('sha256').update(text).digest('hex');

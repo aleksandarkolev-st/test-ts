@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings} from './lib/interview-metrics.mjs';
+import {distribution,difference,transcriptWordError,qualitySummary,counterSummary,verifiedReviewFindings,interviewCoverage} from './lib/interview-metrics.mjs';
 
 const directory=path.resolve(process.argv[2]??'');
 assert(process.argv[2]&&directory.toLowerCase().startsWith(process.cwd().toLowerCase()+path.sep));
@@ -58,7 +58,7 @@ const value={status:report.status,durationVerified,requestedDurationMs:report.re
   summary:{firstWordFromSpeechEndMs:words(rows),firstWordFromLatestInputMs:distribution(rows.map(row=>row.firstWordFromLatestInputMs)),
     firstHalfFirstWordMs:words(rows.slice(0,mid)),secondHalfFirstWordMs:words(rows.slice(mid)),
     ignored:rows.filter(row=>row.ignored).length,
-    ...qualitySummary(rows),
+    ...qualitySummary(rows),coverage:interviewCoverage(report.rows),
     stages:Object.fromEntries(['asrFinalizationFromSpeechEndMs','confirmationAfterAsrMs','latestInputConsumptionWaitMs',
       'firstWordAfterLatestInputConsumptionMs','renderAfterFirstWordMs','completedFromSpeechEndMs'].map(key=>[key,distribution(rows.map(row=>row[key]))])),
     counters:Object.fromEntries(['restarts','steers','followups','completedDraftReplacements'].map(key=>[key,counterSummary(rows,key)])),

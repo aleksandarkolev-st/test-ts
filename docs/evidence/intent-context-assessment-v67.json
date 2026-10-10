@@ -1,0 +1,244 @@
+{
+  "recordedAt": "2026-10-10T18:31:54.874429+00:00",
+  "scope": "Coding-agent quality review of all 20 matched episode triples before classifier inference. Review sees the contrast design, so it is not blind. Separate annotation requests see only current words and prior context and never two variants of one group together. Generator/annotator/reviewer agreement is AI supervision, not human ground truth. Exact identity auditing does not establish semantic independence. Assessment-only; no fitting, calibration or threshold selection.",
+  "assessmentFreeze": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\assessment-freeze.json",
+      "sha256": "9d12b1eef272fcde951a94ac502d899d54ef4351a9e3b8ebdac6580a79819fe1"
+    },
+    "value": {
+      "scope": "Fresh text context contrasts generated after fit, source-group independent. No ASR/audio/native scheduler timing. Assessment only; no epoch, temperature, parameter or policy selection.",
+      "generatorSha256": "acf54da3ca48e31499fc804adfa50fc84bfd9f598d5c4266d68da2dce87104dc",
+      "profileSha256": "df116fb2f53cc48f72d02f1627f08b1ca8797e86a62ba92e02e313dca0d6a99b",
+      "profile": ".local/intent-encoder/finetuned-context-v67-r1/profile.fp32.json",
+      "threshold": 0.95,
+      "recordedAt": "2026-10-10T18:27:26.8785655Z",
+      "annotatorSha256": "78e677927562d0084568e782150cbedb354ffe9fb01bec8ea6c4eb137db6a458"
+    }
+  },
+  "audit": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\assessment-audit.json",
+      "sha256": "efc74b8dabbfe9bfc5ae297e4a4bf711b562aac5277b790f4d40617b647706a8"
+    },
+    "value": {
+      "source": {
+        "file": "artifacts\\intent-classifier\\context-v67\\fresh-assessment.json",
+        "sha256": "359d85d2483db3efcf75a20de9b4c1ff452e28e1c4c4b63a79431a8907428380"
+      },
+      "annotations": {
+        "file": "artifacts\\intent-classifier\\context-v67\\assessment-labels.json",
+        "sha256": "72dc0315b27472987bc96c4134712aeeb31c798b528365210f770cd472f8c69f"
+      },
+      "unlabeled": {
+        "file": "artifacts\\intent-classifier\\context-v67\\assessment-unlabeled.json",
+        "sha256": "b9ca33ebe9029997796b21176a02d65fa198e25c7961fe6721facdaae04b68c1"
+      },
+      "freeze": {
+        "file": "artifacts\\intent-classifier\\context-v67\\assessment-freeze.json",
+        "sha256": "9d12b1eef272fcde951a94ac502d899d54ef4351a9e3b8ebdac6580a79819fe1"
+      },
+      "references": {
+        "artifacts/intent-classifier/asr-corpus-v62/split/training.json": {
+          "file": "artifacts/intent-classifier/asr-corpus-v62/split/training.json",
+          "sha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86"
+        },
+        "artifacts/intent-classifier/prefix-validation-v57.json": {
+          "file": "artifacts/intent-classifier/prefix-validation-v57.json",
+          "sha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9"
+        },
+        "artifacts/intent-classifier/asr-corpus-v62/split/evaluation.json": {
+          "file": "artifacts/intent-classifier/asr-corpus-v62/split/evaluation.json",
+          "sha256": "5725563d0e94babb655e89e9fc9e86ecee2fcdf34129781b060d87e5190c1c78"
+        },
+        "artifacts/intent-classifier/assessment-v65/fresh-asr/evaluation-deduplicated.json": {
+          "file": "artifacts/intent-classifier/assessment-v65/fresh-asr/evaluation-deduplicated.json",
+          "sha256": "49485eab976f30556587b2b4d7dac921fd676cbd4cf85cc4a71ac9a242b2965c"
+        },
+        "artifacts\\intent-classifier\\context-v67\\training.json": {
+          "file": "artifacts\\intent-classifier\\context-v67\\training.json",
+          "sha256": "430ea000d0604c7acedb2e18979b97d244d1ecf1756997c867368a5ceb727161"
+        },
+        "artifacts\\intent-classifier\\context-v67\\development.json": {
+          "file": "artifacts\\intent-classifier\\context-v67\\development.json",
+          "sha256": "f7de1f65dc74af5f41410d8b13e59a1fc1d991c4fec48decad587d2d5842d503"
+        }
+      },
+      "totalCases": 60,
+      "retainedCases": 60,
+      "readyCases": 20,
+      "sourceGroups": 20,
+      "excluded": [],
+      "sameTextDifferentContextOverlap": 0,
+      "scope": "Coding-agent quality review of all 20 matched episode triples before classifier inference. Review sees the contrast design, so it is not blind. Separate annotation requests see only current words and prior context and never two variants of one group together. Generator/annotator/reviewer agreement is AI supervision, not human ground truth. Exact identity auditing does not establish semantic independence. Assessment-only; no fitting, calibration or threshold selection."
+    }
+  },
+  "baseline": {
+    "source": {
+      "file": "artifacts\\intent-classifier\\context-v67\\baseline-evaluation.json",
+      "sha256": "4092276183e473b987759c0d974c3577eea749d1021d2b2254b6c45fd7415df5"
+    },
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+    },
+    "cases": 60,
+    "readyCases": 20,
+    "policy": {
+      "threshold": 0.95,
+      "selected": 0,
+      "falseEarly": 0,
+      "missedReadyRequests": 20,
+      "ignoredBackground": 0,
+      "falseBackgroundIgnore": 0,
+      "missedBackground": 20
+    },
+    "latencyMs": {
+      "median": 3.8831999991089106,
+      "p95": 4.66560001950711,
+      "max": 5.936999921686947
+    },
+    "argmaxCorrect": 21,
+    "completeContrastsCorrect": 0,
+    "completeContrasts": 20,
+    "confusion": {
+      "background": {
+        "background": 1,
+        "unfinished": 16,
+        "ready": 3,
+        "abstained": 0
+      },
+      "unfinished": {
+        "background": 2,
+        "unfinished": 17,
+        "ready": 1,
+        "abstained": 0
+      },
+      "ready": {
+        "background": 1,
+        "unfinished": 16,
+        "ready": 3,
+        "abstained": 0
+      }
+    }
+  },
+  "prior": {
+    "source": {
+      "file": "artifacts\\intent-classifier\\context-v67\\prior-evaluation.json",
+      "sha256": "b74baa591f7414315959f45f379d91ac95d991739974e064cde38feca73a2791"
+    },
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "4794f1d6ecdec6079ff51b04a3241b35e06978cc7d128fc579752f124b6f12d4",
+      "trainedModelSha256": "b2c99e8a42ae72baeeb74a85467a86ce6f3d433c34cebf93382897711ce857c7"
+    },
+    "cases": 60,
+    "readyCases": 20,
+    "policy": {
+      "threshold": 0.95,
+      "selected": 14,
+      "falseEarly": 1,
+      "missedReadyRequests": 7,
+      "ignoredBackground": 0,
+      "falseBackgroundIgnore": 0,
+      "missedBackground": 20
+    },
+    "latencyMs": {
+      "median": 5.730450036935508,
+      "p95": 7.302900077775121,
+      "max": 7.947999984025955
+    },
+    "argmaxCorrect": 43,
+    "completeContrastsCorrect": 5,
+    "completeContrasts": 20,
+    "confusion": {
+      "background": {
+        "background": 7,
+        "unfinished": 1,
+        "ready": 12,
+        "abstained": 0
+      },
+      "unfinished": {
+        "background": 0,
+        "unfinished": 16,
+        "ready": 4,
+        "abstained": 0
+      },
+      "ready": {
+        "background": 0,
+        "unfinished": 0,
+        "ready": 20,
+        "abstained": 0
+      }
+    }
+  },
+  "fitted": {
+    "source": {
+      "file": "artifacts\\intent-classifier\\context-v67\\fitted-evaluation.json",
+      "sha256": "05712100e47ae77d7b6d5c6b1793a7a86f6a612723fb437720062fe392c1450f"
+    },
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "df116fb2f53cc48f72d02f1627f08b1ca8797e86a62ba92e02e313dca0d6a99b",
+      "trainedModelSha256": "454ad429f990e340303ec965f83cfa1337d2504193a1e1352c4bc4599149636d"
+    },
+    "cases": 60,
+    "readyCases": 20,
+    "policy": {
+      "threshold": 0.95,
+      "selected": 1,
+      "falseEarly": 0,
+      "missedReadyRequests": 19,
+      "ignoredBackground": 16,
+      "falseBackgroundIgnore": 0,
+      "missedBackground": 4
+    },
+    "latencyMs": {
+      "median": 5.580800003372133,
+      "p95": 7.357100024819374,
+      "max": 8.205699967220426
+    },
+    "argmaxCorrect": 58,
+    "completeContrastsCorrect": 18,
+    "completeContrasts": 20,
+    "confusion": {
+      "background": {
+        "background": 20,
+        "unfinished": 0,
+        "ready": 0,
+        "abstained": 0
+      },
+      "unfinished": {
+        "background": 0,
+        "unfinished": 18,
+        "ready": 2,
+        "abstained": 0
+      },
+      "ready": {
+        "background": 0,
+        "unfinished": 0,
+        "ready": 20,
+        "abstained": 0
+      }
+    }
+  },
+  "productionPromoted": false,
+  "targetAchieved": false,
+  "limitations": [
+    "Fresh text contrasts, not ASR fragments or native runtime gating.",
+    "Matched utterances and repeated topic families are correlated. No population accuracy or semantic novelty guarantee.",
+    "Argmax accuracy does not imply readiness at the frozen 0.95 sending threshold. Other threshold curves are exploratory only.",
+    "The coding-agent quality review sees the contrast design and is not blind. Separate annotator threads never see another variant of the same group. All labels are AI-reviewed, not human ground truth.",
+    "No fitting, temperature, epoch or threshold selection from this assessment.",
+    "The exact user utterance is not training or assessment data; any literal regression is recorded separately."
+  ]
+}

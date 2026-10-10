@@ -8,6 +8,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { connectNativePages } from './lib/native-cdp.mjs';
 import { gradeWithRetry } from './lib/examiner-retry.mjs';
 import { interviewBudget,continueInterview,interviewStopReason } from './lib/interview-duration.mjs';
+import {runRapidInterview} from './lib/rapid-interview.mjs';
 
 const root=process.cwd(),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const scenarioFile=process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO):null;
@@ -32,6 +33,7 @@ if(seedWave){
   assert.equal((await readFile(seedWave.replace(/\.wav$/i,'.txt'),'utf8')).trim(),seedQuestion,'Saved waveform question must match the replay seed');
 }
 const budget=interviewBudget(process.env),rounds=budget.rounds;
+const rapidMode=process.env.COPILOT_NATIVE_RAPID==='1';
 const model=process.env.COPILOT_NATIVE_ANSWER_MODEL||process.env.COPILOT_INTERVIEW_MODEL||'gpt-6.1-sol';
 const examinerModel=process.env.COPILOT_INTERVIEW_EXAMINER_MODEL||model;
 const examinerEffort=process.env.COPILOT_INTERVIEW_EXAMINER_EFFORT||'low';
@@ -104,7 +106,7 @@ if(recordedDir){
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
-result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs'].map(async file=>[file,hash(await readFile(file))])));
+result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs','scripts/lib/rapid-interview.mjs','scripts/lib/rapid-wave.mjs'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -182,7 +184,7 @@ async function speak(question,label){
   return {waveFile:path.basename(waveFile),sha256:hash(await readFile(waveFile))};
 }
 try {
-  if(!scenario){
+  if(!scenario&&!rapidMode){
     const request=path.join(output,'scenario-request.json');
     await writeFile(request,JSON.stringify({runId:result.interviewPlan.runId,brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||'CUDA and GPU systems: vague unexpected behavior, followed by increasingly difficult quantitative reasoning, concurrency, memory ordering and exact code. Require clarification and revise hypotheses as new evidence arrives.'},null,2));
     result.scenarioGenerationAttempts=[];
@@ -283,6 +285,9 @@ try {
   const intro='This is a technical interview. I will present hypothetical systems problems, ask you to analyze them, and keep drilling into your reasoning. Some challenges will be intentionally vague; ask for missing information rather than inventing it.';
   let offset=await eventCount();await event('started');const introEnd=await event('ended');await event('transcript',intro);
   result.introduction=await outcome(intro,offset,introEnd);await invoke('action',{action:'dismiss'});
+  if(rapidMode){
+    await runRapidInterview({root,output,result,budget,examiner,invoke,connection,event,events,eventCount,runChild,persist,realAudio,playbackName,examinerModel,examinerEffort});
+  }else{
   let history=`INTERVIEWER INTRODUCTION: ${intro}\n`,question=recorded[0]?.question??seedQuestion;
   const sessionClock=performance.now();
   result.interviewSessionStartedAt=new Date().toISOString();
@@ -325,6 +330,7 @@ try {
   result.stopReason=interviewStopReason(budget,result.rows.length,result.actualInterviewDurationMs);
   assert(result.stopReason!=='round_cap_before_duration','Round cap exhausted before the requested interview duration');
   result.status='complete';result.targetAchieved=false; // Broad audio/interruption target requires further evidence.
+  }
 } catch(error){result.status='failed';result.failure=String(error);if(invoke){try{const snapshot=await invoke('get_snapshot');result.failureState={status:snapshot.status,error:snapshot.error};}catch{}}if(process.env.COPILOT_NEMO_DIAGNOSTICS==='1')result.nativeDiagnosticTail=appError;throw error;}
 finally {
   if(connection){try{await writeFile(path.join(output,'event-log.json'),JSON.stringify(await events(),null,2));}catch{}}

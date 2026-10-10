@@ -52,6 +52,9 @@ async fn run(codex:&Arc<Codex>,root:&std::path::Path)->Result<(),String> {
     if let Some(index)=arguments.iter().position(|a|a=="--generate-scenario") {
         return generate_scenario(codex,std::path::Path::new(arguments.get(index+1).ok_or("Scenario request path is missing")?)).await;
     }
+    if let Some(index)=arguments.iter().position(|a|a=="--generate-burst") {
+        return generate_burst(codex,std::path::Path::new(arguments.get(index+1).ok_or("Burst request path is missing")?)).await;
+    }
     if let Some(index)=arguments.iter().position(|a|a=="--grade-request") {
         return grade_request(codex,std::path::Path::new(arguments.get(index+1).ok_or("Grade request path is missing")?)).await;
     }
@@ -191,6 +194,26 @@ async fn generate_scenario(codex:&Arc<Codex>,path:&std::path::Path)->Result<(),S
     let scenario:Value=serde_json::from_str(&text.lock().unwrap()).map_err(|e|format!("Generated scenario JSON is invalid: {e}"))?;
     for field in ["seed","examinerOnly","rubric"] {if !scenario[field].as_str().is_some_and(|s|!s.trim().is_empty()){return Err(format!("Generated scenario has no {field}"));}}
     std::fs::write(path.with_extension("scenario.json"),serde_json::to_vec_pretty(&json!({"scenario":scenario,"model":model,"effort":effort,"instructions":instructions,"schema":schema})).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
+    Ok(())
+}
+
+// Offline probe preparation only. Public prompts are generated afresh; no
+// topic vocabulary, response bank or benchmark script is loaded by the app.
+async fn generate_burst(codex:&Arc<Codex>,path:&std::path::Path)->Result<(),String> {
+    let request:Value=serde_json::from_slice(&std::fs::read(path).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
+    let count=request["count"].as_u64().filter(|n|(2..=12).contains(n)).ok_or("Burst requires 2-12 questions")?;
+    let brief=request["brief"].as_str().filter(|s|!s.trim().is_empty()).ok_or("Burst requires a brief")?;
+    let model=std::env::var("COPILOT_INTERVIEW_EXAMINER_MODEL").unwrap_or("gpt-6.1-sol".into());
+    let effort=std::env::var("COPILOT_INTERVIEW_EXAMINER_EFFORT").unwrap_or("low".into());
+    let instructions="Generate fresh exceptionally difficult rapid-fire interview questions from the brief and public history. Return only the requested JSON. Each question must be spoken naturally and concise (normally 12-40 words), but demand precise reasoning, quantitative derivation, a proof or code. Mix new problems with deeper probes, corrections, changed constraints and terse contextual references. Later questions in this burst may depend on earlier PUBLIC question facts, but must not assume the candidate gave an answer not present in history. Make vague challenges answerable by clarification. Vary domains and constructions instead of repeating a template. Do not supply answers, diagnoses, private facts or a fixed question bank. Future bursts will adapt to the actual answers. Never use tools.";
+    let schema=json!({"type":"object","properties":{"questions":{"type":"array","minItems":count,"maxItems":count,"items":{"type":"string"}}},"required":["questions"],"additionalProperties":false});
+    let input=serde_json::to_string(&json!({"runId":request["runId"],"brief":brief,"publicHistory":request["history"],"count":count})).map_err(|e|e.to_string())?;
+    let text=Arc::new(Mutex::new(String::new()));let sink=text.clone();
+    codex.stream_json(&model,Some("fast"),Some(&effort),instructions,&input,&schema,CancellationToken::new(),move|event|{match event{StreamEvent::Delta(delta)=>sink.lock().unwrap().push_str(&delta),StreamEvent::Revision(replacement)=>*sink.lock().unwrap()=replacement,_=>{}}async{Ok(())}}).await?;
+    let burst:Value=serde_json::from_str(&text.lock().unwrap()).map_err(|e|format!("Generated burst JSON is invalid: {e}"))?;
+    let questions=burst["questions"].as_array().ok_or("Burst has no questions")?;
+    if questions.len()!=count as usize||questions.iter().any(|q|!q.as_str().is_some_and(|s|!s.trim().is_empty()&&s.len()<=4000)){return Err("Invalid generated burst question count or text".into());}
+    std::fs::write(path.with_extension("burst.json"),serde_json::to_vec_pretty(&json!({"questions":questions,"runId":request["runId"],"model":model,"effort":effort,"instructions":instructions,"schema":schema})).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
     Ok(())
 }
 

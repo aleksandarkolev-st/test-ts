@@ -1,0 +1,229 @@
+{
+  "recordedAt": "2026-10-10T18:16:53.536135+00:00",
+  "scope": "Fresh held-out real Nemotron prefixes, independently reviewed by the coding agent using selected current words and prior context only, before classifier inference. This is AI-reviewed synthetic-speech evidence, not human ground truth or independent audio/interview accuracy certification. No future source text, source class or classifier scores were used to label prefixes. Ambiguous prefixes are excluded. All rows remain assessment-only; no fitting or threshold selection.",
+  "prospectivePlan": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\assessment-v65\\fresh-assessment-plan.json",
+      "sha256": "83844ec96276bb86db8e06872710b739aea854a01b018be2e0129ec46094e191"
+    },
+    "plan": {
+      "profileSha256": "4794F1D6ECDEC6079FF51B04A3241B35E06978CC7D128FC579752F124B6F12D4",
+      "productionProfileChanges": false,
+      "sampledFragmentsPerUtterance": 4,
+      "expectedEpisodes": 10,
+      "profile": ".local/intent-encoder/finetuned-asr-v64-r1/profile.fp32.json",
+      "samplingSeed": 64,
+      "selection": "New episode groups are assessment-only. No epoch, temperature, threshold or policy selection from this data. Independent label review must finish before classifier evaluation.",
+      "expectedUtterances": 30,
+      "captureBinarySha256": "2AD50C336AD3CAB65871D49747DDA7425E3DEEA75FB56284FEFBE12EFD1F2F9D",
+      "samplingSourceSha256": "F61DDC72DEA53AB08533C91735288CC73FEC7DCFDA4158D519C4AC2A9A16887A",
+      "annotationSha256": "F08C1FA2CAC616981109CA2E0EDF00CE7E42D32BF2CBD373D79045E5D75340C7",
+      "assessmentThreshold": 0.95,
+      "createdAt": "2026-10-10T17:49:26.8653125Z",
+      "generatorSha256": "9E5BFC53644AF0990751B97A5EF8CF74A1ED4D4EA97AE2597E3302A0304E174D"
+    }
+  },
+  "overlapAudit": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\assessment-v65\\overlap-audit.json",
+      "sha256": "2abb8339a53e19756d3ccfb7a408b27190bfc44a3c595ef29df2c9b533e4d7ac"
+    },
+    "audit": {
+      "scope": "Exact overlap audit, preserving identifier case and operators and normalizing whitespace only. New nonce-based group IDs alone do not establish semantic independence. Shared short words across different contexts are reported, not excluded; identical text/context pairs are excluded before classifier inference. No semantic novelty certification.",
+      "profileFrozenBeforeSourceGeneration": {
+        "profileSha256": "4794F1D6ECDEC6079FF51B04A3241B35E06978CC7D128FC579752F124B6F12D4",
+        "productionProfileChanges": false,
+        "sampledFragmentsPerUtterance": 4,
+        "expectedEpisodes": 10,
+        "profile": ".local/intent-encoder/finetuned-asr-v64-r1/profile.fp32.json",
+        "samplingSeed": 64,
+        "selection": "New episode groups are assessment-only. No epoch, temperature, threshold or policy selection from this data. Independent label review must finish before classifier evaluation.",
+        "expectedUtterances": 30,
+        "captureBinarySha256": "2AD50C336AD3CAB65871D49747DDA7425E3DEEA75FB56284FEFBE12EFD1F2F9D",
+        "samplingSourceSha256": "F61DDC72DEA53AB08533C91735288CC73FEC7DCFDA4158D519C4AC2A9A16887A",
+        "annotationSha256": "F08C1FA2CAC616981109CA2E0EDF00CE7E42D32BF2CBD373D79045E5D75340C7",
+        "assessmentThreshold": 0.95,
+        "createdAt": "2026-10-10T17:49:26.8653125Z",
+        "generatorSha256": "9E5BFC53644AF0990751B97A5EF8CF74A1ED4D4EA97AE2597E3302A0304E174D"
+      },
+      "reviewedAssessmentSourceSha256": "49485eab976f30556587b2b4d7dac921fd676cbd4cf85cc4a71ac9a242b2965c",
+      "priorDatasets": [
+        {
+          "file": "artifacts\\intent-classifier\\asr-corpus-v62\\split\\training.json",
+          "sha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+          "cases": 991
+        },
+        {
+          "file": "artifacts\\intent-classifier\\prefix-validation-v57.json",
+          "sha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+          "cases": 148
+        },
+        {
+          "file": "artifacts\\intent-classifier\\asr-corpus-v62\\split\\evaluation.json",
+          "sha256": "5725563d0e94babb655e89e9fc9e86ecee2fcdf34129781b060d87e5190c1c78",
+          "cases": 108
+        }
+      ],
+      "newGroups": 10,
+      "sharedGroupIds": 0,
+      "excludedExactTextContextIds": [],
+      "sameTextDifferentContextCount": 3,
+      "retained": 98,
+      "readyRequests": 21
+    }
+  },
+  "baseline": {
+    "source": {
+      "file": "artifacts\\intent-classifier\\assessment-v65\\baseline-evaluation.json",
+      "sha256": "08054c6a5ce2962296e00efbbf6a7710491af9d661d3be5dd30991de8bbd7340"
+    },
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+    },
+    "cases": 98,
+    "readyCases": 21,
+    "policy": {
+      "threshold": 0.95,
+      "selected": 0,
+      "falseEarly": 0,
+      "missedReadyRequests": 21,
+      "ignoredBackground": 0,
+      "falseBackgroundIgnore": 0,
+      "missedBackground": 28
+    },
+    "latencyMs": {
+      "median": 3.6239000037312508,
+      "p95": 6.733000045642257,
+      "max": 9.26149997394532
+    }
+  },
+  "fitted": {
+    "source": {
+      "file": "artifacts\\intent-classifier\\assessment-v65\\fitted-evaluation.json",
+      "sha256": "c332300993afc8c6f7a21603fbdacda65cbbf81572515d7a2cec313f4242f068"
+    },
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "4794f1d6ecdec6079ff51b04a3241b35e06978cc7d128fc579752f124b6f12d4",
+      "trainedModelSha256": "b2c99e8a42ae72baeeb74a85467a86ce6f3d433c34cebf93382897711ce857c7"
+    },
+    "cases": 98,
+    "readyCases": 21,
+    "policy": {
+      "threshold": 0.95,
+      "selected": 6,
+      "falseEarly": 0,
+      "missedReadyRequests": 15,
+      "ignoredBackground": 12,
+      "falseBackgroundIgnore": 0,
+      "missedBackground": 16
+    },
+    "latencyMs": {
+      "median": 5.636500020045787,
+      "p95": 9.094999986700714,
+      "max": 11.013299925252795
+    }
+  },
+  "contextualDiagnostics": [
+    {
+      "id": 82,
+      "text": "More like I might faint",
+      "context": "Speaker: I get dizzy when I stand up. Listener: Does it feel like spinning, or more like you might faint?",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.860491469502449,
+        "background": 0.13950853049755096,
+        "ready": 0.5908347368240356,
+        "unfinished": 0.269656777381897
+      }
+    },
+    {
+      "id": 88,
+      "text": "Could you help me",
+      "context": "Speaker: My gpu job hangs sometimes. Listener: What would you like help with?",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.9960259939543903,
+        "background": 0.003974006045609713,
+        "ready": 0.7513689398765564,
+        "unfinished": 0.24465706944465637
+      }
+    },
+    {
+      "id": 100,
+      "text": "Across streams",
+      "context": "Speaker: In my CUDA pipeline, the producer writes the buffer and the consumer reads it. Listener: Same-stream ordering covers the case we just discussed.",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.42950427532196045,
+        "background": 0.5704957246780396,
+        "ready": 0.358631432056427,
+        "unfinished": 0.07087282091379166
+      }
+    },
+    {
+      "id": 104,
+      "text": "Across streams",
+      "context": "Speaker: In my CUDA pipeline, the producer writes the buffer and the consumer reads it. Listener: Same-stream ordering covers the case we just discussed.",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.42950427532196045,
+        "background": 0.5704957246780396,
+        "ready": 0.358631432056427,
+        "unfinished": 0.07087282091379166
+      }
+    },
+    {
+      "id": 109,
+      "text": "Suppose a CUDA block has one hundred threads the last warp reduces values with underscore underscore shfl underscore down underscore sync",
+      "context": "Listener: For the GPU interview, I'll describe hypothetical kernels and you should identify the correctness risks before discussing performance.",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.9723078440874815,
+        "background": 0.0276921559125185,
+        "ready": 0.8952093124389648,
+        "unfinished": 0.0770985558629036
+      }
+    },
+    {
+      "id": 114,
+      "text": "Suppose a CUDA block has one hundred threads the last warp reduces values with underscore underscore shfl underscore down underscore sync and the mask passed to every shuffle is zero",
+      "context": "Listener: For the GPU interview, I'll describe hypothetical kernels and you should identify the correctness risks before discussing performance.",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.9362436905503273,
+        "background": 0.0637563094496727,
+        "ready": 0.5295768976211548,
+        "unfinished": 0.4066667854785919
+      }
+    },
+    {
+      "id": 116,
+      "text": "Suppose a CUDA block has one hundred threads the last warp reduces values with underscore underscore shfl underscore down underscore sync and the mask passed to every shuffle is zero XFF FFFFFFFFFFF even though only four lanes enter the reduction",
+      "context": "Listener: For the GPU interview, I'll describe hypothetical kernels and you should identify the correctness risks before discussing performance.",
+      "reviewLabel": "ready_request",
+      "scores": {
+        "request": 0.9720498733222485,
+        "background": 0.02795012667775154,
+        "ready": 0.8842566609382629,
+        "unfinished": 0.08779323101043701
+      }
+    }
+  ],
+  "limitations": [
+    "AI-reviewed synthetic speech fragments, not human ground truth. Nineteen ambiguous prefixes excluded; semantic overlap is not ruled out by exact identity auditing.",
+    "Threshold 0.95 was frozen before data generation. No fitting or selection uses this assessment.",
+    "Fragment decisions do not enforce native acoustic quiet, changed-text cadence, stability, floor budgets or final-transcript validation, and are not paid-call counts.",
+    "Inference duration uses evaluator floor-index p95 convention and excludes worker startup.",
+    "Contextual diagnostics are observed assessment rows; do not copy their phrases into training or runtime rules."
+  ],
+  "productionPromoted": false,
+  "targetAchieved": false
+}

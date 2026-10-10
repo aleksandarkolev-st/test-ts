@@ -1,0 +1,271 @@
+{
+  "recordedAt": "2026-10-10T18:28:28.868005+00:00",
+  "scope": "Completed offline intent/completeness fit with fresh contextual contrasts. No answer-model or Nemotron training. Fresh post-fit assessment pending; no production promotion or latency improvement established.",
+  "plan": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\plan.json",
+      "sha256": "39e79931bdd347d055177fd8a48c54eeeccf6c22c12ffde9777ad0d026ebbdba"
+    },
+    "value": {
+      "sampling": "group-class",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "tier": "fast",
+      "developmentNewCases": 60,
+      "selection": "Epoch and temperature use development only. Fresh assessment is generated after fitting and cannot select thresholds, parameters or epochs. No production promotion from synthetic labels alone.",
+      "trainingNewCases": 120,
+      "epochsMaximum": 10,
+      "inputs": {
+        "scripts/label-intent-prefixes.mjs": "f08c1fa2cac616981109ca2e0edf00ce7e42d32bf2cbd373d79045e5d75340c7",
+        ".local/intent-encoder/finetuned-asr-v64-r1/profile.fp32.json": "4794f1d6ecdec6079ff51b04a3241b35e06978cc7d128fc579752f124b6f12d4",
+        "artifacts/intent-classifier/asr-corpus-v62/split/training.json": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+        "scripts/train-intent-encoder.py": "0a51ab2ad96b42ad93123703c789f31fbc5f6c3cd7f19ab50b58486b074c593c",
+        "scripts/intent_sampling.py": "85fa9e19fe9bbff1c2b1d7daab5eaa928f55dc71ed467c6c04db401c39e43107",
+        "scripts/generate-intent-data.mjs": "acf54da3ca48e31499fc804adfa50fc84bfd9f598d5c4266d68da2dce87104dc",
+        "artifacts/intent-classifier/prefix-validation-v57.json": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+        "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1",
+        ".local/intent-encoder/profile.json": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+      },
+      "threshold": 0.95,
+      "scope": "Offline contextual intent/completeness classifier experiment, never answer training or runtime phrase rules. Identical current words with contrasting prior conversation remain grouped. v65 assessment is observed and excluded from fitting and selection.",
+      "trainingThreads": 4,
+      "seed": 42,
+      "createdAt": "2026-10-10T18:13:38.2434366Z",
+      "assessmentNewCases": 60,
+      "batchSize": 8
+    }
+  },
+  "annotationAmendment": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\annotation-amendment.json",
+      "sha256": "8681a2a96a9921211ced1ec55efe0454e847996fc544db568105ff203f607963"
+    },
+    "value": {
+      "assessment": "Generate after fitting, threshold stays 0.95; no fit or selection from v65 assessment",
+      "labelerSha256": "78e677927562d0084568e782150cbedb354ffe9fb01bec8ea6c4eb137db6a458",
+      "reason": "Review of fresh annotation disagreements found that statements answering active clarifications were labeled background despite pending tasks. Corrected generic offline annotation instruction before fitting or classifier prediction inspection. Original labels preserved; reannotations separate. No literal opener or domain rules.",
+      "recordedAt": "2026-10-10T18:20:52.1324385Z",
+      "exportChoice": "FP32 selected prospectively for exact native/export prediction parity; INT8 recorded only"
+    }
+  },
+  "assemblyAudit": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\assembly-audit.json",
+      "sha256": "122262b4f48097eff15b3060139d443a30c59072505dcc7632b1152ccd73ff0a"
+    },
+    "value": {
+      "prospectivePlan": {
+        "file": "artifacts\\intent-classifier\\context-v67\\plan.json",
+        "sha256": "39e79931bdd347d055177fd8a48c54eeeccf6c22c12ffde9777ad0d026ebbdba"
+      },
+      "oldTraining": {
+        "file": "artifacts/intent-classifier/asr-corpus-v62/split/training.json",
+        "sha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86"
+      },
+      "oldDevelopment": {
+        "file": "artifacts/intent-classifier/prefix-validation-v57.json",
+        "sha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9"
+      },
+      "newSources": {
+        "training": {
+          "generated": {
+            "file": "artifacts\\intent-classifier\\context-v67\\fresh-training.json",
+            "sha256": "0092d455817bae453944c408182f8c98ada7778ff591b0a726632e1f4e067771"
+          },
+          "annotations": {
+            "file": "artifacts\\intent-classifier\\context-v67\\training-labels-r1.json",
+            "sha256": "22a2320b206779084930650a09fb34d47d30d13f44a74e4688c76821d2a5d177"
+          },
+          "unlabeled": {
+            "file": "artifacts\\intent-classifier\\context-v67\\training-unlabeled.json",
+            "sha256": "e92cb6c80abab029b61e1015a2346f7514b181421ebae08dc9d08323eef822b6"
+          },
+          "excludedDisagreement": []
+        },
+        "development": {
+          "generated": {
+            "file": "artifacts\\intent-classifier\\context-v67\\fresh-development.json",
+            "sha256": "f39305a46dad34abdaedccf67db15da00bacc9d0c4040a19f10ba3073200237d"
+          },
+          "annotations": {
+            "file": "artifacts\\intent-classifier\\context-v67\\development-labels-r1.json",
+            "sha256": "468296d8e65a97ceef89bccd1c650d4f04307f8fa25c4544d966c9c2d9225ceb"
+          },
+          "unlabeled": {
+            "file": "artifacts\\intent-classifier\\context-v67\\development-unlabeled.json",
+            "sha256": "751b9acc6e0fc38b99984006a52b1d12a31c94f8228bbf23362b966c5b41f358"
+          },
+          "excludedDisagreement": []
+        }
+      },
+      "trainingCases": 1111,
+      "developmentCases": 208,
+      "exactTextOverlapExcluded": 0,
+      "freshTrainingRetained": 120,
+      "freshDevelopmentRetained": 60,
+      "review": "Coding agent inspected all 40 training and 20 development episode triples before inference. Each current statement is a reply requiring continuation in its active problem context and a report/quotation/deferred premise in its counterpart. Unfinished variants end in missing clauses; unspecified task facts alone are not unfinished. Independent annotator disagreement excluded. This is AI review, not human ground truth."
+    }
+  },
+  "profile": {
+    "identity": {
+      "file": ".local/intent-encoder/finetuned-context-v67-r1/profile.fp32.json",
+      "sha256": "df116fb2f53cc48f72d02f1627f08b1ca8797e86a62ba92e02e313dca0d6a99b"
+    },
+    "value": {
+      "encoder": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "classes": [
+        "background",
+        "unfinished_request",
+        "ready_request"
+      ],
+      "trainedModel": {
+        "file": "finetuned-context-v67-r1/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "454ad429f990e340303ec965f83cfa1337d2504193a1e1352c4bc4599149636d"
+      },
+      "temperature": 1.7000000000000002,
+      "validationLoss": 0.5149463415145874,
+      "validationAccuracy": 0.7692307692307693,
+      "maxExportLogitDifference": 6.407499313354492e-06,
+      "exportPredictionDisagreements": 0,
+      "fp32ExportMaxLogitDifference": 6.407499313354492e-06,
+      "fp32ExportPredictionDisagreements": 0,
+      "trainingSha256": "430ea000d0604c7acedb2e18979b97d244d1ecf1756997c867368a5ceb727161",
+      "validationSha256": "f7de1f65dc74af5f41410d8b13e59a1fc1d991c4fec48decad587d2d5842d503",
+      "trainingVariants": 1111,
+      "trainingOriginalGroups": 430,
+      "validationCount": 208,
+      "seed": 42,
+      "selectedEpoch": 4,
+      "trainingThreads": 4,
+      "batchSize": 8,
+      "epochsMaximum": 10,
+      "trainerSourceSha256": {
+        "train-intent-encoder.py": "0a51ab2ad96b42ad93123703c789f31fbc5f6c3cd7f19ab50b58486b074c593c",
+        "intent_sampling.py": "85fa9e19fe9bbff1c2b1d7daab5eaa928f55dc71ed467c6c04db401c39e43107",
+        "intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+      },
+      "sampling": "group-class",
+      "epochs": [
+        {
+          "epoch": 1,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 1.041954742372036,
+          "validationLoss": 0.9790897369384766,
+          "validationAccuracy": 0.5288461446762085,
+          "elapsedSeconds": 14.48499999998603
+        },
+        {
+          "epoch": 2,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.6518632989376784,
+          "validationLoss": 0.7543614506721497,
+          "validationAccuracy": 0.6778846383094788,
+          "elapsedSeconds": 29.10999999998603
+        },
+        {
+          "epoch": 3,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.3180568835232407,
+          "validationLoss": 0.7390571236610413,
+          "validationAccuracy": 0.7259615659713745,
+          "elapsedSeconds": 43.5
+        },
+        {
+          "epoch": 4,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.17711861421121283,
+          "validationLoss": 0.5959926843643188,
+          "validationAccuracy": 0.7692307829856873,
+          "elapsedSeconds": 58.0
+        },
+        {
+          "epoch": 5,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.10493290818994865,
+          "validationLoss": 1.020620584487915,
+          "validationAccuracy": 0.7596153616905212,
+          "elapsedSeconds": 72.375
+        },
+        {
+          "epoch": 6,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.06822965067622136,
+          "validationLoss": 1.1319037675857544,
+          "validationAccuracy": 0.7692307829856873,
+          "elapsedSeconds": 86.81299999996554
+        },
+        {
+          "epoch": 7,
+          "sampledTrainingVariants": 640,
+          "trainingLoss": 0.06982465671462705,
+          "validationLoss": 1.0072557926177979,
+          "validationAccuracy": 0.7932692170143127,
+          "elapsedSeconds": 101.5
+        }
+      ],
+      "torch": "2.6.0+cpu",
+      "transformers": "4.49.0",
+      "sourceModelManifest": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          },
+          {
+            "file": "model.safetensors",
+            "bytes": 90868376,
+            "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db"
+          }
+        ]
+      },
+      "scope": "Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. One variant per available class in each original group per epoch. No phrase rules or answers in inference."
+    }
+  },
+  "exportRecovery": {
+    "identity": {
+      "file": "artifacts\\intent-classifier\\context-v67\\export-recovery.json",
+      "sha256": "dcdefb4b0be47f8c8f7366325e8346ad3add8fe7303eb3f8638140e7c99d3453"
+    },
+    "value": {
+      "partialModelSha256": "454ad429f990e340303ec965f83cfa1337d2504193a1e1352c4bc4599149636d",
+      "reason": "Initial CPU fitting reached selected epoch and wrote FP32 model, then quantization temporary-file access failed under sandbox. Retry identical frozen fit outside sandbox into new directory; original partial preserved.",
+      "recordedAt": "2026-10-10T18:25:27.0608333Z"
+    },
+    "identicalFp32Retry": true
+  },
+  "quantizationDiagnostic": {
+    "identity": {
+      "file": ".local/intent-encoder/finetuned-context-v67-r1/profile.json",
+      "sha256": "ffcb8725aa14620984051a49634d55511e2aeee4bc9346737f39609fe5535b58"
+    },
+    "developmentPredictionDisagreements": 9,
+    "maxLogitDifference": 0.7262895107269287,
+    "usedForAssessment": false
+  },
+  "productionProfileSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "productionPromoted": false,
+  "targetAchieved": false,
+  "limitations": [
+    "Synthetic labels and two AI reviews are not human ground truth.",
+    "An unchanged seed reproduces a fit; it does not establish sampling novelty.",
+    "Development selects epoch and calibration, and cannot certify unseen request detection.",
+    "Context contrast assessment must remain unseen by fitting or policy selection.",
+    "Classifier controls speculative sending only; finalized signed-in requests still reach model intent inference."
+  ]
+}

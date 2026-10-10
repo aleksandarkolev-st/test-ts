@@ -111,6 +111,8 @@ enum Control {
     Protection(bool, oneshot::Sender<()>),
     #[cfg(all(feature = "acceptance", debug_assertions))]
     Inject(InputEvent, oneshot::Sender<u64>),
+    #[cfg(all(feature = "acceptance", debug_assertions))]
+    InspectJobs(oneshot::Sender<serde_json::Value>),
     Start(Settings, oneshot::Sender<Result<(), String>>),
     Stop(oneshot::Sender<Result<(), String>>),
     Pause,
@@ -249,6 +251,18 @@ async fn actor(
     loop {
         tokio::select! {
             control=controls.recv()=>{let Some(control)=control else{break};if starting.is_some()&&!matches!(&control,Control::Start(..)|Control::Stop(..)){continue;}match control {
+                #[cfg(all(feature="acceptance",debug_assertions))] Control::InspectJobs(reply)=>{
+                    let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);
+                    let traces=timings.lock().unwrap();
+                    let jobs=answers.jobs.iter().map(|job|{
+                        let mut latency=job.latency.clone();
+                        if let Some(trace)=traces.get(&job.question.id){latency.pipeline=trace.snapshot();}
+                        serde_json::json!({"question":job.question,"phase":job.phase,"confirmed":job.confirmed,
+                            "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
+                            "error":job.error,"latency":latency})
+                    }).collect::<Vec<_>>();
+                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs}));
+                },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Protection(enabled,reply)=>{engine.view.protection=enabled;publish(&app,&mut engine,&view);let _=reply.send(());},
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::Inject(mut event,reply)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);match &mut event{InputEvent::SpeechStarted(_,t)|InputEvent::SpeechEnded(_,t)|InputEvent::SpeechActivity(_,t,_)=>*t=now,InputEvent::Transcript(s)=>{s.started_at=now;s.ended_at=now;},_=>{}}let _=events_tx.send(event).await;let _=reply.send(now);}, Control::Start(settings,reply)=>{
                     if session.is_some()||starting.is_some(){let _=reply.send(Err("A meeting is already active".into()));continue;}
@@ -594,6 +608,19 @@ fn get_snapshot(rt: State<'_, Runtime>) -> Snapshot {
 #[tauri::command]
 fn get_answer_timings(rt:State<'_,Runtime>)->Vec<(String,crate::openai::timing::Timeline)> {
     rt.timings.lock().unwrap().iter().map(|(id,t)|(id.clone(),t.snapshot())).collect()
+}
+// Read-only, debug/acceptance-only evidence. Hidden or cancelled buffers never
+// authorize display; the production build cannot retrieve scheduler internals.
+#[tauri::command]
+async fn acceptance_jobs(rt:State<'_,Runtime>)->Result<serde_json::Value,String> {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    if crate::openai::acceptance_mode() {
+        let (tx,rx)=oneshot::channel();
+        send(&rt,Control::InspectJobs(tx)).await?;
+        return rx.await.map_err(|_|"Meeting inspection cancelled".into());
+    }
+    let _=rt;
+    Err("Scheduler inspection is available only in acceptance/debug mode".into())
 }
 #[tauri::command]
 fn answer_visible(rt:State<'_,Runtime>,id:String,revision:Option<u64>) {
@@ -1113,6 +1140,7 @@ pub fn run() {
             get_answer_timings,
             get_snapshot,
             acceptance_event,
+            acceptance_jobs,
             acceptance_protection,
             native_diagnostics,
             bootstrap,

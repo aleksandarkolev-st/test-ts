@@ -1,0 +1,782 @@
+{
+  "recordedAt": "2026-10-10T18:15:31.296Z",
+  "scope": "Completed native rapid-fire evidence, post-run reporting only. First retained alphanumeric answer character, not sentence completion. Model grades are synthetic examiner judgments, not certified accuracy. Simulated transcripts exclude capture, ASR and acoustic finalization. Tiny serial samples do not establish model-population p95 or general superiority. Fresh shared public prompts are paired controls prepared before answers, not answer-adaptive hour-long interviews.",
+  "limitations": [
+    "Review sessions run after measured candidates stop; no grading calls during measurement.",
+    "Exact merged identity proves text retention only.",
+    "Hidden job buffers are diagnostic; displaying speculative or cancelled content remains unauthorized.",
+    "The recorded pair predates diagnostic module-hash recording; it contains native/other source hashes but does not freeze rapid module hashes.",
+    "No classifier gate, audio rapid-fire, human interruption, or hour-long Sol certification is established."
+  ],
+  "cases": [
+    {
+      "source": {
+        "file": "artifacts/native-interview/rapid-comparison-v66-r1/gpt-6-luna/interview.json",
+        "sha256": "0acc7464552a3c1bca955d02fdbe993d54ba5bb4b51e6e36539866b5c26aeaf5"
+      },
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "startedAt": "2026-10-10T17:57:46.110Z",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "realAudio": false,
+      "intentMode": "final",
+      "primaryLatencyMetric": "firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.",
+      "rapidConfiguration": {
+        "count": 3,
+        "gapMs": 250,
+        "wordMs": 90,
+        "drainMs": 45000,
+        "delivery": "simulated transcript fragments",
+        "pollMs": 40
+      },
+      "rapidSharedPlan": {
+        "file": "artifacts\\native-interview\\rapid-comparison-v66\\fresh-plan-r1.json",
+        "sha256": "894fa2a3db3d5fbafc5c0786e218ed76be7607a05a7eee1c8db84683daea9051",
+        "runId": "ef5e9454-da61-4d2f-967c-a6e0ac8b6ea2",
+        "createdAt": "2026-10-10T17:54:23.083Z",
+        "scope": "Fresh generated public prompts shared by isolated candidate sessions for a paired comparison. Within-plan questions may depend on earlier public premises. No candidate answers or examiner solutions in this plan."
+      },
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+        "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+        "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+        "src-tauri/src/runtime.rs": "54680838fca231dd50ab29599110ce970d1de3ac1ed5927fce27ea13a5621fa4"
+      },
+      "diagnosticSourceHashes": {
+        "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+        "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+        "src-tauri/examples/adaptive-interview.rs": "821df88cddc2bb9c2e6ae5bb5beb4fcd48032558085ea670fc4e9ab1580f9166",
+        "scripts/native-signed-interview.mjs": "a6e89e59fc308af25487d7aa909d1a0c88827ac91a2b973942043db19aacd06d",
+        "scripts/lib/examiner-retry.mjs": "2570ad1636d3c135ff6747d9fa4c4bf7192614699976a13879de642d09063dec"
+      },
+      "nativeBinarySha256": "a53ee28aa9ee26e3f189027a9cacc5f898be56783de41c5bba0bdd7576b0e792",
+      "examinerBinarySha256": "73e8499be1c2d9739e1bd0876f53f2e4d89f2490fc666616588f50c84c002ca7",
+      "bursts": [
+        {
+          "index": 1,
+          "questions": [
+            "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed.",
+            "Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula.",
+            "A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy."
+          ],
+          "actualOverlappingInputStarts": 2,
+          "attribution": {
+            "sourceOutcomes": [
+              {
+                "question": "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "9644b3b5-0bca-42a0-82fd-bf04f38f9011"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "9644b3b5-0bca-42a0-82fd-bf04f38f9011"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "9644b3b5-0bca-42a0-82fd-bf04f38f9011"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              }
+            ],
+            "mergedJobs": [
+              {
+                "question": "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed. Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula. A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy.",
+                "matched": true,
+                "id": "9644b3b5-0bca-42a0-82fd-bf04f38f9011",
+                "answer": "First clarify what “twice as slow” measures, where the reported kernel duration comes from, and whether both runs use the same GPU, workload, clocks, driver/runtime, synchronization, warm-up, and repetition protocol. Matching kernel times don’t explain end-to-end time unless the timing boundaries and units are comparable; host submission, synchronization, transfers, compilation, or other work may be outside that kernel interval.\n\nRun the same deterministic workload on both OSes and collect independent timestamps around each stage: process start, initialization, allocation, compilation, transfers, launch submission, explicit completion synchronization, and teardown. Repeat warm and cold runs, with and without transfers, and compare host wall-clock elapsed time against GPU event timing and device profiling traces—but treat each as a measurement to cross-check, not a ground truth. Add controlled delays and an empty-kernel case to test what each instrument includes, then reconcile stage totals with end-to-end wall time; the first stage whose measured duration diverges localizes the missing time, and disagreement between instruments flags a measurement-boundary or timer issue.",
+                "phase": "complete",
+                "confirmed": true,
+                "cancelled": false,
+                "error": null,
+                "latency": {
+                  "completedAt": 15837,
+                  "firstCredibleCandidateAt": null,
+                  "firstRemotePartialAt": 3061,
+                  "firstTokenAt": 13632,
+                  "firstWordAt": 13632,
+                  "pipeline": {
+                    "acousticRefinementCount": 0,
+                    "actualServiceTier": null,
+                    "agedFinalWait": false,
+                    "backend": null,
+                    "cachedInputTokens": null,
+                    "cancelled": false,
+                    "candidateDetected": 5200,
+                    "cleanupMaxQueuedEvents": 0,
+                    "cleanupStartedAt": null,
+                    "cleanupTerminalAt": null,
+                    "codexStreamEntered": 5202,
+                    "completedDraftReplacementCount": 0,
+                    "confirmedQuestionRefinements": false,
+                    "eagerFinalReplacement": false,
+                    "finalPendingBudgetMs": null,
+                    "firstAgentDelta": 6439,
+                    "firstVisible": 13642,
+                    "followupCount": 2,
+                    "interruptAckAt": null,
+                    "latestInputAck": 12381,
+                    "latestInputConsumed": 12457,
+                    "latestInputSent": 12363,
+                    "modelRequestSent": null,
+                    "pendingAgeAtConfirmationMs": null,
+                    "preparedThreadAgeMs": 3183,
+                    "promptChars": 1235,
+                    "questionConfirmed": 12361,
+                    "refillCompleted": 6440,
+                    "refillError": false,
+                    "refillStarted": null,
+                    "refillThreadsCreated": 0,
+                    "refinementChars": 1582,
+                    "refinementRestartCount": 0,
+                    "responseCount": 0,
+                    "responseCreated": null,
+                    "restartPromptChars": null,
+                    "retainedFirstDelta": 13632,
+                    "semaphoreAcquired": 5202,
+                    "steeringCount": 0,
+                    "turnCompleted": 15837,
+                    "turnStartAck": 5218,
+                    "turnStartSent": 5202,
+                    "warmStateUsed": true,
+                    "warmThreadTaken": 5202
+                  },
+                  "questionConfirmedAt": 12361,
+                  "remotePartialUpdates": 9,
+                  "remoteSpeechStartedAt": 2063,
+                  "requestSentAt": 5202,
+                  "responseRevision": 4,
+                  "speechStoppedAt": 12158,
+                  "transcriptFinalAt": 12212
+                },
+                "firstWordFromNativeSpeechEndMs": 1474,
+                "firstWordFromLatestInputMs": 1269,
+                "outcome": "completed",
+                "sourcePositions": [
+                  1,
+                  2,
+                  3
+                ],
+                "scope": "One exact composite native job; latency applies to the merged turn, not to each source request. Task coverage and accuracy require review."
+              }
+            ]
+          },
+          "reviews": [
+            {
+              "jobId": "9644b3b5-0bca-42a0-82fd-bf04f38f9011",
+              "file": "artifacts\\native-interview\\rapid-comparison-v66-r1\\gpt-6-luna\\model-review\\burst-1-job-1.review.json",
+              "sha256": "637525d02294865d08302129b6bd9eda9789aa329c2e6164909f0ad2113380fd",
+              "model": "gpt-6.1-sol",
+              "effort": "low",
+              "review": {
+                "constraintTracking": false,
+                "currentTopic": "RDMA exactly-once semantics, LDS bank conflicts, and cross-platform timing",
+                "difficulty": 5,
+                "incorrectClaims": [],
+                "issue": "The supplied suggested answer addresses the timing experiment but leaves both the RDMA and LDS requests unanswered.",
+                "missingInformationHandled": true,
+                "nextTopic": "Crash-safe RDMA deduplication",
+                "omissions": [
+                  "Determine whether reconnecting and retrying guarantees exactly-once execution.",
+                  "Give the requested indistinguishability argument.",
+                  "Specify the minimal durable protocol state.",
+                  "Derive and prove LDS conflict multiplicity for every positive integer stride s."
+                ],
+                "question": "An RDMA request increments a durable server counter and carries a client-generated operation ID. Concurrent retries are possible; the server may crash between any two durable writes. Show why persisting the increment and deduplication record separately fails in either order, then specify an atomic protocol and its recovery invariant. Can deduplication records be safely deleted if retries may arrive arbitrarily late? Justify.",
+                "requiredParts": [
+                  "Assess exactly-once guarantees from reconnecting and retrying an uncertain non-idempotent RDMA update.",
+                  "Provide an indistinguishability argument.",
+                  "Specify minimal durable protocol state.",
+                  "Derive LDS bank-conflict multiplicity for every positive integer s under the stated transaction and bank model.",
+                  "Prove the conflict formula.",
+                  "Identify facts requiring clarification about the Windows/Linux timing discrepancy.",
+                  "Design a cross-platform experiment that localizes missing time without trusting either timer."
+                ],
+                "unsupportedAssumption": false,
+                "verdict": "incomplete"
+              }
+            }
+          ],
+          "pollErrors": [],
+          "changedObservationPollMs": {
+            "count": 224,
+            "median": 4.705000000001746,
+            "max": 58.37359999999171
+          },
+          "scope": "Polling durations cover retained changed observations, not every poll. Shared composite answers do not prove each task was addressed. Native merged-turn timing does not assign independent source-request latency."
+        },
+        {
+          "index": 2,
+          "questions": [
+            "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it?",
+            "Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants.",
+            "A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model."
+          ],
+          "actualOverlappingInputStarts": 2,
+          "attribution": {
+            "sourceOutcomes": [
+              {
+                "question": "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it?",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "47c9348d-f111-4930-a06f-2415b43e164a"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "47c9348d-f111-4930-a06f-2415b43e164a"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "47c9348d-f111-4930-a06f-2415b43e164a"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              }
+            ],
+            "mergedJobs": [
+              {
+                "question": "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it? Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants. A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model.",
+                "matched": true,
+                "id": "47c9348d-f111-4930-a06f-2415b43e164a",
+                "answer": "Use edge-parallel expansion within each frontier vertex, not one thread per vertex. Give each frontier vertex’s adjacency list to a CTA or a tile of lanes, with a grid-stride loop over edges; every lane tests its destination’s level via atomic compare-and-swap, and only the winner appends that vertex to the next frontier. For high-degree vertices, split the list into fixed-size edge tiles so the half-graph hub doesn’t serialize one thread; use a work queue or prefix-summed tile descriptors to schedule those tiles.\n\nAssume bounded-degree-independent edge scans, O(1) atomic operations when uncontended, and a contention model where k simultaneous claims to one destination cost O(k) total work and O(log k) span via hardware serialization or a combining primitive. Each reachable outgoing edge is examined once, so expansion work is O(m_F), where m_F is the number of edges incident to the current frontier; duplicate suppression adds O(m_F) total contention work under that model, and successful discoveries append once. With P workers and balanced edge tiles, span is O(ceil(m_F/P) + log P + C_max), where C_max is the maximum contention cost for any destination; under the stated model C_max ≤ O(m_F), and under bounded fan-in O(log m_F). I’d need the specific atomic and scheduler model to claim a tighter worst-case span.",
+                "phase": "complete",
+                "confirmed": true,
+                "cancelled": false,
+                "error": null,
+                "latency": {
+                  "completedAt": 31340,
+                  "firstCredibleCandidateAt": null,
+                  "firstRemotePartialAt": 17136,
+                  "firstTokenAt": 28957,
+                  "firstWordAt": 28957,
+                  "pipeline": {
+                    "acousticRefinementCount": 0,
+                    "actualServiceTier": null,
+                    "agedFinalWait": false,
+                    "backend": null,
+                    "cachedInputTokens": null,
+                    "cancelled": false,
+                    "candidateDetected": 19520,
+                    "cleanupMaxQueuedEvents": 0,
+                    "cleanupStartedAt": null,
+                    "cleanupTerminalAt": null,
+                    "codexStreamEntered": 19523,
+                    "completedDraftReplacementCount": 0,
+                    "confirmedQuestionRefinements": false,
+                    "eagerFinalReplacement": false,
+                    "finalPendingBudgetMs": 400,
+                    "firstAgentDelta": 20744,
+                    "firstVisible": 28969,
+                    "followupCount": 1,
+                    "interruptAckAt": null,
+                    "latestInputAck": 27604,
+                    "latestInputConsumed": 27694,
+                    "latestInputSent": 27602,
+                    "modelRequestSent": null,
+                    "pendingAgeAtConfirmationMs": 1,
+                    "preparedThreadAgeMs": 3685,
+                    "promptChars": 3939,
+                    "questionConfirmed": 27601,
+                    "refillCompleted": 20745,
+                    "refillError": false,
+                    "refillStarted": null,
+                    "refillThreadsCreated": 0,
+                    "refinementChars": 1879,
+                    "refinementRestartCount": 0,
+                    "responseCount": 0,
+                    "responseCreated": null,
+                    "restartPromptChars": null,
+                    "retainedFirstDelta": 28957,
+                    "semaphoreAcquired": 19523,
+                    "steeringCount": 1,
+                    "turnCompleted": 31339,
+                    "turnStartAck": 19539,
+                    "turnStartSent": 19523,
+                    "warmStateUsed": true,
+                    "warmThreadTaken": 19523
+                  },
+                  "questionConfirmedAt": 27601,
+                  "remotePartialUpdates": 9,
+                  "remoteSpeechStartedAt": 15958,
+                  "requestSentAt": 19523,
+                  "responseRevision": 4,
+                  "speechStoppedAt": 27371,
+                  "transcriptFinalAt": 27425
+                },
+                "firstWordFromNativeSpeechEndMs": 1586,
+                "firstWordFromLatestInputMs": 1355,
+                "outcome": "completed",
+                "sourcePositions": [
+                  1,
+                  2,
+                  3
+                ],
+                "scope": "One exact composite native job; latency applies to the merged turn, not to each source request. Task coverage and accuracy require review."
+              }
+            ]
+          },
+          "reviews": [
+            {
+              "jobId": "47c9348d-f111-4930-a06f-2415b43e164a",
+              "file": "artifacts\\native-interview\\rapid-comparison-v66-r1\\gpt-6-luna\\model-review\\burst-2-job-1.review.json",
+              "sha256": "b3bf52fa6c7a502a260b019ed3fe135b7b7cbc29494bcf0faf6c8d0629d2744e",
+              "model": "gpt-6.1-sol",
+              "effort": "low",
+              "review": {
+                "constraintTracking": false,
+                "currentTopic": "RDMA exactly-once semantics, LDS conflicts, timing, HIP ordering, and parallel BFS",
+                "difficulty": 5,
+                "incorrectClaims": [],
+                "issue": "The supplied latest answer addresses BFS expansion only. It omits the HIP and replicated-RDMA requests, as well as the earlier RDMA, LDS, and timing requests that remained active.",
+                "missingInformationHandled": false,
+                "nextTopic": "Exactly-once recovery across a nontransactional side effect",
+                "omissions": [
+                  "RDMA retry indistinguishability argument and minimal durable protocol state.",
+                  "Conflict multiplicity for every positive LDS stride and its proof.",
+                  "Benchmark clarification questions and a cross-platform timing experiment that trusts neither timer.",
+                  "Correct HIP producer-consumer code, atomic scope and ordering, and whether a fence alone suffices.",
+                  "Partition counterexecution or proof for replicated deduplication, plus execution-authority and recovery invariants."
+                ],
+                "question": "Two replicas durably record request r before acknowledging it; a quorum grants execution authority through monotonically increasing fencing epochs. The update increments an external device counter, which supports neither request-ID deduplication nor transactions with the replicas. The authorized replica crashes after issuing the increment but before recording its outcome. Can any recovery protocol guarantee both exactly-once execution and eventual completion? Give two indistinguishable executions, explain whether fencing resolves them, and identify the additional device capability needed.",
+                "requiredParts": [
+                  "Explain whether reconnecting and retrying an ambiguous RDMA update guarantees exactly-once execution, using indistinguishability.",
+                  "Specify minimal durable protocol state.",
+                  "Derive and prove LDS conflict multiplicity for every positive integer stride under the stated transaction and bank model.",
+                  "Clarify the benchmark's missing facts and design a timer-independent cross-platform localization experiment.",
+                  "Write correct HIP synchronization with explicit atomic scope and ordering; assess fence-only repair.",
+                  "Assess replicated deduplication during partitions and specify execution-authority and recovery invariants.",
+                  "Design work-efficient, load-balanced BFS expansion with duplicate suppression.",
+                  "Prove BFS work and span bounds under an explicit atomic-contention model."
+                ],
+                "unsupportedAssumption": false,
+                "verdict": "incomplete"
+              }
+            }
+          ],
+          "pollErrors": [],
+          "changedObservationPollMs": {
+            "count": 244,
+            "median": 5.65580000000773,
+            "max": 109.51269999999204
+          },
+          "scope": "Polling durations cover retained changed observations, not every poll. Shared composite answers do not prove each task was addressed. Native merged-turn timing does not assign independent source-request latency."
+        }
+      ]
+    },
+    {
+      "source": {
+        "file": "artifacts/native-interview/rapid-comparison-v66-r1/gpt-6.1-sol/interview.json",
+        "sha256": "f42eac3237d872c5b90f6b5782053e73bf8502d765a694b3f11f0d0543fcc6a4"
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "tier": "fast",
+      "startedAt": "2026-10-10T17:59:24.709Z",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "realAudio": false,
+      "intentMode": "final",
+      "primaryLatencyMetric": "firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.",
+      "rapidConfiguration": {
+        "count": 3,
+        "gapMs": 250,
+        "wordMs": 90,
+        "drainMs": 45000,
+        "delivery": "simulated transcript fragments",
+        "pollMs": 40
+      },
+      "rapidSharedPlan": {
+        "file": "artifacts\\native-interview\\rapid-comparison-v66\\fresh-plan-r1.json",
+        "sha256": "894fa2a3db3d5fbafc5c0786e218ed76be7607a05a7eee1c8db84683daea9051",
+        "runId": "ef5e9454-da61-4d2f-967c-a6e0ac8b6ea2",
+        "createdAt": "2026-10-10T17:54:23.083Z",
+        "scope": "Fresh generated public prompts shared by isolated candidate sessions for a paired comparison. Within-plan questions may depend on earlier public premises. No candidate answers or examiner solutions in this plan."
+      },
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+        "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+        "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+        "src-tauri/src/runtime.rs": "54680838fca231dd50ab29599110ce970d1de3ac1ed5927fce27ea13a5621fa4"
+      },
+      "diagnosticSourceHashes": {
+        "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+        "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+        "src-tauri/examples/adaptive-interview.rs": "821df88cddc2bb9c2e6ae5bb5beb4fcd48032558085ea670fc4e9ab1580f9166",
+        "scripts/native-signed-interview.mjs": "a6e89e59fc308af25487d7aa909d1a0c88827ac91a2b973942043db19aacd06d",
+        "scripts/lib/examiner-retry.mjs": "2570ad1636d3c135ff6747d9fa4c4bf7192614699976a13879de642d09063dec"
+      },
+      "nativeBinarySha256": "a53ee28aa9ee26e3f189027a9cacc5f898be56783de41c5bba0bdd7576b0e792",
+      "examinerBinarySha256": "73e8499be1c2d9739e1bd0876f53f2e4d89f2490fc666616588f50c84c002ca7",
+      "bursts": [
+        {
+          "index": 1,
+          "questions": [
+            "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed.",
+            "Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula.",
+            "A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy."
+          ],
+          "actualOverlappingInputStarts": 2,
+          "attribution": {
+            "sourceOutcomes": [
+              {
+                "question": "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "8bcd358d-e357-4588-bb6a-df23ac099c65"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "8bcd358d-e357-4588-bb6a-df23ac099c65"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "8bcd358d-e357-4588-bb6a-df23ac099c65"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              }
+            ],
+            "mergedJobs": [
+              {
+                "question": "An RDMA client crashes after posting a non-idempotent update but before observing completion. Can reconnecting and retrying guarantee exactly-once execution? Give an indistinguishability argument, then specify the minimal durable protocol state needed. Assume a ROCm wave64 executes LDS loads as two 32-lane transactions, with 32 four-byte banks and no broadcasts. Lane i loads word i·s. Derive conflict multiplicity for every positive integer s; prove your formula. A GPU benchmark is twice as slow on Windows as Linux, yet reported kernel durations match. What facts must you clarify first? Design a cross-platform timing experiment that localizes the missing time without assuming either timer is trustworthy.",
+                "matched": true,
+                "id": "8bcd358d-e357-4588-bb6a-df23ac099c65",
+                "answer": "1. RDMA retry cannot guarantee exactly-once execution by itself.\n\nConsider two histories: in A, the update executes and the client crashes before seeing completion; in B, the client crashes before the update executes. Without durable outcome information, these histories look identical to the recovering client. Retrying duplicates the update in A; not retrying loses it in B. A transport completion alone also does not establish application-level durable commitment.\n\nThe minimal durable protocol state is a stable operation ID retained by the client before posting, plus a server-side record binding that ID to the committed update and, if needed, its result. Recording the ID and applying the update must be atomic with respect to crashes, or recoverable through a durable log; otherwise a crash between them recreates the ambiguity. Retries reuse the same ID, and the server returns the recorded outcome instead of executing again. Deduplication records must survive as long as retries remain possible; safe reclamation needs an acknowledgment or fencing protocol that excludes old retries. A bare one-sided write does not provide this protocol automatically.\n\n2. The conflict multiplicity is gcd(s, 32) per 32-lane transaction.\n\nLet d = gcd(s, 32). Lane i accesses bank b(i) = i·s mod 32. Two lanes collide exactly when 32 divides s(i−j). Writing s = d·s′ and 32 = d·m, with gcd(s′, m) = 1, this is equivalent to m dividing i−j. Among 32 consecutive lanes, there are therefore m = 32/d distinct banks, each receiving exactly d accesses. Since s is positive, the word addresses are distinct, so no broadcast can reduce that multiplicity.\n\nThe second transaction has the identical bank pattern because (i+32)s mod 32 = is mod 32. Thus each transaction has d-way conflicts: odd strides are conflict-free, stride 2 has two-way conflicts, and multiples of 32 have 32-way conflicts. Do not combine the transactions into a 2d-way conflict; they are separate transactions under the stated assumption.\n\n3. First clarify exactly what ‘twice as slow’ measures and what the reported kernel durations include.\n\nAre we comparing end-to-end latency or steady-state throughput, and are synchronization, transfers, allocation, compilation, and warm-up included? Are the GPU, workload, outputs, launch count, batching, drivers, runtime versions, power settings, and competing workloads comparable? Also establish each timer’s source, resolution, boundaries, and synchronization semantics, including whether execution is asynchronous.\n\nFor the experiment, use identical validated workloads and repeated, randomized trials on both platforms. Measure long batches with a host monotonic clock, placing a device synchronization before the start and after the final operation. Separately instrument preparation, allocation, transfers, launch submission, completion waiting, and result processing. Collect device events and a CPU/GPU trace showing execution intervals, queue gaps, and scheduling; do not compare absolute timestamps across clock domains without establishing their mapping.\n\nTreat every timing source as evidence rather than ground truth. Check host-clock elapsed time against an independent elapsed-time reference over long runs, and cross-check device events against trace intervals and batch scaling. Sweep iteration count, workload size, and batching, then remove transfers, reuse allocations, and compare asynchronous batches with per-launch synchronization. These controlled changes distinguish fixed setup costs, per-launch overhead, transfer time, and scheduling gaps. Agreement between independent measurements and predictable scaling—not matching kernel-duration reports alone—is what localizes the missing time.",
+                "phase": "complete",
+                "confirmed": true,
+                "cancelled": false,
+                "error": null,
+                "latency": {
+                  "completedAt": 35054,
+                  "firstCredibleCandidateAt": null,
+                  "firstRemotePartialAt": 4968,
+                  "firstTokenAt": 19864,
+                  "firstWordAt": 19864,
+                  "pipeline": {
+                    "acousticRefinementCount": 0,
+                    "actualServiceTier": null,
+                    "agedFinalWait": false,
+                    "backend": null,
+                    "cachedInputTokens": null,
+                    "cancelled": false,
+                    "candidateDetected": 7106,
+                    "cleanupMaxQueuedEvents": 1,
+                    "cleanupStartedAt": 14669,
+                    "cleanupTerminalAt": 14671,
+                    "codexStreamEntered": 7107,
+                    "completedDraftReplacementCount": 0,
+                    "confirmedQuestionRefinements": false,
+                    "eagerFinalReplacement": false,
+                    "finalPendingBudgetMs": 400,
+                    "firstAgentDelta": 11650,
+                    "firstVisible": 19875,
+                    "followupCount": 0,
+                    "interruptAckAt": 14671,
+                    "latestInputAck": 14685,
+                    "latestInputConsumed": 15730,
+                    "latestInputSent": 14671,
+                    "modelRequestSent": null,
+                    "pendingAgeAtConfirmationMs": 3760,
+                    "preparedThreadAgeMs": 11260,
+                    "promptChars": 1221,
+                    "questionConfirmed": 14266,
+                    "refillCompleted": 11651,
+                    "refillError": false,
+                    "refillStarted": 19493,
+                    "refillThreadsCreated": 1,
+                    "refinementChars": 668,
+                    "refinementRestartCount": 1,
+                    "responseCount": 0,
+                    "responseCreated": null,
+                    "restartPromptChars": 1681,
+                    "retainedFirstDelta": 19864,
+                    "semaphoreAcquired": 7107,
+                    "steeringCount": 1,
+                    "turnCompleted": 35053,
+                    "turnStartAck": 7124,
+                    "turnStartSent": 7107,
+                    "warmStateUsed": true,
+                    "warmThreadTaken": 7107
+                  },
+                  "questionConfirmedAt": 14266,
+                  "remotePartialUpdates": 9,
+                  "remoteSpeechStartedAt": 3972,
+                  "requestSentAt": 7107,
+                  "responseRevision": 3,
+                  "speechStoppedAt": 14040,
+                  "transcriptFinalAt": 14095
+                },
+                "firstWordFromNativeSpeechEndMs": 5824,
+                "firstWordFromLatestInputMs": 5193,
+                "outcome": "completed",
+                "sourcePositions": [
+                  1,
+                  2,
+                  3
+                ],
+                "scope": "One exact composite native job; latency applies to the merged turn, not to each source request. Task coverage and accuracy require review."
+              }
+            ]
+          },
+          "reviews": [
+            {
+              "jobId": "8bcd358d-e357-4588-bb6a-df23ac099c65",
+              "file": "artifacts\\native-interview\\rapid-comparison-v66-r1\\gpt-6.1-sol\\model-review\\burst-1-job-1.review.json",
+              "sha256": "18bd65015efc22b10c9b06546521d46fd0516447de7f36a1eb7588ed319bcea2",
+              "model": "gpt-6.1-sol",
+              "effort": "low",
+              "review": {
+                "constraintTracking": true,
+                "currentTopic": "RDMA exactly-once semantics, LDS bank conflicts, and cross-platform timing",
+                "difficulty": 5,
+                "incorrectClaims": [],
+                "issue": "The supplied suggested answer satisfies all three requests; no separate candidate answer was provided.",
+                "missingInformationHandled": true,
+                "nextTopic": "Crash-safe bounded deduplication and reclamation",
+                "omissions": [],
+                "question": "Extend your RDMA protocol: a client uses a permanent identity and consecutive operation sequence numbers, with at most W operations issued but not durably acknowledged. Requests and acknowledgments may be duplicated, reordered, or delayed indefinitely; either endpoint may crash and recover. Retries must return the original result until the client durably acknowledges it. Design a server state machine retaining O(W) result records plus O(1) metadata per client. Specify atomic durable transitions, acknowledgment rules, and rejection of delayed requests after reclamation; prove exactly-once effects and safe reclamation across every crash boundary.",
+                "requiredParts": [
+                  "Explain whether reconnecting and retrying alone guarantees exactly-once execution, using indistinguishable histories.",
+                  "Specify the minimal durable protocol state and crash-safe relationship between deduplication and update commitment.",
+                  "Derive and prove LDS conflict multiplicity for every positive integer stride under the specified transaction and bank assumptions.",
+                  "Identify the facts to clarify about the Windows/Linux benchmark discrepancy.",
+                  "Design a cross-platform experiment that localizes missing time without trusting either timer by assumption."
+                ],
+                "unsupportedAssumption": false,
+                "verdict": "correct"
+              }
+            }
+          ],
+          "pollErrors": [],
+          "changedObservationPollMs": {
+            "count": 598,
+            "median": 4.789300000004005,
+            "max": 37.03840000000491
+          },
+          "scope": "Polling durations cover retained changed observations, not every poll. Shared composite answers do not prove each task was addressed. Native merged-turn timing does not assign independent source-request latency."
+        },
+        {
+          "index": 2,
+          "questions": [
+            "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it?",
+            "Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants.",
+            "A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model."
+          ],
+          "actualOverlappingInputStarts": 2,
+          "attribution": {
+            "sourceOutcomes": [
+              {
+                "question": "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it?",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "1d0824cf-5806-4cb5-a354-62f732c25620"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "1d0824cf-5806-4cb5-a354-62f732c25620"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              },
+              {
+                "question": "A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model.",
+                "matched": false,
+                "answer": "",
+                "outcome": "retained_in_exact_merged_job",
+                "sharedMergedJobIds": [
+                  "1d0824cf-5806-4cb5-a354-62f732c25620"
+                ],
+                "firstWordFromNativeSpeechEndMs": null,
+                "firstWordFromLatestInputMs": null
+              }
+            ],
+            "mergedJobs": [
+              {
+                "question": "A ROCm producer executes `payload=7; flag.store(1, relaxed);`; another workgroup spins on `flag.load(relaxed)` before reading payload. Assume device-resident memory and concurrent residency. Write a correct HIP version, specifying atomic scope and ordering; can a fence alone repair it? Revisit the crashed RDMA update: two replicas persist deduplication records, but either may execute the update during a partition. Can acknowledgment after both records persist guarantee exactly-once execution? Give a counterexecution or proof, then specify necessary execution-authority and recovery invariants. A directed graph has n vertices and m edges; one GPU thread per vertex performs BFS expansion. One frontier vertex owns half the edges. Design a work-efficient parallel expansion with duplicate suppression; prove work and span bounds under an explicit atomic-contention model.",
+                "matched": true,
+                "id": "1d0824cf-5806-4cb5-a354-62f732c25620",
+                "answer": "1. Use device-scope release/acquire atomics to publish the payload between workgroups. Relaxed operations alone do not establish a happens-before relationship for the non-atomic payload.\n\n```cpp\n#include <hip/hip_runtime.h>\n\nstruct Shared {\n    int payload;\n    int flag;\n};\n\n__global__ void producer(Shared* s) {\n    s->payload = 7;\n    __hip_atomic_store(&s->flag, 1, __ATOMIC_RELEASE,\n                       __HIP_MEMORY_SCOPE_AGENT);\n}\n\n__global__ void consumer(Shared* s, int* result) {\n    while (__hip_atomic_load(&s->flag, __ATOMIC_ACQUIRE,\n                             __HIP_MEMORY_SCOPE_AGENT) == 0) {\n    }\n    *result = s->payload;\n}\n\nvoid launch(Shared* s, int* result,\n            hipStream_t producerStream, hipStream_t consumerStream) {\n    hipLaunchKernelGGL(consumer, dim3(1), dim3(1), 0,\n                       consumerStream, s, result);\n    hipLaunchKernelGGL(producer, dim3(1), dim3(1), 0,\n                       producerStream, s);\n}\n```\n\nCompile with hipcc. Allocate `s` and `result` in device memory, initialize `flag` to zero and finish initialization before calling `launch`; use distinct nonblocking streams, check HIP errors, and synchronize both streams before retrieving the result or freeing memory. Under the stated concurrent-residency assumption, the consumer can make progress. Agent scope covers workgroups on the same GPU; participation by a CPU or another GPU would require an appropriate wider scope and supported memory configuration.\n\nWhen the acquire load observes the release store's value, the preceding payload write happens-before the consumer's payload read. A fence alone does not repair this: a producer-only fence supplies no acquiring synchronization on the consumer. A correctly paired release fence before the relaxed store and acquire fence after the successful relaxed load can establish synchronization under the atomic fence rules, but release/acquire operations express the protocol more directly.\n\n2. No—persisting deduplication records on both replicas does not establish exclusive execution authority.\n\nTake a non-idempotent increment with request ID X. During a partition, replica A sees no local record for X, persists its record, and executes the increment; replica B independently does the same. After healing, both confirm that X is durably recorded, so the acknowledgment condition passes, but the update has executed twice. For a shared counter, it has increased by two; for separate replica-local state, both replicas have executed X, and the eventual logical result depends on the reconciliation rules. The acknowledgment rule prevents neither execution.\n\nThe necessary invariants are:\n• Each request has a stable identity, with its operation contents bound to that identity.\n• There is one authoritative decision and execution path for that identity. Typically this is a quorum-backed leader or equivalent serialized authority; partitioned replicas cannot both independently execute.\n• Authority changes fence stale executors at the resource applying the effect. A leader designation alone is insufficient if an old leader can still perform writes.\n• Applying the effect and recording its committed outcome are crash-atomic, or recoverably coupled by a durable transaction/log. Recovery must distinguish committed effects from intents and must never blindly replay an ambiguous non-idempotent effect.\n• Recovery preserves committed deduplication state, retries reuse X, and reclamation excludes all possible stale retries.\n\nIf the effect is external and cannot participate in that transaction, the effect recipient must itself enforce request-ID deduplication or an equivalent atomic protocol. Merely replicating an intent cannot resolve a crash between executing the effect and recording its completion.\n\n3. Expand edges in parallel, not one whole adjacency list per vertex. Otherwise the vertex owning half the edges creates a linear critical path.\n\nAssume a duplicate-free frontier F, immutable CSR adjacency, and a persistent atomic `visited` array initialized before BFS. Let f = |F| and E_F be the number of outgoing edges from this frontier.\n\nFirst, compute frontier degrees and exclusive-scan them to obtain adjacency offsets. Allocate E_F edge slots. For each nonempty frontier adjacency list, mark its starting slot with that frontier vertex's index; initialize other slots to −1. A parallel prefix-maximum scan identifies the owner of every slot. Slot j can then calculate its CSR edge address in constant time from its owner and that owner's offset. Empty adjacency lists emit no markers, so coincident offsets cause no collisions.\n\nProcess all E_F slots in parallel. For destination v, perform an atomic compare-and-swap of `visited[v]` from zero to one. Exactly one successful claimant writes v into its private candidate slot; all other slots are marked invalid. Scan the validity bits and compact the successful candidates into the next frontier. Initialize the source's visited bit before the first expansion. If distances or parents are needed, only the winner writes them, and finish the entire expansion before consuming the next frontier.\n\nFor an explicit contention model, assume unrelated atomic addresses progress independently, but k operations to one address serialize in Θ(k) time, with constant work per operation and no retry loops. Let C be the maximum number of this expansion's edges targeting any one vertex.\n\nThe degree scan, slot initialization, owner scan, edge processing, and compaction each use O(f + E_F) total work. Their span is O(log(2 + f + E_F) + C): scans contribute logarithmic depth, and the most-contended atomic address contributes C. Zero-edge frontiers terminate without edge processing. These bounds assume enough processors; on P processors, an ideal scheduler gives O((f + E_F)/P + log(2 + f + E_F) + C) time under this contention model.\n\nAcross the BFS, each reached vertex enters a frontier once and each outgoing edge of a reached vertex is inspected once. Including initial visited-array setup, total work is O(n + m). The heavy owner's edges are distributed across threads, but duplicate suppression can still have linear span if all those edges target the same vertex; the contention term explicitly captures that limitation.",
+                "phase": "complete",
+                "confirmed": true,
+                "cancelled": false,
+                "error": null,
+                "latency": {
+                  "completedAt": 86528,
+                  "firstCredibleCandidateAt": null,
+                  "firstRemotePartialAt": 36430,
+                  "firstTokenAt": 62384,
+                  "firstWordAt": 62384,
+                  "pipeline": {
+                    "acousticRefinementCount": 0,
+                    "actualServiceTier": null,
+                    "agedFinalWait": false,
+                    "backend": null,
+                    "cachedInputTokens": null,
+                    "cancelled": false,
+                    "candidateDetected": 38825,
+                    "cleanupMaxQueuedEvents": 1,
+                    "cleanupStartedAt": 47268,
+                    "cleanupTerminalAt": 47270,
+                    "codexStreamEntered": 38827,
+                    "completedDraftReplacementCount": 0,
+                    "confirmedQuestionRefinements": false,
+                    "eagerFinalReplacement": false,
+                    "finalPendingBudgetMs": 400,
+                    "firstAgentDelta": 46159,
+                    "firstVisible": 62393,
+                    "followupCount": 0,
+                    "interruptAckAt": 47269,
+                    "latestInputAck": 47285,
+                    "latestInputConsumed": 48027,
+                    "latestInputSent": 47270,
+                    "modelRequestSent": null,
+                    "pendingAgeAtConfirmationMs": 4118,
+                    "preparedThreadAgeMs": 27650,
+                    "promptChars": 6452,
+                    "questionConfirmed": 46864,
+                    "refillCompleted": 46160,
+                    "refillError": false,
+                    "refillStarted": 62227,
+                    "refillThreadsCreated": 1,
+                    "refinementChars": 801,
+                    "refinementRestartCount": 1,
+                    "responseCount": 0,
+                    "responseCreated": null,
+                    "restartPromptChars": 7042,
+                    "retainedFirstDelta": 62384,
+                    "semaphoreAcquired": 38827,
+                    "steeringCount": 1,
+                    "turnCompleted": 86527,
+                    "turnStartAck": 38847,
+                    "turnStartSent": 38828,
+                    "warmStateUsed": true,
+                    "warmThreadTaken": 38827
+                  },
+                  "questionConfirmedAt": 46864,
+                  "remotePartialUpdates": 9,
+                  "remoteSpeechStartedAt": 35253,
+                  "requestSentAt": 38827,
+                  "responseRevision": 3,
+                  "speechStoppedAt": 46654,
+                  "transcriptFinalAt": 46710
+                },
+                "firstWordFromNativeSpeechEndMs": 15730,
+                "firstWordFromLatestInputMs": 15114,
+                "outcome": "completed",
+                "sourcePositions": [
+                  1,
+                  2,
+                  3
+                ],
+                "scope": "One exact composite native job; latency applies to the merged turn, not to each source request. Task coverage and accuracy require review."
+              }
+            ]
+          },
+          "reviews": [
+            {
+              "jobId": "1d0824cf-5806-4cb5-a354-62f732c25620",
+              "file": "artifacts\\native-interview\\rapid-comparison-v66-r1\\gpt-6.1-sol\\model-review\\burst-2-job-1.review.json",
+              "sha256": "53bb84a8087a7976eebeb6e04027f7dffc47dd0aef5d201d4ceed0c8b6a9546b",
+              "model": "gpt-6.1-sol",
+              "effort": "low",
+              "review": {
+                "constraintTracking": true,
+                "currentTopic": "GPU publication, replicated exactly-once execution, and parallel BFS",
+                "difficulty": 5,
+                "incorrectClaims": [],
+                "issue": "The answer satisfies all three current requests: correct device-scope publication and fence reasoning, a valid replicated-execution counterexample with recovery invariants, and work-efficient BFS with explicit contention-dependent bounds.",
+                "missingInformationHandled": true,
+                "nextTopic": "Bounded durable deduplication with reordered retries and fencing",
+                "omissions": [],
+                "question": "An external counter supports atomic durable transactions over its value and protocol metadata. One logical client uses increasing sequence numbers with at most W unacknowledged increments; requests and replies may reorder, and retries may arrive arbitrarily late. Leaders carry increasing fencing epochs. Design an exactly-once protocol using O(W) durable metadata at the counter and client: give precise transaction rules, acknowledgment and reclamation rules, and recovery behavior. Prove safety when an old request arrives after its deduplication entry is reclaimed and when a stale leader races a new leader. State the availability limitation during partitions.",
+                "requiredParts": [
+                  "Write correct HIP publication code with explicit atomic scope and ordering, and explain whether fences can repair relaxed publication.",
+                  "Determine whether acknowledgment after both replicas persist deduplication records guarantees exactly-once execution; provide a counterexecution or proof and execution-authority and recovery invariants.",
+                  "Design work-efficient parallel BFS expansion with duplicate suppression and prove work and span bounds under an explicit atomic-contention model."
+                ],
+                "unsupportedAssumption": false,
+                "verdict": "correct"
+              }
+            }
+          ],
+          "pollErrors": [],
+          "changedObservationPollMs": {
+            "count": 986,
+            "median": 5.829499999992549,
+            "max": 59.89909999999509
+          },
+          "scope": "Polling durations cover retained changed observations, not every poll. Shared composite answers do not prove each task was addressed. Native merged-turn timing does not assign independent source-request latency."
+        }
+      ]
+    }
+  ],
+  "targetAchieved": false
+}

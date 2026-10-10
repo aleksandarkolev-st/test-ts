@@ -6,6 +6,7 @@ import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { connectNativePages } from './lib/native-cdp.mjs';
+import { gradeWithRetry } from './lib/examiner-retry.mjs';
 
 const root=process.cwd(),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const scenarioFile=process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO):null;
@@ -38,6 +39,8 @@ assert(Number.isInteger(replayRounds)&&replayRounds>0&&replayRounds<=rounds,'Rep
 assert(recordedDir||process.env.COPILOT_NATIVE_INTERVIEW_REPLAY_PREFIX_ROUNDS===undefined,'Replay prefix requires recorded questions and audio');
 const recorded=[];
 const skipReview=process.env.COPILOT_NATIVE_SKIP_REVIEW==='1';
+const reviewAttempts=Number(process.env.COPILOT_NATIVE_REVIEW_ATTEMPTS??1);
+assert(Number.isInteger(reviewAttempts)&&reviewAttempts>=1&&reviewAttempts<=2,'Examiner attempts must be 1 or 2');
 assert(!skipReview||(recordedDir&&replayRounds===rounds),'Skipping model review requires a completely fixed replay; adaptive follow-ups need the examiner');
 assert(!(!scenario&&(seedFile||recordedDir)),'Fixed regression replays must specify their examiner scenario');
 if(recordedDir){
@@ -69,7 +72,8 @@ const result={status:'in_progress',model:'gpt-6-luna',effort,tier:'fast',scenari
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
 result.intentMode=process.env.COPILOT_INTENT_MODE||'existing';
 result.reviewMode=skipReview?'No model grading: fixed public replay, independent answer review required':'Model examiner; grades require independent review';
-result.provisionalDiagnostics={enabled:process.env.COPILOT_TRACE_PROVISIONAL==='1',scope:'Acceptance-only bounded unvalidated decoded prefixes and raw ASR segment boundaries. Does not authorize display or semantic reuse; primary retained first-word metric is unchanged.'};
+result.reviewAttemptLimit=reviewAttempts;
+result.provisionalDiagnostics={enabled:process.env.COPILOT_TRACE_PROVISIONAL==='1',scope:'Acceptance-only bounded unvalidated decoded prefixes, raw ASR segment boundaries and exact submitted classifier inputs. Local diagnostic data only; does not authorize display or semantic reuse; primary retained first-word metric is unchanged.'};
 if(result.intentMode==='early'){
   const threshold=Number(process.env.COPILOT_INTENT_READY_THRESHOLD??0.9);
   assert(Number.isFinite(threshold)&&threshold>=0&&threshold<=1,'Intent readiness threshold must be a bounded probability');
@@ -91,7 +95,7 @@ if(recordedDir){
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
-result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','scripts/native-signed-interview.mjs'].map(async file=>[file,hash(await readFile(file))])));
+result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs'].map(async file=>[file,hash(await readFile(file))])));
 const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
@@ -290,7 +294,9 @@ try {
     await writeFile(request,JSON.stringify({scenario,round,history},null,2));
     if(skipReview){row.reviewSkipped=true;row.review=null;}
     else {
-      await runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'});
+      row.examinerAttempts=[];
+      await gradeWithRetry(()=>runChild(examiner,['--grade-request',request],{...env,COPILOT_INTERVIEW_EXAMINER_MODEL:'gpt-6-luna',COPILOT_INTERVIEW_EXAMINER_EFFORT:'high'}),
+        {attempts:reviewAttempts,onAttempt:async attempt=>{row.examinerAttempts.push(attempt);await persist();}});
       const judged=JSON.parse(await readFile(request.replace(/\.json$/,'.review.json'),'utf8'));row.review=judged.review;
     }
     await persist();

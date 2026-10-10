@@ -412,7 +412,15 @@ async fn actor(
                             if !intent_gate.matches(floor,&question,&context) {
                                 intent_gate.observe(floor,question,context,now);
                             }
-                            if let Some(input)=intent_gate.request(now) {classifier.submit(input);}
+                            if let Some(input)=intent_gate.request(now) {
+                                #[cfg(all(feature="acceptance",debug_assertions))]
+                                if std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
+                                    emit(&app,"intent.input_submitted",serde_json::json!({"input":input,"submittedAt":now,
+                                        "remoteQuiet":engine.detector.remote_quiet,"remoteSpeaking":engine.detector.remote_speaking,
+                                        "selfSpeaking":engine.detector.self_speaking}));
+                                }
+                                classifier.submit(input);
+                            }
                             while let Some(prediction)=classifier.prediction() {
                                 let payload=serde_json::json!({"id":prediction.id,"abstained":prediction.abstained,"scores":prediction.scores.as_ref().map(|scores|serde_json::json!({"request":scores.request,"ready":scores.ready})),"elapsedMs":prediction.elapsed_ms,"observedAt":now});
                                 let accepted=intent_gate.accept(prediction);emit(&app,"intent.predicted",serde_json::json!({"accepted":accepted,"prediction":payload}));

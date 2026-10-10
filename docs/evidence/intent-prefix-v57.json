@@ -1,0 +1,1405 @@
+{
+  "scope": "Unpromoted classifier-prefix supervision experiment and native adaptive audio evidence. Synthetic assistant-reviewed labels and model grades are not human certification. No latency target or deep-interview correctness is certified.",
+  "metric": "Client receipt of first alphanumeric character of retained decoded and validated answer; speech-end metric includes capture/ASR. Rendering is separate, whole-sentence completion is not the primary metric.",
+  "previousPartialAudio": {
+    "file": "artifacts/native-interview/luna-capacity-intent-audit-v56/interview.json",
+    "sha256": "56c1fb95320475b1e38581e26298da5a71e5b939e473051331ecae1b986ad7e8",
+    "status": "failed",
+    "requestedRounds": 6,
+    "recordedRounds": 1,
+    "failure": "Error: Examiner exited 1: Error: \"Codex answer timed out\"\n",
+    "audit": {
+      "file": "artifacts/native-interview/luna-capacity-intent-audit-v56/intent-stream-audit.json",
+      "sha256": "eeffa1c0a89d6debf6da13be4973d3c673c6426314d25bd4a6f9713e7bb30e3f",
+      "summary": {
+        "predictions": 33,
+        "missingSubmissions": 1,
+        "stale": 6,
+        "abstained": 0,
+        "acceptedAboveReadyThreshold": 0,
+        "acceptedExactFinalAboveReadyThreshold": 0
+      }
+    },
+    "contextAblation": {
+      "file": "artifacts/native-interview/luna-capacity-intent-audit-v56/intent-context-ablation.json",
+      "sha256": "b3ef99f96255dd57fc69ebf5e531a7a0ecba2c9649936ac7b725a8f9415037f1",
+      "summary": {
+        "inputs": 32,
+        "exactParityMaxScoreDifference": 1.1102230246251565e-16,
+        "readyWithExactContext": 0,
+        "readyWithEmptyContext": 0,
+        "contextRaisedAboveThreshold": 0,
+        "contextLoweredBelowThreshold": 0
+      }
+    },
+    "stages": [
+      {
+        "round": 1,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1872,
+        "asrFinalizationFromSpeechEndMs": 720,
+        "confirmationAfterAsrMs": 19,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 12,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 46,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1086,
+        "renderAfterFirstWordMs": 7,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 1100,
+        "refinementChars": 361
+      }
+    ],
+    "recoveredExaminer": {
+      "file": "artifacts/native-interview/luna-capacity-intent-audit-v56/round-01.review.json",
+      "sha256": "f00ba9ba98a0600d499ae5c744924a7af4907585155f59cbc0a5e65bfaa3f461",
+      "review": {
+        "constraintTracking": true,
+        "difficulty": 2,
+        "incorrectClaims": [],
+        "issue": "The answer appropriately asks what capacity means, how it is measured, whether the workload and deployment changed, and whether the symptom affects all instances or only some.",
+        "missingInformationHandled": true,
+        "omissions": [],
+        "question": "Assume the same input and binary reproduce the slowdown on one instance. What paired measurements would you collect to separate kernel execution time from allocation, transfers, synchronization, and host dispatch—and how would you make the comparison valid?",
+        "requiredParts": [
+          "Clarify which capacity metric changed and how it is measured",
+          "Establish whether workload, service version, and GPU allocation changed",
+          "Determine whether the issue is broad or limited to particular instances"
+        ],
+        "unsupportedAssumption": false,
+        "verdict": "correct"
+      },
+      "scope": "Examiner-only retry after original run stopped. Does not complete or resume the failed six-round interview."
+    }
+  },
+  "supervision": {
+    "training": {
+      "file": "artifacts/intent-classifier/prefix-training-v57.json",
+      "sha256": "4a19cbbd720e18bc931997cb58efaa1e0b59e2539942a120b4defbd700800a2b",
+      "cases": 778,
+      "groups": 370,
+      "ambiguousExcluded": [
+        0,
+        4,
+        13,
+        25,
+        63,
+        65,
+        68
+      ],
+      "overlapsExcluded": 1,
+      "review": [
+        {
+          "label": "unfinished_request",
+          "reason": "The current words stop inside a needed clause or word; the preceding context does not supply the missing condition.",
+          "id": 1,
+          "text": "Retries keep climbin"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The current words stop inside a needed clause or word; the preceding context does not supply the missing condition.",
+          "id": 69,
+          "text": "One of the GPUs disappeared after the job started and I have not captured the proc"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The current words stop inside a needed clause or word; the preceding context does not supply the missing condition.",
+          "id": 97,
+          "text": "Our consumer can restart after a crash and the broker may redeliver an unacknowledged mess"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The current words stop inside a needed clause or word; the preceding context does not supply the missing condition.",
+          "id": 110,
+          "text": "What if the tensor i"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The current words stop inside a needed clause or word; the preceding context does not supply the missing condition.",
+          "id": 111,
+          "text": "What if the tensor is not contiguou"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 15,
+          "text": "Latency spikes a"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 17,
+          "text": "The patch fixes the crash on m"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 29,
+          "text": "It seems like the workers are processing messages out of or"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 102,
+          "text": "We can delay the email un"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 103,
+          "text": "We can delay the email until t"
+        },
+        {
+          "label": "background",
+          "reason": "The available words are an incomplete report or suggestion, with no current request for a reply expressed.",
+          "id": 118,
+          "text": "The payment cleared but the balance has not changed in the app and I may be looking at a"
+        },
+        {
+          "label": "ambiguous",
+          "reason": "Available words and context admit multiple conversational purposes; exclude this annotation rather than invent a continuation or intended request.",
+          "id": 4,
+          "text": "Please don’t change the ending; it’s me"
+        },
+        {
+          "label": "ambiguous",
+          "reason": "Available words and context admit multiple conversational purposes; exclude this annotation rather than invent a continuation or intended request.",
+          "id": 13,
+          "text": "The interviewer says the kernel is bandwidth limited but the measured throughput is far below the device peak and the access pattern"
+        },
+        {
+          "label": "ambiguous",
+          "reason": "Available words and context admit multiple conversational purposes; exclude this annotation rather than invent a continuation or intended request.",
+          "id": 63,
+          "text": "Make the title"
+        },
+        {
+          "label": "ambiguous",
+          "reason": "Available words and context admit multiple conversational purposes; exclude this annotation rather than invent a continuation or intended request.",
+          "id": 65,
+          "text": "A quiet table would be nic"
+        }
+      ]
+    },
+    "validation": {
+      "file": "artifacts/intent-classifier/prefix-validation-v57.json",
+      "sha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+      "cases": 148,
+      "ambiguousExcluded": [
+        39,
+        59
+      ],
+      "review": [
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 6,
+          "text": "Why can coalesced loads still bottleneck thi"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 7,
+          "text": "Why can coalesced loads still bottleneck this ker"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 11,
+          "text": "Earlier I said"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 18,
+          "text": "So the matrix has a repeat"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 19,
+          "text": "So the matrix has a repeated eigenvalu"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 28,
+          "text": "Ask me to derive the"
+        },
+        {
+          "label": "unfinished_request",
+          "reason": "The available contextual request or clarification response stops before a required word or clause is complete.",
+          "id": 29,
+          "text": "Ask me to derive the backward pass for this ker"
+        },
+        {
+          "label": "background",
+          "reason": "The current words report a thought or explicitly defer a reply; grammatical incompleteness alone does not establish a request.",
+          "id": 30,
+          "text": "We could use the train if the"
+        },
+        {
+          "label": "background",
+          "reason": "The current words report a thought or explicitly defer a reply; grammatical incompleteness alone does not establish a request.",
+          "id": 32,
+          "text": "She asked"
+        },
+        {
+          "label": "background",
+          "reason": "The current words report a thought or explicitly defer a reply; grammatical incompleteness alone does not establish a request.",
+          "id": 43,
+          "text": "Pause there please I need to add one"
+        },
+        {
+          "label": "background",
+          "reason": "The current words report a thought or explicitly defer a reply; grammatical incompleteness alone does not establish a request.",
+          "id": 52,
+          "text": "Hold on a mome"
+        }
+      ]
+    },
+    "constraints": "Prefixes are character cuts, not recorded ASR corruption. No future words or source labels reach the signed-in Luna Fast/low labeler. Same-source prefixes never share a batch; every batch uses a fresh thread. Source groups stay disjoint; exact current-text overlaps are removed. Epoch and temperature use validation, so these validation results are diagnostics."
+  },
+  "model": {
+    "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+    "trainedModel": {
+      "file": "finetuned-prefix-v57/model.fp32.onnx",
+      "bytes": 90403057,
+      "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+    },
+    "selectedEpoch": 7,
+    "temperature": 1.8,
+    "validationAccuracy": 0.8040540540540541,
+    "maxExportLogitDifference": 0.000003933906555175781,
+    "exportPredictionDisagreements": 0,
+    "promoted": false
+  },
+  "diagnostics": {
+    "oldPrefixes": {
+      "file": "artifacts/intent-classifier/old-prefix-validation-v57.json",
+      "sha256": "763b3af34375b3acd7bab07e7397c53700c06f05f25d2f2f8239a401b5c95f6f",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "trainedModelSha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "scope": "Offline synthetic supervision, using model annotations of isolated available prefixes. Source and annotation labels require independent review; not human certification. Related prefixes and contrastive variants stay grouped. No runtime examples or routing rules.",
+      "cases": 58,
+      "readyRequests": 1,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 17,
+          "falseEarly": 17,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 7,
+          "falseBackgroundIgnore": 2,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.7,
+          "selected": 9,
+          "falseEarly": 9,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 6,
+          "falseBackgroundIgnore": 2,
+          "missedBackground": 11
+        },
+        {
+          "threshold": 0.8,
+          "selected": 7,
+          "falseEarly": 7,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 11
+        },
+        {
+          "threshold": 0.9,
+          "selected": 3,
+          "falseEarly": 3,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 3,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 12
+        },
+        {
+          "threshold": 0.95,
+          "selected": 2,
+          "falseEarly": 2,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 14
+        }
+      ],
+      "latencyMs": {
+        "median": 2.4568000226281583,
+        "p95": 4.607499926351011,
+        "max": 5.107200006023049
+      }
+    },
+    "newPrefixes": {
+      "file": "artifacts/intent-classifier/new-prefix-validation-v57.json",
+      "sha256": "c7d79d8f2c103a7a0552bdce8b24c7e84ccf0f5c44d15c908994eb3a18e0579f",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "scope": "Offline synthetic supervision, using model annotations of isolated available prefixes. Source and annotation labels require independent review; not human certification. Related prefixes and contrastive variants stay grouped. No runtime examples or routing rules.",
+      "cases": 58,
+      "readyRequests": 1,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 5,
+          "falseEarly": 5,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 9,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 7
+        },
+        {
+          "threshold": 0.7,
+          "selected": 2,
+          "falseEarly": 2,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 7,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.8,
+          "selected": 1,
+          "falseEarly": 1,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 11
+        },
+        {
+          "threshold": 0.9,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 3,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 12
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 1,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 14
+        }
+      ],
+      "latencyMs": {
+        "median": 2.6655500405468047,
+        "p95": 4.454899928532541,
+        "max": 5.587800056673586
+      }
+    },
+    "oldOriginals": {
+      "file": "artifacts/intent-classifier/old-original-validation-v57.json",
+      "sha256": "973450c8b32f8fab5291b7f85146dcb1c32930d3f0ad17685d1d213db6cde0d2",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "trainedModelSha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+      "cases": 90,
+      "readyRequests": 36,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 33,
+          "falseEarly": 4,
+          "missedReadyRequests": 7,
+          "ignoredBackground": 27,
+          "falseBackgroundIgnore": 4,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.7,
+          "selected": 24,
+          "falseEarly": 3,
+          "missedReadyRequests": 15,
+          "ignoredBackground": 22,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 5
+        },
+        {
+          "threshold": 0.8,
+          "selected": 22,
+          "falseEarly": 3,
+          "missedReadyRequests": 17,
+          "ignoredBackground": 21,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 6
+        },
+        {
+          "threshold": 0.9,
+          "selected": 13,
+          "falseEarly": 1,
+          "missedReadyRequests": 24,
+          "ignoredBackground": 18,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 9
+        },
+        {
+          "threshold": 0.95,
+          "selected": 1,
+          "falseEarly": 0,
+          "missedReadyRequests": 35,
+          "ignoredBackground": 15,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 12
+        }
+      ],
+      "latencyMs": {
+        "median": 2.889750001486391,
+        "p95": 5.2541999612003565,
+        "max": 6.846599979326129
+      }
+    },
+    "newOriginals": {
+      "file": "artifacts/intent-classifier/new-original-validation-v57.json",
+      "sha256": "e216316929e45d945e12efc98f47282f6df0fc6c28076a6850d1af3a2eac295e",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "scope": "Synthetic labels with offline terminal-punctuation augmentation to reduce ASR mismatch; no live text normalization, phrase rules, or production examples. Labels retain their source-review limitations.",
+      "cases": 90,
+      "readyRequests": 36,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 30,
+          "falseEarly": 5,
+          "missedReadyRequests": 11,
+          "ignoredBackground": 26,
+          "falseBackgroundIgnore": 3,
+          "missedBackground": 3
+        },
+        {
+          "threshold": 0.7,
+          "selected": 21,
+          "falseEarly": 2,
+          "missedReadyRequests": 17,
+          "ignoredBackground": 23,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 4
+        },
+        {
+          "threshold": 0.8,
+          "selected": 15,
+          "falseEarly": 1,
+          "missedReadyRequests": 22,
+          "ignoredBackground": 21,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 6
+        },
+        {
+          "threshold": 0.9,
+          "selected": 7,
+          "falseEarly": 0,
+          "missedReadyRequests": 29,
+          "ignoredBackground": 16,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 36,
+          "ignoredBackground": 11,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 15
+        }
+      ],
+      "latencyMs": {
+        "median": 2.7506499900482595,
+        "p95": 4.775400040671229,
+        "max": 5.7363000232726336
+      }
+    },
+    "oldFreshLong": {
+      "file": "artifacts/intent-classifier/old-fresh-long-heldout-v57.json",
+      "sha256": "ab518a63c9d268025b963c3afab72ea90a520fb8ea39a02725d438175bfd76e7",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+        "trainedModelSha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "scope": "Fresh synthetic long-form heldout examples, with explicit assistant semantic-label review. Not human ground truth or production routing.",
+      "cases": 60,
+      "readyRequests": 21,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 31,
+          "falseEarly": 12,
+          "missedReadyRequests": 2,
+          "ignoredBackground": 11,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.7,
+          "selected": 26,
+          "falseEarly": 9,
+          "missedReadyRequests": 4,
+          "ignoredBackground": 9,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 12
+        },
+        {
+          "threshold": 0.8,
+          "selected": 21,
+          "falseEarly": 4,
+          "missedReadyRequests": 4,
+          "ignoredBackground": 9,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 12
+        },
+        {
+          "threshold": 0.9,
+          "selected": 17,
+          "falseEarly": 4,
+          "missedReadyRequests": 8,
+          "ignoredBackground": 5,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 15
+        },
+        {
+          "threshold": 0.95,
+          "selected": 10,
+          "falseEarly": 4,
+          "missedReadyRequests": 15,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 16
+        }
+      ],
+      "latencyMs": {
+        "median": 6.136350042652339,
+        "p95": 7.857699994929135,
+        "max": 9.125699987635016
+      }
+    },
+    "newFreshLong": {
+      "file": "artifacts/intent-classifier/new-fresh-long-heldout-v57.json",
+      "sha256": "5c0731825e2f69a03d3d31b724f71771a8a220197709b37ed270b4e260ea9fb5",
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "scope": "Fresh synthetic long-form heldout examples, with explicit assistant semantic-label review. Not human ground truth or production routing.",
+      "cases": 60,
+      "readyRequests": 21,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 27,
+          "falseEarly": 8,
+          "missedReadyRequests": 2,
+          "ignoredBackground": 11,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.7,
+          "selected": 23,
+          "falseEarly": 5,
+          "missedReadyRequests": 3,
+          "ignoredBackground": 11,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 10
+        },
+        {
+          "threshold": 0.8,
+          "selected": 21,
+          "falseEarly": 4,
+          "missedReadyRequests": 4,
+          "ignoredBackground": 8,
+          "falseBackgroundIgnore": 1,
+          "missedBackground": 13
+        },
+        {
+          "threshold": 0.9,
+          "selected": 15,
+          "falseEarly": 3,
+          "missedReadyRequests": 9,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 16
+        },
+        {
+          "threshold": 0.95,
+          "selected": 7,
+          "falseEarly": 0,
+          "missedReadyRequests": 14,
+          "ignoredBackground": 2,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 18
+        }
+      ],
+      "latencyMs": {
+        "median": 6.073450029361993,
+        "p95": 8.326500072143972,
+        "max": 11.84229995124042
+      }
+    }
+  },
+  "policySelection": "The .95 native threshold was selected after inspecting fresh-long diagnostics. Those diagnostics are therefore not an untouched test of that threshold. The new native scenario is independently generated; no production threshold or model is changed. Group weighting, training distribution, epoch and calibration differ; no single-change causal claim.",
+  "adaptiveAudio": {
+    "file": "artifacts/native-interview/luna-prefix-gate-adaptive-v57/interview.json",
+    "sha256": "dd57199f963ccd420d64836cf20becc3a661feb2e1f939930552078daf12fa79",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "classifier": {
+      "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-prefix-v57/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "threshold": 0.95,
+      "changedTextCadenceMs": 250
+    },
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "48c5a4fa75d69482272e85c982f8b40f8b46324741380bb84a7990175ad3aa9a"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "da16db28eec76cecdb0b4135d714e05ac71c53a063859eae64cf48a80725b666",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+      "scripts/native-signed-interview.mjs": "2a169b0e14ae39b63ecb0ceb85ac49da5a0fbb3e8cc7893f4786fd105b452e0a",
+      "scripts/lib/examiner-retry.mjs": "ecedf198f8b2387c55db513f1c870c51c05ef9ff786c59e73871eacc3f4b7138"
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true
+    },
+    "audit": {
+      "file": "artifacts/native-interview/luna-prefix-gate-adaptive-v57/intent-stream-audit.json",
+      "sha256": "37ef3be222cb3087ae34c7a7112f2b96387ec92e7f47af3073aa7ff38c2e23a9",
+      "summary": {
+        "predictions": 401,
+        "missingSubmissions": 1,
+        "stale": 43,
+        "abstained": 0,
+        "acceptedAboveReadyThreshold": 62,
+        "acceptedExactFinalAboveReadyThreshold": 3
+      }
+    },
+    "stages": [
+      {
+        "round": 1,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2158,
+        "asrFinalizationFromSpeechEndMs": 759,
+        "confirmationAfterAsrMs": 25,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 76,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1297,
+        "renderAfterFirstWordMs": 9,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 1080,
+        "refinementChars": 352
+      },
+      {
+        "round": 2,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1834,
+        "asrFinalizationFromSpeechEndMs": 699,
+        "confirmationAfterAsrMs": 2,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 14,
+        "latestInputSentAfterConfirmationMs": 2,
+        "latestInputConsumptionWaitMs": 65,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1066,
+        "renderAfterFirstWordMs": 11,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 2116,
+        "refinementChars": 520
+      },
+      {
+        "round": 3,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1711,
+        "asrFinalizationFromSpeechEndMs": 985,
+        "confirmationAfterAsrMs": 36,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 14,
+        "latestInputSentAfterConfirmationMs": -358,
+        "latestInputConsumptionWaitMs": 68,
+        "pendingAgeAtConfirmationMs": 358,
+        "finalPendingBudgetMs": 400,
+        "firstWordAfterLatestInputConsumptionMs": 980,
+        "renderAfterFirstWordMs": 9,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 4,
+        "followups": 5,
+        "promptChars": 2848,
+        "refinementChars": 5718
+      },
+      {
+        "round": 4,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2104,
+        "asrFinalizationFromSpeechEndMs": 819,
+        "confirmationAfterAsrMs": 21,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 1,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 2,
+        "latestInputConsumptionWaitMs": 70,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1192,
+        "renderAfterFirstWordMs": 11,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 0,
+        "promptChars": 4405,
+        "refinementChars": 0
+      },
+      {
+        "round": 5,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1551,
+        "asrFinalizationFromSpeechEndMs": 785,
+        "confirmationAfterAsrMs": 31,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 14,
+        "latestInputSentAfterConfirmationMs": -358,
+        "latestInputConsumptionWaitMs": 69,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1024,
+        "renderAfterFirstWordMs": 9,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 4562,
+        "refinementChars": 614
+      },
+      {
+        "round": 6,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2075,
+        "asrFinalizationFromSpeechEndMs": 937,
+        "confirmationAfterAsrMs": 26,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 1,
+        "initialStartAcknowledgementMs": 12,
+        "latestInputSentAfterConfirmationMs": -517,
+        "latestInputConsumptionWaitMs": 63,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1566,
+        "renderAfterFirstWordMs": 13,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 4669,
+        "refinementChars": 431
+      }
+    ],
+    "contextAblation": {
+      "file": "artifacts/native-interview/luna-prefix-gate-adaptive-v57/intent-context-ablation.json",
+      "sha256": "d3f56dca544eb333e409a0298ab99b53282e6695888764c68d45edcd9a68742f",
+      "summary": {
+        "inputs": 400,
+        "exactParityMaxScoreDifference": 1.1102230246251565e-16,
+        "readyWithExactContext": 69,
+        "readyWithEmptyContext": 1,
+        "contextRaisedAboveThreshold": 69,
+        "contextLoweredBelowThreshold": 1
+      }
+    },
+    "firstWordTiming": {
+      "words": [
+        2158,
+        1834,
+        1711,
+        2104,
+        1551,
+        2075
+      ],
+      "mean": 1905.5,
+      "median": 1954.5,
+      "min": 1551,
+      "max": 2158
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "question": "A CUDA kernel’s runtime has become much less predictable even though its input and output sizes appear unchanged. What would you clarify or measure first?",
+        "recognizedQuestion": "Akuda kernels runtime has become much less predictable even though its input and output sizes appear unchanged What would you clarify or measure first",
+        "answer": "First, I’d clarify what “less predictable” means: higher variance, a worse tail, or intermittent stalls—and whether we’re measuring one kernel or end-to-end latency. Then I’d compare latency distributions, not just averages, while verifying the exact workload shapes, data values, warm-up and compilation behavior, and measurement method stayed the same. I’d also capture device utilization, clocks and throttling, memory pressure, concurrency, and recent runtime or compiler changes; that helps distinguish workload, system, and instrumentation causes.",
+        "firstWordFromSpeechEndMs": 2158,
+        "fullRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyInputs": [],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 11849,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 2,
+          "incorrectClaims": [],
+          "issue": "The answer addresses the requested first steps: define what changed, compare latency distributions, verify workload and measurement consistency, and check system conditions without asserting a cause.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "The same benchmark reports 1.3 ms on one run and 8.4 ms on another, with the same executable, GPU, launch dimensions, and input/output sizes; times are kernel-only, with output initialization excluded. What would you verify next before attributing the difference to the data?",
+          "requiredParts": [
+            "Clarify what “less predictable” means and the timing scope.",
+            "Identify relevant measurements or controls to distinguish workload, system, and instrumentation effects."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 2,
+        "question": "The same benchmark reports 1.3 ms on one run and 8.4 ms on another, with the same executable, GPU, launch dimensions, and input/output sizes; times are kernel-only, with output initialization excluded. What would you verify next before attributing the difference to the data?",
+        "recognizedQuestion": "the same benchmark reports one point three milliseconds on one run and eight point four milliseconds on another with the same executable GPU launch dimensions and input slash output sizes times our kernel only with output initialization excluded What would you verify next before attributing the difference to the data",
+        "answer": "Before blaming the data, I’d verify the timing is valid and the GPU state is comparable. Run many warmed-up repetitions with device-side timing and explicit synchronization, confirm the measured interval excludes setup consistently, and check whether other GPU work, clock or power state, thermal throttling, or memory pressure differed between runs. If the gap persists under controlled, isolated conditions, then compare the exact input contents and data-dependent execution paths.",
+        "firstWordFromSpeechEndMs": 1834,
+        "fullRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyInputs": [],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 18693,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "The inputs are N = 67,108,864 updates into 1,048,576 valid float bins. The faster run’s indices are approximately uniform; in the slower run, 90% target one bin and the rest are approximately uniform over the others. Values are identical, and the 512 MiB of input reads alone imply a roughly 0.45 ms lower bound at the stated 1.2 TB/s streaming-read bandwidth. What does this evidence support about the runtime gap, and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic-throughput rate?",
+          "requiredParts": [
+            "Propose checks for timing validity and comparable GPU state before attributing the gap to input data.",
+            "If the controlled gap persists, compare the exact inputs or data-dependent execution paths."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "question": "The inputs are N = 67,108,864 updates into 1,048,576 valid float bins. The faster run’s indices are approximately uniform; in the slower run, 90% target one bin and the rest are approximately uniform over the others. Values are identical, and the 512 MiB of input reads alone imply a roughly 0.45 ms lower bound at the stated 1.2 TB/s streaming-read bandwidth. What does this evidence support about the runtime gap, and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic-throughput rate?",
+        "recognizedQuestion": "the inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins the faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others values are identical and the five hundred and twelve MIB of input reads alone imply roughly zero point four five milliseconds lower bound at the stated one point two TB s streaming read bandwidth what does this evidence support about the runtime gap and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic throughput rate",
+        "answer": "The index skew supports contention as a plausible cause of the gap, if the updates use atomics, but it doesn’t prove contention dominates; 0.45 ms is an ideal streaming-read lower bound, not an expected runtime for irregular accesses. I’d run repeated, synchronized timings with identical conditions and vary only the index distribution, then use a profiler to compare achieved memory bandwidth, cache behavior, and atomic or serialization indicators—without assuming an atomic rate. If skew sharply increases latency while read traffic and measured bandwidth stay similar, that strengthens the contention explanation; if timing shifts with synchronization or GPU state, investigate the measurement or system instead.",
+        "firstWordFromSpeechEndMs": 1711,
+        "fullRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyInputs": [
+          {
+            "floor": 93127,
+            "id": "304e6a68-2550-4170-8dbb-84bf777b9054",
+            "text": "the inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float",
+            "timestamp": 104459
+          }
+        ],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 17591,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer addresses both parts: skew makes contention plausible but not proven, and 0.45 ms is only an input-read lower bound; it proposes controlled timings and profiling without assuming an atomic throughput rate.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "What exact operation does each update perform—especially, does it use `atomicAdd`? Once you specify the kernel, what measurement would distinguish atomic serialization from reduced memory bandwidth?",
+          "requiredParts": [
+            "Interpret the skew as evidence supporting, but not proving, contention.",
+            "Distinguish the input-read lower bound from total kernel runtime.",
+            "Propose measurements to separate contention from bandwidth or timing explanations without assuming an atomic throughput rate."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 4,
+        "question": "What exact operation does each update perform—especially, does it use `atomicAdd`? Once you specify the kernel, what measurement would distinguish atomic serialization from reduced memory bandwidth?",
+        "recognizedQuestion": "does each update perform especially does it use atomic add once you specify the kernel what measurement would distinguish atomic serialization from reduced memory bandwidth",
+        "answer": "Yes—the kernel’s update operation is the critical detail: does each update perform an atomic add to its target bin? To distinguish serialization from reduced bandwidth, compare uniform and skewed inputs under identical conditions, and profile both achieved memory bandwidth and atomic-related stalls or serialization indicators. If skew raises latency and atomic stalls while bandwidth stays similar, that favors serialization; if bandwidth falls substantially without a corresponding rise in atomic contention indicators, bandwidth is more likely the limiter.",
+        "firstWordFromSpeechEndMs": 2104,
+        "fullRecognizedClauses": true,
+        "earlySends": 0,
+        "earlyInputs": [],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 28388,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The kernel implementation was not yet supplied, so asking whether updates use atomicAdd is a valid clarification; the proposed controlled comparison and profiling signals address the measurement requirement.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "The update is `atomicAdd(out + idx[i], val[i])` (262,144 blocks × 256 threads; 80 SMs, 32-lane warps). Design a controlled uniform-versus-skewed test and name the profiler evidence you’d expect under serialization versus bandwidth limitation, without treating the 0.45 ms input-read bound as total traffic.",
+          "requiredParts": [
+            "Clarify whether each update uses atomicAdd or another operation.",
+            "Describe measurements that distinguish atomic serialization from reduced memory bandwidth."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 5,
+        "question": "The update is `atomicAdd(out + idx[i], val[i])` (262,144 blocks × 256 threads; 80 SMs, 32-lane warps). Design a controlled uniform-versus-skewed test and name the profiler evidence you’d expect under serialization versus bandwidth limitation, without treating the 0.45 ms input-read bound as total traffic.",
+        "recognizedQuestion": "the update is atomic ad out plus IDXI Val I two hundred and sixty two thousand one hundred and forty four blocks times two hundred and fifty six threads eighty SMS thirty two lane warps design a controlled uniform versus skewed test and name the profiler evidence you'd expect under serialization versus bandwidth limitation without treating the zero point four five milliseconds input readbound as total traffic",
+        "answer": "Keep the executable, launch, output initialization, values, GPU state, and timing method fixed; run many warmed-up, synchronized trials, changing only the index distribution between uniform and 90%-to-one-bin. Randomize the order, reset the output consistently outside the timed region, and verify results so the comparison is controlled. Under serialization, I’d expect skewed runs to show higher atomic-pipeline contention or serialization stalls and longer latency, without a proportional rise in DRAM bytes; under a bandwidth limit, I’d expect sustained high measured DRAM throughput and latency that tracks total memory traffic. The 0.45 ms estimate covers only idealized input reads, not index reads, output traffic, atomics, or actual irregular-access efficiency.",
+        "firstWordFromSpeechEndMs": 1551,
+        "fullRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyInputs": [
+          {
+            "floor": 205733,
+            "id": "e3d3c704-9e79-42bc-b8ca-8adfb83d8277",
+            "text": "the update is atomic ad out plus IDXI Val I two hundred and sixty two thousand one hundred and forty four blocks times two hundred and fifty six threads eighty SMS thirty two lane warps design a controlled uniform versus skewed test and name the profiler evidence you'd expect under serialization versus bandwidth limitation without treating the zero point four five milliseconds input readbound as total traffic",
+            "timestamp": 234298
+          }
+        ],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 14085,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer addresses the requested controlled comparison and distinguishes expected profiler patterns without treating the input-read bound as total traffic.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Estimate the expected distinct keys—and atomics eliminated—per 32-lane warp for each stated index distribution. Show your reasoning, then explain why that reduction does not imply a comparable reduction in bytes transferred.",
+          "requiredParts": [
+            "Describe a controlled uniform-versus-skewed test.",
+            "Name profiler evidence expected under serialization versus bandwidth limitation.",
+            "Treat 0.45 ms as an input-read lower bound, not total traffic."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 6,
+        "question": "Estimate the expected distinct keys—and atomics eliminated—per 32-lane warp for each stated index distribution. Show your reasoning, then explain why that reduction does not imply a comparable reduction in bytes transferred.",
+        "recognizedQuestion": "estimate the expected distinct keys and atomics eliminated per thirty two lane warp for each stated index distribution show your reasoning then explain why that reduction does not imply a comparable reduction in bytes transferred",
+        "answer": "Assuming independent lane indices and one atomic per lane, for 32 uniform picks across 1,048,576 bins, expected distinct keys are M[1−(1−1/M)^32], about 31.9995, so only about 0.0005 atomics per warp are theoretically redundant. For the skewed case, one hot bin has probability 0.9 and each of the other M−1 bins has probability 0.1/(M−1). Expected distinct keys are 1−0.1^32 +(M−1)[1−(1−0.1/(M−1))^32], about 4.05, so about 27.95 atomics could be eliminated by perfect same-warp aggregation. That does not imply similar byte savings: the index and value inputs are still read for every lane, and atomics may require read-modify-write traffic, cache-line ownership or serialization; aggregation reduces atomic operations, not necessarily the input bytes or proportional DRAM traffic.",
+        "firstWordFromSpeechEndMs": 2075,
+        "fullRecognizedClauses": true,
+        "earlySends": 1,
+        "earlyInputs": [
+          {
+            "floor": 252255,
+            "id": "5439f1a7-59e7-4a08-98e0-eae77e289e57",
+            "text": "estimate the expected distinct keys and atomics eliminated per thirty two lane warp for each stated index distribution show your reasoning then explain why that reduction does not imply a comparable reduction in bytes transferred",
+            "timestamp": 266619
+          }
+        ],
+        "examinerAttempts": [
+          {
+            "attempt": 1,
+            "elapsedMs": 13361,
+            "status": "complete",
+            "failure": null,
+            "retryable": false
+          }
+        ],
+        "review": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "For the skewed distribution, the expected distinct-key count is about 4.2, not 4.05: the hot key contributes approximately 1, and the 31 non-hot lanes contribute approximately 3.2 distinct keys. Thus perfect warp aggregation eliminates about 27.8 atomics per warp, not 27.95.",
+            "The stated skewed distinct-key formula is appropriate, but its numerical evaluation is incorrect: (M−1)[1−(1−0.1/(M−1))^32] is approximately 3.2, not 3.05."
+          ],
+          "issue": "The skewed-distribution arithmetic is wrong: it understates expected distinct keys and overstates atomics eliminated per warp.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Write CUDA warp-aggregation code for this scatter-add that handles a partial tail warp correctly. Specify the active mask, peer grouping, leader election, sum, and atomic, and explain why every lane named in each shuffle’s mask participates.",
+          "requiredParts": [
+            "Estimate expected distinct keys per warp for both distributions and show the reasoning.",
+            "Estimate atomics eliminated per warp under perfect same-warp aggregation.",
+            "Explain why fewer atomics do not imply a comparable reduction in bytes transferred."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "finalOnlyControl": {
+    "file": "artifacts/native-interview/luna-prefix-gate-final-v58/interview.json",
+    "sha256": "62a8d8360b49f88510a7c6496cdf8d43fa338b248c8fa1978dd85fd850ff213e",
+    "firstWordTiming": {
+      "words": [
+        2614,
+        2003,
+        2293,
+        2277,
+        2283,
+        2737
+      ],
+      "mean": 2367.8333333333335,
+      "median": 2288,
+      "min": 2003,
+      "max": 2737
+    },
+    "stages": [
+      {
+        "round": 1,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2614,
+        "asrFinalizationFromSpeechEndMs": 742,
+        "confirmationAfterAsrMs": 35,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 14,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 65,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1771,
+        "renderAfterFirstWordMs": 11,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 1076,
+        "refinementChars": 353
+      },
+      {
+        "round": 2,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2003,
+        "asrFinalizationFromSpeechEndMs": 691,
+        "confirmationAfterAsrMs": 38,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 63,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1210,
+        "renderAfterFirstWordMs": 9,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 2193,
+        "refinementChars": 520
+      },
+      {
+        "round": 3,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2293,
+        "asrFinalizationFromSpeechEndMs": 979,
+        "confirmationAfterAsrMs": 28,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 13,
+        "latestInputSentAfterConfirmationMs": 2,
+        "latestInputConsumptionWaitMs": 73,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1211,
+        "renderAfterFirstWordMs": 10,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 3,
+        "promptChars": 2991,
+        "refinementChars": 2242
+      },
+      {
+        "round": 4,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2277,
+        "asrFinalizationFromSpeechEndMs": 831,
+        "confirmationAfterAsrMs": 29,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 73,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1343,
+        "renderAfterFirstWordMs": 12,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 4392,
+        "refinementChars": 395
+      },
+      {
+        "round": 5,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2283,
+        "asrFinalizationFromSpeechEndMs": 788,
+        "confirmationAfterAsrMs": 25,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 1,
+        "initialStartAcknowledgementMs": 14,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 60,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1409,
+        "renderAfterFirstWordMs": 7,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 4677,
+        "refinementChars": 610
+      },
+      {
+        "round": 6,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2737,
+        "asrFinalizationFromSpeechEndMs": 970,
+        "confirmationAfterAsrMs": 2,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 1,
+        "initialStartAcknowledgementMs": 12,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 62,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1702,
+        "renderAfterFirstWordMs": 6,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 4864,
+        "refinementChars": 431
+      }
+    ],
+    "answers": [
+      {
+        "round": 1,
+        "answer": "First, I’d clarify what “less predictable” means: latency variance, throughput variation, or incorrect results, and whether it affects all kernels or a subset. If it’s latency, I’d measure per-kernel latency distributions—not just averages—along with GPU utilization, clocks, memory bandwidth, and concurrent work; CUDA events with warm-up and synchronized measurements help separate kernel time from launch and host overhead. I’d also compare the exact shapes, strides, dtypes, launch parameters, and software/driver versions against a stable baseline, since unchanged input and output sizes don’t guarantee the same execution path.",
+        "recognizedQuestion": "A CUDA kernels runtime has become much less predictable even though its input and output sizes appear unchanged What would you clarify or measure first"
+      },
+      {
+        "round": 2,
+        "answer": "Before blaming the data, I’d verify that the measurements are comparable: same GPU and process state, warm-up, synchronization and timing boundaries, and repeated samples rather than one run each. Kernel-only event timing can still vary with other GPU workloads, clock and power state, thermal throttling, and cache state, so I’d log those alongside each sample and check for errors or retries. If those are stable, I’d profile the slow and fast cases to see whether the kernel’s execution path or memory behavior actually differs.",
+        "recognizedQuestion": "The same benchmark reports one point three milliseconds on one run and eight point four milliseconds on another with the same executable GPU launch dimensions and input slash output sizes Times are kernel only with output initialization excluded What would you verify next before attributing the difference to the data"
+      },
+      {
+        "round": 3,
+        "answer": "The evidence supports, but doesn’t prove, severe contention as the cause: a 90% hot-bin distribution can make atomic updates serialize, while the 0.45 ms read-only floor alone cannot explain an 8.4 ms run. I’d confirm whether the kernel uses atomics, then profile fast and slow cases with the exact same measurement protocol, collecting achieved memory bandwidth, atomic activity or serialization indicators, and kernel duration; compare these against a non-atomic read-only control with the same input stream. Also repeat randomized runs with warm-up and synchronized GPU-event timing while logging clocks, temperature, and concurrent GPU work, so contention can be separated from bandwidth saturation and timing or device-state variation.",
+        "recognizedQuestion": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others Values are identical and the five hundred and twelve MIB of input reads alone imply roughly zero point four five milliseconds lower bound at the stated one point two TB s streaming read bandwidth What does this evidence support about the runtime gap and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic throughput rate"
+      },
+      {
+        "round": 4,
+        "answer": "Assuming each update uses `atomicAdd`, compare the uniform and hot-bin inputs under identical timing, then profile both with hardware counters. Atomic serialization is supported if the hot-bin case shows sharply higher atomic serialization or stall indicators and longer execution, while achieved DRAM bandwidth is similar or lower—not saturated enough to explain the gap. Reduced bandwidth is supported if the slow case instead approaches the device’s bandwidth ceiling with more memory-stall time; use a same-input read-only control and verify timing, clocks, and GPU contention to rule out confounders.",
+        "recognizedQuestion": "What exact operation does each update perform especially Does it use atomic add once you specify the kernel what measurement would distinguish atomic serialization from reduced memory bandwidth"
+      },
+      {
+        "round": 5,
+        "answer": "I’d hold the kernel, launch geometry, values, output initialization, GPU state, and timing method fixed, then run repeated, randomized trials with the same 67,108,864 updates: one index set uniform across bins and one with 90% targeting a single bin. Warm up first, time only the kernel with synchronized CUDA events, and profile representative runs of each. Under atomic serialization, I’d expect the skewed case to show much longer runtime and increased atomic serialization, replay, or stall indicators, without DRAM bandwidth reaching its ceiling; under bandwidth limitation, I’d expect high achieved DRAM bandwidth and memory-stall evidence consistent with the measured total traffic. The 0.45 ms estimate is only a lower bound for the specified input reads, not total kernel traffic—atomic read-modify-writes and other reads and writes must be counted separately.",
+        "recognizedQuestion": "the update is atomic ad out plus IDXI Val I two hundred and sixty two thousand one hundred and forty four blocks times two hundred and fifty six threads AD SMS thirty two lane warps design a controlled uniform versus skewed test and name the profiler evidence you'd expect under serialization versus bandwidth limitation without treating the zero point four five milliseconds input readbound as total traffic"
+      },
+      {
+        "round": 6,
+        "answer": "For uniform indices over 1,048,576 bins, the expected distinct keys in 32 lanes are `M[1−(1−1/M)^32]`, about 31.9995. Warp aggregation therefore saves only about 0.0005 atomics per warp on average. For the skewed distribution, with 90% on one hot bin and the other 10% uniform over the remaining bins, the expected distinct count is `1−0.1^32 + (M−1)[1−(1−0.1/(M−1))^32]`, about 4.2; that saves roughly 27.8 atomics per warp. Fewer atomics do not mean proportionally fewer bytes: every lane still has to read its index and value, and aggregated atomics still access output memory; the optimization mainly reduces contending atomic operations, not the input stream. Any reduction in output traffic depends on the hardware’s atomic implementation and cache behavior.",
+        "recognizedQuestion": "estimate the expected distinct keys and atomics eliminated per thirty two lane warp for each stated index distribution show your reasoning then explain why that reduction does not imply a comparable reduction in bytes transferred"
+      }
+    ],
+    "scope": "Same binary/source, public questions, saved waveforms, Luna Fast/low, Nemotron 160 ms and monitor. Early run is adaptive with examiner calls between answers; final-only control is fixed replay without those calls. Generated histories and ASR can differ. No causal improvement or population p95 claim."
+  },
+  "independentReview": {
+    "scope": "Assistant review of supplied questions, recognized text and answers; arithmetic independently evaluated from the stated distributions. No complete CUDA program was supplied or executed in these six turns. Real microphone interruptions are excluded.",
+    "unsafeEarlyStart": "Round 3 started Luna on a fragment ending valid float, before the bin specification or requested analysis was complete. Hidden output still waited for confirmation; one job start does not mean one paid inference turn (round 3 had four steers and five follow-ups).",
+    "trafficMisstatement": "Round 5 says the provided input-read bound excludes index reads, although index data are part of the supplied input reads. The question does not authorize excluding that array. Model examiner marked this answer correct; that grade is not independent certification.",
+    "arithmetic": {
+      "assumption": "Independent lane draws, as the answer explicitly assumes; this independence is not implied by a marginal index histogram alone.",
+      "method": "Each bin contributes 1-(1-p)^lanes, evaluated with -expm1(lanes*log1p(-p)) to avoid cancellation.",
+      "bins": 1048576,
+      "lanes": 32,
+      "hotProbability": 0.9,
+      "uniformDistinct": 31.999526982050124,
+      "uniformAtomicsEliminated": 0.00047301794987575363,
+      "skewedDistinct": 4.199995269775391,
+      "skewedAtomicsEliminated": 27.800004730224607,
+      "reportedSkewedDistinct": 4.05,
+      "reportedSkewedAtomicsEliminated": 27.95,
+      "conclusion": "Round 6 gives an appropriate formula under its assumption but evaluates the skewed case incorrectly. The model examiner also detects this failure."
+    },
+    "profilingReference": "https://docs.nvidia.com/nsight-compute/ComputeTriage/"
+  },
+  "verification": {
+    "defaultRustPassed": 121,
+    "defaultRustIgnored": 14,
+    "acceptanceRustPassed": 122,
+    "acceptanceRustIgnored": 14,
+    "boundedExaminerRetryTestsPassed": 2,
+    "releaseBuild": "cargo build --release --features tauri/custom-protocol --bin meeting-copilot",
+    "runtimeSourceSha256": "48c5a4fa75d69482272e85c982f8b40f8b46324741380bb84a7990175ad3aa9a",
+    "releaseRefresh": {
+      "file": ".local/latency-app-refresh-proof.json",
+      "sha256": "714aef4e5e701424a91aabbcd94b9bcb4fdacfa1f40d9a78de5807d7ad14450d",
+      "updatedAt": "2026-10-10T11:16:04.635Z",
+      "pid": 20216,
+      "executable": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\latency-app\\meeting-copilot-latency.exe",
+      "binarySha256": "0bf2d7c040d71c7f8adc0456acfe52291d7be2fc96011f33a789dbaf10665f35",
+      "debug": false,
+      "active": false,
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "settingsPreserved": true
+    }
+  },
+  "runtimeProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "classifierEnabledInRelease": false,
+  "goalAchieved": false
+}

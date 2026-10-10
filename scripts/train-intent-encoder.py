@@ -59,6 +59,9 @@ def main():
     training,train_sha=read(args.train);validation,val_sha=read(args.validation)
     key=lambda r:' '.join(r['text'].casefold().split())
     assert not {key(r) for r in training['cases']} & {key(r) for r in validation['cases']}
+    train_groups={r['sourceGroup'] for r in training['cases'] if 'sourceGroup' in r}
+    validation_groups={r['sourceGroup'] for r in validation['cases'] if 'sourceGroup' in r}
+    assert not train_groups & validation_groups, 'Related source groups cross the training/validation split'
     tokenizer=Tokenizer.from_file(str(model_dir/'tokenizer.json'))
     tokenizer.no_truncation();tokenizer.no_padding()
     def encode(rows):
@@ -72,7 +75,7 @@ def main():
     train=encode(training['cases']);valid=encode(validation['cases'])
     groups={}
     for index,row in enumerate(training['cases']):
-        groups.setdefault(row.get('sourceCase',index),[]).append(index)
+        groups.setdefault(row.get('sourceGroup',row.get('sourceCase',index)),[]).append(index)
     def batch(items,indices):
         width=max(items[i][0]['input_ids'].shape[1] for i in indices)
         tensors={name:torch.as_tensor(np.concatenate([np.pad(items[i][0][name],((0,0),(0,width-items[i][0][name].shape[1]))) for i in indices],axis=0)) for name in items[0][0]}

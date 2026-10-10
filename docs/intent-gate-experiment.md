@@ -556,3 +556,105 @@ Default Rust tests passed 121, acceptance tests 122, with 14 live tests ignored
 in each; the signed-in correction test was also run explicitly. The release
 build with `tauri/custom-protocol` passed, and the idle app was refreshed with
 all saved settings preserved. No experimental policy was enabled in release.
+
+## Exact ASR inputs and prefix supervision (v56–v58)
+
+The opt-in acceptance trace now records the exact text, context, floor and input
+ID submitted to the CPU classifier. `audit-intent-stream.mjs` joins these inputs
+to received scores; `rescore-intent-stream.py` checks native/offline score parity
+and separately removes context. Neither tool assigns labels or permits display
+of an unconfirmed answer. A failed run requires an explicit audit flag and keeps
+its failed status.
+
+The first capacity-change interview stopped after one of six requested answers
+when the examiner timed out. Its retained first word arrived **1872 ms** after
+speech end, including **720 ms** of ASR finalization. All 32 captured inputs
+replayed to the same scores, with a maximum difference below `2e-16`. The complete
+recognized question scored **0.777** readiness, below the 0.90 gate; removing
+context raised it to **0.885**, still below threshold. The separately recovered
+examiner grade accepted the clarifying answer. That retry does not make the
+failed interview complete.
+
+Offline prefix supervision addresses the mismatch between complete written
+examples and ASR fragments. The preparation script samples character cuts from
+existing synthetic sources without inheriting their future labels. Signed-in
+Luna Fast/low sees only each current prefix and its earlier context. Prefixes of
+one source never share a labeling request, and each batch uses a fresh thread.
+Explicit assistant review corrects annotations; ambiguous cases are excluded.
+Related punctuation variants and contrastive episodes stay grouped, and exact
+validation-text overlaps are excluded from training. No examples, word rules or
+CUDA answers are loaded by runtime inference.
+
+The experiment labeled 120 training and 60 validation prefixes. The merged
+training set contains **778 variants in 370 source groups**; validation contains
+148 cases. Epoch and temperature use validation, so its scores are diagnostic.
+FP32 export has zero prediction disagreements and a maximum logit difference
+of `3.94e-6`. The INT8 export has three disagreements and was not used for audio.
+
+At a 0.90 gate, the new model reduced false early selections on the 58 reviewed
+validation prefixes from three to zero, but still missed the sole complete
+contextual request. On the original complete validation examples it selected
+fewer ready requests. Sixty fresh long examples produced three false early
+selections at 0.90. Raising the experimental threshold to 0.95 selected seven
+ready requests and no false early requests, while missing fourteen ready
+requests. This threshold was chosen after inspecting that diagnostic; it is not
+an untouched held-out test of the policy.
+
+A new six-round interview then ran through T24E390, Nemotron 160 ms, the native
+scheduler and Luna Fast/low. It moved from an unpredictable kernel runtime to
+controlled measurement, skewed scatter updates, an explicit `atomicAdd`, and
+expected distinct-key counts per warp. The final-only control replayed the same
+six public questions and saved waveforms on the same binary and runtime source.
+
+| Mode | First word after speech end, ms | Median, ms |
+| --- | --- | --- |
+| Learned early gate at 0.95 | 2158, 1834, 1711, 2104, 1551, 2075 | 1954.5 |
+| Final transcript only | 2614, 2003, 2293, 2277, 2283, 2737 | 2288 |
+
+The early mean was 1905.5 ms versus 2367.8 ms for final-only. This small comparison
+does not establish a population p95 or a general causal improvement: generated
+answer histories and ASR may differ, and only the adaptive run had examiner
+calls between answers. Every recorded first-word time remains above 800 ms.
+
+Actual learned starts occurred in rounds 3, 5 and 6. Round 3 started on a fragment
+ending “valid float”, before the specification and analysis request were
+complete; its pipeline needed four steers and five follow-ups. Rounds 5 and 6
+sent complete text about **458 and 446 ms after speech end**, respectively,
+before finalized ASR. The early run's ASR-finalization median was **802 ms**,
+post-consumption first-word median **1129 ms**, and rendering delay **9–13 ms**.
+The post-consumption interval includes inference, transport, parsing and delivery;
+overlapping stages must not be summed. Exact replay of 400 native classifier
+inputs again matched scores. Removing context reduced threshold crossings from
+69 to one, while the context-bearing classifier still allowed the incomplete
+round-3 start. This warrants further context supervision, not automatic removal
+of context.
+
+Deep correctness also failed. Round 6 supplied the appropriate distinct-key
+formula under an explicit independent-lane assumption, but evaluated the skewed
+case as 4.05 keys and 27.95 eliminated atomics. Stable numerical evaluation gives
+**4.1999953 keys and 27.8000047 eliminated atomics**. The model examiner detected
+this; the final-only answer gave the correct rounded values. Round 5 also said
+the supplied input-read bound excluded index reads, although indices are inputs;
+the examiner accepted that answer. Grades therefore do not certify every claim.
+Profiling interpretation should follow NVIDIA's
+[compute triage guidance](https://docs.nvidia.com/nsight-compute/ComputeTriage/),
+which separates memory tiers, atomic pressure and latency indicators. These
+six turns contain no complete CUDA program and establish no hardware execution
+or real microphone interruption result.
+
+The harness supports an explicit maximum of two examiner attempts, retrying
+only its known answer timeout and recording both attempts. It never regenerates
+the candidate answer for a grading retry. The new six-round run needed no retry.
+Two contract tests verify bounded attempts and no retry for cancellation,
+authentication or rate-limit failures. Acceptance Rust tests pass **122**, with
+14 live tests ignored. The [evidence report](evidence/intent-prefix-v57.json) is
+reproduced by `node scripts/summarize-intent-prefixes.mjs` after the native input
+and stage audits. The original runtime profile is restored; this classifier
+and threshold remain experimental. Near-instant latency, reliable deep answers,
+exact code through audio and real microphone interruptions remain unmet or
+unverified.
+
+Default Rust tests also pass **121**, with 14 live tests ignored. The release
+build with `tauri/custom-protocol` passed, and the idle app was refreshed with
+all saved settings preserved, including Luna Fast/low and T24E390. The diagnostic
+trace is acceptance/debug only, and no new classifier was enabled in release.

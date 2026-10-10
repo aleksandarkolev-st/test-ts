@@ -100,6 +100,23 @@ without sampling all correlated variants or adding live text rules. The existing
 each epoch's sampled count. This option has data-contract tests; a new model and
 fresh independent assessment are required before any performance claim.
 
+The [v64 sampling evidence](evidence/intent-sampling-v64.json) records a completed
+fit with this option: 520 sampled variants per epoch, with epoch six and FP32
+temperature 1.7 selected only by the existing development corpus. FP32 export
+preserved all development predictions, with maximum logit difference below
+0.000007. A sandbox temporary-file failure interrupted the first export; its
+partial FP32 file was preserved, and an approved retry produced the identical
+FP32 model with the same learning and selection settings.
+
+The previously observed v62 assessment set is exploratory for this new model.
+At the frozen 0.95 threshold it selected 20 of 108 fragments: 16 ready requests
+and four prematurely ready fragments, missing eight of the 24 ready requests.
+CPU inference took 4.59 ms median and 5.87 ms reported p95. These are fragment
+decisions, not actual early requests under the runtime's quiet and stability
+guards. Increased selection also introduced errors. Fresh unseen episode groups
+and independently reviewed ASR labels are still required before live promotion;
+no default profile changed.
+
 This utility excludes WASAPI capture, microphone interference, monitor rendering,
 answer generation, and full application-state parity. It does not measure time to
 the first answer word or prove a latency improvement. The near-instantaneous

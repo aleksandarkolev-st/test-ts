@@ -1,0 +1,330 @@
+{
+  "recordedAt": "2026-10-10T17:24:41.273357+00:00",
+  "scope": "Completed offline readiness-classifier sampling experiment. Only intent/completeness supervision is trained, never interview answers or subject-specific routing. The v62 assessment set was previously observed, so its new scores are exploratory. Fresh unseen-group review and assessment remain pending. No live latency improvement or promotion is established.",
+  "status": "fitted; fresh independent assessment pending",
+  "planIdentity": {
+    "file": "artifacts\\intent-classifier\\sampling-v64\\plan.json",
+    "sha256": "04680f313726bd19afec01172fc39f029ea977abe7c16dcba4ba3abfa233de6f"
+  },
+  "plan": {
+    "createdAt": "2026-10-10T16:20:21.271880+00:00",
+    "sampling": "group-class",
+    "seed": 42,
+    "epochsMaximum": 10,
+    "selection": "Previous development corpus selects epoch and temperature only. Previously seen v62 evaluation is exploratory and cannot certify this change. Fresh independently generated episode groups required before promotion.",
+    "assessmentThreshold": 0.95,
+    "productionProfileChanges": false,
+    "inputs": {
+      "scripts/train-intent-encoder.py": "0a51ab2ad96b42ad93123703c789f31fbc5f6c3cd7f19ab50b58486b074c593c",
+      "scripts/intent_sampling.py": "85fa9e19fe9bbff1c2b1d7daab5eaa928f55dc71ed467c6c04db401c39e43107",
+      "artifacts/intent-classifier/asr-corpus-v62/split/training.json": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+      "artifacts/intent-classifier/prefix-validation-v57.json": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "amendedAt": "2026-10-10T17:04:40.039792+00:00",
+    "amendment": "Record trainer code identities and batch/max-epoch settings in output metadata. Training hypothesis, data, sampling, seed and selection policy are unchanged; model fitting has not started.",
+    "batchSize": 8,
+    "trainingThreads": 4,
+    "exportRecovery": {
+      "recordedAt": "2026-10-10T17:16:50.114319+00:00",
+      "reason": "Windows sandbox denied ONNX quantization temporary-file access after fitting. No completed profile exists. Preserve the partial model, retry identical training and selection in a fresh output directory outside the sandbox.",
+      "failedPartialModel": ".local\\intent-encoder\\finetuned-asr-v64\\model.fp32.onnx",
+      "failedPartialModelSha256": "b2c99e8a42ae72baeeb74a85467a86ce6f3d433c34cebf93382897711ce857c7",
+      "retryOutput": ".local/intent-encoder/finetuned-asr-v64-r1",
+      "policyChanges": false
+    }
+  },
+  "profileIdentity": {
+    "file": ".local\\intent-encoder\\finetuned-asr-v64-r1\\profile.fp32.json",
+    "sha256": "4794f1d6ecdec6079ff51b04a3241b35e06978cc7d128fc579752f124b6f12d4"
+  },
+  "profile": {
+    "encoder": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "featureSchema": "finetuned-joint-readiness-v1",
+    "classes": [
+      "background",
+      "unfinished_request",
+      "ready_request"
+    ],
+    "trainedModel": {
+      "file": "finetuned-asr-v64-r1/model.fp32.onnx",
+      "bytes": 90403057,
+      "sha256": "b2c99e8a42ae72baeeb74a85467a86ce6f3d433c34cebf93382897711ce857c7"
+    },
+    "temperature": 1.7000000000000002,
+    "validationLoss": 0.38853347301483154,
+    "validationAccuracy": 0.8581081081081081,
+    "maxExportLogitDifference": 6.4373016357421875e-06,
+    "exportPredictionDisagreements": 0,
+    "fp32ExportMaxLogitDifference": 6.4373016357421875e-06,
+    "fp32ExportPredictionDisagreements": 0,
+    "trainingSha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+    "validationSha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+    "trainingVariants": 991,
+    "trainingOriginalGroups": 390,
+    "validationCount": 148,
+    "seed": 42,
+    "selectedEpoch": 6,
+    "trainingThreads": 4,
+    "batchSize": 8,
+    "epochsMaximum": 10,
+    "trainerSourceSha256": {
+      "train-intent-encoder.py": "0a51ab2ad96b42ad93123703c789f31fbc5f6c3cd7f19ab50b58486b074c593c",
+      "intent_sampling.py": "85fa9e19fe9bbff1c2b1d7daab5eaa928f55dc71ed467c6c04db401c39e43107",
+      "intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "sampling": "group-class",
+    "epochs": [
+      {
+        "epoch": 1,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 1.047985029220581,
+        "validationLoss": 1.0222374200820923,
+        "validationAccuracy": 0.4324324429035187,
+        "elapsedSeconds": 10.952999999979511
+      },
+      {
+        "epoch": 2,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.7030138212900895,
+        "validationLoss": 0.7355318665504456,
+        "validationAccuracy": 0.662162184715271,
+        "elapsedSeconds": 21.483999999938533
+      },
+      {
+        "epoch": 3,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.38595168613470515,
+        "validationLoss": 0.556708037853241,
+        "validationAccuracy": 0.7567567825317383,
+        "elapsedSeconds": 32.061999999918044
+      },
+      {
+        "epoch": 4,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.2485006477397222,
+        "validationLoss": 0.5115066766738892,
+        "validationAccuracy": 0.7770270109176636,
+        "elapsedSeconds": 42.421999999904074
+      },
+      {
+        "epoch": 5,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.14832793791563464,
+        "validationLoss": 0.5128465294837952,
+        "validationAccuracy": 0.7972972989082336,
+        "elapsedSeconds": 53.311999999918044
+      },
+      {
+        "epoch": 6,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.09920325459052737,
+        "validationLoss": 0.4578912556171417,
+        "validationAccuracy": 0.8581081032752991,
+        "elapsedSeconds": 64.42199999990407
+      },
+      {
+        "epoch": 7,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.06662489089738721,
+        "validationLoss": 0.5154661536216736,
+        "validationAccuracy": 0.8716216087341309,
+        "elapsedSeconds": 74.64099999994505
+      },
+      {
+        "epoch": 8,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.0332859459046561,
+        "validationLoss": 0.5396608710289001,
+        "validationAccuracy": 0.8851351141929626,
+        "elapsedSeconds": 84.78099999995902
+      },
+      {
+        "epoch": 9,
+        "sampledTrainingVariants": 520,
+        "trainingLoss": 0.03754427141371147,
+        "validationLoss": 0.6050229668617249,
+        "validationAccuracy": 0.8783783912658691,
+        "elapsedSeconds": 95.10899999993853
+      }
+    ],
+    "torch": "2.6.0+cpu",
+    "transformers": "4.49.0",
+    "sourceModelManifest": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "license": "Apache-2.0",
+      "assets": [
+        {
+          "file": "tokenizer.json",
+          "bytes": 466247,
+          "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+        },
+        {
+          "file": "config.json",
+          "bytes": 612,
+          "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+        },
+        {
+          "file": "README.md",
+          "bytes": 10502,
+          "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+        },
+        {
+          "file": "model.safetensors",
+          "bytes": 90868376,
+          "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db"
+        }
+      ]
+    },
+    "scope": "Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. One variant per available class in each original group per epoch. No phrase rules or answers in inference."
+  },
+  "exportRecovery": {
+    "retryFp32IdenticalToFailedPartial": true,
+    "reason": "Windows sandbox denied ONNX quantization temporary-file access after fitting. No completed profile exists. Preserve the partial model, retry identical training and selection in a fresh output directory outside the sandbox."
+  },
+  "seenEvaluationIdentity": {
+    "file": "artifacts\\intent-classifier\\sampling-v64\\evaluation-seen-v62.json",
+    "sha256": "60a392d733da2eddbcde786f2327c7d8af4ec1033e6b66e15c0012bc015efe62"
+  },
+  "seenEvaluation": {
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "4794f1d6ecdec6079ff51b04a3241b35e06978cc7d128fc579752f124b6f12d4",
+      "trainedModelSha256": "b2c99e8a42ae72baeeb74a85467a86ce6f3d433c34cebf93382897711ce857c7"
+    },
+    "thresholds": [
+      {
+        "threshold": 0.5,
+        "selected": 48,
+        "falseEarly": 28,
+        "missedReadyRequests": 4,
+        "ignoredBackground": 15,
+        "falseBackgroundIgnore": 2,
+        "missedBackground": 20
+      },
+      {
+        "threshold": 0.7,
+        "selected": 35,
+        "falseEarly": 15,
+        "missedReadyRequests": 4,
+        "ignoredBackground": 9,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 24
+      },
+      {
+        "threshold": 0.8,
+        "selected": 32,
+        "falseEarly": 12,
+        "missedReadyRequests": 4,
+        "ignoredBackground": 9,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 24
+      },
+      {
+        "threshold": 0.9,
+        "selected": 24,
+        "falseEarly": 6,
+        "missedReadyRequests": 6,
+        "ignoredBackground": 5,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 28
+      },
+      {
+        "threshold": 0.95,
+        "selected": 20,
+        "falseEarly": 4,
+        "missedReadyRequests": 8,
+        "ignoredBackground": 3,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 30
+      }
+    ],
+    "latencyMs": {
+      "median": 4.593199992086738,
+      "p95": 5.870199995115399,
+      "max": 8.131999988108873
+    }
+  },
+  "baselineEvaluationIdentity": {
+    "file": "artifacts\\intent-classifier\\asr-corpus-v62\\evaluation-v62-fp32.json",
+    "sha256": "636d674cd529ebcde3b9dd1ab89313b92428d984776c8abb49a3d79360781b8e"
+  },
+  "baselineEvaluation": {
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "bf1ee280e2f3187404b0ea0d84213a2015c413731c6dc3e5ed2b5f41fe17e3d2",
+      "trainedModelSha256": "19480a7c470b4e1584328306c28547e46d50360f6a12372bee6bd6c0e01aeb2a"
+    },
+    "thresholds": [
+      {
+        "threshold": 0.5,
+        "selected": 46,
+        "falseEarly": 27,
+        "missedReadyRequests": 5,
+        "ignoredBackground": 21,
+        "falseBackgroundIgnore": 3,
+        "missedBackground": 15
+      },
+      {
+        "threshold": 0.7,
+        "selected": 29,
+        "falseEarly": 11,
+        "missedReadyRequests": 6,
+        "ignoredBackground": 13,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 20
+      },
+      {
+        "threshold": 0.8,
+        "selected": 24,
+        "falseEarly": 7,
+        "missedReadyRequests": 7,
+        "ignoredBackground": 9,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 24
+      },
+      {
+        "threshold": 0.9,
+        "selected": 9,
+        "falseEarly": 2,
+        "missedReadyRequests": 17,
+        "ignoredBackground": 4,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 29
+      },
+      {
+        "threshold": 0.95,
+        "selected": 1,
+        "falseEarly": 0,
+        "missedReadyRequests": 23,
+        "ignoredBackground": 2,
+        "falseBackgroundIgnore": 0,
+        "missedBackground": 31
+      }
+    ],
+    "latencyMs": {
+      "median": 4.471449996344745,
+      "p95": 6.380900042131543,
+      "max": 8.004799950867891
+    }
+  },
+  "seenEvaluationCases": 108,
+  "seenReadyCases": 24,
+  "limitations": [
+    "The 0.95 assessment threshold was frozen before this fit. Other thresholds are descriptive, not a new policy selection.",
+    "Fragment decisions are not actual cloud-request counts: this evaluation does not enforce runtime cadence, stability, acoustic quiet, floor budgets or final validation.",
+    "CPU inference p95 uses the evaluator floor-index convention, whereas interview evidence uses nearest-rank sample p95.",
+    "Synthetic isolated annotations and independent assistant review are not human ground truth.",
+    "FP32 preserved export predictions. The INT8 alternative changed one development prediction and is not used for this assessment.",
+    "More ready selections on seen data also produced more premature-ready decisions; this result alone does not justify enabling the gate."
+  ],
+  "productionProfileChanges": false,
+  "productionProfileSha256AtRecording": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+}

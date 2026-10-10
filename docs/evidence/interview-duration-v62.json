@@ -391,5 +391,33 @@
       },
       "requestedHourCompleted": false
     }
+  },
+  "implementationVerification": {
+    "acceptanceUnitTests": {
+      "passed": 128,
+      "ignored": 14
+    },
+    "defaultUnitTests": {
+      "passed": 127,
+      "ignored": 14
+    },
+    "nodeMetricsDurationRetryTests": 8,
+    "asrPreparationAndSplitTests": 7,
+    "embeddedReleaseBuild": "cargo build --release --features tauri/custom-protocol --bin meeting-copilot",
+    "scope": "Local contract tests and an embedded release build; not proof of live provider correctness, hour-long coverage or achieved latency."
+  },
+  "deployment": {
+    "updatedAt": "2026-10-10T15:56:37.579Z",
+    "pid": 46960,
+    "executable": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\latency-app\\meeting-copilot-latency.exe",
+    "binarySha256": "4ef5d289ba880307e4eabdd39bf84a2b0efa4881f235f2afa9dcd7f2af600dc3",
+    "debug": false,
+    "active": false,
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+    "settingsPreserved": true,
+    "scope": "Verified idle embedded release after the ASR repair and acceptance profile isolation. All saved settings preserved. This deployed binary is not the measured interview binary; no post-refresh live model result is claimed."
   }
 }

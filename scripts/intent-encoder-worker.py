@@ -114,6 +114,9 @@ class FineTunedClassifier:
             if len(raw)!=asset['bytes'] or hashlib.sha256(raw).hexdigest()!=asset['sha256']:
                 raise ValueError('Fine-tuned asset verification failed')
         self.temperature=float(head['temperature'])
+        self.context_window=head.get('contextWindow','tail')
+        if self.context_window!=('head-tail' if head['featureSchema']=='finetuned-joint-readiness-v2' else 'tail'):
+            raise ValueError('Classifier context window does not match feature schema')
         if not np.isfinite(self.temperature) or not 0.01<=self.temperature<=100:
             raise ValueError('Invalid classifier temperature')
         self.tokenizer=Tokenizer.from_file(str(root/'tokenizer.json'))
@@ -129,7 +132,7 @@ class FineTunedClassifier:
     def classify(self,text,context=''):
         started=time.perf_counter()
         try:
-            inputs=joint_inputs(self.tokenizer,text,context)
+            inputs=joint_inputs(self.tokenizer,text,context,self.context_window)
             logits=self.session.run(None,inputs)[0]
             if logits.shape!=(1,3) or not np.isfinite(logits).all():
                 raise ValueError('Invalid classifier logits')
@@ -148,7 +151,7 @@ class Classifier:
         if head['classes']!=['background','unfinished_request','ready_request']:
             raise ValueError('Classifier profile class order is invalid')
         self.tuned=None
-        if head['featureSchema']=='finetuned-joint-readiness-v1':
+        if head['featureSchema'] in ('finetuned-joint-readiness-v1','finetuned-joint-readiness-v2'):
             self.tuned=FineTunedClassifier(models,head,hashlib.sha256(data).hexdigest(),threads)
             self.identity=self.tuned.identity
             return

@@ -43,9 +43,12 @@ def main():
     parser.add_argument('--epochs',type=int,default=10)
     parser.add_argument('--batch',type=int,default=8)
     parser.add_argument('--threads',type=int,default=4)
+    parser.add_argument('--context-window',choices=['tail','head-tail'],default='tail',
+                        help='Versioned token allocation for history; current utterance is never truncated')
     parser.add_argument('--sampling',choices=['group','group-class'],default='group',
                         help='One variant per group, or one per available class in each group')
     args=parser.parse_args()
+    feature_schema='finetuned-joint-readiness-v2' if args.context_window=='head-tail' else 'finetuned-joint-readiness-v1'
     assert 1<=args.epochs<=50 and 1<=args.batch<=64 and 1<=args.threads<=16
     trainer_sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                      for name in ('train-intent-encoder.py','intent_sampling.py','intent_tokens.py')}
@@ -73,7 +76,7 @@ def main():
         for row in rows:
             assert isinstance(row['request'],bool) and isinstance(row['ready'],bool)
             assert not row['ready'] or row['request']
-            items.append((joint_inputs(tokenizer,row['text'],row.get('context','')),
+            items.append((joint_inputs(tokenizer,row['text'],row.get('context',''),args.context_window),
                 2 if row['ready'] else 1 if row['request'] else 0))
         return items
     train=encode(training['cases']);valid=encode(validation['cases'])
@@ -140,7 +143,7 @@ def main():
         return float(-np.log(np.maximum(probability[np.arange(len(valid)),labels.numpy()],1e-9)).mean())
     temperature=min(np.linspace(0.5,3.0,51),key=lambda value:nll(exported,value))
     raw=quantized.read_bytes()
-    result={'encoder':manifest['revision'],'featureSchema':'finetuned-joint-readiness-v1',
+    result={'encoder':manifest['revision'],'featureSchema':feature_schema,'contextWindow':args.context_window,
         'classes':['background','unfinished_request','ready_request'],
         'trainedModel':{'file':quantized.resolve().relative_to(Path(args.runtime_models).resolve()).as_posix(),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()},
         'temperature':float(temperature),'validationLoss':nll(exported,temperature),

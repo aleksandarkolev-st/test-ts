@@ -9,6 +9,7 @@ import { connectNativePages } from './lib/native-cdp.mjs';
 import { gradeWithRetry } from './lib/examiner-retry.mjs';
 import { interviewBudget,continueInterview,interviewStopReason } from './lib/interview-duration.mjs';
 import {runRapidInterview} from './lib/rapid-interview.mjs';
+import {runDeepAudioInterview} from './lib/deep-audio-interview.mjs';
 
 const root=process.cwd(),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const scenarioFile=process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO?path.resolve(process.env.COPILOT_NATIVE_INTERVIEW_SCENARIO):null;
@@ -106,8 +107,13 @@ if(recordedDir){
 }
 result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/mod.rs','src-tauri/src/transcription/vad.rs','src-tauri/src/transcription/nemotron.rs','src-tauri/src/meeting/questions.rs','src-tauri/src/meeting/scheduler.rs','src-tauri/src/openai/codex.rs','src-tauri/src/openai/prompts.rs','src-tauri/src/runtime.rs'].map(async file=>[file,hash(await readFile(file))])));
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
-result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs','scripts/lib/rapid-interview.mjs','scripts/lib/rapid-wave.mjs'].map(async file=>[file,hash(await readFile(file))])));
-const persist=()=>writeFile(path.join(output,'interview.json'),JSON.stringify(result,null,2));
+result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs','scripts/lib/rapid-interview.mjs','scripts/lib/rapid-wave.mjs','scripts/lib/deep-audio-interview.mjs','scripts/lib/painted-answer-recorder.mjs','scripts/play-fixture-device.ps1','scripts/synthesize-interview-question.ps1'].map(async file=>[file,hash(await readFile(file))])));
+let persistence=Promise.resolve();
+const persist=()=>{
+  const snapshot=JSON.stringify(result,null,2);
+  persistence=persistence.then(()=>writeFile(path.join(output,'interview.json'),snapshot));
+  return persistence;
+};
 const runChild=(file,args,env)=>new Promise((resolve,reject)=>{
   const child=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});let error='';
   child.stderr.on('data',chunk=>{error=(error+chunk).slice(-4000);});
@@ -199,7 +205,7 @@ try {
   for(const file of await readdir(build))if(file==='meeting-copilot.exe'||file.endsWith('.dll'))await copyFile(path.join(build,file),path.join(appDir,file));
   result.nativeBinarySha256=hash(await readFile(path.join(appDir,'meeting-copilot.exe')));result.examinerBinarySha256=hash(await readFile(examiner));
   try {await fetch('http://127.0.0.1:1420');} catch {
-    vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});
+    vite=spawn(process.execPath,['node_modules/vite/bin/vite.js',...(process.env.COPILOT_DEEP_AUDIO==='1'?['preview']:[]),'--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});
     for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');break;}catch{await sleep(100);}}
   }
   const env={...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_DATA_DIR:dataDir,WEBVIEW2_USER_DATA_FOLDER:path.join(root,'.local/native-interview-webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:`--remote-debugging-port=${port}`};
@@ -285,7 +291,10 @@ try {
   const intro='This is a technical interview. I will present hypothetical systems problems, ask you to analyze them, and keep drilling into your reasoning. Some challenges will be intentionally vague; ask for missing information rather than inventing it.';
   let offset=await eventCount();await event('started');const introEnd=await event('ended');await event('transcript',intro);
   result.introduction=await outcome(intro,offset,introEnd);await invoke('action',{action:'dismiss'});
-  if(rapidMode){
+  if(process.env.COPILOT_DEEP_AUDIO==='1'){
+    await runDeepAudioInterview({root,output,result,rounds,scenario,seedQuestion,invoke,connection,eventCount,events,runChild,persist,
+      playbackName,examiner,examinerModel,examinerEffort});
+  }else if(rapidMode){
     await runRapidInterview({root,output,result,budget,examiner,invoke,connection,event,events,eventCount,runChild,persist,realAudio,playbackName,examinerModel,examinerEffort});
   }else{
   let history=`INTERVIEWER INTRODUCTION: ${intro}\n`,question=recorded[0]?.question??seedQuestion;

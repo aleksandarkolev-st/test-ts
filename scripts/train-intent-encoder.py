@@ -43,6 +43,8 @@ def main():
     parser.add_argument('--epochs',type=int,default=10)
     parser.add_argument('--batch',type=int,default=8)
     parser.add_argument('--threads',type=int,default=4)
+    parser.add_argument('--sampling',choices=['group','group-class'],default='group',
+                        help='One variant per group, or one per available class in each group')
     args=parser.parse_args()
     assert 1<=args.epochs<=50 and 1<=args.batch<=64 and 1<=args.threads<=16
     torch.set_num_threads(args.threads);torch.set_num_interop_threads(1)
@@ -73,9 +75,8 @@ def main():
                 2 if row['ready'] else 1 if row['request'] else 0))
         return items
     train=encode(training['cases']);valid=encode(validation['cases'])
-    groups={}
-    for index,row in enumerate(training['cases']):
-        groups.setdefault(row.get('sourceGroup',row.get('sourceCase',index)),[]).append(index)
+    from intent_sampling import sample_epoch
+    groups={row.get('sourceGroup',row.get('sourceCase',index)) for index,row in enumerate(training['cases'])}
     def batch(items,indices):
         width=max(items[i][0]['input_ids'].shape[1] for i in indices)
         tensors={name:torch.as_tensor(np.concatenate([np.pad(items[i][0][name],((0,0),(0,width-items[i][0][name].shape[1]))) for i in indices],axis=0)) for name in items[0][0]}
@@ -94,7 +95,7 @@ def main():
     labels=torch.tensor([item[1] for item in valid])
     best_loss=float('inf');best=None;stale=0;epochs=[];started=time.monotonic()
     for epoch in range(args.epochs):
-        indices=[random.choice(group) for group in groups.values()];random.shuffle(indices)
+        indices=sample_epoch(training['cases'],random,args.sampling)
         model.train();total=0
         for start in range(0,len(indices),args.batch):
             selected=indices[start:start+args.batch];tensors,targets=batch(train,selected)
@@ -103,7 +104,7 @@ def main():
             loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.0);optimizer.step()
             total+=float(loss.detach())*len(selected)
         logits=predictions();loss=float(torch.nn.functional.cross_entropy(logits,labels))
-        row={'epoch':epoch+1,'trainingLoss':total/len(indices),'validationLoss':loss,
+        row={'epoch':epoch+1,'sampledTrainingVariants':len(indices),'trainingLoss':total/len(indices),'validationLoss':loss,
             'validationAccuracy':float((logits.argmax(dim=1)==labels).float().mean()),
             'elapsedSeconds':time.monotonic()-started}
         epochs.append(row);print(json.dumps(row),flush=True)
@@ -147,8 +148,10 @@ def main():
         'fp32ExportMaxLogitDifference':full_difference,'fp32ExportPredictionDisagreements':full_disagreements,
         'trainingSha256':train_sha,'validationSha256':val_sha,'trainingVariants':len(train),
         'trainingOriginalGroups':len(groups),'validationCount':len(valid),'seed':42,'selectedEpoch':selected_epoch,
-        'trainingThreads':args.threads,'epochs':epochs,'torch':torch.__version__,'transformers':transformers.__version__,
-        'sourceModelManifest':manifest,'scope':'Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. One variant per original example per epoch. No phrase rules or answers in inference.'}
+        'trainingThreads':args.threads,'sampling':args.sampling,'epochs':epochs,'torch':torch.__version__,'transformers':transformers.__version__,
+        'sourceModelManifest':manifest,'scope':'Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. '
+            + ('One variant per original group per epoch. ' if args.sampling=='group' else 'One variant per available class in each original group per epoch. ')
+            + 'No phrase rules or answers in inference.'}
     (output/'profile.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     full_raw=full.read_bytes()
     full_temperature=min(np.linspace(0.5,3.0,51),key=lambda value:nll(full_logits,value))

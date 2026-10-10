@@ -73,6 +73,33 @@ are correlated diagnostics from previously used training groups, not held-out
 accuracy measurements or human ground truth. No new profile was trained or
 promoted. Details and identities are in [the evidence](evidence/intent-asr-v61.json).
 
+The [v62 evidence](evidence/intent-asr-v62.json) records a complete capture of
+90 utterances from 30 fresh episode groups, producing 1,480 changed candidates.
+Isolated Luna Fast/low annotation covered 360 sampled fragments in 24 fresh-thread
+batches. Independent assistant review corrected 77 labels and excluded 35
+ambiguous fragments. This remains synthetic supervision, not human ground truth.
+Twenty groups contributed training fragments; ten reserved groups supplied 108
+evaluation fragments, including 24 ready requests. Group isolation and four
+excluded exact training-text overlaps are recorded in the split audit.
+
+Fine-tuning used 991 training variants across 390 original groups. Only the
+previous development corpus selected epoch five and the FP32 temperature of 1.4;
+the fresh evaluation corpus selected neither. FP32 export preserved predictions
+and had a maximum logit difference below 0.000005. On fresh evaluation, CPU
+inference took 4.47 ms median and 6.38 ms reported p95. At the prospectively fixed
+0.95 threshold, the new model selected one of 24 ready requests with zero false
+early selections; the previous v57 model selected none. At 0.9, the new model
+selected nine fragments, two incorrectly early. These results provide too little
+coverage for promotion. The default profile remains unchanged.
+
+`train-intent-encoder.py --sampling group-class` is an offline training option
+that samples one variant from each available class within each original group
+per epoch. It lets the encoder see the group's different conversational intents
+without sampling all correlated variants or adding live text rules. The existing
+`group` sampling remains the default. Profiles record the sampling policy and
+each epoch's sampled count. This option has data-contract tests; a new model and
+fresh independent assessment are required before any performance claim.
+
 This utility excludes WASAPI capture, microphone interference, monitor rendering,
 answer generation, and full application-state parity. It does not measure time to
 the first answer word or prove a latency improvement. The near-instantaneous

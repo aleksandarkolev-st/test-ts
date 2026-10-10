@@ -1,0 +1,426 @@
+{
+  "scope": "Fresh synthetic speech paced through actual Nemotron/VAD. Isolated signed-in Luna annotations and independent assistant review, not human ground truth. Evaluation groups held out of fitting, epoch, temperature and threshold selection. No live phrase routing or model promotion.",
+  "artifacts": [
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/plan.json",
+      "sha256": "79754b0aed2262cbf3b5970a791ef44bd9b2fb7dad532b447c41c1546a454610",
+      "bytes": 1656
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/manifest.json",
+      "sha256": "d9f9b6b08c1c1cc200363d9c4743053b9af0e184b76358ff100e91bc3ff2eb30",
+      "bytes": 25092
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/sources.json",
+      "sha256": "e98a19c79d881a4ae2ce1e160f40aea139070d16aba59f2e471c48d9fc310465",
+      "bytes": 1061
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/capture-repaired.jsonl",
+      "sha256": "d45310fa743f377bc30d4ec6d3af9b5a9904df1eeabbbc1d41d39df4edd4fcb4",
+      "bytes": 1085740
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/fragments-repaired.json",
+      "sha256": "ec5fdf05bafe1d7ca723c62b3ea93ee4ad4358dd30455ab312b636e5b251b578",
+      "bytes": 192443
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/labels-repaired.json",
+      "sha256": "381c1ab3bfef8cdab39a2a9574eab37a7de79156d6c822a63f0c9ab989fb7b1e",
+      "bytes": 240263
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/review-repaired.json",
+      "sha256": "b9c3d1694e6303a55db035b5deac1c8b712c3f160e8780540554e6ea4891ed6e",
+      "bytes": 36283
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/prefixes-reviewed.json",
+      "sha256": "a50a3d6a01a6e9c6cd07d3f7165bbb1f06a9545426094f39bad3c7e9fb06ee4d",
+      "bytes": 278422
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/split/audit.json",
+      "sha256": "efb35c53be9b8c1fd52a08d72523c863dff4ae6629e1976b557ce75f9a92facf",
+      "bytes": 3714
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/split/training.json",
+      "sha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+      "bytes": 420941
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/split/evaluation.json",
+      "sha256": "5725563d0e94babb655e89e9fc9e86ecee2fcdf34129781b060d87e5190c1c78",
+      "bytes": 85158
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/evaluation-v57-fp32.json",
+      "sha256": "5954c846d4597e368b6a20e9ceeb29b584aa29e1ed6a7b12966dff2c286fc4b4",
+      "bytes": 116681
+    },
+    {
+      "file": "artifacts/intent-classifier/asr-corpus-v62/evaluation-v62-fp32.json",
+      "sha256": "636d674cd529ebcde3b9dd1ab89313b92428d984776c8abb49a3d79360781b8e",
+      "bytes": 116696
+    }
+  ],
+  "capture": {
+    "audioFrameMs": 10,
+    "chunkMs": 160,
+    "collectorSha256": "4f8aea4f857fa7db8ca094c0c02d1440942c52dd7e828cd15237814e1c0d1142",
+    "detectorSourceSha256": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+    "manifestSha256": "d9f9b6b08c1c1cc200363d9c4743053b9af0e184b76358ff100e91bc3ff2eb30",
+    "modelSha256": "d9a01898d2a611c8764e23a1c2f45e70bbd5a425dc4de93692ac951dd603812d",
+    "nemotronSourceSha256": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+    "runtimeSha256": "2ac2e3d697399fdbc6965a6e59ec3324a4f78b811af8015590e343e292691f19",
+    "schemaVersion": 2,
+    "scope": "Offline ASR data, no answer or classifier inference. Real-time paced recorded PCM through production Nemotron and VAD; excludes WASAPI, microphone, monitor rendering, answer latency and full application-state parity. Context is caller-supplied previous conversation and never sent to ASR. No labels are inherited from future words.",
+    "type": "capture.started",
+    "utteranceCount": 90,
+    "vadSourceSha256": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca"
+  },
+  "split": {
+    "scope": "Offline isolated ASR supervision. Fresh evaluation groups are excluded from training and from epoch, temperature, threshold and runtime-policy selection. Synthetic model annotations require review; not human certification or a production promotion.",
+    "freshTrainingVariants": 217,
+    "freshEvaluationVariants": 108,
+    "exactTextOverlapsExcludedFromTraining": 4,
+    "freshTrainingGroups": [
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:0",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:1",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:10",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:11",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:12",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:13",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:14",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:15",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:16",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:17",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:18",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:19",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:2",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:3",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:4",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:5",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:6",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:7",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:8",
+      "7ef2aa4245169677e22799589b6ad3a8fe8a63dc0eb016c8148526f1587b83f5:episode:9"
+    ],
+    "freshEvaluationGroups": [
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:0",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:1",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:2",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:3",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:4",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:5",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:6",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:7",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:8",
+      "e72d1c2b0ba912e421607f42399b253f15851d522ed118949b76a07687ff50e6:episode:9"
+    ],
+    "inputs": {
+      "sources": {
+        "file": "artifacts/intent-classifier/asr-corpus-v62/sources.json",
+        "sha256": "e98a19c79d881a4ae2ce1e160f40aea139070d16aba59f2e471c48d9fc310465"
+      },
+      "prefixes": {
+        "file": "artifacts/intent-classifier/asr-corpus-v62/prefixes-reviewed.json",
+        "sha256": "a50a3d6a01a6e9c6cd07d3f7165bbb1f06a9545426094f39bad3c7e9fb06ee4d"
+      },
+      "base": {
+        "file": "artifacts/intent-classifier/prefix-training-v57.json",
+        "sha256": "4a19cbbd720e18bc931997cb58efaa1e0b59e2539942a120b4defbd700800a2b"
+      },
+      "development": {
+        "file": "artifacts/intent-classifier/prefix-validation-v57.json",
+        "sha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9"
+      }
+    }
+  },
+  "annotation": {
+    "model": "gpt-6-luna",
+    "tier": "fast",
+    "effort": "low",
+    "calls": 24,
+    "sampledFragments": 360,
+    "retainedFragments": 325,
+    "reviewScope": "Selective independent assistant review of isolated current words and supplied prior context; no full source utterance or source intent is used. Synthetic supervision, not human certification. Corrections are offline evidence only and never runtime phrase routing.",
+    "corrections": 77,
+    "ambiguousExcluded": 2
+  },
+  "training": {
+    "profile": {
+      "file": ".local/intent-encoder/finetuned-asr-v62/profile.fp32.json",
+      "sha256": "bf1ee280e2f3187404b0ea0d84213a2015c413731c6dc3e5ed2b5f41fe17e3d2",
+      "bytes": 3883
+    },
+    "metadata": {
+      "encoder": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "classes": [
+        "background",
+        "unfinished_request",
+        "ready_request"
+      ],
+      "trainedModel": {
+        "file": "finetuned-asr-v62/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "19480a7c470b4e1584328306c28547e46d50360f6a12372bee6bd6c0e01aeb2a"
+      },
+      "temperature": 1.4,
+      "validationLoss": 0.5196805596351624,
+      "validationAccuracy": 0.7837837837837838,
+      "maxExportLogitDifference": 4.902482032775879e-06,
+      "exportPredictionDisagreements": 0,
+      "fp32ExportMaxLogitDifference": 4.902482032775879e-06,
+      "fp32ExportPredictionDisagreements": 0,
+      "trainingSha256": "8cc2263a9fbb161e45c56159fe19c03304bafd183b4d1f4d297f3001dbe9ba86",
+      "validationSha256": "9c3184c2a789c75428584c46154d41c03d51d5eae61453a638126a9acdad80d9",
+      "trainingVariants": 991,
+      "trainingOriginalGroups": 390,
+      "validationCount": 148,
+      "seed": 42,
+      "selectedEpoch": 5,
+      "trainingThreads": 4,
+      "epochs": [
+        {
+          "epoch": 1,
+          "trainingLoss": 1.04990593286661,
+          "validationLoss": 1.0491440296173096,
+          "validationAccuracy": 0.4189189076423645,
+          "elapsedSeconds": 12.827999999979511
+        },
+        {
+          "epoch": 2,
+          "trainingLoss": 0.7978255742635483,
+          "validationLoss": 0.8789921402931213,
+          "validationAccuracy": 0.6013513803482056,
+          "elapsedSeconds": 21.375
+        },
+        {
+          "epoch": 3,
+          "trainingLoss": 0.4692905272428806,
+          "validationLoss": 0.7416752576828003,
+          "validationAccuracy": 0.6486486196517944,
+          "elapsedSeconds": 30.015999999945052
+        },
+        {
+          "epoch": 4,
+          "trainingLoss": 0.2876361140073874,
+          "validationLoss": 0.5890294909477234,
+          "validationAccuracy": 0.7635135054588318,
+          "elapsedSeconds": 37.95299999997951
+        },
+        {
+          "epoch": 5,
+          "trainingLoss": 0.1924598577695015,
+          "validationLoss": 0.5479814410209656,
+          "validationAccuracy": 0.7837837934494019,
+          "elapsedSeconds": 46.04700000002049
+        },
+        {
+          "epoch": 6,
+          "trainingLoss": 0.10577924135021674,
+          "validationLoss": 0.5992765426635742,
+          "validationAccuracy": 0.7905405163764954,
+          "elapsedSeconds": 53.85999999998603
+        },
+        {
+          "epoch": 7,
+          "trainingLoss": 0.13003677488424076,
+          "validationLoss": 0.5745463371276855,
+          "validationAccuracy": 0.8040540814399719,
+          "elapsedSeconds": 61.25
+        },
+        {
+          "epoch": 8,
+          "trainingLoss": 0.04688732334329054,
+          "validationLoss": 0.6560864448547363,
+          "validationAccuracy": 0.7972972989082336,
+          "elapsedSeconds": 68.82799999997951
+        }
+      ],
+      "torch": "2.6.0+cpu",
+      "transformers": "4.49.0",
+      "sourceModelManifest": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          },
+          {
+            "file": "model.safetensors",
+            "bytes": 90868376,
+            "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db"
+          }
+        ]
+      },
+      "scope": "Offline supervised fine-tuning. Assistant-reviewed synthetic labels; not human certification. Validation selects epoch and temperature. One variant per original example per epoch. No phrase rules or answers in inference."
+    }
+  },
+  "evaluation": {
+    "v57": {
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "cases": 108,
+      "readyRequests": 24,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 37,
+          "falseEarly": 18,
+          "missedReadyRequests": 5,
+          "ignoredBackground": 18,
+          "falseBackgroundIgnore": 3,
+          "missedBackground": 18
+        },
+        {
+          "threshold": 0.7,
+          "selected": 21,
+          "falseEarly": 6,
+          "missedReadyRequests": 9,
+          "ignoredBackground": 11,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 22
+        },
+        {
+          "threshold": 0.8,
+          "selected": 18,
+          "falseEarly": 4,
+          "missedReadyRequests": 10,
+          "ignoredBackground": 6,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 27
+        },
+        {
+          "threshold": 0.9,
+          "selected": 7,
+          "falseEarly": 2,
+          "missedReadyRequests": 19,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 29
+        },
+        {
+          "threshold": 0.95,
+          "selected": 0,
+          "falseEarly": 0,
+          "missedReadyRequests": 24,
+          "ignoredBackground": 1,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 32
+        }
+      ],
+      "latencyMs": {
+        "median": 5.507799971383065,
+        "p95": 7.4905999936163425,
+        "max": 8.018300053663552
+      }
+    },
+    "v62": {
+      "identity": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "provider": "CPUExecutionProvider",
+        "threads": 2,
+        "profileSha256": "bf1ee280e2f3187404b0ea0d84213a2015c413731c6dc3e5ed2b5f41fe17e3d2",
+        "trainedModelSha256": "19480a7c470b4e1584328306c28547e46d50360f6a12372bee6bd6c0e01aeb2a"
+      },
+      "cases": 108,
+      "readyRequests": 24,
+      "thresholds": [
+        {
+          "threshold": 0.5,
+          "selected": 46,
+          "falseEarly": 27,
+          "missedReadyRequests": 5,
+          "ignoredBackground": 21,
+          "falseBackgroundIgnore": 3,
+          "missedBackground": 15
+        },
+        {
+          "threshold": 0.7,
+          "selected": 29,
+          "falseEarly": 11,
+          "missedReadyRequests": 6,
+          "ignoredBackground": 13,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 20
+        },
+        {
+          "threshold": 0.8,
+          "selected": 24,
+          "falseEarly": 7,
+          "missedReadyRequests": 7,
+          "ignoredBackground": 9,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 24
+        },
+        {
+          "threshold": 0.9,
+          "selected": 9,
+          "falseEarly": 2,
+          "missedReadyRequests": 17,
+          "ignoredBackground": 4,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 29
+        },
+        {
+          "threshold": 0.95,
+          "selected": 1,
+          "falseEarly": 0,
+          "missedReadyRequests": 23,
+          "ignoredBackground": 2,
+          "falseBackgroundIgnore": 0,
+          "missedBackground": 31
+        }
+      ],
+      "latencyMs": {
+        "median": 4.471449996344745,
+        "p95": 6.380900042131543,
+        "max": 8.004799950867891
+      }
+    }
+  },
+  "verification": {
+    "productionProfile": {
+      "file": ".local/intent-encoder/profile.json",
+      "sha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+      "bytes": 77421
+    },
+    "promoted": false,
+    "endToEndLatencyMeasured": false,
+    "targetMet": false
+  },
+  "limitations": [
+    "Synthetic speech and model-reviewed labels are not human interview certification.",
+    "Fragments within ten held-out groups are correlated, not 108 independent conversations.",
+    "CPU inference timings exclude process startup and live scheduling.",
+    "The evaluator p95 uses sorted[int((n-1)*.95)], not the interview reporter nearest-rank quantile.",
+    "A CPU release build overlapped part of capture; max frame lateness was 40 ms.",
+    "The fixed 0.95 readiness threshold misses 23 of 24 ready fragments. Lower reported thresholds are descriptive, not selected deployment policies."
+  ]
+}

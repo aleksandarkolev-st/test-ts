@@ -143,13 +143,24 @@ impl MeetingContext {
     /// Short, plain conversation for intent classification only. This does not
     /// replace or truncate the exact context/code supplied to the answer model.
     pub fn classifier_context(&self,started:u64)->String {
-        let mut parts=self.recent.iter().rev().filter(|segment|segment.source!=super::SpeakerSource::Remote||segment.started_at<started).take(4)
-            .map(|segment|segment.text.chars().rev().take(300).collect::<String>().chars().rev().collect::<String>()).collect::<Vec<_>>();
-        parts.reverse();
         let suggestion=self.visible_answer.as_ref().filter(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer)
             .or_else(||self.answers.iter().rev().find(|(at,_,_,_)|*at<started).map(|(_,_,_,answer)|answer));
-        if let Some(answer)=suggestion {parts.push(answer.chars().rev().take(600).collect::<String>().chars().rev().collect::<String>());}
-        parts.join("\n").chars().rev().take(1200).collect::<String>().chars().rev().collect()
+        let prior=self.recent.iter().rev().filter(|segment|segment.source!=super::SpeakerSource::Remote||segment.started_at<started).take(4).collect::<Vec<_>>();
+        let answer_label="COPILOT SUGGESTION (may be unfinished or wrong): ";
+        let answer=suggestion.map(|text|format!("{answer_label}{}",bounded_excerpt(text,600-answer_label.chars().count())));
+        let history_budget=1200-answer.as_ref().map_or(0,|text|text.chars().count()+1);
+        let mut parts=Vec::new();
+        if !prior.is_empty() {
+            // Budget complete labeled excerpts, rather than tail-clipping the
+            // joined string and losing the oldest request or its provenance.
+            let per_segment=(history_budget-prior.len().saturating_sub(1))/prior.len();
+            for segment in prior.iter().rev() {
+                let label=if segment.source==super::SpeakerSource::Remote {"REMOTE: "}else{"SELF: "};
+                parts.push(format!("{label}{}",bounded_excerpt(&segment.text,per_segment.saturating_sub(label.chars().count()))));
+            }
+        }
+        if let Some(answer)=answer {parts.push(answer);}
+        parts.join("\n")
     }
     /// The current remote utterance is supplied as CURRENT QUESTION. Excluding
     /// its transcript fragments avoids treating their finalization as new facts.
@@ -187,6 +198,17 @@ impl MeetingContext {
     pub fn clear(&mut self) {
         *self = Self::default();
     }
+}
+/// Intent-only excerpts keep both setup and recent qualifications. The gap is
+/// explicit; this function never truncates the answer model's exact code.
+fn bounded_excerpt(text:&str,budget:usize)->String {
+    if text.chars().take(budget.saturating_add(1)).count()<=budget{return text.to_owned();}
+    if budget<3{return text.chars().take(budget).collect();}
+    let head=(budget-3+1)/2;
+    let tail=budget-3-head;
+    let first=text.chars().take(head).collect::<String>();
+    let last=text.chars().rev().take(tail).collect::<String>().chars().rev().collect::<String>();
+    format!("{first}\n…\n{last}")
 }
 fn select_lines(lines:&[String],budget:usize,question:&str)->String {
     let query=super::scheduler::normalized(question).split_whitespace()
@@ -229,6 +251,31 @@ pub fn conversation(segments: &[TranscriptSegment]) -> String {
 mod tests {
     use super::*;
     use crate::meeting::SpeakerSource;
+    #[test]
+    fn classifier_context_keeps_earlier_setup_and_tail_with_speaker_provenance() {
+        let mut c=MeetingContext::default();
+        c.push(seg(1,&format!("A prior request begins here. {} A prior request ends here.","details ".repeat(100))));
+        let answer=format!("Ω <= μ is the supplied assumption. {} Last qualification stays visible.","explanation ".repeat(150));
+        c.remember_answer_at("prior","Analyze",&answer,2);
+        let context=c.classifier_context(10);
+        assert!(context.contains("REMOTE: A prior request begins here."));
+        assert!(context.contains("A prior request ends here."));
+        assert!(context.contains("COPILOT SUGGESTION (may be unfinished or wrong): Ω <= μ"));
+        assert!(context.contains("Last qualification stays visible."));
+        assert!(context.chars().count()<=1200);
+        assert!(c.answer_context_for_utterance("Continue",Some(10)).contains(&answer));
+    }
+    #[test]
+    fn classifier_budget_preserves_all_available_speakers_without_tail_clipping() {
+        let mut c=MeetingContext::default();
+        for i in 1..=4 {let mut s=seg(i,&"段落 ".repeat(250));if i%2==0{s.source=SpeakerSource::Self_;}c.push(s);}
+        c.remember_answer_at("prior","Analyze",&"résumé ".repeat(200),5);
+        let context=c.classifier_context(10);
+        assert_eq!(context.matches("REMOTE: ").count(),2);
+        assert_eq!(context.matches("SELF: ").count(),2);
+        assert_eq!(context.matches("COPILOT SUGGESTION").count(),1);
+        assert!(context.chars().count()<=1200);
+    }
     #[test]
     fn current_floor_suggestions_do_not_rewrite_their_own_reference_context() {
         let mut c=MeetingContext::default();

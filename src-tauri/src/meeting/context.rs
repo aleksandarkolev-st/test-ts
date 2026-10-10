@@ -153,6 +153,7 @@ impl MeetingContext {
     }
     /// The current remote utterance is supplied as CURRENT QUESTION. Excluding
     /// its transcript fragments avoids treating their finalization as new facts.
+    /// Suggestions created on that same floor are not their own reference data.
     /// Other speakers, earlier turns, and exact suggested code remain available.
     pub fn answer_context_for_utterance(&self, question:&str,started:Option<u64>)->String {
         // Keep the archive and summary retry behavior intact; retrieval bounds
@@ -172,13 +173,14 @@ impl MeetingContext {
         let memory=select_lines(&memory,2_000,question);
         let pending=select_lines(&conversation(&pending).lines().map(String::from).collect::<Vec<_>>(),1_500,question);
         let recent=select_lines(&conversation(&recent).lines().map(String::from).collect::<Vec<_>>(),4_000,question);
-        let mut selected=self.code_history.iter().collect::<Vec<_>>();
-        for answer in self.answers.iter().skip(self.answers.len().saturating_sub(2)) {
+        let prior=|at:u64|started.is_none_or(|start|at<start);
+        let mut selected=self.code_history.iter().filter(|(at,_,_,_)|prior(*at)).collect::<Vec<_>>();
+        for answer in self.answers.iter().rev().filter(|(at,_,_,_)|prior(*at)).take(2) {
             if !selected.iter().any(|(_,id,_,_)|id==&answer.1){selected.push(answer);}
         }
         selected.sort_by_key(|(order,_,_,_)|*order);
         let mut answers=selected.into_iter().map(|(_,_,q,a)|format!("QUESTION: {q}\nSUGGESTED ANSWER:\n{a}")).collect::<Vec<_>>().join("\n\n");
-        if let Some((_,_,q,a))=&self.visible_answer{answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
+        if let Some((_,_,q,a))=self.visible_answer.as_ref().filter(|(at,_,_,_)|prior(*at)){answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
         let history=if answers.is_empty(){String::new()}else{format!("\n\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\n{answers}")};
         format!("MEETING SUMMARY (selected relevant memory)\n{memory}\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\n{pending}\n\nRECENT CONVERSATION (selected excerpts)\n{recent}{history}")
     }
@@ -227,6 +229,24 @@ pub fn conversation(segments: &[TranscriptSegment]) -> String {
 mod tests {
     use super::*;
     use crate::meeting::SpeakerSource;
+    #[test]
+    fn current_floor_suggestions_do_not_rewrite_their_own_reference_context() {
+        let mut c=MeetingContext::default();
+        let earlier="```rust\nfn evaluate(x: i32) -> i32 { x - 3 }\n```";
+        c.remember_answer_at("earlier","Implement",earlier,10);
+        c.remember_answer_at("explanation","Explain","The earlier invariant",15);
+        let before=c.answer_context_for_utterance("Trace the actual code",Some(20));
+        c.remember_visible_answer_at("current","Trace","An unfinished current draft",20);
+        assert_eq!(c.answer_context_for_utterance("Trace the actual code",Some(20)),before);
+        c.remember_answer_at("current","Trace","```rust\nlet current_guess = 123;\n```",21);
+        c.remember_answer_at("current-next","Continue","Another current guess",22);
+        assert_eq!(c.answer_context_for_utterance("Trace the actual code",Some(20)),before);
+        assert!(before.contains(earlier));assert!(before.contains("The earlier invariant"));
+        assert!(c.answer_context_for_utterance("Follow up",Some(30)).contains("current_guess"));
+        assert!(c.answer_context("Manual reference").contains("current_guess"));
+        c.remember_visible_answer_at("previous-stream","Earlier followup","Earlier unfinished code",25);
+        assert!(c.answer_context_for_utterance("Follow up",Some(30)).contains("Earlier unfinished code"));
+    }
     #[test]
     fn classifier_reference_excludes_its_own_draft_without_losing_prior_answers() {
         let mut c=MeetingContext::default();

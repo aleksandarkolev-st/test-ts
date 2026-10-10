@@ -426,3 +426,72 @@ use `summarize-latency-stages.mjs DIRECTORY` and
 and remains disabled in release. Real microphone interruptions, CUDA execution,
 near-instant response timing and general deep-interview correctness remain
 unverified or unmet.
+
+## Exact candidate availability and acoustic-end updates (v51–v53)
+
+Current-floor suggestions are now excluded from their own reference context.
+Earlier code and earlier visible unfinished answers remain available. Filtering
+before selecting the latest two prior answers prevents current drafts from
+displacing those references. Tests cover draft growth, completion, later turns
+and manual prompts. This fixes context feedback; no latency gain is attributed
+solely to it.
+
+The opt-in acceptance trace now records exact accumulated ASR candidates at actor
+receipt and the question/context identity of received answer frames. These
+timestamps measure text availability rather than audio submission. A matching
+frame establishes input identity, not correctness or permission to display an
+unconfirmed answer.
+
+A fresh six-round adaptive interview drilled from vague mixed/stale GPU batches
+into pinned-buffer overwrite experiments and exact event ordering. First-word
+latencies from speech end were **2997, 2550, 3066, 3487, 2729 and 2112 ms**;
+median **2863 ms**, including ASR. Complete recognized questions first became
+available **111–352 ms after speech end**, **473–637 ms before final ASR**.
+There is finalization delay to overlap, but these complete inputs were not
+available before speech ended. ASR finalization had a 765 ms median; retained
+first word after latest input consumption had a 1256 ms median. The latter
+includes inference, transport, framing and delivery. Rendering added 6–22 ms.
+Overlapping stages must not be summed as independent costs.
+
+The learned gate also started work for the dependent fragment “before proposing
+a fix”; high readiness confidence did not establish a complete request. The
+model grader marked rounds 3, 5 and 6 incorrect and round 4 incomplete. Independent
+review of rounds 5 and 6 found that both claimed a future event record would
+release a wait submitted before the event's first record. Such a wait captures
+the empty event state; a later record does not retarget it, so the claimed
+overwrite-before-copy order is unproven. See NVIDIA's
+[event semantics](https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html).
+The answers contain protocols rather than complete programs; no compiler or
+CUDA execution claim is made for this run.
+
+An acceptance/debug-only policy, `COPILOT_SETTLED_UPDATE=1`, permits one stable
+exact-text update of an existing hidden speculative job per observed acoustic
+end. It cannot allocate a job or publish an unconfirmed answer. Initial starts
+still use the learned gate; final ASR and renewed speech can correct or invalidate
+work. The update itself requires availability and stability, not a new classifier
+prediction. Scheduler tests verify these guards, hidden output, one update per
+end and final correction. No topic rules, canned answers or CUDA fixes enter
+the runtime.
+
+The first two public questions and saved audio were replayed with the same
+binary, source hashes, classifier and Luna Fast/low settings. Both controls
+skipped review calls between turns. Baseline first-word times were **1825 and
+2438 ms**; the experimental policy took **2591 and 2607 ms**, a mean increase
+of **468 ms**. Round 1 sent the latest input 119 ms before confirmation but
+took 2000 ms after consumption; round 2 still restarted pending work. Earlier
+sending therefore did not produce earlier retained output in this comparison.
+Two samples and differing generated contexts cannot establish a general causal
+effect or population p95. The policy remains disabled in release.
+
+The [evidence report](evidence/settled-update-v53.json) is reproduced with
+`node scripts/summarize-settled-update.mjs`, after the stage and provisional
+audits for v51–v53. Default Rust tests pass **121**, acceptance tests **122**,
+with 14 live tests ignored in each configuration. The original classifier
+profile is restored and the release classifier remains disabled. Near-instant
+timing, reliable deep-interview answers and real microphone interruptions
+remain unmet or unverified.
+
+The release build with `tauri/custom-protocol` passed. The idle release app was
+refreshed with every saved setting preserved: signed-in Codex, Luna Fast/low,
+Nemotron 160 ms and T24E390. Experimental update and trace paths are excluded
+from this release.

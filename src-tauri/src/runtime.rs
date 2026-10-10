@@ -323,6 +323,12 @@ async fn actor(
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
                         let candidate_changed=engine.detector.transcript(&segment);
+                        #[cfg(all(feature="acceptance",debug_assertions))]
+                        if segment.source==SpeakerSource::Remote&&std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
+                            emit(&app,"asr.candidate_observed",serde_json::json!({"text":engine.detector.classifier_text(),
+                                "floor":engine.detector.remote_turn_started_at,"segmentId":segment.id,
+                                "final":segment.final_,"observedAt":now}));
+                        }
                         if candidate_changed && intent_mode==meeting::intent::Mode::Existing {
                             if answers.candidate.is_none() && engine.detector.continued {
                                 if let Some(id)=resume_answer_question(&mut answers,&mut engine.context,&engine.detector.last_question,engine.detector.remote_turn_started_at){if let Some(trace)=timings.lock().unwrap().get(&id){trace.reset_answer();}}
@@ -346,6 +352,16 @@ async fn actor(
                 if let Some(id)=answer_id {if let Some(job)=answers.find_mut(&id) {
                     let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);
                     let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    if valid&&job.latency.first_word_at.is_none()&&std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
+                        if let Work::QuestionDelta(_,question,key,text)=&w {
+                            if text.chars().any(char::is_alphanumeric)&&job.accepts_stream(question,key){
+                                emit(&app,"answer.frame_received",serde_json::json!({"id":id,"question":question,"contextKey":key,
+                                    "revision":job.latency.response_revision,"confirmed":job.confirmed,"observedAt":now,
+                                    "scope":"Exact current request/context frame receipt; not answer correctness or authorization to display an unconfirmed answer."}));
+                            }
+                        }
+                    }
                     let Some(w)=gate_question_work(job,w)else{continue};
                     match w {
                         Work::NoReply(_,_,_) if valid=>{job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.buffer.clear();job.latency.completed_at=Some(now);emit(&app,"question.ignored",serde_json::json!({"id":id,"timestamp":now}));},
@@ -400,6 +416,19 @@ async fn actor(
                             while let Some(prediction)=classifier.prediction() {
                                 let payload=serde_json::json!({"id":prediction.id,"abstained":prediction.abstained,"scores":prediction.scores.as_ref().map(|scores|serde_json::json!({"request":scores.request,"ready":scores.ready})),"elapsedMs":prediction.elapsed_ms,"observedAt":now});
                                 let accepted=intent_gate.accept(prediction);emit(&app,"intent.predicted",serde_json::json!({"accepted":accepted,"prediction":payload}));
+                            }
+                            if meeting::intent::settled_update_enabled()&&!engine.detector.remote_speaking {
+                                if let Some(stopped)=engine.detector.stopped_at {
+                                    if let Some(input)=intent_gate.settled_input(now,stopped,engine.detector.remote_quiet,engine.detector.self_speaking) {
+                                        if let Some(id)=answers.update_speculative_question(input.floor,input.text) {
+                                            intent_gate.mark_settled_update(input.floor,stopped);
+                                            if let Some(job)=answers.find_mut(&id){refresh_question_context(job,&engine.context);}
+                                            if let Some(trace)=timings.lock().unwrap().get(&id){trace.reset_answer();}
+                                            update_acoustic_quiet(&mut answers,&engine.detector);
+                                            emit(&app,"intent.settled_updated",serde_json::json!({"id":id,"floor":input.floor,"stoppedAt":stopped,"timestamp":now}));
+                                        }
+                                    }
+                                }
                             }
                             if let Some(input)=intent_threshold.and_then(|threshold|intent_gate.ready_input(now,engine.detector.remote_quiet,engine.detector.self_speaking,threshold)) {
                                 if let Some(id)=answers.update_speculative_question(input.floor,input.text) {

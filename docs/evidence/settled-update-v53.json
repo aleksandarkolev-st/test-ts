@@ -1,0 +1,699 @@
+{
+  "scope": "Fresh adaptive GPU transfer interview plus a two-question controlled public audio replay. No near-instant latency or deep-interview correctness demonstrated. Model grades require independent review; microphone interruptions and physical CUDA execution are excluded.",
+  "metric": "Client receipt of the first alphanumeric character in the retained decoded/validated answer from speech end, including ASR. Exact-candidate observations use actor receipt time, not submitted audio chunk timestamps. Rendering is separate; sentence completion is not measured.",
+  "fresh": {
+    "file": "artifacts/native-interview/luna-transfer-frame-audit-v51/interview.json",
+    "sha256": "1317ff2315f453b3489b7a788238b0f25a0a63cbfac483696075d52e6c8345f8",
+    "binarySha256": "7b6be060725a05cada5f8dece940dbcf096e70df4291aa70fb3acccf4d09eb7d",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "8192ef5a852e4fadc37aa3abf0046b8803d96877279ec5c03a2a4f08d04ed520"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "42223a150546b100a736c03171e7a2914e7f1abc98394800676f24f600bd3237",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "e7af047db1bec5eb0dd97b90f11f917258aaab68d23ac7ed411997bc735fe101"
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "remoteOnly": true
+    },
+    "meanFirstWordMs": 2823.5,
+    "medianFirstWordMs": 2863,
+    "stageSummary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 6,
+        "median": 2863,
+        "max": 3487
+      },
+      "asrFinalizationFromSpeechEndMs": {
+        "count": 6,
+        "median": 765,
+        "max": 834
+      },
+      "confirmationAfterAsrMs": {
+        "count": 6,
+        "median": 16.5,
+        "max": 32
+      },
+      "foregroundSlotWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 0
+      },
+      "preparedThreadWaitMs": {
+        "count": 6,
+        "median": 0,
+        "max": 0
+      },
+      "initialStartAcknowledgementMs": {
+        "count": 6,
+        "median": 12,
+        "max": 18
+      },
+      "latestInputSentAfterConfirmationMs": {
+        "count": 6,
+        "median": 204,
+        "max": 404
+      },
+      "latestInputConsumptionWaitMs": {
+        "count": 6,
+        "median": 441,
+        "max": 611
+      },
+      "pendingAgeAtConfirmationMs": {
+        "count": 5,
+        "median": 1,
+        "max": 2159
+      },
+      "finalPendingBudgetMs": {
+        "count": 5,
+        "median": 398,
+        "max": 399
+      },
+      "firstWordAfterLatestInputConsumptionMs": {
+        "count": 6,
+        "median": 1255.5,
+        "max": 2243
+      },
+      "renderAfterFirstWordMs": {
+        "count": 6,
+        "median": 9.5,
+        "max": 22
+      },
+      "cleanupMs": {
+        "count": 4,
+        "median": 1,
+        "max": 1
+      }
+    },
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2997,
+        "firstExactCandidateFromSpeechEndMs": 111,
+        "firstExactCandidateBeforeFinalAsrMs": 637,
+        "exactFinalContextReceived": true,
+        "earlySends": 0,
+        "settledUpdates": [],
+        "restarts": 0,
+        "latestInputSentAfterConfirmationMs": 0,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 3,
+          "incorrectClaims": [],
+          "issue": "Correctly begins by clarifying the failure’s definition and boundaries, then asks about buffer ownership and GPU ordering without asserting a cause.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Before proposing a fix, what exact trace fields and controlled reproduction would you request to distinguish a staging-buffer overwrite from a batch-to-input association bug, without treating correlation as proof?",
+          "requiredParts": [
+            "Clarify what “mixed or stale” means and how it is detected.",
+            "Ask about workload boundaries and buffer ownership/reuse.",
+            "Ask about stream and synchronization ordering."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 2550,
+        "firstExactCandidateFromSpeechEndMs": 352,
+        "firstExactCandidateBeforeFinalAsrMs": 482,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 4,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 4,
+          "incorrectClaims": [],
+          "issue": "The answer specifies useful per-batch and per-buffer trace fields and controlled interventions that separate staging reuse from batch association without treating correlation as proof.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "With pinned staging memory and asynchronous HtoD, design a controlled experiment that causally tests whether overwriting the host buffer before copy completion corrupts a batch. Specify the ordering, controls, and observations that would distinguish this cause from an association bug; do not infer the DMA’s sampled bytes from timings alone.",
+          "requiredParts": [
+            "Request per-batch trace fields that identify inputs, batches, slots, buffers, and transfer/kernel stages.",
+            "Propose a controlled reproduction or intervention to distinguish staging-buffer overwrite from batch-to-input association error.",
+            "Treat observed correlation as a hypothesis rather than proof."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "correct"
+        }
+      },
+      {
+        "round": 3,
+        "firstWordFromSpeechEndMs": 3066,
+        "firstExactCandidateFromSpeechEndMs": 150,
+        "firstExactCandidateBeforeFinalAsrMs": 632,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 404,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "“Establish overwrite-before-completion by event ordering” is false: recording `copy_done` after the HtoD orders device work, but does not order a later CPU write against DMA completion. For example, enqueue HtoD of pattern A; the copy engine completes it before the CPU overwrites `h` with B; `copy_done` then completes. The destination contains A, although the proposed event-based reasoning cannot establish that the overwrite preceded completion."
+          ],
+          "issue": "The proposed experiment does not provide a valid way to establish that the host overwrite occurred before HtoD completion; CUDA event ordering alone cannot establish that host/device ordering.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A deterministic protocol to ensure the host overwrite occurs before HtoD can complete, rather than relying on event ordering."
+          ],
+          "question": "Without timing as proof, give an exact CUDA stream/event protocol that deterministically holds the HtoD until after the CPU overwrites the pinned buffer. Then specify how you verify the destination only after copy completion, and state the resulting happens-before edges.",
+          "requiredParts": [
+            "Control host-buffer reuse independently from batch-to-input association.",
+            "Use distinguishable inputs and observe copied contents or output after HtoD completion.",
+            "Establish causality without inferring DMA-sampled bytes from timings alone."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 4,
+        "firstWordFromSpeechEndMs": 3487,
+        "firstExactCandidateFromSpeechEndMs": 257,
+        "firstExactCandidateBeforeFinalAsrMs": 475,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 404,
+        "modelReview": {
+          "constraintTracking": false,
+          "difficulty": 5,
+          "incorrectClaims": [],
+          "issue": "The answer does not provide the requested deterministic protocol that gates HtoD until after the CPU overwrite; its proposed event ordering instead makes the overwrite occur after copy completion.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A gate that prevents the HtoD from starting until after the CPU overwrites the pinned buffer, with explicit happens-before edges for overwrite, gate release, HtoD, and completion."
+          ],
+          "question": "Give a two-stream protocol where the copy stream waits on a gate event before HtoD, and the CPU overwrites the pinned buffer before releasing that gate. State the exact happens-before edges and explain whether this proves corruption during an already-running DMA transfer.",
+          "requiredParts": [
+            "Specify CUDA stream/event ordering that deterministically delays HtoD until after the CPU overwrite.",
+            "Verify the destination only after HtoD completion.",
+            "State the resulting happens-before edges."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incomplete"
+        }
+      },
+      {
+        "round": 5,
+        "firstWordFromSpeechEndMs": 2729,
+        "firstExactCandidateFromSpeechEndMs": 221,
+        "firstExactCandidateBeforeFinalAsrMs": 473,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 404,
+        "modelReview": {
+          "constraintTracking": false,
+          "difficulty": 4,
+          "incorrectClaims": [
+            "The copy-stream wait is not guaranteed to wait for the later gate record. If no record of `gate` has occurred when `cudaStreamWaitEvent` is called, the wait acts as already complete; the HtoD may proceed before the CPU overwrite. Thus the claimed overwrite → gate release → HtoD ordering is not established."
+          ],
+          "issue": "The proposed event ordering does not reliably hold the HtoD until after the CPU overwrite: the wait is enqueued before any record of `gate`.",
+          "missingInformationHandled": true,
+          "omissions": [
+            "A valid ordering that ensures the event record exists before the copy-stream wait captures it."
+          ],
+          "question": "At the instant `cudaStreamWaitEvent(S, gate, 0)` is called, which event record does it wait for if none has yet been issued? Give a corrected host/API call order that guarantees overwrite-before-HtoD, and state the resulting happens-before edges.",
+          "requiredParts": [
+            "Propose a two-stream gate protocol with overwrite before HtoD.",
+            "State exact happens-before edges.",
+            "Explain whether the protocol proves corruption during an already-running DMA transfer."
+          ],
+          "unsupportedAssumption": true,
+          "verdict": "incorrect"
+        }
+      },
+      {
+        "round": 6,
+        "firstWordFromSpeechEndMs": 2112,
+        "firstExactCandidateFromSpeechEndMs": 326,
+        "firstExactCandidateBeforeFinalAsrMs": 474,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 0,
+        "latestInputSentAfterConfirmationMs": 2,
+        "modelReview": {
+          "constraintTracking": true,
+          "difficulty": 5,
+          "incorrectClaims": [
+            "The proposed call order does not guarantee overwrite-before-HtoD: `cudaStreamWaitEvent(copy, gate, 0)` is issued before any record of `gate`, so it acts as an already-satisfied wait. Recording `gate` later does not retroactively change that wait; HtoD may run before the host overwrite."
+          ],
+          "issue": "The corrected ordering is still incorrect: the copy-stream wait is enqueued before the gate event is recorded, so it cannot enforce the claimed dependency.",
+          "missingInformationHandled": true,
+          "omissions": [],
+          "question": "Now suppose serialized host calls record `gate` for generation 1, then record the same event for generation 2, and only then enqueue a copy-stream wait intended for generation 1. Which record does the wait bind to, what ordering does it establish, and how would you prevent this event-reuse scheme from releasing the wrong generation?",
+          "requiredParts": [
+            "Identify which record a stream wait issued with no prior event record observes.",
+            "Give a call order that guarantees the host overwrite precedes HtoD.",
+            "State the resulting happens-before edges."
+          ],
+          "unsupportedAssumption": false,
+          "verdict": "incorrect"
+        }
+      }
+    ]
+  },
+  "baseline": {
+    "file": "artifacts/native-interview/luna-settled-baseline-v52/interview.json",
+    "sha256": "f6843448be0d873b3d419278d48fd6791b1df5c1beccb1386ceb9a8a53df3c8c",
+    "binarySha256": "6d964bb483b2a34aefc5a646bcfeebd6bf482de3fd110c871ac33a30cc946633",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "91bb11fae27cf7068a5ebde628569fade1e561280633f265e6a10f3deafe7749"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "da16db28eec76cecdb0b4135d714e05ac71c53a063859eae64cf48a80725b666",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "1b9913f09862d80d6666508f6c10cadb9b073ecabe83842725167a00fa8d16c5"
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "settledUpdate": false,
+      "remoteOnly": true
+    },
+    "meanFirstWordMs": 2131.5,
+    "medianFirstWordMs": 2131.5,
+    "stageSummary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 2,
+        "median": 2131.5,
+        "max": 2438
+      },
+      "asrFinalizationFromSpeechEndMs": {
+        "count": 2,
+        "median": 805,
+        "max": 822
+      },
+      "confirmationAfterAsrMs": {
+        "count": 2,
+        "median": 18.5,
+        "max": 25
+      },
+      "foregroundSlotWaitMs": {
+        "count": 2,
+        "median": 0,
+        "max": 0
+      },
+      "preparedThreadWaitMs": {
+        "count": 2,
+        "median": 0,
+        "max": 0
+      },
+      "initialStartAcknowledgementMs": {
+        "count": 2,
+        "median": 12,
+        "max": 14
+      },
+      "latestInputSentAfterConfirmationMs": {
+        "count": 2,
+        "median": 1.5,
+        "max": 3
+      },
+      "latestInputConsumptionWaitMs": {
+        "count": 2,
+        "median": 264,
+        "max": 481
+      },
+      "pendingAgeAtConfirmationMs": {
+        "count": 1,
+        "median": 2159,
+        "max": 2159
+      },
+      "finalPendingBudgetMs": {
+        "count": 1,
+        "median": 0,
+        "max": 0
+      },
+      "firstWordAfterLatestInputConsumptionMs": {
+        "count": 2,
+        "median": 1042.5,
+        "max": 1120
+      },
+      "renderAfterFirstWordMs": {
+        "count": 2,
+        "median": 8.5,
+        "max": 11
+      },
+      "cleanupMs": {
+        "count": 1,
+        "median": 1,
+        "max": 1
+      }
+    },
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 1825,
+        "firstExactCandidateFromSpeechEndMs": 153,
+        "firstExactCandidateBeforeFinalAsrMs": 635,
+        "exactFinalContextReceived": true,
+        "earlySends": 0,
+        "settledUpdates": [],
+        "restarts": 0,
+        "latestInputSentAfterConfirmationMs": 0,
+        "modelReview": null
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 2438,
+        "firstExactCandidateFromSpeechEndMs": 344,
+        "firstExactCandidateBeforeFinalAsrMs": 478,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 3,
+        "modelReview": null
+      }
+    ]
+  },
+  "experiment": {
+    "file": "artifacts/native-interview/luna-settled-experiment-v53/interview.json",
+    "sha256": "0ae27eefcd28476241a1b1a2d6075f439d967ac30474aaaf341d2d30483ae077",
+    "binarySha256": "6d964bb483b2a34aefc5a646bcfeebd6bf482de3fd110c871ac33a30cc946633",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "33ca28bb669b8bbbc4a897d222e49b17fe737acfb670d32fb9f970d0f0d5d36f",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "91bb11fae27cf7068a5ebde628569fade1e561280633f265e6a10f3deafe7749"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "da16db28eec76cecdb0b4135d714e05ac71c53a063859eae64cf48a80725b666",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "c50b35aa8e014dd9897e392d51a6ca613b8e4de5ddcd7a71888fbdf73695387a",
+      "scripts/native-signed-interview.mjs": "1b9913f09862d80d6666508f6c10cadb9b073ecabe83842725167a00fa8d16c5"
+    },
+    "classifier": {
+      "profileSha256": "75acc1143573e462be2595e42d537a1334cd3ea9d6ee078d75f8745091ad00c8",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-parity-v42/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "baf1dfafa149accab883288ea9f4f41ea98bd15a18765f6f0866192b38b3a96e"
+      },
+      "threshold": 0.9,
+      "changedTextCadenceMs": 250
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": true,
+      "settledUpdate": true,
+      "remoteOnly": true
+    },
+    "meanFirstWordMs": 2599,
+    "medianFirstWordMs": 2599,
+    "stageSummary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 2,
+        "median": 2599,
+        "max": 2607
+      },
+      "asrFinalizationFromSpeechEndMs": {
+        "count": 2,
+        "median": 780,
+        "max": 903
+      },
+      "confirmationAfterAsrMs": {
+        "count": 2,
+        "median": 16,
+        "max": 16
+      },
+      "foregroundSlotWaitMs": {
+        "count": 2,
+        "median": 0,
+        "max": 0
+      },
+      "preparedThreadWaitMs": {
+        "count": 2,
+        "median": 0.5,
+        "max": 1
+      },
+      "initialStartAcknowledgementMs": {
+        "count": 2,
+        "median": 11.5,
+        "max": 12
+      },
+      "latestInputSentAfterConfirmationMs": {
+        "count": 2,
+        "median": -37.5,
+        "max": 44
+      },
+      "latestInputConsumptionWaitMs": {
+        "count": 2,
+        "median": 263.5,
+        "max": 490
+      },
+      "pendingAgeAtConfirmationMs": {
+        "count": 1,
+        "median": 360,
+        "max": 360
+      },
+      "finalPendingBudgetMs": {
+        "count": 1,
+        "median": 39,
+        "max": 39
+      },
+      "firstWordAfterLatestInputConsumptionMs": {
+        "count": 2,
+        "median": 1577,
+        "max": 2000
+      },
+      "renderAfterFirstWordMs": {
+        "count": 2,
+        "median": 7,
+        "max": 9
+      },
+      "cleanupMs": {
+        "count": 1,
+        "median": 2,
+        "max": 2
+      }
+    },
+    "rows": [
+      {
+        "round": 1,
+        "firstWordFromSpeechEndMs": 2591,
+        "firstExactCandidateFromSpeechEndMs": 184,
+        "firstExactCandidateBeforeFinalAsrMs": 473,
+        "exactFinalContextReceived": true,
+        "earlySends": 0,
+        "settledUpdates": [
+          {
+            "floor": 2982,
+            "id": "b0591172-f49d-453d-ac69-849b7defd246",
+            "stoppedAt": 12192,
+            "timestamp": 12745
+          }
+        ],
+        "restarts": 0,
+        "latestInputSentAfterConfirmationMs": -119,
+        "modelReview": null
+      },
+      {
+        "round": 2,
+        "firstWordFromSpeechEndMs": 2607,
+        "firstExactCandidateFromSpeechEndMs": 265,
+        "firstExactCandidateBeforeFinalAsrMs": 638,
+        "exactFinalContextReceived": true,
+        "earlySends": 1,
+        "settledUpdates": [
+          {
+            "floor": 16226,
+            "id": "84c6a1a2-9654-4f49-b57e-0d23ffa8b17c",
+            "stoppedAt": 28586,
+            "timestamp": 29145
+          }
+        ],
+        "restarts": 1,
+        "latestInputSentAfterConfirmationMs": 44,
+        "modelReview": null
+      }
+    ]
+  },
+  "comparisonScope": "Matched binary, runtime sources, diagnostic sources, classifier and saved public waveforms; policy differs. Two descriptive samples, not a population p95 or a general causal estimate. Fixed replay questions cannot adapt to differing answers. Review calls are skipped between replay turns.",
+  "result": "The experimental policy was slower in both replay rounds: mean 2599 ms versus 2131.5 ms, a 467.5 ms increase. Round 1 sent the latest input 119 ms before confirmation but still took 2000 ms after consumption; round 2 still restarted pending work. These observations do not isolate a causal source of the regression. The policy remains disabled in release.",
+  "contextFix": "Current-floor suggestions are excluded from their own reference context. Earlier completed code and earlier visible unfinished answers remain available. Manual prompts are unchanged. Unit tests prove context stability under current draft growth/completion; no latency gain is attributed solely to this fix.",
+  "updatePolicy": "Acceptance/debug COPILOT_SETTLED_UPDATE=1 permits one stable exact-text update of an existing hidden speculative job per observed acoustic end. It cannot start a job or publish an unconfirmed answer. Final ASR and new speech still invalidate or correct work. No intent prediction is required for this update; the learned gate still controls initial speculative starts.",
+  "independentReview": {
+    "rounds5and6": "Both answers wait on gate before its first record, then claim a future record releases that wait. CUDA event waits capture state at the call; an unrecorded event captures no work. Later records do not change the existing wait, so the claimed overwrite-before-copy ordering is unproven. Round 6 acknowledges the rule but repeats the same invalid order.",
+    "source": "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/group__CUDART__EVENT.html",
+    "readinessFailure": "An early request was started for the dependent phrase “before proposing a fix”. High readiness confidence did not imply that the request was complete.",
+    "noCompileClaim": "The six answers contain protocols rather than complete compilable programs; no compiler or CUDA-device execution certificate is claimed."
+  },
+  "checks": {
+    "rustDefaultPassed": 121,
+    "rustAcceptancePassed": 122,
+    "rustIgnored": 14
+  },
+  "classifierProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "classifierEnabledInRelease": false,
+  "settledUpdatesEnabledInRelease": false,
+  "goalAchieved": false
+}

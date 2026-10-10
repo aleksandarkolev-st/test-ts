@@ -47,6 +47,9 @@ pub fn ready_threshold() -> Option<f64> {
 pub fn background_enabled()->bool {
     cfg!(debug_assertions)&&std::env::var("COPILOT_INTENT_BACKGROUND_IGNORE").as_deref()==Ok("1")
 }
+pub fn settled_update_enabled()->bool {
+    cfg!(all(feature="acceptance",debug_assertions))&&std::env::var("COPILOT_SETTLED_UPDATE").as_deref()==Ok("1")
+}
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Input {
     pub id: u64,
@@ -78,6 +81,7 @@ pub struct Gate {
     sent_id: Option<u64>,
     prediction: Option<Prediction>,
     spent_floor: Option<u64>,
+    spent_stop: Option<(u64,u64)>,
 }
 impl Gate {
     pub fn matches(&self, floor: u64, text: &str, context: &str) -> bool {
@@ -197,6 +201,15 @@ impl Gate {
         }
         Some(input.clone())
     }
+    /// Availability only: this is not an intent or completeness prediction.
+    /// Used solely to update existing hidden work after acoustic speech end.
+    pub fn settled_input(&self,now:u64,stopped:u64,quiet:bool,self_speaking:bool)->Option<Input> {
+        let input=self.latest.as_ref()?;
+        if !quiet||self_speaking||input.floor>stopped||now<stopped
+            ||now.saturating_sub(self.changed_at)<100||self.spent_stop==Some((input.floor,stopped)){return None;}
+        Some(input.clone())
+    }
+    pub fn mark_settled_update(&mut self,floor:u64,stopped:u64){self.spent_stop=Some((floor,stopped));}
 }
 
 struct Worker {
@@ -367,6 +380,35 @@ impl Drop for Classifier {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn acoustic_end_updates_existing_hidden_work_once_without_an_intent_prediction() {
+        use crate::meeting::scheduler::Scheduler;
+        let mut gate=Gate::default();let mut scheduler=Scheduler::default();scheduler.semantic_intent=true;
+        let id=scheduler.propose("Initial request".into(),25,25,25);
+        scheduler.next(25);let job=scheduler.find_mut(&id).unwrap();job.steer_supported=true;
+        job.latency.remote_speech_started_at=Some(20);job.buffer="Old hidden answer".into();job.latency.first_word_at=Some(30);
+        gate.observe(20,"Complete changed request".into(),"Earlier reference".into(),100);
+        assert!(gate.settled_input(150,90,true,false).is_none());
+        assert!(gate.settled_input(200,90,false,false).is_none());
+        assert!(gate.settled_input(200,90,true,true).is_none());
+        let input=gate.settled_input(200,90,true,false).unwrap();
+        assert_eq!(scheduler.update_speculative_question(input.floor,input.text),Some(id.clone()));
+        gate.mark_settled_update(input.floor,90);
+        assert_eq!(scheduler.jobs.len(),1);assert_eq!(scheduler.active(),1);
+        assert!(scheduler.visible().is_none());assert!(scheduler.jobs[0].buffer.is_empty());
+        gate.observe(20,"Later final correction".into(),"Earlier reference".into(),260);
+        assert!(gate.settled_input(400,90,true,false).is_none());
+        assert!(gate.settled_input(400,410,true,false).is_none());
+        assert!(gate.settled_input(500,410,true,false).is_some());
+        let final_id=scheduler.confirm("Later final correction".into(),500,410,490);
+        assert_ne!(final_id,id);assert!(scheduler.find_mut(&id).unwrap().cancel.is_cancelled());
+        let final_job=scheduler.find_mut(&final_id).unwrap();
+        assert_eq!(final_job.question.text,"Later final correction");assert!(!final_job.cancel.is_cancelled());
+        assert!(scheduler.update_speculative_question(20,"Unconfirmed stale text".into()).is_none());
+        gate.invalidate();assert!(gate.settled_input(600,410,true,false).is_none());
+        gate.observe(700,"Next floor".into(),String::new(),700);
+        assert!(gate.settled_input(800,410,true,false).is_none());
+    }
     use super::*;
     fn prediction(id: u64) -> Prediction {
         Prediction {

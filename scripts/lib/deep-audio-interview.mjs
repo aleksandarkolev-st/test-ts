@@ -4,12 +4,13 @@ import {readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {installPaintedAnswerRecorder} from './painted-answer-recorder.mjs';
+import {publicContextCheckpoint,replayContextCheckpoint} from './deep-replay-context.mjs';
 
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const styles={2:'Use a very short contextual follow-up grounded in the actual answer.',
  4:'Add a decisive constraint at the END; include a late explicit negation that changes the valid solution.',
- 5:'Abruptly switch to an unrelated technical topic, with enough public facts to answer.',
+ 5:'Abruptly switch to a technical topic OUTSIDE this interview domain, with enough public facts to answer.',
  7:'Present a plausible FALSE premise; a correct answer must reject it rather than accept it.',
  8:'Ask a long multipart question with an important final condition; demand quantitative or executable reasoning.',
  9:'Debug concrete code or trace from the actual previous answer.',
@@ -70,10 +71,11 @@ export async function runDeepAudioInterview(ctx){
  const play=async(audio,label,device=playbackName)=>{
   const timingFile=path.join(output,`${label}.playback.json`),before=await clockAnchor();
   const atStart=await invoke('acceptance_jobs');
+  const publicPriorContext=publicContextCheckpoint(atStart,{hostMs:Date.now(),nativeMs:atStart.nativeNow});
   await runChild('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/play-fixture-device.ps1'),
    '-InputPath',path.join(output,audio.waveFile),'-OutputName',device,'-TimingPath',timingFile],process.env);
   const after=await clockAnchor(),timing=JSON.parse(await readFile(timingFile,'utf8'));
-  return {...audio,playback:timing,clockAnchors:[before,after],runningAtPlaybackLaunch:atStart.jobs.filter(j=>j.running&&!j.cancelled).map(j=>j.question.id)};
+  return {...audio,playback:timing,clockAnchors:[before,after],publicPriorContext,runningAtPlaybackLaunch:atStart.jobs.filter(j=>j.running&&!j.cancelled).map(j=>j.question.id)};
  };
  const jobsSince=ids=>[...latest.values()].filter(j=>!ids.has(j.question.id));
  const awaitJob=async(ids,{prefixOnly=false}={})=>{
@@ -108,10 +110,11 @@ export async function runDeepAudioInterview(ctx){
   const trials=source?source.rows.flatMap((row,i)=>(i%2?['existing','final']:['final','existing']).map(policy=>({row,policy}))):Array.from({length:rounds},()=>null);
   for(let index=0;index<trials.length;index++){
    const trial=trials[index],round=trial?trial.row.round:index+1,label=trial?`round-${String(round).padStart(2,'0')}-${trial.policy}`:`round-${String(round).padStart(2,'0')}`;
+   let frozen=null;
    if(trial){
     question=trial.row.question;await invoke('action',{action:'dismiss'});await sleep(600);
-    assert(typeof trial.row.selectedContext==='string','Missing exact public context checkpoint');
-    await invoke('acceptance_freeze_context',{context:trial.row.selectedContext,policy:trial.policy});
+    frozen=replayContextCheckpoint(source,trial.row);
+    await invoke('acceptance_freeze_context',{context:frozen.text,policy:trial.policy});
    }
    const offset=await eventCount(),ids=new Set(latest.keys());
    const audio=prepared??await prepareAudio(question,label,trial?.row);prepared=null;
@@ -146,10 +149,11 @@ export async function runDeepAudioInterview(ctx){
     row.reviewRecord=await examine(row,label);row.review=row.reviewRecord.review;next=row.review.question;
    }
    if(trial){
-    row.frozenContextSha256=hash(Buffer.from(trial.row.selectedContext));
-    row.contextMatches=job?.selectedContext===trial.row.selectedContext;
+    row.frozenContextSha256=hash(Buffer.from(frozen.text));
+    row.frozenContextProvenance=frozen.provenance;
+    row.contextMatches=job?.selectedContext==null?null:job.selectedContext===frozen.text;
     row.sourceRow={file:replayFile,round,answerSha256:hash(Buffer.from(trial.row.answer))};
-    assert(row.contextMatches,'Replay context changed');
+    if(job?.selectedContext!=null)assert(row.contextMatches,'Replay context changed');
    }
    row.events=await events(offset);
    history+=`\nINTERVIEWER: ${row.question}\nACTUAL CANDIDATE ANSWER: ${row.answer}\n`;

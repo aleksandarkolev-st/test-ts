@@ -79,7 +79,7 @@ if(result.intentMode==='early'){
   assert(Number.isFinite(threshold)&&threshold>=0&&threshold<=1,'Intent readiness threshold must be a bounded probability');
   const profile=await readFile('.local/intent-encoder/profile.json');
   const head=JSON.parse(profile);
-  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),featureSchema:head.featureSchema,trainedModel:head.trainedModel??null,threshold,changedTextCadenceMs:250};
+  result.intentClassifier={profileSha256:hash(profile),encoder:JSON.parse(await readFile('.local/intent-encoder/manifest.json','utf8')),featureSchema:head.featureSchema,trainedModel:head.trainedModel??null,threshold,changedTextCadenceMs:250,quietPriority:process.env.COPILOT_INTENT_QUIET_PRIORITY==='1'};
 }
 result.acousticRefinements=result.intentMode==='early'||process.env.COPILOT_ACOUSTIC_REFINE==='1';
 result.backgroundSuppression=result.intentMode==='early'&&process.env.COPILOT_INTENT_BACKGROUND_IGNORE==='1';

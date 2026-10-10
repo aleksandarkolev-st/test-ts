@@ -50,6 +50,9 @@ pub fn background_enabled()->bool {
 pub fn settled_update_enabled()->bool {
     cfg!(all(feature="acceptance",debug_assertions))&&std::env::var("COPILOT_SETTLED_UPDATE").as_deref()==Ok("1")
 }
+pub fn quiet_priority_enabled()->bool {
+    cfg!(all(feature="acceptance",debug_assertions))&&std::env::var("COPILOT_INTENT_QUIET_PRIORITY").as_deref()==Ok("1")
+}
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Input {
     pub id: u64,
@@ -82,6 +85,8 @@ pub struct Gate {
     prediction: Option<Prediction>,
     spent_floor: Option<u64>,
     spent_stop: Option<(u64,u64)>,
+    quiet_priority_spent: bool,
+    last_submission_prioritized: bool,
 }
 impl Gate {
     pub fn matches(&self, floor: u64, text: &str, context: &str) -> bool {
@@ -109,18 +114,29 @@ impl Gate {
         self.sequence += 1;
         self.latest = None;
         self.prediction = None;
+        self.quiet_priority_spent = false;
     }
     pub fn request(&mut self, now: u64) -> Option<Input> {
+        self.request_with_quiet(now,false,false)
+    }
+    /// One stable-text cadence bypass per acoustic pause, not per ASR update.
+    /// Only classification is expedited; early generation still needs an exact
+    /// accepted prediction, stability, silence and the ordinary readiness gate.
+    pub fn request_with_quiet(&mut self,now:u64,quiet:bool,priority_enabled:bool)->Option<Input> {
+        if !quiet {self.quiet_priority_spent=false;}
         let input = self.latest.as_ref()?;
-        if self.sent_id == Some(input.id)
-            || self.sent_at.is_some_and(|at| now.saturating_sub(at) < 250)
-        {
-            return None;
-        }
+        if self.sent_id == Some(input.id) {return None;}
+        let before_cadence=self.sent_at.is_some_and(|at|now.saturating_sub(at)<250);
+        let prioritized=before_cadence&&priority_enabled&&quiet&&!self.quiet_priority_spent
+            &&now.saturating_sub(self.changed_at)>=100;
+        if before_cadence&&!prioritized{return None;}
+        if prioritized {self.quiet_priority_spent=true;}
+        self.last_submission_prioritized=prioritized;
         self.sent_id = Some(input.id);
         self.sent_at = Some(now);
         Some(input.clone())
     }
+    pub fn last_submission_prioritized(&self)->bool {self.last_submission_prioritized}
     pub fn accept(&mut self, prediction: Prediction) -> bool {
         if self
             .latest
@@ -433,6 +449,51 @@ mod tests {
         }
         assert_eq!(gate.request(250).unwrap().text, "249");
         assert!(gate.request(500).is_none());
+    }
+    #[test]
+    fn quiet_priority_is_stable_once_per_pause_and_does_not_authorize_generation() {
+        let mut gate=Gate::default();
+        gate.observe(1,"initial".into(),"".into(),0);
+        let initial=gate.request_with_quiet(0,false,true).unwrap();
+        gate.observe(1,"changed".into(),"".into(),100);
+        assert!(gate.request_with_quiet(199,true,true).is_none());
+        let fast=gate.request_with_quiet(200,true,true).unwrap();
+        assert!(gate.last_submission_prioritized());
+        assert!(!gate.accept(prediction(initial.id)));
+        assert!(gate.early(200,true,false,0.95).is_none());
+        assert!(gate.accept(prediction(fast.id)));
+        assert!(gate.early(200,false,false,0.95).is_none());
+        assert!(gate.early(200,true,true,0.95).is_none());
+        assert_eq!(gate.early(200,true,false,0.95).unwrap().id,fast.id);
+        assert!(gate.request_with_quiet(220,true,true).is_none());
+        gate.observe(1,"later condition".into(),"".into(),210);
+        assert!(gate.request_with_quiet(310,true,true).is_none());
+        assert!(gate.request_with_quiet(450,true,true).is_some());
+        assert!(!gate.last_submission_prioritized());
+        // The pause remains spent after an ordinary due submission.
+        gate.observe(1,"still changing".into(),"".into(),460);
+        assert!(gate.request_with_quiet(560,true,true).is_none());
+        // Renewed speech rearms the classification budget, not the job budget.
+        assert!(gate.request_with_quiet(570,false,true).is_none());
+        assert!(gate.request_with_quiet(580,true,true).is_some());
+        assert!(gate.last_submission_prioritized());
+        assert!(gate.early(580,true,false,0.95).is_none());
+    }
+    #[test]
+    fn disabled_quiet_priority_keeps_cadence_and_invalidation_discards_old_results() {
+        let mut gate=Gate::default();
+        gate.observe(1,"initial".into(),"".into(),0);
+        gate.request_with_quiet(0,false,true).unwrap();
+        gate.observe(1,"stable".into(),"".into(),100);
+        assert!(gate.request_with_quiet(200,true,false).is_none());
+        let sent=gate.request_with_quiet(200,true,true).unwrap();
+        gate.invalidate();
+        gate.observe(2,"new turn".into(),"changed reference".into(),300);
+        assert!(!gate.accept(prediction(sent.id)));
+        let latest=gate.request_with_quiet(400,true,true).unwrap();
+        assert_ne!(latest.id,sent.id);
+        assert!(gate.last_submission_prioritized());
+        assert!(gate.ready_input(400,true,false,0.95).is_none());
     }
     #[test]
     fn stale_predictions_and_changed_conditions_cannot_start() {

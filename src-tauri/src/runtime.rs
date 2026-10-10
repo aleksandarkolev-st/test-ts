@@ -235,6 +235,7 @@ async fn actor(
     let intent_mode=meeting::intent::Mode::configured();
     let mut intent_gate=meeting::intent::Gate::default();
     let intent_threshold=meeting::intent::ready_threshold();
+    let quiet_priority=meeting::intent::quiet_priority_enabled();
     let mut summary: Option<CancellationToken> = None;
     let (mut events_tx, mut events) = mpsc::channel(256);
     let (work_tx, mut work) = mpsc::channel(256);
@@ -412,10 +413,10 @@ async fn actor(
                             if !intent_gate.matches(floor,&question,&context) {
                                 intent_gate.observe(floor,question,context,now);
                             }
-                            if let Some(input)=intent_gate.request(now) {
+                            if let Some(input)=intent_gate.request_with_quiet(now,engine.detector.remote_quiet&&!engine.detector.self_speaking,quiet_priority) {
                                 #[cfg(all(feature="acceptance",debug_assertions))]
                                 if std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
-                                    emit(&app,"intent.input_submitted",serde_json::json!({"input":input,"submittedAt":now,
+                                    emit(&app,"intent.input_submitted",serde_json::json!({"input":input,"submittedAt":now,"quietPriorityBypass":intent_gate.last_submission_prioritized(),
                                         "remoteQuiet":engine.detector.remote_quiet,"remoteSpeaking":engine.detector.remote_speaking,
                                         "selfSpeaking":engine.detector.self_speaking}));
                                 }

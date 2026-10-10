@@ -25,6 +25,7 @@ const rounds=report.rows.map(row=>{
       inputToObservedPredictionMs:p.observedAt-input.submittedAt,workerElapsedMs:p.elapsedMs,
       remoteQuietAtSubmission:input.remoteQuiet,remoteSpeakingAtSubmission:input.remoteSpeaking,
       selfSpeakingAtSubmission:input.selfSpeaking,accepted:event.payload.accepted,
+      quietPriorityBypass:input.quietPriorityBypass??false,
       abstained:p.abstained,scores:p.scores,aboveReadyThreshold:Boolean(ready),
       exactFinalRecognizedText:input.input.floor===row.latency?.remoteSpeechStartedAt&&identity(input.input.text)===identity(row.recognizedQuestion),
       submittedFromSpeechEndMs:input.submittedAt-row.speechEndNativeMs,

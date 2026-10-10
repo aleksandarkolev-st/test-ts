@@ -1,0 +1,766 @@
+{
+  "scope": "Unpromoted CPU classification timing experiment. Three fixed public audio replays, not newly adaptive follow-ups or population latency/correctness certification. User edits, Luna Fast/low and Nemotron remain preserved.",
+  "metric": "First client-received alphanumeric character of retained decoded and validated answer, measured from speech end including capture/ASR. Rendering is separate; not full-word or sentence completion or pure model compute.",
+  "policy": "Opt-in acceptance/debug COPILOT_INTENT_QUIET_PRIORITY=1 permits one cadence bypass per acoustic pause for text stable at least 100 ms, while keeping normal 250 ms cadence otherwise. Only CPU classification is expedited. No prediction, intent, confirmation, one-job-per-floor or output gate is bypassed. No topic rules, canned replies or live context changes.",
+  "contextRoleDiagnostic": {
+    "file": "artifacts/native-interview/luna-prefix-gate-adaptive-v57/intent-role-ablation.json",
+    "sha256": "aa4e9bfaecc57c0160a89b5f194363ff5676afa9791235738b94f22ed406a0ef",
+    "scope": "Diagnostic role-label ablation, not production promotion or semantic labels. Remote-only capture proves all retained transcript fragments are remote; the prior assistant-answer suffix is checked against the saved answer. Bootstrap provenance is unavailable and is excluded. New labels can change history token retention. Correlated samples are not independent observations.",
+    "identity": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "provider": "CPUExecutionProvider",
+      "threads": 2,
+      "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+      "trainedModelSha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+    },
+    "summary": {
+      "inputs": 370,
+      "originalAboveThreshold": 69,
+      "labeledAboveThreshold": 51,
+      "exactFinalOriginalAboveThreshold": 3,
+      "exactFinalLabeledAboveThreshold": 1
+    },
+    "skipped": [
+      {
+        "round": 1,
+        "reason": "No saved bootstrap-answer provenance"
+      }
+    ],
+    "fullRecognizedInputs": [
+      {
+        "round": 2,
+        "originalReady": 0.9356016516685486,
+        "labeledReady": 0.9114881753921509
+      },
+      {
+        "round": 3,
+        "originalReady": 0.9663938879966736,
+        "labeledReady": 0.9664078950881958
+      },
+      {
+        "round": 4,
+        "originalReady": 0.945634126663208,
+        "labeledReady": 0.9293918609619141
+      },
+      {
+        "round": 5,
+        "originalReady": 0.957481324672699,
+        "labeledReady": 0.9420372247695923
+      },
+      {
+        "round": 6,
+        "originalReady": 0.9507243633270264,
+        "labeledReady": 0.9426120519638062
+      }
+    ],
+    "conclusion": "Role labels lower the valid-float fragment from .9559 to .9459, but also push two complete recognized requests below .95. Bootstrap provenance is excluded. No evidence supports live context replacement without matching supervision."
+  },
+  "baseline": {
+    "file": "artifacts/native-interview/luna-quiet-cadence-baseline-v59/interview.json",
+    "sha256": "a547c92ab9e670ba5ba671e09531c08784ef300e8e31acfbb07a7a69e19c0454",
+    "binarySha256": "6c5820548299a448e07d7143eaa60160b97c121ce8a17f038fa6505e7216d8c2",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "780fac2fee939366aa8c5bcf27ae5ddd7d38d032ccca896d44252f6c6ba3152f"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "74acdc12107d5c9b7acc97630388e7887305b2ca2698ad26265a79cb763c691b",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+      "scripts/native-signed-interview.mjs": "d27a1f3cd906af7185508e7e8a47eb3ee1eb439c6989d373ab74c98d33d8e9ba",
+      "scripts/lib/examiner-retry.mjs": "ecedf198f8b2387c55db513f1c870c51c05ef9ff786c59e73871eacc3f4b7138"
+    },
+    "classifier": {
+      "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-prefix-v57/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "threshold": 0.95,
+      "changedTextCadenceMs": 250,
+      "quietPriority": false
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true
+    },
+    "firstWordMs": {
+      "values": [
+        1892,
+        2543,
+        3522
+      ],
+      "mean": 2652.3333333333335,
+      "median": 2543,
+      "max": 3522
+    },
+    "cadence": {
+      "file": "artifacts/native-interview/luna-quiet-cadence-baseline-v59/intent-cadence-audit.json",
+      "sha256": "00463c40186e22bd501f3a70bc763e91d50d48bced7f549a26ad69600a735426",
+      "scope": "Recorded complete recognized-text availability versus classification submission and received prediction. Complete here means identity with eventual recognized input, not semantic completeness, intended-speech fidelity or correctness. Earliest matching text might subsequently change. Cadence intervals are descriptive; new text and context can invalidate results. Submission quiet flags do not reconstruct every acoustic pause. No counterfactual first-word latency is inferred.",
+      "source": {
+        "file": "artifacts\\native-interview\\luna-quiet-cadence-baseline-v59\\interview.json",
+        "sha256": "a547c92ab9e670ba5ba671e09531c08784ef300e8e31acfbb07a7a69e19c0454"
+      },
+      "classifier": {
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "featureSchema": "finetuned-joint-readiness-v1",
+        "trainedModel": {
+          "file": "finetuned-prefix-v57/model.fp32.onnx",
+          "bytes": 90403057,
+          "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+        },
+        "threshold": 0.95,
+        "changedTextCadenceMs": 250,
+        "quietPriority": false
+      },
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+        "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+        "src-tauri/src/runtime.rs": "780fac2fee939366aa8c5bcf27ae5ddd7d38d032ccca896d44252f6c6ba3152f"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "74acdc12107d5c9b7acc97630388e7887305b2ca2698ad26265a79cb763c691b",
+        "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+        "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+      },
+      "summary": {
+        "rounds": 3,
+        "submissions": 234,
+        "quietPriorityBypasses": 0
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 1892,
+          "completeRecognizedTextFirstObservedFromEndMs": 147,
+          "firstExactSubmissionFromEndMs": 372,
+          "firstCompleteObservedToSubmissionMs": 225,
+          "firstExactPredictionFromEndMs": 413,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.6171057820320129,
+            "request": 0.9674308747053146
+          },
+          "earlyStarts": [],
+          "submissions": 29,
+          "quietPriorityBypasses": []
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 2543,
+          "completeRecognizedTextFirstObservedFromEndMs": 296,
+          "firstExactSubmissionFromEndMs": 471,
+          "firstCompleteObservedToSubmissionMs": 175,
+          "firstExactPredictionFromEndMs": 551,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.936421513557434,
+            "request": 0.9750166740268468
+          },
+          "earlyStarts": [],
+          "submissions": 62,
+          "quietPriorityBypasses": []
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 3522,
+          "completeRecognizedTextFirstObservedFromEndMs": 492,
+          "firstExactSubmissionFromEndMs": 584,
+          "firstCompleteObservedToSubmissionMs": 92,
+          "firstExactPredictionFromEndMs": 626,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.960421085357666,
+            "request": 0.992092179134488
+          },
+          "earlyStarts": [
+            {
+              "floor": 41923,
+              "id": "e8ade47d-cedf-4edd-803f-40506bdb448d",
+              "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins",
+              "timestamp": 53488,
+              "fromSpeechEndMs": -34095
+            }
+          ],
+          "submissions": 143,
+          "quietPriorityBypasses": []
+        }
+      ]
+    },
+    "inputSummary": {
+      "file": "artifacts/native-interview/luna-quiet-cadence-baseline-v59/intent-stream-audit.json",
+      "sha256": "47aa8c8038a962a4f38c271d27a5fdb60141f829ceacb5172cb899b14e8b956b",
+      "summary": {
+        "predictions": 235,
+        "missingSubmissions": 1,
+        "stale": 25,
+        "abstained": 0,
+        "acceptedAboveReadyThreshold": 33,
+        "acceptedExactFinalAboveReadyThreshold": 1
+      }
+    },
+    "stages": [
+      {
+        "round": 1,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1892,
+        "asrFinalizationFromSpeechEndMs": 787,
+        "confirmationAfterAsrMs": 26,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 13,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 67,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1011,
+        "renderAfterFirstWordMs": 10,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 1081,
+        "refinementChars": 353
+      },
+      {
+        "round": 2,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 2543,
+        "asrFinalizationFromSpeechEndMs": 769,
+        "confirmationAfterAsrMs": 22,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 16,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 75,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1676,
+        "renderAfterFirstWordMs": 6,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 2104,
+        "refinementChars": 520
+      },
+      {
+        "round": 3,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 3522,
+        "asrFinalizationFromSpeechEndMs": 969,
+        "confirmationAfterAsrMs": 16,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 16,
+        "latestInputSentAfterConfirmationMs": 407,
+        "latestInputConsumptionWaitMs": 473,
+        "pendingAgeAtConfirmationMs": 1,
+        "finalPendingBudgetMs": 400,
+        "firstWordAfterLatestInputConsumptionMs": 1657,
+        "renderAfterFirstWordMs": 11,
+        "cleanupMs": 1,
+        "restarts": 1,
+        "steers": 4,
+        "followups": 4,
+        "promptChars": 2963,
+        "refinementChars": 5462
+      }
+    ],
+    "answers": [
+      {
+        "round": 1,
+        "question": "A CUDA kernel’s runtime has become much less predictable even though its input and output sizes appear unchanged. What would you clarify or measure first?",
+        "recognizedQuestion": "A CUDA kernels runtime has become much less predictable even though its input and output sizes appear unchanged What would you clarify or measure first",
+        "answer": "First, I’d clarify what “less predictable” means: higher latency variance, throughput swings, or incorrect results, and whether it affects all kernels, GPUs, and workloads. Then I’d measure per-kernel latency distributions and collect a profiler trace, comparing kernel selection, launch parameters, synchronization, memory behavior, GPU utilization, clocks and power, and software versions against a known-good run. I’d also control warm-up, concurrency, and benchmark conditions so we can separate runtime changes from measurement noise.",
+        "earlyInputs": []
+      },
+      {
+        "round": 2,
+        "question": "The same benchmark reports 1.3 ms on one run and 8.4 ms on another, with the same executable, GPU, launch dimensions, and input/output sizes; times are kernel-only, with output initialization excluded. What would you verify next before attributing the difference to the data?",
+        "recognizedQuestion": "The same benchmark reports one point three milliseconds on one run and eight point four milliseconds on another with the same executable GPU launch dimensions and input slash output sizes times our kernel only with output initialization excluded What would you verify next before attributing the difference to the data",
+        "answer": "Before blaming the data, I’d verify that the timing isolates completed kernel work: use CUDA events around the launch, synchronize at the end, and confirm the reported interval excludes initialization consistently. Then repeat many times in one controlled process and compare the latency distribution, with warm-up and an otherwise idle GPU. Capture a GPU timeline and check for queued work, synchronization or allocation effects, clock or power changes, and whether the kernel reads prior output contents—excluding initialization from timing doesn’t necessarily exclude its effect on cache state.",
+        "earlyInputs": []
+      },
+      {
+        "round": 3,
+        "question": "The inputs are N = 67,108,864 updates into 1,048,576 valid float bins. The faster run’s indices are approximately uniform; in the slower run, 90% target one bin and the rest are approximately uniform over the others. Values are identical, and the 512 MiB of input reads alone imply a roughly 0.45 ms lower bound at the stated 1.2 TB/s streaming-read bandwidth. What does this evidence support about the runtime gap, and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic-throughput rate?",
+        "recognizedQuestion": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others Values are identical and the five hundred and twelve MIB of input reads alone imply roughly zero point four five milliseconds lower bound at the stated one point two TB s streaming read bandwidth What does this evidence support about the runtime gap and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic throughput rate",
+        "answer": "The input reads alone cannot explain an 8.4 ms run: at the stated bandwidth, the 512 MiB read lower bound is about 0.45 ms, so the gap needs another explanation. The skewed workload makes atomic contention plausible—many updates serialize on one bin—but it doesn’t prove that contention is the cause or quantify its cost; the uniform workload also updates bins, and effective bandwidth or timing artifacts may differ.\n\nI’d rerun both distributions with identical timing boundaries, warm-up, synchronization, and GPU conditions, and collect repeated latency distributions plus a GPU timeline. Measure actual memory traffic and achieved bandwidth, and use available profiler counters for atomic activity, serialization, or memory-pipeline stalls. As a controlled test, sweep the hot-bin fraction while keeping update count and values fixed; if latency rises with skew alongside atomic serialization indicators, that supports contention, whereas bandwidth saturation or inconsistent event/timeline measurements point elsewhere.",
+        "earlyInputs": [
+          {
+            "floor": 41923,
+            "id": "e8ade47d-cedf-4edd-803f-40506bdb448d",
+            "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins",
+            "timestamp": 53488
+          }
+        ]
+      }
+    ]
+  },
+  "priority": {
+    "file": "artifacts/native-interview/luna-quiet-cadence-priority-v60/interview.json",
+    "sha256": "ae06f046f44ec8f9b2a38b03ea9b51da3030296306f380da2e4225366c581f2b",
+    "binarySha256": "6c5820548299a448e07d7143eaa60160b97c121ce8a17f038fa6505e7216d8c2",
+    "sourceHashes": {
+      "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+      "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+      "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+      "src-tauri/src/runtime.rs": "780fac2fee939366aa8c5bcf27ae5ddd7d38d032ccca896d44252f6c6ba3152f"
+    },
+    "intentSourceHashes": {
+      "src-tauri/src/meeting/intent.rs": "74acdc12107d5c9b7acc97630388e7887305b2ca2698ad26265a79cb763c691b",
+      "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+      "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+      "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+    },
+    "diagnosticSourceHashes": {
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/openai/timing.rs": "cc93f24d73471d84215f5c8595ae8c456b4d4bcad0f2770104720b539a1cdc84",
+      "scripts/native-signed-interview.mjs": "d27a1f3cd906af7185508e7e8a47eb3ee1eb439c6989d373ab74c98d33d8e9ba",
+      "scripts/lib/examiner-retry.mjs": "ecedf198f8b2387c55db513f1c870c51c05ef9ff786c59e73871eacc3f4b7138"
+    },
+    "classifier": {
+      "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+      "encoder": {
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "license": "Apache-2.0",
+        "assets": [
+          {
+            "file": "onnx/model_quint8_avx2.onnx",
+            "bytes": 23046789,
+            "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+          },
+          {
+            "file": "tokenizer.json",
+            "bytes": 466247,
+            "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+          },
+          {
+            "file": "config.json",
+            "bytes": 612,
+            "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+          },
+          {
+            "file": "README.md",
+            "bytes": 10502,
+            "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+          }
+        ]
+      },
+      "featureSchema": "finetuned-joint-readiness-v1",
+      "trainedModel": {
+        "file": "finetuned-prefix-v57/model.fp32.onnx",
+        "bytes": 90403057,
+        "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+      },
+      "threshold": 0.95,
+      "changedTextCadenceMs": 250,
+      "quietPriority": true
+    },
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": true,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true
+    },
+    "firstWordMs": {
+      "values": [
+        1791,
+        1770,
+        3281
+      ],
+      "mean": 2280.6666666666665,
+      "median": 1791,
+      "max": 3281
+    },
+    "cadence": {
+      "file": "artifacts/native-interview/luna-quiet-cadence-priority-v60/intent-cadence-audit.json",
+      "sha256": "9af5b097cea7ce9a91d89ec3bbab926c5e3d92309d3333dd9b6c192e451f7d07",
+      "scope": "Recorded complete recognized-text availability versus classification submission and received prediction. Complete here means identity with eventual recognized input, not semantic completeness, intended-speech fidelity or correctness. Earliest matching text might subsequently change. Cadence intervals are descriptive; new text and context can invalidate results. Submission quiet flags do not reconstruct every acoustic pause. No counterfactual first-word latency is inferred.",
+      "source": {
+        "file": "artifacts\\native-interview\\luna-quiet-cadence-priority-v60\\interview.json",
+        "sha256": "ae06f046f44ec8f9b2a38b03ea9b51da3030296306f380da2e4225366c581f2b"
+      },
+      "classifier": {
+        "profileSha256": "683c03bd09703a3c3f9a6d78c3667e6763efce21c3ad71e787ca97109ebba3ab",
+        "encoder": {
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+          "license": "Apache-2.0",
+          "assets": [
+            {
+              "file": "onnx/model_quint8_avx2.onnx",
+              "bytes": 23046789,
+              "sha256": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+            },
+            {
+              "file": "tokenizer.json",
+              "bytes": 466247,
+              "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+            },
+            {
+              "file": "config.json",
+              "bytes": 612,
+              "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+            },
+            {
+              "file": "README.md",
+              "bytes": 10502,
+              "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+            }
+          ]
+        },
+        "featureSchema": "finetuned-joint-readiness-v1",
+        "trainedModel": {
+          "file": "finetuned-prefix-v57/model.fp32.onnx",
+          "bytes": 90403057,
+          "sha256": "d2f65263f52d3e796217340c6026d5066363808aabb17f4eb21a137f3e2544c7"
+        },
+        "threshold": 0.95,
+        "changedTextCadenceMs": 250,
+        "quietPriority": true
+      },
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+        "src-tauri/src/meeting/questions.rs": "b0d4f585eaefd99be30b6899eebde13179bb3a683ee35826baa864413f67ad56",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+        "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+        "src-tauri/src/runtime.rs": "780fac2fee939366aa8c5bcf27ae5ddd7d38d032ccca896d44252f6c6ba3152f"
+      },
+      "intentSourceHashes": {
+        "src-tauri/src/meeting/intent.rs": "74acdc12107d5c9b7acc97630388e7887305b2ca2698ad26265a79cb763c691b",
+        "src-tauri/src/meeting/context.rs": "8191e793eceab8987e03cce7c7c402d09570ea4ff401e4eab909aa2eaf6b9999",
+        "scripts/intent-encoder-worker.py": "e3ca1c2482fe4fbb3fbe414963a89531744f9c006de0ab7cb42e1cfea23d693a",
+        "scripts/intent_tokens.py": "58ab3c2a7fdef91cd3d890a688015fb2480d1ab8d067f1c6e204df4f4fffd2b1"
+      },
+      "summary": {
+        "rounds": 3,
+        "submissions": 233,
+        "quietPriorityBypasses": 4
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "firstWordFromSpeechEndMs": 1791,
+          "completeRecognizedTextFirstObservedFromEndMs": 194,
+          "firstExactSubmissionFromEndMs": 293,
+          "firstCompleteObservedToSubmissionMs": 99,
+          "firstExactPredictionFromEndMs": 333,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.6213837265968323,
+            "request": 0.9718097541481256
+          },
+          "earlyStarts": [],
+          "submissions": 28,
+          "quietPriorityBypasses": [
+            {
+              "id": 112,
+              "text": "Acuda kernels runtime has become much less predictable even though its input and output sizes appear unchang",
+              "submittedFromSpeechEndMs": -2868,
+              "sincePreviousSubmissionMs": 199
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "firstWordFromSpeechEndMs": 1770,
+          "completeRecognizedTextFirstObservedFromEndMs": 308,
+          "firstExactSubmissionFromEndMs": 436,
+          "firstCompleteObservedToSubmissionMs": 128,
+          "firstExactPredictionFromEndMs": 516,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.9212175607681274,
+            "request": 0.9675468690693378
+          },
+          "earlyStarts": [],
+          "submissions": 64,
+          "quietPriorityBypasses": [
+            {
+              "id": 308,
+              "text": "The same benchmark reports one point three milliseconds on one run and eight point four milliseconds on another with the same executable. GPU launch dimensions and input slash output sizes times our kernel only with output initialization excluded What would you verify next before attributing the difference to the data",
+              "submittedFromSpeechEndMs": 436,
+              "sincePreviousSubmissionMs": 241
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "firstWordFromSpeechEndMs": 3281,
+          "completeRecognizedTextFirstObservedFromEndMs": 418,
+          "firstExactSubmissionFromEndMs": 446,
+          "firstCompleteObservedToSubmissionMs": 28,
+          "firstExactPredictionFromEndMs": 488,
+          "firstExactPredictionAccepted": true,
+          "firstExactPredictionScores": {
+            "ready": 0.9552583694458008,
+            "request": 0.9910796955227852
+          },
+          "earlyStarts": [
+            {
+              "floor": 39311,
+              "id": "b700fe3a-dc53-43b2-bded-21636fcc5828",
+              "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform",
+              "timestamp": 54667,
+              "fromSpeechEndMs": -30274
+            }
+          ],
+          "submissions": 141,
+          "quietPriorityBypasses": [
+            {
+              "id": 487,
+              "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others Values are identical",
+              "submittedFromSpeechEndMs": -21674,
+              "sincePreviousSubmissionMs": 198
+            },
+            {
+              "id": 525,
+              "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others Values are identical and the five hundred and twelve MIB of input reads alone imply roughly zero point four five milliseconds lower bound at the stated one point two TB s streaming read",
+              "submittedFromSpeechEndMs": -11354,
+              "sincePreviousSubmissionMs": 240
+            }
+          ]
+        }
+      ]
+    },
+    "inputSummary": {
+      "file": "artifacts/native-interview/luna-quiet-cadence-priority-v60/intent-stream-audit.json",
+      "sha256": "959aa465b47b6b061b4e04052586dfba9a9e9c4cba6e8041d8c7510944d0ccc5",
+      "summary": {
+        "predictions": 234,
+        "missingSubmissions": 1,
+        "stale": 23,
+        "abstained": 0,
+        "acceptedAboveReadyThreshold": 32,
+        "acceptedExactFinalAboveReadyThreshold": 1
+      }
+    },
+    "stages": [
+      {
+        "round": 1,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1791,
+        "asrFinalizationFromSpeechEndMs": 674,
+        "confirmationAfterAsrMs": 19,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 2,
+        "latestInputConsumptionWaitMs": 63,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 1033,
+        "renderAfterFirstWordMs": 7,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 1076,
+        "refinementChars": 352
+      },
+      {
+        "round": 2,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 1770,
+        "asrFinalizationFromSpeechEndMs": 783,
+        "confirmationAfterAsrMs": 12,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 15,
+        "latestInputSentAfterConfirmationMs": 1,
+        "latestInputConsumptionWaitMs": 59,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "firstWordAfterLatestInputConsumptionMs": 915,
+        "renderAfterFirstWordMs": 10,
+        "cleanupMs": null,
+        "restarts": 0,
+        "steers": 0,
+        "followups": 1,
+        "promptChars": 2077,
+        "refinementChars": 521
+      },
+      {
+        "round": 3,
+        "fullRecognizedClauses": true,
+        "firstWordFromSpeechEndMs": 3281,
+        "asrFinalizationFromSpeechEndMs": 898,
+        "confirmationAfterAsrMs": 29,
+        "foregroundSlotWaitMs": 0,
+        "preparedThreadWaitMs": 0,
+        "initialStartAcknowledgementMs": 16,
+        "latestInputSentAfterConfirmationMs": 414,
+        "latestInputConsumptionWaitMs": 563,
+        "pendingAgeAtConfirmationMs": 3,
+        "finalPendingBudgetMs": 400,
+        "firstWordAfterLatestInputConsumptionMs": 1377,
+        "renderAfterFirstWordMs": 9,
+        "cleanupMs": 2,
+        "restarts": 1,
+        "steers": 3,
+        "followups": 4,
+        "promptChars": 2824,
+        "refinementChars": 4666
+      }
+    ],
+    "answers": [
+      {
+        "round": 1,
+        "question": "A CUDA kernel’s runtime has become much less predictable even though its input and output sizes appear unchanged. What would you clarify or measure first?",
+        "recognizedQuestion": "Acuda kernels runtime has become much less predictable even though its input and output sizes appear unchanged What would you clarify or measure first",
+        "answer": "First, I’d clarify what “less predictable” means: higher run-to-run variance, occasional latency spikes, or a higher average, and under what workload and environment. Then I’d collect repeated end-to-end timings and per-kernel traces for fast and slow runs, including kernel selection, launch count, synchronization, transfers, and concurrent load. I’d also verify the effective workload—not just input and output sizes—including shapes, strides, data distribution, batch composition, and runtime or hardware changes.",
+        "earlyInputs": []
+      },
+      {
+        "round": 2,
+        "question": "The same benchmark reports 1.3 ms on one run and 8.4 ms on another, with the same executable, GPU, launch dimensions, and input/output sizes; times are kernel-only, with output initialization excluded. What would you verify next before attributing the difference to the data?",
+        "recognizedQuestion": "The same benchmark reports one point three milliseconds on one run and eight point four milliseconds on another with the same executable. GPU launch dimensions and input slash output sizes times our kernel only with output initialization excluded What would you verify next before attributing the difference to the data",
+        "answer": "Before blaming the data, I’d verify the timing is valid and the runs are comparable: synchronize correctly around GPU events, warm up, and collect repeated measurements. Then I’d use a GPU timeline to check whether the kernel itself runs longer or is delayed by queueing, other GPU work, clock or power-state changes, or synchronization; also confirm output initialization is truly outside the timed region. Are the two runs isolated on the same GPU, with the same clocks and device load?",
+        "earlyInputs": []
+      },
+      {
+        "round": 3,
+        "question": "The inputs are N = 67,108,864 updates into 1,048,576 valid float bins. The faster run’s indices are approximately uniform; in the slower run, 90% target one bin and the rest are approximately uniform over the others. Values are identical, and the 512 MiB of input reads alone imply a roughly 0.45 ms lower bound at the stated 1.2 TB/s streaming-read bandwidth. What does this evidence support about the runtime gap, and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic-throughput rate?",
+        "recognizedQuestion": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform in the slower run ninety percent target one bin and the rest are approximately uniform over the others Values are identical and the five hundred and twelve MIB of input reads alone imply roughly zero point four five milliseconds lower bound at the stated one point two TB s streaming read bandwidth What does this evidence support about the runtime gap and what measurements would distinguish a contention hypothesis from a bandwidth or timing explanation without assuming an atomic throughput rate",
+        "answer": "The skewed indices make atomic contention a plausible explanation, but the 0.45 ms read-only lower bound doesn’t establish that they caused the 7.1 ms gap or predict atomic throughput. It only says the faster 1.3 ms run is above that idealized streaming-read floor; actual traffic and timing overhead can make it longer. I’d first validate repeated, synchronized timings and measure kernel duration, then compare GPU activity, memory traffic, and atomic/serialization or stall indicators across uniform and skewed inputs while holding everything else constant. If the skewed run takes longer with comparable bytes and external load, and shows greater serialization, that supports contention; if duration tracks memory traffic, bandwidth saturation, queueing, or timing-boundary changes instead, those favor the alternatives.",
+        "earlyInputs": [
+          {
+            "floor": 39311,
+            "id": "b700fe3a-dc53-43b2-bded-21636fcc5828",
+            "text": "The inputs are N equals sixty seven million one hundred and eight thousand eight hundred and sixty four updates into one million forty eight thousand five hundred and seventy six valid float bins The faster runs indices are approximately uniform",
+            "timestamp": 54667
+          }
+        ]
+      }
+    ]
+  },
+  "interpretation": "The priority path ran four times. The median first-word decrease does not establish a policy benefit: rounds 1/2 still waited for confirmation, round 1 ASR varied by 113 ms, and round 2 post-consumption latency varied by 761 ms. Both round-3 answers restarted once. ASR and generated histories differ despite identical waveforms and source; no observations are excluded.",
+  "correctnessScope": "Both runs start speculative work on setup before the final analysis request. Priority starts after a grammatically complete setup; its later conditions cannot serve as clairvoyant labels that the earlier words were incomplete. Hidden output waits for confirmation and then updates/restarts. These three answers do not verify deep code, corrections or real microphone interruptions, and no CUDA execution is claimed.",
+  "verification": {
+    "defaultRustPassed": 123,
+    "defaultRustIgnored": 14,
+    "acceptanceRustPassed": 124,
+    "acceptanceRustIgnored": 14,
+    "releaseBuild": "cargo build --release --features tauri/custom-protocol --bin meeting-copilot",
+    "releaseRefresh": {
+      "file": ".local/latency-app-refresh-proof.json",
+      "sha256": "3b50d9902a801ec6531aa73817eca8f2fe0f5e6c14be4b922f9b2f352964f237",
+      "updatedAt": "2026-10-10T11:40:46.569Z",
+      "pid": 18792,
+      "executable": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\latency-app\\meeting-copilot-latency.exe",
+      "binarySha256": "8dedf0a03cb766eb7406af67d65ee74728f9a12ed7e2fd3be448859bbfea4fa0",
+      "debug": false,
+      "active": false,
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "fast",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "settingsPreserved": true
+    }
+  },
+  "runtimeProfileRestoredSha256": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417",
+  "quietPriorityEnabledInRelease": false,
+  "classifierEnabledInRelease": false,
+  "goalAchieved": false
+}

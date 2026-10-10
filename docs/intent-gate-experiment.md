@@ -658,3 +658,75 @@ Default Rust tests also pass **121**, with 14 live tests ignored. The release
 build with `tauri/custom-protocol` passed, and the idle app was refreshed with
 all saved settings preserved, including Luna Fast/low and T24E390. The diagnostic
 trace is acceptance/debug only, and no new classifier was enabled in release.
+
+## Context roles and quiet classification priority (v59–v60)
+
+The new role probe checks speaker provenance rather than guessing roles from
+punctuation or words. The v57 run captured only remote speech, and each context's
+prior-answer suffix is matched to the saved copilot answer before inserting
+`User:` and `Assistant:` labels. The unsaved bootstrap answer is excluded. This
+replays 370 inputs from rounds 2–6 with the same classifier. Threshold crossings
+drop from 69 to 51, including complete recognized requests dropping from three
+to one. The incomplete fragment ending “valid float” moves from 0.9559 to 0.9459,
+but complete rounds 5 and 6 also fall below 0.95. Role labels change history
+token retention as well as representation. These findings do not support a live
+context-format change without matching supervision, so runtime context is kept.
+
+The cadence audit separately measures when eventual recognized text first
+appears and when it reaches classification. In v57 the delays were 29–279 ms.
+Identity with eventual recognized text does not establish semantic completeness,
+speech fidelity or correctness, and that text can still change afterward.
+
+The acceptance/debug-only `COPILOT_INTENT_QUIET_PRIORITY=1` experiment allows
+one expedited classification while remote speech is quiet and self speech is
+inactive. The text must have been stable for 100 ms. Renewed speech re-arms the
+allowance; normal changed-text classification keeps the 250 ms cadence. This
+only expedites CPU classification. Confidence, exact-input identity, stale-result
+rejection, output confirmation and the one-job-per-floor rule remain in force.
+Finalized requests never wait for this worker. A trace marker identifies actual
+cadence bypasses, and scheduler tests cover stability, repeated changes within a
+pause, resumed speech, disabled behavior and invalidated predictions.
+
+The first three v57 public questions and waveforms were replayed twice on the
+same binary and runtime source, with the same FP32 head, 0.95 threshold, Luna
+Fast/low, Nemotron 160 ms and T24E390. Both controls skipped grading between
+answers and used fixed questions rather than newly adaptive follow-ups.
+
+| Mode | First word after speech end, ms | Median, ms |
+| --- | --- | --- |
+| Normal cadence | 1892, 2543, 3522 | 2543 |
+| Quiet priority | 1791, 1770, 3281 | 1791 |
+
+The means were 2652.3 and 2280.7 ms. Actual bypasses ran four times, with
+198–241 ms since the preceding submission; they did not run on every ASR update.
+Classification received complete recognized text after **225, 175 and 92 ms**
+in baseline, versus **99, 128 and 28 ms** in priority. Changes to cadence phase,
+ASR and generated contexts prevent attributing these differences solely to the
+policy. Total submissions were 234 and 233, respectively.
+
+The lower first-word median does not establish a policy benefit. Rounds 1 and 2
+still failed the readiness threshold and waited for confirmation in both runs.
+Round 1's ASR finalization differed by 113 ms; round 2's post-consumption latency
+fell from 1676 to 915 ms, which cannot be credited to earlier classification
+when it authorized no early generation. Both round-3 answers restarted once;
+priority did not eliminate the stalled refinement or its extra paid inference.
+Rendering took 6–11 ms across the six observations. Every first-word time remains
+well above 800 ms, and three turns per mode do not establish a population p95.
+
+Baseline round 3 started on a fragment ending “valid float”. Priority started
+after a grammatically complete setup ending “approximately uniform”, before
+later essential facts and the analysis request. Those later words cannot serve
+as clairvoyant labels that the earlier setup was necessarily incomplete; they
+do demonstrate that this start still required corrections. Hidden output waited
+for confirmation. The retained answers broadly addressed the controlled
+measurement question, but these controls establish no deep-code correctness,
+CUDA execution or real microphone interruption result.
+
+Default Rust tests pass **123**, acceptance tests **124**, with 14 live tests
+ignored in each. The release build with `tauri/custom-protocol` passed and the
+idle app was refreshed with all saved settings preserved. The original runtime
+profile is restored, and quiet priority and the learned classifier remain
+disabled in release. The [evidence report](evidence/quiet-cadence-v60.json) is
+reproduced by `node scripts/summarize-quiet-cadence.mjs` after the input, cadence
+and stage audits. The near-instant and deep-interview requirements remain unmet
+or unverified.

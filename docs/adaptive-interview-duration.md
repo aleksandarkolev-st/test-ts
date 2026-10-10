@@ -93,3 +93,38 @@ are retained with the JSON/CSV exports in `artifacts/native-interview`.
 These results do not meet the requested sub-800 ms p95 or establish correctness
 through a full hour. No model profile or runtime phrase routing was promoted
 from this interview.
+
+## Completed algorithms v63 run
+
+The [recorded evidence](evidence/interview-duration-v63.json) verifies 60.18
+elapsed minutes, 91 completed and graded rounds, and clean shutdown. The
+synthetic speech passed through WASAPI, Nemotron with 160 ms chunks, signed-in
+Luna Fast/low, the native scheduler and the overlay. This run used diagnostic
+ASR-final-only sending, not the experimental learned classifier. ASR can
+finalize an earlier segment during a spoken question; subsequent speech can
+still cause follow-up requests. It is not a single-request-per-question proof.
+
+Retained first-word latency was 2,035 ms median, 3,261 ms sample p95 and 7,540 ms
+maximum from speech end, including ASR. From the latest model input sent, it
+was 1,299 ms median and 2,335 ms sample p95. Rendering after first word was 9 ms
+median. The final recognized text was retrospectively available 224 ms after
+speech end at the median, followed by another 505 ms before the latest request.
+That is potential lead time to investigate, not a measured early-gate saving.
+
+The model examiner graded 52 correct, 30 incorrect and nine incomplete (57.14%
+graded correct). A separate selective review independently checked one
+arithmetic failure; it does not certify the other answers. Lexical ASR
+comparison recorded 585 edits across 3,968 source words (14.74% normalized word
+error). All recognized clauses were preserved. The traces recorded 97
+follow-ups and no refinement restarts or steering operations. No real
+microphone interruptions were tested.
+
+All 91 question strings were distinct after whitespace normalization, and none
+matched the 169 distinct questions in available previous native journals.
+This audit preserves code operators and case. Many questions still revisited
+similar reasoning, so it does not establish semantic novelty or coverage of
+every algorithm named in the brief. Subsequent examiner requests now preserve
+the original scope and encourage a fresh problem family when repeated errors
+would otherwise consume the interview. These remain evaluation instructions
+only. No classifier was promoted, and the requested latency target remains
+unmet.

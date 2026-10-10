@@ -1,0 +1,653 @@
+{
+  "recordedAt": "2026-10-10T17:16:11.423747+00:00",
+  "scope": "Completed actual elapsed synthetic-audio interview, signed-in Luna Fast/low, Nemotron 160 ms, T24E390. Diagnostic ASR-final-only mode; not evidence for the experimental classifier. No runtime questions, phrase rules, or answers are derived from this record.",
+  "run": {
+    "status": "complete",
+    "durationVerified": true,
+    "requestedDurationMs": 3600000,
+    "actualInterviewDurationMs": 3610725.0593,
+    "stopReason": "duration_reached",
+    "recordedRounds": 91,
+    "stoppedCleanly": true,
+    "failure": null,
+    "identity": {
+      "file": "artifacts\\native-interview\\algorithms-hour-final-v63\\interview.json",
+      "sha256": "01340b9a3d7dd75ee44de1a74a1c8413ddf4eddf02a86511fc00e6c18d8ee39b",
+      "binarySha256": "32bd9a066ce5acaedced6e510150a471feaada1bec22d9eb41e2220aad36651c",
+      "sourceHashes": {
+        "src-tauri/src/audio/mod.rs": "a6c682272527f4e872f6096fcb93ad1109787ba6ac0dc2c788f49c3a31b30f34",
+        "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+        "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+        "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+        "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+        "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+        "src-tauri/src/openai/prompts.rs": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5",
+        "src-tauri/src/runtime.rs": "484c17683fb95450305c7c3a72b6acfdf891d4c2db669720c40e4f3bcf319e73"
+      }
+    },
+    "scope": "Real elapsed interview duration includes spoken questions, candidate generation and separate examiner grading; startup and scenario preparation are excluded. Latency is client receipt of the first retained alphanumeric answer character after speech end, including ASR. Rendering and completion are separate. Percentiles describe this correlated synthetic interview sample, not a population guarantee. Model grades are not independent correctness certification. Lexical ASR word error ignores punctuation/case and may count harmless spoken numerals or code spellings as differences. Preserved recognized clauses do not prove intended speech was recognized correctly. Missing counters remain unknown. Stage intervals can overlap and must not be summed.",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "tier": "fast",
+    "intentMode": "final",
+    "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true
+    },
+    "independentReview": {
+      "scope": "Selective independent assistant review of recorded public questions and answers. Python integer arithmetic verifies this finding; not a correctness rate or certification of other rounds. Offline evidence only, no runtime rules.",
+      "findings": [
+        {
+          "round": 29,
+          "questionSha256": "6d0fe277511a902ae77d5870ea308256eb059f9fd2dcfba9da9607b3fa84d3bb",
+          "answerSha256": "8d79cdea89d96583c8b0d721b97c62313a7972ca5276718ab02da7dc709f1eb3",
+          "issue": "Incorrect byte ceiling, maximal reservation count and remainder in the retained answer. The model examiner also identified the error.",
+          "verification": {
+            "capBytes": 58720256,
+            "marginReservations": 4700,
+            "bytesPerReservation": 1536,
+            "correctCeilingBytes": 51501056,
+            "maximalReservations": 33529,
+            "leftoverBytes": 512,
+            "leftoverAt33528": 2048,
+            "fullCapDivision": [
+              38229,
+              512
+            ]
+          },
+          "runtimeChanges": false
+        }
+      ],
+      "roundsWithFindings": 1,
+      "scopeLimit": "Recorded findings are a selective review, not a correctness rate for every round.",
+      "sha256": "616ada7555eff34bf44111a59679ba06b9fb167318c7dbcec4508022a14de73b"
+    },
+    "summary": {
+      "firstWordFromSpeechEndMs": {
+        "count": 91,
+        "median": 2035,
+        "sampleP95": 3261,
+        "max": 7540
+      },
+      "firstWordFromLatestInputMs": {
+        "count": 91,
+        "median": 1299,
+        "sampleP95": 2335,
+        "max": 6761
+      },
+      "firstHalfFirstWordMs": {
+        "count": 46,
+        "median": 2060.5,
+        "sampleP95": 3410,
+        "max": 7540
+      },
+      "secondHalfFirstWordMs": {
+        "count": 45,
+        "median": 2021,
+        "sampleP95": 3017,
+        "max": 3445
+      },
+      "ignored": 0,
+      "modelGrades": {
+        "correct": 52,
+        "incorrect": 30,
+        "incomplete": 9
+      },
+      "graded": 91,
+      "ungraded": 0,
+      "modelGradedCorrectRate": 0.5714285714285714,
+      "constraintTracking": {
+        "assessed": 91,
+        "true": 71,
+        "false": 20
+      },
+      "missingInformationHandled": {
+        "assessed": 91,
+        "true": 79,
+        "false": 12
+      },
+      "unsupportedAssumption": {
+        "assessed": 91,
+        "true": 20,
+        "false": 71
+      },
+      "recognizedClausePreservation": {
+        "assessed": 91,
+        "true": 91,
+        "false": 0
+      },
+      "lexicalAsr": {
+        "assessed": 91,
+        "referenceWords": 3968,
+        "edits": 585,
+        "normalizedWordErrorRate": 0.14742943548387097
+      },
+      "coverage": {
+        "knownQuestions": 91,
+        "unknownQuestions": 0,
+        "uniqueQuestions": 91,
+        "repeatedQuestionGroups": [],
+        "knownTopics": 0,
+        "unknownTopics": 91,
+        "modelTopicCounts": {},
+        "scope": "Exact question repetitions normalize whitespace only. Unique strings do not establish semantic novelty or uniform randomness. Topic descriptions are free-form model assessments of actual questions, not independently certified coverage."
+      },
+      "exactTranscriptAvailability": {
+        "firstExactTextFromSpeechEndMs": {
+          "count": 91,
+          "median": 224,
+          "sampleP95": 488,
+          "max": 991
+        },
+        "lastStableExactTextFromSpeechEndMs": {
+          "count": 91,
+          "median": 224,
+          "sampleP95": 488,
+          "max": 991
+        },
+        "stableExactTextToRequestMs": {
+          "count": 91,
+          "median": 505,
+          "sampleP95": 676,
+          "max": 730
+        },
+        "scope": "Equality with the eventual recognized question after whitespace normalization only. This is retrospective text availability, not semantic completeness, intended-speech fidelity, classifier confidence, or a counterfactual latency improvement. The last matching suffix excludes earlier exact text subsequently revised."
+      },
+      "stages": {
+        "asrFinalizationFromSpeechEndMs": {
+          "count": 91,
+          "median": 733,
+          "sampleP95": 979,
+          "max": 1463
+        },
+        "confirmationAfterAsrMs": {
+          "count": 91,
+          "median": 19,
+          "sampleP95": 41,
+          "max": 132
+        },
+        "latestInputConsumptionWaitMs": {
+          "count": 91,
+          "median": 61,
+          "sampleP95": 499,
+          "max": 690
+        },
+        "firstWordAfterLatestInputConsumptionMs": {
+          "count": 91,
+          "median": 1208,
+          "sampleP95": 2276,
+          "max": 6700
+        },
+        "renderAfterFirstWordMs": {
+          "count": 91,
+          "median": 9,
+          "sampleP95": 12,
+          "max": 61
+        },
+        "completedFromSpeechEndMs": {
+          "count": 91,
+          "median": 3620,
+          "sampleP95": 6345,
+          "max": 10850
+        }
+      },
+      "counters": {
+        "restarts": {
+          "assessed": 91,
+          "total": 0,
+          "roundsWithAny": 0
+        },
+        "steers": {
+          "assessed": 91,
+          "total": 0,
+          "roundsWithAny": 0
+        },
+        "followups": {
+          "assessed": 91,
+          "total": 97,
+          "roundsWithAny": 69
+        },
+        "completedDraftReplacements": {
+          "assessed": 91,
+          "total": 0,
+          "roundsWithAny": 0
+        }
+      },
+      "cancellation": {
+        "assessed": 91,
+        "retainedPipelineCancelled": 0
+      },
+      "interruptionCoverage": {
+        "realMicrophone": false,
+        "pauseProbe": null,
+        "scope": "Retained pipeline cancellation is not a count of all discarded speculative turns. Sequential questions alone do not exercise human interruption handling."
+      }
+    }
+  },
+  "examinerBinarySha256": "4847ff996df38d2ce510ea8999626910f17f98a212076dd12c9654e0b98490f8",
+  "startedAt": "2026-10-10T16:11:54.297Z",
+  "completedAt": "2026-10-10T17:13:44.754Z",
+  "questionReuse": {
+    "scope": "Exact question reuse across available journals at audit time. Whitespace only is normalized; case and operators are preserved. This does not measure semantic novelty, uniform randomness, or whether a model has seen the question elsewhere. Historical journals can include deliberate fixture and replay probes.",
+    "historicalUniqueQuestions": 169,
+    "currentKnownQuestions": 91,
+    "currentQuestionsSeenInHistory": 0,
+    "matches": []
+  },
+  "questionReuseIdentity": {
+    "file": "artifacts\\native-interview\\algorithms-hour-final-v63\\question-reuse-audit.json",
+    "sha256": "21272518bf01b7a0720b6564b9e4a610b75c804f5378a58371d4785ce6e5b119",
+    "historicalJournals": [
+      {
+        "file": "artifacts\\native-interview\\algorithms-hour-retry-v62\\interview.json",
+        "sha256": "d60cb4d5db70d0ccb93a06b26fdd8545e976e63749085c3b885b356534548280",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\algorithms-hour-v62\\interview.json",
+        "sha256": "f01f012709bb24f97dc4d7fb53d815bddbd91c081d2100b5d58f78bf7dec3b2e",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\cuda-hour-retry-v62\\interview.json",
+        "sha256": "f659a0b3946705d705b9cc6bedd23ce00ad55bbf8021be496843ba6b3f8ed766",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\cuda-hour-v62\\interview.json",
+        "sha256": "41d322720b83d952393eb68ae470f1415b23f0165d2f6775baab65762d9d2fe5",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-acoustic-occupancy-control-v9\\interview.json",
+        "sha256": "cfd57f540ee729630a9e51b2569f6aedface4577873c1576284f70dd8bac0850",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-acoustic-occupancy-probe-v9\\interview.json",
+        "sha256": "e67d7e710abe87ee1be3a01b92611e98bfaa1c8ffe6b2e8683b0f36b4d27e9e3",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-barrier-audio-bounded-refinement-v5\\interview.json",
+        "sha256": "4bffd4c3c5b14124095f039ce63d95caf002dc430d0028d7c077f2ed119c0eee",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-capacity-intent-audit-v56\\interview.json",
+        "sha256": "56c1fb95320475b1e38581e26298da5a71e5b939e473051331ecae1b986ad7e8",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-claim-check-counterexample-v49\\interview.json",
+        "sha256": "8c185d1b822f8ebc86498c7bb1b9cd82ddab72f13a67e6670c29e6fa00c2edc4",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-code-history-replay-v48\\interview.json",
+        "sha256": "7b107ac301968095c33cddf8776d4246fc1aebc0a089b1741020b88868e147b5",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-completed-baseline-v54\\interview.json",
+        "sha256": "d34658df85e2ba768131a08bd4b7b99f55813ee98118064f039e4f1220ea40d6",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-completed-experiment-v55\\interview.json",
+        "sha256": "ddd820873b30c6f605425507c3da29e2c132e8b4151c9b47939b8ab055417cf8",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-confirmed-refinement-control-remote-v16\\interview.json",
+        "sha256": "4a9cad8c3180c1a545e893bd24ecd31c88be8df2214827081adbaa9b6ea275fb",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-confirmed-refinement-control-reverse-v17\\interview.json",
+        "sha256": "43272365e89a585d62710b4eca421b1b8c4595305fe515eb0ea2b0513f00ae2e",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-confirmed-refinement-control-v16\\interview.json",
+        "sha256": "2e05789542ca7abd84165625284b1c3a74c8063ca70026a9003da0a2bd62d5ff",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-confirmed-refinement-probe-remote-v16\\interview.json",
+        "sha256": "5651b7e1c2f019ec586a258e1903ec1297c86b201c35450da2b7cb3934de4a1d",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-confirmed-refinement-probe-reverse-v17\\interview.json",
+        "sha256": "12539ce35fc0067ca51e9960f54ec3403d3819d77893c6f7c805377b789eb1e2",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-cuda-audio-bounded-restart-v1\\interview.json",
+        "sha256": "57e9b63224a274e61316e1c658ba6446db351f74fa7f6177ef4b22e13aaadf59",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-cuda-audio-context-refinement-v3\\interview.json",
+        "sha256": "770640350feb1a25ce6654c62ced5fcd3a6fedd7d32eb23ef2d03b217b41d774",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-cuda-audio-context-refinement-v3-disk-recovered\\interview.json",
+        "sha256": "a192e58e6a9f7c7d89e1e93255d0ec0349f480946cd70c11972f254c469d4e4e",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-deep-prefix-diagnostics-v47\\interview.json",
+        "sha256": "9499bec8a47573ebf4b13414b1435fc06079d25ebd63c3cdf322732d8ae78ce4",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-eager-final-control-v13\\interview.json",
+        "sha256": "31a6275d18d90176b75be4bf40ef29ada67711c71691a1dfd148c7c41873a826",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-eager-final-probe-v13\\interview.json",
+        "sha256": "7a05914ba37a1b0c494fad68943269d4fcbe222ada1ac750228efc7c5304f76b",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-final-policy-vague-audio-v6\\interview.json",
+        "sha256": "6c1b848893d1358966cce08d984eb9956ccdee305e613328f183de326c15a5fe",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-fp32-adaptive-v43\\interview.json",
+        "sha256": "58bbd7332633b505c99fda64f774d2f237bb2593e8458d768b6164d9b4bbd601",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-fp32-final-replay-v44\\interview.json",
+        "sha256": "0e491a67fa2cb89a1155293aaf94ed8299fa9bffb83b51af1702fb4bdf4f50ed",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-framed-occupancy-audio-v8\\interview.json",
+        "sha256": "6a7e1c101b0d86e4845d31cc9636ee394765b4099128c8275e206b8a4781cb7b",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-generated-first-word-v12\\interview.json",
+        "sha256": "d3d9dbe7082521c2ddaa9b87d7a9ffcb44e139a1fe238d9b83c9fee8ffd5cd65",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-generated-interrupt-drain-v15\\interview.json",
+        "sha256": "35b8d7e27068cb7230c324dda715085566a4899155861e08bd049b141a4343b1",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-generated-retracted-draft-remote-v18\\interview.json",
+        "sha256": "bd81f62f4c76d2a5723f3ada6f7c3e53aa37db0e0870fdd7596dcf33c4187c33",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-generated-retracted-draft-v18\\interview.json",
+        "sha256": "82be310e8b472ac06966d4732d6c0abffc95fa78d8c16fba17b43c01025ccd68",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-high-counterexample-v50\\interview.json",
+        "sha256": "75af3262e91152cb04953961f1ee1e8bd07ee64129022baa5cd437a36e4e9248",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-json-vague-audio-t24-v1\\interview.json",
+        "sha256": "c9d8abaabf44576713346ae8399b809e681e902a7c06329675b2a54940d2f14e",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-json-vague-audio-v1\\interview.json",
+        "sha256": "fcb71633f98b32e981a01ad77d13da9465ff1d53b51827e6567b0dc06ec58537",
+        "status": "interrupted"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-json-vague-audio-v2\\interview.json",
+        "sha256": "5c3e7246c407c2b8e37f95331b6f3e017c91798c161d1ce01d68dabe890bd8f7",
+        "status": "interrupted"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-json-vague-audio-v3\\interview.json",
+        "sha256": "afad7e32b419d5e55047e92905a7eecc8a5ec62f60acf7e2d4073ae836644251",
+        "status": "interrupted"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-late-asr-prefix-replay-v10\\interview.json",
+        "sha256": "dc10935f3abc84c2a2f7e1b7ada6912b44fbdcb9a360f19bc100de8cd6b08c57",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-adaptive-v26\\interview.json",
+        "sha256": "38218d35e75051982bb5e24a98889a5ccd94ebdc338049345bb9741e53727e0b",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-asr-final-v34\\interview.json",
+        "sha256": "176793389eccd4e8da6aefda9c951f02670a9dca0cfbb713588c985e6a960600",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-asr-trained-v33\\interview.json",
+        "sha256": "346189f9f00acb3c96c685517c5d2458ccb9ddd6ce6a51357176321631320ea6",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-coalesced-v37\\interview.json",
+        "sha256": "68bd5a0bd451399786b91ead41d34f001a329aba9a5bc3209c86ed1cf6fe25ea",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-completed-pause-v24\\interview.json",
+        "sha256": "12894217d92c8d828b69ccd9ced59c6ae9f07dcb48517e523bfca73743311915",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-continuation-v27\\interview.json",
+        "sha256": "9bcc17e5b443842099ce402444aff61a2d059141bf037204b7002389ded32abd",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-contract-v23\\interview.json",
+        "sha256": "f996a2c93e16d68654da8080ed815636f2101e75bdcc2df88d7040b0f8cb435f",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-counterexample-v28\\interview.json",
+        "sha256": "5e4ccb62e6260af219ccb04fb60a99e9f12731fa34b227f37fd0515105a4b9cb",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-early-v19\\interview.json",
+        "sha256": "0c254dbdb9de5cc3f70b27d76b270e2b651b7e2953ae71e131868ddbe4cc2669",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-early-v20\\interview.json",
+        "sha256": "2f4dd3ea4fc4ab223c9cf7352c35ffaecfe192790580ba21d3f9915a16fca465",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-early-v25\\interview.json",
+        "sha256": "fe523827850622ad7aac116a74eab2622557c6f7212cf376ed048587b2d0ebe5",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-exact-counterexample-v30\\interview.json",
+        "sha256": "2b68750da9f393911689703a4b7ec44bbf220eac388433ea16e0a1a6e1b2e377",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-final-v19\\interview.json",
+        "sha256": "73acb1194f80369a0308487858f4a728b6c4833d5bb7f7797044ee40870476a1",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-final-v25\\interview.json",
+        "sha256": "65544cafdf6868bc6d1c6e22e954d59c2c3eba5402ea3b0b653436a4a930d2a4",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-finetuned-final-v36\\interview.json",
+        "sha256": "340bc810926d9a46fd6538098cf762aca59b093e81b0f3a3f0eb422f8eac7da2",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-finetuned-v35\\interview.json",
+        "sha256": "2c3efbf1fd16291b1b17c468ab0a57febd3df82152163b8d05ebeea2bbee4a29",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-late-tail-v29\\interview.json",
+        "sha256": "7f58022996a97d8536ea19f531e95eff3685869a3d2a3c070c2b271eaf280c9f",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-pause-v21\\interview.json",
+        "sha256": "aaed98f8d7accaf1a29126f43b4c0d7d90b29986ae35e17c6b3ea8b03ba59684",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-ready-updates-v39\\interview.json",
+        "sha256": "bf4297009422f74a87575c0a58dffeecc435250505fddba601335c9ab32943c3",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-local-intent-threshold-v32\\interview.json",
+        "sha256": "07b7d61d18e471a5a24deb5cfcd1af608e4bf3507ae1cea6733bb8f9f1f8c611",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-multipart-occupancy-audio-v7\\interview.json",
+        "sha256": "9e99a5c3fa3e9f627f4dc03f9b46a2a3dcd61ed6fea8ffb8fd83ee08cfc82ece",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-paired-asr-160-v11\\interview.json",
+        "sha256": "11ee9825a839e309757cf1badd3e2f41b7e19357e879885c7654bfd568f3efaa",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-paired-asr-80-v11\\interview.json",
+        "sha256": "3a89a36e1ee9efe346191302fd21da7a76ea2ef6871ab3caa5880b21a72b23d7",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-pending-age-baseline-v45\\interview.json",
+        "sha256": "f13786b0b8a62c22b0b275087994819d8c490510f9ab6314ac967cffdeb85340",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-pending-age-experiment-v46\\interview.json",
+        "sha256": "4e155b3bfa57df8feb2b32dd565e322d71d8f7f40b005319ec451cbebd2b8454",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-prefix-gate-adaptive-v57\\interview.json",
+        "sha256": "dd57199f963ccd420d64836cf20becc3a661feb2e1f939930552078daf12fa79",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-prefix-gate-final-v58\\interview.json",
+        "sha256": "62a8d8360b49f88510a7c6496cdf8d43fa338b248c8fa1978dd85fd850ff213e",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-quiet-cadence-baseline-v59\\interview.json",
+        "sha256": "a547c92ab9e670ba5ba671e09531c08784ef300e8e31acfbb07a7a69e19c0454",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-quiet-cadence-priority-v60\\interview.json",
+        "sha256": "ae06f046f44ec8f9b2a38b03ea9b51da3030296306f380da2e4225366c581f2b",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-received-turn-control-v14\\interview.json",
+        "sha256": "2374f1dc5fb72b99c31ca55d4e59bccdf6cc89779f7b3ab9adab7ced21e0b6dd",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-received-turn-probe-v14\\interview.json",
+        "sha256": "d4cc694f9a617c0ed26b1f62d59fbbee16f7f8b99f1f2fef33e26712bd30d2e9",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-settled-baseline-v52\\interview.json",
+        "sha256": "f6843448be0d873b3d419278d48fd6791b1df5c1beccb1386ceb9a8a53df3c8c",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-settled-experiment-v53\\interview.json",
+        "sha256": "0ae27eefcd28476241a1b1a2d6075f439d967ac30474aaaf341d2d30483ae077",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-streamed-json-cuda-v1\\interview.json",
+        "sha256": "f9fc74a8c9cf880b3bb4013d07b9f779d96d141dbc854952d1b82967c7d6a0c9",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-streamed-json-cuda-v2\\interview.json",
+        "sha256": "d3c90b0b43528e4cc293da52b218870b1d51bb79aaa21db9398b104cf5825063",
+        "status": "failed"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-streamed-json-cuda-v3\\interview.json",
+        "sha256": "810482848697d28de9789792e3d73ba59a087d95be463bae8fad61fe7be3eade",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-terminal-context-v4\\interview.json",
+        "sha256": "7e25d29bafd5bf22c2d4cdeeb95fd7e4937a7fec847a44d9ed09ee4b16903f68",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-transfer-frame-audit-v51\\interview.json",
+        "sha256": "1317ff2315f453b3489b7a788238b0f25a0a63cbfac483696075d52e6c8345f8",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-vague-audio-160ms-v1\\interview.json",
+        "sha256": "3bf20c9d5673adfa825c102599f969d5aed804e7621e36a5fa1d4bebd680cfb9",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\luna-vague-audio-80ms-v1\\interview.json",
+        "sha256": "60a814c484175f915dbd662026b3ad391783e34e331f851e968f34bfcc3f87ed",
+        "status": "complete"
+      },
+      {
+        "file": "artifacts\\native-interview\\timed-endpoint-smoke-v62\\interview.json",
+        "sha256": "52f9db682e4ce12e589dfe7d3503b39c1459edbd068bbe89fcda831ab4352adc",
+        "status": "complete"
+      }
+    ]
+  },
+  "limitations": [
+    "Exact non-repetition does not establish semantic novelty. Many follow-ups revisited the same reasoning, and the requested broad algorithms brief did not establish coverage of every named family.",
+    "ASR-final-only means an ASR finalized segment can start inference before the complete source question ends. Later recognized segments can trigger follow-ups. This is not a guaranteed single model request per source question.",
+    "The retained first-word timestamp is the primary metric. A raw first agent delta can belong to earlier incomplete question input; subtracting it from the retained first-word timestamp does not isolate JSON parsing delay.",
+    "Literal string and operator speech can be ambiguous under synthetic TTS and ASR. Preserved recognized clauses do not establish intended-question fidelity.",
+    "Model grades are not independent correctness certification. The separate selective arithmetic finding does not certify every answer.",
+    "No real microphone interruptions were tested. The sub-800 ms p95 target remains unmet."
+  ],
+  "productionProfileChanges": false,
+  "productionProfileSha256AtRecording": "7d7aabc270461a0fa5dc69cb7dc57436a2ffed00bfbccea1896282c5f6945417"
+}

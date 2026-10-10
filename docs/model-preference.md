@@ -13,3 +13,5 @@ Interview and offline data tools allow model overrides rather than fixing a mode
 Defaults follow the current preference. Native probes and settings restore reject a requested model absent from the signed-in catalog. Probe records and generated corpora identify the configured model and reasoning effort. Changing the generator does not retrain or promote the local intent classifier. Synthetic annotations still need independent review.
 
 Interview questions continue to be generated from a fresh run identifier and the requested brief. These configuration defaults introduce no question matching, topic-based routing, cached answers, or canned responses.
+
+The two-turn [model-switch smoke evidence](evidence/model-switch-sol-v65.json) verifies the new model through the native scheduler and overlay, with clean shutdown. Retained first-text times were 1,613 ms and 7,255 ms after simulated speech end. This excludes ASR, establishes no model comparison, and does not meet the near-instant goal. New hour-long audio and rapid-fire measurements remain outstanding.

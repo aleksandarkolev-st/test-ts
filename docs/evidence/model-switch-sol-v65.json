@@ -1,0 +1,58 @@
+{
+  "scope": "Model-switch smoke only: two newly generated adaptive questions through signed-in Codex, native scheduler and overlay. Simulated transcripts exclude ASR and acoustic endpointing. Not an hour-long or rapid-fire probe, independent accuracy review or latency certification.",
+  "productionSettings": {
+    "completedAt": "2026-10-10T17:38:48.246Z",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "tier": "fast",
+    "backend": "codex",
+    "active": false,
+    "production": true,
+    "cloudRequestMade": false
+  },
+  "probe": {
+    "path": "artifacts\\native-interview\\sol-switch-smoke-v65-r1\\interview.json",
+    "sha256": "fc542903edd049437ea3877bc2ce877e070703b6970d61b1250d00ad1e563d69",
+    "status": "complete",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "tier": "fast",
+    "examinerModel": "gpt-6.1-sol",
+    "examinerEffort": "low",
+    "startedAt": "2026-10-10T17:41:12.380Z",
+    "completedAt": "2026-10-10T17:45:35.443Z",
+    "stoppedCleanly": true,
+    "nativeBinarySha256": "32bd9a066ce5acaedced6e510150a471feaada1bec22d9eb41e2220aad36651c",
+    "examinerBinarySha256": "d963d0a6f6fd299e997f33ee112d0fc98571f6068ac0695af986eaf1f1569354",
+    "runId": "2f4c493d-948a-49fe-b543-137084c36dc5",
+    "primaryLatencyMetric": "firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.",
+    "rows": [
+      {
+        "round": 1,
+        "questionSha256": "a363e830711c371271487f004e05489412a13bd05f0b69b4afb1033b74369f2a",
+        "firstWordFromSimulatedSpeechEndMs": 1613,
+        "firstWordFromLatestInputMs": 1398,
+        "modelAssessedVerdict": "correct"
+      },
+      {
+        "round": 2,
+        "questionSha256": "c75fd143ac23c89ea375e7aaa591b5aaf70214b61e60648c65e0370ce16efd19",
+        "firstWordFromSimulatedSpeechEndMs": 7255,
+        "firstWordFromLatestInputMs": 7052,
+        "modelAssessedVerdict": "correct"
+      }
+    ]
+  },
+  "checks": [
+    "Frontend TypeScript/Vite build passed",
+    "Existing frontend state tests: 2 passed",
+    "Rust adaptive-interview example tests: 2 passed",
+    "Rust adaptive-interview example build passed",
+    "Changed JavaScript entry points passed node --check"
+  ],
+  "limitations": [
+    "Luna historical evidence remains unchanged.",
+    "The local classifier was not retrained or promoted by the model switch.",
+    "The broad goal remains unmet; new audio hour-long, rapid-fire and independent technical accuracy measurements remain necessary."
+  ]
+}

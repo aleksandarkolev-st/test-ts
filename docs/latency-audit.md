@@ -1,5 +1,29 @@
 # Live response latency audit
 
+The current measurements use **gpt-6.1-sol, low reasoning, T24E390 output and no microphone**. Three fresh synthetic interviews ran for at least an hour each. Their [completed recording summary](evidence/completed-hour-measurements-v71.json) retains unanswered and erroneous turns:
+
+| Interview | Recorded turns | Visible retained words | Median | Sample p95 | Maximum |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| General | 55 | 55 | 8.92 s | 36.22 s | 64.86 s |
+| Systems | 52 | 51 | 9.76 s | 36.17 s | 42.98 s |
+| DSA | 49 | 48 | 12.30 s | 50.94 s | 78.63 s |
+
+These are descriptive first-word timings from physical synthetic playback end to actual overlay visibility. They do not establish correctness or population p95. Independent accuracy review is pending. The missing systems response timed out; the missing DSA response had no native question job after a spoken "Why?". Neither is silently removed from the recorded turn count.
+
+The [78.6-second DSA tail](evidence/algorithms-79-second-tail-decomposition-v71.json), bound to the completed journal, includes **35.16 s from confirmation to sending the final input**, 38.56 s from sending to matching reader receipt, 70 ms from reader receipt to consumer processing, 4.23 s to retained decoded text, and 7 ms to native visibility. The source still permits 120 seconds per generation attempt. There is no 50-second hard maximum.
+
+A subsequent, still-running code-memory probe captured a [93.9-second retained first word](evidence/deep-memory-94-second-tail-decomposition-v71.json). Its final input waited **41.19 s before submission**, followed by 50.03 s before matching reader receipt and 2.05 s before retained decoded text. This row also records `Codex answer timed out`; a visible word does not make it a successful answer. This checkpoint still requires binding to the final stopped journal and independent accuracy review.
+
+The substantial pre-submission intervals demonstrate application scheduling delay. Reader receipt is an application timestamp, so the following interval combines provider work, transport and any preceding shared-reader blockage; it cannot be called isolated model compute. Per-thread completed queue waits do not exclude blockage on other threads. Large repeated prompts are recorded, but their causal cost has not been isolated.
+
+The candidate on `fix/latest-question-wins` coalesces revisions locally, submits one complete frame per attempt, rejects obsolete output, and retires stale generation before a fresh replacement. Its 400 ms stale-work guard applies on every acknowledged attempt; further confirmed revisions do not extend it. Resumed speech waits for confirmation, and the stream allows at most three replacements. Terminal cleanup, literal references and explicit context are preserved. This is a universal protocol policy with no topic or expected-answer routing.
+
+The candidate remains separate from the recorded baseline. Its protocol tests and balanced audio comparisons are queued after baseline stress capture and confirmation-policy controls. Each comparison uses an unchanged waveform, frozen source context, the same model and a fresh meeting. Failed and unanswered outcomes remain recorded. Compilation, independent accuracy and a latency improvement have **not** yet been established. Full-prompt size, start acknowledgement, service scheduling and the shared reader remain separate concerns.
+
+The earlier ChatGPT backend experiment showed faster direct-prompt first words in a small dependent sample after omitting an unsupported fast tier. Native playback also exposed an intent-routing gap: those GPT trials had transcripts but no answer jobs. Those results do not establish the ChatGPT backend as a working latency replacement for the live Codex path. The [corrected backend and architecture evidence](evidence/answer-architecture-audit-corrected-v70.json) preserves these distinctions.
+
+## Historical Luna measurements
+
 The largest remaining delays occur before the first retained word. Six fresh adaptive synthetic-audio questions on signed-in Luna low/Fast took 2,207â€“3,388 ms after speech ended (median 2,680 ms). This remote-only acceptance run excludes room microphone interruptions. It does not establish broad p95 or hard-interview correctness.
 
 The [recorded stage audit](evidence/luna-fast-latency-v18.json) separates first-word receipt from answer completion. Speculative stages overlap; these medians must not be added together.

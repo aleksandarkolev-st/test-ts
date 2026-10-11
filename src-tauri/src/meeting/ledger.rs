@@ -36,6 +36,17 @@ impl Ledger {
         self.suggestions.push(Suggestion{id:id.into(),question:question.into(),..Default::default()});self.suggestions.last_mut().unwrap()
     }
     pub fn generated(&mut self,id:&str,question:&str,delta:&str) {self.suggestion(id,question).generated.push_str(delta);self.version+=1;}
+    /// Renderer evidence, independent of delivery to the renderer. Delayed
+    /// acknowledgements may belong to a retired generation; retain that history
+    /// without authorizing it to replace the current panel. Never invent text.
+    pub fn acknowledge_display(&mut self,id:&str,text:&str,now:u64)->bool {
+        let Some(s)=self.suggestions.iter().find(|s|s.id==id) else{return false;};
+        if text.is_empty()||!s.generated.starts_with(text){return false;}
+        let previous=s.displayed.iter().map(|(_,delta)|delta.as_str()).collect::<String>();
+        // Out-of-order IPC acknowledgements cannot roll history back.
+        if !text.starts_with(&previous){return false;}
+        let question=s.question.clone();self.displayed(id,&question,text,now);true
+    }
     pub fn displayed(&mut self,id:&str,question:&str,text:&str,now:u64) {
         let suggestion=self.suggestion(id,question);
         let previous=suggestion.displayed.iter().map(|(_,delta)|delta.as_str()).collect::<String>();

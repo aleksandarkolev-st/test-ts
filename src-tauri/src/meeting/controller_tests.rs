@@ -69,6 +69,25 @@ fn late_acceptance_has_a_distinct_revision_but_a_new_floor_starts_at_zero() {
     assert_eq!(ledger.accepted_revision(20),0);assert_eq!(ledger.accepted_revision(10),2);
 }
 #[test]
+fn only_painted_prefix_enters_followup_context_and_retired_history_survives() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.generated("old","Explain the invariant","Visible opening. Unseen tail.");
+    assert!(!ledger.context("Why?",Some(200)).contains("Visible opening"));
+    assert!(!ledger.acknowledge_display("old","Invented answer",100));
+    assert!(ledger.acknowledge_display("old","Visible opening.",100));
+    ledger.terminal("old",150,false);
+    ledger.generated("current","Why?","Current reasoning.");
+    // This IPC arrived after the interruption but describes a later paint.
+    assert!(ledger.acknowledge_display("old","Visible opening. Unseen tail.",300));
+    let pinned=ledger.context("Why?",Some(200));
+    assert!(pinned.contains("Visible opening."));assert!(!pinned.contains("Unseen tail"));
+    assert!(!pinned.contains("Current reasoning"));
+    assert!(ledger.context("Recall the earlier answer",Some(400)).contains("Unseen tail"));
+    assert!(!ledger.acknowledge_display("old","Visible opening.",100));
+    assert!(!ledger.acknowledge_display("missing","Visible opening.",100));
+    assert_eq!(ledger.suggestions[0].interrupted_at,Some(150));
+}
+#[test]
 fn multipart_pause_and_short_followup_use_independent_acceptance() {
     let mut d=QuestionDetector::default();d.semantic_intent=true;d.conversation_endpoints=true;
     d.speech_started(SpeakerSource::Remote,0);d.transcript(&speech("a","Explain all constraints on the design including overflow and",0));d.speech_ended(SpeakerSource::Remote,100);
@@ -97,7 +116,10 @@ fn hour_long_archive_and_application_clock_are_independent() {
 }
 #[test]
 fn candidate_failed_waveform_final_frame_remains_eligible() {
+    use sha2::{Digest,Sha256};
     let fixture:serde_json::Value=serde_json::from_str(include_str!("../../../tests/fixtures/candidate-replacement-exhaustion.json")).unwrap();
+    let waveform=include_bytes!("../../../tests/fixtures/candidate-replacement-exhaustion.wav");
+    assert_eq!(format!("{:x}",Sha256::digest(waveform)),fixture["waveSha256"].as_str().unwrap());
     assert_eq!(fixture["failure"],"Codex question replacement budget exhausted");
     assert_eq!(fixture["events"].as_array().unwrap().iter().filter(|e|e["name"]=="question.confirmed").count(),11);
     let mut detector=QuestionDetector::default();detector.semantic_intent=true;detector.independent_asr_endpoint=true;detector.conversation_endpoints=true;

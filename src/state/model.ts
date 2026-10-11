@@ -2,6 +2,11 @@ export type SpeakerSource = 'self' | 'remote';
 export interface TranscriptSegment { id: string; source: SpeakerSource; text: string; startedAt: number; endedAt: number; final: boolean }
 export interface CurrentQuestion { id: string; text: string; detectedAt: number }
 export interface PipelineTimeline {
+  generationId?: string | null; sessionId?: string | null; utteranceId?: number | null;
+  utteranceRevision?: number; contextVersion?: number; inputHash?: number[] | null;
+  transportWrittenAt?: number | null; inputTokens?: number | null; cachedInputTokens?: number | null;
+  outputTokens?: number | null; reasoningTokens?: number | null; remoteTerminationConfirmed?: boolean | null;
+  localRetirementStartedAt?: number | null; localRetirementReleasedAt?: number | null;
   candidateDetected: number | null; codexStreamEntered: number | null; semaphoreAcquired: number | null;
   warmThreadTaken: number | null; preparedThreadAgeMs: number | null; refillStarted: number | null;
   turnStartSent: number | null; turnStartAck: number | null; firstAgentDelta: number | null;

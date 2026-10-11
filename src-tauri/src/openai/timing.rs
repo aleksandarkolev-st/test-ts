@@ -16,6 +16,8 @@ pub struct Timeline {
     #[serde(default)] pub output_tokens:Option<u64>,
     #[serde(default)] pub reasoning_tokens:Option<u64>,
     #[serde(default)] pub remote_termination_confirmed:Option<bool>,
+    #[serde(default)] pub local_retirement_started_at:Option<u64>,
+    #[serde(default)] pub local_retirement_released_at:Option<u64>,
     pub candidate_detected: Option<u64>,
     pub codex_stream_entered: Option<u64>,
     pub semaphore_acquired: Option<u64>,
@@ -128,6 +130,9 @@ impl Trace {
     pub fn refill_thread_created(&self) { self.data.lock().unwrap().refill_threads_created += 1; }
     pub fn refill_failed(&self) { self.data.lock().unwrap().refill_error = true; }
     pub fn cancelled(&self) { let mut data=self.data.lock().unwrap();data.cancelled=true;data.remote_termination_confirmed.get_or_insert(false); }
+    pub fn remote_terminal(&self){self.data.lock().unwrap().remote_termination_confirmed=Some(true);}
+    pub fn local_retirement_started(&self){let mut data=self.data.lock().unwrap();data.local_retirement_started_at=Some(self.clock.elapsed().as_millis()as u64);data.remote_termination_confirmed.get_or_insert(false);}
+    pub fn local_retirement_released(&self){self.data.lock().unwrap().local_retirement_released_at=Some(self.clock.elapsed().as_millis()as u64);}
     pub fn steered(&self) { self.data.lock().unwrap().steering_count += 1; }
     pub fn followup(&self) { self.data.lock().unwrap().followup_count += 1; }
     pub fn prompt_chars(&self, count:usize) { self.data.lock().unwrap().prompt_chars=count; }

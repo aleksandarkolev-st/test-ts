@@ -47,6 +47,9 @@ pub struct Client {
     trace: Option<super::timing::Trace>,
     refill_policy: super::codex::RefillPolicy,
     pub http: reqwest::Client,
+    // Shared by clones, including summary/attachment calls. Unknown remote
+    // retirement continues to consume capacity after its local stream closes.
+    http_slots: std::sync::Arc<tokio::sync::Semaphore>,
     base: String,
     reasoning_effort: Option<String>,
     backend: AnswerBackend,
@@ -65,6 +68,7 @@ impl Default for Client {
             responses_ws: Default::default(),
             trace: None,
             refill_policy: super::codex::RefillPolicy::default(),
+            http_slots: std::sync::Arc::new(tokio::sync::Semaphore::new(2)),
             http: reqwest::Client::builder()
                 .connect_timeout(std::time::Duration::from_secs(10))
                 .timeout(std::time::Duration::from_secs(120))
@@ -84,6 +88,7 @@ impl Default for Client {
                         responses_ws: Default::default(),
                         trace: None,
                         refill_policy: super::codex::RefillPolicy::default(),
+                        http_slots: std::sync::Arc::new(tokio::sync::Semaphore::new(2)),
                         http: reqwest::Client::new(),
                         base,
                         reasoning_effort: None,
@@ -187,7 +192,7 @@ impl Client {
     #[allow(clippy::too_many_arguments)]
     pub async fn stream_with_image<F, Fut>(
         &self, token: &str, model: &str, instructions: &str, input: &str,
-        image: Option<&str>, cancel: CancellationToken, mut event: F,
+        image: Option<&str>, cancel: CancellationToken, event: F,
     ) -> Result<(), String>
     where
         F: FnMut(StreamEvent) -> Fut + Send,
@@ -203,6 +208,35 @@ impl Client {
             return self.codex.as_ref().ok_or("Codex runtime is unavailable")?
                 .stream_traced(model, self.service_tier.as_deref(), self.reasoning_effort.as_deref(), instructions, input, image, cancel, self.refill_policy, self.trace.clone(), event).await;
         }
+        let permit=tokio::select!{
+            biased;
+            _=cancel.cancelled()=>return Err("cancelled".into()),
+            acquired=tokio::time::timeout(std::time::Duration::from_millis(2500),self.http_slots.clone().acquire_owned())=>
+                acquired.map_err(|_|"Answer capacity recovery deadline exceeded; ask again")?.map_err(|_|"Answer capacity is unavailable")?
+        };
+        if cancel.is_cancelled(){return Err("cancelled".into());}
+        if let Some(trace)=&self.trace{trace.mark(super::timing::Stage::SemaphoreAcquired);}
+        let mut terminal=false;
+        let result=self.stream_http(token,model,instructions,input,image,cancel,&mut terminal,event).await;
+        if result.is_err()&&!terminal{
+            // Closing an HTTP stream does not prove provider termination. A
+            // bounded hold prevents cancellation/error storms while allowing
+            // one new foreground stream. It is not a remote cancellation ack.
+            self.hold_http_retirement(permit);
+        }
+        result
+    }
+    fn hold_http_retirement(&self,permit:tokio::sync::OwnedSemaphorePermit){
+        let trace=self.trace.clone();if let Some(trace)=&trace{trace.local_retirement_started();}
+        tokio::spawn(async move{
+            tokio::time::sleep(std::time::Duration::from_millis(1500)).await;
+            if let Some(trace)=trace{trace.local_retirement_released();}
+            drop(permit);
+        });
+    }
+    #[allow(clippy::too_many_arguments)]
+    async fn stream_http<F,Fut>(&self,token:&str,model:&str,instructions:&str,input:&str,image:Option<&str>,cancel:CancellationToken,terminal:&mut bool,mut event:F)->Result<(),String>
+    where F:FnMut(StreamEvent)->Fut+Send,Fut:std::future::Future<Output=Result<(),String>>+Send {
         if let Some(trace)=&self.trace { trace.backend("http"); trace.mark(super::timing::Stage::StreamEntered); trace.request_sent(); }
         let request = self
             .http
@@ -234,11 +268,14 @@ impl Client {
                         }
                     }
                     "response.completed" => {
+                        *terminal=true;
                         if let Some(trace)=&self.trace { trace.response_metadata(&value["response"]);trace.usage(&value["response"]["usage"]); trace.mark(super::timing::Stage::TurnCompleted); }
                         complete = true;
                         tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Completed)=>r?};
                     }
                     "error" | "response.failed" | "response.incomplete" => {
+                        *terminal=true;
+                        if let Some(trace)=&self.trace{trace.remote_terminal();}
                         return Err(stream_error(&value))
                     }
                     _ => {}
@@ -446,6 +483,7 @@ mod tests {
                 responses_ws: Default::default(),
                 trace: None,
                 refill_policy: super::super::codex::RefillPolicy::default(),
+                http_slots: std::sync::Arc::new(tokio::sync::Semaphore::new(2)),
                 http: reqwest::Client::new(),
                 base,
                 reasoning_effort: None,
@@ -560,7 +598,41 @@ mod tests {
             "cancelled"
         );
         assert!(start.elapsed().as_millis() < 500);
+        assert_eq!(c.http_slots.available_permits(),1,"Closed local stream must still count its unknown retirement");
         s.await.unwrap();
+    }
+    #[tokio::test(start_paused=true)]
+    async fn unknown_http_retirement_holds_capacity_without_claiming_remote_termination(){
+        let trace=super::super::timing::Trace::new(std::time::Instant::now(),0);
+        let c=Client::default().with_trace(trace.clone());
+        let old=c.http_slots.clone().acquire_owned().await.unwrap();
+        c.hold_http_retirement(old);
+        let current=c.http_slots.clone().acquire_owned().await.unwrap();
+        assert_eq!(c.clone().http_slots.available_permits(),0);
+        tokio::task::yield_now().await;
+        tokio::time::advance(std::time::Duration::from_millis(1499)).await;
+        assert_eq!(c.http_slots.available_permits(),0);
+        assert_eq!(trace.snapshot().remote_termination_confirmed,Some(false));
+        tokio::time::advance(std::time::Duration::from_millis(1)).await;tokio::task::yield_now().await;
+        assert_eq!(c.http_slots.available_permits(),1);
+        assert!(trace.snapshot().local_retirement_released_at.is_some());
+        assert_eq!(trace.snapshot().remote_termination_confirmed,Some(false));
+        drop(current);
+    }
+    #[tokio::test(start_paused=true)]
+    async fn unavailable_http_capacity_fails_before_submitting_and_next_request_remains_eligible(){
+        let trace=super::super::timing::Trace::new(std::time::Instant::now(),0);
+        let c=Client::default().with_trace(trace.clone());
+        let slots=c.http_slots.clone().acquire_many_owned(2).await.unwrap();
+        let start=tokio::time::Instant::now();
+        let result=c.text("fixture-token","m","i","q",CancellationToken::new()).await;
+        assert!(result.unwrap_err().contains("capacity recovery deadline"));
+        assert_eq!(start.elapsed().as_millis(),2500);assert!(trace.snapshot().model_request_sent.is_none());
+        drop(slots);assert_eq!(c.http_slots.available_permits(),2);
+        let (mut next,server)=server("data: {\"type\":\"response.completed\"}\n\n",0).await;
+        next.http_slots=c.http_slots.clone();
+        next.text("fixture-token","m","i","final corrected frame",CancellationToken::new()).await.unwrap();
+        assert_eq!(server.await.unwrap()["input"][0]["content"],"final corrected frame");
     }
     #[test]
     fn utf8_and_split_crlf() {

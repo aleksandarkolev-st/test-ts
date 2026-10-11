@@ -124,6 +124,7 @@ enum Control {
     Pause,
     ManualOpen,
     Manual(String),
+    Displayed(String,u64,String,u64),
     Dismiss,
     Expand,
     Project(Option<String>),
@@ -271,7 +272,10 @@ async fn actor(
                             "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
                             "error":job.error,"latency":latency,"selectedContext":job.updates.borrow().context.clone()})
                     }).collect::<Vec<_>>();
-                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version}}));
+                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version,
+                        "recognizedRevisionBytes":engine.context.ledger.recognized.iter().map(|r|r.segment.text.len()).sum::<usize>(),
+                        "generatedBytes":engine.context.ledger.suggestions.iter().map(|s|s.generated.len()).sum::<usize>(),
+                        "displayedBytes":engine.context.ledger.suggestions.iter().map(|s|s.display_versions.iter().chain(std::iter::once(&s.displayed)).flat_map(|v|v.iter()).map(|(_,text)|text.len()).sum::<usize>()).sum::<usize>()}}));
                 },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::FreezeContext(context,policy,reply)=>{
                     if !engine.view.active || !answers.jobs.is_empty() || generation.is_some() {
@@ -307,6 +311,13 @@ async fn actor(
                     if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();}
                     else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
                     publish(&app,&mut engine,&view);
+                }},
+                Control::Displayed(id,revision,text,paint_host_ms)=>{if let Some(s)=session.as_ref(){
+                    let now=s.clock.elapsed().as_millis()as u64;
+                    let host_now=std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis()as u64;
+                    if revision==0 {if let Some(at)=display_session_time(now,host_now,paint_host_ms){
+                        engine.context.ledger.acknowledge_display(&id,&text,at);
+                    }}
                 }},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
                 Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question,now,now,now,Some(context));engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
@@ -603,6 +614,17 @@ fn answer_visible(rt:State<'_,Runtime>,id:String,revision:Option<u64>) {
         if let Some(trace)=rt.timings.lock().unwrap().get(&id){trace.mark(crate::openai::timing::Stage::FirstVisible);}
     }
 }
+// Host monotonic session time is reconstructed at receipt so a delayed IPC
+// message does not turn a late paint into a pre-interruption visible answer.
+// Future clocks and observations predating this session are rejected.
+fn display_session_time(native_now:u64,host_now:u64,paint_host_ms:u64)->Option<u64> {
+    native_now.checked_sub(host_now.checked_sub(paint_host_ms)?)
+}
+#[tauri::command]
+async fn answer_displayed(rt:State<'_,Runtime>,id:String,revision:u64,text:String,paint_host_ms:u64)->Result<(),String> {
+    if text.len()>32_000{return Err("Displayed answer is oversized".into());}
+    send(&rt,Control::Displayed(id,revision,text,paint_host_ms)).await
+}
 #[tauri::command]
 fn acceptance_disconnect_answers(rt:State<'_,Runtime>)->Result<(),String> {
     #[cfg(all(feature="acceptance",debug_assertions))]
@@ -712,8 +734,6 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
     if let Some(j)=answers.visible() {
-        if !j.buffer.is_empty(){engine.context.ledger.displayed(&j.generation_id,&j.question.text,&j.buffer,j.output_observed_at);}
-        if j.error.is_none() && j.latency.completed_at.is_none(){engine.context.remember_visible_answer_at(&j.question.id,&j.question.text,&j.buffer,j.latency.remote_speech_started_at.unwrap_or(j.question.detected_at));}
         engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=j.error.clone();
         engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}
@@ -724,6 +744,12 @@ fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
 #[cfg(test)]
 mod answer_view_tests {
     use super::*;
+    #[test]
+    fn delayed_paint_ack_uses_paint_time_and_rejects_other_session_clocks() {
+        assert_eq!(display_session_time(1000,100_000,99_800),Some(800));
+        assert_eq!(display_session_time(1000,100_000,100_001),None);
+        assert_eq!(display_session_time(1000,100_000,98_999),None);
+    }
     #[test]
     fn continued_question_does_not_feed_its_retracted_visible_draft_back_as_context() {
         let mut engine=Engine::default();
@@ -736,6 +762,9 @@ mod answer_view_tests {
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.latency.remote_speech_started_at=Some(100);
         job.buffer="The unfinished draft assumes a different boundary.".into();job.output_observed_at=450;
         sync_answers(&mut engine,&answers);
+        engine.context.ledger.generated(&id,question,&engine.view.answer);
+        assert!(!engine.context.prompt("Why that boundary?").contains(&engine.view.answer));
+        engine.context.ledger.acknowledge_display(&id,&engine.view.answer,450);
         assert!(engine.context.prompt("Why that boundary?").contains(&engine.view.answer));
         assert!(resume_answer_question(&mut answers,&mut engine.context,question,Some(5000)).is_none());
         assert!(engine.context.prompt("Why that boundary?").contains(&engine.view.answer));
@@ -806,6 +835,9 @@ mod answer_view_tests {
         let id=answers.confirm("Implement it".into(),0,0,0);answers.next(0);
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.buffer="```rust\nlet changed=7;".into();
         sync_answers(&mut engine,&answers);
+        engine.context.ledger.generated(&id,"Implement it",&engine.view.answer);
+        assert!(!engine.context.prompt("Why 7?").contains(&engine.view.answer));
+        assert!(engine.context.ledger.acknowledge_display(&id,&engine.view.answer,1));
         assert!(engine.context.prompt("Why 7?").contains(&engine.view.answer));
         assert!(engine.context.prompt("Why 7?").contains("may be unfinished"));
         assert!(engine.view.latency.as_ref().unwrap().completed_at.is_none());
@@ -1133,6 +1165,7 @@ pub fn run() {
         .plugin(plugin)
         .invoke_handler(tauri::generate_handler![
             answer_visible,
+            answer_displayed,
             get_answer_timings,
             get_snapshot,
             acceptance_event,

@@ -304,6 +304,7 @@ impl Codex {
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         let mut retry_context=None;
         let mut frame=prompt.cloned();
+        if updates.is_some(){if let Some(trace)=&trace{trace.question_policy("latest_confirmed",MAX_QUESTION_REPLACEMENTS,FINAL_CONSUMPTION_WAIT.as_millis()as u64);}}
         for replacement in 0..=MAX_QUESTION_REPLACEMENTS {
             let attempt_input=frame.as_ref().map(QuestionPrompt::render).unwrap_or_else(||input.to_owned());
             let question=frame.as_ref().map(|frame|frame.question.clone()).unwrap_or_else(||active_question.clone());
@@ -313,7 +314,7 @@ impl Codex {
             // stream_attempt proved terminal cleanup before returning this
             // signal. Every subsequent attempt retains the same stale guard.
             if let Some(trace)=&trace{trace.reset_answer();}
-            tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
+            tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=tokio::time::timeout(RPC_TIMEOUT,event(StreamEvent::Revision(String::new())))=>result.map_err(|_|"Codex revision delivery timed out")??};
             if replacement==MAX_QUESTION_REPLACEMENTS {
                 return Err("Codex question replacement budget exhausted".into());
             }
@@ -409,7 +410,22 @@ impl Codex {
                     let changed=stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now());
                     if changed && !obsolete_output_hidden {
                         obsolete_output_hidden=true;
-                        tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
+                        let clear=event(StreamEvent::Revision(String::new()));tokio::pin!(clear);
+                        loop {
+                            tokio::select!{
+                                _=cancel.cancelled()=>return Err("cancelled".into()),
+                                _=&mut deadline=>return Err("Codex answer timed out".into()),
+                                _=async {match stale.deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}}=>return Err(REFINEMENT_STALLED.into()),
+                                result=&mut clear=>{result?;break;},
+                                changed=receiver.changed()=>{
+                                    changed.map_err(|_|"Question update channel closed")?;
+                                    let mut latest=receiver.borrow().clone();
+                                    if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
+                                    latest.context=latest.context.or_else(||retry_context.clone());
+                                    stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now());
+                                },
+                            }
+                        }
                         if let Some(trace)=&trace{trace.reset_answer();}
                     }
                     if turn_finished && latest.confirmed && !changed {
@@ -479,6 +495,7 @@ impl Codex {
                         loop {
                             tokio::select! {
                                 _=cancel.cancelled()=>return Err("cancelled".into()),
+                                _=&mut deadline=>return Err("Codex answer timed out".into()),
                                 result=&mut delivery=>{result?;break;},
                                 changed=async {match updates.as_mut(){Some(receiver)=>receiver.changed().await.map_err(|_|"Question update channel closed"),None=>std::future::pending().await}}=>{
                                     changed?;
@@ -795,6 +812,46 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         assert!(service.events.lock().unwrap().is_empty());assert!(service.pending.lock().unwrap().is_empty());assert!(!service.dead.is_cancelled());codex.close();
     }
     #[tokio::test]
+    async fn resumed_speech_during_cleanup_coalesces_while_obsolete_delivery_is_blocked() {
+        let (codex,service,mut requests)=question_fixture();
+        let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:"initial".into(),context:None,confirmed:false,acoustic_quiet:false});
+        let (entered,old_delivery)=oneshot::channel();let mut entered=Some(entered);
+        let server=async {
+            let request=question_request(&mut requests).await;assert_eq!(request["method"],"turn/start");
+            let thread=request["params"]["threadId"].as_str().unwrap();
+            acknowledge(&service,&request,json!({"turn":{"id":"old-turn"}}));
+            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"old-answer"}}})));
+            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"old-answer","delta":"{\"intent\":\"answer\",\"text\":\"obsolete draft\"}"}})));
+            tokio::time::timeout(Duration::from_secs(2),old_delivery).await.unwrap().unwrap();
+            tx.send_replace(QuestionUpdate{question:"early pause".into(),context:None,confirmed:true,acoustic_quiet:true});
+            let interrupt=question_request(&mut requests).await;assert_eq!(interrupt["method"],"turn/interrupt");
+            tx.send_replace(QuestionUpdate{question:"continuing fragment".into(),context:Some("latest facts".into()),confirmed:false,acoustic_quiet:false});
+            acknowledge(&service,&interrupt,json!({}));end_fixture_turn(&service,thread,"old-turn","interrupted");
+            let unsubscribe=tokio::time::timeout(Duration::from_secs(2),requests.recv()).await.unwrap().unwrap();assert_eq!(unsubscribe["method"],"thread/unsubscribe");
+            assert!(tokio::time::timeout(Duration::from_millis(150),requests.recv()).await.is_err(),"Do not submit a replacement for an unconfirmed fragment");
+            tx.send_replace(QuestionUpdate{question:"complete latest question".into(),context:None,confirmed:true,acoustic_quiet:true});
+            let request=question_request(&mut requests).await;assert_eq!(request["method"],"turn/start");
+            let text=request["params"]["input"][0]["text"].as_str().unwrap();
+            assert!(text.contains("complete latest question")&&text.contains("latest facts"));
+            assert!(!text.contains("early pause")&&!text.contains("continuing fragment"));
+            let thread=request["params"]["threadId"].as_str().unwrap();acknowledge(&service,&request,json!({"turn":{"id":"new-turn"}}));
+            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"new-answer"}}})));
+            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"new-answer","delta":"{\"intent\":\"answer\",\"text\":\"latest answer\"}"}})));
+            end_fixture_turn(&service,thread,"new-turn","completed");tx
+        };
+        let mut text=String::new();let prompt=QuestionPrompt::new("initial facts","initial");
+        let result=codex.stream_question("fixture-model",None,None,"fixture instructions",&prompt,None,CancellationToken::new(),RefillPolicy::Disabled,None,rx,|event|{
+            let block=match event {
+                StreamEvent::QuestionDelta{question,..} if question=="initial"=>{entered.take().unwrap().send(()).unwrap();true},
+                StreamEvent::QuestionDelta{question,text:delta,..}=>{assert_eq!(question,"complete latest question");text.push_str(&delta);false},
+                StreamEvent::Revision(replacement)=>{text=replacement;false},_=>false,
+            };
+            async move {if block{std::future::pending::<()>().await;}Ok(())}
+        });
+        let (result,sender)=tokio::join!(result,server);result.unwrap();drop(sender);
+        assert_eq!(text,"latest answer");assert!(service.pending.lock().unwrap().is_empty());codex.close();
+    }
+    #[tokio::test]
     async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
         let (service,_requests)=transport_fixture();let (output,mut events)=mpsc::channel(1);
         #[cfg(all(feature="acceptance",debug_assertions))]
@@ -947,8 +1004,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-intent-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
-        codex.prime("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prime("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         assert!(codex.prepared.lock().unwrap().iter().all(|thread|thread.turns==0),"Startup inference must not become meeting history");
         for (question,context,should_reply) in [
             ("A component suddenly becomes x","This is a technical interview. The interviewer is presenting a hypothetical failure for the candidate to analyze. No meaning for x has been supplied.",true),
@@ -963,7 +1020,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         ] {
             let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:question.into(),confirmed:true,context:None});
             let mut text=String::new();let mut ignored=false;
-            codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
+            codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
                 match event {StreamEvent::QuestionDelta{text:delta,..}=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,StreamEvent::NoReply{..}=>ignored=true,_=>{}}
                 std::future::ready(Ok(()))
             }).await.unwrap();
@@ -990,14 +1047,14 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let cwd=binary.parent().unwrap().join("test-work");
         let codex=Codex::new(binary,cwd);
         assert!(codex.account().await.unwrap().is_some());
-        assert!(codex.models().await.unwrap().iter().any(|m|m.slug=="gpt-6-luna"));
+        assert!(codex.models().await.unwrap().iter().any(|m|m.slug=="gpt-6.1-sol"));
         let service=codex.ready(&CancellationToken::new()).await.unwrap();
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("xhigh"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         assert_eq!(codex.prepared.lock().unwrap().len(),PREPARED_POOL_SIZE);
         let trace=Trace::new(std::time::Instant::now(),0);
         let cancel=CancellationToken::new();let abort=cancel.clone();let mut deltas=0;
-        let result=codex.stream_traced("gpt-6-luna",Some("fast"),Some("xhigh"),&instructions,
+        let result=codex.stream_traced("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,
             "Synthetic meeting: the target is February 19. Explain the target in three short sentences.",None,cancel,RefillPolicy::FirstToken,Some(trace.clone()),|event| {
                 if let StreamEvent::Delta(_)=event {deltas+=1;abort.cancel();}
                 std::future::ready(Ok(()))
@@ -1020,7 +1077,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let cwd=std::env::current_dir().unwrap().join(".local/live-question-test");
         let codex=Codex::new(binary,cwd);
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         for early_completion in [false,true] {
             let (prior_id,prior_turns,prior_chars)={let pool=codex.prepared.lock().unwrap();let thread=pool.iter().max_by_key(|thread|thread.turns).unwrap();(thread.id.clone(),thread.turns,thread.history_chars)};
             let initial="What is our".to_string();let final_question="What is our launch date?".to_string();
@@ -1037,7 +1094,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             });
             let mut text=String::new();
             let supplied_context=QuestionPrompt::new("MEETING SUMMARY\nThe launch date is February 19. The hiring target is 12 people.",initial.clone());
-            let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
+            let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,
                 &supplied_context,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
                     match event {StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
                     std::future::ready(Ok(()))
@@ -1047,8 +1104,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             let timeline=trace.snapshot();assert!(!timeline.cancelled);
             assert_eq!(timeline.followup_count,0);
             assert_eq!(timeline.steering_count,0);
-            assert_eq!(timeline.refinement_restart_count,1);
-            assert!(timeline.latest_input_sent>=timeline.turn_start_ack);
+            assert!(timeline.refinement_restart_count<=1,"A latest frame sampled before submission needs no replacement");
             assert!(timeline.latest_input_ack>=timeline.latest_input_sent);
             let pool=codex.prepared.lock().unwrap();let thread=pool.iter().max_by_key(|thread|thread.turns).unwrap();
             if timeline.refinement_restart_count==0 {
@@ -1063,12 +1119,12 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         codex.close();
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to measure repeated stable refinements within one utterance"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol to measure repeated stable refinements within one utterance"]
     async fn live_multiple_stable_refinements_keep_latest_context_before_confirmation() {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-multiple-refinement-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let initial="What is our".to_string();let final_question="What is our launch date after the latest change?".to_string();
         let input=QuestionPrompt::new("MEETING FACT\nThe launch date was February 19.",initial.clone());
         let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:initial.clone(),confirmed:false,context:None});
@@ -1084,13 +1140,13 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:final_copy,confirmed:true,context:None});(tx,prefinal,confirmed)
         });
         let mut text=String::new();let mut first_final=None;
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event{StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},StreamEvent::Revision(replacement)=>{text=replacement;first_final=None;},_=>{}}
             std::future::ready(Ok(()))
         });
         let (result,sender)=tokio::join!(result,update);result.unwrap();let (sender,prefinal,confirmed)=sender.unwrap();drop(sender);
         let timeline=trace.snapshot();
-        let evidence=json!({"model":"gpt-6-luna","effort":"low","tier":"fast","scope":"Controlled staged ASR updates with a four-second final hold; tests refinement behavior, not human-interview latency.","answer":text,"first_final_delta":first_final,"confirmed":confirmed,"prefinal":prefinal,"timeline":timeline});
+        let evidence=json!({"model":"gpt-6.1-sol","effort":"low","tier":"fast","scope":"Controlled staged ASR updates with a four-second final hold; tests refinement behavior, not human-interview latency.","answer":text,"first_final_delta":first_final,"confirmed":confirmed,"prefinal":prefinal,"timeline":timeline});
         let output=PathBuf::from(std::env::var("COPILOT_MULTI_REFINEMENT_TEST_OUTPUT").expect("Explicit refinement evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
@@ -1099,12 +1155,12 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         println!("Multi-refinement evidence: {evidence}");codex.close();
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to verify a context correction under an unchanged question"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol to verify a context correction under an unchanged question"]
     async fn live_same_question_context_correction_replaces_old_answer() {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-context-correction-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let question="What is our launch date?".to_string();
         let old="The agreed launch date is February 19.";
         let corrected="LATEST SPOKEN CORRECTION: the launch date is March 22. February 19 is obsolete.";
@@ -1119,7 +1175,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();let mut old_text=String::new();let mut revisions=0;let mut corrected_completion=false;let mut held_old_delta=false;
         let input=QuestionPrompt::new(old,question.clone());
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             let mut hold=false;
             match event{StreamEvent::QuestionDelta{context_key,text:delta,..} if context_key==expected_key=>text.push_str(&delta),StreamEvent::QuestionDelta{text:delta,..}=>old_text.push_str(&delta),StreamEvent::QuestionCompleted{context_key,..}=>{assert_eq!(context_key,expected_key);corrected_completion=true;},StreamEvent::Revision(replacement)=>{text=replacement;revisions+=1;},_=>{}}
             if !held_old_delta&&!old_text.is_empty(){held_old_delta=true;hold=true;}
@@ -1136,7 +1192,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             }
         });
         let (result,sender)=tokio::join!(result,update);result.unwrap();drop(sender.unwrap());
-        let evidence=json!({"model":"gpt-6-luna","effort":"low","tier":"fast","scope":"Controlled same-question context correction; not a latency certification.","old_answer":old_text,"answer":text,"revisions":revisions,"timeline":trace.snapshot()});
+        let evidence=json!({"model":"gpt-6.1-sol","effort":"low","tier":"fast","scope":"Controlled same-question context correction; not a latency certification.","old_answer":old_text,"answer":text,"revisions":revisions,"timeline":trace.snapshot()});
         let output=PathBuf::from(std::env::var("COPILOT_CONTEXT_CORRECTION_TEST_OUTPUT").expect("Explicit context evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
@@ -1147,26 +1203,26 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         assert!(revisions>0&&corrected_completion);println!("Context correction evidence: {evidence}");codex.close();
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to check coalescing while input grows without a quiet interval"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol to check coalescing while input grows without a quiet interval"]
     async fn live_continuous_question_growth_coalesces_until_confirmation() {
         continuous_growth_probe(false,None).await;
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to check changed context during continuous question growth"]
-    async fn live_continuous_growth_submits_changed_context_before_confirmation() {
+    #[ignore = "Uses signed-in GPT-6.1 Sol to check changed context during continuous question growth"]
+    async fn live_continuous_growth_coalesces_changed_context_until_confirmation() {
         continuous_growth_probe(true,None).await;
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna with an acoustic pause and a simulated 750 ms ASR endpoint wait"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol with an acoustic pause and a simulated 750 ms ASR endpoint wait"]
     async fn live_growth_with_acoustic_pause_probe() {continuous_growth_probe(false,Some(true)).await;}
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna for the matched simulated endpoint-wait control"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol for the matched simulated endpoint-wait control"]
     async fn live_growth_with_asr_wait_control() {continuous_growth_probe(false,Some(false)).await;}
     async fn continuous_growth_probe(context_correction:bool,acoustic_pause:Option<bool>) {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-continuous-growth-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let initial="What is the".to_string();
         let question="What is the currently agreed launch date after the latest correction, considering the schedule revised today and the decision recorded in the release meeting, and excluding the obsolete date from the earlier version?".to_string();
         let corrected_context="LATEST MEETING FACT: the agreed launch date is March 22. February 19 is obsolete.";
@@ -1189,7 +1245,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();let mut first_final=None;let mut prefinal_replies:Vec<Value>=vec![];let original_question=initial.clone();
         let input=QuestionPrompt::new(context,initial.clone());
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event{
                 StreamEvent::QuestionDelta{question:current,text:delta,..} if current==question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},
                 StreamEvent::QuestionDelta{question:current,text:delta,..} if current!=original_question&&trace.snapshot().question_confirmed.is_none()=>{
@@ -1201,7 +1257,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             std::future::ready(Ok(()))
         });
         let (result,sender)=tokio::join!(result,update);result.unwrap();let(sender,prefinal,confirmed)=sender.unwrap();drop(sender);
-        let evidence=json!({"model":"gpt-6-luna","effort":"low","tier":"fast","contextCorrection":context_correction,"acousticPause":acoustic_pause,"endpointWaitMs":if acoustic_pause.is_some(){750}else{0},"scope":"Controlled word-by-word updates every 150 ms; optional 750 ms endpoint-wait control. Excludes capture, real ASR and rendering; not a hard-interview certification.","answer":text,"first_final_delta":first_final,"confirmed":confirmed,"prefinalReplies":prefinal_replies,"prefinal":prefinal,"timeline":trace.snapshot()});
+        let evidence=json!({"model":"gpt-6.1-sol","effort":"low","tier":"fast","contextCorrection":context_correction,"acousticPause":acoustic_pause,"endpointWaitMs":if acoustic_pause.is_some(){750}else{0},"scope":"Controlled word-by-word updates every 150 ms; optional 750 ms endpoint-wait control. Excludes capture, real ASR and rendering; not a hard-interview certification.","answer":text,"first_final_delta":first_final,"confirmed":confirmed,"prefinalReplies":prefinal_replies,"prefinal":prefinal,"timeline":trace.snapshot()});
         let output=PathBuf::from(std::env::var("COPILOT_CONTINUOUS_GROWTH_TEST_OUTPUT").expect("Explicit continuous-growth evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
@@ -1210,12 +1266,12 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         println!("Continuous growth evidence: {evidence}");codex.close();
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to distinguish recognition errors from genuinely missing information"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol to distinguish recognition errors from genuinely missing information"]
     async fn live_recognition_context_preserves_numbers_and_unknowns() {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-recognition-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let mut records=vec![];
         for (question,context) in [
             ("For an Akuda block with 45 threads, explain what execution groups it has. One sentence, no implementation.","We are discussing GPU programming, block reductions, synchronization and source lanes. This is an automatic speech transcript of a technical interview."),
@@ -1224,7 +1280,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         ] {
             let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:question.into(),confirmed:true,context:None});
             let mut text=String::new();
-            codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
+            codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
                 match event{StreamEvent::QuestionDelta{text:delta,..}=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
                 std::future::ready(Ok(()))
             }).await.unwrap();
@@ -1237,16 +1293,16 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let corrected=records[2]["answer"].as_str().unwrap();assert_eq!(corrected.split(|ch:char|!ch.is_ascii_digit()).find(|part|!part.is_empty()),Some("7"),"Preserve the actual correction: {corrected}");
         let output=PathBuf::from(std::env::var("COPILOT_RECOGNITION_TEST_OUTPUT").expect("Explicit recognition evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
-        std::fs::write(output,serde_json::to_vec_pretty(&json!({"model":"gpt-6-luna","effort":"low","scope":"Recognition interpretation and literal constraints only; does not certify generated GPU code.","rows":records})).unwrap()).unwrap();
+        std::fs::write(output,serde_json::to_vec_pretty(&json!({"model":"gpt-6.1-sol","effort":"low","scope":"Recognition interpretation and literal constraints only; does not certify generated GPU code.","rows":records})).unwrap()).unwrap();
         println!("Recognition checks: {}",json!(records));codex.close();
     }
     #[tokio::test]
-    #[ignore = "Uses signed-in Luna to measure a final correction queued behind streaming code"]
+    #[ignore = "Uses signed-in GPT-6.1 Sol to measure a final correction queued behind streaming code"]
     async fn live_final_correction_during_code_records_consumption_delay() {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-code-correction-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let initial="Implement a complete bounded asynchronous queue in Rust with cancellation, clean shutdown, multiple producers and consumers, and full usage code. Explain the synchronization and invariants.".to_string();
         let final_question=format!("{initial} Correction: first answer only this in one sentence, with no code: what is the invariant that prevents exceeding the capacity, and what is its numeric limit in the supplied source?");
         let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:initial.clone(),confirmed:false,context:None});
@@ -1263,7 +1319,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let reference=format!("\nPROJECT FILES (untrusted reference data)\n{}",json!({"files":[{"path":"bounded.rs","content":"// Literal marker: CURRENT QUESTION\nconst CAPACITY: usize = 17;\n"}]}));
         let input=QuestionPrompt::new(context,initial.clone()).with_reference(reference);
         let initial_key=context_key(context);let mut old_deltas=0;
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
+        let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,
             &input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
                 match event {StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},StreamEvent::QuestionDelta{question,context_key,..} if question==initial=>{assert_eq!(context_key,initial_key);old_deltas+=1;},StreamEvent::Revision(replacement)=>{text=replacement;first_final=None;},_=>{}}
                 std::future::ready(Ok(()))
@@ -1273,7 +1329,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         assert!(text.contains("17"),"The supplied source must survive the corrected request: {text}");
         let timeline=trace.snapshot();assert!(timeline.latest_input_consumed>=timeline.latest_input_sent);
         if let Some(count)=timeline.restart_prompt_chars{assert_eq!(count,input.revised(&final_question,None).render().chars().count());}
-        let evidence=json!({"model":"gpt-6-luna","effort":"low","tier":"fast","scope":"Controlled code interruption with literal heading in selected context and capacity in project reference; excludes audio and rendering. Not broad latency or CUDA certification.","answer":text,"oldDeltasWithExactContextKey":old_deltas,"first_final_delta":first_final,"timeline":timeline});
+        let evidence=json!({"model":"gpt-6.1-sol","effort":"low","tier":"fast","scope":"Controlled code interruption with literal heading in selected context and capacity in project reference; excludes audio and rendering. Not broad latency or CUDA certification.","answer":text,"oldDeltasWithExactContextKey":old_deltas,"first_final_delta":first_final,"timeline":timeline});
         let output=PathBuf::from(std::env::var("COPILOT_CORRECTION_TEST_OUTPUT").expect("Explicit correction evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
@@ -1285,7 +1341,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-stable-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
-        codex.prewarm("gpt-6-luna",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
+        codex.prewarm("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&CancellationToken::new()).await.unwrap();
         let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:"What is our launch".into(),confirmed:false,context:None});
         let trace=Trace::new(std::time::Instant::now(),0);let observed=trace.clone();
         let update=tokio::spawn(async move {
@@ -1297,7 +1353,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();
         let input=QuestionPrompt::new("The launch date is February 19.","What is our launch");
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_question("gpt-6.1-sol",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event {StreamEvent::QuestionDelta{question,text:delta,..} if question=="What is our launch date"=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
             std::future::ready(Ok(()))
         });

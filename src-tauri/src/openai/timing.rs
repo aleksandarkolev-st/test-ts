@@ -38,6 +38,9 @@ pub struct Timeline {
     #[serde(default)] pub latest_input_ack: Option<u64>,
     #[serde(default)] pub latest_input_consumed: Option<u64>,
     #[serde(default)] pub refinement_restart_count: usize,
+    #[serde(default)] pub question_policy: Option<String>,
+    #[serde(default)] pub question_replacement_limit: Option<usize>,
+    #[serde(default)] pub stale_question_budget_ms: Option<u64>,
     #[serde(default)] pub completed_draft_replacement_count: usize,
     #[serde(default)] pub restart_prompt_chars: Option<usize>,
     #[serde(default)] pub acoustic_refinement_count: usize,
@@ -143,6 +146,10 @@ impl Trace {
         t.delta_callback_max_us=t.delta_callback_max_us.max(elapsed_us);
     }
     pub fn refinement_restarted(&self) {self.data.lock().unwrap().refinement_restart_count+=1;}
+    pub fn question_policy(&self,policy:&str,replacements:usize,stale_ms:u64) {
+        let mut t=self.data.lock().unwrap();t.question_policy=Some(policy.into());
+        t.question_replacement_limit=Some(replacements);t.stale_question_budget_ms=Some(stale_ms);
+    }
     pub fn completed_draft_replaced(&self) {self.data.lock().unwrap().completed_draft_replacement_count+=1;}
     pub fn acoustic_refined(&self) {self.data.lock().unwrap().acoustic_refinement_count+=1;}
     pub fn eager_final_replacement(&self, enabled:bool) {self.data.lock().unwrap().eager_final_replacement=enabled;}

@@ -46,6 +46,13 @@ protocol tests passed in the real compiled crate on 2026-10-11. The first run
 recorded 14 passes and three fixture failures because blocking dispatch ran
 inside Tokio; the fixture now uses a dedicated reader thread, matching the
 real transport. Both attempts and source fingerprints are retained under
-`artifacts/deep-interview-v71/candidate-tests`. Native balanced audio
-comparisons and independent accuracy reviews remain pending. No latency
-improvement is claimed for this candidate yet.
+`artifacts/deep-interview-v71/candidate-tests`. All 24 balanced native audio
+comparisons are now complete: baseline delivered 12/12 retained words with a
+14.01-second median, while this candidate delivered 11/12 with a 10.98-second
+median among delivered words. One long multipart question exhausted the
+replacement budget and produced no retained word. Eleven of twelve delivered
+words cannot establish a finite all-trial sample p95. No limit was raised or
+topic-specific exception added. Full non-live library validation also recorded
+135 distinct passing tests and two ignored tests. Independent accuracy review
+remains pending. The candidate remains experimental and separate from the main
+app; these results do not establish a complete universal solution.

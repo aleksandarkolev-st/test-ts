@@ -10,6 +10,8 @@ const root=process.cwd(),output=path.resolve(outDir);assert(output.startsWith(ro
 const bytes=await readFile(journalFile),journal=JSON.parse(bytes),spec=JSON.parse(await readFile(specFile));
 assert.equal(journal.status,'complete','Do not run code checks concurrently with measured inference');
 const sha=x=>createHash('sha256').update(x).digest('hex');assert.equal(spec.journalSha256,sha(bytes));
+const harnessSha256=sha(await readFile('tests/fixtures/cuda-collective-harness.hpp'));
+const harnessHeaderSha256=sha(await readFile('tests/fixtures/cuda_runtime.h'));
 const run=(file,args,budget=20000)=>new Promise(resolve=>{
  const child=spawn(file,args,{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']});let stdout='',stderr='',timedOut=false;
  child.stdout.on('data',x=>stdout=(stdout+x).slice(-12000));child.stderr.on('data',x=>stderr=(stderr+x).slice(-12000));
@@ -43,6 +45,6 @@ for(const item of spec.checks){
  if(result.compile.code===0)result.execution=await run(exe,[],10000);
  result.pass=result.compile.code===0&&result.execution?.code===0&&!result.execution.timedOut&&(item.kind!=='foo-exact'||result.exactOriginal);
 }
-await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',results,
+await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',harnessSha256,harnessHeaderSha256,results,
  scope:'CPU compilation/execution of recorded algorithm plus explicit test harness. CUDA header/intrinsics and PTX lane-id read are adapted to the documented CPU environment; algorithm is not repaired. This does not certify NVIDIA hardware, nvcc or a proof for arbitrary inputs.'},null,2));
 console.log(JSON.stringify(results.map(r=>({round:r.round,pass:r.pass??false,failure:r.pass?null:r.failure??r.compile?.error??r.compile?.stderr??null}))));

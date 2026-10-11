@@ -14,6 +14,9 @@
 #define __forceinline__ inline
 struct Dim { unsigned x=0,y=0,z=0; };
 inline thread_local Dim threadIdx;
+// Full physical warp laid out along x; y/z thread coordinates remain zero.
+// Rank-based lane computations in valid CUDA answers must also compile.
+inline const Dim blockDim{32,1,1};
 inline thread_local unsigned collective_step=0;
 inline thread_local unsigned shuffle_count=0;
 struct Collective {

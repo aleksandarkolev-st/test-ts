@@ -12,9 +12,9 @@ while(true){const journal=JSON.parse(await readFile(finalHour));if(journal.statu
 const tasks=[];
 const replay=(name,plan,backend)=>tasks.push({name,backend,args:['scripts/controller-session-replay.mjs',relative(plan),'.local/controller-app',relative(path.join(runRoot,'native',name)),backend],journal:path.join(runRoot,'native',name,'interview.json')});
 for(const backend of ['codex','chatgpt']){
- replay(`contextual-final-${backend}`,path.join(runRoot,'prepared/contextual-session.json'),backend);
- replay(`reasoning-${backend}`,path.join(runRoot,'prepared/reasoning-probes.json'),backend);
- replay(`meeting-behavior-${backend}`,path.join(runRoot,'prepared/meeting-behavior.json'),backend);
+ replay(`contextual-range-final-${backend}`,path.join(runRoot,'prepared/contextual-session.json'),backend);
+ replay(`reasoning-range-${backend}`,path.join(runRoot,'prepared/reasoning-probes.json'),backend);
+ replay(`meeting-behavior-range-${backend}`,path.join(runRoot,'prepared/meeting-behavior.json'),backend);
  replay(`hour-display-${backend}`,path.join(runRoot,'prepared/hour-session.json'),backend);
 }
 // One continuous application/session, with real 60/120/180-minute recall and

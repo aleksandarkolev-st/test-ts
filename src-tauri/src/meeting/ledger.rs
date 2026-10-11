@@ -8,7 +8,9 @@ pub struct Suggestion {
     pub id:String,pub question:String,pub generated:String,
     pub displayed:Vec<(u64,String)>,pub completed_at:Option<u64>,pub interrupted_at:Option<u64>,
     pub display_versions:Vec<Vec<(u64,String)>>,
-    pub painted_ranges:Vec<(u64,usize,String)>,
+    // Observations reference the immutable exact source; never copy growing
+    // text on every paint (which would make retained memory quadratic).
+    pub painted_ranges:Vec<(u64,usize,usize)>,
 }
 #[derive(Default)]
 pub struct Ledger {
@@ -51,9 +53,8 @@ impl Ledger {
     pub fn acknowledge_paint(&mut self,id:&str,text:&str,start:usize,end:usize,now:u64)->bool {
         let Some(s)=self.suggestions.iter_mut().find(|s|s.id==id) else{return false;};
         if start>=end||end>text.len()||!text.is_char_boundary(start)||!text.is_char_boundary(end)||!s.generated.starts_with(text){return false;}
-        let visible=&text[start..end];
-        if !s.painted_ranges.last().is_some_and(|(_,previous_start,previous)|*previous_start==start&&previous==visible){
-            s.painted_ranges.push((now,start,visible.into()));self.version+=1;
+        if !s.painted_ranges.last().is_some_and(|(_,previous_start,previous_end)|*previous_start==start&&*previous_end==end){
+            s.painted_ranges.push((now,start,end));self.version+=1;
         }
         true
     }
@@ -98,7 +99,7 @@ impl Ledger {
                     let code=parts[i];
                     let matches=code.split(|c:char|!c.is_alphanumeric()&&c!='_').any(|identifier|query.iter().any(|word|word==&identifier.to_lowercase()));
                     let exact=format!("```{code}```");
-                    let already_visible=suggestion.painted_ranges.iter().any(|(at,_,text)|*at<cutoff&&text.contains(&exact))||suggestion.displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,text)|text.as_str()).collect::<String>().contains(&exact);
+                    let already_visible=suggestion.painted_ranges.iter().any(|(at,start,end)|*at<cutoff&&suggestion.generated[*start..*end].contains(&exact))||suggestion.displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,text)|text.as_str()).collect::<String>().contains(&exact);
                     if matches&&!already_visible {
                         items.push((suggestion.completed_at.or(suggestion.interrupted_at).unwrap(),format!("ARCHIVED EXACT GENERATED CODE [generation {}; may be incorrect; not evidence of speech or viewport visibility]\nQUESTION: {}\n{exact}",suggestion.id,suggestion.question)));
                     }
@@ -109,10 +110,9 @@ impl Ledger {
                 let first=ranges.iter().map(|(at,_,_)|*at).min().unwrap();
                 ranges.sort_by_key(|(_,start,_)|*start);
                 let mut merged:Vec<(usize,usize)>=Vec::new();
-                for (_,start,text) in ranges {
-                    let end=start+text.len();
-                    if let Some(previous)=merged.last_mut().filter(|(_,previous_end)|*start<=*previous_end){previous.1=previous.1.max(end);}
-                    else{merged.push((*start,end));}
+                for (_,start,end) in ranges {
+                    if let Some(previous)=merged.last_mut().filter(|(_,previous_end)|*start<=*previous_end){previous.1=previous.1.max(*end);}
+                    else{merged.push((*start,*end));}
                 }
                 let text=merged.into_iter().map(|(start,end)|format!("[visible source bytes {start}..{end}]\n{}",&suggestion.generated[start..end])).collect::<Vec<_>>().join("\n[undisplayed gap]\n");
                 items.push((first,format!("COPILOT SUGGESTION [generation {}; may be unfinished or incorrect]\nQUESTION: {}\nEXACT DISPLAYED TEXT:\n{}",suggestion.id,suggestion.question,text)));

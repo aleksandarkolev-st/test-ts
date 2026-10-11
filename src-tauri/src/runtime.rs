@@ -276,7 +276,8 @@ async fn actor(
                         "recognizedRevisionBytes":engine.context.ledger.recognized.iter().map(|r|r.segment.text.len()).sum::<usize>(),
                         "generatedBytes":engine.context.ledger.suggestions.iter().map(|s|s.generated.len()).sum::<usize>(),
                         "paintedRanges":engine.context.ledger.suggestions.iter().map(|s|s.painted_ranges.len()).sum::<usize>(),
-                        "paintedRangeBytes":engine.context.ledger.suggestions.iter().flat_map(|s|s.painted_ranges.iter()).map(|(_,_,text)|text.len()).sum::<usize>(),
+                        "paintedRangeBytes":engine.context.ledger.suggestions.iter().flat_map(|s|s.painted_ranges.iter()).map(|(_,start,end)|end-start).sum::<usize>(),
+                        "paintMetadataBytes":engine.context.ledger.suggestions.iter().map(|s|s.painted_ranges.capacity()*std::mem::size_of::<(u64,usize,usize)>()).sum::<usize>(),
                         "displayedBytes":engine.context.ledger.suggestions.iter().map(|s|s.display_versions.iter().chain(std::iter::once(&s.displayed)).flat_map(|v|v.iter()).map(|(_,text)|text.len()).sum::<usize>()).sum::<usize>()}}));
                 },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::FreezeContext(context,policy,reply)=>{

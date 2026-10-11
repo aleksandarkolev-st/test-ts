@@ -96,6 +96,17 @@ fn exact_archived_code_retrieval_does_not_present_unseen_tail_to_live_followup()
     assert_eq!(ledger.context("Recall OriginalGuard",Some(400)).matches(code).count(),1);
 }
 #[test]
+fn growing_paint_history_references_source_once_instead_of_copying_prefixes() {
+    let mut ledger=super::ledger::Ledger::default();
+    let text="x".repeat(32_000);ledger.generated("a","Explain",&text);
+    for end in 1..=32_000 {assert!(ledger.acknowledge_paint("a",&text,0,end,end as u64));}
+    assert_eq!(ledger.suggestions[0].generated.len(),32_000);
+    assert_eq!(ledger.suggestions[0].painted_ranges.len(),32_000);
+    assert_eq!(std::mem::size_of_val(&ledger.suggestions[0].painted_ranges[0]),24);
+    assert!(ledger.context("Why?",Some(16_001)).contains(&"x".repeat(16_000)));
+    assert!(!ledger.context("Why?",Some(16_001)).contains(&"x".repeat(16_001)));
+}
+#[test]
 fn only_painted_prefix_enters_followup_context_and_retired_history_survives() {
     let mut ledger=super::ledger::Ledger::default();
     ledger.generated("old","Explain the invariant","Visible opening. Unseen tail.");

@@ -48,6 +48,8 @@ if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-visibility-audit.json'))){
 $taskSources=@($taskQueue | Where-Object { $_.event -eq 'finished' -and $_.kind -eq 'elapsed_hour' } | ForEach-Object { $_.source })
 if(!$taskSources.Count -or @($taskSources | Sort-Object -Unique).Count -ne $taskSources.Count){throw 'Missing or duplicate completed recordings in queue'}
 $taskHourSources=@($taskSources)
+$taskCodeSelectionFile='docs/evidence/recorded-code-selections-v71.json'
+$taskCodeSelections=Get-Content -LiteralPath $taskCodeSelectionFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $taskSources+=Get-ChildItem -LiteralPath ($taskRoot+'/hard-probes') -Directory | Sort-Object Name | ForEach-Object { $taskRoot+'/hard-probes/'+$_.Name+'/interview.json' }
 $taskSources+=$taskPressure+'/pressure-review-input.json'
 $taskSources+=$taskControl.trials | ForEach-Object { $_.outputDirectory+'/interview.json' }
@@ -70,6 +72,11 @@ foreach($taskSource in $taskSources){
  $taskParent=Split-Path -Path $taskSource -Parent
  $taskReviews=$taskParent+'/independent-model-review-v71'
  $taskSummary=$taskParent+'/independent-assessment-v71'
+ foreach($taskCodeCheck in $taskCodeSelections.checks | Where-Object file -eq $taskSource){
+  if($taskCodeCheck.kind -ne 'directed_graph_walk_classifier'){throw 'Unregistered explicit code-check contract'}
+  node --max-old-space-size=6144 $taskCodeCheck.collector $taskSource $taskCodeCheck.round $taskCodeCheck.outputDirectory $taskCodeSelectionFile
+  if($LASTEXITCODE -ne 0){throw ('Code-check evidence binding failed: '+$taskSource)}
+ }
  if($taskSource -notmatch 'pressure-review-input.json$'){
   if(!(Test-Path -LiteralPath ($taskParent+'/older-code-reference-audit.json'))){
    node --max-old-space-size=6144 scripts/audit-older-code-reference.mjs $taskParent

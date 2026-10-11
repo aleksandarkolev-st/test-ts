@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-11T10:34:22.747Z",
+  "scope": "Explicit selective executable checks for observed public contracts. These data do not route or alter production answers, select successful latency outcomes, or certify every interview implementation.",
+  "checks": [
+    {
+      "kind": "directed_graph_walk_classifier",
+      "file": "artifacts/deep-interview-v71/algorithms-hour-t/interview.json",
+      "round": 4,
+      "journalSha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+      "rowSha256": "bd3960d67eba5bebc7e7b94eee597e561c745064531c6165f527660b7d824975",
+      "questionSha256": "8df68d3062007fa887e7132909ab0ad3790c998696da1058f52f001d5c794251",
+      "answerSha256": "5c2232059de80120ce35c3df0883c8aceeef01b446e2f1e1828d869842272f6e",
+      "outputDirectory": "artifacts/deep-interview-v71/algorithms-hour-t/code-review/independent-graph-oracle-v71",
+      "collector": ".local/verify-recorded-graph-code-v71.mjs",
+      "entryPointSelection": "Exactly one recorded top-level Python function taking N, edges, S and T positionally. The recorded recognized name differs from the spoken name; neither is repaired.",
+      "contract": "Directed finite graph with exact signed integer edge weights, zero-indexed vertices, parallel edges and self-loops allowed, empty walk allowed. Return unreachable/None, finite/exact minimum cost, or unbounded/None for source-target walk cost."
+    }
+  ]
+}

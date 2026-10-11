@@ -17,6 +17,7 @@ async function fileHash(file){
 async function terminal(file,event){const rows=(await readFile(file,'utf8')).trim().replace(/^\uFEFF/,'').split('\n').map(JSON.parse);assert.equal(rows.at(-1).event,event);await fileHash(file);}
 await terminal(root+'/recording-queue.jsonl','recordings_terminal');
 const recorded=await recordedCohort(root);
+const codeSelections=await load('docs/evidence/recorded-code-selections-v71.json');
 await terminal(root+'/deferred-queue.jsonl','reviews_terminal');
 const playback=await load(root+'/policy-playback/playback.json');assert.equal(playback.status,'complete');assert(playback.stoppedCleanly);
 const controls=await load(root+'/policy-playback/manifest.json');assert.equal(playback.trials.length,controls.cases.length*controls.repetitions*controls.policies.length);
@@ -52,6 +53,15 @@ const reviewerProvenance=new Map();
 for(const entry of inputs){
  const directory=path.dirname(entry.file),journal=await load(entry.file),journalSha256=await fileHash(entry.file);
  assert.equal(journal.status,'complete');assert(journal.stoppedCleanly);
+ for(const selection of codeSelections.checks.filter(check=>path.resolve(check.file)===path.resolve(entry.file))){
+  assert.equal(selection.journalSha256,journalSha256);
+  const check=await load(selection.outputDirectory+'/source-bound-check.json');
+  assert.equal(check.journal.sha256,journalSha256);assert.equal(check.row.round,selection.round);
+  assert.equal(check.row.exactSha256,selection.rowSha256);assert.equal(check.row.answerSha256,selection.answerSha256);
+  assert.equal(await fileHash(check.code.file),check.code.sha256);
+  if(check.oracle){assert.equal(await fileHash(check.oracle.file),check.oracle.sha256);assert.equal(check.oracle.sourceCodeSha256,check.code.sha256);}
+  for(const log of Object.values(check.executionLogs))assert.equal(await fileHash(log.file),log.sha256);
+ }
  if(journal.olderCodeProbe){
   const older=await load(directory+'/older-code-reference-audit.json');assert.equal(older.journal.sha256,journalSha256);
   assert.equal(older.recordedReference.sourceAnswerSha256,journal.olderCodeProbe.sourceAnswerSha256);

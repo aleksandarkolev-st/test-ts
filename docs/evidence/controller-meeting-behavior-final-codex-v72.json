@@ -650,7 +650,42 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\meeting-behavior-range-codex-r1\\results.json",
+      "sha256": "94370fe4178c835110b792be07c618affbc2a1e208cda73fae5886256957135e",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/meeting-behavior-range-codex/interview.json",
+        "journalSha256": "0f212f61aa760bd45f51bacc79c9629032afea95cdc3299f7f2eb1224cb5a41d",
+        "compiler": "C:/TheRock/build/bin/clang++.exe",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 5,
+            "answerSha256": "24fbe38219ee2cffa2b54d05a81cc0ac465f88a182a85cc11eb782bafdfb4a69",
+            "kind": "cpp-self-test",
+            "scope": "Compile and execute the original recorded FIFO test main without repairing the source.",
+            "codeSha256": "a115fe2d555a6e25cf75d49d406bfd8c7a1f744c2dfe78d1f3c004d548660acd",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded algorithm plus explicit test harness. CUDA header/intrinsics and PTX lane-id read are adapted to the documented CPU environment; algorithm is not repaired. This does not certify NVIDIA hardware, nvcc or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

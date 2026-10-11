@@ -8,6 +8,7 @@ import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
 import {changedJobObservation} from './lib/deep-observations.mjs';
 import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
 import {servedRenderer} from './lib/served-renderer.mjs';
+import {nativeBuildProvenance} from './lib/native-build-provenance.mjs';
 
 const root=process.cwd(),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms)),hash=b=>createHash('sha256').update(b).digest('hex');
 const [runRoot,applicationDirectory,sourceDirectory,outputDirectory,caseArgument,repetitionArgument,variant]=process.argv.slice(2);
@@ -27,6 +28,8 @@ await mkdir(out,{recursive:true});await mkdir(trialsDir);await mkdir(appDir);awa
 for(const file of await readdir(binaryRoot))if(file==='meeting-copilot.exe'||file.endsWith('.dll'))await copyFile(path.join(binaryRoot,file),path.join(appDir,file));
 const binarySha256=hash(await readFile(path.join(appDir,'meeting-copilot.exe')));
 assert.equal(binarySha256,hash(await readFile(path.join(binaryRoot,'meeting-copilot.exe'))),'Use the declared variant binary');
+const sourceFiles=['src-tauri/src/audio/mod.rs','src-tauri/src/openai/codex.rs','src-tauri/src/runtime.rs','src-tauri/src/meeting/scheduler.rs'];
+const buildEvidence=await nativeBuildProvenance(binaryRoot,sourceRoot,sourceFiles);
 // Validate large source journals before launching the measured app. Do not
 // keep a whole hour's observation history resident during a control trial.
 async function validateSource(file,cases){
@@ -37,8 +40,8 @@ for(const file of new Set(manifest.cases.map(c=>c.source.file))){await validateS
 const env={...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_ACCEPTANCE_REMOTE_ONLY:'1',COPILOT_INTENT_MODE:'existing',COPILOT_TRACE_PROVISIONAL:'1',COPILOT_NEMO_DIAGNOSTICS:'1',COPILOT_DATA_DIR:dataDir,WEBVIEW2_USER_DATA_FOLDER:path.join(out,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9245'};
 for(const key of ['COPILOT_TEST_API','COPILOT_ACCEPTANCE_INPUT_ONLY','COPILOT_ACCEPTANCE_SELF_LOOPBACK','COPILOT_INTENT_PROFILE','COPILOT_EAGER_FINAL_REPLACEMENT','COPILOT_CONFIRM_QUESTION_REFINEMENTS','COPILOT_AGE_FINAL_WAIT','COPILOT_REPLACE_COMPLETED_DRAFT'])delete env[key];
 const result={status:'in_progress',startedAt:new Date().toISOString(),manifestFile,manifestSha256:hash(manifestBytes),nativeBinarySha256:binarySha256,variant,sourceRoot,binaryRoot,caseIndex,repetitionIndex,
- model:manifest.model,effort:manifest.effort,serviceTier:manifest.serviceTier,scope:'One source-bound controller comparison using identical saved audio and frozen context. Controller endpoints may differ; model, effort and full answer objective are held fixed. No microphone, correctness selection, population p95 or provider-compute isolation.',protocol:manifest.protocol,
- collectorSourceHashes:{'scripts/controller-native-control.mjs':hash(await readFile(new URL(import.meta.url))),'scripts/lib/deep-observations.mjs':hash(await readFile('scripts/lib/deep-observations.mjs'))},
+ model:manifest.model,effort:manifest.effort,serviceTier:manifest.serviceTier,buildEvidence,scope:'One source-bound controller comparison using identical saved audio and frozen context. Controller endpoints may differ; model, effort and full answer objective are held fixed. No microphone, correctness selection, population p95 or provider-compute isolation.',protocol:manifest.protocol,
+ collectorSourceHashes:{'scripts/controller-native-control.mjs':hash(await readFile(new URL(import.meta.url))),'scripts/lib/deep-observations.mjs':hash(await readFile('scripts/lib/deep-observations.mjs')),'scripts/lib/native-build-provenance.mjs':hash(await readFile('scripts/lib/native-build-provenance.mjs'))},
  trials:[],independentAccuracyPending:true,goalComplete:false};
 let app,vite,connection,invoke,active=false;
 const persist=()=>writeFile(path.join(out,'playback.json'),JSON.stringify(result,null,2));
@@ -64,7 +67,6 @@ try{
  const settings={...initial.settings,answerBackend:process.env.COPILOT_CONTROLLER_BACKEND||'codex',answerObjective:'detailed',model:manifest.model,reasoningEffort:manifest.effort,serviceTier:manifest.serviceTier,output:output[0].id,microphone:'',projectPath:'',speechChunkMs:160};
  await invoke('save_settings',{settings});
  if(settings.answerBackend==='chatgpt'){const boot=await invoke('bootstrap');const account=boot.accounts.find(a=>a.planEnabled);assert(account,'No saved authorized direct-plan account');await invoke('select_account',{clientId:account.clientId});}
- const sourceFiles=['src-tauri/src/audio/mod.rs','src-tauri/src/openai/codex.rs','src-tauri/src/runtime.rs','src-tauri/src/meeting/scheduler.rs'];
  const sourceHashes=Object.fromEntries(await Promise.all(sourceFiles.map(async file=>[file,hash(await readFile(path.join(sourceRoot,file)))])));
  const timingFile='src-tauri/src/openai/timing.rs',diagnosticSourceHashes={[timingFile]:hash(await readFile(path.join(sourceRoot,timingFile))),'scripts/controller-native-control.mjs':hash(await readFile('scripts/controller-native-control.mjs'))};
  for(const repetition of [repetitionIndex])for(const [index,source] of manifest.cases.entries()){
@@ -79,7 +81,7 @@ try{
    await invoke('action',{action:'dismiss'});
    await invoke('acceptance_freeze_context',{context:source.selectedContext,policy});
    const journal={status:'in_progress',startedAt:new Date().toISOString(),model:manifest.model,effort:manifest.effort,tier:manifest.serviceTier,
-    outputDevice:result.outputDevice,sourceHashes,diagnosticSourceHashes,nativeBinarySha256:binarySha256,
+    outputDevice:result.outputDevice,sourceHashes,sourceHashesScope:'Observed checkout file bytes; do not bind these to the frozen binary. See buildEvidence for its declared commit Git blobs.',buildEvidence,diagnosticSourceHashes,nativeBinarySha256:binarySha256,
     speechConfiguration:{remoteOnly:true,selfCapture:{kind:'disabled',physicalMicrophoneUsed:false},speechChunkMs:160,speechBackend:settings.speechBackend},
     endpointDefinition:'Last nonzero PCM frame in the unchanged synthetic source waveform, timed by the actual waveOut device-position crossing interval. Host/native anchors calibrate native timestamps; overlay paint samples measure actual viewport-visible text. No microphone or room-acoustic ground truth.',
     primaryLatencyMetric:'Physical synthetic playback speech end to first complete word visibly painted in the actual overlay; independent accuracy and first correct useful phrase assessed after recording.',

@@ -44,6 +44,8 @@ Production conversations remain RAM-only until Stop. The collectors explicitly w
 
 Codex actual submission is its instrumented flushed transport write. HTTP request-send timing does not prove a wire write; that field remains unknown. Capture uses physical device-position crossing bounds for the last nonzero source sample, host/native clock anchors, per-generation timings and actual overlay paint samples. Recognized question text can differ even with identical audio. Lexical WER is reported without silently repairing identifiers or normalizing numerals; source accuracy and accuracy conditional on recognition are separate judgments.
 
+Native baseline/control captures check the frozen executable hash against its preserved build manifest and record source Git-blob hashes at that manifest's declared commit. Observed current checkout hashes are separately labeled: later edits must not be presented as the source of an older frozen executable. Renderer hashes remain independent, including the shared current renderer used with the c704a75 native baseline. Build provenance is not a reproducible-build attestation.
+
 Reasoning review checks assumptions, causal arguments, counterexample executions, changed constraints, exact identifiers, synchronization contracts, arithmetic and completeness. It does not demand hidden chain-of-thought. Code and proof are assessed independently:
 
 - `compile-controller-answer-cuda.mjs` uses the pinned real NVIDIA nvcc/MSVC toolchain from the existing compiler manifest to compile unchanged fenced CUDA/C++ sources. Failed snippets remain failures. Compilation does not prove GPU execution.

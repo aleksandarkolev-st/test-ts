@@ -53,6 +53,8 @@ Reasoning review checks assumptions, causal arguments, counterexample executions
 
 The collector does not repair answers after generation. Reviewer verdicts, executable results and latency evidence are source-bound and remain separately labeled. Model-assisted review, if used, is not independent expert certification.
 
+Disclosed observer interference is attached to the source-bound row review. Measurements retain that row in all correctness, completion, missing-answer and overall latency results, report its interference flag, and provide a separate `nonFaultNonObserverAcceptedToWriteMs` distribution excluding requested fault probes and known observer interference. This filtered distribution alone does not certify a healthy warm connection. The marathon grading overrun is preserved in `docs/evidence/controller-marathon-interference-v72.json`.
+
 ## Promotion gates
 
 The proposed targets remain acceptance criteria: healthy warm accepted-to-write p95 below 250 ms, ordinary follow-up useful feedback p50 at most 2 seconds/p95 at most 3 seconds, no silent lost final request, no obsolete active-panel text, no material correctness/completion regression, and no material age degradation under matched workload. Complex proofs have separate completion measurements. A successful fixture or one fast sample cannot establish these gates.

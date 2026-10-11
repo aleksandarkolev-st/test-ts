@@ -48,6 +48,16 @@ test('a requested but unsupported fault is separated without claiming it was inj
 test('generation mismatch is rejected instead of combining timing',()=>{
  assert.throws(()=>measureJournal({rows:[{round:1,responseVersion:'a:0',latency:{pipeline:{generationId:'b'}}}]},{}));
 });
+test('observer interference is disclosed without deleting failures or overall latency',()=>{
+ const j={rows:[{round:1,phase:'complete',answer:'Correct',latency:{questionConfirmedAt:1,pipeline:{transportWrittenAt:3}}},
+  {round:2,phase:'complete',answer:'Wrong',latency:{questionConfirmedAt:5,pipeline:{transportWrittenAt:305}}}]};
+ const interference={source:'observer-record.json',description:'Concurrent compilation'};
+ const m=measureJournal(j,{rows:[{round:1,correctness:'correct'},{round:2,correctness:'incorrect',observerInterference:interference}]});
+ assert.equal(m.counts.all,2);assert.equal(m.counts.incorrect,1);assert.equal(m.counts.observerInterference,1);
+ assert.equal(m.acceptedToWriteMs.count,2);assert.equal(m.acceptedToWriteMs.sampleP95,300);
+ assert.equal(m.nonFaultNonObserverAcceptedToWriteMs.count,1);assert.equal(m.nonFaultNonObserverAcceptedToWriteMs.sampleP95,2);
+ assert.deepEqual(m.rows[1].observerInterference,interference);
+});
 test('ASR numerical and identifier errors remain visible',()=>{
  assert.equal(wordError('Mira owns Foo_17','Myra owns Foo_17').distance,1);
  assert.equal(wordError('Why?',null),null);

@@ -16,19 +16,22 @@ if(process.argv[2]==='--stop'){
  try{await connection.main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}finally{connection.close();}
  process.exit(0);
 }
-const [manifestFile,applicationDir,outputDir,backend='codex']=process.argv.slice(2);
+const [manifestFile,applicationDir,outputDir,backend='codex',authMode='isolated']=process.argv.slice(2);
 assert(manifestFile&&applicationDir&&outputDir&&['codex','chatgpt'].includes(backend));
+assert(['isolated','saved-plan'].includes(authMode));assert(authMode!=='saved-plan'||backend==='chatgpt');
 const root=process.cwd(),out=path.resolve(outputDir),sleep=ms=>new Promise(r=>setTimeout(r,ms)),hash=x=>createHash('sha256').update(x).digest('hex');
 for(const file of [manifestFile,applicationDir,outputDir])assert(path.resolve(file).startsWith(root+path.sep),'Keep all artifacts inside the workspace');
 const bytes=await readFile(manifestFile),plan=JSON.parse(bytes);assert.equal(plan.model,'gpt-6.1-sol');assert.equal(plan.effort,'low');
 await mkdir(out,{recursive:true});
 const journal={status:'in_progress',evaluationKind:'authenticated_native_session_replay',model:plan.model,effort:plan.effort,tier:plan.serviceTier??null,backend,
- manifestSha256:hash(bytes),nativeBinarySha256:hash(await readFile(path.join(applicationDir,'meeting-copilot.exe'))),
+ manifestSha256:hash(bytes),authMode,nativeBinarySha256:hash(await readFile(path.join(applicationDir,'meeting-copilot.exe'))),
  scope:'Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.',
  rows:[],deepObservations:[],overlayPaintSamples:[],pollErrors:[],resourceSamples:[],startedAt:new Date().toISOString()};
 let app,vite,connection,invoke,active=false,sampling=false,sampler;
 const persist=()=>writeFile(path.join(out,'interview.json'),JSON.stringify(journal,null,2));
 const env={...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_ACCEPTANCE_REMOTE_ONLY:'1',COPILOT_INTENT_MODE:'existing',COPILOT_TRACE_PROVISIONAL:'1',COPILOT_DATA_DIR:path.join(out,'data'),WEBVIEW2_USER_DATA_FOLDER:path.join(out,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9251'};
+delete env.COPILOT_ACCEPTANCE_REAL_AUTH;
+if(authMode==='saved-plan')env.COPILOT_ACCEPTANCE_REAL_AUTH='1';
 for(const key of ['COPILOT_TEST_API','COPILOT_ACCEPTANCE_INPUT_ONLY','COPILOT_ACCEPTANCE_SELF_LOOPBACK','COPILOT_INTENT_PROFILE','COPILOT_EAGER_FINAL_REPLACEMENT','COPILOT_CONFIRM_QUESTION_REFINEMENTS','COPILOT_AGE_FINAL_WAIT'])delete env[key];
 const child=(file,args)=>new Promise((resolve,reject)=>{const p=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','pipe','pipe']});let error='',stdout='';p.stderr.on('data',x=>error=(error+x).slice(-4000));p.stdout.on('data',x=>stdout+=x);p.once('error',reject);p.once('exit',code=>code===0?resolve(stdout):reject(Error(`${file} exited ${code}: ${error}`)));});
 try {

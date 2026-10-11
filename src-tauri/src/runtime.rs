@@ -1138,7 +1138,7 @@ fn open_debug(app: tauri::AppHandle) -> Result<(), String> {
 pub fn run() {
     #[cfg(windows)]
     let _instance = {
-        let scope = if crate::openai::acceptance_mode() {
+        let scope = if crate::openai::acceptance_mode() && !crate::openai::authenticated_acceptance_mode() {
             std::env::var("COPILOT_DATA_DIR").unwrap_or_else(|_| "acceptance".into())
         } else {
             "local.meeting.copilot/oauth".into()

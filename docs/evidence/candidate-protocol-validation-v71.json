@@ -1,0 +1,109 @@
+{
+    "variants":  [
+                     {
+                         "binarySha256":  "2341ef4b18c7f87abb73af2c96836b518fa0f579f5b7b1145dd35a2c18297441",
+                         "name":  "baseline",
+                         "source":  ".",
+                         "application":  "artifacts/deep-interview-v71/policy-playback/app"
+                     },
+                     {
+                         "binarySha256":  "2b349188323755e8cbb333a3b4dbf8cca1ef07d871a407fd93fc18795592f34d",
+                         "name":  "latest-question-wins",
+                         "source":  "C:\\Users\\polek\\Downloads\\test-ts\\.local\\latest-question-wins",
+                         "application":  "artifacts/deep-interview-v71/architecture-comparison/candidate-app"
+                     }
+                 ],
+    "scope":  "Real compiled protocol test outcomes and native build proof. Initial fixture failure is retained; the fixture transport was corrected to dispatch outside Tokio, matching the stdout reader. This does not certify native latency, answer correctness or hour-long candidate behavior.",
+    "candidateBuild":  {
+                           "stdout":  {
+                                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                          "file":  "artifacts/deep-interview-v71/architecture-comparison/build.stdout.log"
+                                      },
+                           "exitCode":  0,
+                           "command":  [
+                                           "build",
+                                           "--offline",
+                                           "--manifest-path",
+                                           "C:\\Users\\polek\\Downloads\\test-ts\\.local\\latest-question-wins\\src-tauri\\Cargo.toml",
+                                           "--target-dir",
+                                           "C:\\Users\\polek\\Downloads\\test-ts\\src-tauri\\target",
+                                           "--features",
+                                           "acceptance",
+                                           "--bin",
+                                           "meeting-copilot"
+                                       ],
+                           "stderr":  {
+                                          "sha256":  "1ccbdc7df8dd75695b6f9a371a88471310a85213784fc4491b2859c1a653522a",
+                                          "file":  "artifacts/deep-interview-v71/architecture-comparison/build.stderr.log"
+                                      }
+                       },
+    "candidateProtocolTestProof":  {
+                                       "sha256":  "45f31204e1197a6984c35d6a2e23ebcdd1a811c9c09dedafb8d5f277e8945765",
+                                       "file":  "artifacts/deep-interview-v71/candidate-tests/89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0/result.json",
+                                       "sourceFingerprint":  "89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0"
+                                   },
+    "goalComplete":  false,
+    "recordedAt":  "2026-10-11T12:50:27.9642967+00:00",
+    "attempts":  [
+                     {
+                         "stdout":  {
+                                        "sha256":  "15e461d7e205626b9e3f55d22e1d23f4d89ef5aca8c30abad87bc55ad94c764c",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\771f103604ebfbcccbe3c6e2081d41883726e6ae0607e20ae6f6472e895776b8/stdout.log"
+                                    },
+                         "startedAt":  "2026-10-11T12:28:49.7672471+00:00",
+                         "testSummary":  {
+                                             "passed":  14,
+                                             "durationSeconds":  1.19,
+                                             "failed":  3,
+                                             "ignored":  0,
+                                             "filtered":  132,
+                                             "status":  "FAILED"
+                                         },
+                         "completedAt":  "2026-10-11T12:30:19.9569760+00:00",
+                         "stderr":  {
+                                        "sha256":  "2c5e51e96cb8580eeacd888469043b445a210ce8bcb90d4975830c8568778511",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\771f103604ebfbcccbe3c6e2081d41883726e6ae0607e20ae6f6472e895776b8/stderr.log"
+                                    },
+                         "codexSourceSha256":  "578a465685183344b33249c6272152481e5337b32e06b14fb192b87edcf2aa10",
+                         "sourceFingerprint":  "771f103604ebfbcccbe3c6e2081d41883726e6ae0607e20ae6f6472e895776b8",
+                         "exitCode":  101,
+                         "result":  {
+                                        "sha256":  "f55de70188cdc5ddaae68ccccc04125d1a273934213832cb3e4627d4d7562d8e",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\771f103604ebfbcccbe3c6e2081d41883726e6ae0607e20ae6f6472e895776b8/result.json"
+                                    },
+                         "sourceChangedDuringCompilation":  [
+
+                                                            ]
+                     },
+                     {
+                         "stdout":  {
+                                        "sha256":  "3547026d4e24425d6ceb7d6d6b1cba83cd147244b067126d996a965df28351de",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0/stdout.log"
+                                    },
+                         "startedAt":  "2026-10-11T12:32:30.7269904+00:00",
+                         "testSummary":  {
+                                             "passed":  17,
+                                             "durationSeconds":  3.87,
+                                             "failed":  0,
+                                             "ignored":  0,
+                                             "filtered":  132,
+                                             "status":  "ok"
+                                         },
+                         "completedAt":  "2026-10-11T12:32:49.4068972+00:00",
+                         "stderr":  {
+                                        "sha256":  "e55c7fe14634b88809b0e1c21dbec96a611ed2bbb7293e66cf4acaac84348d74",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0/stderr.log"
+                                    },
+                         "codexSourceSha256":  "cc38a0be1ba0366bb3f5d6c232a62b9ed0ce9d8400be5b98e7dd51558ef21016",
+                         "sourceFingerprint":  "89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0",
+                         "exitCode":  0,
+                         "result":  {
+                                        "sha256":  "45f31204e1197a6984c35d6a2e23ebcdd1a811c9c09dedafb8d5f277e8945765",
+                                        "file":  "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\candidate-tests\\89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0/result.json"
+                                    },
+                         "sourceChangedDuringCompilation":  [
+
+                                                            ]
+                     }
+                 ]
+}

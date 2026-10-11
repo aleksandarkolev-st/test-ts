@@ -1,0 +1,51 @@
+# Persistent conversation controller validation
+
+The implementation is on `feat/persistent-conversation-controller`. The starting tree was `main` at `c704a75`, with only the user-supplied `realtime-assistant-architecture-decision.md` untracked. Candidate `c359e4d` remains separate; its actual failed event trace is a regression fixture, not a merged implementation.
+
+Production changes were committed as `432e59f`. Its acceptance binary has SHA256 `69b7b50b4b11eb6ab2d8cf460fdd00adaed51a9915a6fae12e288fea30e8e72b`. The rebuilt `c704a75` comparison binary has SHA256 `a9ac4e6e2ac6cadbe9b432ad28515613e751f5b99fa236a67faa2e9a4b4f739a`. Earlier experiments used different binaries and must retain their own identifiers.
+
+## Questions and capture
+
+Native audio tests play unchanged, hashed mono PCM waveforms through **T24E390**. The app captures that output through its normal loopback path; local Nemotron transcribes it with 160 ms chunks. Typed tests invoke the native Ask control and explicitly exclude audio, transcription and automatic endpoint delay. The microphones are disabled in these synthetic recordings, rather than recording nearby people. Production continues to recognize both output and microphone sources.
+
+These are simulated meetings and technical interviews with an authenticated assistant, not human interview certification. Saved questions include CUDA collective proofs, numerical reasoning, directed graphs with negative cycles, transactional invariants, changed constraints, and underspecified challenges. No expected answer or fixture identity selects production routing, acceptance, model, context retrieval or response policy.
+
+All measured assistant runs use **`gpt-6.1-sol`, `low`**. The final contextual/backend/history/objective cells use standard tier (`null`); the original baseline/controller cells retain their source manifest's identical tier. Startup checks the model catalog and completes real inference. Codex also validates the catalog's supported effort values. Unsupported direct-plan capabilities fail visibly; there is no billed API fallback.
+
+## Reproduction
+
+Build the acceptance application and preserve its binary hash before capture. The old baseline is a detached checkout at `c704a75`; do not copy new controller source into it. The six existing source-bound controller cases are specified in `artifacts/controller-v72/policy-playback/manifest.json`, including original waveform, context and journal hashes.
+
+```powershell
+node scripts/prepare-controller-validation.mjs artifacts/controller-v72/prepared
+node scripts/controller-session-replay.mjs artifacts/controller-v72/plans/hour-final.json .local/controller-app artifacts/controller-v72/native/hour-final-codex codex
+node scripts/run-controller-validation.mjs artifacts/controller-v72
+```
+
+The sequential runner waits for the already-started Codex hour to finish, then runs final contextual and reasoning probes, behavior waveforms, the same elapsed-hour plan on direct ChatGPT-plan HTTP, history controls, fresh application controls, brief/detailed controls, and interleaved baseline/controller pairs. It preserves failed runs and requires a new trial name for retries. It never merges a branch.
+
+The elapsed-hour plan uses actual wall-clock scheduling for 60 minutes, spoken source audio, typed exact-code probes, a decision recognized near the beginning and queried after 30 and approximately 57 minutes, a spoken follow-up triggered by visible output, and identical fixed-context questions at the start/end. A 3,600-turn virtual-clock Rust test is a separate fixture and cannot satisfy the elapsed-hour requirement.
+
+History controls use finalized recognized speech from the v71 general hour up to native timestamps 0, 10, 30 and 60 minutes. Every cell appends exactly the same immediate exchange and target question. The resulting context bytes and waveform hashes are held constant across adapters. Fresh versus aged fixed-context cells isolate history length from application age; provider drift and observer overhead remain possible confounders. Interleaving reduces time confounding but does not remove it.
+
+Production conversations remain RAM-only until Stop. The collectors explicitly write user-authorized validation artifacts; their persistence is not a production privacy-policy change. Never commit credentials, copied account databases, WebView profiles or raw secrets.
+
+## Measurements and reasoning checks
+
+`measure-controller-validation.mjs` requires an exact journal hash in its review file. Every row remains in correctness/completion/missing/error counts. Only a reviewed correct substantive claim actually painted in the viewport supplies useful-feedback latency. First words, input acknowledgements and ungraded openings are separate measurements. Missing or incorrect useful delivery ranks after finite correct delivery in the all-row p95, without assigning a fabricated timeout latency.
+
+Codex actual submission is its instrumented flushed transport write. HTTP request-send timing does not prove a wire write; that field remains unknown. Capture uses physical device-position crossing bounds for the last nonzero source sample, host/native clock anchors, per-generation timings and actual overlay paint samples. Recognized question text can differ even with identical audio. Lexical WER is reported without silently repairing identifiers or normalizing numerals; source accuracy and accuracy conditional on recognition are separate judgments.
+
+Reasoning review checks assumptions, causal arguments, counterexample executions, changed constraints, exact identifiers, synchronization contracts, arithmetic and completeness. It does not demand hidden chain-of-thought. Code and proof are assessed independently:
+
+- `compile-controller-answer-cuda.mjs` uses the pinned real NVIDIA nvcc/MSVC toolchain from the existing compiler manifest to compile unchanged fenced CUDA/C++ sources. Failed snippets remain failures. Compilation does not prove GPU execution.
+- `check-controller-answer-code.mjs` compiles/runs exact C++ code with explicit contracts. For nineteen-lane reductions, a documented CPU intrinsic shim and mechanical PTX lane-id substitution exercise the recorded algorithm's basis-vector coverage, all-caller results, matching collectives, participating sources and six-shuffle limit. This is CPU emulation, not NVIDIA hardware certification.
+- `check-controller-answer-python.py` evaluates unchanged required entry points against independent path/cycle enumeration, exhaustive small graphs, seeded multigraph/extreme-weight probes, and high-precision Decimal numerical oracles. These finite checks supplement the invariant and complexity proof review; they do not prove every allowed input.
+
+The collector does not repair answers after generation. Reviewer verdicts, executable results and latency evidence are source-bound and remain separately labeled. Model-assisted review, if used, is not independent expert certification.
+
+## Promotion gates
+
+The proposed targets remain acceptance criteria: healthy warm accepted-to-write p95 below 250 ms, ordinary follow-up useful feedback p50 at most 2 seconds/p95 at most 3 seconds, no silent lost final request, no obsolete active-panel text, no material correctness/completion regression, and no material age degradation under matched workload. Complex proofs have separate completion measurements. A successful fixture or one fast sample cannot establish these gates.
+
+The final findings and recommendation must be based on completed authenticated captures and their audits. This protocol is not a latency-success claim or a substitute for implementation.

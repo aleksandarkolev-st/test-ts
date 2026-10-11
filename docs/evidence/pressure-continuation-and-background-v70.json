@@ -1,0 +1,840 @@
+{
+  "recordedAt": "2026-10-11T00:45:27.858Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/interview.json",
+      "sha256": "e0a56329ce503b4bcda30b19d6f87256252b60a836a0aa32a9edc91506742ee5"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-review-input.json",
+      "sha256": "54aa2ddf6a787b63db89717a761ad1d506ed6826c6e641463522a9b91da79dd7"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-events-audit.json",
+      "sha256": "9ef50b76ea689d359f5198fb7a4eb37ccf0e861aeb43c45d597c0e969464161c"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-visibility-contextual-audit.json",
+      "sha256": "2bc226dc12652908bb35fe3aed137bc51fec1a0bc6fc3fa877349ac7b7c932f1"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-source-coverage-audit.json",
+      "sha256": "f2b5e621fd9f9f082f8fc40161ac24f843a64ddc9b114803e2ee88c6d446e082"
+    }
+  ],
+  "productionSourceHashes": [
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "sha256": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f"
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "sha256": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95"
+    },
+    {
+      "file": "src-tauri/src/openai/prompts.rs",
+      "sha256": "3a62dba1e236b009daae6d616545ff191ab6a8eb030158cb49c49d84184a62d5"
+    }
+  ],
+  "productionLogicChanged": false,
+  "sourceCoverage": {
+    "sourceUtterances": 158,
+    "sourceWords": 3557,
+    "asrDeletedSourceWords": 2,
+    "asrSubstitutedSourceWords": 34,
+    "utterancesWithoutAnyFinalNativeJob": 0,
+    "utterancesWithRecognizedWordsAbsentFromFinalNativeQuestions": 0,
+    "utterancesRepresentedAcrossMultipleNativeJobs": 12,
+    "backgroundOnlyFinalNativeJobs": 0,
+    "sourceKinds": {
+      "question": 28,
+      "followup": 45,
+      "incomplete": 17,
+      "long-question": 6,
+      "background": 11,
+      "topic-switch": 33,
+      "false-premise": 6,
+      "false-start": 6,
+      "late-reversal": 6
+    }
+  },
+  "essentialFinalCondition": {
+    "occurrences": [
+      {
+        "trial": 2,
+        "nativeQuestionId": "b49834d6-dc52-408c-b803-4ce0ab2a8890",
+        "sourceFragments": [
+          {
+            "sequence": 5,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "there is an essential final condition use sign sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Interpreting “sign sixty four bit” as signed 64-bit: compute each batch’s complete sum exactly, then accept it only if it lies between −9,223,372,036,854,775,808 and 9,223,372,036,854,775,807 inclusive. Do not reject intermediate overflow: [9,223,372,036,854,775,807, 1, −1] has a valid final sum despite exceeding the limit temporarily. Reject an overflowing batch with its batch index and a clear “final sum outside signed 64-bit range” error—never wrap or return a partial sum.",
+        "answerSha256": "68aabd4a630ad4dccf01a4cf80085fc38122ddb0337f0ef4723859d588bf1ab3",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      },
+      {
+        "trial": 18,
+        "nativeQuestionId": "0d8a2a4d-62e0-4025-8ffe-c19ffe0f1f6e",
+        "sourceFragments": [
+          {
+            "sequence": 33,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "There is an essential final condition use sines sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Interpreting “sines” as signed: compute the complete sum exactly, then accept it only if −2^63 ≤ sum ≤ 2^63 − 1. Use arbitrary-precision accumulation so intermediate values can exceed that range and later cancel without premature rejection. If the final sum is outside the range, reject the entire batch with an overflow error; otherwise convert it to signed 64-bit, never wrapping or returning a partial result.",
+        "answerSha256": "68e87b397ed1a463a72fac86e11a91d4e16f72ee9044d22dbfc8d4af8d9c25d0",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      },
+      {
+        "trial": 33,
+        "nativeQuestionId": "03967b04-a04f-48b9-a562-fb340f0857b3",
+        "sourceFragments": [
+          {
+            "sequence": 61,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "there is an essential finition use signs sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Use signed 64-bit output, but accumulate in arbitrary precision so intermediate overflow does not incorrectly reject values that later cancel. After summing the entire batch exactly, check that the result is between −2^63 and 2^63 − 1, inclusive. Return it only if it fits; otherwise reject the batch with a final-sum overflow error, never wrapping or returning a partial result.",
+        "answerSha256": "344feb85b48ff49a3ff269c8e30e4a7f6e1605d4c3add6bc3d25e3be80c8037f",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      },
+      {
+        "trial": 49,
+        "nativeQuestionId": "cfe9fd92-491c-4863-89be-94926ccd3228",
+        "sourceFragments": [
+          {
+            "sequence": 89,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "there is an essential final condition use sign sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Use signed 64-bit output, but accumulate in arbitrary precision and range-check only the final exact sum. Accept totals from −9,223,372,036,854,775,808 through 9,223,372,036,854,775,807; otherwise reject the entire batch with an overflow error identifying the batch, never wrapping or returning a partial result. Intermediate totals outside that range must not trigger rejection, because later positive and negative values can cancel; an empty batch returns zero.",
+        "answerSha256": "d637929857df358777adcd55ac47a1390eb459363da27d32ea68d42f17689c2d",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      },
+      {
+        "trial": 65,
+        "nativeQuestionId": "1aa41d7d-ff8b-4da2-bf5f-cf5455561dd0",
+        "sourceFragments": [
+          {
+            "sequence": 117,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "There is an essential final condition U sign sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Use signed 64-bit output, but accumulate in arbitrary-precision integers so intermediate overflow cannot destroy cancellation. After summing the entire batch exactly, check that the total lies between −2^63 and 2^63 − 1, inclusive. Return it only if it fits; otherwise reject the whole batch with an overflow error, never wrapping or returning a partial result. An empty batch returns zero.",
+        "answerSha256": "9082d5f98dac9ec23c82cfe986c0ff084d7aa9e278ad521f6760472833632090",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      },
+      {
+        "trial": 80,
+        "nativeQuestionId": "b86c6026-dd5a-43f2-af6d-b55acc072937",
+        "sourceFragments": [
+          {
+            "sequence": 145,
+            "clipId": 5,
+            "kind": "long-question",
+            "startCharacter": 311,
+            "endCharacter": 507,
+            "text": "There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result.",
+            "completeSourceUtterance": false
+          }
+        ],
+        "recognizedQuestion": "there is an essential finition use signs sixty four bit output detect overflow of the final exact sum and reject an overflowing batch rather than wrapping or returning a partial result",
+        "answer": "Interpreting “signs sixty four bit” as signed 64-bit: accumulate using arbitrary-precision integers, then accept the final sum only if it lies between −9,223,372,036,854,775,808 and 9,223,372,036,854,775,807 inclusive. Check only the final exact sum, because large positive and negative values can cancel; for example, [10^20, 1, −10^20] sums exactly to 1. Empty batches return zero; an out-of-range final sum rejects the entire batch with an overflow error identifying the batch, never wrapping or returning a partial result.",
+        "answerSha256": "c2fe1288352e6b42e739c71336f36402c96c36d4accadcbe8bf5ec64063f6636",
+        "phase": "complete",
+        "cancelledFlag": false,
+        "error": null
+      }
+    ],
+    "manualAssessment": "All six retained complete tail answers require signed 64-bit final output, exact accumulation, checking only the final sum, and rejection rather than wrapping or partial output. Intermediate cancellation is preserved. ASR variants sign/sines/signs/finition are visible in the raw questions. Prefix answers and tail answers are separate native jobs, and earlier repetitions can supply prior context; these are dependent observations, not six novel held-out trials."
+  },
+  "backgroundSuppression": {
+    "recordedIgnoredMergedRequests": 5,
+    "findings": [
+      {
+        "trial": 13,
+        "nativeQuestionId": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+        "sourceFragments": [
+          {
+            "sequence": 20,
+            "clipId": 20,
+            "kind": "followup",
+            "startCharacter": 0,
+            "endCharacter": 32,
+            "text": "What if arrivals drop to thirty?",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 21,
+            "clipId": 21,
+            "kind": "question",
+            "startCharacter": 0,
+            "endCharacter": 187,
+            "text": "Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid.",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 22,
+            "clipId": 22,
+            "kind": "background",
+            "startCharacter": 0,
+            "endCharacter": 97,
+            "text": "No reply needed. Someone is testing the room speaker. Please keep the earlier question available.",
+            "completeSourceUtterance": true
+          }
+        ],
+        "recognizedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "answer": "",
+        "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phase": "cancelled",
+        "cancelledFlag": false,
+        "error": null,
+        "lifecycle": [
+          {
+            "eventIndex": 6500,
+            "name": "answer.started",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "speculative": true
+            }
+          },
+          {
+            "eventIndex": 6590,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 253180
+            }
+          },
+          {
+            "eventIndex": 6803,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 258940
+            }
+          },
+          {
+            "eventIndex": 6943,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 262139
+            }
+          },
+          {
+            "eventIndex": 7078,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 265979
+            }
+          },
+          {
+            "eventIndex": 7116,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 268700
+            }
+          },
+          {
+            "eventIndex": 7187,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 271580
+            }
+          },
+          {
+            "eventIndex": 7293,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 274300
+            }
+          },
+          {
+            "eventIndex": 7294,
+            "name": "question.ignored",
+            "payload": {
+              "id": "0f5fb7cc-3005-4019-b551-059df1fc97bf",
+              "timestamp": 277970
+            }
+          }
+        ],
+        "observations": 132,
+        "maximumObservedAnswerChars": 0,
+        "visibleAnswerPaints": 0,
+        "lastObservedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "finding": "The legitimate nineteen-lane CUDA request and the background instruction to keep it available share one native job. Its ignore event cancels the merged request; no answer was observed before or after in this recording. This is a request-scope/background-handling failure despite retained recognized clauses."
+      },
+      {
+        "trial": 28,
+        "nativeQuestionId": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+        "sourceFragments": [
+          {
+            "sequence": 48,
+            "clipId": 20,
+            "kind": "followup",
+            "startCharacter": 0,
+            "endCharacter": 32,
+            "text": "What if arrivals drop to thirty?",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 49,
+            "clipId": 21,
+            "kind": "question",
+            "startCharacter": 0,
+            "endCharacter": 187,
+            "text": "Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid.",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 50,
+            "clipId": 22,
+            "kind": "background",
+            "startCharacter": 0,
+            "endCharacter": 97,
+            "text": "No reply needed. Someone is testing the room speaker. Please keep the earlier question available.",
+            "completeSourceUtterance": true
+          }
+        ],
+        "recognizedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "answer": "",
+        "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phase": "cancelled",
+        "cancelledFlag": false,
+        "error": null,
+        "lifecycle": [
+          {
+            "eventIndex": 15604,
+            "name": "answer.started",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "speculative": true
+            }
+          },
+          {
+            "eventIndex": 15679,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 572700
+            }
+          },
+          {
+            "eventIndex": 15885,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 578460
+            }
+          },
+          {
+            "eventIndex": 15999,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 581660
+            }
+          },
+          {
+            "eventIndex": 16139,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 585540
+            }
+          },
+          {
+            "eventIndex": 16167,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 588220
+            }
+          },
+          {
+            "eventIndex": 16218,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 591139
+            }
+          },
+          {
+            "eventIndex": 16340,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 593980
+            }
+          },
+          {
+            "eventIndex": 16341,
+            "name": "question.ignored",
+            "payload": {
+              "id": "e3ae6301-c0f3-443e-923d-2a643cbbc113",
+              "timestamp": 598245
+            }
+          }
+        ],
+        "observations": 130,
+        "maximumObservedAnswerChars": 0,
+        "visibleAnswerPaints": 0,
+        "lastObservedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "finding": "The legitimate nineteen-lane CUDA request and the background instruction to keep it available share one native job. Its ignore event cancels the merged request; no answer was observed before or after in this recording. This is a request-scope/background-handling failure despite retained recognized clauses."
+      },
+      {
+        "trial": 44,
+        "nativeQuestionId": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+        "sourceFragments": [
+          {
+            "sequence": 76,
+            "clipId": 20,
+            "kind": "followup",
+            "startCharacter": 0,
+            "endCharacter": 32,
+            "text": "What if arrivals drop to thirty?",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 77,
+            "clipId": 21,
+            "kind": "question",
+            "startCharacter": 0,
+            "endCharacter": 187,
+            "text": "Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid.",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 78,
+            "clipId": 22,
+            "kind": "background",
+            "startCharacter": 0,
+            "endCharacter": 97,
+            "text": "No reply needed. Someone is testing the room speaker. Please keep the earlier question available.",
+            "completeSourceUtterance": true
+          }
+        ],
+        "recognizedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "answer": "",
+        "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phase": "cancelled",
+        "cancelledFlag": false,
+        "error": null,
+        "lifecycle": [
+          {
+            "eventIndex": 25307,
+            "name": "answer.started",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "speculative": true
+            }
+          },
+          {
+            "eventIndex": 25405,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 892260
+            }
+          },
+          {
+            "eventIndex": 25627,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 898180
+            }
+          },
+          {
+            "eventIndex": 25741,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 901380
+            }
+          },
+          {
+            "eventIndex": 25872,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 905219
+            }
+          },
+          {
+            "eventIndex": 25903,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 907940
+            }
+          },
+          {
+            "eventIndex": 26024,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 910819
+            }
+          },
+          {
+            "eventIndex": 26079,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 913540
+            }
+          },
+          {
+            "eventIndex": 26080,
+            "name": "question.ignored",
+            "payload": {
+              "id": "affc9c0a-df36-47a5-8738-f30cdc7ae662",
+              "timestamp": 916972
+            }
+          }
+        ],
+        "observations": 133,
+        "maximumObservedAnswerChars": 0,
+        "visibleAnswerPaints": 0,
+        "lastObservedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "finding": "The legitimate nineteen-lane CUDA request and the background instruction to keep it available share one native job. Its ignore event cancels the merged request; no answer was observed before or after in this recording. This is a request-scope/background-handling failure despite retained recognized clauses."
+      },
+      {
+        "trial": 60,
+        "nativeQuestionId": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+        "sourceFragments": [
+          {
+            "sequence": 104,
+            "clipId": 20,
+            "kind": "followup",
+            "startCharacter": 0,
+            "endCharacter": 32,
+            "text": "What if arrivals drop to thirty?",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 105,
+            "clipId": 21,
+            "kind": "question",
+            "startCharacter": 0,
+            "endCharacter": 187,
+            "text": "Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid.",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 106,
+            "clipId": 22,
+            "kind": "background",
+            "startCharacter": 0,
+            "endCharacter": 97,
+            "text": "No reply needed. Someone is testing the room speaker. Please keep the earlier question available.",
+            "completeSourceUtterance": true
+          }
+        ],
+        "recognizedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "answer": "",
+        "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phase": "cancelled",
+        "cancelledFlag": false,
+        "error": null,
+        "lifecycle": [
+          {
+            "eventIndex": 34897,
+            "name": "answer.started",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "speculative": true
+            }
+          },
+          {
+            "eventIndex": 34991,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1211939
+            }
+          },
+          {
+            "eventIndex": 35205,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1217700
+            }
+          },
+          {
+            "eventIndex": 35260,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1220900
+            }
+          },
+          {
+            "eventIndex": 35394,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1224739
+            }
+          },
+          {
+            "eventIndex": 35425,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1227459
+            }
+          },
+          {
+            "eventIndex": 35479,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1230341
+            }
+          },
+          {
+            "eventIndex": 35601,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1233061
+            }
+          },
+          {
+            "eventIndex": 35602,
+            "name": "question.ignored",
+            "payload": {
+              "id": "3daf00c7-e2a0-4c52-b626-9f5fa9d924ca",
+              "timestamp": 1237788
+            }
+          }
+        ],
+        "observations": 134,
+        "maximumObservedAnswerChars": 0,
+        "visibleAnswerPaints": 0,
+        "lastObservedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "finding": "The legitimate nineteen-lane CUDA request and the background instruction to keep it available share one native job. Its ignore event cancels the merged request; no answer was observed before or after in this recording. This is a request-scope/background-handling failure despite retained recognized clauses."
+      },
+      {
+        "trial": 75,
+        "nativeQuestionId": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+        "sourceFragments": [
+          {
+            "sequence": 132,
+            "clipId": 20,
+            "kind": "followup",
+            "startCharacter": 0,
+            "endCharacter": 32,
+            "text": "What if arrivals drop to thirty?",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 133,
+            "clipId": 21,
+            "kind": "question",
+            "startCharacter": 0,
+            "endCharacter": 187,
+            "text": "Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid.",
+            "completeSourceUtterance": true
+          },
+          {
+            "sequence": 134,
+            "clipId": 22,
+            "kind": "background",
+            "startCharacter": 0,
+            "endCharacter": 97,
+            "text": "No reply needed. Someone is testing the room speaker. Please keep the earlier question available.",
+            "completeSourceUtterance": true
+          }
+        ],
+        "recognizedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "answer": "",
+        "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phase": "cancelled",
+        "cancelledFlag": false,
+        "error": null,
+        "lifecycle": [
+          {
+            "eventIndex": 44537,
+            "name": "answer.started",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "speculative": true
+            }
+          },
+          {
+            "eventIndex": 44634,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1531460
+            }
+          },
+          {
+            "eventIndex": 44825,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1537219
+            }
+          },
+          {
+            "eventIndex": 44877,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1540420
+            }
+          },
+          {
+            "eventIndex": 45008,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1544259
+            }
+          },
+          {
+            "eventIndex": 45037,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1546979
+            }
+          },
+          {
+            "eventIndex": 45086,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1549860
+            }
+          },
+          {
+            "eventIndex": 45203,
+            "name": "question.confirmed",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1552740
+            }
+          },
+          {
+            "eventIndex": 45221,
+            "name": "question.ignored",
+            "payload": {
+              "id": "58055e7a-d836-41a2-9cf9-40bc5f661bd5",
+              "timestamp": 1559294
+            }
+          }
+        ],
+        "observations": 127,
+        "maximumObservedAnswerChars": 0,
+        "visibleAnswerPaints": 0,
+        "lastObservedQuestion": "what if arrivals drop to thirty give the sum of nineteen participating CUDA lanes physical lanes zero through eighteen all nineteen callers must receive the sum explain the mask and why every shuffle source is valid no reply needed someone is testing the room speaker please keep the earlier question available",
+        "finding": "The legitimate nineteen-lane CUDA request and the background instruction to keep it available share one native job. Its ignore event cancels the merged request; no answer was observed before or after in this recording. This is a request-scope/background-handling failure despite retained recognized clauses."
+      }
+    ],
+    "sourceBehavior": "The automatic reply protocol has one answer/ignore intent for the entire current question. Runtime Work::NoReply clears that job buffer, sets its phase to Cancelled and confirmed=false, and emits question.ignored. Source matches the observed effect; provider-internal intent reasoning was not captured.",
+    "outcomeFlags": "All five jobs have phase cancelled while cancelled=false. The latter flag is not a complete count of ignored terminal requests; both recorded fields remain preserved."
+  },
+  "obsoleteHistogramVisibility": {
+    "currentQuestion": {
+      "trial": 8,
+      "nativeQuestionId": "06129c8d-f130-47a7-99be-f4ecf3000188",
+      "sourceFragments": [
+        {
+          "sequence": 13,
+          "clipId": 13,
+          "kind": "late-reversal",
+          "startCharacter": 115,
+          "endCharacter": 246,
+          "text": "Actually, no atomics are allowed and the keys are highly skewed. Explain a race-free ownership scheme under this final restriction.",
+          "completeSourceUtterance": false
+        }
+      ],
+      "recognizedQuestion": "actually no atomics are allowed and the keys are highly skewed explain a race free ownership scheme under this final restriction",
+      "answer": "Without atomics, give each worker exclusive ownership of a private histogram, then give each final output bin exactly one reduction owner. Partition the input into disjoint chunks",
+      "answerSha256": "3818e63b5fb3d0f1a46daccaf7270c392b5fd214f363613aaaa94bf0610bf743",
+      "phase": "superseded",
+      "cancelledFlag": true,
+      "error": null
+    },
+    "confirmedNoAtomicQuestion": {
+      "hostBeforeMs": 1791673523989,
+      "hostAfterMs": 1791673523994,
+      "question": {
+        "detectedAt": 156212,
+        "id": "06129c8d-f130-47a7-99be-f4ecf3000188",
+        "text": "actually no atomics are allowed and the keys are highly skewed"
+      },
+      "phase": "confirmed"
+    },
+    "confirmationHostMs": {
+      "low": 1791673523976,
+      "high": 1791673523978
+    },
+    "obsoleteAtomicIntervals": [
+      {
+        "startHostMs": 1791673523978,
+        "endHostMs": 1791673523988,
+        "durationMs": 10,
+        "shownQuestionId": "2912bae6-3b69-4a3f-9de1-6f22b8c3bcd4",
+        "shownRevision": 12,
+        "sourceOrder": "earlier_native_job",
+        "visibleText": "Use one atomic increment per key into zero-initialized 64-bit counters; integer atomics make the counts exact regardless of execution order. I’ll assume"
+      }
+    ],
+    "unrelatedEarlierAnswerAfterLastSameJobConfirmationMs": 4525,
+    "finding": "An earlier atomic-increment proposal remains in the sampled visible display across the no-atomics confirmation boundary, then an unrelated experiment answer is shown. The sample-held atomic interval is 10 ms; it is not continuous pixel-level timing. The old experiment answer also persists 4525 ms after the last same-job confirmation. The revised histogram job is later superseded with a partial ownership answer."
+  },
+  "scope": "Concrete manual continuation, background and conflicting stale-display findings bound to the completed pressure recording. No source text, runtime logic, answer or timing is repaired. These do not certify all 158 utterances as semantically correct; deferred per-job model reviews and substantive checks remain separate."
+}

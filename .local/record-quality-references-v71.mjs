@@ -1,0 +1,12 @@
+import {writeFile} from 'node:fs/promises';
+const report={recordedAt:new Date().toISOString(),scope:'Offline primary-source references for later manual recorded-answer checks. No facts are injected into candidate prompts, no production behavior changes, and no fresh answer has been graded by this artifact.',
+ sources:[
+  {url:'https://docs.nvidia.com/cuda/cuda-runtime-api/cuda_runtime_api/group__CUDART__EVENT.html',title:'CUDA Runtime API: Event Management',fetchedOn:'2026-10-11',documentationVersionShown:'13.4',section:'cudaEventRecord',
+   findings:['A wait uses the event state captured at the wait call; a later recording does not retroactively change that dependency.','Before the first recording, the event represents no captured work.'],
+   evidenceKind:'Documented API semantics; not execution of a recorded candidate program.'},
+  {url:'https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html',title:'CUDA Programming Guide: C/C++ Language Extensions',fetchedOn:'2026-10-11',sections:['Built-in Variables','Thread Block Synchronization Functions'],
+   findings:['Block dimensions and thread indices have x, y and z components.','Conditional block barriers require a block-uniform condition; the barrier coordinates non-exited participating threads. A nonuniform call may hang or have unintended effects.'],
+   manualQualification:'For 128 live threads in a one-dimensional block, threadIdx.x < 16 selects 16 threads. A two-dimensional 8 by 16 block also has 128 threads but makes that predicate true for all of them. Thus total thread count alone does not establish that exactly 16 threads reach the barrier, although the proposed condition does not guarantee safety for arbitrary 128-thread launches. Do not infer that every such kernel necessarily hangs.',
+   evidenceKind:'Documented language contract plus direct reasoning about launch dimensions; not GPU hardware execution.'}
+ ],candidateExecutionsPending:true,independentAccuracyPending:true,goalComplete:false};
+const file='docs/evidence/quality-reference-scope-v71.json';await writeFile(file,JSON.stringify(report,null,2),{flag:'wx'});console.log(JSON.stringify({file,sources:report.sources.length}));

@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-10T23:05:44.918Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+    "sha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+    "status": "complete",
+    "stoppedCleanly": true,
+    "turns": 27,
+    "actualInterviewDurationMs": 2569968.1393000004
+  },
+  "references": [
+    {
+      "evidence": "docs/evidence/older-code-retention-v70.json",
+      "evidenceSha256": "f08683b0e2e4e1cc5d767fbc1776fd6d95feaffa35f4e102c033eb11f1167c2d",
+      "round": 22,
+      "answerSha256": "055874936ad9cbf199faa8e632447d2485775189e3f27a3c9042b792ad7b9048",
+      "phase": "complete",
+      "matchingRecordedQuestionAnswerContextAndVersion": true
+    },
+    {
+      "evidence": "docs/evidence/older-code-retention-v70.json",
+      "evidenceSha256": "f08683b0e2e4e1cc5d767fbc1776fd6d95feaffa35f4e102c033eb11f1167c2d",
+      "round": 23,
+      "answerSha256": "3e295205004a2df7c9eba4cd09ed6d5f3be4aacdd4274ad5f2964c1531a6be74",
+      "phase": "complete",
+      "matchingRecordedQuestionAnswerContextAndVersion": true
+    },
+    {
+      "evidence": "docs/evidence/snapshot-proof-accuracy-v70.json",
+      "evidenceSha256": "79b2071f5e412773e864507feb6583222c7ba4e8765d3af1760adea70f4296dd",
+      "round": 19,
+      "answerSha256": "58e3d506a9be57855c5c7ba04e9c20b61dfe0e5fa54c8f85fe97fe396509fde2",
+      "phase": "complete",
+      "matchingRecordedQuestionAnswerAndVersion": true
+    },
+    {
+      "evidence": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round11/round-11.manifest.json",
+      "evidenceSha256": "b7d63c6332ce11fbce951f538c76446f92c55ba9653fd40219a8864a6bb2a13c",
+      "round": 11,
+      "answerSha256": "6e74a22437274194f2cc6737941c883abda41974d2f6dc78668ff55f8fc1aa6e",
+      "phase": "complete",
+      "matchingRecordedAnswerVersionAndExportedSource": true
+    }
+  ],
+  "scope": "Post-termination identity confirmation for prior selective reviews and untouched extracted code. Original in-progress snapshots remain preserved. Matching identities bind those findings to the final journal; this does not expand the checks or establish full independent interview accuracy."
+}

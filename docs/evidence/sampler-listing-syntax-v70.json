@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-10T23:17:05.749Z",
+  "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+  "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+  "round": 10,
+  "answerSha256": "00283f6b86e2f0bfbb1e1257dfe031d5af6a8f7ca8f949e7443ee9ee6e013069",
+  "phase": "complete",
+  "firstVisibleWordLatencyHighMs": 10069,
+  "rawSyntaxCheck": {
+    "recordedAtUnixMs": 1791674161158,
+    "sourceSha256": "d5e63a402d6f744ba5c09f558152a58601d99b1f586d69cbff6764f412fd09d2",
+    "answerSha256": "00283f6b86e2f0bfbb1e1257dfe031d5af6a8f7ca8f949e7443ee9ee6e013069",
+    "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+    "sourcePatched": false,
+    "syntaxCheck": {
+      "passed": false,
+      "type": "SyntaxError",
+      "message": "name 'MOD' is used prior to global declaration",
+      "line": 240,
+      "sourceLine": "global MOD"
+    },
+    "scope": "Compile the exact untouched fenced listing. No execution or repair. The recorded answer separately discloses the required global MOD relocation; the listing itself is not runnable as printed."
+  },
+  "disclosedCorrection": "One Python syntax correction is required in the listing: move `global MOD` to the first line inside `run_tests()`, before any use of `MOD`, and remove its later occurrence. Save as `schedule.py` and run `python schedule.py` with Python 3.9 or newer.",
+  "modelExaminerGrade": "correct",
+  "recordingFinding": "The untouched fenced Python listing cannot compile because run_tests uses MOD before global MOD. The same recorded answer explicitly discloses the correction. A raw-listing execution claim would fail; applying the disclosed correction and assessing the corrected full answer are distinct checks and were not performed here.",
+  "scope": "Selective exact-source syntax check, with a disclosed prose correction preserved. No code repair, sampling proof verification or whole-interview independent accuracy claim."
+}

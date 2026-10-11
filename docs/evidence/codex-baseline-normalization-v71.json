@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-11T07:31:12.262Z",
+  "file": "src-tauri/src/openai/codex.rs",
+  "baseline": {
+    "file": "docs/evidence/answer-architecture-audit-corrected-v70.json",
+    "sha256": "9eb8fa6f76aee9f8982d293d29a6f5041570fe77d7ed19cf642b455f7e0f374d",
+    "recordedCodexSha256": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95"
+  },
+  "gitBlobSha256": "36b4e0e25b3ead5ca4aa67b3a8c5a3b9b0a2b2dca29c6f264aca58d172a90df5",
+  "gitBlobLfNormalizedSha256": "36b4e0e25b3ead5ca4aa67b3a8c5a3b9b0a2b2dca29c6f264aca58d172a90df5",
+  "recordedBaselineMatchesLfNormalizedGitBlob": false,
+  "newlineCounts": {
+    "crlf": 0,
+    "bareLf": 1261
+  },
+  "qualifies": {
+    "file": "docs/evidence/backend-baseline-applicability-v71.json",
+    "sha256": "a355202950b5c8b2f5aaed73f39e83a424c61ef6f94293d11b04b3a18121e7dc"
+  },
+  "interpretation": "LF normalization does not resolve the source mismatch. Keep Codex baseline/current transport equivalence unproven; four other routing files remain independently byte-identical.",
+  "currentDiagnosticSourceSha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766",
+  "productionPerformanceFixesApplied": false,
+  "goalComplete": false
+}

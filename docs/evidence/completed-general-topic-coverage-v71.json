@@ -1,0 +1,528 @@
+{
+  "recordedAt": "2026-10-11T08:26:31.209Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/general-hour-t/interview.json",
+    "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+    "status": "complete",
+    "stoppedCleanly": true
+  },
+  "evidence": {
+    "file": "artifacts/deep-interview-v71/general-hour-t/duration-audit.json",
+    "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+  },
+  "actualInterviewDurationMs": 3664484.5214,
+  "recordedTurns": 55,
+  "manuallyAnnotatedActualTopicGroups": [
+    {
+      "topic": "Service reliability and complaint bounds",
+      "rounds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "sourceQuestions": [
+        {
+          "round": 1,
+          "question": "Customers are increasingly calling a refill-delivery service unreliable. How would you work out what is happening and decide what to do first?",
+          "sha256": "8ee39a3e42336907f1fe2e9b2a366c5936ad675b652b42a7ab979f5b6a426ee1"
+        },
+        {
+          "round": 2,
+          "question": "Why?",
+          "sha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+        },
+        {
+          "round": 3,
+          "question": "You proposed comparing complaints with delivery performance. Two consecutive twenty-eight-day periods each had twelve thousand orders. Late means delivered after the promised calendar date; timestamps are complete. Late orders increased from nine hundred to one thousand four hundred forty, while complaint-producing orders fell from six hundred to five hundred forty. Each order counts at most once in each measure; overlap is unknown. Calculate both rates and their percentage-point changes. [Interviewer pause: one point five seconds.] What can you conclude about reliability, what cannot you conclude about complaints among late orders, and what evidence would you request next before choosing an intervention?",
+          "sha256": "cf1c580105e3e187d62ccf009ac6cfd867a79d0de4ae941b7a0a75a2e91744fe"
+        },
+        {
+          "round": 4,
+          "question": "You correctly calculated first-period lateness as seven point five percent. With the supplied order and complaint counts, what are the sharp lower and upper bounds on the percentage of late orders that produced complaints in each period? Give feasible overlap counts showing whether that conditional complaint rate could have risen or fallen despite fewer complaints overall. [Interviewer pause: one point five seconds.] Explain why your bounds are attainable. Crucially, complaints are not restricted to late orders, and you must not assume independence.",
+          "sha256": "e54c0772e7e32ab4af113fa6f0564c3285f255e24119424fbed513e23c0ce4ca"
+        }
+      ]
+    },
+    {
+      "topic": "PostgreSQL isolation, locks and durable notifications",
+      "rounds": [
+        5,
+        6,
+        7,
+        25,
+        26,
+        28,
+        37,
+        38
+      ],
+      "sourceQuestions": [
+        {
+          "round": 5,
+          "question": "Switch to database concurrency: your overlap constructions preserved all counts; now test whether transactions preserve an invariant. PostgreSQL has two doctor rows, Alice and Bob, both marked on call. At repeatable-read isolation, each transaction counts on-call doctors and, if the count exceeds one, marks its own doctor off call. Alice and Bob run concurrently. Show an exact interleaving where both commit and nobody remains on call. Why does updating different rows matter? [Interviewer pause: one point five seconds.] Provide executable SQL using serializable isolation that preserves at least one on-call doctor, specify exactly what must be retried after a serialization failure, and justify correctness.",
+          "sha256": "06659063e908d43c40ef868dba21812fb1c7e1d287713d7e7ed55b316abde0be"
+        },
+        {
+          "round": 6,
+          "question": "What if that changes?",
+          "sha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+        },
+        {
+          "round": 7,
+          "question": "The isolation level changes to PostgreSQL serializable; they still update different rows. Since those writes cannot conflict, both transactions must still commit, correct? Explain precisely. [Interviewer pause: one point five seconds.] Supply executable SQL for one doctor's transaction, assuming doctors has a text primary key named name and a nonnull boolean named on_call. Initially Alice and Bob are both on call; every writer follows your protocol. Identify the SQLSTATE requiring retry, exactly which operations must rerun, and why retrying only the failed statement cannot preserve the invariant.",
+          "sha256": "0956d78559eba8c40ad093c0d49377dc37b4db5a84ec216075189502218ccba4"
+        },
+        {
+          "round": 25,
+          "question": "Revisit your earlier SQL beginning “BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE.” Change it to repeatable read and insert SELECT pg_advisory_xact_lock(42) before counting doctors. Every writer acquires this same lock. A colleague claims serialization failures are now unnecessary because the lock serializes decisions. Is that correct? [Interviewer pause: one point five seconds.] Trace Alice and Bob starting with both on call, including exactly when each snapshot is established and what Bob sees after waiting. Then supply executable SQL that safely uses this lock, justify the isolation level you choose, and prove that at least one doctor remains on call.",
+          "sha256": "08a0a41c181fb7027ed95acdd197e1903b57a106ac84ea6b18976edfa79b1f43"
+        },
+        {
+          "round": 26,
+          "question": "Why?",
+          "sha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+        },
+        {
+          "round": 28,
+          "question": "Return to the FIRST completed implementation you supplied for this original question: The isolation level changes to PostgreSQL serializable; they still update different rows. Since those writes cannot conflict, both transactions must still commit, correct? Explain precisely. [Interviewer pause: one point five seconds.] Supply executable SQL for one doctor's transaction, assuming doctors has a text primary key Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+          "sha256": "0bf14a02dde60311d28cefb6237bbb7bc3fbc906cb6be28f6f9b3e53a24de7c0"
+        },
+        {
+          "round": 37,
+          "question": "Revisit your original SQL beginning “BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE,” with no advisory lock. Now every successful departure must trigger an external notification. Sending before commit risks notifying after rollback; sending afterward risks a crash before notification. [Interviewer pause: one point five seconds.] Revise that transaction using an outbox. Assume outbox has request_id as a text primary key, doctor as nonnull text, and sent as nonnull boolean. A request identifier remains stable across retries. Supply executable SQL that makes the departure and outbox insertion atomic and handles duplicate requests. Then trace a worker crash after sending but before marking sent. Can you guarantee exactly one notification without cooperation from the recipient?",
+          "sha256": "dbbbf581271bbb13435cfaa6fc5be07e52cca4bf00c8b516074541433810efbc"
+        },
+        {
+          "round": 38,
+          "question": "Why?",
+          "sha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+        }
+      ]
+    },
+    {
+      "topic": "Causal experiments and partial-identification bounds",
+      "rounds": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sourceQuestions": [
+        {
+          "round": 8,
+          "question": "You distinguished direct conflicts from system-level correctness. Now assess a randomized offer: twenty thousand visitors split equally; control records eight hundred purchases, treatment nine hundred twenty. Each purchase contributes thirty currency units; treatment costs zero point four currency units per assigned visitor. Calculate conversion uplift, incremental contribution per treatment-assigned visitor, and its approximate ninety-five percent interval, assuming independent Bernoulli purchases. Recommend whether to launch. [Interviewer pause: one point five seconds.] Crucially, one thousand treatment-assigned visitors never saw the offer; their seventy purchases are included in the nine hundred twenty. A colleague excludes them and claims a stronger causal profit estimate. Evaluate that claim and state what remains identifiable.",
+          "sha256": "83be0e40f25f72a4320efb0ef6771f5935848b6c4dbc09f98148c54e2eac91a4"
+        },
+        {
+          "round": 9,
+          "question": "Your selected-viewer calculation subtracted zero point four currency units per viewer. Debug that accounting: all ten thousand treatment assignments incurred the cost. If the colleague divides total treatment cost by nine thousand viewers, what descriptive net contrast results, and why is it still noncausal? [Interviewer pause: one point five seconds.] Now suppose fixing rendering leaves the existing viewers’ outcomes unchanged and affects only the one thousand non-viewers. Full delivery still costs zero point four currency units per assignment. With no assumptions about those non-viewers’ purchase responses, derive sharp bounds on full-delivery incremental contribution per assigned visitor, using observed control conversion as the benchmark. Show outcome configurations attaining both endpoints.",
+          "sha256": "72ab3d59d88e6ce0058d71af1cab11e2e343508401f40b62996768b93747e476"
+        },
+        {
+          "round": 10,
+          "question": "Your negative zero point zero one one is correctly rounded. Complete the noncausality explanation, then implement executable Python three code named bounds for this problem. Accept control assignments, control purchases, treatment assignments, existing viewers, and viewer purchases as integer arguments. Reject booleans, impossible counts, and nonpositive assignment totals with ValueError. Keep thirty currency units per purchase and zero point four currency units per treatment assignment. Return exact lower and upper contribution bounds using Fraction, allowing every non-viewer either purchase outcome while existing viewers remain unchanged. Apply it to our counts, exhibit endpoint configurations, and explain why the bounds are sharp.",
+          "sha256": "afc1971e89a0604954851232af1158c994004692beb36a2e1a203bfb62de8567"
+        },
+        {
+          "round": 11,
+          "question": "And if, uh, that thing changes?",
+          "sha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f"
+        },
+        {
+          "round": 12,
+          "question": "The unchanged-viewer assumption changes: fixing rendering may alter purchase outcomes for at most two hundred of the nine thousand existing viewers. Previously, eight hundred fifty viewers purchased; the one thousand non-viewers remain unrestricted. Control still has eight hundred purchases among ten thousand assignments. Treatment still costs zero point four currency units per assignment; each purchase contributes thirty. [Interviewer pause: one point five seconds.] Write executable Python three bounds accepting the five earlier counts plus a nonnegative integer change budget. Reject booleans and invalid counts with ValueError; return exact Fraction endpoints. Derive the sharp endpoints for these figures and give attaining configurations. Your function must also handle budgets larger than the viewer count.",
+          "sha256": "0ec090646672ed3fac19be19e2fd1615f3b13f40c1f3e5dceec6d5671191cdfd"
+        }
+      ]
+    },
+    {
+      "topic": "Cooling models, measurement uncertainty and calibration",
+      "rounds": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "sourceQuestions": [
+        {
+          "round": 13,
+          "question": "Your bounds separated observations from assumptions. Switch to cooling: two kilograms of well-mixed water starts at sixty degrees Celsius in a room held at twenty degrees. It reaches forty degrees after ten minutes and thirty after twenty. Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible; no evaporation or internal heating occurs. Heat-loss power equals constant conductance times water temperature minus room temperature. Derive conductance with units. [Interviewer pause: one point five seconds.] A later run starts at sixty and reaches twenty-seven after twenty minutes; its constant ambient temperature was not logged. Construct two exact explanations, one retaining conductance and one retaining twenty-degree ambient. What experiment distinguishes them?",
+          "sha256": "824e3b8d6ddfce6ac8527dd29ff6f3eb5a7a3c28ec609a236dddb588aa20c765"
+        },
+        {
+          "round": 14,
+          "question": "Why?",
+          "sha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+        },
+        {
+          "round": 15,
+          "question": "Your derivation was complete. I meant: why does an intermediate reading distinguish the explanations? Deepen that claim: initial water temperature is exactly sixty degrees Celsius; readings at ten and twenty minutes are thirty-eight and twenty-seven degrees. Ambient temperature and positive conductance are unknown constants; heat capacity remains eight thousand four hundred joules per kelvin. Derive whether these readings uniquely identify both parameters, requiring ambient below every water reading. [Interviewer pause: one point five seconds.] Now each later reading has independently bounded error of plus or minus zero point two degrees Celsius. Derive sharp bounds on ambient temperature and justify which error configurations attain them.",
+          "sha256": "5b13f43dca9b8bc0ba3edbb3b969381a70722940589a1f7fc04c4ecd8b1e50c2"
+        },
+        {
+          "round": 16,
+          "question": "Your stated ambient endpoints are correct for independent errors. Now suppose both later readings come from one thermometer with a shared additive calibration offset, bounded between negative zero point two and positive zero point two degrees Celsius. The displayed readings remain thirty-eight and twenty-seven degrees; the initial sixty-degree temperature is independently exact. Derive sharp ambient-temperature bounds and identify the offsets attaining them. Does either bound occur at an interior offset? [Interviewer pause: one point five seconds.] Crucially, there is no additional measurement noise: the two later errors are not independently selectable.",
+          "sha256": "0aa0840b43790738a348958a677d4a309ef8253426d118eef4985fec3d957a82"
+        }
+      ]
+    },
+    {
+      "topic": "Nonce reuse, finite-field algebra and executable binary linear algebra",
+      "rounds": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "sourceQuestions": [
+        {
+          "round": 17,
+          "question": "Switch to cryptography. A simplified authentication scheme operates in a field with two to the power one hundred twenty-eight elements. Addition is bitwise exclusive OR. For a one-block ciphertext C, its tag equals S plus C times H squared plus L times H. H is a secret field element; S is a nonce-dependent mask; L is a public length block. Two distinct ciphertexts use the same nonce and length, exposing both ciphertexts and tags. [Interviewer pause: one point five seconds.] Derive how an attacker recovers H and S, prove whether recovery is unique, and construct a valid tag for any third one-block ciphertext under that nonce. Does this also recover the encryption key?",
+          "sha256": "30330f52431018d35abe0f1c56bff80142a84625dd4b52d30a376a2aac621891"
+        },
+        {
+          "round": 18,
+          "question": "What if that changes?",
+          "sha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+        },
+        {
+          "round": 19,
+          "question": "The equal-length assumption changes. Two distinct one-block ciphertexts reuse a nonce, but their public length blocks differ; retain the stated tag formula. A colleague says distinct ciphertexts still guarantee unique recovery of H because squaring is bijective. Is that correct? Derive the equation for H, determine exactly how many solutions it has for these genuine observed tags, and characterize when a chosen third ciphertext and length has the same predicted tag under every compatible pair of H and S. [Interviewer pause: one point five seconds.] Use field operations and justify each uniqueness or ambiguity claim.",
+          "sha256": "225284609df3686b65cf39ea790dae02b08019c68b3ec6efda7956725ee53237"
+        },
+        {
+          "round": 20,
+          "question": "Keep your unequal-length setup, but expose only ninety-six bits of each tag through a known linear projection P of rank ninety-six over the two-element field. Define a, b, and d as before, with d now the projected tag difference. Derive the exact possible numbers of compatible H values for genuine observations, and characterize when each number occurs using the kernel of P and the field trace. [Interviewer pause: one point five seconds.] Then characterize when a third projected tag is identical across all compatible pairs. Crucially, the nonce mask remains an unrestricted secret field element; do not assume its hidden bits are known.",
+          "sha256": "3449ec81ad225af6089ec7b4638a8a84ace403619c041aaa9b33b45af4fed84f"
+        },
+        {
+          "round": 21,
+          "question": "Turn your kernel criterion into executable Python three: analyze(m_columns, n_columns, d, first_tag). Each column list contains exactly one hundred twenty-eight nonnegative integers below two to the power ninety-six, encoding the respective linear map’s columns; d and first_tag have the same range. Return the number of compatible H values, the number of distinct third projected tags, and the unique third tag if determined, otherwise None. Reject booleans, malformed inputs, and inconsistent observations with ValueError. [Interviewer pause: one point five seconds.] Use exclusive OR elimination, not enumeration. Trace a case where checking only the original two-element ambiguity gives the wrong answer, and prove your counting formulas and complexity.",
+          "sha256": "e81e313a43374384e5ca0a80841aaafb13bc95f89dee1d297730d8666e42c988"
+        },
+        {
+          "round": 22,
+          "question": "Complete analyze using the stated contract. How will each elimination pivot retain enough information to recover both a particular solution and a kernel basis? Supply executable Python three, then compute the rank of N restricted to that kernel without enumeration. [Interviewer pause: one point five seconds.] Trace the case where M is zero, N has exactly one nonzero column, d is zero, and first_tag is zero. Give both counts and explain why testing one kernel vector on which N vanishes can falsely suggest uniqueness. Include validation and complexity.",
+          "sha256": "b5aeb594d1d3e8fcc22cbf58a92b0068c7e50f67b72610002863d8e87f249232"
+        },
+        {
+          "round": 23,
+          "question": "And if, uh, that thing changes?",
+          "sha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f"
+        },
+        {
+          "round": 24,
+          "question": "The input contract changes: each column collection may now be a one-shot iterable, still containing exactly one hundred twenty-eight integers below two to the power ninety-six. Everything else remains unchanged. Complete executable Python three analyze, rejecting booleans, invalid lengths, invalid values, and inconsistent observations with ValueError, without mutating inputs. Return both counts and the unique third tag, or None. [Interviewer pause: one point five seconds.] Preserve input masks through exclusive OR elimination to recover a particular solution and a full kernel basis. Trace zero M with exactly one nonzero N column and zero observed tags. Prove the counting formulas and state complexity.",
+          "sha256": "d0fdc5726821000e23ff9770a7c4fe1f7a98495f2b63055799498c315e122ea1"
+        }
+      ]
+    },
+    {
+      "topic": "Procurement yields, demand scenarios and commitment costs",
+      "rounds": [
+        27,
+        39,
+        40
+      ],
+      "sourceQuestions": [
+        {
+          "round": 27,
+          "question": "Your locking protocol guarantees an invariant; distinguish that from meeting demand in expectation. A manufacturer needs ten thousand acceptable units. Supplier A charges twelve currency units per delivered unit, with acceptance probability ninety-eight percent and capacity eight thousand. Supplier B charges eleven point five, with acceptance probability ninety-four percent and capacity six thousand. Unit acceptances are independent; purchases are integers; total delivered-unit storage is eleven thousand. Find the cheapest purchase plan meeting expected demand. [Interviewer pause: one point five seconds.] Does it guarantee a ninety-nine percent probability of meeting actual demand? Give an exact probability expression and a rigorous method to find the cheapest plan satisfying that probability threshold, or establish infeasibility.",
+          "sha256": "f74f70e2eaed3047ec536c8341a937c1fd0c17d8a944feba663d0d2aca5aea2b"
+        },
+        {
+          "round": 39,
+          "question": "You distinguished durable intent from guaranteed outcomes. Return to procurement: supplier A offers a one-percent discount on twelve currency units per delivered unit, requiring eight thousand units monthly for six months. Acceptance remains ninety-eight percent. Supplier B remains eleven point five with ninety-four-percent acceptance and six-thousand-unit capacity. This month requires ten thousand acceptable units; later demand is unknown. Unused units cannot carry forward or be resold. [Interviewer pause: one point five seconds.] Compare six-month costs if demand stays constant versus disappears after month one, using integer purchases that meet expected demand. Derive the probability threshold favoring commitment under those two scenarios. Without that probability, recommend concrete reservation terms rather than inventing a forecast.",
+          "sha256": "c0f47a348e83f951ef8e70d2534f8bd7cabe17f3acdfdf75c94096cc7c2554b6"
+        },
+        {
+          "round": 40,
+          "question": "Complete your capacity-reservation proposal. Compare the discounted commitment with buying without commitment in both demand scenarios, using integer purchases meeting expected demand. Derive the probability threshold favoring commitment. [Interviewer pause: one point five seconds.] Now suppose A instead offers an optional monthly call on eight thousand units at the discounted price, charging a nonrefundable six-month reservation fee upfront; unused calls cost nothing. Derive the largest fee worth paying as a function of the probability that demand continues, and propose terms when that probability is unknown. Crucially, the reservation does not oblige you to buy eight thousand units in any month.",
+          "sha256": "3220d6fea39a35a8a2d4095c590b79410041f389a8bd659aa1c19e642a2c5f49"
+        }
+      ]
+    },
+    {
+      "topic": "C++20 atomics and sequentially consistent fences",
+      "rounds": [
+        29,
+        30,
+        31
+      ],
+      "sourceQuestions": [
+        {
+          "round": 29,
+          "question": "Switch to C plus plus twenty memory ordering. Atomic integers x and y initially contain zero. Four threads run once: one release-stores one to x; another release-stores one to y; a third acquire-loads x, then y; a fourth acquire-loads y, then x. Each thread preserves its stated order. An acquire load synchronizes with a release store whose value it reads; each atomic has its own modification order. Can both readers obtain one followed by zero? Construct the dependency graph and check coherence. [Interviewer pause: one point five seconds.] Now make all six operations sequentially consistent, requiring one total order consistent with thread order. Prove whether the same outcome remains possible.",
+          "sha256": "7e175e43918ff1eaf49727308d7daa073ce7d588937dcbf2aa71ba894cd8c675"
+        },
+        {
+          "round": 30,
+          "question": "What if that changes?",
+          "sha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+        },
+        {
+          "round": 31,
+          "question": "The ordering changes: all stores and loads are now relaxed. Each writer places a sequentially consistent fence after its store; each reader places a sequentially consistent fence between its two loads. A colleague claims that fences do not make the accesses sequentially consistent, so both readers can still obtain one followed by zero. Is that conclusion correct under C plus plus twenty? [Interviewer pause: one point five seconds.] Derive the required ordering between the four fences from the observed values and per-atomic coherence. Prove whether the outcome is allowed, distinguishing fence order from synchronization and happens-before.",
+          "sha256": "b6bad69ebbd90d6e6480be54da36c53720c8c1c6af7afc3510e07edf151def29"
+        }
+      ]
+    },
+    {
+      "topic": "Sequential testing, predictable decisions and dependent outcomes",
+      "rounds": [
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "sourceQuestions": [
+        {
+          "round": 32,
+          "question": "Return to your offer experiment. Change one assumption: control conversion is now known exactly as eight percent. Treatment purchases are independent Bernoulli outcomes with unknown constant probability p. Contribution remains thirty currency units per purchase, minus zero point four per assignment. You inspect results after every visitor. Derive the break-even probability. Construct a likelihood-ratio process against that null boundary using ten percent as the alternative. [Interviewer pause: one point five seconds.] Prove validity for every unprofitable p, give a stopping threshold controlling false profitable declarations at five percent, and express the process after nine hundred twenty purchases among ten thousand assignments. Crucially, stopping time is unrestricted; a fixed-sample confidence interval is insufficient.",
+          "sha256": "c932683cc2a11bb021ebce00932cc236a7747760f6a2ada605cd68a2e6db5648"
+        },
+        {
+          "round": 33,
+          "question": "Debug this modification of your process. After observing each outcome, code chooses the alternative probability as ten percent for a purchase and nine percent otherwise, then multiplies by that outcome’s likelihood ratio against seven seventy-fifths. A colleague claims your supermartingale proof still applies. Compute both multipliers and prove whether false declarations remain controlled at five percent over unrestricted time. [Interviewer pause: one point five seconds.] Give a deterministic upper bound on the number of observations needed to cross twenty, if one exists. Then supply executable Python three for a valid adaptive alternative chosen from previous outcomes only, explaining the precise range restriction and conditional-expectation invariant.",
+          "sha256": "4811ddc94c806742def44fce05d665fc6ab8ba93fcddcc4e0dad6100f3479968"
+        },
+        {
+          "round": 34,
+          "question": "Complete your argument for eight hundred seventeen observations: give both multipliers and prove the bound. Then implement monitor(outcomes), consuming a one-shot iterable of integer zeros and ones and rejecting booleans or other values with ValueError. Before each outcome, choose ten percent if previous purchases exceed seven seventy-fifths times previous assignments; otherwise choose the break-even probability. Use exact Fraction arithmetic. Return the first index at which the process reaches twenty, or None, but validate the entire finite input even after crossing. Why is this predictable rule valid over unrestricted time, whereas choosing after observing the outcome is not?",
+          "sha256": "de65fd788def0ff0839246708b4aabac0b305f9062fdf55212a429bbac6d24c1"
+        },
+        {
+          "round": 35,
+          "question": "And if, uh, that thing changes?",
+          "sha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f"
+        },
+        {
+          "round": 36,
+          "question": "Outcome independence changes; your predictable rule and full-input validation requirement remain unchanged. Each outcome individually has purchase probability seven seventy-fifths, but dependence is unrestricted. A colleague says the same five-percent guarantee follows from these marginal probabilities. Test this using one Bernoulli variable Z with that probability and setting every outcome equal to Z. [Interviewer pause: one point five seconds.] Derive the first crossing index on each possible infinite sequence and the false-declaration probability. Then identify a conditional-probability assumption sufficient to restore your supermartingale proof without independence. Explain precisely why marginal bounds do not supply that assumption.",
+          "sha256": "d5e2541c0de8e9975d3399895d9d0be4c276711f06a57cd796260b5284565e79"
+        }
+      ]
+    },
+    {
+      "topic": "Perspective interpolation, texture mapping and exact geometric area",
+      "rounds": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "sourceQuestions": [
+        {
+          "round": 41,
+          "question": "Switch to computer graphics. A triangle has projected vertices at screen coordinates zero zero, one zero, and zero one. Their positive clip-space w values are one, two, and four; scalar vertex attributes are zero, ten, and twenty. Attributes vary affinely on the original three-dimensional triangle before perspective division. At screen coordinates one quarter, one quarter, derive the correct interpolated attribute and explain why ordinary screen-space interpolation fails. [Interviewer pause: one point five seconds.] Derive the general interpolation formula from homogeneous coordinates. Then split the original edge joining the first two vertices at its three-dimensional midpoint. Compute the new vertex’s projected position and attribute, and prove that triangulating with this vertex preserves the interpolated field.",
+          "sha256": "6ae1464aa858f62711141d719ccc76e46fbe96fbea3b23b2dd50e52576595bc6"
+        },
+        {
+          "round": 42,
+          "question": "What if that changes?",
+          "sha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+        },
+        {
+          "round": 43,
+          "question": "The subdivision rule changes: insert a vertex at the screen-space midpoint of the edge joining the first two vertices, rather than its three-dimensional midpoint. A colleague assigns it attribute five and clip-space w equal to one point five, claiming midpoint interpolation preserves the field. Is that correct? [Interviewer pause: one point five seconds.] Derive the original-edge barycentric weights, attribute, and clip-space w of the actual point projecting to that screen midpoint. Then prove whether using those corrected values preserves perspective-correct interpolation throughout both subtriangles, not merely along the split edge.",
+          "sha256": "28824de529a1e2ad2b1612d5876e46e2214bedd6e1e13612085ba6add6a694f2"
+        },
+        {
+          "round": 44,
+          "question": "Your affine numerator-and-denominator proof establishes field preservation. Now replace the scalar attribute with texture coordinates: A has zero, zero; B has one, zero; C has zero, one. Keep the same screen vertices and clip-space w values. Derive the perspective-correct texture map and its exact Jacobian at screen coordinates one quarter, one quarter. [Interviewer pause: one point five seconds.] The texture is one thousand twenty-four texels square; a screen pixel spans one hundredth in each coordinate. Compute both singular values of the local texel-footprint matrix and their ratio. Compare them with forward differences over one pixel. Crucially, distinguish the infinitesimal footprint from the exact finite-pixel image; is that image necessarily a parallelogram?",
+          "sha256": "600e138a80d38703e67d22042cbe9ccd94ebc2e57cc3c365b290aa8222d5b591"
+        },
+        {
+          "round": 45,
+          "question": "Debug a renderer using your forward-difference matrix: it reports the absolute determinant as the exact pixel-image area in square texels. For your pixel with lower-left corner one quarter, one quarter and side one hundredth, calculate the exact area from your four mapped corners. Compare it with both that renderer’s estimate and the Jacobian determinant estimate, giving exact ratios and signed relative errors. [Interviewer pause: one point five seconds.] Independently derive the exact area by integrating the Jacobian determinant over the screen square. Explain why the forward-difference columns do not suffice, and derive a general exact area formula for an axis-aligned pixel under this texture map, wherever its denominator stays positive.",
+          "sha256": "ac2dc1ad59801a3e9884a5b54b9f6cba98d93fc40944bbbb1aba316e2835234b"
+        },
+        {
+          "round": 46,
+          "question": "Complete your area calculation, then implement pixel_area(x, y, h) in executable Python three using Fraction inputs and exact arithmetic. Use our texture map. Reject nonpositive h and any square whose denominator is not positive throughout. Return the exact area in square texels, the forward-difference determinant estimate, and the Jacobian determinant estimate. For our pixel, give exact ratios and signed relative errors, defined as estimate divided by true area minus one. [Interviewer pause: one point five seconds.] Prove your formula independently by integrating the Jacobian determinant, and explain which missing geometric information makes the renderer’s estimate inexact.",
+          "sha256": "3996d10dfff8316d4ae6c497604caaf7a826d010aefa57c50dd19c5c5525ba00"
+        },
+        {
+          "round": 47,
+          "question": "And if, uh, that thing changes?",
+          "sha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f"
+        },
+        {
+          "round": 48,
+          "question": "The pixel shape changes to a rotated square. Keep your texture map and denominator-positivity requirement. Its vertices, in boundary order, are p, p plus e, p plus e plus f, and p plus f, where e and f are perpendicular vectors of equal nonzero length. [Interviewer pause: one point five seconds.] Supply executable Python three rotated_area using Fraction coordinates, returning exact image area in square texels. Reject invalid squares and nonpositive denominators. Derive a formula using the four corner denominators and the absolute determinant of e and f. Prove it remains valid when the denominator is constant along one edge direction, without dividing by that direction’s denominator change.",
+          "sha256": "d0e1f2f7e612d0a15427261a722412351f3d66f404f4b5da18fb91126b4769e2"
+        }
+      ]
+    },
+    {
+      "topic": "Integer-cost profit optimization and exact-budget dynamic programming",
+      "rounds": [
+        49,
+        50,
+        51,
+        52
+      ],
+      "sourceQuestions": [
+        {
+          "round": 49,
+          "question": "Revisit your earlier six-argument bounds implementation, which used max of zero and viewer purchases minus change budget. Replace uniform purchases and flip costs: each existing viewer now has an observed integer outcome, zero or one, a nonnegative integer purchase contribution, and a positive integer flip cost. There are no non-viewers. A shared integer budget limits total flip cost, not the number changed. [Interviewer pause: one point five seconds.] Write executable Python three contribution_bounds(records, budget), returning exact minimum and maximum total contribution. Records may be one-shot; reject booleans and invalid values. At most two hundred records; budget at most two thousand. Require order records times budget time, order budget auxiliary space, and prove your state invariant.",
+          "sha256": "799d2a687b0dcba2acf3c3cd2c9a3e85c26d24bc59b12f6849f52da4e187cebf"
+        },
+        {
+          "round": 50,
+          "question": "Why?",
+          "sha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+        },
+        {
+          "round": 51,
+          "question": "Change one constraint: total flip cost must equal the budget exactly, rather than merely stay within it. Now counterproductive flips may be necessary. [Interviewer pause: one point five seconds.] Write executable Python three contribution_bounds_exact with the same input validation, one-shot support, and complexity bounds; return None if infeasible. Otherwise return minimum and maximum total contribution. Prove your unreachable-state representation and descending-update invariant. Trace two records: an observed purchaser contributing ten with flip cost two, and an observed nonpurchaser contributing seven with flip cost one, with budget three. Explain why your earlier separation into two tables by observed outcome no longer works.",
+          "sha256": "42cf5b28a49737c8f918309db25351cd8cd44b58b0c756ea4378f877a8f2f8b0"
+        },
+        {
+          "round": 52,
+          "question": "Complete contribution_bounds_exact using signed changes across all records. Trace the purchaser contributing ten at cost two and nonpurchaser contributing seven at cost one, with exact budget three. Explain how descending updates preserve both minimum and maximum reachable changes, and why an unreachable source must never enter a transition. [Interviewer pause: one point five seconds.] Include validation, one-shot consumption, and the required complexity. Contributions have no upper bound; zero and negative changes are valid, so do not use a finite numeric sentinel or treat zero as unreachable.",
+          "sha256": "b0c78f6be30802c1ea995418b164d5affca0f3c9d247122e14a47153eee1ffe7"
+        }
+      ]
+    },
+    {
+      "topic": "Error-correcting polynomial codes and recovery ambiguity",
+      "rounds": [
+        53,
+        54,
+        55
+      ],
+      "sourceQuestions": [
+        {
+          "round": 53,
+          "question": "Switch to error-correcting codes. Arithmetic is modulo the prime one hundred one. An unknown polynomial of degree at most two was evaluated at integers zero through six. Received values, in that order, are three, seven, eleven, eighteen, twenty-seven, forty, fifty-one; at most two are corrupted. Recover the polynomial and locate the errors. [Interviewer pause: one point five seconds.] Derive a linear decoding system using a monic degree-two error-locator polynomial E and a polynomial Q of degree at most four, satisfying Q at each evaluation point equals its received value times E there. Prove unique recovery, and explain why fewer than two actual errors can make E nonunique without making the decoded polynomial ambiguous.",
+          "sha256": "bd4149842555b85b7cbb41139e9045d6d61ad04a70f0225afeb1f076533d04bb"
+        },
+        {
+          "round": 54,
+          "question": "What if that changes?",
+          "sha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+        },
+        {
+          "round": 55,
+          "question": "The evaluation count changes to six, at integers zero through five; modulus one hundred one, degree at most two, and at most two corruptions remain unchanged. A colleague claims six samples still guarantee unique recovery because the monic error locator gives a linear system. Is that correct? [Interviewer pause: one point five seconds.] Construct an explicit received vector and two distinct quadratic polynomials, each disagreeing with it at exactly two positions. Prove your construction and identify exactly where the earlier uniqueness argument fails. Explain why a linear decoding system cannot resolve this ambiguity.",
+          "sha256": "58e991988846f65b90de52fc5d1cca899b1c91666fa01659d288780966f9a669"
+        }
+      ]
+    }
+  ],
+  "actualShortQuestions": [
+    {
+      "round": 2,
+      "question": "Why?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "049b3da5-d4e3-43e6-8996-77063e41fb5e"
+      ]
+    },
+    {
+      "round": 6,
+      "question": "What if that changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "2ebe80cc-d585-4b9f-b212-299100a3fc06"
+      ]
+    },
+    {
+      "round": 11,
+      "question": "And if, uh, that thing changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "a0b98681-6a53-4946-8066-0cdc4fd5a7a7"
+      ]
+    },
+    {
+      "round": 14,
+      "question": "Why?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "fc6fee5b-b880-4485-9607-7d9403850c3d"
+      ]
+    },
+    {
+      "round": 18,
+      "question": "What if that changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "78cc3b14-1644-4d9d-80de-094b77788bbc"
+      ]
+    },
+    {
+      "round": 23,
+      "question": "And if, uh, that thing changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "d1d9de7b-78d6-490f-9509-504541787326"
+      ]
+    },
+    {
+      "round": 26,
+      "question": "Why?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "8037ec97-eed1-4516-90f2-542e55c11c41"
+      ]
+    },
+    {
+      "round": 30,
+      "question": "What if that changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "f6f951e0-64f6-4454-bb61-63016413e0e6"
+      ]
+    },
+    {
+      "round": 35,
+      "question": "And if, uh, that thing changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "9c86dc93-7d21-4f24-b96f-45c5ef6142e4"
+      ]
+    },
+    {
+      "round": 38,
+      "question": "Why?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "cae67c5a-8f59-4cca-a205-fdf9f1108211"
+      ]
+    },
+    {
+      "round": 42,
+      "question": "What if that changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "f60bda17-4892-4f30-a230-48c6c90f6580"
+      ]
+    },
+    {
+      "round": 47,
+      "question": "And if, uh, that thing changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "504e3c51-ac69-44e0-b667-9b587aefd602"
+      ]
+    },
+    {
+      "round": 50,
+      "question": "Why?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "5ac77a61-936e-4ea6-af23-0b7f6c357be1"
+      ]
+    },
+    {
+      "round": 54,
+      "question": "What if that changes?",
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "e0079ed0-e858-4ad0-895e-43d692a84f5b"
+      ]
+    }
+  ],
+  "actualStreamingOverlapLaunches": 22,
+  "scope": "Manual grouping of every actual played source question, bound to the completed SHA-verified recording and numerical audit. Short questions and overlap fields come from the recording, not its generation brief. Contextual short questions are grouped with their actual surrounding topic. These are dependent synthetic interview observations, not random population coverage. Actual earlier-code version retention, response correctness and delivery/visible timing require their separate source-bound audits.",
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

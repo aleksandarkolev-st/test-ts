@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-11T00:14:51.213Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/algorithms-hour-t/interview.json",
+    "sha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5",
+    "status": "complete"
+  },
+  "round": 12,
+  "questionSha256": "fcd1ca458171b8c8e7b65cb122118f4a75b1fb849b14a232b806f49fb60bd8b9",
+  "answerSha256": "56709613da476e3a765028043909dac562a6fbfd72a263d8249340126caf3228",
+  "code": {
+    "file": "artifacts\\deep-interview-v70\\algorithms-hour-t\\code-review\\round12\\round-12-block-1.py",
+    "languageAnnotation": "python",
+    "bytes": 6878,
+    "sha256": "e26d00d5ed5e2dccfa26e174235f213d02290c1105c1822cb282970c6dee9959"
+  },
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round12/round-12.manifest.json",
+      "sha256": "dc374d207df5e8624e414fed11fddaf962b3158ada947b9b96e92cc9eb1bf8c8"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round12/independent-parser-oracle.json",
+      "sha256": "a89d107b553546d9b88cb2552b67e91fb34949a123b8f07c4f803f635560278b"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "candidateAuthoredTests": "passed",
+  "independentCases": {
+    "random_partition_cases": 600,
+    "malformed_suffix_cases": 100,
+    "truncated_eof_cases": 47,
+    "early_close_cases": 8,
+    "maximum_payload_cases": 4,
+    "released_traceback_views_checked": 200
+  },
+  "totalIndependentCases": 759,
+  "seed": 15228447345328245000,
+  "failures": 0,
+  "observedExecutionMs": 311.7090999148786,
+  "originalSourcePatched": false,
+  "manualSourceReview": {
+    "ownership": "feed sets the active iterator before returning. A rejected competing feed or EOF leaves ownership intact. Normal exhausted next releases it; explicit early close and parsing errors additionally close and discard the parser state.",
+    "yieldOrder": "Each next returns a completed frame before looking at the following header, so an invalid suffix does not suppress a preceding valid frame.",
+    "inputReferences": "finish releases the top-level input memoryview and removes the iterator references to that view and parser. Temporary slices use memoryview context managers. The execution checks also keep protocol-error tracebacks alive and check their candidate-frame views for release.",
+    "workBound": "For immutable byte chunks and sequential calls, each consumed header or payload byte is appended once; completed payload conversion copies that payload once. Bounded header unpacking and constant iterator operations give amortized O(B + K) for B bytes and K feed calls, using the standard bytearray growth model.",
+    "storageBound": "Copied header storage is at most twelve bytes and the unfinished payload is at most the cap. The parser has one input view; it does not accumulate yielded outputs. This supports O(cap) internal copied storage under the stated exclusions, not a strict one-cap peak-byte bound."
+  },
+  "scope": "Selective full-source execution of the completed DSA round-12 parser, not a whole-interview accuracy rate or proof of every input. The 759 functional cases are dependent finite checks, not independent interview draws. No real network concurrency, simultaneous calls or exact peak-memory benchmark was performed. Full source-contract and other-answer judgments remain separately reviewable."
+}

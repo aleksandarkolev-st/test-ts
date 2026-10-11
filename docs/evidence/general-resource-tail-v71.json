@@ -1,0 +1,374 @@
+{
+  "recordedAt": "2026-10-11T07:42:53.807Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v71/general-hour-t/native-resource-excerpt.json",
+      "sha256": "fcb7b1b19f950cbc386252b7e3a07e8d83b6d740e0c27d20ca3dbee0ff09d4c8"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/general-hour-t/duration-audit.json",
+      "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+    },
+    {
+      "file": "docs/evidence/architecture-r34-checkpoint-v71.json",
+      "sha256": "b261ccf86c8d705e197201c1b0403f84b38dfea1107ccf8ee12be64c4d3f188c"
+    }
+  ],
+  "journal": {
+    "file": "artifacts/deep-interview-v71/general-hour-t/interview.json",
+    "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+    "status": "complete",
+    "stoppedCleanly": true
+  },
+  "round": 34,
+  "responseVersion": "9c86dc93-7d21-4f24-b96f-45c5ef6142e4:42",
+  "visibleWordLatencyMs": {
+    "low": 64857,
+    "high": 64862
+  },
+  "resourceHostWindow": {
+    "low": 1791702755261,
+    "high": 1791702820123,
+    "scope": "From physical synthetic endpoint lower host bound to first visibly painted complete word in the preserved row snapshot."
+  },
+  "nativeResourceSamplesInsideWindow": 5,
+  "processes": [
+    {
+      "processId": 36908,
+      "name": "meeting-copilot.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 5.03125,
+      "processorSecondsPerWallSecond": 0.08384019330111649,
+      "firstPrivateBytes": 19419136,
+      "lastPrivateBytes": 19382272,
+      "maximumPrivateBytes": 19419136,
+      "firstWorkingSetBytes": 58834944,
+      "lastWorkingSetBytes": 58839040
+    },
+    {
+      "processId": 30160,
+      "name": "conhost.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 1441792,
+      "lastPrivateBytes": 1441792,
+      "maximumPrivateBytes": 1441792,
+      "firstWorkingSetBytes": 8916992,
+      "lastWorkingSetBytes": 8916992
+    },
+    {
+      "processId": 29432,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 3.296875,
+      "processorSecondsPerWallSecond": 0.05493876020663223,
+      "firstPrivateBytes": 48730112,
+      "lastPrivateBytes": 49668096,
+      "maximumPrivateBytes": 49668096,
+      "firstWorkingSetBytes": 129970176,
+      "lastWorkingSetBytes": 130949120
+    },
+    {
+      "processId": 29676,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 2985984,
+      "lastPrivateBytes": 2985984,
+      "maximumPrivateBytes": 2985984,
+      "firstWorkingSetBytes": 16560128,
+      "lastWorkingSetBytes": 16560128
+    },
+    {
+      "processId": 45192,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 105914368,
+      "lastPrivateBytes": 110256128,
+      "maximumPrivateBytes": 110256128,
+      "firstWorkingSetBytes": 62832640,
+      "lastWorkingSetBytes": 62693376
+    },
+    {
+      "processId": 27216,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0.203125,
+      "processorSecondsPerWallSecond": 0.003384852524579237,
+      "firstPrivateBytes": 14323712,
+      "lastPrivateBytes": 14815232,
+      "maximumPrivateBytes": 14815232,
+      "firstWorkingSetBytes": 44593152,
+      "lastWorkingSetBytes": 45072384
+    },
+    {
+      "processId": 8084,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 7745536,
+      "lastPrivateBytes": 7753728,
+      "maximumPrivateBytes": 7827456,
+      "firstWorkingSetBytes": 23281664,
+      "lastWorkingSetBytes": 23293952
+    },
+    {
+      "processId": 30804,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 2.796875,
+      "processorSecondsPerWallSecond": 0.046606815530744874,
+      "firstPrivateBytes": 318382080,
+      "lastPrivateBytes": 316993536,
+      "maximumPrivateBytes": 330428416,
+      "firstWorkingSetBytes": 356511744,
+      "lastWorkingSetBytes": 355393536
+    },
+    {
+      "processId": 12780,
+      "name": "msedgewebview2.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0.765625,
+      "processorSecondsPerWallSecond": 0.012758290284952508,
+      "firstPrivateBytes": 211279872,
+      "lastPrivateBytes": 218005504,
+      "maximumPrivateBytes": 218005504,
+      "firstWorkingSetBytes": 252510208,
+      "lastWorkingSetBytes": 258867200
+    },
+    {
+      "processId": 2852,
+      "name": "codex.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0.125,
+      "processorSecondsPerWallSecond": 0.002082986168971838,
+      "firstPrivateBytes": 112967680,
+      "lastPrivateBytes": 102690816,
+      "maximumPrivateBytes": 112967680,
+      "firstWorkingSetBytes": 164249600,
+      "lastWorkingSetBytes": 152473600
+    },
+    {
+      "processId": 47036,
+      "name": "conhost.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 1253376,
+      "lastPrivateBytes": 1253376,
+      "maximumPrivateBytes": 1253376,
+      "firstWorkingSetBytes": 7847936,
+      "lastWorkingSetBytes": 7847936
+    },
+    {
+      "processId": 32020,
+      "name": "nemo-speech.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 3.703125,
+      "processorSecondsPerWallSecond": 0.061708465255790705,
+      "firstPrivateBytes": 5329473536,
+      "lastPrivateBytes": 5329473536,
+      "maximumPrivateBytes": 5329473536,
+      "firstWorkingSetBytes": 60289024,
+      "lastWorkingSetBytes": 60289024
+    },
+    {
+      "processId": 42188,
+      "name": "conhost.exe",
+      "samples": 5,
+      "firstHostMs": 1791702759876,
+      "lastHostMs": 1791702819886,
+      "windowSeconds": 60.01,
+      "observedProcessorSeconds": 0,
+      "processorSecondsPerWallSecond": 0,
+      "firstPrivateBytes": 1265664,
+      "lastPrivateBytes": 1265664,
+      "maximumPrivateBytes": 1265664,
+      "firstWorkingSetBytes": 8019968,
+      "lastWorkingSetBytes": 8019968
+    }
+  ],
+  "finalNativeTreeSnapshot": {
+    "hostBeforeMs": 1791704248216,
+    "hostAfterMs": 1791704248603,
+    "rows": [
+      {
+        "processId": 36908,
+        "parentProcessId": 17204,
+        "name": "meeting-copilot.exe",
+        "workingSetBytes": 60133376,
+        "privateBytes": 21467136,
+        "cpuSeconds": 498.890625,
+        "handles": 427,
+        "threads": 22
+      },
+      {
+        "processId": 30160,
+        "parentProcessId": 36908,
+        "name": "conhost.exe",
+        "workingSetBytes": 8601600,
+        "privateBytes": 1441792,
+        "cpuSeconds": 0.015625,
+        "handles": 100,
+        "threads": 2
+      },
+      {
+        "processId": 29432,
+        "parentProcessId": 36908,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 127864832,
+        "privateBytes": 48328704,
+        "cpuSeconds": 254.796875,
+        "handles": 1431,
+        "threads": 50
+      },
+      {
+        "processId": 29676,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 15949824,
+        "privateBytes": 2985984,
+        "cpuSeconds": 0.03125,
+        "handles": 177,
+        "threads": 8
+      },
+      {
+        "processId": 45192,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 62070784,
+        "privateBytes": 105512960,
+        "cpuSeconds": 59.15625,
+        "handles": 1238,
+        "threads": 28
+      },
+      {
+        "processId": 27216,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 42782720,
+        "privateBytes": 14073856,
+        "cpuSeconds": 16.703125,
+        "handles": 353,
+        "threads": 20
+      },
+      {
+        "processId": 8084,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 22781952,
+        "privateBytes": 7745536,
+        "cpuSeconds": 0.0625,
+        "handles": 190,
+        "threads": 10
+      },
+      {
+        "processId": 30804,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 329711616,
+        "privateBytes": 289497088,
+        "cpuSeconds": 485.953125,
+        "handles": 305,
+        "threads": 23
+      },
+      {
+        "processId": 12780,
+        "parentProcessId": 29432,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 292704256,
+        "privateBytes": 253435904,
+        "cpuSeconds": 94,
+        "handles": 301,
+        "threads": 23
+      },
+      {
+        "processId": 2852,
+        "parentProcessId": 36908,
+        "name": "codex.exe",
+        "workingSetBytes": 155652096,
+        "privateBytes": 106094592,
+        "cpuSeconds": 68.21875,
+        "handles": 391,
+        "threads": 33
+      },
+      {
+        "processId": 47036,
+        "parentProcessId": 2852,
+        "name": "conhost.exe",
+        "workingSetBytes": 7606272,
+        "privateBytes": 1253376,
+        "cpuSeconds": 0.015625,
+        "handles": 98,
+        "threads": 2
+      },
+      {
+        "processId": 32020,
+        "parentProcessId": 36908,
+        "name": "nemo-speech.exe",
+        "workingSetBytes": 50585600,
+        "privateBytes": 5329473536,
+        "cpuSeconds": 240.90625,
+        "handles": 553,
+        "threads": 15
+      },
+      {
+        "processId": 42188,
+        "parentProcessId": 32020,
+        "name": "conhost.exe",
+        "workingSetBytes": 7626752,
+        "privateBytes": 1265664,
+        "cpuSeconds": 0,
+        "handles": 98,
+        "threads": 2
+      }
+    ],
+    "nativeTreePrivateBytes": 6182576128,
+    "nativeTreeSumWorkingSetBytes": 1184071680,
+    "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+  },
+  "scope": "Descriptive process-wide counters in sparse samples wholly inside the tail interval. CPU deltas cover only first-to-last observed samples, not the entire latency interval. Processor seconds include all threads and do not isolate the parser or any request; one second per wall second means one logical core occupied. Processes absent or exiting between snapshots are unobserved; PID lifetime identity is not captured in these resource rows. Private bytes are not resident working-set bytes or a GPU allocation metric. Native descendants exclude recorder/examiner/playback siblings and pre-existing system services. These measurements do not identify a causal tail mechanism or establish absence of transient resource contention.",
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

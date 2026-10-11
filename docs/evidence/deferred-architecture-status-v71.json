@@ -1,0 +1,106 @@
+{
+  "recordedAt": "2026-10-11T07:19:59.771Z",
+  "recording": {
+    "file": "artifacts/deep-interview-v71/recording-queue.jsonl",
+    "sha256AtSnapshot": "ad299322f6abea09f53ec3ce048538c2c3239bd08984f256106da83cd0374c7e",
+    "entries": [
+      {
+        "diagnostics": "acceptance-only reader receipt, queue occupancy and callback waits",
+        "model": "gpt-6.1-sol",
+        "effort": "low",
+        "recordedAt": "2026-10-11T06:35:02.3805591+00:00",
+        "productionBehaviorChanged": false,
+        "ownerPid": 24692,
+        "output": "T24E390",
+        "microphone": false,
+        "event": "started"
+      },
+      {
+        "domain": "general",
+        "recordedAt": "2026-10-11T06:35:02.3943107+00:00",
+        "kind": "elapsed_hour",
+        "event": "starting",
+        "minutes": 60,
+        "ownerPid": 24692
+      }
+    ]
+  },
+  "deferred": {
+    "file": "artifacts/deep-interview-v71/deferred-queue.jsonl",
+    "sha256AtSnapshot": "9ceff6202d8752b240a0f367df636419b4260d650cdb0789e4039c1ad658e126",
+    "entries": [
+      {
+        "recordedAt": "2026-10-11T07:13:57.4021586+00:00",
+        "goalComplete": false,
+        "recordingCreationEpochMs": 1791700501977,
+        "event": "waiting_for_recordings",
+        "recordingOwner": 24692,
+        "ownerPid": 25816
+      }
+    ]
+  },
+  "helperRevisions": [
+    {
+      "file": ".local/run-deferred-v71.ps1",
+      "sha256": "18f653834dd52d86f5b66eab6f16be7f351829c4c74f0577f466225072d99873"
+    },
+    {
+      "file": ".local/run-policy-controls-v71.ps1",
+      "sha256": "ab1988dfa3c28b8e9b2448a4f701c139710e27e54c846d5fe7e6203d46df5e09"
+    },
+    {
+      "file": ".local/prepare-policy-controls-v71.mjs",
+      "sha256": "0dbcd414e3793ee11da9f3f90eb8d8cd7228a38014786e2a16c1f3e07d2504e8"
+    },
+    {
+      "file": ".local/record-policy-playback-v71.mjs",
+      "sha256": "a47d62a3c4156033ec6931c6a41945e6f8bec23094635292c70f8e1087084b0a"
+    },
+    {
+      "file": ".local/run-assessments-v71.ps1",
+      "sha256": "37078fd0c82d98c2491b18726b5165266c2c4ad43a4e09cb76f33c2d1fa872c5"
+    },
+    {
+      "file": ".local/analyze-architecture-v71.mjs",
+      "sha256": "df9619b5722b1cfb5f49a29edfa10d5f96768bb24145b73067ff9d6f63cf1a5b"
+    },
+    {
+      "file": ".local/inspect-row-v71.mjs",
+      "sha256": "b0451da1fe1aac4a4f181a348a3b3538739fd8aa43d3b59a04da178396bf5186"
+    }
+  ],
+  "ordering": [
+    "Finish all three full hours, hard probes and continuous pressure",
+    "Run 24 fresh-meeting matched policy controls",
+    "Build and run isolated independent assessments",
+    "Complete substantive checks, final source audit and consolidated report"
+  ],
+  "currentCapture": {
+    "domain": "general",
+    "status": "in_progress_at_snapshot",
+    "lastStdoutTurnObserved": 39
+  },
+  "newTail": {
+    "checkpointFile": "docs/evidence/architecture-r34-checkpoint-v71.json",
+    "sha256": "b261ccf86c8d705e197201c1b0403f84b38dfea1107ccf8ee12be64c4d3f188c",
+    "round": 34,
+    "responseVersion": "9c86dc93-7d21-4f24-b96f-45c5ef6142e4:42",
+    "physicalEndpointToVisibleWordMs": {
+      "low": 64857,
+      "high": 64862
+    },
+    "confirmationToSendMs": 416,
+    "sentToReaderReceiptMs": 491,
+    "readerToConsumerMs": 0,
+    "consumerToRetainedDeltaMs": 63337,
+    "retainedDeltaToNativeVisibleMs": 8,
+    "readerFullQueueCount": 0,
+    "interpretation": "This live row differs from earlier submission/receipt tails: most waiting happens after matching final-input consumption and before the final decoded prefix. Provider compute, raw output arrival/field order, and decoding are not isolated by this trace. Final word retention and answer correctness require the clean journal and deferred reviewer."
+  },
+  "limits": [
+    "Queue files are historical snapshots, not independent proof of current liveness. Owner process identity was verified when the waiting job launched; final terminal records and source hashes are still required.",
+    "Helper changes affect measurement/audit orchestration. Production prompts, routing, timing policies and answer logic are unchanged.",
+    "No final hour p95 or independent accuracy reported before recording and assessment finish."
+  ],
+  "goalComplete": false
+}

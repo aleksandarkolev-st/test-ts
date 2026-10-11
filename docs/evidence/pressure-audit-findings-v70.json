@@ -1,0 +1,233 @@
+{
+  "recordedAt": "2026-10-10T23:42:04.586Z",
+  "journalSha256": "e0a56329ce503b4bcda30b19d6f87256252b60a836a0aa32a9edc91506742ee5",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "lexicalAlignment": {
+    "sourceWords": 3557,
+    "recognizedWords": 3555,
+    "sourceSegments": 158,
+    "finalAsrChunks": 518,
+    "counts": {
+      "match": 3521,
+      "substitution": 34,
+      "deletion": 2
+    },
+    "lexicalEdits": 36,
+    "lexicalWordErrorRate": 0.010120888389091932,
+    "segmentsWithLexicalDeletion": 2,
+    "segmentsWithoutAlignedRawAsr": 0
+  },
+  "nativeFrameTokenCoverage": {
+    "finalAsrTokens": 3555,
+    "coveredByRecordedNativeQuestionSpans": 3555,
+    "uncovered": [],
+    "sourceBoundJobRows": 89,
+    "multiSourceJobs": 57,
+    "maxAsrEndpointVsNativeFinalTranscriptDifferenceMs": 64,
+    "scope": "Union of temporally disambiguated exact token spans in all final recorded native question frames, including cancelled/superseded/unfinished jobs. Case and punctuation are ignored. Coverage establishes retained text somewhere in the recording, not per-utterance delivery, current selected context, semantic preservation or correct visible answers."
+  },
+  "drift": {
+    "firstHalf": {
+      "nativeJobs": 44,
+      "observedVisibleWords": 29,
+      "missingVisibleWords": 15,
+      "cancelled": 15,
+      "phases": {
+        "complete": 26,
+        "superseded": 13,
+        "cancelled": 5
+      },
+      "nativeEndpointToFirstVisibleWordMs": {
+        "count": 29,
+        "min": 2191,
+        "median": 3004,
+        "sampleP95": 7409,
+        "max": 8806
+      },
+      "completeJobsNativeEndpointToFirstVisibleWordMs": {
+        "count": 26,
+        "min": 2191,
+        "median": 2958.5,
+        "sampleP95": 7409,
+        "max": 8806
+      }
+    },
+    "secondHalf": {
+      "nativeJobs": 45,
+      "observedVisibleWords": 27,
+      "missingVisibleWords": 18,
+      "cancelled": 20,
+      "phases": {
+        "superseded": 18,
+        "complete": 22,
+        "cancelled": 4,
+        "confirmed": 1
+      },
+      "nativeEndpointToFirstVisibleWordMs": {
+        "count": 27,
+        "min": 1850,
+        "median": 3136,
+        "sampleP95": 8701,
+        "max": 11021
+      },
+      "completeJobsNativeEndpointToFirstVisibleWordMs": {
+        "count": 22,
+        "min": 1850,
+        "median": 3179,
+        "sampleP95": 8701,
+        "max": 11021
+      }
+    },
+    "resources": {
+      "native": {
+        "workingSetBytes": {
+          "first": 28758016,
+          "last": 55267328,
+          "count": 123,
+          "min": 28758016,
+          "median": 53616640,
+          "sampleP95": 55418880,
+          "max": 55906304
+        },
+        "privateBytes": {
+          "first": 4460544,
+          "last": 19034112,
+          "count": 123,
+          "min": 4460544,
+          "median": 17674240,
+          "sampleP95": 19230720,
+          "max": 20406272
+        },
+        "handles": {
+          "first": 268,
+          "last": 429,
+          "count": 123,
+          "min": 268,
+          "median": 429,
+          "sampleP95": 436,
+          "max": 440
+        },
+        "threads": {
+          "first": 10,
+          "last": 23,
+          "count": 123,
+          "min": 10,
+          "median": 23,
+          "sampleP95": 28,
+          "max": 36
+        }
+      },
+      "recorder": {
+        "rss": {
+          "first": 50348032,
+          "last": 165965824,
+          "count": 183,
+          "min": 50348032,
+          "median": 164884480,
+          "sampleP95": 279261184,
+          "max": 300773376
+        },
+        "heapUsed": {
+          "first": 9274392,
+          "last": 48449728,
+          "count": 183,
+          "min": 9274392,
+          "median": 30976680,
+          "sampleP95": 120019416,
+          "max": 131959792
+        },
+        "pollMs": {
+          "first": 17,
+          "last": 5,
+          "count": 183,
+          "min": 4,
+          "median": 6,
+          "sampleP95": 10,
+          "max": 20
+        }
+      },
+      "childTree": {
+        "nativeTreePrivateBytes": {
+          "first": 244011008,
+          "last": 6000386048,
+          "count": 123,
+          "min": 244011008,
+          "median": 6017318912,
+          "sampleP95": 6139342848,
+          "max": 6173216768
+        },
+        "nativeTreeSumWorkingSetBytes": {
+          "first": 500563968,
+          "last": 1153810432,
+          "count": 123,
+          "min": 500563968,
+          "median": 1171017728,
+          "sampleP95": 1292034048,
+          "max": 1323806720
+        }
+      },
+      "instrumentationChange": {
+        "observerStartedAfterPlaybackMs": 757240,
+        "initialReadBackfilledRetainedEvents": true,
+        "scope": "The additional observer began during playback and read previously retained events. Its CPU/memory and CDP polling are extra instrumentation; native process-tree and main recorder measurements exclude this separate observer. Timing drift across its start is not an isolated model or app effect."
+      }
+    },
+    "scope": "Descriptive temporal halves using native job speech-end times calibrated to the physical playback midpoint. Jobs may combine source utterances; missing/cancelled jobs stay in each denominator. Complete-job statistics are explicitly conditional. Source repeats and partial cycles give dependent and unequal workload samples. The event observer started during playback; its additional load prevents an isolated causal drift claim. Startup/warm-up memory growth is not a leak proof. Working-set sums may double count shared pages; GPU and sibling process allocations are excluded. No predeclared significant-degradation threshold or population certification is inferred."
+  },
+  "manualStale": {
+    "currentJobId": "8f5c404c-a7b4-4b46-baaf-b01bfd67e7ee",
+    "confirmedQuestionObservedAt": {
+      "hostBeforeMs": 1791674983381,
+      "hostAfterMs": 1791674983387,
+      "question": {
+        "detectedAt": 1616076,
+        "id": "8f5c404c-a7b4-4b46-baaf-b01bfd67e7ee",
+        "text": "explain the invariant for a sliding window median"
+      },
+      "phase": "confirmed"
+    },
+    "earlierJobQuestion": {
+      "detectedAt": 1606953,
+      "id": "9739f55f-0468-4d7c-9117-8d2884d153f8",
+      "text": "What if it accelerates instead"
+    },
+    "intervals": [
+      {
+        "startHostMs": 1791674983378,
+        "endHostMs": 1791675034594,
+        "durationMs": 51216,
+        "shownQuestionId": "9739f55f-0468-4d7c-9117-8d2884d153f8",
+        "shownRevision": 3,
+        "sourceOrder": "earlier_native_job",
+        "visibleText": "If it accelerates, the distance depends on the acceleration. Assuming constant acceleration a, an initial speed of 20 meters per second, and the same 30 seconds, displacement is 20 × 30 + ½ × a × 30² = 600 + 450a meters, with a in meters per second squared. This also equals distance traveled if the vehicle never reverses direction; without an acceleration value or profile, there’s no unique numerical answer."
+      }
+    ],
+    "initialDistinctJobConfirmationHostMs": {
+      "low": 1791674983376,
+      "high": 1791674983378
+    },
+    "lastSameJobConfirmationHostMs": {
+      "low": 1791675024016,
+      "high": 1791675024018
+    },
+    "finalRecordedNativeJobSpeechEndHostMs": {
+      "low": 1791675023573,
+      "high": 1791675023575
+    },
+    "durationAfterInitialConfirmationMs": 51216,
+    "durationAfterLastSameJobConfirmationMs": 10576,
+    "durationAfterFinalNativeJobSpeechEndMs": 11019,
+    "verdict": "observed_stale_answer_display",
+    "reason": "The newly confirmed question asks for a sliding-window median invariant. The actual visible paragraph still answers the preceding vehicle-acceleration question. Its IDs, observed question state, visible text and held paint interval are recorded. The 51-second initial-confirmation interval includes later continued speech/refinements; the shorter post-native-job-speech interval is separately recorded.",
+    "scope": "Direct review of this concrete recorded display example. Does not classify all different-ID intervals or establish source utterance endpoint latency."
+  },
+  "independentJobReviewInput": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-review-input.json",
+  "remaining": [
+    "Independent Sol 6.1 low per-native-job answer assessment.",
+    "Source utterance completeness and continuation handling across split/merged jobs.",
+    "Semantic review of other different-question visible intervals."
+  ],
+  "productionLogicChanged": false
+}

@@ -394,6 +394,8 @@ impl Codex {
         let result = async {
             // Keep the acknowledgement even if speech resumes during the RPC:
             // we need its turn id to interrupt before releasing the slot.
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&initial_input));}
             if let Some(trace)=&trace{trace.input_sent();}
             let turn=service.rpc("turn/start", json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":turn_input,"outputSchema":output_schema}), &service.dead).await?;
             if let Some(trace)=&trace {trace.mark(Stage::TurnStartAck);trace.input_ack();}
@@ -470,6 +472,8 @@ impl Codex {
                         if turn_finished {
                             pending_steer=false;
                             pending_sent_at=None;pending_input_key=None;
+                            #[cfg(all(feature="acceptance",debug_assertions))]
+                            if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&text));}
                             if let Some(trace)=&trace{trace.input_sent();}
                             let turn=service.rpc("turn/start",json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":[{"type":"text","text":text}],"outputSchema":output_schema}),&service.dead).await?;
                             if let Some(trace)=&trace{trace.input_ack();}
@@ -481,6 +485,8 @@ impl Codex {
                         } else {
                             let sent_at=tokio::time::Instant::now();
                             service.received_inputs.lock().unwrap().remove(&id);
+                            #[cfg(all(feature="acceptance",debug_assertions))]
+                            if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&text));}
                             if let Some(trace)=&trace{trace.input_sent();}
                             let steer=service.rpc("turn/steer",json!({"threadId":id,"expectedTurnId":turn_id,"input":[{"type":"text","text":text}]}),&service.dead).await;
                             if steer.is_ok(){if let Some(trace)=&trace{trace.input_ack();}}
@@ -560,7 +566,11 @@ impl Codex {
                         let Some(delta)=gated else{continue};
                         active_has_delta|=!delta.trim().is_empty();
                         let emitted=if updates.is_some(){StreamEvent::QuestionDelta{question:active_question.clone(),context_key:active_context_key,text:delta}}else{StreamEvent::Delta(delta)};
+                        #[cfg(all(feature="acceptance",debug_assertions))]
+                        let callback_started=std::time::Instant::now();
                         tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(emitted)=>result? }
+                        #[cfg(all(feature="acceptance",debug_assertions))]
+                        if let Some(trace)=&trace{trace.diagnostic_delta_callback(callback_started.elapsed().as_micros()as u64);}
                     }
                     Some("turn/completed") => {
                         turn_finished = true;
@@ -730,7 +740,9 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
             }
             if sender.is_some() && message["method"]=="item/completed" && message["params"]["item"]["type"]=="userMessage" {
                 if let (Some(turn),Some(content))=(message["params"]["turnId"].as_str(),message["params"]["item"]["content"].as_array()) {
-                    let keys=content.iter().filter_map(|part|part["text"].as_str()).map(context_key).collect();
+                    let keys:Vec<[u8;32]>=content.iter().filter_map(|part|part["text"].as_str()).map(context_key).collect();
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    if let Some(trace)=service.traces.lock().unwrap().get(id){trace.diagnostic_input_received(&keys);}
                     service.received_inputs.lock().unwrap().insert(id.to_owned(),(turn.to_owned(),keys));
                 }
             }
@@ -738,7 +750,13 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
         };
         if message["method"]=="item/agentMessage/delta" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}
         if message["method"]=="turn/completed" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::TurnCompleted);}}
-        if let Some(sender)=sender { let _=sender.blocking_send(message); }
+        if let Some(sender)=sender {
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            let diagnostic=(service.traces.lock().unwrap().get(id).cloned(),sender.max_capacity()-sender.capacity(),sender.capacity()==0,std::time::Instant::now());
+            let _=sender.blocking_send(message);
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            if let (Some(trace),queued,full,start)=diagnostic{trace.diagnostic_reader_send(queued,full,start.elapsed().as_micros()as u64);}
+        }
     }
     !service.dead.is_cancelled()
 }
@@ -759,6 +777,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     #[tokio::test]
     async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
         let (service,_requests)=transport_fixture();let (output,mut events)=mpsc::channel(1);
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        let observed={let trace=Trace::new(std::time::Instant::now(),0);trace.diagnostic_input_expected(context_key("Exact corrected input"));trace.input_sent();service.traces.lock().unwrap().insert("thread".into(),trace.clone());trace};
         output.try_send(json!({"method":"precedingOutput"})).unwrap();
         service.events.lock().unwrap().insert("thread".into(),output);
         let weak=Arc::downgrade(&service);
@@ -770,9 +790,14 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         }
         assert!(!service.input_received("thread","older",&context_key("Exact corrected input")));
         assert!(!service.input_received("thread","current",&context_key("Obsolete input")));
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        {assert!(observed.snapshot().latest_input_reader_received.is_some());assert!(observed.snapshot().latest_input_consumed.is_none());}
         assert_eq!(events.recv().await.unwrap()["method"],"precedingOutput");
         assert_eq!(events.recv().await.unwrap()["params"]["turnId"],"current");
-        assert!(reader.join().unwrap());service.shutdown();
+        assert!(reader.join().unwrap());
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        {let snapshot=observed.snapshot();assert_eq!(snapshot.reader_send_count,1);assert_eq!(snapshot.reader_queue_peak,1);assert_eq!(snapshot.reader_full_queue_count,1);observed.diagnostic_input_expected(context_key("New input"));observed.diagnostic_input_received(&[context_key("Exact corrected input")]);assert!(observed.snapshot().latest_input_reader_received.is_none());}
+        service.shutdown();
     }
     #[tokio::test]
     async fn full_output_queue_blocks_interrupt_ack_until_the_receiver_drains() {

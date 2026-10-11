@@ -1,0 +1,128 @@
+{
+  "recordedAt": "2026-10-10T23:26:43.959Z",
+  "source": {
+    "file": "src-tauri/src/openai/codex.rs",
+    "sha256": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95"
+  },
+  "references": [
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 463,
+      "source": "if (latest.confirmed || stable_partial) && (question_changed || context_changed) && pending_question.is_none() {",
+      "finding": "Changed confirmed input is sent only when the prior pending input has cleared."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 335,
+      "source": "self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await",
+      "finding": "The second attempt disables restart_stalled; the outer function retries only once."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 515,
+      "source": "_=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{",
+      "finding": "The pending-final deadline can trigger refinement retirement only while restart_stalled is enabled."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 540,
+      "source": "let (_,question,context)=pending_question.take().unwrap();active_question=question;",
+      "finding": "A matching completed userMessage event clears the pending update and activates its question/context frame."
+    }
+  ],
+  "representativeTrace": {
+    "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/round-09-latency-stage-audit.json",
+    "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+    "round": 9,
+    "physicalEndpointNativeMs": {
+      "low": 778592,
+      "high": 778608
+    },
+    "visibleWord": {
+      "word": "The",
+      "characterRange": [
+        0,
+        3
+      ],
+      "observedHostMs": 1791671472165,
+      "latencyMs": {
+        "low": 77751,
+        "high": 77757
+      },
+      "responseRevision": 28,
+      "observedDuringStreaming": true,
+      "retainedInCurrentRecordedAnswer": true
+    },
+    "stages": {
+      "endpointToFinalConfirmationMs": {
+        "low": 589,
+        "high": 605
+      },
+      "finalConfirmationToFinalInputSentMs": 32269,
+      "finalInputRpcAckMs": 7,
+      "finalInputSentToConsumptionEventMs": 41937,
+      "consumptionEventToRetainedFirstDeltaMs": 2949,
+      "retainedFirstDeltaToNativeVisibleMs": 8
+    },
+    "counters": {
+      "restarts": 1,
+      "steers": 4,
+      "followups": 1
+    },
+    "textSizes": {
+      "initialPromptChars": 34635,
+      "restartPromptChars": 35303,
+      "totalRefinementChars": 177251
+    }
+  },
+  "completedRecordings": {
+    "file": "docs/evidence/answer-architecture-audit-corrected-v70.json",
+    "summary": {
+      "turns": 91,
+      "visibleWordMs": {
+        "count": 90,
+        "missing": 1,
+        "median": 7252.5,
+        "sampleP95": 44545,
+        "max": 77757
+      },
+      "confirmationToFinalInputSentMs": {
+        "count": 90,
+        "median": 408,
+        "sampleP95": 15373,
+        "max": 32269
+      },
+      "finalInputSentToConsumptionEventMs": {
+        "count": 90,
+        "median": 473,
+        "sampleP95": 26701,
+        "max": 41937
+      },
+      "consumptionEventToRetainedFirstDeltaMs": {
+        "count": 90,
+        "median": 2775,
+        "sampleP95": 11744,
+        "max": 27489
+      },
+      "foregroundSemaphoreWaitMs": {
+        "count": 90,
+        "median": 0,
+        "sampleP95": 0,
+        "max": 0
+      },
+      "confirmedToFinalSendAbove10Seconds": 7,
+      "finalInputConsumptionAbove10Seconds": 19
+    }
+  },
+  "conclusion": "The recorded final question was delayed behind an older pending update. The once-only retry removes the short refinement deadline on the second attempt, permitting further waits. This is an application architecture mechanism supported by the trace and matching source. It does not identify the provider-internal cause of the subsequent consumption-event delay.",
+  "uncertainties": [
+    "Consumption is the application processing a matching item/completed userMessage event, not measured provider GPU/reasoning/queue time.",
+    "Large prompt and refinement character counts are recorded; their causal contribution has not been isolated.",
+    "Backend selection also changes detection, continuation and steering. A final-prompt comparison alone cannot establish end-to-end superiority."
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "productionLogicChanged": false,
+  "scope": "Recording and read-only architecture diagnosis. No answer-specific rules, expected-answer injection or production fixes."
+}

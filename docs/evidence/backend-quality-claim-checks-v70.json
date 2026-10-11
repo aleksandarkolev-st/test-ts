@@ -1,0 +1,152 @@
+{
+  "sources": [
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-backend-comparison-no-tier/repeat-1-case-02-codex.json",
+      "sha256": "25e782151586ef2234bce42a3ac4b3798c3b80ef3343f549f0e8e50208e5fc07"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-backend-comparison-no-tier/repeat-1-case-09-codex.json",
+      "sha256": "ee21eacfb0405da33adbbbf8fc682d114b2f814eaeab8c3f0d97ba9405201522"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-backend-comparison-no-tier/codex-independent-model-review-v70/trial-002.json",
+      "sha256": "c0edf6bb339f2420bfaad27f0e9ff893974f8c6c02457dc6cf6fb0dc948a245d"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-backend-comparison-no-tier/codex-independent-model-review-v70/trial-009.json",
+      "sha256": "75cab6c54afb14e4290dd524663c986c62a45128fd08e0d7abdcec46171f4af7"
+    },
+    {
+      "file": "C:/Users/polek/miniconda3/Lib/random.py",
+      "sha256": "cf8e72f887d838e273c274b79758b2bf8630a0927112b8876fa3a9e4b9b1756b"
+    },
+    {
+      "file": "C:/Users/polek/Downloads/test-ts/.local/check-backend-quality-claims-v70.py",
+      "sha256": "cf3abd8a309dcdced6fd733ece734586db279e207692c6837bb8e86a13d16998"
+    }
+  ],
+  "candidateModel": "gpt-6.1-sol",
+  "candidateEffort": "low",
+  "originalAnswersAndJudgmentsChanged": false,
+  "cudaBlockShape": {
+    "sourceQuestion": "I put the CUDA block barrier, spelled underscore underscore syncthreads, inside an if condition where thread index x is less than sixteen, in a block of one hundred twenty-eight threads. That guarantees safety, correct? All one hundred twenty-eight threads are live and executing this kernel.",
+    "candidateAnswer": "No\u2014putting `__syncthreads()` inside `if (threadIdx.x < 16)` is unsafe with all 128 threads live. Only 16 threads reach the block-wide barrier; the other 112 skip it, violating the requirement that the condition be uniform across the block and potentially causing a hang or unintended behavior. Keep the work conditional, but place `__syncthreads()` outside the `if` so every thread reaches it.",
+    "independentVerdict": "incorrect",
+    "enumeratedShapes": [
+      {
+        "blockDimensions": [
+          128,
+          1,
+          1
+        ],
+        "liveThreads": 128,
+        "threadsSatisfyingPredicate": 16,
+        "predicateUniform": false
+      },
+      {
+        "blockDimensions": [
+          64,
+          2,
+          1
+        ],
+        "liveThreads": 128,
+        "threadsSatisfyingPredicate": 32,
+        "predicateUniform": false
+      },
+      {
+        "blockDimensions": [
+          32,
+          4,
+          1
+        ],
+        "liveThreads": 128,
+        "threadsSatisfyingPredicate": 64,
+        "predicateUniform": false
+      },
+      {
+        "blockDimensions": [
+          16,
+          8,
+          1
+        ],
+        "liveThreads": 128,
+        "threadsSatisfyingPredicate": 128,
+        "predicateUniform": true
+      },
+      {
+        "blockDimensions": [
+          8,
+          16,
+          1
+        ],
+        "liveThreads": 128,
+        "threadsSatisfyingPredicate": 128,
+        "predicateUniform": true
+      }
+    ],
+    "finding": "A categorical 16/112 split requires a one-dimensional 128-by-1-by-1 block. The source specifies 128 live threads, not dimensions. A block of shape 8-by-16-by-1 has all 128 threads satisfying x<16. This does not make the original general safety guarantee valid: uniform block-wide participation and surrounding control flow still matter.",
+    "scope": "Thread-coordinate counting and control-flow qualification only; no CUDA runtime or deadlock execution."
+  },
+  "pythonRejectionSampling": {
+    "pythonVersion": "3.14.7",
+    "implementation": "CPython",
+    "stdlibFunction": "_randbelow_with_getrandbits",
+    "candidateRelevantLines": [
+      "from random import Random, SystemRandom",
+      "    rng must provide unbiased randrange(stop); defaults to SystemRandom.",
+      "        rng = SystemRandom()",
+      "    ticket = rng.randrange(total)",
+      "                rng.randrange(skip_weight + take_weight) >= skip_weight",
+      "Save as `schedule.py` and run `python schedule.py` with Python 3.9 or newer. `SystemRandom.randrange` uses rejection sampling, giving unbiased integer draws under the uniform-random-bit model; do not replace it with a floating-point draw or a random integer reduced modulo the bound. The tests check validity and counts; uniformity follows from the proof, not from observed sample frequencies.",
+      "That is not a unit-cost bit-complexity claim. With B count bits, P bits for accumulated profits, and L bits for time values and cleanup completions, a straightforward bound is O(N log N \u00b7 L + NK \u00b7 (P+B)) bit operations, plus expected O(KB) random-bit work. Rejection sampling needs fewer than two attempts on average per nontrivial draw. Count storage uses O(NKB) bits, and profit storage uses O(NKP) bits; supplied time and profit integers have no stated bit-width limit."
+    ],
+    "independentVerdict": "incorrect",
+    "controlledActualRandrangeCalls": [
+      {
+        "firstTwoBitValue": 0,
+        "returnedValue": 0,
+        "getrandbitsRequests": [
+          2
+        ]
+      },
+      {
+        "firstTwoBitValue": 1,
+        "returnedValue": 1,
+        "getrandbitsRequests": [
+          2
+        ]
+      },
+      {
+        "firstTwoBitValue": 2,
+        "returnedValue": 0,
+        "getrandbitsRequests": [
+          2,
+          2
+        ]
+      },
+      {
+        "firstTwoBitValue": 3,
+        "returnedValue": 0,
+        "getrandbitsRequests": [
+          2,
+          2
+        ]
+      }
+    ],
+    "bound": 2,
+    "requestedBits": 2,
+    "acceptedValues": [
+      0,
+      1
+    ],
+    "rejectedValues": [
+      2,
+      3
+    ],
+    "acceptanceProbabilityUnderIndependentUniformBits": "1/2",
+    "expectedAttemptsUnderIndependentUniformBits": "2",
+    "finding": "The actual local standard-library method draws two bits for randrange(2). With independent uniform bits its acceptance probability is one half, hence exactly two expected attempts. The strict fewer-than-two claim is false for this supported power-of-two bound. Uniformity and the stated asymptotic complexity are unaffected.",
+    "scope": "Actual standard-library method exercised with controlled draws, plus exact geometric expectation under the explicitly stated independent-uniform-bit model. This is not a statistical certificate for OS entropy or execution validation of the full scheduling program."
+  },
+  "scope": "Source-bound checks of two newly graded candidate claims. No candidate replay, source repair, judgment replacement or production behavior change."
+}

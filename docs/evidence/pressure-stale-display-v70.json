@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-10T23:42:04.584Z",
+  "journalSha256": "e0a56329ce503b4bcda30b19d6f87256252b60a836a0aa32a9edc91506742ee5",
+  "manualStale": {
+    "currentJobId": "8f5c404c-a7b4-4b46-baaf-b01bfd67e7ee",
+    "confirmedQuestionObservedAt": {
+      "hostBeforeMs": 1791674983381,
+      "hostAfterMs": 1791674983387,
+      "question": {
+        "detectedAt": 1616076,
+        "id": "8f5c404c-a7b4-4b46-baaf-b01bfd67e7ee",
+        "text": "explain the invariant for a sliding window median"
+      },
+      "phase": "confirmed"
+    },
+    "earlierJobQuestion": {
+      "detectedAt": 1606953,
+      "id": "9739f55f-0468-4d7c-9117-8d2884d153f8",
+      "text": "What if it accelerates instead"
+    },
+    "intervals": [
+      {
+        "startHostMs": 1791674983378,
+        "endHostMs": 1791675034594,
+        "durationMs": 51216,
+        "shownQuestionId": "9739f55f-0468-4d7c-9117-8d2884d153f8",
+        "shownRevision": 3,
+        "sourceOrder": "earlier_native_job",
+        "visibleText": "If it accelerates, the distance depends on the acceleration. Assuming constant acceleration a, an initial speed of 20 meters per second, and the same 30 seconds, displacement is 20 × 30 + ½ × a × 30² = 600 + 450a meters, with a in meters per second squared. This also equals distance traveled if the vehicle never reverses direction; without an acceleration value or profile, there’s no unique numerical answer."
+      }
+    ],
+    "initialDistinctJobConfirmationHostMs": {
+      "low": 1791674983376,
+      "high": 1791674983378
+    },
+    "lastSameJobConfirmationHostMs": {
+      "low": 1791675024016,
+      "high": 1791675024018
+    },
+    "finalRecordedNativeJobSpeechEndHostMs": {
+      "low": 1791675023573,
+      "high": 1791675023575
+    },
+    "durationAfterInitialConfirmationMs": 51216,
+    "durationAfterLastSameJobConfirmationMs": 10576,
+    "durationAfterFinalNativeJobSpeechEndMs": 11019,
+    "verdict": "observed_stale_answer_display",
+    "reason": "The newly confirmed question asks for a sliding-window median invariant. The actual visible paragraph still answers the preceding vehicle-acceleration question. Its IDs, observed question state, visible text and held paint interval are recorded. The 51-second initial-confirmation interval includes later continued speech/refinements; the shorter post-native-job-speech interval is separately recorded.",
+    "scope": "Direct review of this concrete recorded display example. Does not classify all different-ID intervals or establish source utterance endpoint latency."
+  }
+}

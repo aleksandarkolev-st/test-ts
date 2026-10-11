@@ -1,0 +1,700 @@
+{
+  "recordedAt": "2026-10-11T00:08:16.258Z",
+  "records": [
+    {
+      "directory": "artifacts/deep-interview-v70/algorithms-hour-t",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/algorithms-hour-t/delivery-coverage-audit.json",
+        "sha256": "6eab2ba4f6be14770b0f04484f000bc3439f44764727c96db77a3a6b9507a428"
+      },
+      "journalSha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5",
+      "sourceQuestions": 49,
+      "backgroundUtterances": 4,
+      "shortQuestions": [
+        {
+          "round": 2,
+          "question": "Why?",
+          "sourceWordCount": 1
+        },
+        {
+          "round": 6,
+          "question": "What if that changes?",
+          "sourceWordCount": 4
+        },
+        {
+          "round": 11,
+          "question": "And if, uh, that thing changes?",
+          "sourceWordCount": 6
+        },
+        {
+          "round": 14,
+          "question": "Why?",
+          "sourceWordCount": 1
+        },
+        {
+          "round": 18,
+          "question": "What if that changes?",
+          "sourceWordCount": 4
+        },
+        {
+          "round": 23,
+          "question": "And if, uh, that thing changes?",
+          "sourceWordCount": 6
+        },
+        {
+          "round": 26,
+          "question": "Why?",
+          "sourceWordCount": 1
+        },
+        {
+          "round": 30,
+          "question": "What if that changes?",
+          "sourceWordCount": 4
+        },
+        {
+          "round": 35,
+          "question": "And if, uh, that thing changes?",
+          "sourceWordCount": 6
+        },
+        {
+          "round": 38,
+          "question": "Why?",
+          "sourceWordCount": 1
+        },
+        {
+          "round": 42,
+          "question": "What if that changes?",
+          "sourceWordCount": 4
+        },
+        {
+          "round": 47,
+          "question": "And if, uh, that thing changes?",
+          "sourceWordCount": 6
+        }
+      ],
+      "activeAnswerOverlapLaunches": 18,
+      "precedingJobOverlapLaunches": 17,
+      "immediatePreparedFollowups": {
+        "count": 12,
+        "matchingVisiblePriorPrefix": 12,
+        "precedingJobOverlap": 12,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 12,
+          "min": 491,
+          "median": 1882.5,
+          "sampleP95": 4980,
+          "max": 4980
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads/delivery-coverage-audit.json",
+        "sha256": "a85429f37bd4c6f04ff27e4bbdc30d529a1cdb9706ac6bb8e18c6edebf06934b"
+      },
+      "journalSha256": "24ce1d1c9ca243b2e3a9c7056085ce9cf0a7a07fee85b01fc335a81dea9ee4c3",
+      "sourceQuestions": 2,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 1,
+      "precedingJobOverlapLaunches": 1,
+      "immediatePreparedFollowups": {
+        "count": 1,
+        "matchingVisiblePriorPrefix": 1,
+        "precedingJobOverlap": 1,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 1,
+          "min": 734,
+          "median": 734,
+          "sampleP95": 734,
+          "max": 734
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/deep-code-memory",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/delivery-coverage-audit.json",
+        "sha256": "c24ac9ea962a03225ab8b1fcf70c145a02253b445393191b8a10764de7a37c39"
+      },
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "sourceQuestions": 27,
+      "backgroundUtterances": 2,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 7,
+      "precedingJobOverlapLaunches": 5,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/divergent-block-barrier",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/divergent-block-barrier/delivery-coverage-audit.json",
+        "sha256": "3f1b32bbb44aaa838905d582800b862b82168b9393c06360083cf92c38f3ac2e"
+      },
+      "journalSha256": "5cbc92af7ccb26757df2ec0fe5270a77359ba5d23d000daf77ff71ea5ed26b70",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/exact-launch-numbers",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/exact-launch-numbers/delivery-coverage-audit.json",
+        "sha256": "efaa98b11cd31d2beb01c6d43e4374400e7a7c51bd361f8816b8e3f7ba3cf676"
+      },
+      "journalSha256": "98ea5fbd39b87730079f05608cb551055fe33e546f746a1edcff2fd71def70f3",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/fp32-association",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/fp32-association/delivery-coverage-audit.json",
+        "sha256": "f149b76f03ee961ec1282bfe4bf6d7396be6648a9bc54a19921669027c86dec5"
+      },
+      "journalSha256": "7cd5132ab20e51ed91403e2e842a4c4ad0e29a9a7df3cf83cae19d9170b4b859",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal/delivery-coverage-audit.json",
+        "sha256": "ce68fcbf724adc384bc608b71c24795ed7aaa3baf87daf13b4b89cd34ee40366"
+      },
+      "journalSha256": "f65c48b8b369a0748e0174ad1234474f811ad2b54ad5fa851b5eb04a325b4c04",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/delivery-coverage-audit.json",
+        "sha256": "ffd4e791f071513016952e28689d61bde2162a15f9f6863a7412ac1c03f982b6"
+      },
+      "journalSha256": "ba254a92f1e234c14ef93f7c6d5523c94de0e1efd870eae0e6939e17c75c274c",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail/delivery-coverage-audit.json",
+        "sha256": "960236212c7b3a3a18b313b292d73cea5ce93cfe22b49e007de50711e4b7a872"
+      },
+      "journalSha256": "d2779072873d9c21bebc5acc4fd81e87d23ceed3e223c6945a5b4a17197dbe01",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-exact-pause",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-exact-pause/delivery-coverage-audit.json",
+        "sha256": "6c1db082521c305c8158e33ceadcbb1e81d388f5f821fa287fcb569feecf3f79"
+      },
+      "journalSha256": "7cb4d0ea9914dc68b442a7c9fa5869e4e569b6085affff6c60a41dbd5a69c0c8",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/never-recorded-event",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/never-recorded-event/delivery-coverage-audit.json",
+        "sha256": "2dabf641cfc143723c975dd13a64acfba92e7598c5677c62fce33340f924907f"
+      },
+      "journalSha256": "0b32164230d9ae92a689d2f4e2f2db3f558f37a2fb687768e66764eaf35bc3fe",
+      "sourceQuestions": 1,
+      "backgroundUtterances": 0,
+      "shortQuestions": [],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "directory": "artifacts/deep-interview-v70/hard-probes/warp-followups",
+      "audit": {
+        "file": "artifacts/deep-interview-v70/hard-probes/warp-followups/delivery-coverage-audit.json",
+        "sha256": "02bad213b428e2a55c01d3870a76bd3e96149150e398033ebaebe0acf1502084"
+      },
+      "journalSha256": "ee7d962f0f703a6c9c50c785a48aee1fbbb1d5d1fe044ef63f65afcfddcc74a4",
+      "sourceQuestions": 5,
+      "backgroundUtterances": 0,
+      "shortQuestions": [
+        {
+          "round": 1,
+          "question": "Explain CUDA warps.",
+          "sourceWordCount": 3
+        }
+      ],
+      "activeAnswerOverlapLaunches": 0,
+      "precedingJobOverlapLaunches": 0,
+      "immediatePreparedFollowups": {
+        "count": 0,
+        "matchingVisiblePriorPrefix": 0,
+        "precedingJobOverlap": 0,
+        "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      }
+    }
+  ],
+  "summary": {
+    "completedRecordings": 12,
+    "questionWaveformsHashValidated": 91,
+    "backgroundWaveformsHashValidated": 6,
+    "dsaSourceTopicFamilies": 10,
+    "dsaShortQuestions": 12,
+    "dsaActualAnswerOverlapLaunches": 18,
+    "dsaImmediatePreparedFollowups": {
+      "count": 12,
+      "matchingVisiblePriorPrefix": 12,
+      "precedingJobOverlap": 12,
+      "priorVisiblePrefixBasisToPlaybackSubmissionMs": {
+        "count": 12,
+        "min": 491,
+        "median": 1882.5,
+        "sampleP95": 4980,
+        "max": 4980
+      }
+    }
+  },
+  "dsaTopicAnnotations": [
+    {
+      "topic": "Graph costs, negative cycles, DAG ordering and bounded-size SCCs",
+      "sourceRows": [
+        {
+          "round": 1,
+          "sourceQuestionSha256": "2a9564bcc25ae5ae6c3ab1d08fc569d4eec59bdc9ddc0df99638604ae8f46598",
+          "question": "Our route-cost algorithm sometimes returns numbers that look wrong, and sometimes rejects the whole input. How would you start investigating?"
+        },
+        {
+          "round": 2,
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "question": "Why?"
+        },
+        {
+          "round": 3,
+          "sourceQuestionSha256": "f6d1cb9f3553574acf3166ccdc98fd1ded13692beaba69ed0391bd4552eeb324",
+          "question": "Here, wrong means minimum travel-cost labels. Edges are directed signed-integer credits; source is 0. For seven vertices, edges are (0,1,4), (1,2,-6), (2,1,1), (0,3,8), (3,4,2), (5,6,-3), (6,5,1). Expected labels are [0,'-INF','-INF',8,10,None,None]: '-INF' means no finite minimum; None means unreachable. The implementation initializes every distance to zero and rejects all routes if any relaxation occurs on pass seven. What independent defects do you see? Trace concrete consequences, then explain how to identify exactly which vertices need '-INF' without rejecting unaffected routes."
+        },
+        {
+          "round": 4,
+          "sourceQuestionSha256": "026bbf6272e12c750f985d684d11f8941eb6356520b0a538d6bb799c7a4277e2",
+          "question": "Continue your diagnosis, then implement Python classify(n, edges, source), returning integers, None, or '-INF'. For this coding instance, n is at most 2,000 and there are at most 10,000 directed edges; parallel edges and self-loops are allowed. Define a complete pass for your in-place relaxations, and prove that propagation from relaxable vertices after n minus one passes marks exactly the unbounded-below vertices. Crucially, a negative cycle does not invalidate the whole graph, and an unreachable negative cycle must not mark any vertex '-INF'."
+        },
+        {
+          "round": 21,
+          "sourceQuestionSha256": "a2d86786c7bac21a40f5e9b2ac3283b63a9a9bcee4b5f17a5cdbe07f95a65fa7",
+          "question": "Return to your earlier classify implementation, specifically `for _ in range(N - 1)` and `return [inf if affected[v] else distance[v] ...]`. Change the constraints: 200,000 vertices, 600,000 directed edges, signed weights, and a promised DAG. Supply executable Python replacing the repeated relaxation passes with a linear-time algorithm, preserving integers and None for unreachable vertices. Explain why your existing negative-cycle machinery is unnecessary and prove correctness with parallel edges and disconnected vertices. Then remove only the DAG promise: does your new proof survive? Give a minimal failing trace for the new code and distinguish detecting a cycle from proving a reachable negative cycle."
+        },
+        {
+          "round": 22,
+          "sourceQuestionSha256": "60e9bc80c5b780b648c7f49be0a38f893bd0c6a8ad8923bc0d2cc4389cf18ae9",
+          "question": "Continue with executable Python and your proof. Specify whether topological ordering includes unreachable vertices and how parallel edges affect indegree updates. Then remove the DAG promise and trace your exact code on a minimal cyclic input: report what it actually returns or raises, rather than assuming it silently computes wrong labels. Why does a failed topological sort establish neither reachability from the source nor negative total cycle weight? Include a disconnected cyclic component as a distinguishing test."
+        },
+        {
+          "round": 23,
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 24,
+          "sourceQuestionSha256": "650a017b0352d976a3f3551a636f0133b36395c669a97edd86c56d0495290d5c",
+          "question": "The DAG promise changes—not the weights. No DAG code has actually been supplied, so your claimed ValueError behavior is unverified. Implement Python classify(n, edges, source) for a promised DAG with 200,000 vertices and 600,000 directed signed-weight edges, returning integers or None in linear time. Include unreachable vertices in topological processing and handle parallel edges. Prove correctness. Then withdraw the DAG promise and trace your exact implementation on a negative source self-loop and, separately, an unreachable positive self-loop. Report its actual return or exception. Why can cycle rejection alone neither classify negative-cycle influence nor justify rejecting unaffected labels?"
+        },
+        {
+          "round": 37,
+          "sourceQuestionSha256": "a09a61b50283e60dd5a958cb19fae5f4c148a2a560026da3686abfa48c1bf998",
+          "question": "Return to your original general-graph classifier’s `for _ in range(N - 1)`. Now there are 200,000 vertices and 600,000 directed edges, signed integer weights of absolute value at most one trillion, and every strongly connected component has at most 30 vertices. Implement Python classify returning integers, None, or '-INF', without global repeated passes or recursive graph traversal. Process the component condensation graph, handling multiple incoming finite labels and negative-cycle influence. What exactly initializes each component’s relaxation? Prove your detection and propagation are exact, and derive time and storage bounds, including parallel edges and unreachable negative cycles."
+        },
+        {
+          "round": 38,
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "question": "Why?"
+        },
+        {
+          "round": 39,
+          "sourceQuestionSha256": "5352d0f5d7079b2395aeec335fe2560404701e37865ab269d63df3e3ac8b0cf9",
+          "question": "Focus first on one component. Its internal edges are (a,b,2), (b,a,-1); incoming finalized candidates give a cost 10 and b cost 0. What initializes local distances, and how many complete internal relaxation passes suffice? Now change only the second edge’s weight to minus 3. Explain your detection scan and which descendants become '-INF'. Then supply the complete iterative SCC-based classify implementation under the stated limits. Preserve None for unreachable components, handle parallel incoming edges, and prove the total relaxation work is bounded using the maximum component size of 30."
+        },
+        {
+          "round": 40,
+          "sourceQuestionSha256": "941e411ae95196138601f9248df9425e0a8dfd1d9f5ca27d0ed5dfb55bacfd21",
+          "question": "Continue from a=10 and b=0. Trace complete passes in the listed edge order for both versions, then give your frozen detection scan. Supply the iterative SCC-based implementation and prove its work bound. Explain how the source component starts, how parallel incoming candidates combine, and how an affected component propagates influence through the condensation DAG. Finally, a component with no finite incoming candidate and not containing the source must remain unreachable—even if it contains a negative cycle; do not initialize its local distances to zero."
+        }
+      ]
+    },
+    {
+      "topic": "PostgreSQL retries, uniqueness races and durable deduplication",
+      "sourceRows": [
+        {
+          "round": 5,
+          "sourceQuestionSha256": "0f4a8ff4ea64c83c5f722d036ea170b8b4daf183c0a98dfe70d92b84c2379391",
+          "question": "Switch topics. PostgreSQL, default READ COMMITTED: accounts(id primary key, balance bigint). A transfer debits one account, credits another, and records a unique client request id. The connection drops after the server receives COMMIT; two clients concurrently retry that same request. Design executable SQL and transaction control that applies the transfer exactly once and returns its recorded result. Why can’t the connection error establish whether it committed? Handle reuse of the id with different transfer parameters. Finally, unrelated transfers may lock accounts in opposite orders: explain deadlock prevention and precisely what must be retried after a deadlock."
+        },
+        {
+          "round": 6,
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "question": "What if that changes?"
+        },
+        {
+          "round": 7,
+          "sourceQuestionSha256": "d83349acd83271d531c59f2dbb49fff2db62329eb48bf18f5ec92614f80fccf5",
+          "question": "The retry logic changes—not the isolation level. No SQL implementation has been supplied yet. A colleague claims that, under PostgreSQL READ COMMITTED, INSERT ... ON CONFLICT DO NOTHING RETURNING always returns the existing request row after waiting for a concurrent commit. That claim is false; explain why. Supply executable SQL and transaction control for concurrent retries, retrieving the committed result, rejecting the same request id with different parameters, and atomically updating both balances. Use ascending account-id lock order. If a deadlock still occurs, what exactly must be retried?"
+        },
+        {
+          "round": 49,
+          "sourceQuestionSha256": "9ef602a05d8b436e3c2cf29b026bca047cae09c1458d3923ca49208d084ea4d7",
+          "question": "Return to your earlier PostgreSQL transfer implementation, specifically `ON CONFLICT (request_id) DO NOTHING` and the separate result SELECT. Reverse your explicit retention assumption: request rows are deleted after 24 hours, but clients may retry indefinitely. Trace how your old code can apply a transfer twice. Can indefinite exactly-once behavior coexist with deleting every durable trace of a request? Justify your answer using indistinguishable histories. Then propose a concrete schema and transaction-control patch preserving indefinite retries and parameter-mismatch rejection, allowing result payloads—but not necessarily all metadata—to expire. Handle cleanup racing with retries under READ COMMITTED, and state exactly what result an expired successful request returns."
+        }
+      ]
+    },
+    {
+      "topic": "Incremental TCP parsing, iterator ownership and lifecycle",
+      "sourceRows": [
+        {
+          "round": 8,
+          "sourceQuestionSha256": "bdce0788b6532b3655ab5f466ee262f740a4ae2af1a54d596fabd405dd07e604",
+          "question": "Switch to TCP. Each message has a twelve-byte header: an eight-byte unsigned big-endian payload length, then a four-byte request id. Payloads are capped at 1,048,576 bytes. Implement Python Parser.feed(chunk), returning completed (request_id, payload) pairs. A header arrives in reads of five and seven bytes; another read contains two messages and part of a third. Handle zero-length payloads and EOF inside a frame. Reject excessive lengths before allocating payload storage. Prove aggregate linear processing time, including buffer compaction, and bound retained memory. Finally, chunks can be arbitrarily large and contain arbitrarily many valid frames: caller-owned input and returned outputs are excluded, but internal copies are not."
+        },
+        {
+          "round": 9,
+          "sourceQuestionSha256": "40718a05b7325f00630ee761c37cfe6d888af4f710eff0aa82a5de4517b26a7d",
+          "question": "Trace your exact `completed.append` and excessive-length exception when one chunk contains a valid frame followed by an oversized header. Does the caller receive the valid frame? That behavior was permitted; now change the contract: completed frames must become observable before a later protocol error. Implement `feed` as an iterator without copying the whole chunk. Reject another `feed` or `eof` while that iterator is active. Exhaustion releases it; explicitly closing it early must permanently close the parser and release its input reference. Show executable code and tests for exhaustion, early close, and malformed suffixes. Preserve your working-memory bound."
+        },
+        {
+          "round": 10,
+          "sourceQuestionSha256": "67e24b131b05bd6601b176e0533e48a220079aba0eb5afcbd2a0f0938d08f425",
+          "question": "Continue your trace and implementation. Include this lifecycle test: create an iterator with feed(chunk), call close before its first next, then attempt another feed and eof. Both must reject, and the iterator must release its input reference. Also test closing immediately after yielding one valid frame, and exhausting normally. Explain precisely when the parser becomes active and which operation clears ownership; do not assume an unstarted generator executes its finally block when closed."
+        },
+        {
+          "round": 11,
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 12,
+          "sourceQuestionSha256": "fcd1ca458171b8c8e7b65cb122118f4a75b1fb849b14a232b806f49fb60bd8b9",
+          "question": "The lifecycle contract—not the framing format or memory bound. No custom iterator implementation has actually been supplied. Implement it now: feed immediately claims exclusive ownership; another feed or eof must reject while active. Normal exhaustion releases ownership. Closing before the first next, or immediately after one yield, permanently closes the parser and releases the chunk reference. A valid frame must be yielded before a malformed suffix raises. Supply executable Python and tests for those cases. Identify the exact operations that clear ownership and input references, including on a protocol error. Keep internal working memory bounded by the payload cap, excluding caller input and yielded outputs."
+        }
+      ]
+    },
+    {
+      "topic": "Dynamic connectivity, rollback union-find and bipartiteness",
+      "sourceRows": [
+        {
+          "round": 13,
+          "sourceQuestionSha256": "e1375567da736519355dd7dc1869e6723f2c7ce4641bb3349246cfbc56c1754b",
+          "question": "Switch to dynamic connectivity. Implement Python dynamic_connected(n, ops), returning booleans for ask operations. Operations are add(id,u,v), remove(id), and ask(u,v); queries see preceding operations. An id has at most one active edge, removals target active ids, and removed ids may be reused with different endpoints. Parallel edges and self-loops are valid. Both n and operation count are at most 200,000. Use a segment tree over time and rollback union-find. Supply executable snapshot and rollback code, explain activity boundaries and redundant unions, and derive time and storage bounds. Why can’t ordinary path compression remain with an unchanged union-only rollback log?"
+        },
+        {
+          "round": 14,
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "question": "Why?"
+        },
+        {
+          "round": 15,
+          "sourceQuestionSha256": "7c05982e41fe20ed5db766368aa0b90f87e1f4c2d1a077cbc3ec49adfcdc7b14",
+          "question": "Now change ask to ('ask',u): return whether u’s current connected component is bipartite. Keep the same limits, edge lifetimes, parallel edges, and self-loops. Patch your executable code with rollback parity union-find. Your current `if a == b: return False` cannot simply discard every redundant edge. Explain why, and record enough state to undo contradictions and component merges exactly. Test a triangle that becomes bipartite after one edge is removed, and a self-loop in a separate component. What happens when two already non-bipartite components merge and that merge is rolled back? State invariants and updated time and storage bounds."
+        },
+        {
+          "round": 16,
+          "sourceQuestionSha256": "ed12c3465d20da5ceba7eb2ad5abbe82025504875cd04731ccdbda58700b2cf6",
+          "question": "Continue with executable Python. Define what find returns, derive the parity assigned when attaching either root, and show precisely what your history records for a merge versus a contradictory same-root edge. Trace a triangle becoming bipartite after removal, and two non-bipartite components merging and rolling back. Include snapshot and rollback tests and updated bounds. Finally, ask(u) concerns only u’s component—not whether the entire graph is bipartite; an unrelated self-loop must not make its answer false."
+        }
+      ]
+    },
+    {
+      "topic": "C++20 acquire/release and sequentially consistent fences",
+      "sourceRows": [
+        {
+          "round": 17,
+          "sourceQuestionSha256": "5cf13dfd89d4faeb470d404e266c876f5c4e9d7d335a1deceedf5355e7ea7a2a",
+          "question": "Switch to C++20 memory ordering. Atomic integers x and y initially equal zero. Thread A executes x.store(1, release), then rA = y.load(acquire). Thread B executes y.store(1, release), then rB = x.load(acquire). Results are read after both threads join. Can both results be zero? Explain using reads-from, synchronizes-with, and happens-before—not hardware folklore. Now place a sequentially consistent atomic_thread_fence between each thread’s store and load, leaving those operations unchanged. Is zero-zero still permitted? Prove your answer using the C++ fence-order rules, and supply an executable litmus test. Explain why observing no failures cannot establish impossibility."
+        },
+        {
+          "round": 18,
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "question": "What if that changes?"
+        },
+        {
+          "round": 19,
+          "sourceQuestionSha256": "bd7be80e33053a2c2ba2ad8c5a2fad50bf378dde4c65cefcb3153ddf478482e0",
+          "question": "The fence orders change: replace both sequentially consistent fences with acquire-release fences, leaving the release stores and acquire loads unchanged. A colleague claims these fences still forbid zero-zero because each orders its local store before its load. Is that claim correct? Compare this variant with the sequentially consistent fence version. For each, prove whether zero-zero is permitted using reads-from, synchronizes-with, happens-before, and the applicable fence-order rules. Supply an executable C++20 litmus test, and explain why a run that never observes zero-zero does not prove it impossible."
+        }
+      ]
+    },
+    {
+      "topic": "GPU performance and serialized host/device timing",
+      "sourceRows": [
+        {
+          "round": 20,
+          "sourceQuestionSha256": "874dd63e2e54cee29802add5b95a5b9c889ebaa1856aafdcdd02812745dcbf2b",
+          "question": "Switch to GPU performance. A hypothetical request spends four milliseconds preparing on the host, six copying 64 MiB to the device, two in a kernel, and six copying 64 MiB back, all serialized. Device operations use event timings; complete requests use wall-clock timing. Calculate current latency and the speedup if only the kernel drops to one millisecond. What evidence is needed before claiming bandwidth saturation or overlap? Now requests are independent, buffers are pageable, and device operations use one stream. Propose a correct pipelining design with explicit buffer lifetimes and derive conditional throughput bounds. Finally, do not assume concurrent copy engines or host preparation overlapping device work."
+        }
+      ]
+    },
+    {
+      "topic": "Streaming sliding-window lower medians, expiration and heap rebuilding",
+      "sourceRows": [
+        {
+          "round": 25,
+          "sourceQuestionSha256": "b0d0dd0ca66e78692a7b736c07e1ac29ad2de81bccf2c7a9e44dafcf0e508a08",
+          "question": "Switch to streaming medians. Implement Python WindowMedian with add(t,x) and median(t). All call timestamps are nondecreasing integer milliseconds; values are signed 64-bit integers. Retain exactly readings whose timestamps satisfy t minus 10,000 strictly less than timestamp, and timestamp at most t. Duplicates are distinct readings; return the lower median, or None if empty. Queries must expire readings even without additions. There are at most one million readings overall and 50,000 live. Require amortized logarithmic time and physical storage proportional to live readings plus one. Explain your invariants and rebuilding policy if using lazy heaps. Test expiration exactly at 10,000 milliseconds and strictly increasing values over a million additions."
+        },
+        {
+          "round": 26,
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "question": "Why?"
+        },
+        {
+          "round": 27,
+          "sourceQuestionSha256": "a246184b035f7d913c748437c23823c25116c2ecefa4294bf601a50c2f945a33",
+          "question": "Supply executable WindowMedian and the requested tests now. Show how unique ids, heap membership, and logical sizes stay consistent when an expired entry is buried or a live entry moves between heaps. Your rebuilding claim uses linear work: how do you partition live readings into the two balanced heaps without sorting? Alternatively, revise the amortized proof if rebuilding sorts. Test add(0,7), median(9999), and median(10000), repeated values, equal timestamps, and a million increasing additions. Instrument physical heap sizes and justify O(live plus one) storage even after a query expires nearly everything."
+        },
+        {
+          "round": 28,
+          "sourceQuestionSha256": "f992bae5f4f940742efb1d47111c6e03cb3184e264a2740030d4051383ab8e21",
+          "question": "Continue. Preserving membership can support linear heapify, but when is that membership already balanced after expiration? Supply executable WindowMedian and tests. Trace a query that expires every lower-heap reading while upper-heap readings survive: identify each logical-size update, pruning operation, and membership change during rebalancing. Explain how rebuilding filters buried expired ids without losing live entries, and charge rebuild work when the live count collapses. Instrument both physical heap lengths during the million-increasing-readings test. Finally, rebuilding must use your membership-preserving linear approach—not sorting or an assumed linear-time selection primitive."
+        }
+      ]
+    },
+    {
+      "topic": "Binary64 numerical cancellation and stable quadratic roots",
+      "sourceRows": [
+        {
+          "round": 29,
+          "sourceQuestionSha256": "cd12197cfe83e42ce04da731fb06fa611427e0e71c458702b0e20a8a5ceea3d2",
+          "question": "Switch to numerical analysis. Use IEEE 754 binary64, round-to-nearest ties-to-even, with each operation rounded separately and no fused operations. Solve x squared plus 100,000,000 x plus 1 equals zero. Trace the discriminant, square root, and both roots produced by the textbook quadratic formula; explain any lost root using representable spacing, not merely 'floating-point error.' Derive a cancellation-resistant alternative using the product of the roots, and supply executable Python. Why is the small root not inherently ill-conditioned here? Finally, your function must handle any finite coefficients with a nonzero leading coefficient: explain how you prevent intermediate overflow and underflow, or explicitly narrow its supported domain."
+        },
+        {
+          "round": 30,
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "question": "What if that changes?"
+        },
+        {
+          "round": 31,
+          "sourceQuestionSha256": "e6012febf0f0852fda710e459facb2519e02eaf1bced66c00411fa3c8ff682ff",
+          "question": "The coefficient domain changes: restrict your solver to a equals one, c equals one, and finite binary64 b between two and 100,000,000 inclusive. A colleague claims that because both multiplications are exact at b equals 100,000,000, the subtraction b squared minus four is exact too, so your stated small textbook root must be wrong. Is that claim correct? Trace the rounded discriminant, square root, numerator, and division using representable spacing. Then supply executable Python using a cancellation-resistant formula, justify its intermediate range over this domain, and explain why cancellation does not imply that the small root is inherently ill-conditioned."
+        }
+      ]
+    },
+    {
+      "topic": "Exactly-K interval scheduling, cleanup and witness reconstruction",
+      "sourceRows": [
+        {
+          "round": 32,
+          "sourceQuestionSha256": "e9955a4fc6eb4bc97165e770e41c0bf0b978c1ff403f27ef633e8c6cd3f876d8",
+          "question": "Switch to scheduling. Implement Python best_schedule(jobs,K), where each job has integer start, end, and signed profit; start is less than end, and intervals are half-open. Input indices are job ids. There are at most 2,000 jobs, K is between zero and 50, and absolute profits are at most one trillion. Return optimal profit and selected ids, or None if impossible. Define predecessor-search boundaries and DP states, reconstruct without selecting a job twice, and prove O(nK+n log n) time. Test touching intervals, negative profits, K zero, and infeasibility. Crucially, select exactly K jobs, not at most K: explain why zero-initializing every DP state fails."
+        },
+        {
+          "round": 33,
+          "sourceQuestionSha256": "a9fa910054f5358f93a4d9dfa55666e2efcb6ff85f8faf253b4676c7e5f6110e",
+          "question": "Change the scheduling contract: job i has a nonnegative integer cleanup delay g[i]. If selected job j follows i, require end[i] + g[i] <= start[j]; no cleanup deadline applies after the final job. Keep exactly K and the same complexity bound. Your expression `bisect_right(ends, job[1], 0, i)` no longer captures compatibility. Give a minimal failing trace for your old code, then executable patched Python. Can compatible predecessors still form a prefix under some ordering? Prove your ordering and reconstruction remain valid, including equal completion times and negative profits."
+        },
+        {
+          "round": 34,
+          "sourceQuestionSha256": "e96900b5612f3c7f3110d48b4a496de2d6adec8886a3889058becd84448042ed",
+          "question": "It is the inequality end[i] + g[i] <= start[j], not equality. Continue with a minimal failing trace and executable patched Python. Consider ordering by end[i] + g[i]: prove whether every compatible predecessor occurs earlier, including ties, and define your binary-search range precisely. Your final selected job needs no cleanup deadline; explain why this ordering does not accidentally exclude it. Preserve exactly K jobs, negative-profit handling, reconstruction, and O(nK + n log n) time."
+        },
+        {
+          "round": 35,
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 36,
+          "sourceQuestionSha256": "219bc09de5110f18f92e586115ee5749e458676756de20a5ad46d81ed581bb8a",
+          "question": "No constraint changes; my reference was ambiguous. Finish your interrupted answer. Use jobs A=(0,1,5,2) and B=(1,2,7,0), with K=2, to trace your old code’s failure. Supply executable best_schedule(jobs,K) for tuples (start,end,profit,cleanup), using completion-time ordering and precisely bounded predecessor searches. Prove compatibility implies strictly earlier completion even with ties, and explain why a final job with arbitrarily large cleanup remains selectable. Preserve impossible states, negative profits, original ids, reconstruction, and O(nK+n log n) time."
+        }
+      ]
+    },
+    {
+      "topic": "Finite-field cryptographic algebra, truncated tags and linear witnesses",
+      "sourceRows": [
+        {
+          "round": 41,
+          "sourceQuestionSha256": "13726f08e5166bf2bb351e3016b2c8498d15cd69c885bede9745e7a10e9d9e03",
+          "question": "Switch to cryptography. Two AES-GCM messages reuse a key and nonce, have no associated data, and each contain one 128-bit ciphertext block. Full tags satisfy T = S XOR C·H² XOR L·H in GF(2^128), where S and H are secret and L is the same known length block. You observe distinct ciphertexts C1,C2 and tags T1,T2. Derive how to recover H and S and forge a tag for any chosen one-block ciphertext. Justify division and uniqueness of the square root in this field. Does this recover the AES key? Finally, explain precisely which recovery step fails if the tags are truncated to 64 bits."
+        },
+        {
+          "round": 42,
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "question": "What if that changes?"
+        },
+        {
+          "round": 43,
+          "sourceQuestionSha256": "3bb89fda44bba7b942e0aa411f1ebdac0b3a3dd2ad5aa34bd7788e91d5c8bd84",
+          "question": "Only tag length changes: you now observe the first 64 bits of each tag. A colleague claims division by C1 XOR C2 still uniquely recovers H because squaring is bijective. Is that correct? First finish the full-tag derivation of H, S, and a forged one-block tag, including why it does not recover the AES key. Then identify precisely what truncation breaks. Quantify how many H values are consistent with the observed tag difference, and determine whether a chosen ciphertext’s truncated tag is uniquely determined by these two observations. Justify your answer using linear maps over GF(2)."
+        },
+        {
+          "round": 44,
+          "sourceQuestionSha256": "139e8b0987f98d1144ba9145fb4348d854095f7010e569797a5d1b5cb01c17c7",
+          "question": "Make your kernel criterion executable. Represent field elements as integers whose bit i is the coefficient of x to power i, modulo x^128+x^7+x^2+x+1; P retains bits 127 through 64. Supply Python analyze(D,E,delta), for nonzero D, returning the number of possible P(EX) values subject to P(DX)=delta, and their affine-space description. Construct multiplication matrices and perform elimination over GF(2), proving your reported rank and consistency. Test E=0, E=D, and D=1 with E=x^64. For the last case, calculate the rank exactly. Finally, do not enumerate the 2^64 candidate field elements; state time and storage bounds."
+        },
+        {
+          "round": 45,
+          "sourceQuestionSha256": "3d804dff8d17c221329f837fe13c28028cc57c5fa0273e4a74abff73137c70a4",
+          "question": "Your `image_pivots` retains output vectors but discards their preimages. Patch the actual implementation to add witness(D,E,delta,target), returning a 128-bit X satisfying both P(DX)=delta and P(EX)=target, or None if impossible. Track preimages through every XOR during image elimination; do not enumerate candidates or invert a singular matrix. Prove that reducing target XOR base decides feasibility and reconstructs a valid witness. Test E=0 with nonzero target, E=D with matching and mismatching targets, and D=1, E=x^64 with an arbitrary target. Preserve polynomial-time bounds and explain why dependent image vectors do not lose feasible witnesses."
+        },
+        {
+          "round": 46,
+          "sourceQuestionSha256": "7b6e749797dedd4dc96eedce9a65efb487110911bbce040b47f29443e42bd894",
+          "question": "Continue your implementation. State the invariant for each stored output/preimage pair and update both on every elimination XOR. Show how reducing target XOR base accumulates a nullspace preimage, and identify the exact condition returning None. Include executable tests for E=0 with nonzero target, E=D with matching and mismatching targets, and D=1, E=x^64 with an arbitrary target; verify both equations on every returned witness. Why does discarding a zero image with a nonzero preimage preserve feasibility, even though it loses some witnesses? State updated bounds."
+        },
+        {
+          "round": 47,
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 48,
+          "sourceQuestionSha256": "6fb982ef6956c713af8d7930a5c87766dc0f9153ab45103243c41515dc4f800e",
+          "question": "Nothing changes; my reference was ambiguous. Finish with executable witness(D,E,delta,target), reusing your supplied mul and multiplication_matrix functions rather than repeating them. Track a nullspace preimage alongside each output pivot, updating both on every XOR. Show the exact infeasibility condition and reconstruction. Test zero E with nonzero target, E equal to D with matching and mismatching targets, and D equal to one with E equal to x to power 64. Verify both equations for every returned witness. Why can a zero image with a nonzero preimage be discarded without losing feasibility? State bounds."
+        }
+      ]
+    }
+  ],
+  "annotationScope": "Manual labels for the exact spoken source questions, including context-carrying terse references. Each source-question hash binds the label. Topic breadth is not a factual accuracy or recognized-constraint verdict.",
+  "endpointConvention": "The playback helper legacy lastNonzeroFrame field is the exclusive consumed-frame end position. The waveform checker separately reports the zero-based last nonzero frame index and asserts endPosition=index+1. The recorded device-position host intervals are unchanged.",
+  "pending": [
+    "Full-hour systems and general recordings and their delivery/topic audits.",
+    "The literal midpoint-pause runtime probe.",
+    "Independent model review and source-bound accuracy/phrase summaries.",
+    "ChatGPT final-prompt and actual playback backend comparison."
+  ],
+  "productionLogicChanged": false,
+  "goalComplete": false,
+  "scope": "Offline verification of actual completed playback delivery, waveform identity, question breadth and request overlap. Prepared follow-up launch gaps use recorded prior answer-basis time, not an inferred human reaction time or latency pass/fail target. All accuracy, cancellation and missing-word findings remain separate."
+}

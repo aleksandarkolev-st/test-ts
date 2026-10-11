@@ -1,0 +1,786 @@
+{
+  "recordedAt": "2026-10-11T02:12:37.121Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/interview.json",
+      "sha256": "920f6a0c4461fd5d9c89e1e888da721ddfb4900ee0621061246dda50baf3e8bf"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/duration-audit.json",
+      "sha256": "936fa03004fb18b6bc76f3a8c984aab4511438d0e3344664515863f26c600b99"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/delivery-coverage-audit.json",
+      "sha256": "f59ef3ce950a14df7a4a9a8c3afbea50831c5252ff0ebe638800368b11bf139e"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/observed-turn-state-audit.json",
+      "sha256": "aff44332667b5dbeb7ab732814c8c69d6a804d353d39e8a07ef62b3822df1dcc"
+    },
+    {
+      "file": "docs/evidence/general-split-question-v70.json",
+      "sha256": "513e28566fd3433519440fff685c24f1690e8344939aa218c129543d94e2f0b4"
+    },
+    {
+      "file": "docs/evidence/general-numerical-checks-v70.json",
+      "sha256": "d5f79cee4a7c55e20553a64987e789418bcbf4f0394778ac01aa20f4c676b8b8"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/code-review/crt-execution-evidence.json",
+      "sha256": "9e77f1fd971d21456d67f04a8d4b10e5d027224c08183f46533b8520a1ecc7ce"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/code-review/erasure-execution-evidence.json",
+      "sha256": "2c046c95aa602c0c690157ecabd0bf7d6c21571669c39c3209462b5568d0174b"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/code-review/publication-execution-evidence.json",
+      "sha256": "f78dca80aa5255e8266aa0b54220b717033ad7bb22c76aaed0ca6bffcaf3ae3a"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "examinerModel": "gpt-6.1-sol",
+  "examinerEffort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "speechConfiguration": {
+    "backend": "nemotron",
+    "chunkMs": 160,
+    "device": 0,
+    "deviceName": "AMD Radeon RX 9070 XT",
+    "acousticRefinements": false,
+    "eagerFinalReplacement": false,
+    "confirmedQuestionRefinements": false,
+    "agedFinalWait": false,
+    "settledUpdate": false,
+    "completedDraftReplacement": false,
+    "remoteOnly": true,
+    "selfCapture": {
+      "kind": "disabled",
+      "physicalMicrophoneUsed": false
+    }
+  },
+  "actualInterviewDurationMs": 3628115.7754,
+  "recordedTurns": 58,
+  "primaryFirstRetainedVisibleWordMs": {
+    "count": 57,
+    "min": 1960,
+    "median": 5375,
+    "sampleP95": 27592,
+    "max": 44309
+  },
+  "missingVisibleWords": 1,
+  "cancelled": 14,
+  "errors": 0,
+  "delivery": {
+    "sourceQuestions": 58,
+    "allQuestionAndBackgroundWaveHashesValidated": true,
+    "questionWaveDurationMs": {
+      "count": 58,
+      "min": 1145,
+      "median": 44755,
+      "sampleP95": 56600,
+      "max": 62870
+    },
+    "sourceWordCount": {
+      "count": 58,
+      "min": 1,
+      "median": 94,
+      "sampleP95": 112,
+      "max": 115
+    },
+    "shortestQuestions": [
+      {
+        "round": 2,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 6,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 11,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 14,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 18,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 23,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 26,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 30,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 35,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 38,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 42,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 47,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 50,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 54,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      }
+    ],
+    "incomingDeliveryOrigins": {
+      "initial_question": 1,
+      "prepared_contextual_probe_after_actual_visible_answer": 14,
+      "examiner_generated_followup": 28,
+      "examiner_generated_from_actual_partial_answer": 14,
+      "public_older_implementation_reference": 1
+    },
+    "deliveryByIncomingOrigin": {
+      "initial_question": {
+        "questions": 1,
+        "precedingJobOverlapLaunches": 0,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      },
+      "prepared_contextual_probe_after_actual_visible_answer": {
+        "questions": 14,
+        "precedingJobOverlapLaunches": 14,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 14,
+          "min": 442,
+          "median": 803.5,
+          "sampleP95": 1282,
+          "max": 1282
+        }
+      },
+      "examiner_generated_followup": {
+        "questions": 28,
+        "precedingJobOverlapLaunches": 0,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      },
+      "examiner_generated_from_actual_partial_answer": {
+        "questions": 14,
+        "precedingJobOverlapLaunches": 4,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 14,
+          "min": 7982,
+          "median": 12185,
+          "sampleP95": 18879,
+          "max": 18879
+        }
+      },
+      "public_older_implementation_reference": {
+        "questions": 1,
+        "precedingJobOverlapLaunches": 1,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 1,
+          "min": 818,
+          "median": 818,
+          "sampleP95": 818,
+          "max": 818
+        }
+      }
+    },
+    "activeAnswerOverlapLaunches": 23,
+    "precedingJobOverlapLaunches": 19,
+    "priorVisiblePrefixBasisCount": 29,
+    "priorAnswerBasisToPlaybackSubmissionMs": {
+      "count": 29,
+      "min": 442,
+      "median": 1282,
+      "sampleP95": 16574,
+      "max": 18879
+    },
+    "backgroundUtterances": 4
+  },
+  "observedTurnStates": {
+    "capturedTurns": 58,
+    "capturedComplete": 43,
+    "lastObservedComplete": 43,
+    "changedAnswers": 1,
+    "changedCancellationStates": 0,
+    "capturedCancelled": 14,
+    "lastObservedCancelled": 14
+  },
+  "manuallyAnnotatedActualTopicFamilies": [
+    {
+      "name": "Operations, staffing, outsourcing, service contracts",
+      "rounds": [
+        1,
+        2,
+        3,
+        4,
+        39,
+        40
+      ],
+      "sourceQuestions": [
+        {
+          "round": 1,
+          "question": "Our operation has started missing its promises, and the team wants to add people. How would you decide what to do first?"
+        },
+        {
+          "round": 2,
+          "question": "Why?"
+        },
+        {
+          "round": 3,
+          "question": "You proposed finding the bottleneck. Here, promises mean dispatch by 16:00. Exactly 960 meal-kit orders arrive at 08:00, with all materials ready. Eight staffed benches each pack ten orders per hour, with one thirty-minute interruption each. No other stage exists. Each accepted order contributes twelve dollars before fixed daily wages of 960 dollars and a six-dollar late penalty. A vendor can dispatch up to 300 orders on time for five dollars each. Calculate internal capacity and daily contribution with and without maximum outsourcing. What would you recommend, distinguishing financial benefit from fulfilling promises?"
+        },
+        {
+          "round": 4,
+          "question": "Using your capacity of 600 orders, suppose next month adds a 2,000-dollar daily charge whenever fewer than 95 percent of accepted orders dispatch on time. Compare accepting 960 orders with maximum outsourcing against the largest integer acceptance cap that avoids this charge. Calculate each daily contribution, retaining the previous wages, contribution, vendor cost, and late penalty. Which would you choose, and what promises remain unmet? For this decision, acceptance can be capped without other costs, but you cannot add benches or workers, and outsourcing does not eliminate penalties on orders still dispatched late."
+        },
+        {
+          "round": 39,
+          "question": "You emphasize explicit checks before committing. Apply that discipline to a staffing decision. Two teams share forty internal analyst hours this week. Compliance needs twenty-four hours by Friday; incomplete work incurs a twenty-thousand-dollar charge. Growth needs twenty hours and yields eight thousand dollars expected contribution; incomplete work yields nothing this week. Up to eight equally productive contractor hours cost two hundred fifty dollars each, but using any requires two internal onboarding hours. Give the financially optimal exact allocation and net benefit versus completing compliance alone. Assign accountable roles and explain your message to both teams. If contractors become unavailable, revise your allocation without assuming partial growth earns anything."
+        },
+        {
+          "round": 40,
+          "question": "Your plan buys six contractor hours for growth. Now any booking costs two hundred fifty dollars per hour upfront, without refunds. With probability thirty percent, all booked hours become unavailable; otherwise all arrive. You may book any integer number from zero through eight. Growth still earns eight thousand dollars only if completed. Find the financially optimal booking and internal allocation, its expected benefit versus compliance alone, and the failure probability at which booking ceases to be preferable. Specify who owns the cancellation response. Final constraint: cancellation is discovered Friday after internal hours are spent; onboarding hours cannot be recovered or reassigned."
+        }
+      ]
+    },
+    {
+      "name": "Exact arithmetic, floating-point counterexamples, signed bounds",
+      "rounds": [
+        5,
+        6,
+        7,
+        12,
+        25,
+        26,
+        37,
+        38
+      ],
+      "sourceQuestions": [
+        {
+          "round": 5,
+          "question": "Switch to software: turn your acceptance-cap calculation into executable Python 3, standard library only. Name the function max_accepted, taking capacity, numerator, and denominator. Return the greatest nonnegative accepted count whose on-time fraction meets numerator divided by denominator; on-time count is the smaller of capacity and accepted count. Zero accepted is compliant. Require nonnegative integer capacity and integer ratio operands with zero less than numerator less than or equal to denominator. Reject booleans and invalid inputs with ValueError. Use exact integer arithmetic. Provide boundary tests, prove maximality including counts below capacity, and distinguish arithmetic-operation count from bit complexity."
+        },
+        {
+          "round": 6,
+          "question": "What if that changes?"
+        },
+        {
+          "round": 7,
+          "question": "I mean the capacity limit changes: capacity may now be any nonnegative Python integer, while the ratio rules stay unchanged. Your proposed multiplication followed by integer division seems unnecessarily exact: converting the product to floating point, dividing, then truncating should always give the same answer because the ratio is at most one. Is that claim valid? Give a fully specified counterexample if not, with the exact expected result and the floating-point result, and explain whether your original algorithm remains correct."
+        },
+        {
+          "round": 12,
+          "question": "I mean the locking requirement: validation outside the lock is now proposed as an optimization. Keep timestamps nondecreasing in lock-acquisition order. Can that optimization preserve your contract? Use the earlier calls at timestamps ten and twenty to justify your answer. Supply executable Python 3 code for the correct locking scope and a deterministic threaded test forcing B to acquire first at twenty, then A at ten. Verify B’s returned counts and that A raises ValueError without changing the deque, late count, or last timestamp. Explain how your test forces the order without sleeps."
+        },
+        {
+          "round": 25,
+          "question": "You distinguish operation counts from integer bit costs. Revisit your original max_accepted implementation: capacity multiplied by denominator, then integer-divided by numerator, which returned 947 for capacity 900 and ratio 95 over 100. Port it to executable C++17 using signed 64-bit arithmetic only, with no wider integer type, arbitrary-precision library, or floating point. Capacity may reach 9,000,000,000,000,000,000; ratio operands range from one through 100, with numerator at most denominator. Return an explicit overflow result exactly when the mathematical answer exceeds the signed 64-bit maximum. Include invalid-input behavior, boundary tests, and a proof that every intermediate operation is representable."
+        },
+        {
+          "round": 26,
+          "question": "Why?"
+        },
+        {
+          "round": 37,
+          "question": "Your reduced-modulus calculation avoids an unavailable inverse. Revisit your original max_accepted, which returned 947 for capacity 900 and ratio 95 over 100, and its later signed sixty-four-bit port. Now capacity and both ratio operands may reach the signed sixty-four-bit maximum; numerator remains positive and at most denominator. Your remainder multiplied by denominator can now overflow. Supply executable C++17 preserving the existing status contract, using no wider integers, floating point, or arbitrary precision. Return overflow exactly when the mathematical answer is unrepresentable. Prove every intermediate safe and test cases where the intermediate product overflows but the answer fits."
+        },
+        {
+          "round": 38,
+          "question": "Why?"
+        }
+      ]
+    },
+    {
+      "name": "Streaming and rolling-window statistics, arbitrary arrival and concurrency",
+      "rounds": [
+        8,
+        9,
+        10,
+        11,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "sourceQuestions": [
+        {
+          "round": 8,
+          "question": "Your proof handles exact arithmetic; now handle exact time boundaries. Supply executable Python 3, standard library only, for RollingLate with a positive integer window and method push taking timestamp and boolean late status. Timestamps must be nonnegative, nondecreasing integers; duplicates are distinct events. Return late and total counts for timestamps strictly greater than the current timestamp minus the window and at most the current timestamp. Reject invalid inputs, including booleans as integers, with ValueError without changing state. Use a deque with amortized constant queue operations per push. Provide boundary, duplicate, and rejected-input tests, storage bounds, and an invariant proof. Finally, trace a counterexample if expiration removes only timestamps strictly less than the left boundary."
+        },
+        {
+          "round": 9,
+          "question": "Your validation precedes mutation. Now two threads share RollingLate with window ten, initially containing one late event at timestamp zero. Thread A calls push at timestamp ten with false and finishes validation, then stops before computing cutoff. Thread B completes push at timestamp twenty with true. Thread A then resumes. Trace both returned counts and the final state of your exact implementation. Does it admit any legal sequential ordering that preserves completed-call order? Supply an executable Python 3 synchronization fix, defining how concurrent timestamp ordering and rejected calls behave, and explain why locking only the expiration loop is insufficient."
+        },
+        {
+          "round": 10,
+          "question": "Continue from your returned counts. What are the final deque contents, late count, and last timestamp? Justify your sequential-order conclusion, then supply executable Python 3 code locking the necessary operations. Define ordering by lock acquisition: if B acquires first at timestamp twenty, what must A’s later call at timestamp ten do? Include a deterministic test forcing that order and verifying rejected-call state preservation. Explain precisely why protecting only the expiration loop does not suffice."
+        },
+        {
+          "round": 11,
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 20,
+          "question": "Your repair establishes a persistent invariant. Revisit your actual RollingLate implementation with window ten: replace nondecreasing timestamps with arbitrarily ordered arrivals. Each result now uses the greatest timestamp observed so far. Accept stale events but exclude timestamps less than or equal to that maximum minus ten; duplicates remain distinct. Supply executable Python 3, standard library only, using a suitable replacement data structure. Trace arrivals at twenty with true, fifteen with false, ten with true, and thirty with false. Prove exact membership and failure atomicity, and bound time and storage. Final condition: retained event storage must be proportional to currently active events, not all historical arrivals."
+        },
+        {
+          "round": 21,
+          "question": "Your RollingLate discards expired events permanently. Now add resize, allowing the window to increase without advancing the maximum timestamp; results must include all historical arrivals newly inside the window. Can your current state support this? Give two arrival histories producing identical retained state but different results after expansion. Then consider one event at each integer timestamp from one through N, with arbitrary late flags, followed by a nonlate event at N plus one and window one. If arbitrary resize queries must recover exact historical counts, prove a lower bound on retained information in bits. Can active-event-only storage survive without hiding history in metadata? Propose a feasible revised contract."
+        },
+        {
+          "round": 22,
+          "question": "Continue your information-loss argument. Give two explicit histories that leave your RollingLate state identical but yield different counts after the same expansion. For the stated N arbitrary late flags, explain how exact resize answers at maximum timestamp N plus one could recover each flag, and derive the retained-information lower bound in bits. Does that rule out storage proportional only to active events, even if metadata holds compressed history? Finish with a concrete revised resize contract that your implementation could support."
+        },
+        {
+          "round": 23,
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 24,
+          "question": "The allowed resize range changes: declare a fixed positive integer maximum window at construction. Retain historical events within that maximum horizon, and allow any positive integer window up to it. Arbitrarily ordered arrivals and distinct duplicates remain. Supply executable Python 3 push and resize methods, preserving state on invalid input. Resize must return exact counts without advancing the greatest timestamp. Require logarithmic resize time in the number of distinct retained timestamps, and storage proportional to retained events. Specify your data structure, prove boundary correctness, and test expansion recovering an event excluded by the current window."
+        }
+      ]
+    },
+    {
+      "name": "Marketing experiments, causality, Simpson paradox and sequential stopping",
+      "rounds": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "sourceQuestions": [
+        {
+          "round": 13,
+          "question": "Your threaded test controls ordering rather than trusting scheduling. Switch to evaluating a tutoring onboarding message. Each message reached one thousand users. New: eight hundred returning visitors made one hundred sixty purchases; two hundred first-time visitors made ten. Old: two hundred returning visitors made fifty purchases; eight hundred first-time visitors made sixty-four. Calculate aggregate conversion, both category-specific comparisons, and conversion standardized to equal category weights. Explain why the comparisons reverse, what population your standardized result describes, and what assignment information you need before recommending rollout."
+        },
+        {
+          "round": 14,
+          "question": "Why?"
+        },
+        {
+          "round": 15,
+          "question": "You asked about assignment: an account manager chose the original messages. A separate follow-up randomizes one thousand independent eligible accounts per arm, observing one hundred twenty purchases with new and one hundred with old, once at a predeclared endpoint. Each incremental purchase contributes forty dollars; new costs twenty cents per exposed account. Calculate the purchase-rate difference, unpooled standard error, approximate ninety-five-percent confidence interval, and net contribution per exposed account with its interval. What purchase-rate improvement breaks even, and does this evidence justify rollout? Distinguish maximizing estimated expected contribution from requiring evidence of positive contribution."
+        },
+        {
+          "round": 16,
+          "question": "You distinguish maximizing estimated contribution from requiring evidence of positive contribution. Suppose the team now proposes a fresh randomized trial, inspecting results daily for thirty days and stopping when an ordinary ninety-five-percent interval first implies positive net contribution. Using forty dollars per incremental purchase and twenty cents per exposure, identify the correct economic null threshold. Explain why daily inspection changes the evidence guarantee, and specify a valid stopping design and rollout criterion. The decisive constraint is that early stopping must remain possible: you may not solve this by allowing only one final analysis."
+        }
+      ]
+    },
+    {
+      "name": "Distributed quorum and atomic register semantics",
+      "rounds": [
+        17,
+        18,
+        19
+      ],
+      "sourceQuestions": [
+        {
+          "round": 17,
+          "question": "Your stopping guarantee survives dependent observations. Switch to distributed storage and examine another guarantee. Five replicas store a register, initially zero with tag zero. One writer assigns increasing integer tags; replicas retain the highest tag received. A write completes after three acknowledgments. A reader queries three replicas and returns the value with the highest tag, without updating replicas. Messages may be delayed arbitrarily; up to two replicas may crash permanently. Can two successive, nonoverlapping reads violate linearizability while a write remains unfinished? Give an exact message trace, then specify a repair permitting progress with two crashes and prove its safety."
+        },
+        {
+          "round": 18,
+          "question": "What if that changes?"
+        },
+        {
+          "round": 19,
+          "question": "I mean the quorum argument, not a changed replica count. Keep five replicas and quorums of three. Since every two quorums intersect, I claim read-only queries already prevent a later read from returning an older value, even during an unfinished write. Is that claim valid? Finish your exact trace using replicas A through E, then give a repair that remains safe with two permanent crashes. Explain its quorum invariant and whether progress requires an additional message-delivery assumption."
+        }
+      ]
+    },
+    {
+      "name": "Physics and heat balance",
+      "rounds": [
+        27
+      ],
+      "sourceQuestions": [
+        {
+          "round": 27,
+          "question": "You distinguished exact arithmetic from computational costs. Switch to physical measurement: twenty kilograms of water start at twenty degrees Celsius. A heater draws one thousand watts for ten minutes; specific heat is four thousand two hundred joules per kilogram per degree Celsius. Ignore evaporation and tank heat capacity initially. The final reading is twenty-five degrees Celsius, with error bounded by plus or minus zero point two degrees; other inputs are exact. Calculate input energy, ideal temperature rise, and the residual energy range. Does that residual identify environmental heat loss? Give two competing explanations and measurements that distinguish them."
+        }
+      ]
+    },
+    {
+      "name": "Public older-code reference",
+      "rounds": [
+        28
+      ],
+      "sourceQuestions": [
+        {
+          "round": 28,
+          "question": "Return to the FIRST completed implementation you supplied for this original question: I mean the capacity limit changes: capacity may now be any nonnegative Python integer, while the ratio rules stay unchanged. Your proposed multiplication followed by integer division seems unnecessarily exact: converting the product to floating point, dividing, then truncating should always give the same answer Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification."
+        }
+      ]
+    },
+    {
+      "name": "RSA common-modulus, nonunit messages and CRT candidate construction",
+      "rounds": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "sourceQuestions": [
+        {
+          "round": 29,
+          "question": "You requested an explicit artifact rather than inventing one. Switch to cryptography with fully specified facts. Two textbook RSA encryptions use modulus fifty-five and the same unknown message, an integer from zero through fifty-four. Exponents are three and seven; ciphertexts are eight and eighteen respectively. Recover the message using these ciphertexts and Bézout coefficients, showing every modular inverse required. Explain why this attack works despite neither private exponent being supplied. Now replace the ciphertexts with fifteen and twenty-five. Why does the same inverse-based calculation fail, and how can that failure instead reveal the message? No padding or randomness is used."
+        },
+        {
+          "round": 30,
+          "question": "What if that changes?"
+        },
+        {
+          "round": 31,
+          "question": "I mean the ciphertexts change to fifteen and twenty-five; modulus fifty-five and exponents three and seven remain. I claim that because neither ciphertext has a modular inverse, the message cannot be recovered without a supplied private exponent. Is that valid? Use the failed inverse to extract a factor, then recover the unique message between zero and fifty-four using congruences modulo both prime factors. Show why your reconstruction satisfies both ciphertext equations."
+        },
+        {
+          "round": 32,
+          "question": "Your uniqueness argument used cubing being invertible modulo eleven. Change the modulus to ninety-one and the public exponents to three and nine. The ciphertexts are eight and fifty-seven, from the same unpadded message between zero and ninety. Recover every possible message, using congruences modulo seven and thirteen and explicit Chinese remainder reconstruction. Explain why the second ciphertext does or does not remove ambiguity. Contrast this with your earlier Bézout recovery: which precise algebraic conditions now fail? Final condition: prove your list exhaustive rather than merely checking some candidates."
+        },
+        {
+          "round": 33,
+          "question": "Your reconstruction uses coefficients seventy-eight and fourteen. Generalize it into executable Python 3 named crt_candidates, taking two coprime integer moduli greater than one and two lists of allowed residues. Return sorted, distinct representatives from zero through the moduli product minus one. Reject booleans, nonintegers, noncoprime moduli, and out-of-range residues with ValueError; never mutate either list. Empty lists are valid. Compute modular inverses yourself using extended Euclid. Test your nine-message example, repeated residues, empty lists, and invalid inputs. Prove completeness and uniqueness, and bound arithmetic operations and output storage. Finally, trace the error if seventy-eight were replaced by thirteen for residues one modulo seven and two modulo thirteen."
+        },
+        {
+          "round": 34,
+          "question": "You propose reconstructing every residue pair. Complete executable Python 3 crt_candidates with the requested validation, extended Euclid, tests, and proof. If each input list contains one million copies of a single valid residue, must your implementation process one trillion pairs? Explain your actual duplicate handling and distinguish input-reading cost, distinct-pair enumeration, sorting, and output storage. Finally, trace replacing seventy-eight with thirteen for residue one modulo seven and residue two modulo thirteen: give the computed representative and identify exactly which congruence fails."
+        },
+        {
+          "round": 35,
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 36,
+          "question": "The coprime requirement changes. Allow any integer moduli greater than one, retaining your residue validation and duplicate handling. Supply executable Python 3 named crt_candidates returning sorted distinct solutions from zero through the least common multiple minus one. Compute Bézout coefficients yourself. Test modulus six with residues one and three against modulus nine with residues four and six, plus an incompatible pair and duplicates. Derive the compatibility condition and reconstruction, prove completeness and uniqueness, and bound input-reading, distinct-pair, sorting, and storage costs. Explain exactly why your earlier modular inverse cannot simply be reused."
+        }
+      ]
+    },
+    {
+      "name": "Filesystem atomicity, generation publication, reader protection and reclamation",
+      "rounds": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "sourceQuestions": [
+        {
+          "round": 41,
+          "question": "You treated Friday commitments as irreversible. Switch to filesystem crash consistency. A configuration file initially contains durable old data. Replace it using a temporary file in the same directory. Writes may persist partially; synchronizing a file makes its contents durable. Rename atomically replaces the pathname while running, but only synchronizing the directory guarantees durable namespace changes. No concurrent writers exist. Give the minimal ordered replacement protocol and acknowledgment point guaranteeing that every crash leaves either complete old data or complete new data, and every acknowledged replacement survives. Trace crashes between operations, prove the guarantee, and give a failing trace if either required synchronization is omitted."
+        },
+        {
+          "round": 42,
+          "question": "What if that changes?"
+        },
+        {
+          "round": 43,
+          "question": "You asked which assumption changes. I mean rename’s recovery guarantee. Keep only the stated fact that rename atomically replaces the pathname while running. I claim that synchronizing the temporary file before rename therefore ensures every crash before directory synchronization recovers either the old or new pathname. Is that implication valid? Give a recovery behavior consistent with the stated guarantees that falsifies it, or prove it. Identify the additional filesystem contract your replacement protocol needs, and distinguish that contract from durability after a successful directory synchronization."
+        },
+        {
+          "round": 44,
+          "question": "Your repair needs an explicit crash-atomic namespace contract. Now replace two configuration files as one generation. Immutable generation files have unique names; a manifest names both. Readers read the manifest once, then open its files. Grant crash-atomic manifest replacement and the synchronization guarantees already stated. Supply an ordered publication protocol, acknowledgment point, and crash proof preventing mixed generations or missing referenced files. Identify every required file and directory synchronization. Then decide whether deleting the old generation immediately after acknowledgment is safe. Final condition: readers can pause indefinitely between reading the manifest and opening either file; propose a reclamation contract without assuming bounded reader duration."
+        },
+        {
+          "round": 45,
+          "question": "Your collector relies on generation pins. Suppose pins exist only in the publisher’s memory, but readers are separate processes that survive its restart. Reader R pins the old generation and pauses before opening either file. The publisher durably publishes the new generation, then crashes. After restart, its empty pin table leads the collector to delete the old files. Trace R’s outcome. Design a precise replacement coordination protocol that permits safe reclamation across publisher restarts without timeouts or bounded reader duration. Specify how protection is acquired atomically with manifest selection, how surviving readers remain protected, and how genuinely dead readers’ protection can be released. State any additional operating-system contract you require."
+        },
+        {
+          "round": 46,
+          "question": "You predict R receives ENOENT. Now supply executable Python 3 protection and reclamation functions for separate POSIX processes. You may assume advisory shared and exclusive file locks survive publisher restart while their owning readers live, and are released when those readers die. Stable lock files are never deleted or replaced; all participants cooperate. Use a global coordination lock and per-generation locks. Show exactly when a reader selects the manifest, acquires protection, and releases coordination. Show how the collector checks retirement and obtains exclusive protection before deletion. Explain why a paused reader remains safe and why publisher restart cannot erase its protection."
+        },
+        {
+          "round": 47,
+          "question": "And if, uh, that thing changes?"
+        },
+        {
+          "round": 48,
+          "question": "The rule that lock files are never replaced changes. A collector now unlinks a retired generation’s lock file before attempting an exclusive lock, then recreates that pathname. A paused reader still holds a shared lock on the original inode. Is reclamation safe? Trace the reader’s lock, the collector’s lock, and deletion of the data files. Then specify a protocol that can reclaim lock files safely, or explain precisely what additional coordination is required. Readers may pause indefinitely, and publisher restarts must remain safe."
+        },
+        {
+          "round": 49,
+          "question": "Implement your stricter protocol in executable Python 3 for cooperating POSIX processes, using flock. Supply a protected-reader context manager and a collector function; assume durable initialized directories and globally unique generation names. The collector must never recreate a missing retired lock file. Include a deterministic multiprocessing test: a reader selects the old generation, acquires protection, then pauses before opening its files; publication changes the manifest; collection must skip both data and lock deletion. After releasing the reader, collection must reclaim both. Use process events, not sleeps, and propagate worker failures. Show exception-safe descriptor cleanup and the synchronization ordering needed before reclamation after publisher restart."
+        },
+        {
+          "round": 50,
+          "question": "Why?"
+        },
+        {
+          "round": 51,
+          "question": "Yes. Finish the executable Python 3 implementation and deterministic multiprocessing test. Use flock, a protected-reader context manager, and a collector that never recreates missing retired lock files. Force a reader to acquire old-generation protection and pause before opening either file; publish a new manifest and verify collection preserves both old data files and their lock file. Release the reader, then verify reclamation deletes all three. Use process events, not sleeps, and propagate worker failures. Show exception-safe descriptor cleanup and the directory synchronization required before reclamation after publisher restart."
+        },
+        {
+          "round": 52,
+          "question": "Your acquisition order closes the selection race. Complete the executable Python 3 implementation and event-controlled multiprocessing test. Also handle this precise failure: opening the generation lock succeeds, but acquiring its shared lock raises an exception. Show which descriptors close and why coordination is released. Verify collection preserves both old data files and the lock while the reader is paused, then deletes all three after release. Include the restart synchronization barrier. Final constraint: a missing retired lock file must return a non-reclamation result; do not recreate it or delete data on that path."
+        }
+      ]
+    },
+    {
+      "name": "Error-correcting codes, miscorrection, erasures and binary elimination",
+      "rounds": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ],
+      "sourceQuestions": [
+        {
+          "round": 53,
+          "question": "You explicitly test detectable failures. Switch to error-correcting codes: seven data-code positions have three-bit check columns equal to their position numbers, one through seven. An eighth bit enforces even overall parity. Valid words have zero check syndrome and even parity. A decoder flips the syndrome-indicated position when overall parity is odd and the syndrome is nonzero; it flips position eight for odd parity and zero syndrome, and reports double errors for even parity and nonzero syndrome. Trace corruption at positions one, two, and four starting from all zeros. Prove all double errors are detected, find the minimum undetected corruption weight, and explain whether successful decoding certifies correctness."
+        },
+        {
+          "round": 54,
+          "question": "What if that changes?"
+        },
+        {
+          "round": 55,
+          "question": "The number of corrupted bits changes: exactly three distinct positions among all eight are flipped. I claim odd overall parity guarantees your decoder corrects these errors, because it always selects one position to flip. Is that valid? Starting from all zeros, determine how many of the fifty-six possible triples produce a wrong valid codeword after decoding. Prove your count, including triples containing position eight. Then count the distinct wrong codewords reached and how many triples lead to each. Distinguish an undetected corruption before decoding from a miscorrection caused by decoding."
+        },
+        {
+          "round": 56,
+          "question": "Your count shows that valid output need not identify the transmitted word. Keep this code, but erase positions one and two; among the six observed bits, at most one is corrupted. Supply executable Python 3 returning every compatible valid codeword, sorted in position order, with explicit invalid-input behavior. Prove completeness rather than trusting the correction rule. For observations all zero, list the candidates. Across all sixty-four possible observed patterns, count how many have zero, one, or multiple candidates, proving those counts. Finally, determine whether any decoder can guarantee unique recovery under this contract."
+        },
+        {
+          "round": 57,
+          "question": "Your compatible_codewords enumerates all eight-bit words. Generalize it to an arbitrary binary parity-check matrix with n columns: valid words have zero syndrome, observations contain erased entries marked None, and at most one observed bit is corrupted. Supply executable Python 3 using binary Gaussian elimination, not enumeration of all full words. Return every compatible word, sorted and distinct, with explicit validation. Explain how you enumerate erased-bit solutions when the erased columns are dependent, avoid duplicates across corruption hypotheses, and prove completeness. Bound runtime in matrix dimensions, erased-column rank, and output size. Test your existing two-candidate observation and a rank-deficient erased-column example."
+        },
+        {
+          "round": 58,
+          "question": "Continue your proposal to eliminate the erased columns once. Supply the complete executable Python 3 function and tests. Specify how each no-error or single-observed-bit-error hypothesis changes the right-hand side, how elimination detects inconsistency, and how free variables generate every erased-bit assignment. Include zero erased columns and dependent erased columns. Explain whether two different corruption hypotheses can actually produce the same full word under this contract, rather than assuming deduplication is necessary. Prove completeness and give an output-sensitive runtime bound, including the cost of sorting full words."
+        }
+      ]
+    }
+  ],
+  "selectedSubstantiveChecks": {
+    "numerical": "docs/evidence/general-numerical-checks-v70.json",
+    "crtStrictEntryPointFailures": 1,
+    "crtDiagnosticFailures": 0,
+    "erasureFiniteFailures": 0,
+    "publicationOwnTestsPassed": true,
+    "originalCandidateSourcesPatched": false
+  },
+  "sourceSplitQualification": "Round 8 spans two native jobs; its earlier clauses occur in actual final selected context. The row-only 60 percent lexical disagreement does not establish captured-clause deletion; ordered native-job union disagreement is 7.826 percent.",
+  "olderReferenceQualification": "Round 28 references round 7 after twenty intervening source turns. Round 7 contained counterexample assignments, not a function implementation with a signature; asking for an exact implementation is ambiguous. This probe is not treated as a definitive code-memory failure.",
+  "durationCutoff": {
+    "round": 58,
+    "recordedPhase": "confirmed",
+    "recordedAnswerChars": 1107,
+    "completedAt": null,
+    "error": null,
+    "finalObservedAnswerDifferent": true,
+    "explanation": "The duration cap ended during the final response. A subsequent native observation contains 47 additional characters, still without completion. The exact answer captured at turn end remains the grading input. This is observation censoring, not a recorded backend timeout."
+  },
+  "resources": {
+    "native": {
+      "workingSetBytes": {
+        "first": 28454912,
+        "last": 56291328,
+        "count": 243,
+        "min": 28454912,
+        "median": 54644736,
+        "sampleP95": 56860672,
+        "max": 58114048
+      },
+      "privateBytes": {
+        "first": 4440064,
+        "last": 24788992,
+        "count": 243,
+        "min": 4440064,
+        "median": 20729856,
+        "sampleP95": 23785472,
+        "max": 27627520
+      },
+      "rss": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "heapUsed": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "handles": {
+        "first": 269,
+        "last": 428,
+        "count": 243,
+        "min": 269,
+        "median": 428,
+        "sampleP95": 431,
+        "max": 444
+      },
+      "threads": {
+        "first": 10,
+        "last": 22,
+        "count": 243,
+        "min": 10,
+        "median": 22,
+        "sampleP95": 26,
+        "max": 37
+      },
+      "pollMs": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      }
+    },
+    "recorder": {
+      "workingSetBytes": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "privateBytes": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "rss": {
+        "first": 50495488,
+        "last": 826126336,
+        "count": 362,
+        "min": 50495488,
+        "median": 365606912,
+        "sampleP95": 796102656,
+        "max": 826126336
+      },
+      "heapUsed": {
+        "first": 9558824,
+        "last": 578306216,
+        "count": 362,
+        "min": 9558824,
+        "median": 225806080,
+        "sampleP95": 550805952,
+        "max": 578306216
+      },
+      "handles": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "threads": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "pollMs": {
+        "first": 14,
+        "last": 13,
+        "count": 362,
+        "min": 3,
+        "median": 9,
+        "sampleP95": 14,
+        "max": 622
+      }
+    },
+    "nativeTree": {
+      "sha256": "920f6a0c4461fd5d9c89e1e888da721ddfb4900ee0621061246dda50baf3e8bf",
+      "source": "interview.json nativeResources[].nativeTree",
+      "observations": 243,
+      "firstHostMs": 1791678992152,
+      "lastHostMs": 1791682629745,
+      "privateAllocationBytes": {
+        "count": 243,
+        "min": 219914240,
+        "median": 6159572992,
+        "sampleP95": 6355685376,
+        "max": 6514458624
+      },
+      "summedWorkingSetBytes": {
+        "count": 243,
+        "min": 424980480,
+        "median": 1240690688,
+        "sampleP95": 1426882560,
+        "max": 1503473664
+      },
+      "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+    }
+  },
+  "independentAccuracyPending": true,
+  "scope": "Final clean general-hour recording with immutable source, actual delivery and topics, selected finite checks and final-state qualifications. Code-entry-point capitalization and algorithm mathematics remain separate. Finite execution and candidate-authored tests do not certify every answer, arbitrary concurrency or crash durability. No production changes or source-answer injection."
+}

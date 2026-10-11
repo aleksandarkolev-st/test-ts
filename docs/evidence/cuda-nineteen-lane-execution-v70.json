@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-10-10T22:11:59Z",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "playbackOutput": "T24E390",
+  "sourceRound": 4,
+  "sourceSha256": "c23cb51b2873e5b0889fc7dd68ae43eea5333446f819188f18e8405dd79ebabc",
+  "answerSha256": "85325d7c1a14a8b9c7740d8211b2c6dffa019b159f15a5f6c6f2cfc8e72b4eef",
+  "ptxSha256": "81cb0dfbf12936f3620ef8c9caab7756da05e9ca40b4d55ea04f88dab98591f2",
+  "originalSourcePatched": false,
+  "compilation": {
+    "passed": true,
+    "compiler": "NVIDIA nvcc 12.9.86 with MSVC 14.44.35207",
+    "target": "sm_70",
+    "unsupportedCompilerOverride": false,
+    "method": "Untouched generated function included in a full physical warp kernel wrapper; only lanes zero through eighteen call it"
+  },
+  "compiledPtxSymbolicCheck": {
+    "shuffleCallsPerCaller": 6,
+    "allExecutedSourcesParticipate": true,
+    "matchingNamedParticipationAtEveryCall": true,
+    "everyCallerReceivesEachOfThe19InputsOnce": true,
+    "runtimeMs": 5.810000002384186,
+    "method": "Interpret actual compiled PTX integer controls, predicates, collective shuffles and symbolic input contribution vectors; reject unsupported instructions"
+  },
+  "rawEvidence": "artifacts/deep-interview-v70/hard-probes/warp-followups/code-review/round4/ptx-symbolic-evidence.json",
+  "source": "https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html#warp-shuffle-functions",
+  "scope": "Compilation and symbolic instruction checks, without source edits. FP32 rounding is not simulated; the public problem permits any addition order. No NVIDIA hardware execution was performed. This is selective code validation, not a whole-interview accuracy certificate."
+}

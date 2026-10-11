@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-10T22:41:12.780Z",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "journalSha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5",
+  "sourceRound": 7,
+  "returnRound": 49,
+  "interveningTurns": 41,
+  "questionSha256": "9ef602a05d8b436e3c2cf29b026bca047cae09c1458d3923ca49208d084ea4d7",
+  "answerSha256": "10e6f38e540f8098251c0bdc7486b6f614fa531d2fa57f73d9e82867c99e56e2",
+  "sourceAnswerSha256": "708cfb1f8f66244273ed9b47bea4bca514c875574f0c589c2d7c5e9feb04daa8",
+  "originalEntryPoint": "transfer(dsn, request_id, from_id, to_id, amount)",
+  "referredEntryPoint": "transfer_once(UUID,BIGINT,BIGINT,BIGINT)",
+  "earlierRecordedRowsDefiningReferredEntryPoint": [],
+  "observedRevisionsDefiningReferredEntryPoint": [],
+  "selectedContextSamplesMentioningReferredEntryPoint": 0,
+  "finding": "The retained answer says that a complete transfer_once schema and function were supplied immediately above, and gives a call and retry-branch fragment. No earlier retained answer or observed answer revision defines that function; the original completed implementation was the Python transfer function. The requested complete executable patch is missing from the recorded answer.",
+  "sourceConstraintTracking": "The retained answer correctly states that deleting every durable request trace is incompatible with indefinite deduplication and proposes keeping permanent request metadata while expiring payloads. This conceptual response does not supply the missing function.",
+  "rawAudit": "artifacts/deep-interview-v70/algorithms-hour-t/sql-reference-audit.json",
+  "rawAuditSha256": "80f7d10891265cfed262be1a1bcd51fb65f5376c5e8fec77bb58db4aa339fbaa",
+  "scope": "Selective mechanical reference audit of exposed recorded source/answer revisions. Hidden speculative backend turns are not reconstructed. No PostgreSQL runtime test was performed, and this finding does not establish a whole-interview accuracy rate."
+}

@@ -1,0 +1,123 @@
+{
+  "recordedAt": "2026-10-11T00:11:54.562Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/round-12-completed-row-snapshot.json",
+      "sha256": "478d5812b12d295251678dd79994e5ff7fe7f61023f3ad5b93aef0f3ad596001"
+    },
+    {
+      "file": "docs/evidence/systems-slow-turn-snapshot-v70.json",
+      "sha256": "8c644526cc56c96756d89b0d7d4ea5d885999b4dee7e883a2dff4f1ab0ec9209"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+      "sha256": "27a5598320136ee7e909c5b25fe05ad33feda6904f165bfc79f91beb4d5e3c76"
+    }
+  ],
+  "round": 12,
+  "questionSha256": "7647fa45e77fa7c390c678c4b9d5ae2cea913fb92402260dbaf528d88a9fcaa3",
+  "answerSha256": "ab51805414b5de86f8e616ce912641af1e46693459854a40f405c49ecd994233",
+  "outcome": {
+    "nativePhase": "complete",
+    "error": "Codex answer timed out",
+    "cancelled": false,
+    "successfulAnswerDelivery": false,
+    "answerChars": 9038,
+    "answerTail": "     std::lock_guard<std::mutex> lock(mutex);\n                failed = true;\n            }\n            cv.notify_all();\n            if (a.joinable()) a.join();\n            if (b.joinable()) b.join();\n",
+    "codeFenceLines": [
+      "```cpp"
+    ],
+    "finding": "The retained CUDA listing stops inside main, in the thread-creation catch block, without its closing code fence or remaining program. The native complete phase follows cleanup of a timed-out answer and is not proof of a complete executable answer."
+  },
+  "firstVisibleRetainedWord": {
+    "word": "Use",
+    "characterRange": [
+      0,
+      3
+    ],
+    "observedHostMs": 1791676000646,
+    "latencyMs": {
+      "low": 77539,
+      "high": 77544
+    },
+    "responseRevision": 32,
+    "observedDuringStreaming": true,
+    "retainedInCurrentRecordedAnswer": true
+  },
+  "stages": {
+    "physicalEndpointToFinalConfirmationMs": {
+      "low": 827,
+      "high": 838
+    },
+    "finalConfirmationToFinalInputSentMs": 37261,
+    "finalInputRpcAckMs": 5,
+    "finalInputSentToConsumptionEventMs": 33454,
+    "consumptionEventToRetainedFirstDeltaMs": 5926,
+    "retainedFirstDeltaToNativeVisibleMs": 6,
+    "foregroundSemaphoreWaitMs": 0
+  },
+  "restartObservation": {
+    "lastNoRestart": {
+      "hostBeforeMs": 1791675903031,
+      "hostAfterMs": 1791675903037,
+      "nativeNow": 624263,
+      "restartCount": 0,
+      "error": null,
+      "phase": "confirmed",
+      "confirmed": true,
+      "recognizedQuestion": "the host submission assumption changes two host threads now submit adjacent chunks concurrently to nonblocking streams P and C sharing two buffer slots reusable events and one accumulator the event contracts and serial fold requirements stay unchanged give a concrete interleaving that breaks a naive upload record wait consume protocol"
+    },
+    "firstRestart": {
+      "hostBeforeMs": 1791675903431,
+      "hostAfterMs": 1791675903439,
+      "nativeNow": 624664,
+      "restartCount": 1,
+      "error": null,
+      "phase": "speculative",
+      "confirmed": false,
+      "recognizedQuestion": "the host submission assumption changes two host threads now submit adjacent chunks concurrently to nonblocking streams P and C sharing two buffer slots reusable events and one accumulator the event contracts and serial fold requirements stay unchanged give a concrete interleaving that breaks a naive upload record wait consume protocol"
+    },
+    "hostOccurrenceBoundsMs": {
+      "low": 1791675903031,
+      "high": 1791675903439
+    },
+    "occurredBeforePhysicalSourceEndByAtLeastMs": 19663,
+    "finding": "The single permitted refinement restart was already spent while the source question was still playing, before its essential executable-code and failure-handling tail finished. The second attempt subsequently had no further short-budget restart available."
+  },
+  "reviewerOutcomeBinding": {
+    "inputSchemaVersion": 3,
+    "sources": [
+      {
+        "file": "src-tauri/examples/assess-recorded-interview.rs",
+        "sha256": "2c3780e3b80a45192e76fe03c4c50821428209d15d307c1f96dbf2921a9d32f4"
+      },
+      {
+        "file": "scripts/summarize-deep-audio-interview.mjs",
+        "sha256": "9c78973419fab93a5f99de630834feb89ef5616e5c0c7607dc86e359c0d7e6b7"
+      },
+      {
+        "file": "scripts/summarize-pressure-assessment.mjs",
+        "sha256": "f7c8f8552da2a680fc25d17343ae5c8c97c721f246bc48528775488c3e30c11c"
+      },
+      {
+        "file": "scripts/tests/deep-audio-assessment.test.mjs",
+        "sha256": "a2cb796eeb8914ab9532d196437c1e547e958de0093830bc6f94baa5433023a9"
+      }
+    ],
+    "qualitativeErrorAndCancellationPassedToReviewer": true,
+    "examinerGradesAndNumericalTimingPassedToReviewer": false,
+    "nodeBindingTestPassed": true,
+    "modelReviewExecutionPending": true,
+    "buildDeferredUntilMeasuredPlaybackStops": true
+  },
+  "clarifies": [
+    "docs/evidence/systems-slow-turn-snapshot-v70.json",
+    "docs/evidence/architecture-tail-replication-v70.json"
+  ],
+  "finalJournalBindingPending": true,
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "productionLogicChanged": false,
+  "scope": "Corrects any implication that the previously described completed systems response was successful. Original immutable row already records its timeout; no measured latency or raw answer is replaced. Live journal is unfinished. Restart timing is bounded by actual sparse observations, not an exact provider-internal timestamp."
+}

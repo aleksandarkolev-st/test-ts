@@ -50,14 +50,38 @@ pub struct Timeline {
     #[serde(default)] pub interrupt_ack_at: Option<u64>,
     #[serde(default)] pub cleanup_terminal_at: Option<u64>,
     #[serde(default)] pub cleanup_max_queued_events: usize,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub latest_input_reader_received: Option<u64>,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub reader_queue_peak: usize,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub reader_send_count: usize,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub reader_full_queue_count: usize,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub reader_send_total_us: u64,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub reader_send_max_us: u64,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub delta_callback_count: usize,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub delta_callback_total_us: u64,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    #[serde(default)] pub delta_callback_max_us: u64,
 }
 #[derive(Clone, Copy)]
 pub enum Stage { StreamEntered, SemaphoreAcquired, WarmThreadTaken, RefillStarted, TurnStartSent, TurnStartAck, FirstAgentDelta, TurnCompleted, QuestionConfirmed, FirstVisible, RefillCompleted }
 #[derive(Clone, Debug)]
-pub struct Trace { clock: Instant, data: Arc<Mutex<Timeline>> }
+pub struct Trace { clock: Instant, data: Arc<Mutex<Timeline>>,
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    expected_input: Arc<Mutex<Option<[u8;32]>>>,
+}
 impl Trace {
     pub fn new(clock: Instant, candidate: u64) -> Self {
-        Self { clock, data: Arc::new(Mutex::new(Timeline { candidate_detected: Some(candidate), ..Default::default() })) }
+        Self { clock, data: Arc::new(Mutex::new(Timeline { candidate_detected: Some(candidate), ..Default::default() })),
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            expected_input: Arc::new(Mutex::new(None)),
+        }
     }
     pub fn mark(&self, stage: Stage) {
         let now = self.clock.elapsed().as_millis() as u64;
@@ -92,6 +116,32 @@ impl Trace {
     pub fn input_sent(&self) {let mut data=self.data.lock().unwrap();data.latest_input_sent=Some(self.clock.elapsed().as_millis()as u64);data.latest_input_ack=None;data.latest_input_consumed=None;}
     pub fn input_ack(&self) {self.data.lock().unwrap().latest_input_ack=Some(self.clock.elapsed().as_millis()as u64);}
     pub fn input_consumed(&self) {self.data.lock().unwrap().latest_input_consumed=Some(self.clock.elapsed().as_millis()as u64);}
+    // Acceptance-only numeric diagnostics. Matching uses the input hash and
+    // records reader receipt separately from async consumer processing.
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub fn diagnostic_input_expected(&self,key:[u8;32]) {
+        *self.expected_input.lock().unwrap()=Some(key);
+        self.data.lock().unwrap().latest_input_reader_received=None;
+    }
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub fn diagnostic_input_received(&self,keys:&[[u8;32]]) {
+        if self.expected_input.lock().unwrap().is_some_and(|key|keys.contains(&key)) {
+            self.data.lock().unwrap().latest_input_reader_received.get_or_insert(self.clock.elapsed().as_millis()as u64);
+        }
+    }
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub fn diagnostic_reader_send(&self,queued:usize,full:bool,elapsed_us:u64) {
+        let mut t=self.data.lock().unwrap();t.reader_queue_peak=t.reader_queue_peak.max(queued);
+        t.reader_send_count+=1;t.reader_full_queue_count+=usize::from(full);
+        t.reader_send_total_us=t.reader_send_total_us.saturating_add(elapsed_us);
+        t.reader_send_max_us=t.reader_send_max_us.max(elapsed_us);
+    }
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub fn diagnostic_delta_callback(&self,elapsed_us:u64) {
+        let mut t=self.data.lock().unwrap();t.delta_callback_count+=1;
+        t.delta_callback_total_us=t.delta_callback_total_us.saturating_add(elapsed_us);
+        t.delta_callback_max_us=t.delta_callback_max_us.max(elapsed_us);
+    }
     pub fn refinement_restarted(&self) {self.data.lock().unwrap().refinement_restart_count+=1;}
     pub fn completed_draft_replaced(&self) {self.data.lock().unwrap().completed_draft_replacement_count+=1;}
     pub fn acoustic_refined(&self) {self.data.lock().unwrap().acoustic_refinement_count+=1;}

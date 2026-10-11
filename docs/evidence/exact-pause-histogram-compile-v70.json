@@ -1,0 +1,39 @@
+{
+  "recordedAt": "2026-10-11T02:33:58.433Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/interview.json",
+    "sha256": "ba254a92f1e234c14ef93f7c6d5523c94de0e1efd870eae0e6939e17c75c274c"
+  },
+  "round": 1,
+  "questionSha256": "58c747c31bbde3498761721a343483addeecf78e20893ed8cf031751fdc1d0cf",
+  "answerSha256": "67514fb3f3884126863309f528e05312275f0426ef88973884425e607c87ef80",
+  "source": {
+    "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/code-review/original.cu",
+    "sha256": "b4fa4113cdf596b1168600206beb55bc43332d497b5eb725cb2382e77b92c3dc"
+  },
+  "executable": {
+    "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/code-review/histogram.exe",
+    "sha256": "4704b03ec44e58d27f92c58a76f6b80baa54410dd62785c6a7f9d363df8c8e4f"
+  },
+  "originalSourcePatched": false,
+  "compilation": {
+    "passed": true,
+    "exitCode": 0,
+    "elapsedMs": 5403.577,
+    "commandFile": ".local/compile-exact-histogram-v70.cmd",
+    "commandSha256": "fe0ab0b110968bf1128a37f85fa9229681ee8fbdcc7f34021d94fee46e77901e",
+    "target": "sm_70",
+    "standard": "c++17",
+    "optimization": "O2",
+    "unsupportedCompilerOverride": false,
+    "compilerBanner": "**********************************************************************\r\n** Visual Studio 2022 Developer Command Prompt v17.14.40\r\n** Copyright (c) 2025 Microsoft Corporation\r\n**********************************************************************\r\n[vcvarsall.bat] Environment initialized for: 'x64'\r\nnvcc: NVIDIA (R) Cuda compiler driver\r\nCopyright (c) 2005-2025 NVIDIA Corporation\r\nBuilt on Tue_May_27_02:24:01_Pacific_Daylight_Time_2025\r\nCuda compilation tools, release 12.9, V12.9.86\r\nBuild cuda_12.9.r12.9/compiler.36037853_0\r\nnvcc warning : Support for offline compilation for architectures prior to '<compute/sm/lto>_75' will be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).\r\noriginal.cu\r\ntmpxft_0000802c_00000000-7_original.cudafe1.cpp\r\n   Creating library artifacts\\deep-interview-v70\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\histogram.lib and object artifacts\\deep-interview-v70\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\histogram.exp\r\n"
+  },
+  "manualOwnershipReview": {
+    "partialWriter": "One worker exclusively owns one row and processes input indices congruent to its worker index modulo WORKERS.",
+    "finalWriter": "Each reduction bin has one owner; the ordered kernels make all private rows available first.",
+    "skew": "Repeated keys remain within private rows, so skew introduces no shared-write contention.",
+    "counts": "Every intermediate count is nonnegative and bounded by N; the supplied 64-bit counter supports the stated representable N. The input-index increment guards overflow, and the supplied host bin allocation bound limits reduction index growth.",
+    "scope": "Manual source reasoning, separate from compilation and model verdict. The CLI demonstration requires input and scratch storage to fit memory and discloses chunking for larger input."
+  },
+  "scope": "Untouched source from the exact-1500ms-pause response, separate from the previously compiled different histogram listing. Compilation and linkage are recorded; no NVIDIA hardware execution, GPU performance measurement or full input-parser certificate is claimed."
+}

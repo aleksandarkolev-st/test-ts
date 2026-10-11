@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-10-11T00:21:55.776Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/algorithms-hour-t/interview.json",
+    "sha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5",
+    "status": "complete"
+  },
+  "round": 36,
+  "questionSha256": "219bc09de5110f18f92e586115ee5749e458676756de20a5ad46d81ed581bb8a",
+  "answerSha256": "8feab13c268bcfba10297002587eb30f61304c532c2ef419be971a860ca1fddd",
+  "code": {
+    "file": "artifacts\\deep-interview-v70\\algorithms-hour-t\\code-review\\round36\\round-36-block-1.py",
+    "languageAnnotation": "python",
+    "bytes": 3498,
+    "sha256": "01ad1098caaf23dd27bd2df761cda082b02c91488a00d7ae069f3b24d3c97030"
+  },
+  "priorPublicContract": [
+    {
+      "round": 32,
+      "question": "Switch to scheduling. Implement Python best_schedule(jobs,K), where each job has integer start, end, and signed profit; start is less than end, and intervals are half-open. Input indices are job ids. There are at most 2,000 jobs, K is between zero and 50, and absolute profits are at most one trillion. Return optimal profit and selected ids, or None if impossible. Define predecessor-search boundaries and DP states, reconstruct without selecting a job twice, and prove O(nK+n log n) time. Test touching intervals, negative profits, K zero, and infeasibility. Crucially, select exactly K jobs, not at most K: explain why zero-initializing every DP state fails.",
+      "questionSha256": "e9955a4fc6eb4bc97165e770e41c0bf0b978c1ff403f27ef633e8c6cd3f876d8"
+    },
+    {
+      "round": 33,
+      "question": "Change the scheduling contract: job i has a nonnegative integer cleanup delay g[i]. If selected job j follows i, require end[i] + g[i] <= start[j]; no cleanup deadline applies after the final job. Keep exactly K and the same complexity bound. Your expression `bisect_right(ends, job[1], 0, i)` no longer captures compatibility. Give a minimal failing trace for your old code, then executable patched Python. Can compatible predecessors still form a prefix under some ordering? Prove your ordering and reconstruction remain valid, including equal completion times and negative profits.",
+      "questionSha256": "a9fa910054f5358f93a4d9dfa55666e2efcb6ff85f8faf253b4676c7e5f6110e"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round36/round-36.manifest.json",
+      "sha256": "25953721fd85cf09bb9fe170c6a53a9811e5b6d628bc34c7dbdad6ca387c4964"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round36/independent-cleanup-schedule-oracle.json",
+      "sha256": "4461c02150df3335544a313bc77b7adba3a74babe728e5a9e9d811a30d31d9c3"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "seed": 587615890465963000,
+  "candidateAuthoredTests": "passed",
+  "exhaustiveSubsetOracleCases": 3066,
+  "feasibleCases": 1358,
+  "infeasibleCases": 1708,
+  "namedBoundaryCases": 5,
+  "maximumDomainCase": {
+    "jobs": 2000,
+    "K": 50,
+    "expectedProfit": 50000000000000,
+    "passed": true
+  },
+  "failures": 0,
+  "observedExecutionMs": 155.33470001537353,
+  "originalSourcePatched": false,
+  "manualSourceReview": {
+    "ordering": "Compatibility requires c_i=end_i+g_i <= start_j < end_j <= c_j, so any compatible predecessor has strictly smaller completion. Equal-completion jobs cannot follow one another.",
+    "predecessorBoundary": "bisect_right searches only the earlier prefix and includes completions equal to the new start. The resulting prefix index is strictly before the current job, preventing its reuse.",
+    "exactlyK": "Only the zero-count row is initialized to zero. Positive-count infeasible states remain None; negative optima remain eligible. Each take consumes one count and jumps to its compatible predecessor prefix.",
+    "finalCleanup": "There is no external completion deadline on the final selected job. A huge cleanup value changes ordering but does not prevent selection as the last job.",
+    "workBound": "Sorting and predecessor searches use O(N log N) arithmetic comparisons; DP uses O(NK) transitions and O(N(K+1)) storage. The answer explicitly notes that arbitrary-precision timestamp/cleanup bit lengths add integer-operation costs."
+  },
+  "scope": "Selective full-source execution and manual reasoning about DSA round 36. The 3066 subset-oracle cases come from dependent small instances, with five named boundary cases and one maximum-size positive chain. These are not independent interview draws, an all-input proof, all large-instance coverage or a whole-interview accuracy rate."
+}

@@ -1,0 +1,60 @@
+{
+  "recordedAtSource": "completed systems-hour recording",
+  "journalSha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9",
+  "round": 9,
+  "question": "Debug your blockSums implementation with n equal to 12,582,721 and exactly 65,535 blocks. All inputs are positive zero except index zero, containing 16,777,216; index one, containing one; and index 12,582,720, containing negative 16,777,216. Assume binary32 round-to-nearest ties-to-even, no reassociation, and no contraction. What does your program return, and what does a binary32 serial left fold starting at positive zero return? Trace the operations. [pause 1.5 seconds] Now require serial-left-fold bitwise agreement for arbitrary finite inputs: provide an executable correct replacement and explain which parallelism remains without assuming additional numerical properties.",
+  "answerSha256": "b03fa966d0ea954a8668f4903a830b91cf362b9015f5307b10c996ec5fc46dd4",
+  "publicProblemInputs": {
+    "n": 12582721,
+    "blocks": 65535,
+    "threads": 192,
+    "nonzeroEntries": {
+      "0": 16777216,
+      "1": 1,
+      "12582720": -16777216
+    }
+  },
+  "numericalReference": {
+    "serialStates": [
+      0.0,
+      16777216.0,
+      16777216.0,
+      0.0
+    ],
+    "serialResultBits": "0x0",
+    "groupedThreadZero": 0.0,
+    "groupedThreadOne": 1.0,
+    "groupedResult": 1.0,
+    "groupedResultBits": "0x3f800000",
+    "recordedInitialNumericClaimMatches": true,
+    "zeroRunsCollapsed": true,
+    "scope": "Only the three nonzero values are explicitly evaluated. Adding positive zero leaves the specified finite accumulator unchanged; the stated grid stride assigns the last value to thread zero. This is an independent binary32 reference, not execution of CUDA code."
+  },
+  "incorrectSpecificationClaim": "arbitrary finite inputs can overflow and subsequently produce NaN. Round-to-nearest does not specify NaN payload bits, so universal bitwise agreement with an unspecified external implementation is not well-defined. The executable below implements the serial fold using CUDA\u2019s __fadd_rn operation, preserving subnormals; an external reference must match those semantics, including NaN representation.",
+  "finiteOverflowWitness": [
+    {
+      "accumulatorBits": "0x7f7fffff",
+      "isInfinity": false,
+      "isNaN": false
+    },
+    {
+      "accumulatorBits": "0x7f800000",
+      "isInfinity": true,
+      "isNaN": false
+    },
+    {
+      "accumulatorBits": "0x7f800000",
+      "isInfinity": true,
+      "isNaN": false
+    },
+    {
+      "accumulatorBits": "0x7f800000",
+      "isInfinity": true,
+      "isNaN": false
+    }
+  ],
+  "reassociatedParallelWitnessCanProduceNaN": true,
+  "inductiveProof": "A sequential addition-only fold starts with finite +0. Each source operand is finite. Adding two finite binary32 values yields a finite value or signed infinity, not NaN. Once an accumulator becomes signed infinity, adding any finite source operand preserves that same infinity. Therefore every fold state is finite or signed infinity, and NaN is unreachable. Opposite infinities can occur as separate grouped partials; that different reassociated reduction can produce NaN.",
+  "conclusion": "The recorded 1 versus +0 counterexample is correct. The NaN-payload objection to the requested serial finite-input fold is incorrect. The replacement CUDA implementation and device behavior remain separately unverified.",
+  "scope": "Selected numerical evaluation and an induction over the explicitly finite-input serial-addition contract. No candidate source was repaired, no model verdict was overwritten, and no NVIDIA hardware execution or whole-answer correctness certificate is claimed."
+}

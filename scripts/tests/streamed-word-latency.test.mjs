@@ -22,3 +22,14 @@ test('measures a streaming word before answer completion and keeps discarded rev
  journal.overlayPaintSamples=[paint(1200,'No. A complete answer follows.',2,4)];
  assert.equal(streamedWordLatency(journal,row).firstVisibleStreamedWord,null);
 });
+
+test('an unassigned historical turn cannot borrow a later question and its painted answer',()=>{
+ const row={phase:'no_job',responseVersion:null,audio:{clockAnchors:[{nativeMs:100}],
+  playback:{lastVoicedDevicePositionLowerHostMs:1000,lastVoicedDevicePositionUpperHostMs:1010}}};
+ const journal={deepObservations:[{jobs:[{question:{id:'future',detectedAt:2000},answer:'No. Later answer.',
+  phase:'complete',latency:{responseRevision:0}}]}],overlayPaintSamples:[{questionId:'future',recorderVersion:2,
+  text:'No. Later answer.',revision:0,visible:true,visibleStart:0,visibleEnd:17,hostMs:190000,streaming:true}]};
+ const measured=streamedWordLatency(journal,row);
+ assert.equal(measured.questionId,null);assert.equal(measured.firstVisibleStreamedWord,null);
+ assert.equal(measured.phase,'no_job');assert.equal(measured.missingReason,'no_native_question_assigned');
+});

@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-11T07:26:35.001Z",
+  "source": {
+    "file": "src-tauri/src/openai/codex.rs",
+    "sha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766"
+  },
+  "qualifies": {
+    "file": "docs/evidence/architecture-decoder-analysis-v71.json",
+    "sha256": "5798caad3e4912c917220edab94cf191c56fa070d07777fe9b9a69f867fecfcf"
+  },
+  "documentation": {
+    "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "fetchedOn": "2026-10-11",
+    "sections": [
+      "Key ordering",
+      "Supply your schema in the API call"
+    ],
+    "findings": [
+      "Documented Structured Outputs preserve the schema key order.",
+      "The first use of a schema can add schema-processing latency; repeated requests with that schema do not have that additional setup latency."
+    ],
+    "scope": "Current public API documentation. This is not a captured wire trace or proof of the exact implementation used by pinned Codex 0.160.1."
+  },
+  "sourceObservations": [
+    "The automatic-answer schema defines intent before text.",
+    "It is the same two-field schema for every automatic question and refinement."
+  ],
+  "interpretation": "Text-first gating is a behavior the local decoder permits, but it should not be treated as an observed or leading explanation for these tails. Under the documented schema-order contract and this schema, intent precedes text. Actual raw chunks are absent, so pinned runtime field order and decoder cost remain unmeasured. Likewise, a repeated unchanged schema does not establish recurring setup delay.",
+  "productionBehaviorChanged": false,
+  "newDecoderBenchmarkExecuted": false,
+  "goalComplete": false
+}

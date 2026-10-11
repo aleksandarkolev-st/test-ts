@@ -1,0 +1,125 @@
+{
+  "name": "attached-ten-hard-tests",
+  "scope": "Evaluation-only public speech probes and private examiner criteria. These are never installed in production prompts or routing. Broad elapsed-hour interviews and continuous pressure are audited separately.",
+  "cases": [
+    {
+      "name": "warp-followups",
+      "requirementIds": [1],
+      "rounds": 5,
+      "brief": "Start by explaining warps, then adapt each next question to the actual answer while progressing through divergence, active masks, shuffle source validity, and executable reduction code with exactly 19 participating lanes. Preserve explicit assumptions and challenge a real earlier claim. Do not give a fixed expected implementation.",
+      "scenario": {
+        "name": "warp-followups",
+        "seed": "Explain CUDA warps.",
+        "rubric": "Correct warp execution, divergence and participation contracts. Later questions must establish which 19 lanes participate, what each caller returns and which hardware assumptions are valid. Check exact caller masks, active shuffle sources, edge cases and compilable code. Do not grade the opening against requirements first introduced later.",
+        "examinerOnly": "Build the next question from actual claims. Before the final coding challenge publicly specify a full physical warp with exactly physical lanes zero through eighteen participating, each supplying one float, all nineteen named lanes calling once and no unnamed lanes calling. Ask for their sum returned to every caller, without shared memory or atomics. Accept any valid implementation and proof.",
+        "sources": ["https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html"]
+      },
+      "delivery": {"immediateAfterRounds": {}}
+    },
+    {
+      "name": "divergent-block-barrier",
+      "requirementIds": [2],
+      "rounds": 1,
+      "scenario": {
+        "name": "divergent-block-barrier",
+        "seed": "I put the CUDA block barrier, spelled underscore underscore syncthreads, inside an if condition where thread index x is less than sixteen, in a block of one hundred twenty-eight threads. That guarantees safety, correct? All one hundred twenty-eight threads are live and executing this kernel.",
+        "rubric": "Reject the false safety premise and explain uniform block-wide barrier participation. The source states all block threads are live; do not introduce an exited-thread exception to rescue this conditional barrier.",
+        "examinerOnly": "The intended code is if (threadIdx.x < 16) { __syncthreads(); } with a 128-thread block, all threads live. Grade only this public contract.",
+        "sources": ["https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html"]
+      }
+    },
+    {
+      "name": "never-recorded-event",
+      "requirementIds": [3],
+      "rounds": 1,
+      "scenario": {
+        "name": "never-recorded-event",
+        "seed": "Stream B waits on event E before E has ever been recorded. Later, stream A records E. Does that earlier wait now synchronize B? Assume valid streams and event, successful API calls, and no other ordering dependency.",
+        "rubric": "Reject the retroactive dependency. Explain that the wait observes event state at its call; an event before its first recording represents an empty set of work, and later recording does not change that earlier wait.",
+        "examinerOnly": "This is the exact first-record ordering trap, not reuse of an already-recorded event or a captured graph. Do not silently replace the chronology.",
+        "sources": ["https://docs.nvidia.com/cuda/cuda-runtime-api/cuda_runtime_api/group__CUDART__EVENT.html"]
+      }
+    },
+    {
+      "name": "fp32-association",
+      "requirementIds": [4],
+      "rounds": 1,
+      "scenario": {
+        "name": "fp32-association",
+        "seed": "In F P thirty-two, use a positive value of one times ten to the power twenty, its negative, and one. Evaluate two expressions. First, add the positive and negative large values, then add one. Second, add the negative large value and one first, then add the positive large value. Round each operation to F P thirty-two, nearest with ties to even; do not reassociate. Give both actual results and explain why they differ.",
+        "rubric": "Require actual FP32 results: first expression 1, second expression 0. Explain cancellation in the first order and loss of the unit increment in the second. Generic floating-point advice alone is incomplete.",
+        "examinerOnly": "Source expressions are (float32(1e20) + float32(-1e20)) + float32(1) and float32(1e20) + (float32(-1e20) + float32(1)); operation rounding is explicit.",
+        "sources": []
+      }
+    },
+    {
+      "name": "histogram-late-reversal",
+      "requirementIds": [5],
+      "rounds": 1,
+      "scenario": {
+        "name": "histogram-late-reversal",
+        "seed": "Implement a parallel histogram on the GPU using atomics. The keys are unsigned integers in a known small finite range, the input length is arbitrary, and the output counts must be exact. Explain ownership and give executable CUDA code. Actually, no atomics are allowed, and the keys are highly skewed. Use the final restriction in your solution and explain how you avoid races.",
+        "rubric": "The final no-atomics and highly-skewed constraints supersede the earlier request. Require a valid exact race-free implementation or an explicit essential clarification; no obsolete atomic solution may survive in the final visible answer.",
+        "examinerOnly": "The reversal is in the same spoken question after an internal pause. Audit painted revisions separately, including whether a completed obsolete atomic answer was displayed before the trailing restriction arrived. No hidden key distribution is supplied.",
+        "sources": []
+      },
+      "delivery": {"initialPauseBeforeText": "Actually, no atomics", "pauseMs": 1500}
+    },
+    {
+      "name": "long-question-essential-tail",
+      "requirementIds": [6],
+      "rounds": 1,
+      "scenario": {
+        "name": "long-question-essential-tail",
+        "seed": "Compute exact sums of batches of signed integer measurements before we consider optimizations. Some batches are empty, some contain one value, and others are much larger. Values can be positive or negative. Explain how you would validate an implementation and return useful error information. There is an essential final condition: use signed sixty-four-bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum.",
+        "rubric": "The visible final answer must include empty and singleton behavior, exact batch sum, signed 64-bit output and overflow rejection rather than wrapping or partial output. Inspect actual waveform duration, the 1.5-second internal pause and whether pre-tail answer completion incorrectly commits.",
+        "examinerOnly": "Target an approximately 30-second spoken question with a 1.5-second pause near its middle. Do not claim the duration was achieved without reading the synthesized WAV timeline. No special runtime phrase map is permitted.",
+        "sources": []
+      },
+      "delivery": {"initialPauseBeforeText": "Values can be positive", "pauseMs": 1500, "targetSpeechDurationMs": 30000, "durationToleranceMs": 5000}
+    },
+    {
+      "name": "exact-launch-numbers",
+      "requirementIds": [7],
+      "rounds": 1,
+      "scenario": {
+        "name": "exact-launch-numbers",
+        "seed": "There are ten thousand elements. Use one hundred ninety-two threads per block, not one hundred twenty-eight. How many blocks do we need? Use one thread per element and enough blocks to cover the whole input.",
+        "rubric": "Require 53 blocks using ceiling division of 10000 by 192. A bounds guard is useful optional advice, not an extra requirement for this arithmetic-only question. Audit exact intended numbers against recognized text; 128 must not silently become the launch size.",
+        "examinerOnly": "Expected arithmetic is 192 times 52 equals 9984, leaving 16 elements, hence 53 blocks. Numbers and the negation of 128 are public spoken facts.",
+        "sources": []
+      }
+    },
+    {
+      "name": "cuda-to-phantom-reads",
+      "requirementIds": [8],
+      "rounds": 2,
+      "scenario": {
+        "name": "cuda-to-phantom-reads",
+        "seed": "Explain CUDA global memory coalescing. Give a concrete indexing example, compare adjacent and strided lane addresses, and explain what assumptions are needed before predicting transaction counts.",
+        "rubric": "First answer should accurately address GPU coalescing. When the next public question abruptly switches to database phantom reads and serializable isolation, answer that topic without importing GPU assumptions. Painted text must be attributed to the correct question and revision; inspect actual streaming overlap.",
+        "examinerOnly": "The evaluation delivers the database question from an actual visible still-streaming answer prefix, without waiting for examiner inference. Its exact public text is recorded in delivery metadata. Do not grade the GPU opening against later database requirements.",
+        "sources": []
+      },
+      "delivery": {"immediateAfterRounds": {"1": "Explain database phantom reads and how serializable isolation handles them."}}
+    },
+    {
+      "name": "deep-code-memory",
+      "requirementIds": [9],
+      "rounds": 27,
+      "brief": "Refine one scheduling algorithm repeatedly across at least twenty intervening turns. Build every follow-up from actual code or claims. Change at-most K to exactly K, permit negative profits, introduce job-specific nonnegative cleanup times for all selected jobs except the final job, challenge actual boundary or reconstruction errors, and demand executable corrected versions. Name each version by its actual distinctive contract rather than inventing version identifiers. Revisit earlier versions after changes. The delivery layer will ask for an actual code implementation from at least twenty intervening turns earlier; judge that reference against its real recorded source, distinguishing original, corrected and superseded versions. This dedicated case favors deep refinement of the same algorithm over unrelated novelty.",
+      "scenario": {
+        "name": "deep-code-memory",
+        "seed": "Implement Python best schedule for weighted nonoverlapping jobs. Each input job has integer start, end and signed profit, start is less than end, intervals are half-open, and input indices are job identifiers. There are at most two thousand jobs and K is between zero and fifty. Return optimal profit and selected identifiers for at most K jobs. Supply executable code, predecessor boundaries, reconstruction and edge tests; allow touching intervals and negative profits.",
+        "rubric": "Assess each implementation only against its public current contract. The eventual older-code probe must identify the actual earlier implementation, its entry-point signature and return contract, relevant constraints and any real corrections, without treating an earlier incorrect claim as a fact. Compare exact recorded code and revision identities. Do not demand later exactly-K or cleanup conditions from the initial at-most-K version.",
+        "examinerOnly": "Every changed condition must first be supplied in a public spoken question. Preserve source signs and comparisons verbally. Follow actual candidate corrections through many turns. Independently execute retained code with exhaustive small-subset oracles; model grading alone is provisional.",
+        "sources": []
+      },
+      "delivery": {"immediateAfterRounds": {}, "enableOlderCodeProbe": true}
+    }
+  ],
+  "separateElapsedRuns": [
+    {"requirementIds": [9], "journal": "artifacts/deep-interview-v70/algorithms-hour-t/interview.json", "state": "unverified_until_an_actual_older_code_probe_is_observed"},
+    {"requirementIds": [10], "fixture": "tests/fixtures/continuous-interview-pressure.json", "requestedMinutes": 30, "state": "pending_live_playback_and_independent_audit"}
+  ]
+}

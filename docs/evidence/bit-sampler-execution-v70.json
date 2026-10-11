@@ -1,0 +1,1650 @@
+{
+  "recordedAt": "2026-10-10T23:54:00.726Z",
+  "source": {
+    "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+    "sha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+  },
+  "records": [
+    {
+      "round": 15,
+      "isolatedFunctionEvidence": {
+        "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round15/independent-bit-tree-oracle.json",
+        "recordedAtUnixMs": 1791676227658,
+        "round": 15,
+        "sourceSha256": "24806967022cc7cebcb1ee98309eeb1c6cc42bb074267428189cf4b723d48eb0",
+        "answerSha256": "c174d6d87dce6a2bee73d3e13f6fb2233051dceb4cdd77a844808acd88054d00",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+        "model": "gpt-6.1-sol",
+        "effort": "low",
+        "selectedFunctionSha256": "31e00fb66faa48d86e0bcf3ce1b2b60c257c2c8fce00059a9a6ffa6620b1d9f3",
+        "originalFunctionPatched": false,
+        "functionIsolatedFromAppendOnlyIntegration": true,
+        "integrationExecuted": false,
+        "guardsPassed": 13,
+        "bitStringsPerCount": 4096,
+        "countsAssessed": 38,
+        "totalBitStringExecutions": 155648,
+        "uniformityFailures": 0,
+        "terminationRemainderFailures": 0,
+        "results": [
+          {
+            "count": 2,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 2048,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "1": 4096
+            },
+            "tailSumLowerBound": 1,
+            "geometricTailUpperBound": 1,
+            "analyticBoundLog2CountPlus2": 3
+          },
+          {
+            "count": 3,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 1365,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "2": 3072,
+              "4": 768,
+              "6": 192,
+              "8": 48,
+              "10": 12,
+              "12": 3
+            },
+            "tailSumLowerBound": 2.666015625,
+            "geometricTailUpperBound": 2.66748046875,
+            "analyticBoundLog2CountPlus2": 3.584962500721156
+          },
+          {
+            "count": 4,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 1024,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "2": 4096
+            },
+            "tailSumLowerBound": 2,
+            "geometricTailUpperBound": 2,
+            "analyticBoundLog2CountPlus2": 4
+          },
+          {
+            "count": 5,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 819,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 2560,
+              "4": 1280,
+              "7": 160,
+              "8": 80,
+              "11": 10,
+              "12": 5
+            },
+            "tailSumLowerBound": 3.59912109375,
+            "geometricTailUpperBound": 3.6015625,
+            "analyticBoundLog2CountPlus2": 4.321928094887362
+          },
+          {
+            "count": 6,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 682,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 3072,
+              "5": 768,
+              "7": 192,
+              "9": 48,
+              "11": 12
+            },
+            "tailSumLowerBound": 3.6650390625,
+            "geometricTailUpperBound": 3.66796875,
+            "analyticBoundLog2CountPlus2": 4.584962500721156
+          },
+          {
+            "count": 7,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 585,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 3584,
+              "6": 448,
+              "9": 56,
+              "12": 7
+            },
+            "tailSumLowerBound": 3.427734375,
+            "geometricTailUpperBound": 3.43115234375,
+            "analyticBoundLog2CountPlus2": 4.807354922057604
+          },
+          {
+            "count": 8,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 512,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 4096
+            },
+            "tailSumLowerBound": 3,
+            "geometricTailUpperBound": 3,
+            "analyticBoundLog2CountPlus2": 5
+          },
+          {
+            "count": 9,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 455,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2304,
+              "5": 1152,
+              "6": 576,
+              "10": 36,
+              "11": 18,
+              "12": 9
+            },
+            "tailSumLowerBound": 4.66552734375,
+            "geometricTailUpperBound": 4.669921875,
+            "analyticBoundLog2CountPlus2": 5.169925001442312
+          },
+          {
+            "count": 10,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 6,
+            "expectedUnfinished": 6,
+            "acceptedStringsPerRank": 409,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2560,
+              "5": 1280,
+              "8": 160,
+              "9": 80,
+              "12": 10
+            },
+            "tailSumLowerBound": 4.59765625,
+            "geometricTailUpperBound": 4.6025390625,
+            "analyticBoundLog2CountPlus2": 5.321928094887362
+          },
+          {
+            "count": 11,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 372,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2816,
+              "6": 704,
+              "7": 352,
+              "8": 176,
+              "10": 44
+            },
+            "tailSumLowerBound": 4.845703125,
+            "geometricTailUpperBound": 4.85107421875,
+            "analyticBoundLog2CountPlus2": 5.459431618637297
+          },
+          {
+            "count": 12,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 341,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3072,
+              "6": 768,
+              "8": 192,
+              "10": 48,
+              "12": 12
+            },
+            "tailSumLowerBound": 4.6640625,
+            "geometricTailUpperBound": 4.669921875,
+            "analyticBoundLog2CountPlus2": 5.584962500721156
+          },
+          {
+            "count": 13,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 315,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3328,
+              "7": 416,
+              "8": 208,
+              "9": 104,
+              "11": 26,
+              "12": 13
+            },
+            "tailSumLowerBound": 4.70654296875,
+            "geometricTailUpperBound": 4.712890625,
+            "analyticBoundLog2CountPlus2": 5.700439718141093
+          },
+          {
+            "count": 14,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 8,
+            "expectedUnfinished": 8,
+            "acceptedStringsPerRank": 292,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3584,
+              "7": 448,
+              "10": 56
+            },
+            "tailSumLowerBound": 4.42578125,
+            "geometricTailUpperBound": 4.4326171875,
+            "analyticBoundLog2CountPlus2": 5.807354922057604
+          },
+          {
+            "count": 15,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 273,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3840,
+              "8": 240,
+              "12": 15
+            },
+            "tailSumLowerBound": 4.265625,
+            "geometricTailUpperBound": 4.27294921875,
+            "analyticBoundLog2CountPlus2": 5.906890595608519
+          },
+          {
+            "count": 16,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 256,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 4096
+            },
+            "tailSumLowerBound": 4,
+            "geometricTailUpperBound": 4,
+            "analyticBoundLog2CountPlus2": 6
+          },
+          {
+            "count": 17,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 240,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2176,
+              "6": 1088,
+              "7": 544,
+              "8": 272
+            },
+            "tailSumLowerBound": 5.7578125,
+            "geometricTailUpperBound": 5.76611328125,
+            "analyticBoundLog2CountPlus2": 6.087462841250339
+          },
+          {
+            "count": 18,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 10,
+            "expectedUnfinished": 10,
+            "acceptedStringsPerRank": 227,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2304,
+              "6": 1152,
+              "7": 576,
+              "11": 36,
+              "12": 18
+            },
+            "tailSumLowerBound": 5.6630859375,
+            "geometricTailUpperBound": 5.671875,
+            "analyticBoundLog2CountPlus2": 6.169925001442312
+          },
+          {
+            "count": 19,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 11,
+            "expectedUnfinished": 11,
+            "acceptedStringsPerRank": 215,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2432,
+              "6": 1216,
+              "8": 304,
+              "10": 76,
+              "11": 38,
+              "12": 19
+            },
+            "tailSumLowerBound": 5.71923828125,
+            "geometricTailUpperBound": 5.728515625,
+            "analyticBoundLog2CountPlus2": 6.247927513443585
+          },
+          {
+            "count": 20,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 204,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2560,
+              "6": 1280,
+              "9": 160,
+              "10": 80
+            },
+            "tailSumLowerBound": 5.59375,
+            "geometricTailUpperBound": 5.603515625,
+            "analyticBoundLog2CountPlus2": 6.321928094887363
+          },
+          {
+            "count": 21,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 195,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2688,
+              "6": 1344,
+              "11": 42,
+              "12": 21
+            },
+            "tailSumLowerBound": 5.42724609375,
+            "geometricTailUpperBound": 5.4375,
+            "analyticBoundLog2CountPlus2": 6.392317422778761
+          },
+          {
+            "count": 22,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 186,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2816,
+              "7": 704,
+              "8": 352,
+              "9": 176,
+              "11": 44
+            },
+            "tailSumLowerBound": 5.8447265625,
+            "geometricTailUpperBound": 5.85546875,
+            "analyticBoundLog2CountPlus2": 6.459431618637297
+          },
+          {
+            "count": 23,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 2,
+            "expectedUnfinished": 2,
+            "acceptedStringsPerRank": 178,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2944,
+              "7": 736,
+              "8": 368,
+              "11": 46
+            },
+            "tailSumLowerBound": 5.69970703125,
+            "geometricTailUpperBound": 5.7109375,
+            "analyticBoundLog2CountPlus2": 6.523561956057013
+          },
+          {
+            "count": 24,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 170,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3072,
+              "7": 768,
+              "9": 192,
+              "11": 48
+            },
+            "tailSumLowerBound": 5.66015625,
+            "geometricTailUpperBound": 5.671875,
+            "analyticBoundLog2CountPlus2": 6.584962500721156
+          },
+          {
+            "count": 25,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 21,
+            "expectedUnfinished": 21,
+            "acceptedStringsPerRank": 163,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3200,
+              "7": 800,
+              "11": 50,
+              "12": 25
+            },
+            "tailSumLowerBound": 5.54248046875,
+            "geometricTailUpperBound": 5.5546875,
+            "analyticBoundLog2CountPlus2": 6.643856189774724
+          },
+          {
+            "count": 26,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 14,
+            "expectedUnfinished": 14,
+            "acceptedStringsPerRank": 157,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3328,
+              "8": 416,
+              "9": 208,
+              "10": 104,
+              "12": 26
+            },
+            "tailSumLowerBound": 5.703125,
+            "geometricTailUpperBound": 5.7158203125,
+            "analyticBoundLog2CountPlus2": 6.700439718141092
+          },
+          {
+            "count": 27,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 19,
+            "expectedUnfinished": 19,
+            "acceptedStringsPerRank": 151,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3456,
+              "8": 432,
+              "10": 108,
+              "11": 54,
+              "12": 27
+            },
+            "tailSumLowerBound": 5.60595703125,
+            "geometricTailUpperBound": 5.619140625,
+            "analyticBoundLog2CountPlus2": 6.754887502163468
+          },
+          {
+            "count": 28,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 8,
+            "expectedUnfinished": 8,
+            "acceptedStringsPerRank": 146,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3584,
+              "8": 448,
+              "11": 56
+            },
+            "tailSumLowerBound": 5.423828125,
+            "geometricTailUpperBound": 5.4375,
+            "analyticBoundLog2CountPlus2": 6.807354922057604
+          },
+          {
+            "count": 29,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 7,
+            "expectedUnfinished": 7,
+            "acceptedStringsPerRank": 141,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3712,
+              "9": 232,
+              "10": 116,
+              "12": 29
+            },
+            "tailSumLowerBound": 5.4296875,
+            "geometricTailUpperBound": 5.44384765625,
+            "analyticBoundLog2CountPlus2": 6.857980995127572
+          },
+          {
+            "count": 30,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 136,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3840,
+              "9": 240
+            },
+            "tailSumLowerBound": 5.26171875,
+            "geometricTailUpperBound": 5.2763671875,
+            "analyticBoundLog2CountPlus2": 6.906890595608519
+          },
+          {
+            "count": 31,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 132,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3968,
+              "10": 124
+            },
+            "tailSumLowerBound": 5.158203125,
+            "geometricTailUpperBound": 5.17333984375,
+            "analyticBoundLog2CountPlus2": 6.954196310386875
+          },
+          {
+            "count": 32,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 128,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 4096
+            },
+            "tailSumLowerBound": 5,
+            "geometricTailUpperBound": 5,
+            "analyticBoundLog2CountPlus2": 7
+          },
+          {
+            "count": 64,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 64,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "6": 4096
+            },
+            "tailSumLowerBound": 6,
+            "geometricTailUpperBound": 6,
+            "analyticBoundLog2CountPlus2": 8
+          },
+          {
+            "count": 128,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 32,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "7": 4096
+            },
+            "tailSumLowerBound": 7,
+            "geometricTailUpperBound": 7,
+            "analyticBoundLog2CountPlus2": 9
+          },
+          {
+            "count": 256,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 16,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "8": 4096
+            },
+            "tailSumLowerBound": 8,
+            "geometricTailUpperBound": 8,
+            "analyticBoundLog2CountPlus2": 10
+          },
+          {
+            "count": 257,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 241,
+            "expectedUnfinished": 241,
+            "acceptedStringsPerRank": 15,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "9": 2056,
+              "10": 1028,
+              "11": 514,
+              "12": 257
+            },
+            "tailSumLowerBound": 9.86669921875,
+            "geometricTailUpperBound": 9.9921875,
+            "analyticBoundLog2CountPlus2": 10.005624549193879
+          },
+          {
+            "count": 1023,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 4,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "10": 4092
+            },
+            "tailSumLowerBound": 10.001953125,
+            "geometricTailUpperBound": 10.50146484375,
+            "analyticBoundLog2CountPlus2": 11.99859042974533
+          },
+          {
+            "count": 1024,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 4,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "10": 4096
+            },
+            "tailSumLowerBound": 10,
+            "geometricTailUpperBound": 10,
+            "analyticBoundLog2CountPlus2": 12
+          },
+          {
+            "count": 1025,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1021,
+            "expectedUnfinished": 1021,
+            "acceptedStringsPerRank": 3,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "11": 2050,
+              "12": 1025
+            },
+            "tailSumLowerBound": 11.49951171875,
+            "geometricTailUpperBound": 12,
+            "analyticBoundLog2CountPlus2": 12.001408194392809
+          }
+        ],
+        "scriptedRecyclingChecks": [
+          {
+            "count": 5,
+            "bits": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "rank": 4,
+            "consumed": 4
+          },
+          {
+            "count": 3,
+            "bits": [
+              1,
+              1,
+              0,
+              1
+            ],
+            "rank": 1,
+            "consumed": 4
+          },
+          {
+            "count": 3,
+            "bits": [
+              1,
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            "rank": 1,
+            "consumed": 6
+          }
+        ],
+        "runtimeMs": 350.4869999596849,
+        "oracle": "Enumerate every length-12 unbiased bit string, including unused suffixes when the function returns early. Each accepted output must have identical full-prefix mass; surviving strings must number 2^12 mod count. Power-of-two counts must consume exactly log2(count) bits.",
+        "scope": "Unmodified selected function from an explicitly append-only recorded listing. Finite decision-tree mass checks and count/bit guards; no statistical assumption about a physical bit source is tested. Schedule-index integration and the whole listing were not executed. Finite tests alone do not prove all-count uniformity, almost-sure termination or the infinite expected-bit bound."
+      },
+      "fullAppendOnlyIntegrationEvidence": {
+        "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round15/independent-sampler-integration.json",
+        "recordedAtUnixMs": 1791676346129,
+        "round": 15,
+        "seed": 16448724958648550000,
+        "dependencies": [
+          {
+            "round": 11,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round11-final\\round-11-block-1.py",
+            "sourceSha256": "34a8359f49de7cb690cc92159ecc674c658f3a4eb51c2ba0cd995e4560301bd3",
+            "answerSha256": "6e74a22437274194f2cc6737941c883abda41974d2f6dc78668ff55f8fc1aa6e",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 12,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round12\\round-12-block-1.py",
+            "sourceSha256": "17bd74fc788372f180667590362126bce105ab20b435010526677c5ffb4eb0ad",
+            "answerSha256": "dded10d00993fa6db4d28629064259af8994ef7b186d632777d0a524349694ef",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 13,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round13\\round-13-block-1.py",
+            "sourceSha256": "5edb534fdc44c624848d8b20ab9d2d56b98980c6c09d0062a0453f737b4273db",
+            "answerSha256": "94f87ffbd6fa5c412866266570b39fb03acaba9e4d513fba5223af44227df040",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 14,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round14\\round-14-block-1.py",
+            "sourceSha256": "d5dcf083604920c8d77dfd1af4309683c7d3cdccbf7a3f9dc6d1b22a7e27452f",
+            "answerSha256": "c18ec5dd0dd6fdd78a3c1263d98c9a258b10f95213c37a395c533cbf3dc1a6ac",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 15,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round15\\round-15-block-1.py",
+            "sourceSha256": "24806967022cc7cebcb1ee98309eeb1c6cc42bb074267428189cf4b723d48eb0",
+            "answerSha256": "c174d6d87dce6a2bee73d3e13f6fb2233051dceb4cdd77a844808acd88054d00",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          }
+        ],
+        "originalSourcesPatched": false,
+        "appendOnlyDependencyOrderPreserved": true,
+        "independentRestrictionCases": 160,
+        "allQualifyingRankSamplesChecked": 50,
+        "zeroCountRejectedBeforeDrawing": 112,
+        "singletonCountWithoutDrawChecks": 46,
+        "nonqualifyingSetRejections": 5388,
+        "failures": 0,
+        "firstFailures": [],
+        "candidateOwnBitSamplerTestsPassed": true,
+        "candidateOwnBitSamplerTestsStdout": "Bit sampler tests passed\n",
+        "runtimeMs": 58.602500008419156,
+        "oracle": "Enumerate all exactly-K original-id subsets; apply cleanup only between consecutive selected jobs, preserve global optimal profit, then filter required/forbidden identifiers. Compare conditional counts, every qualifying lexicographic rank and sampled witness; reject all other input subsets.",
+        "scope": "Unmodified full recorded append-only blocks in their explicitly required dependency order. Finite scheduling/restriction/rank integration cases and supplied bit-sampler tests. Uniform finite bit-tree mass is measured separately; no physical random-source assumption, all-input correctness, global complexity bound, or whole-interview accuracy is certified."
+      }
+    },
+    {
+      "round": 16,
+      "isolatedFunctionEvidence": {
+        "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round16/independent-bit-tree-oracle.json",
+        "recordedAtUnixMs": 1791676227997,
+        "round": 16,
+        "sourceSha256": "244519dac930e6b55eb1867d54f690ade771cb9409de456775022313ba9a7d16",
+        "answerSha256": "c216332b4ebd388ff28e5595bbd41ae24003fb55433a7e427131fc5e49a0de36",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+        "model": "gpt-6.1-sol",
+        "effort": "low",
+        "selectedFunctionSha256": "65ac374950c8c5daa967ac00f31c75df3eadb245f25bc2305c31a64c9962b6e5",
+        "originalFunctionPatched": false,
+        "functionIsolatedFromAppendOnlyIntegration": true,
+        "integrationExecuted": false,
+        "guardsPassed": 13,
+        "bitStringsPerCount": 4096,
+        "countsAssessed": 38,
+        "totalBitStringExecutions": 155648,
+        "uniformityFailures": 0,
+        "terminationRemainderFailures": 0,
+        "results": [
+          {
+            "count": 2,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 2048,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "1": 4096
+            },
+            "tailSumLowerBound": 1,
+            "geometricTailUpperBound": 1,
+            "analyticBoundLog2CountPlus2": 3
+          },
+          {
+            "count": 3,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 1365,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "2": 3072,
+              "4": 768,
+              "6": 192,
+              "8": 48,
+              "10": 12,
+              "12": 3
+            },
+            "tailSumLowerBound": 2.666015625,
+            "geometricTailUpperBound": 2.66748046875,
+            "analyticBoundLog2CountPlus2": 3.584962500721156
+          },
+          {
+            "count": 4,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 1024,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "2": 4096
+            },
+            "tailSumLowerBound": 2,
+            "geometricTailUpperBound": 2,
+            "analyticBoundLog2CountPlus2": 4
+          },
+          {
+            "count": 5,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 819,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 2560,
+              "4": 1280,
+              "7": 160,
+              "8": 80,
+              "11": 10,
+              "12": 5
+            },
+            "tailSumLowerBound": 3.59912109375,
+            "geometricTailUpperBound": 3.6015625,
+            "analyticBoundLog2CountPlus2": 4.321928094887362
+          },
+          {
+            "count": 6,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 682,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 3072,
+              "5": 768,
+              "7": 192,
+              "9": 48,
+              "11": 12
+            },
+            "tailSumLowerBound": 3.6650390625,
+            "geometricTailUpperBound": 3.66796875,
+            "analyticBoundLog2CountPlus2": 4.584962500721156
+          },
+          {
+            "count": 7,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 585,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 3584,
+              "6": 448,
+              "9": 56,
+              "12": 7
+            },
+            "tailSumLowerBound": 3.427734375,
+            "geometricTailUpperBound": 3.43115234375,
+            "analyticBoundLog2CountPlus2": 4.807354922057604
+          },
+          {
+            "count": 8,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 512,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "3": 4096
+            },
+            "tailSumLowerBound": 3,
+            "geometricTailUpperBound": 3,
+            "analyticBoundLog2CountPlus2": 5
+          },
+          {
+            "count": 9,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 455,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2304,
+              "5": 1152,
+              "6": 576,
+              "10": 36,
+              "11": 18,
+              "12": 9
+            },
+            "tailSumLowerBound": 4.66552734375,
+            "geometricTailUpperBound": 4.669921875,
+            "analyticBoundLog2CountPlus2": 5.169925001442312
+          },
+          {
+            "count": 10,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 6,
+            "expectedUnfinished": 6,
+            "acceptedStringsPerRank": 409,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2560,
+              "5": 1280,
+              "8": 160,
+              "9": 80,
+              "12": 10
+            },
+            "tailSumLowerBound": 4.59765625,
+            "geometricTailUpperBound": 4.6025390625,
+            "analyticBoundLog2CountPlus2": 5.321928094887362
+          },
+          {
+            "count": 11,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 372,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 2816,
+              "6": 704,
+              "7": 352,
+              "8": 176,
+              "10": 44
+            },
+            "tailSumLowerBound": 4.845703125,
+            "geometricTailUpperBound": 4.85107421875,
+            "analyticBoundLog2CountPlus2": 5.459431618637297
+          },
+          {
+            "count": 12,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 341,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3072,
+              "6": 768,
+              "8": 192,
+              "10": 48,
+              "12": 12
+            },
+            "tailSumLowerBound": 4.6640625,
+            "geometricTailUpperBound": 4.669921875,
+            "analyticBoundLog2CountPlus2": 5.584962500721156
+          },
+          {
+            "count": 13,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 315,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3328,
+              "7": 416,
+              "8": 208,
+              "9": 104,
+              "11": 26,
+              "12": 13
+            },
+            "tailSumLowerBound": 4.70654296875,
+            "geometricTailUpperBound": 4.712890625,
+            "analyticBoundLog2CountPlus2": 5.700439718141093
+          },
+          {
+            "count": 14,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 8,
+            "expectedUnfinished": 8,
+            "acceptedStringsPerRank": 292,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3584,
+              "7": 448,
+              "10": 56
+            },
+            "tailSumLowerBound": 4.42578125,
+            "geometricTailUpperBound": 4.4326171875,
+            "analyticBoundLog2CountPlus2": 5.807354922057604
+          },
+          {
+            "count": 15,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 273,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 3840,
+              "8": 240,
+              "12": 15
+            },
+            "tailSumLowerBound": 4.265625,
+            "geometricTailUpperBound": 4.27294921875,
+            "analyticBoundLog2CountPlus2": 5.906890595608519
+          },
+          {
+            "count": 16,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 256,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "4": 4096
+            },
+            "tailSumLowerBound": 4,
+            "geometricTailUpperBound": 4,
+            "analyticBoundLog2CountPlus2": 6
+          },
+          {
+            "count": 17,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 240,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2176,
+              "6": 1088,
+              "7": 544,
+              "8": 272
+            },
+            "tailSumLowerBound": 5.7578125,
+            "geometricTailUpperBound": 5.76611328125,
+            "analyticBoundLog2CountPlus2": 6.087462841250339
+          },
+          {
+            "count": 18,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 10,
+            "expectedUnfinished": 10,
+            "acceptedStringsPerRank": 227,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2304,
+              "6": 1152,
+              "7": 576,
+              "11": 36,
+              "12": 18
+            },
+            "tailSumLowerBound": 5.6630859375,
+            "geometricTailUpperBound": 5.671875,
+            "analyticBoundLog2CountPlus2": 6.169925001442312
+          },
+          {
+            "count": 19,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 11,
+            "expectedUnfinished": 11,
+            "acceptedStringsPerRank": 215,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2432,
+              "6": 1216,
+              "8": 304,
+              "10": 76,
+              "11": 38,
+              "12": 19
+            },
+            "tailSumLowerBound": 5.71923828125,
+            "geometricTailUpperBound": 5.728515625,
+            "analyticBoundLog2CountPlus2": 6.247927513443585
+          },
+          {
+            "count": 20,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 204,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2560,
+              "6": 1280,
+              "9": 160,
+              "10": 80
+            },
+            "tailSumLowerBound": 5.59375,
+            "geometricTailUpperBound": 5.603515625,
+            "analyticBoundLog2CountPlus2": 6.321928094887363
+          },
+          {
+            "count": 21,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1,
+            "expectedUnfinished": 1,
+            "acceptedStringsPerRank": 195,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2688,
+              "6": 1344,
+              "11": 42,
+              "12": 21
+            },
+            "tailSumLowerBound": 5.42724609375,
+            "geometricTailUpperBound": 5.4375,
+            "analyticBoundLog2CountPlus2": 6.392317422778761
+          },
+          {
+            "count": 22,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 186,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2816,
+              "7": 704,
+              "8": 352,
+              "9": 176,
+              "11": 44
+            },
+            "tailSumLowerBound": 5.8447265625,
+            "geometricTailUpperBound": 5.85546875,
+            "analyticBoundLog2CountPlus2": 6.459431618637297
+          },
+          {
+            "count": 23,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 2,
+            "expectedUnfinished": 2,
+            "acceptedStringsPerRank": 178,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 2944,
+              "7": 736,
+              "8": 368,
+              "11": 46
+            },
+            "tailSumLowerBound": 5.69970703125,
+            "geometricTailUpperBound": 5.7109375,
+            "analyticBoundLog2CountPlus2": 6.523561956057013
+          },
+          {
+            "count": 24,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 170,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3072,
+              "7": 768,
+              "9": 192,
+              "11": 48
+            },
+            "tailSumLowerBound": 5.66015625,
+            "geometricTailUpperBound": 5.671875,
+            "analyticBoundLog2CountPlus2": 6.584962500721156
+          },
+          {
+            "count": 25,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 21,
+            "expectedUnfinished": 21,
+            "acceptedStringsPerRank": 163,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3200,
+              "7": 800,
+              "11": 50,
+              "12": 25
+            },
+            "tailSumLowerBound": 5.54248046875,
+            "geometricTailUpperBound": 5.5546875,
+            "analyticBoundLog2CountPlus2": 6.643856189774724
+          },
+          {
+            "count": 26,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 14,
+            "expectedUnfinished": 14,
+            "acceptedStringsPerRank": 157,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3328,
+              "8": 416,
+              "9": 208,
+              "10": 104,
+              "12": 26
+            },
+            "tailSumLowerBound": 5.703125,
+            "geometricTailUpperBound": 5.7158203125,
+            "analyticBoundLog2CountPlus2": 6.700439718141092
+          },
+          {
+            "count": 27,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 19,
+            "expectedUnfinished": 19,
+            "acceptedStringsPerRank": 151,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3456,
+              "8": 432,
+              "10": 108,
+              "11": 54,
+              "12": 27
+            },
+            "tailSumLowerBound": 5.60595703125,
+            "geometricTailUpperBound": 5.619140625,
+            "analyticBoundLog2CountPlus2": 6.754887502163468
+          },
+          {
+            "count": 28,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 8,
+            "expectedUnfinished": 8,
+            "acceptedStringsPerRank": 146,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3584,
+              "8": 448,
+              "11": 56
+            },
+            "tailSumLowerBound": 5.423828125,
+            "geometricTailUpperBound": 5.4375,
+            "analyticBoundLog2CountPlus2": 6.807354922057604
+          },
+          {
+            "count": 29,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 7,
+            "expectedUnfinished": 7,
+            "acceptedStringsPerRank": 141,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3712,
+              "9": 232,
+              "10": 116,
+              "12": 29
+            },
+            "tailSumLowerBound": 5.4296875,
+            "geometricTailUpperBound": 5.44384765625,
+            "analyticBoundLog2CountPlus2": 6.857980995127572
+          },
+          {
+            "count": 30,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 16,
+            "expectedUnfinished": 16,
+            "acceptedStringsPerRank": 136,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3840,
+              "9": 240
+            },
+            "tailSumLowerBound": 5.26171875,
+            "geometricTailUpperBound": 5.2763671875,
+            "analyticBoundLog2CountPlus2": 6.906890595608519
+          },
+          {
+            "count": 31,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 132,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 3968,
+              "10": 124
+            },
+            "tailSumLowerBound": 5.158203125,
+            "geometricTailUpperBound": 5.17333984375,
+            "analyticBoundLog2CountPlus2": 6.954196310386875
+          },
+          {
+            "count": 32,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 128,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "5": 4096
+            },
+            "tailSumLowerBound": 5,
+            "geometricTailUpperBound": 5,
+            "analyticBoundLog2CountPlus2": 7
+          },
+          {
+            "count": 64,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 64,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "6": 4096
+            },
+            "tailSumLowerBound": 6,
+            "geometricTailUpperBound": 6,
+            "analyticBoundLog2CountPlus2": 8
+          },
+          {
+            "count": 128,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 32,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "7": 4096
+            },
+            "tailSumLowerBound": 7,
+            "geometricTailUpperBound": 7,
+            "analyticBoundLog2CountPlus2": 9
+          },
+          {
+            "count": 256,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 16,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "8": 4096
+            },
+            "tailSumLowerBound": 8,
+            "geometricTailUpperBound": 8,
+            "analyticBoundLog2CountPlus2": 10
+          },
+          {
+            "count": 257,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 241,
+            "expectedUnfinished": 241,
+            "acceptedStringsPerRank": 15,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "9": 2056,
+              "10": 1028,
+              "11": 514,
+              "12": 257
+            },
+            "tailSumLowerBound": 9.86669921875,
+            "geometricTailUpperBound": 9.9921875,
+            "analyticBoundLog2CountPlus2": 10.005624549193879
+          },
+          {
+            "count": 1023,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 4,
+            "expectedUnfinished": 4,
+            "acceptedStringsPerRank": 4,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "10": 4092
+            },
+            "tailSumLowerBound": 10.001953125,
+            "geometricTailUpperBound": 10.50146484375,
+            "analyticBoundLog2CountPlus2": 11.99859042974533
+          },
+          {
+            "count": 1024,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 0,
+            "expectedUnfinished": 0,
+            "acceptedStringsPerRank": 4,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "10": 4096
+            },
+            "tailSumLowerBound": 10,
+            "geometricTailUpperBound": 10,
+            "analyticBoundLog2CountPlus2": 12
+          },
+          {
+            "count": 1025,
+            "prefixBits": 12,
+            "testedBitStrings": 4096,
+            "unfinished": 1021,
+            "expectedUnfinished": 1021,
+            "acceptedStringsPerRank": 3,
+            "equalAcceptedMassForEveryRank": true,
+            "acceptedBitDrawCounts": {
+              "11": 2050,
+              "12": 1025
+            },
+            "tailSumLowerBound": 11.49951171875,
+            "geometricTailUpperBound": 12,
+            "analyticBoundLog2CountPlus2": 12.001408194392809
+          }
+        ],
+        "scriptedRecyclingChecks": [
+          {
+            "count": 5,
+            "bits": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "rank": 4,
+            "consumed": 4
+          },
+          {
+            "count": 3,
+            "bits": [
+              1,
+              1,
+              0,
+              1
+            ],
+            "rank": 1,
+            "consumed": 4
+          },
+          {
+            "count": 3,
+            "bits": [
+              1,
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            "rank": 1,
+            "consumed": 6
+          }
+        ],
+        "runtimeMs": 337.18410006258637,
+        "oracle": "Enumerate every length-12 unbiased bit string, including unused suffixes when the function returns early. Each accepted output must have identical full-prefix mass; surviving strings must number 2^12 mod count. Power-of-two counts must consume exactly log2(count) bits.",
+        "scope": "Unmodified selected function from an explicitly append-only recorded listing. Finite decision-tree mass checks and count/bit guards; no statistical assumption about a physical bit source is tested. Schedule-index integration and the whole listing were not executed. Finite tests alone do not prove all-count uniformity, almost-sure termination or the infinite expected-bit bound."
+      },
+      "fullAppendOnlyIntegrationEvidence": {
+        "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round16/independent-sampler-integration.json",
+        "recordedAtUnixMs": 1791676346152,
+        "round": 16,
+        "seed": 16448724958648550000,
+        "dependencies": [
+          {
+            "round": 11,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round11-final\\round-11-block-1.py",
+            "sourceSha256": "34a8359f49de7cb690cc92159ecc674c658f3a4eb51c2ba0cd995e4560301bd3",
+            "answerSha256": "6e74a22437274194f2cc6737941c883abda41974d2f6dc78668ff55f8fc1aa6e",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 12,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round12\\round-12-block-1.py",
+            "sourceSha256": "17bd74fc788372f180667590362126bce105ab20b435010526677c5ffb4eb0ad",
+            "answerSha256": "dded10d00993fa6db4d28629064259af8994ef7b186d632777d0a524349694ef",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 13,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round13\\round-13-block-1.py",
+            "sourceSha256": "5edb534fdc44c624848d8b20ab9d2d56b98980c6c09d0062a0453f737b4273db",
+            "answerSha256": "94f87ffbd6fa5c412866266570b39fb03acaba9e4d513fba5223af44227df040",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 14,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round14\\round-14-block-1.py",
+            "sourceSha256": "d5dcf083604920c8d77dfd1af4309683c7d3cdccbf7a3f9dc6d1b22a7e27452f",
+            "answerSha256": "c18ec5dd0dd6fdd78a3c1263d98c9a258b10f95213c37a395c533cbf3dc1a6ac",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          },
+          {
+            "round": 16,
+            "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round16\\round-16-block-1.py",
+            "sourceSha256": "244519dac930e6b55eb1867d54f690ade771cb9409de456775022313ba9a7d16",
+            "answerSha256": "c216332b4ebd388ff28e5595bbd41ae24003fb55433a7e427131fc5e49a0de36",
+            "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+          }
+        ],
+        "originalSourcesPatched": false,
+        "appendOnlyDependencyOrderPreserved": true,
+        "independentRestrictionCases": 160,
+        "allQualifyingRankSamplesChecked": 50,
+        "zeroCountRejectedBeforeDrawing": 112,
+        "singletonCountWithoutDrawChecks": 46,
+        "nonqualifyingSetRejections": 5388,
+        "failures": 0,
+        "firstFailures": [],
+        "candidateOwnBitSamplerTestsPassed": true,
+        "candidateOwnBitSamplerTestsStdout": "Bit sampler tests passed\n",
+        "runtimeMs": 22.220499929971993,
+        "oracle": "Enumerate all exactly-K original-id subsets; apply cleanup only between consecutive selected jobs, preserve global optimal profit, then filter required/forbidden identifiers. Compare conditional counts, every qualifying lexicographic rank and sampled witness; reject all other input subsets.",
+        "scope": "Unmodified full recorded append-only blocks in their explicitly required dependency order. Finite scheduling/restriction/rank integration cases and supplied bit-sampler tests. Uniform finite bit-tree mass is measured separately; no physical random-source assumption, all-input correctness, global complexity bound, or whole-interview accuracy is certified."
+      }
+    }
+  ],
+  "dependencyOwnTests": {
+    "recordedAtUnixMs": 1791676391728,
+    "sources": [
+      {
+        "round": 11,
+        "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round11-final\\round-11-block-1.py",
+        "sourceSha256": "34a8359f49de7cb690cc92159ecc674c658f3a4eb51c2ba0cd995e4560301bd3",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+      },
+      {
+        "round": 12,
+        "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round12\\round-12-block-1.py",
+        "sourceSha256": "17bd74fc788372f180667590362126bce105ab20b435010526677c5ffb4eb0ad",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+      },
+      {
+        "round": 13,
+        "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round13\\round-13-block-1.py",
+        "sourceSha256": "5edb534fdc44c624848d8b20ab9d2d56b98980c6c09d0062a0453f737b4273db",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+      },
+      {
+        "round": 14,
+        "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round14\\round-14-block-1.py",
+        "sourceSha256": "d5dcf083604920c8d77dfd1af4309683c7d3cdccbf7a3f9dc6d1b22a7e27452f",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+      },
+      {
+        "round": 15,
+        "file": "artifacts\\deep-interview-v70\\hard-probes\\deep-code-memory\\code-review\\round15\\round-15-block-1.py",
+        "sourceSha256": "24806967022cc7cebcb1ee98309eeb1c6cc42bb074267428189cf4b723d48eb0",
+        "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+      }
+    ],
+    "originalSourcesPatched": false,
+    "results": [
+      {
+        "function": "test_inclusions",
+        "passed": true,
+        "error": null,
+        "stdout": "Inclusion and conditional-sampling tests passed\n",
+        "runtimeMs": 48.30899997614324
+      },
+      {
+        "function": "test_restrictions",
+        "passed": true,
+        "error": null,
+        "stdout": "Restriction tests passed\n",
+        "runtimeMs": 84.90399993024766
+      },
+      {
+        "function": "test_lex_restrictions",
+        "passed": true,
+        "error": null,
+        "stdout": "Lexicographic restriction tests passed\n",
+        "runtimeMs": 321.0837000515312
+      }
+    ],
+    "scope": "Supplied candidate dependency tests executed on complete unchanged code blocks appended in their explicitly required order. These candidate-authored assertions are separate from independent subset and bit-tree oracles. They do not prove all-input correctness, complexity or whole-interview accuracy."
+  },
+  "manualProofReview": {
+    "assessment": "sound_under_stated_bit_source_assumption",
+    "assumption": "Injected integer bits are independent and unbiased. No physical source was tested.",
+    "uniformity": "Conditional on survival, c is uniform on the integer interval [0,v). Appending one unbiased bit doubles that uniform range. Every accepted rank receives equal mass; rejection followed by subtracting the count preserves a uniform retained tail.",
+    "survival": "For n>1, the surviving prefix count after k bits follows r_(k+1)=2*r_k mod n with r_0=1. Hence r_k=2^k mod n and P(T>k)=r_k/2^k<n/2^k, which tends to zero.",
+    "expectation": "For nonpowers of two, write n=2^m*x with 1<x<2. The first m+1 tail-sum terms equal one; the remaining geometric upper bound is strictly less than x. Thus E[T]<m+1+x<log2(n)+2 because log2(x)>x-1. For n=2^m, exactly m bits suffice. Count one returns without a bit request; nonpositive counts reject before requesting one.",
+    "scope": "Direct mathematical review of the recorded argument plus separate finite executions. This is not a measurement of a physical entropy source or a certification of every schedule-index complexity claim."
+  },
+  "conclusion": "Both complete append-only sampler versions passed the isolated finite bit-tree tests, independent conditional-schedule integration cases, zero/singleton draw checks and their supplied sampler tests. The earlier isolated-function scope remains preserved; subsequent full-chain evidence establishes the tested integration separately.",
+  "productionLogicChanged": false,
+  "scope": "Selective independent execution of exact recorded code and manual proof review. Test executions are dependent checks of two related answers, not independent population-accuracy samples. No source was repaired, and no expected answers were installed in the app."
+}

@@ -1,0 +1,139 @@
+{
+  "recordedAt": "2026-10-11T07:29:12.240Z",
+  "evidence": [
+    {
+      "file": "docs/evidence/backend-routing-differences-v70.json",
+      "sha256": "462b374f99ab9192b36b7b9658a7547ca5b7db25aa33a549aaa39e755012018a"
+    },
+    {
+      "file": "docs/evidence/backend-runtime-findings-v70.json",
+      "sha256": "f31a02a7c0944deca5a8bd85bb574e1cf0d5210b3769709edd09c4780118955c"
+    },
+    {
+      "file": "docs/evidence/answer-architecture-audit-corrected-v70.json",
+      "sha256": "9eb8fa6f76aee9f8982d293d29a6f5041570fe77d7ed19cf642b455f7e0f374d"
+    },
+    {
+      "file": "docs/evidence/deep-interview-results-v70.json",
+      "sha256": "4f3048d76b345a8d181cb331f3f2d497eae0fd1dac25c61081e8c11fc030feaf"
+    }
+  ],
+  "currentRouting": [
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "baselineSha256": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f",
+      "currentSha256": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f",
+      "unchanged": true
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "baselineSha256": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+      "currentSha256": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+      "unchanged": true
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "baselineSha256": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "currentSha256": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+      "unchanged": true
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "baselineSha256": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1",
+      "currentSha256": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1",
+      "unchanged": true
+    }
+  ],
+  "codex": {
+    "file": "src-tauri/src/openai/codex.rs",
+    "baselineSha256": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+    "gitRepresentations": {
+      "gitBlob": "36b4e0e25b3ead5ca4aa67b3a8c5a3b9b0a2b2dca29c6f264aca58d172a90df5",
+      "windowsLineEndings": "6125310d4938dd36d807c5d1e59aaf01f11dc6e3d2c1f253bae8649f6037346d",
+      "gitBlobWithUtf8Bom": "376a3bad3d301a6a6927159a0a60578c587bd2e080e818a30a4767b650d64890",
+      "windowsLineEndingsWithUtf8Bom": "1a349d132fd7783be666f1edfb7967eb7882fb8474cedf40a51348da032aa081"
+    },
+    "matchingRepresentation": null,
+    "currentDiagnosticSourceSha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766",
+    "diffScope": "The inspected worktree diff against Git HEAD adds acceptance/debug-only matching-input receipt, queue and callback counters, their test assertions, an explicit unchanged collection type, and equivalent statement formatting. The measured debug binary has additional observation overhead. This diff does not by itself prove Git HEAD is identical to the archived v70 source hash."
+  },
+  "historicalDirectPromptComparison": {
+    "configuration": "Optional service_tier omitted in a separate comparison; original fast-tier failures preserved.",
+    "measurements": {
+      "codex": {
+        "trials": 24,
+        "errors": 0,
+        "observationLimits": 0,
+        "cleanupLimits": 0,
+        "missingRetainedWords": 0,
+        "firstRetainedCompleteWordFromRequestMs": {
+          "count": 24,
+          "min": 2865,
+          "median": 5679.5,
+          "sampleP95": 16574,
+          "max": 18824
+        },
+        "operationElapsedMs": {
+          "count": 24,
+          "min": 4620,
+          "median": 9451.5,
+          "sampleP95": 63686,
+          "max": 66067
+        },
+        "reportedTierCounts": {
+          "unreported": 24
+        }
+      },
+      "chatgpt": {
+        "trials": 24,
+        "errors": 0,
+        "observationLimits": 0,
+        "cleanupLimits": 0,
+        "missingRetainedWords": 0,
+        "firstRetainedCompleteWordFromRequestMs": {
+          "count": 24,
+          "min": 1784,
+          "median": 3430.5,
+          "sampleP95": 10184,
+          "max": 10937
+        },
+        "operationElapsedMs": {
+          "count": 24,
+          "min": 3279,
+          "median": 10301.5,
+          "sampleP95": 64407,
+          "max": 75494
+        },
+        "reportedTierCounts": {
+          "default": 24
+        }
+      }
+    },
+    "pairs": {
+      "total": 24,
+      "chatgptEarlier": 23,
+      "codexEarlier": 1,
+      "tied": 0,
+      "missingEither": 0
+    },
+    "accuracyPending": false,
+    "scope": "12 captured questions, two dependent repetitions per route, same recognized question and captured context. Clock excludes authentication, thread preparation, ASR, live updates and native overlay. Native protocol differs. ChatGPT reports default; Codex does not report its actual tier."
+  },
+  "historicalNativeChatgptDetection": {
+    "nativeChatgptCases": 3,
+    "nativeChatgptWaveforms": 4,
+    "questionCandidateEvents": 0,
+    "questionConfirmedEvents": 0,
+    "answerStartedEvents": 0,
+    "explanation": "The captured imperative requests were transcribed but the ChatGPT route started no question jobs. Runtime sets semantic_intent only for Codex. The ChatGPT fallback requires interrogative score >=4 or an existing related question; these imperative openings do not qualify. Consequently these native cases did not reach the failing answer POST.",
+    "scope": "Observed on these exact cases, not every ChatGPT question or every speech style. The ChatGPT topic-switch source was eventually played after the recorder wait expired; it did not interrupt a streaming ChatGPT answer because none existed."
+  },
+  "caveats": [
+    "These are the preserved earlier backend executions, not new v71 backend trials. Routing source equivalence supports architectural applicability but cannot guarantee identical provider load, service behavior, cache state or future outcomes.",
+    "The direct comparison excludes ASR, native detection, live question updates, authentication/preparation and overlay rendering; its lower first-word latency cannot establish better end-to-end interviews.",
+    "The revised HTTP timeout finding in backend-runtime-findings-v70 supersedes the earlier mistaken no-timeout analysis.",
+    "New v71 matched policy controls test the Codex question pipeline, not a repaired ChatGPT route or a new production deployment."
+  ],
+  "freshHourAccuracyPending": true,
+  "goalComplete": false
+}

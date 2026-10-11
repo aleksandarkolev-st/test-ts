@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-10-11T03:42:33.927Z",
+  "report": {
+    "file": "docs/evidence/deep-interview-results-v70.json",
+    "sha256": "4f3048d76b345a8d181cb331f3f2d497eae0fd1dac25c61081e8c11fc030feaf"
+  },
+  "consolidationSource": {
+    "file": ".local/consolidate-deep-interviews-v70.mjs",
+    "sha256": "012f20a3594231ff41ebc0843d9e92a8b84e4e23fa8fed98931bc4171d209b99"
+  },
+  "objectiveAttachmentSha256": "ac48b32dcf39cc99dfd96c4daa2701b430d0200b45f7c00c1d659f2ac0fd8b86",
+  "numberedRequirements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "verifiedHours": [
+    {
+      "name": "algorithms-hour-t",
+      "minutes": 62.08914165166667,
+      "turns": 49,
+      "firstWordMedianMs": 6731,
+      "sampleP95Ms": 45135,
+      "modelVerdicts": {
+        "correct": 29,
+        "incorrect": 6,
+        "incomplete": 13,
+        "unverified": 1,
+        "missing": 0
+      },
+      "actualTopicFamilies": [
+        "Graph costs, negative cycles, DAG ordering and bounded-size SCCs",
+        "PostgreSQL retries, uniqueness races and durable deduplication",
+        "Incremental TCP parsing, iterator ownership and lifecycle",
+        "Dynamic connectivity, rollback union-find and bipartiteness",
+        "C++20 acquire/release and sequentially consistent fences",
+        "GPU performance and serialized host/device timing",
+        "Streaming sliding-window lower medians, expiration and heap rebuilding",
+        "Binary64 numerical cancellation and stable quadratic roots",
+        "Exactly-K interval scheduling, cleanup and witness reconstruction",
+        "Finite-field cryptographic algebra, truncated tags and linear witnesses"
+      ]
+    },
+    {
+      "name": "systems-hour-t",
+      "minutes": 60.58685777666667,
+      "turns": 53,
+      "firstWordMedianMs": 8379,
+      "sampleP95Ms": 53701,
+      "modelVerdicts": {
+        "correct": 36,
+        "incorrect": 1,
+        "incomplete": 14,
+        "unverified": 2,
+        "missing": 0
+      },
+      "actualTopicFamilies": [
+        "GPU investigation, kernel synchronization, reductions, histograms and memory layout",
+        "Diagnostic probability and dependence between tests",
+        "Error-correcting codes, interpolation, corruption and ambiguity",
+        "C++20 publication, memory ordering and concurrent ownership",
+        "Durable transfers, deduplication, retirement and fencing",
+        "RSA common-modulus algebra and nonunique message recovery",
+        "PostgreSQL booking transactions, lock ordering and exclusion constraints",
+        "Raft elections and commitment rules",
+        "Combinatorial optimization"
+      ]
+    },
+    {
+      "name": "general-hour-t",
+      "minutes": 60.46859625666667,
+      "turns": 58,
+      "firstWordMedianMs": 5375,
+      "sampleP95Ms": 27592,
+      "modelVerdicts": {
+        "correct": 39,
+        "incorrect": 1,
+        "incomplete": 16,
+        "unverified": 2,
+        "missing": 0
+      },
+      "actualTopicFamilies": [
+        "Operations, staffing, outsourcing, service contracts",
+        "Exact arithmetic, floating-point counterexamples, signed bounds",
+        "Streaming and rolling-window statistics, arbitrary arrival and concurrency",
+        "Marketing experiments, causality, Simpson paradox and sequential stopping",
+        "Distributed quorum and atomic register semantics",
+        "Physics and heat balance",
+        "Public older-code reference",
+        "RSA common-modulus, nonunit messages and CRT candidate construction",
+        "Filesystem atomicity, generation publication, reader protection and reclamation",
+        "Error-correcting codes, miscorrection, erasures and binary elimination"
+      ]
+    }
+  ],
+  "auditedReviewInputs": 396,
+  "pendingAssessments": 0,
+  "original15SystemsJudgmentsUnchanged": true,
+  "resumedGraderInputUnchanged": true,
+  "evaluationWorkComplete": true,
+  "productAssertionsAllPassed": false,
+  "scope": "The complete evaluation report and its 396 original recorded-input checks are verified. Source-bound selected execution and numerical checks remain separate from provisional model verdicts. Product display, memory and background-delivery failures remain results. No production fixes or universal code/accuracy certificate."
+}

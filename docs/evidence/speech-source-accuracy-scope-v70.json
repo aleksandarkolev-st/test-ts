@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-11T02:39:08.049Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/algorithms-hour-t/interview.json",
+    "sha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5"
+  },
+  "synthesizer": {
+    "file": "scripts/synthesize-interview-question.ps1",
+    "sha256": "b0f0dd68b789f9843ac6bff8db8153069f14cef41d79a0f19d176b35e463d421",
+    "mechanism": "The exact text file is given to the installed English System.Speech voice. Pause variants XML-escape the same text into SSML; exact-gap variants separately synthesize unchanged pieces."
+  },
+  "examples": [
+    {
+      "round": 3,
+      "intendedSourceText": "Here, wrong means minimum travel-cost labels. Edges are directed signed-integer credits; source is 0. For seven vertices, edges are (0,1,4), (1,2,-6), (2,1,1), (0,3,8), (3,4,2), (5,6,-3), (6,5,1). Expected labels are [0,'-INF','-INF',8,10,None,None]: '-INF' means no finite minimum; None means unreachable. The implementation initializes every distance to zero and rejects all routes if any relaxation occurs on pass seven. What independent defects do you see? Trace concrete consequences, then explain how to identify exactly which vertices need '-INF' without rejecting unaffected routes.",
+      "recognizedQuestion": "here? Wrong means minimum travel cost labels. Edges are directed, signed integer credits source is zero four seven vertices edges are zero comma one comma four one comma two six two comma one comma one zero comma three comma eight three comma four comma two five comma six dash three six comma five comma one expected labels are zero Inf inf eight comma ten none none inf means no finite minimum none means unreachable the implementation initializes every distance to zero and rejects all roots if any relaxation occurs on pass seven what independent defects do you see trace concrete consequences then explain how to identify exactly which vertices need Inf without rejecting unaffected roots",
+      "waveformSha256": "df61e9e95eb52185df34f2d34be76e6c2df7d16249000266649b34fe239e4f8a",
+      "waveFile": "round-03.wav"
+    },
+    {
+      "round": 4,
+      "intendedSourceText": "Continue your diagnosis, then implement Python classify(n, edges, source), returning integers, None, or '-INF'. For this coding instance, n is at most 2,000 and there are at most 10,000 directed edges; parallel edges and self-loops are allowed. Define a complete pass for your in-place relaxations, and prove that propagation from relaxable vertices after n minus one passes marks exactly the unbounded-below vertices. Crucially, a negative cycle does not invalidate the whole graph, and an unreachable negative cycle must not mark any vertex '-INF'.",
+      "recognizedQuestion": "continue your diagnosis then implement Python classify N edges source returning integers None or Inf for this coding instance N is at most two thousand and there are at most ten thousand directed edges parallel edges and self loops are allowed define a complete pass for your in place relaxations N prove that propagation from relaxable vertices after N minus one passes marks exactly the unbounded below vertices crucially a negative cycle does not invalidate the whole graph and an unreachable negative cycle must not mark any vertex Inf",
+      "waveformSha256": "febf19dfcafe917ed42d89fd3aad0d418266178938470d36ad95051dd5fc45cc",
+      "waveFile": "round-04.wav"
+    },
+    {
+      "round": 39,
+      "intendedSourceText": "Focus first on one component. Its internal edges are (a,b,2), (b,a,-1); incoming finalized candidates give a cost 10 and b cost 0. What initializes local distances, and how many complete internal relaxation passes suffice? Now change only the second edge’s weight to minus 3. Explain your detection scan and which descendants become '-INF'. Then supply the complete iterative SCC-based classify implementation under the stated limits. Preserve None for unreachable components, handle parallel incoming edges, and prove the total relaxation work is bounded using the maximum component size of 30.",
+      "recognizedQuestion": "focus first on one component its internal edges are AB two BA one incoming finalized candidates give a cost ten and B cost zero what initializes local distances and how many complete internal relaxation passes suffice now change only the second edge's weight to minus three explain your detection scan and which descendants become INF then supply the complete iterative SCC based classify implementation under the stated limits preserve none for unreachable components handle parallel incoming edges and prove the total relaxation work is bounded using the maximum component size of thirty",
+      "waveformSha256": "fe72b9adc0b722d7049f7eb5967bd5a1748a2f6ebe346067eddd76f6535b1d36",
+      "waveFile": "round-39.wav"
+    },
+    {
+      "round": 40,
+      "intendedSourceText": "Continue from a=10 and b=0. Trace complete passes in the listed edge order for both versions, then give your frozen detection scan. Supply the iterative SCC-based implementation and prove its work bound. Explain how the source component starts, how parallel incoming candidates combine, and how an affected component propagates influence through the condensation DAG. Finally, a component with no finite incoming candidate and not containing the source must remain unreachable—even if it contains a negative cycle; do not initialize its local distances to zero.",
+      "recognizedQuestion": "continue from A equals ten and B equals zero trace complete passes in the listed edge order for both versions then give your frozen detection scan supply the iterative SCC based implementation and prove its workbound explain how the source component starts how parallel incoming candidates combine and how an affected component propagates influence through the condensation DAG finally a component with no finite incoming candidate and not containing the source must remain unreachable even if it contains a negative cycle do not initialize its local distances to zero",
+      "waveformSha256": "afb4c22969d6e7bc2edbd4c6a69f61f231585094844d2df5a0df09a49fea99fd",
+      "waveFile": "round-40.wav"
+    }
+  ],
+  "interpretation": {
+    "accuracyReference": "Independent reviewers judge against the intended source text and see the actual recognized question separately. These are intended-source recorded-answer judgments, not a pure underlying-model accuracy estimate.",
+    "phoneticGroundTruthIndependentlyValidated": false,
+    "lexicalEditMetric": "Source-text versus recognized-text edit rate includes number spelling, punctuation and spoken-code representations. It is not semantic accuracy or an isolated ASR error estimate.",
+    "signAttribution": "Raw tuple signs and sentinel spellings differ in the examples. The saved waveform proves which audio was played but not how every symbol was pronounced. A missing minus sign cannot be attributed solely to ASR without independently checking the waveform pronunciation; synthesis, recognition and answer handling are distinct possible contributors.",
+    "identifierCase": "Spoken identifier capitalization can be ambiguous. The general CRT lowercase/uppercase entry-point mismatch is retained as a source-text contract check separately from its mathematical execution diagnostic.",
+    "noRetcon": "Recorded text, audio, answers, cached model verdicts and strict code-contract results remain unchanged. This qualification does not convert failed text contracts into passes."
+  },
+  "scope": "Read-only audit of recorded synthesis and grading scope. It does not claim a new audio transcription, human listening check, synthesis fault or recognition fault. No source question, candidate answer or production behavior is changed."
+}

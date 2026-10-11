@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-10-10T23:22:29.146Z",
+  "sourceHashes": {
+    "src-tauri/src/runtime.rs": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f",
+    "src-tauri/src/meeting/questions.rs": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2",
+    "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a",
+    "src-tauri/src/openai/client.rs": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1"
+  },
+  "findings": [
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "line": 323,
+      "finding": "Selecting Codex enables semantic_intent on both the detector and scheduler. Selecting ChatGPT disables it."
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "line": 203,
+      "finding": "The semantic-intent candidate branch admits nonempty remote utterances subject to its short-partial guard. The other branch uses the local grammar score and related-prefix fallback. Confirmation and clause-continuation logic also branch on semantic_intent."
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "line": 889,
+      "finding": "Only Codex sets job.steer_supported true. This affects whether a running job can accept speculative question growth without replacement."
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "line": 265,
+      "finding": "Codex stream_question carries a live update receiver; the ChatGPT branch sends one rendered prompt through streaming HTTP."
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "line": 289,
+      "finding": "Existing scheduler test latest_semantic_reply_is_visible_while_older_code_is_still_streaming explicitly expects the old answer to remain visible until the new answer has a buffer. The observed CUDA-to-database stale display is consistent with this visibility policy."
+    }
+  ],
+  "comparisonDesign": {
+    "finalPromptDiagnostic": "Same captured final recognized question and explicit selected context; fresh Codex thread history, alternating route order, two repetitions. Excludes live question detection/steering and overlay timing.",
+    "actualBackendPlayback": "Must retain and report the existing route-specific detection and update lifecycle; backend selection changes multiple parts of the system.",
+    "requestedModel": "gpt-6.1-sol",
+    "requestedEffort": "low",
+    "candidateInputContainsExaminerGrades": false,
+    "productionLogicChanged": false
+  },
+  "scope": "Read-only source analysis and recorded-trace interpretation. Code paths describe architectural differences; no ChatGPT performance or accuracy superiority has been measured. This does not replace the pending live comparison."
+}

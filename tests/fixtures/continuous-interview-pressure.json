@@ -1,0 +1,43 @@
+{
+  "scenario": {
+    "name": "continuous-public-pressure",
+    "seed": "Explain the invariant for a sliding window median.",
+    "rubric": "Deferred source-grounded audit only. Check clause preservation, context selection, unsupported assumptions, stale answer leakage, endpoint-to-visible-word timing and resource drift. Fixed source cycles do not establish adaptive interview accuracy.",
+    "examinerOnly": "Do not generate or grade during playback. Source utterances are public and recorded separately from recognized jobs. Match by timing and source clauses; do not assume one source utterance creates one job.",
+    "evaluationDelivery": {
+      "continuousPressure": {
+        "minimumDurationMs": 1800000,
+        "clips": [
+          {"kind":"question","gapMs":700,"text":"Explain the invariant for a sliding window median. Readings expire exactly ten seconds after their timestamp, duplicates count separately, and the lower median is required."},
+          {"kind":"followup","gapMs":100,"text":"Why?"},
+          {"kind":"followup","gapMs":250,"text":"What if that changes?"},
+          {"kind":"incomplete","gapMs":600,"text":"And if, uh, the other one, the earlier thing, changes?"},
+          {"kind":"long-question","gapMs":1200,"pauseBefore":"There is an essential final condition","pauseMs":1500,"text":"Compute exact sums of batches of signed integer measurements before considering optimizations. Some batches are empty, some contain one value, and others contain many values. Values can be positive or negative. Explain validation and useful errors, including cancellation of large positive and negative values. There is an essential final condition: use signed sixty-four-bit output, detect overflow of the final exact sum, and reject an overflowing batch rather than wrapping or returning a partial result."},
+          {"kind":"background","gapMs":600,"text":"Side conversation, no reply needed. The room booking moved to tomorrow. We are still waiting for the others."},
+          {"kind":"topic-switch","gapMs":900,"text":"Switch to databases. Explain phantom reads and how serializable isolation prevents a transaction from observing an inconsistent predicate result."},
+          {"kind":"followup","gapMs":100,"text":"Why?"},
+          {"kind":"false-premise","gapMs":1000,"text":"In a live CUDA block of one hundred twenty-eight threads, I call the block barrier only when thread index x is less than sixteen. This guarantees safety, correct?"},
+          {"kind":"false-start","gapMs":400,"text":"Use one hundred twenty-eight, sorry, one hundred ninety-two threads per block for ten thousand elements. How many blocks are needed? Use my final thread count."},
+          {"kind":"topic-switch","gapMs":1000,"text":"Switch to experiments. A randomized test gives fifty purchases from one thousand visitors in group A and sixty purchases from one thousand visitors in group B. State the observed difference in percentage points, and what evidence is still needed before claiming a reliable improvement."},
+          {"kind":"followup","gapMs":200,"text":"And what if assignment was not random?"},
+          {"kind":"late-reversal","gapMs":900,"pauseBefore":"Actually, no atomics","pauseMs":1500,"text":"Implement an exact parallel GPU histogram using atomics. Keys are unsigned integers in a known small finite range. Actually, no atomics are allowed and the keys are highly skewed. Explain a race-free ownership scheme under this final restriction."},
+          {"kind":"question","gapMs":1000,"text":"Stream B waits on an event before the event has ever been recorded. Later stream A records it. Does that earlier wait now synchronize B? Assume successful API calls and no other dependency."},
+          {"kind":"followup","gapMs":100,"text":"Why?"},
+          {"kind":"topic-switch","gapMs":12000,"text":"Switch to leadership. Two teammates disagree about an ambiguous requirement and delivery is due tomorrow. Describe the first concrete steps you would take and the information needed to decide scope."},
+          {"kind":"incomplete","gapMs":300,"text":"And then, wait, which one was that?"},
+          {"kind":"question","gapMs":1000,"text":"In floating point thirty-two, add a positive value of one times ten to the power twenty and its negative, then add one. Compare with adding the negative large value and one first, then adding the positive large value. Round each operation to nearest with ties to even and do not reassociate. Give both actual results."},
+          {"kind":"topic-switch","gapMs":800,"text":"Switch to business operations. A team can process forty tasks per day, arrivals are fifty per day, and the initial backlog is one hundred. With no weekends or cancellations, what is the backlog after ten days? Explain the arithmetic."},
+          {"kind":"followup","gapMs":100,"text":"What if arrivals drop to thirty?"},
+          {"kind":"question","gapMs":700,"text":"Give the sum of nineteen participating CUDA lanes, physical lanes zero through eighteen. All nineteen callers must receive the sum. Explain the mask and why every shuffle source is valid."},
+          {"kind":"background","gapMs":5000,"text":"No reply needed. Someone is testing the room speaker. Please keep the earlier question available."},
+          {"kind":"topic-switch","gapMs":800,"text":"Switch to probability. Flip a fair coin three times independently. What is the probability of exactly two heads? Show the count of equally likely outcomes."},
+          {"kind":"followup","gapMs":150,"text":"Why not one half?"},
+          {"kind":"question","gapMs":1000,"text":"An array is sorted in increasing order and may contain duplicates. Explain binary search for the first element greater than or equal to a target, including an empty array and a target larger than all values."},
+          {"kind":"incomplete","gapMs":500,"text":"No, the earlier version, when that boundary was the other way around."},
+          {"kind":"topic-switch","gapMs":1000,"text":"Switch to basic physics. A vehicle travels at a constant twenty meters per second for thirty seconds. What distance does it cover? State the units and assumptions."},
+          {"kind":"followup","gapMs":6000,"text":"What if it accelerates instead?"}
+        ]
+      }
+    }
+  }
+}

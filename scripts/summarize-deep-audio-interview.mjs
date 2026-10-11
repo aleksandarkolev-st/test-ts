@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
+import {latencyDistribution} from './lib/streamed-word-latency.mjs';
 const [journalFile,reviewsDirectory,outputDirectory]=process.argv.slice(2);
 assert(journalFile&&reviewsDirectory&&outputDirectory,'JOURNAL REVIEWS_DIRECTORY OUTPUT_DIRECTORY');
 const raw=await readFile(journalFile),journal=JSON.parse(raw);
@@ -29,8 +30,17 @@ for(const [index,row] of journal.rows.entries()){
  let assessment=null,assessmentHash=null;
  try{const bytes=await readFile(path.join(reviewsDirectory,`trial-${String(index+1).padStart(3,'0')}.json`));assessment=JSON.parse(bytes);assessmentHash=hash(bytes);}catch(error){if(error.code!=='ENOENT')throw error;}
  if(assessment){
-  const input={answer:row.answer??null,phase:row.phase??null,publicPriorContext:row.selectedContext??null,
-   recognizedQuestion:row.recognizedQuestion??null,spokenQuestion:row.question??null};
+  if(assessment.inputSchemaVersion>=3){
+   assert.equal(assessment.reviewerContinuity,false,`Trial ${index+1} must use isolated reviewer history`);
+   assert.equal(assessment.model,journal.model,`Trial ${index+1} reviewer model differs from recorded settings`);
+   assert.equal(assessment.effort,journal.effort,`Trial ${index+1} reviewer effort differs from recorded settings`);
+  }
+  const input={answer:row.answer??null,
+   ...(assessment.inputSchemaVersion>=3?{cancelled:row.cancelled??null,error:row.error??null}:{}),
+   phase:row.phase??null,publicPriorContext:row.selectedContext??null,
+   recognizedQuestion:row.recognizedQuestion??null,
+   ...(assessment.inputSchemaVersion>=2?{sourcePriorQuestions:row.recordedSourcePriorQuestions??journal.rows.slice(0,index).map(prior=>({question:prior.question??null,round:prior.round??null}))}:{}),
+   spokenQuestion:row.question??null};
   assert.equal(assessment.inputSha256,hash(Buffer.from(JSON.stringify(input))),`Trial ${index+1} assessment does not match recorded input`);
  }
  const review=assessment?.review,phrase=review?.usefulPhrase??null,start=phrase?(row.answer??'').indexOf(phrase):-1,end=start+(phrase?.length??0);
@@ -56,6 +66,7 @@ for(const [index,row] of journal.rows.entries()){
   answer:row.answer,phase:row.phase,cancelled:row.cancelled??false,error:row.error??null,
   examinerGrade:row.review??row.provisionalReview?.review??null,examinerGradeUsesPartialAnswer:Boolean(row.provisionalReview&&!row.review),
   independentReview:review??null,independentReviewModel:assessment?.model??null,independentReviewSha256:assessmentHash,
+  independentReviewerContinuity:assessment?.reviewerContinuity??null,
   gradeScope:'Model reviews are provisional. Substantive executable/manual checks must be linked separately; unresolved claims remain unverified.',
   firstCorrectUsefulPhrase:phrase,phraseCharacterRange:start>=0?[start,end]:null,visibleRetainedPhraseLatencyMs:visibleLatency,
   visiblePhraseMissingReason:missingReason,lastVoicedSourceSample:row.audio?.playback??null,nativeSpeechEndIntervalMs:speechNative,
@@ -76,23 +87,24 @@ for(const [index,row] of journal.rows.entries()){
   observedSelfSpeechMarkers:(row.events??[]).filter(e=>['speech.started','speech.ended'].includes(e.name)&&e.payload?.source==='self'),
   waveformSha256:row.audio?.sha256??null,usage:{cachedInputTokens:p.cachedInputTokens??null,
    scope:'Token usage unavailable unless provided by the actual backend trace. Subscription snapshots are separate.'},
-  under800MsJointProvisionalSuccess:Boolean(visibleLatency&&visibleLatency.high<=800&&review?.verdict==='correct')});
+  correctAnswerAndVisibleUsefulPhrase:Boolean(visibleLatency&&review?.verdict==='correct')});
 }
-const distribution=values=>{const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b);return {count:sorted.length,median:sorted.length?sorted[Math.floor(sorted.length/2)]:null,sampleP95:sorted.length?sorted[Math.ceil(sorted.length*.95)-1]:null,max:sorted.at(-1)??null};};
-function wilson(successes,n){if(!n)return null;const z=1.95996398454,p=successes/n,denom=1+z*z/n,center=(p+z*z/(2*n))/denom,half=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/denom;return {low:Math.max(0,center-half),high:Math.min(1,center+half),scope:'Descriptive binomial interval only; repeated questions and adaptive within-interview dependence violate independent population sampling.'};}
 const policies=[...new Set(rows.map(r=>r.policy))];
 const summary=Object.fromEntries(policies.map(policy=>{
- const group=rows.filter(r=>r.policy===policy),successes=group.filter(r=>r.under800MsJointProvisionalSuccess).length;
- return [policy,{evaluatedTurns:group.length,finitePhraseLatency:distribution(group.map(r=>r.visibleRetainedPhraseLatencyMs?.high)),
+ const group=rows.filter(r=>r.policy===policy);
+ return [policy,{evaluatedTurns:group.length,finitePhraseLatency:latencyDistribution(group.map(r=>r.visibleRetainedPhraseLatencyMs?.high)),
   missingPhraseMeasurements:group.filter(r=>!r.visibleRetainedPhraseLatencyMs).length,
   modelVerdicts:Object.fromEntries(['correct','incorrect','incomplete','unverified','missing'].map(v=>[v,group.filter(r=>(r.independentReview?.verdict??'missing')===v).length])),
-  wrongOrMissingTurnsRemainInDenominator:true,under800MsJointProvisionalSuccesses:successes,successFraction:successes/group.length,
-  descriptiveWilson95: wilson(successes,group.length),p95WithMissingOrIncorrectAsFailure:successes/group.length>=.95?'requires_order_statistic_audit':'fails_95_percent_success_requirement'}];
+  wrongOrMissingTurnsRemainInDenominator:true,
+  correctAnswerAndVisibleUsefulPhraseCount:group.filter(r=>r.correctAnswerAndVisibleUsefulPhrase).length,
+  nativePhaseCounts:Object.fromEntries([...new Set(group.map(r=>r.phase??'missing'))].map(phase=>[phase,group.filter(r=>(r.phase??'missing')===phase).length])),
+  cancelledTurns:group.filter(r=>r.cancelled).length,errorTurns:group.filter(r=>r.error).length,
+  accuracyScope:'Independent model verdicts describe these recorded answers only and remain provisional until substantive checks. No latency threshold, population accuracy estimate or pass/fail performance target is applied.'}];
 }));
 const record={recordedAt:new Date().toISOString(),journal:{file:journalFile,sha256:hash(raw),status:journal.status},
  evaluationKind:journal.evaluationKind,model:journal.model,effort:journal.effort,tier:journal.tier,outputDevice:journal.outputDevice,
  speechConfiguration:journal.speechConfiguration,rows,summary,
- targetCertified:false,samplingScope:'Three answer-adaptive topic pilots and paired fixed replays are reported separately. Replays share source questions and are clustered by question and interview; 100 evaluated executions are not 100 independent draws and do not automatically certify population p95.',
+ samplingScope:`One supplied recording with ${rows.length} retained turn rows. Adaptive questions and any repeated source questions are dependent observations; sample percentiles describe measured finite values only. Missing, cancelled, incorrect and unverified turns remain separately counted.`,
  measurementScope:journal.endpointDefinition,sourceHashes:journal.sourceHashes,diagnosticSourceHashes:journal.diagnosticSourceHashes,nativeBinarySha256:journal.nativeBinarySha256};
 await mkdir(outputDirectory,{recursive:true});
 await writeFile(path.join(outputDirectory,'assessment.json'),JSON.stringify(record,null,2),{flag:'wx'});

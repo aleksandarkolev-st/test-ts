@@ -1,0 +1,118 @@
+{
+  "recordedAt": "2026-10-11T08:55:11.484Z",
+  "evidence": {
+    "file": "docs/evidence/architecture-algorithms-r5-checkpoint-v71.json",
+    "sha256": "411c83a7a65ce2d7dc93cdddd2873d982c60f240933459e8876ab7c0e764c9a0"
+  },
+  "collectorSha256": "4791affecccedec8883ec6974aa60770d7347d2ec2b54b04c8e3b1f0b33e6023",
+  "round": 5,
+  "responseVersion": "7f3b9694-099b-4e94-80a9-ee128c483a6b:18",
+  "sourceQuestionSha256": "b4172cffa2c428d49ad99ea96f4439202c0df59b28e46a2f781608b6b1acf0e8",
+  "question": "Your exact-integer argument avoids overflow; abruptly switch to numerical analysis. Python 3 floats here use IEEE 754 binary64, round-to-nearest ties-to-even, with gradual underflow. Implement f(x) for every finite nonnegative float x, approximating square root of x squared plus one, minus x. Direct evaluation suffers cancellation and overflow. [pause] Your result must remain positive even at x equal to ten to the power 308. You may use math.hypot, assumed correctly rounded. Give executable code, justify every intermediate's range, and derive a relative-error bound where the exact result is normal. What guarantee remains when it is subnormal?",
+  "phase": "confirmed",
+  "cancelled": false,
+  "error": null,
+  "retainedVisibleWord": {
+    "word": "For",
+    "characterRange": [
+      0,
+      3
+    ],
+    "observedHostMs": 1791708378786,
+    "latencyMs": {
+      "low": 35467,
+      "high": 35472
+    },
+    "responseRevision": 18,
+    "observedDuringStreaming": true,
+    "retainedInCurrentRecordedAnswer": true
+  },
+  "inputTimelineOrdered": true,
+  "physicalVoicedEndpointNativeMs": {
+    "low": 284106,
+    "high": 284116
+  },
+  "stagesMs": {
+    "physicalEndToConfirmation": {
+      "low": 623,
+      "high": 633
+    },
+    "confirmationToFinalSend": 1557,
+    "finalSendToMatchingReaderReceipt": 28155,
+    "matchingReaderReceiptToConsumer": 0,
+    "consumerToRetainedDecodedDelta": 5122,
+    "retainedDecodedDeltaToNativeVisible": 9
+  },
+  "separateAckWaitMs": 1,
+  "cleanupRelativeToPhysicalEndMs": {
+    "low": -43773,
+    "high": -43763
+  },
+  "firstDecodedPrefixAfterCleanup": {
+    "atCap": false,
+    "capChars": 256,
+    "contextKey": [
+      2,
+      51,
+      200,
+      124,
+      69,
+      138,
+      143,
+      71,
+      166,
+      128,
+      125,
+      212,
+      194,
+      188,
+      183,
+      176,
+      75,
+      46,
+      59,
+      56,
+      186,
+      188,
+      91,
+      164,
+      144,
+      31,
+      5,
+      77,
+      123,
+      201,
+      37,
+      32
+    ],
+    "firstWordObservedAt": 242953,
+    "id": "7f3b9694-099b-4e94-80a9-ee128c483a6b",
+    "observedAt": 242953,
+    "prefix": "Python",
+    "question": "your exact integer argument avoids overflow abruptly switch to numerical analysis",
+    "revision": 2,
+    "scope": "Unvalidated decoded prefix: not display authorization, retained-answer timing, or proof of semantic validity."
+  },
+  "firstPostCleanupPrefixRelativeToPhysicalEndMs": {
+    "low": -41163,
+    "high": -41153
+  },
+  "counters": {
+    "restarts": 1,
+    "steers": 11,
+    "followups": 1,
+    "promptChars": 8401,
+    "restartPromptChars": 8467,
+    "cumulativeRefinementChars": 6296,
+    "queuePeak": 20,
+    "fullQueueCount": 0,
+    "cumulativeCompletedReaderSendUs": 9299,
+    "maxCompletedReaderSendUs": 44,
+    "cumulativeCompletedCallbackUs": 71420,
+    "maxCompletedCallbackUs": 420
+  },
+  "scope": "Generic arithmetic over recorded checkpoint fields. Stage intervals describe this captured response only when their input timestamps are ordered; absent values remain null. RPC acknowledgment is separate and is not added to the stage sum. Receipt occurs in the shared stdout reader, so pre-receipt delay includes transport, provider activity and any preceding shared-reader blockage. Completed per-thread counters do not isolate an interval or exclude in-progress waits on other threads. Decoded-output delay does not isolate raw provider generation from framing or decoder execution. A live checkpoint requires final journal binding and independent accuracy review.",
+  "finalJournalBindingPending": true,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

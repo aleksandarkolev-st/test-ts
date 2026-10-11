@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-11T02:05:59.568Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/general-hour-t/interview.json",
+    "sha256": "920f6a0c4461fd5d9c89e1e888da721ddfb4900ee0621061246dda50baf3e8bf"
+  },
+  "round": 8,
+  "sourceQuestion": "Your proof handles exact arithmetic; now handle exact time boundaries. Supply executable Python 3, standard library only, for RollingLate with a positive integer window and method push taking timestamp and boolean late status. Timestamps must be nonnegative, nondecreasing integers; duplicates are distinct events. Return late and total counts for timestamps strictly greater than the current timestamp minus the window and at most the current timestamp. Reject invalid inputs, including booleans as integers, with ValueError without changing state. Use a deque with amortized constant queue operations per push. Provide boundary, duplicate, and rejected-input tests, storage bounds, and an invariant proof. Finally, trace a counterexample if expiration removes only timestamps strictly less than the left boundary.",
+  "finalJobRecognizedQuestion": "reject invalid inputs including booleans as integers with value error without changing state use a DIC with amortized constant Q operations per push provide boundary duplicate and rejected input tests storage bounds and an invariant proof finally trace a counterexample if expiration removes only timestamps strictly less than the left boundary",
+  "selectedContextSha256": "b3646e2a2e5945b7b19200ea3ae6582e6e4cbd28a70c4802d473e96f67c324a8",
+  "capturedAnswerSha256": "15210166164d010575760bf1d116e80ee0abbef224951b01e95e892a431e30c4",
+  "nativeJobs": [
+    {
+      "id": "84f97673-2b1d-4f79-a063-49ee18ce5c18",
+      "recognizedQuestion": "you approve handles exact arithmetic now handle exact time boundaries supply executable Python three standard library only for rolling late with a positive integer window and method push taking timestamp and Boolean late status timestamps must be nonnegative nondecreasing integers duplicates are distinct events return late and total counts for timestamps strictly greater than the current timestamp minus the window and at most the current timestamp",
+      "phase": "superseded",
+      "cancelled": true,
+      "answerSha256": "1380727c1792efb6ac17deb480eb117e032bd2db60a697211af3b705ff18d296",
+      "answerChars": 1693,
+      "includedInCapturedContext": true
+    },
+    {
+      "id": "aa652ef4-92bf-4029-8028-41b8ff2fcbd4",
+      "recognizedQuestion": "reject invalid inputs including booleans as integers with value error without changing state use a DIC with amortized constant Q operations per push provide boundary duplicate and rejected input tests storage bounds and an invariant proof finally trace a counterexample if expiration removes only timestamps strictly less than the left boundary",
+      "phase": "complete",
+      "cancelled": false,
+      "answerSha256": "15210166164d010575760bf1d116e80ee0abbef224951b01e95e892a431e30c4",
+      "answerChars": 4630,
+      "includedInCapturedContext": null
+    }
+  ],
+  "priorJobCount": 1,
+  "rowOnlyLexicalDisagreement": {
+    "referenceWords": 115,
+    "transcriptWords": 51,
+    "edits": 69,
+    "rate": 0.6
+  },
+  "orderedNativeJobUnionLexicalDisagreement": {
+    "referenceWords": 115,
+    "transcriptWords": 117,
+    "edits": 9,
+    "rate": 0.0782608695652174
+  },
+  "finalNativeJobMatchesCapturedAnswer": true,
+  "scope": "Offline source-bound audit of one long source question. The row stores the last native job selected for its waveform; its shorter recognized text alone is not evidence of ASR clause deletion. Earlier recognized clauses and partial answer are checked against the actual supplied selected context. Lexical comparisons include spoken-code and numeral spelling differences and do not establish semantic accuracy. No captured text, answer, job or measurement is changed."
+}

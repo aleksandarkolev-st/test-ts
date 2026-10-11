@@ -1,0 +1,246 @@
+{
+  "recordedAt": "2026-10-11T09:01:06.033Z",
+  "sources": [
+    {
+      "file": ".local/analyze-architecture-v71.mjs",
+      "sha256": "5942f3bf4e9c3159174966e0e6a178df81a47649455cef2ba54c6171ddea9be0"
+    },
+    {
+      "file": ".local/audit-pressure-clauses-v71.mjs",
+      "sha256": "356278b7415f779a86bd109c499cadb6280e35988b7adaa7a1a86edec1b2fcdf"
+    },
+    {
+      "file": ".local/audit-pressure-drift-v71.mjs",
+      "sha256": "e50df69b641538cd394ce2b449a25e6385483921886eed78317e9f70ad84c419"
+    },
+    {
+      "file": ".local/audit-pressure-visibility-v71.mjs",
+      "sha256": "22f5f424fc55a8f53ef8ecef15ce104ea8db2c325a38aa43067bc3dbf8d76907"
+    },
+    {
+      "file": ".local/audit-review-cohort-v71.mjs",
+      "sha256": "67654d35ccdecd2a223cfc2557d03ea93705f434591cd1fa32b3cbfd08f306cf"
+    },
+    {
+      "file": ".local/benchmark-decoder-v71.mjs",
+      "sha256": "621437554abde2fd88b6898ab031ac9c9a1fcedeb94a04dcfdbbe11c1951115c"
+    },
+    {
+      "file": ".local/bind-queue-checkpoint-v71.mjs",
+      "sha256": "e50b4ff7659c8d67b7791653f39111cb02edff3844212bb92c888dec9517b8fe"
+    },
+    {
+      "file": ".local/bind-recorded-checkpoints-v71.mjs",
+      "sha256": "1905df25db09b90ce67d4485b429ada0ab3559dc752e7e5c45de8088781b22fe"
+    },
+    {
+      "file": ".local/bind-systems-checkpoints-v71.mjs",
+      "sha256": "7b791f7bdc34ebc6878f70b7121274c2e4eed4231ae3cb4e829cbfcf16f1a900"
+    },
+    {
+      "file": ".local/describe-recorded-tail-v71.mjs",
+      "sha256": "927c052a822bdaaad143de9e8f3e1f42f68a7c44b43eded411885b0643e538b7"
+    },
+    {
+      "file": ".local/inspect-json-property-v71.mjs",
+      "sha256": "75c9450047d3e81d6d23a485e28b4cdda68496ae0a75bc41c0458422007f281d"
+    },
+    {
+      "file": ".local/inspect-live-architecture-v71.mjs",
+      "sha256": "2017c727800fda011069180858243a58491b02a659b202386364bd1bb7d34060"
+    },
+    {
+      "file": ".local/inspect-row-v71.mjs",
+      "sha256": "a139e8bec9637e3d83edd9df8f9d70c9c89a1013d0e10038e43751c592c9008f"
+    },
+    {
+      "file": ".local/inspect-source-hashes-v71.mjs",
+      "sha256": "1bd34cb873808d7bf99cf229f069a09335a47d280b1ebf8b04d50db211bd7ae1"
+    },
+    {
+      "file": ".local/observe-pressure-events-v71.mjs",
+      "sha256": "608a94f5409653d33c89ee3131a417e339b0dff0fb4137ab306dc5b776959f7a"
+    },
+    {
+      "file": ".local/prepare-midpoint-pause-v71.mjs",
+      "sha256": "dea77b35b9fcaf22c70489a981de9094e2c72d55a2ca01e78f705cbf4ba7d22b"
+    },
+    {
+      "file": ".local/prepare-policy-controls-v71.mjs",
+      "sha256": "dbd6937e9e585dbd06e525a9443c0b3a5fbc56efbcd0ca2e109a08618e31452b"
+    },
+    {
+      "file": ".local/prepare-pressure-review-v71.mjs",
+      "sha256": "16080261829035116ac2be753ab4dd7d4147545baab63089b6af8438b0e4c4f6"
+    },
+    {
+      "file": ".local/record-baseline-applicability-v71.mjs",
+      "sha256": "9da104472c10828fb723666ff77b1e7aec8afbe6bf8b67b4ace462be1e5e392d"
+    },
+    {
+      "file": ".local/record-codex-normalization-v71.mjs",
+      "sha256": "d11cee3e0b892787085ccd4f01c739da72ff84adafa6efdafdd87b539330f633"
+    },
+    {
+      "file": ".local/record-decoder-analysis-v71.mjs",
+      "sha256": "7d84810b491d70394393dbcc1e848e5c2bd08b9c9e50b388d707e76a43acd272"
+    },
+    {
+      "file": ".local/record-decoder-documentation-v71.mjs",
+      "sha256": "12fc23634a0604ae358f83343b52983f8f5f21b2a9ae1d59a4c6495802dc35fc"
+    },
+    {
+      "file": ".local/record-deferred-status-v71.mjs",
+      "sha256": "8917f2e82485c25440ea0af1afd8604ddc48c71d38da027eb40af69536501b80"
+    },
+    {
+      "file": ".local/record-early-restart-v71.mjs",
+      "sha256": "1339843f9880820b862d1c4747fda4e950c960caceeb02b2f795faa05d345bd4"
+    },
+    {
+      "file": ".local/record-general-topics-v71.mjs",
+      "sha256": "1ee71f2b832a1342b30f6814d86ad1739be1d83b72d7adc21b5d1caa1e1d3749"
+    },
+    {
+      "file": ".local/record-missing-word-v71.mjs",
+      "sha256": "73e4d2283d98ec4800a070c4059902569f245bf6a1f22f6e23ac6b55775f54d7"
+    },
+    {
+      "file": ".local/record-orchestration-v71.mjs",
+      "sha256": "80e32afbc80e82848752ae595f6908ebd309e80a1ab875a81381d0b9b9cf5d72"
+    },
+    {
+      "file": ".local/record-policy-playback-v71.mjs",
+      "sha256": "d721f20a9647dddd14a6e298d656c3fbb4a46ea2e3aaed5a6da896e0c526fa44"
+    },
+    {
+      "file": ".local/record-preparation-v71.mjs",
+      "sha256": "385eae3066fe772300f3e5074f15af44f3322e2a0b9ac144d8bac8b4b0b6970c"
+    },
+    {
+      "file": ".local/record-protocol-analysis-v71.mjs",
+      "sha256": "30819367e59d8226b2ad7cd88aa29d24fa9ca45dc85240d06b6a51618dba1f77"
+    },
+    {
+      "file": ".local/record-quality-references-v71.mjs",
+      "sha256": "4e941e0c11abed928898b22adf5e05c14340d9228d2e7b254a5e97b5cef6549d"
+    },
+    {
+      "file": ".local/record-question-timeout-scope-v71.mjs",
+      "sha256": "6a5033a48fdf0974a2763c1a9b4849acc9d790baf74b5c12bec894840091902a"
+    },
+    {
+      "file": ".local/record-queue-checkpoint-v71.mjs",
+      "sha256": "455d7dd2d0e0e42c43decce5cc671db619ea3164e1c340ffbf6e20c42625e732"
+    },
+    {
+      "file": ".local/record-resource-tail-v71.mjs",
+      "sha256": "b4aeb4ff1610f6b7066178175187e148a3b924ff1c505c384cf3758d84065874"
+    },
+    {
+      "file": ".local/record-systems-tail-v71.mjs",
+      "sha256": "b67baf564352833f321a0864668df2db4c9bf817ace6c0a01955a645c2a28880"
+    },
+    {
+      "file": ".local/record-tail-checkpoint-v71.mjs",
+      "sha256": "dfcd1190c9bab717c9a99c6939f58e9020433496c011b13691d0e88d0615564d"
+    },
+    {
+      "file": ".local/record-workflow-revision-v71.mjs",
+      "sha256": "7ae13191250f35e31a56924977d572c5338524f6d347b7909bc598e5eb25181b"
+    },
+    {
+      "file": ".local/run-assessments-v71.ps1",
+      "sha256": "aeae8b02faa92e7c46916f4d908e39e4c506e20bcd1a927359900b905cb6d2db"
+    },
+    {
+      "file": ".local/run-continuous-pressure-v71.ps1",
+      "sha256": "2741800d267ec16d502c386e32647e2efd6fc0b02ab48e2786b34275296f3e45"
+    },
+    {
+      "file": ".local/run-deep-hour-v71.ps1",
+      "sha256": "a76eb3d68e6f1d7efd8cc6ba3159562a16e4860d3308e3a0861bb3a76a420ec8"
+    },
+    {
+      "file": ".local/run-deferred-v71.ps1",
+      "sha256": "18f653834dd52d86f5b66eab6f16be7f351829c4c74f0577f466225072d99873"
+    },
+    {
+      "file": ".local/run-hard-probes-v71.ps1",
+      "sha256": "0b77abd4e174c9e725e9844a56219e926bfed649e1a815be468fcc02db832027"
+    },
+    {
+      "file": ".local/run-midpoint-pause-v71.ps1",
+      "sha256": "b01275de3d25d6bbbc428324c18c2789b43e3b1b5d1f91ec43ed471d9b74dcf4"
+    },
+    {
+      "file": ".local/run-policy-controls-v71.ps1",
+      "sha256": "e9ec839aac55111e137ddc49e6569639a49334791d96a324871260170341bd9d"
+    },
+    {
+      "file": ".local/run-recordings-v71.ps1",
+      "sha256": "3e11637a3e75f588387aac048029b58d35ae13d0a3292d637d92fe364f009c15"
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "sha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766"
+    },
+    {
+      "file": "src-tauri/src/openai/timing.rs",
+      "sha256": "c8c9e0986e28441b18d866b2d136228ed4c125d5821cd5569d45d9e2c6be2cf1"
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "sha256": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f"
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "sha256": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a"
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "sha256": "e3f970784f76b55f2e314a0ba16d20826fd2cd5c54a9903cb02e7a072acf46b2"
+    },
+    {
+      "file": "tests/fixtures/hard-interview-audio-suite.json",
+      "sha256": "ede791981998e76f69d80c9d15dcc960d999b9402284ae0bead38b1b201df3f5"
+    },
+    {
+      "file": ".local/lib/recorded-cohort.mjs",
+      "sha256": "c05ee6683365629ca0efb2ddfe2fadc2236f22667976dae7745fbb33ce8e7ac4"
+    },
+    {
+      "file": ".local/lib/recorded-row.mjs",
+      "sha256": "1c949bd005f8f7b9e283f568218fa2b0f74262ddee6a0cf1e36c001b86c575f5"
+    }
+  ],
+  "queueSnapshots": [
+    {
+      "file": "artifacts/deep-interview-v71/recording-queue.jsonl",
+      "snapshotSha256": "41cb4b83447e3d7c821f83b7f1d8f408ebc4e1e199af024ab0f5dc1c97376728",
+      "lastRecordedEvent": {
+        "domain": "algorithms",
+        "recordedAt": "2026-10-11T08:39:26.8803344+00:00",
+        "kind": "elapsed_hour",
+        "event": "starting",
+        "minutes": 60,
+        "ownerPid": 24692
+      }
+    },
+    {
+      "file": "artifacts/deep-interview-v71/deferred-queue.jsonl",
+      "snapshotSha256": "9ceff6202d8752b240a0f367df636419b4260d650cdb0789e4039c1ad658e126",
+      "lastRecordedEvent": {
+        "recordedAt": "2026-10-11T07:13:57.4021586+00:00",
+        "goalComplete": false,
+        "recordingCreationEpochMs": 1791700501977,
+        "event": "waiting_for_recordings",
+        "recordingOwner": 24692,
+        "ownerPid": 25816
+      }
+    }
+  ],
+  "scope": "Immutable hashes of the current v71 workflow helpers, fixture and architecture sources. This inventory does not assert that every helper executed, that queue-file snapshots prove process liveness, or that a later changed helper has the same bytes. Recorded source/binary hashes, actual process identity, terminal recordings, cached-review input hashes and final execution evidence remain authoritative. Updates after the original preparation are explicit audit/helper revisions; numerical diagnostics do not change production answer policy.",
+  "productionBehaviorChanged": false,
+  "goalComplete": false
+}

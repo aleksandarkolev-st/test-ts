@@ -1,0 +1,49 @@
+{
+  "recordedAt": "2026-10-10T21:23:42.474Z",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "scope": "Selective executable accuracy checks of two untouched recorded programs. No full-interview correctness rate or latency target is certified.",
+  "checks": [
+    {
+      "run": "algorithms-hour-t",
+      "round": 4,
+      "language": "Python",
+      "cases": 1004,
+      "sourceContractFailures": 574,
+      "classificationsMatchAfterDiagnosticEncodingTranslation": true,
+      "sourceContractPassed": false,
+      "sourceSha256": "f583549d1ffa5d14f83a720849dd53a524e85c378da0ec06116bec3e4eca5ce4",
+      "answerSha256": "d15d7f80808d7298e851a3a2b481db786170ba85d0d78fdefddadcbf674e2fc8",
+      "issue": "Required string minus-INF was replaced with positive floating-point infinity. The output encoding translation is diagnostic and does not make the original source pass."
+    },
+    {
+      "run": "sol-coding-hour-v68",
+      "round": 10,
+      "language": "C++20",
+      "operations": 14973,
+      "queries": 5488,
+      "allQueriesMatch": true,
+      "originalSourcePatched": false,
+      "compileExitCode": 0,
+      "sourceSha256": "0f77a21298fed661408635348b0662aa537b328bbb2951fdfc531e0dca780924",
+      "boundaryCases": 5,
+      "boundaryCasesPassingWithPlatformNewlines": 5,
+      "evaluatorCorrection": "Initial last-boundary false result compared Windows CRLF bytes with LF. Separate re-execution confirms identical logical lines; original evidence is retained."
+    }
+  ],
+  "inputs": {
+    "classification": {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round4/oracle-evidence.json",
+      "sha256": "c71f498fd5c090bc3f14e37ac6e9b3e21a6aae12050d47b09ca4a3b363fceb54"
+    },
+    "connectivity": {
+      "file": "artifacts/deep-interview-v70/prior-sol-round10-code/oracle-evidence.json",
+      "sha256": "d34e62b57b4f417c872a0ca62d9995e729110581c273ef7c8098e3a0cb4e21d0"
+    },
+    "newlineCorrection": {
+      "file": "artifacts/deep-interview-v70/prior-sol-round10-code/boundary-newline-audit.json",
+      "sha256": "5f52e379f10497ec6060c43ce69d6055a6ded4ecebf3364fe8d5e6df53b14f31"
+    }
+  },
+  "currentHourStillPending": true
+}

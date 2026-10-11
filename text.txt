@@ -1,0 +1,800 @@
+uild it as a Windows-only local meeting copilot. Keep the MVP brutally focused:
+Someone else asks a question → app detects it → ChatGPT generates an answer → answer streams into an overlay only you can see.
+
+1. MVP scope
+Must have
+1. Windows 10/11.
+2. Capture meeting/system audio.
+3. Capture your microphone separately.
+4. Live transcription.
+5. Distinguish REMOTE speech from SELF speech.
+6. Maintain rolling meeting context.
+7. Detect questions from remote participants.
+8. Generate an answer automatically.
+9. Stream answer into an always-on-top overlay.
+10. Overlay excluded from Windows screen capture.
+11. Manual hotkey to ask something yourself.
+12. Sign in with ChatGPT.
+13. No cloud storage of transcripts.
+14. One-click meeting start/stop.
+Explicitly not MVP
+No calendar integration, CRM, Slack, Gmail, team accounts, analytics, automatic speaking, macOS, meeting bots joining Zoom, recording library, post-meeting reports, speaker-name identification, or screen understanding.
+Those are distractions until the core interaction works.
+2. User experience
+Startup:
+┌────────────────────────────────────┐
+│ Meeting Copilot                    │
+│                                    │
+│ Continue with ChatGPT              │
+│                                    │
+│ Microphone:  Headset Microphone    │
+│ Output:      Headphones            │
+│                                    │
+│          [ Start Meeting ]         │
+└────────────────────────────────────┘
+
+During meeting:
+┌──────────────────────────────────────┐
+│ ● LISTENING                    ⌘ Hide │
+├──────────────────────────────────────┤
+│                                      │
+│ Question                             │
+│ Why did conversion fall last month? │
+│                                      │
+│ Suggested answer                     │
+│ Mainly because mobile checkout       │
+│ conversion fell after the new        │
+│ checkout flow was released.          │
+│                                      │
+│                         [More] [×]    │
+└──────────────────────────────────────┘
+
+The answer should start appearing while ChatGPT is still generating it.
+Target:
+speaker finishes question
+        ↓
+~300–600 ms question-end detection
+        ↓
+request starts
+        ↓
+stream first useful words
+        ↓
+target total < 2 seconds
+
+Do not make the user click "Generate."
+3. Recommended stack
+Layer	Choice
+Desktop	Tauri 2
+UI	React + TypeScript
+Native	Rust
+OS audio	WASAPI
+Local STT	whisper.cpp
+VAD	whisper.cpp VAD or lightweight native VAD
+AI answers	OpenAI Responses API
+Auth	Sign in with ChatGPT
+Local state	SQLite
+Secrets	Windows Credential Manager
+UI state	Zustand
+Async runtime	Tokio
+
+
+Tauri already supports always-on-top windows. Tauri
+4. Architecture
+                    ┌──────────────────┐
+                    │ Zoom / Meet /    │
+                    │ Teams            │
+                    └────────┬─────────┘
+                             │
+                   Windows system audio
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │ WASAPI loopback │
+                    └────────┬────────┘
+                             │ REMOTE
+                             ▼
+
+Microphone ────────────────► Audio Engine
+              SELF             │
+                               ▼
+                         Local VAD
+                               │
+                               ▼
+                         whisper.cpp
+                               │
+                        Transcript events
+                               │
+              ┌────────────────┴─────────────────┐
+              ▼                                  ▼
+      Meeting Context                    Question Detector
+              │                                  │
+              └────────────────┬─────────────────┘
+                               │
+                         question found
+                               ▼
+                        Prompt Builder
+                               │
+                               ▼
+                     OpenAI Responses API
+                     ChatGPT OAuth token
+                               │
+                         streaming output
+                               ▼
+                         Overlay Window
+                               │
+                               ▼
+                          User reads
+
+5. Repository
+meeting-copilot/
+│
+├── src/
+│   ├── App.tsx
+│   ├── overlay/
+│   │   ├── Overlay.tsx
+│   │   ├── Answer.tsx
+│   │   └── Status.tsx
+│   ├── settings/
+│   ├── auth/
+│   └── state/
+│
+├── src-tauri/
+│   ├── src/
+│   │   ├── main.rs
+│   │   ├── audio/
+│   │   │   ├── mod.rs
+│   │   │   ├── loopback.rs
+│   │   │   ├── microphone.rs
+│   │   │   └── resampler.rs
+│   │   ├── transcription/
+│   │   │   ├── mod.rs
+│   │   │   ├── whisper.rs
+│   │   │   └── vad.rs
+│   │   ├── meeting/
+│   │   │   ├── context.rs
+│   │   │   ├── questions.rs
+│   │   │   └── state.rs
+│   │   ├── openai/
+│   │   │   ├── auth.rs
+│   │   │   ├── client.rs
+│   │   │   └── prompts.rs
+│   │   ├── overlay/
+│   │   │   ├── window.rs
+│   │   │   └── capture_protection.rs
+│   │   └── storage/
+│   │       └── db.rs
+│   │
+│   └── Cargo.toml
+│
+├── models/
+│   └── whisper-model.bin
+│
+└── package.json
+
+6. Audio capture
+This is the first serious engineering problem.
+Capture two independent streams.
+Remote
+Use WASAPI loopback capture.
+This captures audio being rendered through the user's playback device.
+Microsoft explicitly supports system loopback capture and also offers process-specific loopback capture on modern Windows. Microsoft Learn
+Output:
+AudioFrame {
+    source: AudioSource::Remote,
+    samples: Vec<f32>,
+    timestamp_ms: 123456
+}
+
+User
+Capture the selected microphone normally:
+AudioFrame {
+    source: AudioSource::Self_,
+    samples: Vec<f32>,
+    timestamp_ms: 123480
+}
+
+This distinction is extremely useful.
+You immediately know:
+REMOTE = somebody else
+SELF   = user
+
+You do not need speaker diarization for V1.
+7. Audio preprocessing
+Normalize everything internally to:
+16 kHz
+mono
+PCM float / PCM16
+
+Pipeline:
+WASAPI
+ ↓
+device sample rate
+ ↓
+resampler
+ ↓
+16 kHz mono
+ ↓
+VAD
+ ↓
+speech chunks
+
+Do not feed silence through Whisper continuously.
+8. Local transcription
+Use whisper.cpp.
+It supports Windows, CPU execution, CUDA and Vulkan acceleration. GitHub
+For the first version, use a smaller English model.
+Your transcription interface:
+pub struct TranscriptSegment {
+    pub id: String,
+    pub source: SpeakerSource,
+    pub text: String,
+    pub started_at: u64,
+    pub ended_at: u64,
+    pub is_final: bool,
+}
+
+pub enum SpeakerSource {
+    Self_,
+    Remote,
+}
+
+Example:
+{
+  "source": "remote",
+  "text": "What are we expecting revenue to be next quarter?",
+  "started_at": 59302,
+  "ended_at": 62781,
+  "is_final": true
+}
+
+Why local transcription
+Because current ChatGPT-plan authorization documentation specifically describes eligible Responses API requests. It does not currently document realtime transcription sessions as part of plan sharing. OpenAI Developers
+That gives you:
+raw audio        stays local
+transcription    local
+AI answer        ChatGPT subscription
+
+Good architecture.
+9. Meeting state
+Never send the full transcript every time.
+Keep:
+struct MeetingContext {
+    recent_transcript: Vec<TranscriptSegment>,
+    summary: String,
+    important_facts: Vec<Fact>,
+    decisions: Vec<Decision>,
+    open_questions: Vec<String>,
+}
+
+Recent context
+Keep about:
+last 5 minutes
+or
+last ~5,000-8,000 transcript tokens
+
+Long context
+Periodically compress older conversation into:
+{
+  "facts": [
+    "Mobile conversion dropped 12%",
+    "Enterprise churn increased in September"
+  ],
+  "decisions": [
+    "New checkout rollout will be paused"
+  ],
+  "dates": [
+    "Beta launch is October 20"
+  ],
+  "people": [
+    "Alex owns mobile checkout"
+  ]
+}
+
+The AI request becomes:
+meeting summary
++
+recent conversation
++
+current question
+
+instead of 45 minutes of raw transcript.
+10. Question detector
+Do not trigger ChatGPT every time somebody speaks.
+Create this state machine:
+IDLE
+ │
+ ▼
+REMOTE_SPEAKING
+ │
+ ▼
+POSSIBLE_QUESTION
+ │
+ ▼
+WAIT_FOR_END
+ │
+ ├──── new speech ───► REMOTE_SPEAKING
+ │
+ ▼
+QUESTION_CONFIRMED
+ │
+ ▼
+GENERATING
+
+Question scoring:
++4 transcript ends in ?
++3 starts with why/what/how/who/when/where
++3 contains "can you"
++3 contains "could you"
++3 contains "do you"
++2 contains "what do you think"
++2 contains "any idea"
++2 rising intonation if available
+-3 rhetorical pattern
+-5 user is currently speaking
+
+For V1:
+score >= 4 → candidate question
+
+Wait around:
+400–600 ms
+
+after remote speech stops.
+Then generate.
+11. Handle continued questions
+Essential.
+Someone says:
+What is our launch target?
+
+Your app starts generating.
+Then:
+Assuming Microsoft approves the integration next week?
+
+Cancel the first request.
+GENERATING
+     │
+remote starts talking
+     ▼
+CANCEL RESPONSE
+     │
+append transcript
+     ▼
+WAIT
+     │
+     ▼
+REGENERATE
+
+Every answer request needs an AbortController equivalent.
+12. Manual question mode
+Automatic detection will never be perfect.
+Add:
+Ctrl + Shift + Space
+
+Then show:
+Ask about this meeting...
+
+Example:
+What did he say the launch date was?
+
+This uses the exact same context pipeline.
+13. ChatGPT authentication
+Use Continue with ChatGPT.
+Current OpenAI support allows eligible Plus and Pro users to authorize participating/open-source applications to use plan allowance for eligible Responses API calls. OpenAI Developers
+Important limitation:
+For an open-source/local MVP, this path is supported. A commercial closed-source application currently requires participation/approval in the limited commercial program. OpenAI Developers
+So build the MVP as:
+open-source/local client
+        ↓
+Continue with ChatGPT
+        ↓
+OAuth + PKCE
+        ↓
+ChatGPT plan permission
+        ↓
+access_token
+
+Persist:
+ext_agent_host_id
+client_id
+refresh token / access credentials
+account metadata
+
+Store credentials in Windows Credential Manager, not SQLite.
+14. OpenAI model selection
+Do not hardcode a model.
+After login:
+GET /v1/models
+Authorization: Bearer <CHATGPT_ACCESS_TOKEN>
+
+OpenAI specifically recommends listing models available to that signed-in account. OpenAI Developers
+Select an appropriate low-latency reasoning/text model from the returned catalog.
+15. Responses request
+Current ChatGPT-plan usage requires:
+{
+  "model": "MODEL_FROM_ACCOUNT_CATALOG",
+  "store": false,
+  "stream": true,
+  "instructions": "...",
+  "input": []
+}
+
+store:false and stream:true are required in the current preview flow. OpenAI Developers
+Do not build around unsupported preview parameters such as temperature or max_output_tokens. OpenAI Developers
+16. Answer prompt
+Use this as the initial instruction:
+You are a private real-time meeting copilot.
+
+Your job is to give the user an answer they can immediately say aloud.
+
+RULES:
+
+1. Answer the current question directly.
+2. Maximum 3 short sentences.
+3. Prefer information from the meeting context.
+4. Use general knowledge only when meeting context does not contain the answer.
+5. Never invent company-specific facts, dates, numbers or decisions.
+6. If information is uncertain, clearly say so.
+7. Do not introduce yourself.
+8. Do not say "Based on the context".
+9. Do not repeat the question.
+10. Write natural spoken language.
+11. Give the most useful answer first.
+12. If the question is not actually answerable, say what information is missing.
+
+Request input:
+MEETING SUMMARY
+
+...
+
+RECENT CONVERSATION
+
+REMOTE: ...
+SELF: ...
+REMOTE: ...
+
+CURRENT QUESTION
+
+"What date can we realistically launch?"
+
+17. Do not use JSON for the answer
+For this specific UI, structured output wastes latency.
+Stream plain text:
+We can realistically target October 28...
+
+directly into the overlay.
+The user sees words immediately.
+18. Overlay window
+Tauri config:
+width: 520
+height: dynamic
+decorations: false
+transparent: true
+alwaysOnTop: true
+resizable: false
+skipTaskbar: true
+
+Default position:
+bottom-right
+20-30px margin
+
+Allow dragging.
+Do not steal keyboard focus when an automatic answer appears.
+That is critical.
+If the user is typing in Teams and your overlay grabs focus, the product is unusable.
+19. Screen-share invisibility
+After the native overlay HWND is created:
+SetWindowDisplayAffinity(
+    hwnd,
+    WDA_EXCLUDEFROMCAPTURE
+)
+
+WDA_EXCLUDEFROMCAPTURE tells Windows that the window should not appear in supported capture mechanisms. It exists specifically for cases such as recording controls that must remain local-only. Microsoft Learn
+Rust concept:
+use windows_sys::Win32::UI::WindowsAndMessaging::{
+    SetWindowDisplayAffinity,
+    WDA_EXCLUDEFROMCAPTURE,
+};
+
+unsafe {
+    let ok = SetWindowDisplayAffinity(
+        hwnd,
+        WDA_EXCLUDEFROMCAPTURE,
+    );
+
+    if ok == 0 {
+        // mark capture protection as failed
+    }
+}
+
+The Rust Win32 bindings expose this API directly. Docs.rs
+Important
+Microsoft explicitly says this is not a DRM/security guarantee. Microsoft Learn
+Therefore show:
+● Share protection active
+
+only after:
+1. SetWindowDisplayAffinity succeeds.
+2. GetWindowDisplayAffinity confirms it.
+Otherwise:
+⚠ Share protection unavailable
+
+Never lie to the user.
+20. Test capture behavior
+Before releasing even to yourself, test:
+Capture mechanism	Required
+Teams full-screen share	✓
+Teams window share	✓
+Google Meet full-screen share	✓
+Google Meet tab share	✓
+Zoom full-screen share	✓
+Zoom window share	✓
+OBS Display Capture	✓
+OBS Window Capture	✓
+Windows Snipping Tool	✓
+Xbox Game Bar	✓
+
+
+Windows capture APIs have had edge cases historically. Do not assume one successful Win32 return value means every capture application behaves identically.
+21. Overlay states
+Only five:
+OFF
+LISTENING
+QUESTION
+THINKING
+ANSWER
+ERROR
+
+Example:
+● Listening
+
+then:
+Question detected
+
+"What are we targeting for launch?"
+
+then:
+Thinking...
+
+then streaming:
+October 28 looks like...
+
+No dashboard.
+22. Keyboard controls
+Ctrl + Shift + Space    Ask manually
+Ctrl + Shift + H        Hide/show
+Ctrl + Shift + X        Dismiss answer
+Ctrl + Shift + M        Pause/resume listening
+Ctrl + Shift + ↑        Expand answer
+
+The hide shortcut should work even if the UI breaks.
+Implement it in Rust/native code.
+23. Database
+SQLite needs very little.
+CREATE TABLE settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+CREATE TABLE meetings (
+    id TEXT PRIMARY KEY,
+    started_at INTEGER,
+    ended_at INTEGER
+);
+
+For MVP, do not persist transcripts.
+Keep them in RAM:
+Meeting starts
+     ↓
+transcript exists in memory
+     ↓
+meeting ends
+     ↓
+memory cleared
+
+Add persistence later.
+24. Internal events
+Use a simple event bus.
+audio.remote
+audio.self
+
+speech.started
+speech.ended
+
+transcript.partial
+transcript.final
+
+question.candidate
+question.confirmed
+
+answer.started
+answer.delta
+answer.completed
+answer.cancelled
+
+meeting.started
+meeting.stopped
+
+overlay.show
+overlay.hide
+
+This keeps modules decoupled.
+25. Core TypeScript model
+type SpeakerSource = "self" | "remote";
+
+interface TranscriptSegment {
+  id: string;
+  source: SpeakerSource;
+  text: string;
+  startedAt: number;
+  endedAt: number;
+  final: boolean;
+}
+
+interface CurrentQuestion {
+  id: string;
+  text: string;
+  detectedAt: number;
+}
+
+interface MeetingState {
+  status: "idle" | "listening" | "thinking" | "answer";
+  transcript: TranscriptSegment[];
+  summary: string;
+  question?: CurrentQuestion;
+  answer: string;
+}
+
+26. Main loop
+Conceptually:
+while meeting_active {
+
+    let event = event_bus.next().await;
+
+    match event {
+
+        TranscriptFinal(segment) => {
+
+            context.push(segment.clone());
+
+            if segment.source == Remote {
+
+                if question_detector.is_candidate(&segment) {
+
+                    question_detector.wait_for_completion().await;
+
+                    let question =
+                        question_detector.build_question();
+
+                    generation.cancel_existing();
+
+                    let prompt =
+                        context.build_prompt(question);
+
+                    generation.stream(prompt).await;
+                }
+            }
+        }
+
+        RemoteSpeechStarted => {
+            if generation.is_active() {
+                generation.cancel();
+            }
+        }
+
+        _ => {}
+    }
+}
+
+That is essentially your product.
+27. Context summarization
+Do not summarize constantly.
+Trigger when:
+recent context > threshold
+
+Then:
+older transcript
+      ↓
+Responses API
+      ↓
+compact meeting memory
+
+Keep the latest few minutes verbatim.
+Example:
+summary:
+"The team agreed to postpone mobile rollout.
+The primary issue is checkout conversion.
+Alex will investigate analytics.
+Target release discussed: October 28."
+
+28. Latency instrumentation
+Measure every question.
+t0 remote speech stops
+t1 transcript final
+t2 question confirmed
+t3 OpenAI request sent
+t4 first response token
+t5 response complete
+
+Log:
+{
+  "speech_to_transcript": 220,
+  "question_detection": 410,
+  "request_to_first_token": 530,
+  "total_to_first_answer": 1160
+}
+
+Without this telemetry you will have no idea why the app feels slow.
+29. MVP success criteria
+I would not call it an MVP until all of these pass:
+Requirement	Target
+Remote speech detected	>95%
+Basic question detection	>85%
+False question triggers	<1 per 10 min
+First answer visible	<2 sec median
+Overlay steals focus	0
+Overlay appears in normal screen share	0
+Audio leaves device	No
+Answer streams	Yes
+Can interrupt generation	Yes
+Manual hotkey	Yes
+Meeting can run 60 min without crash	Yes
+ChatGPT OAuth survives restart	Yes
+
+
+30. Build sequence
+Build it in this order:
+1. Tauri window.
+2. Apply WDA_EXCLUDEFROMCAPTURE.
+3. Verify invisibility in Meet/Teams/Zoom.
+4. WASAPI system audio capture.
+5. Microphone capture.
+6. VAD.
+7. Local Whisper transcription.
+8. Show raw transcript in a debug window.
+9. Tag SELF/REMOTE correctly.
+10. Implement question detection.
+11. Hard-code a fake answer to validate UX.
+12. Implement Sign in with ChatGPT.
+13. Call Responses API.
+14. Stream text into overlay.
+15. Cancellation when speaker continues.
+16. Meeting context.
+17. Manual hotkey.
+18. Latency metrics.
+19. Remove debug transcript from production UI.
+20. Package MSI/installer.
+Do not start with the AI integration.
+The hardest things are actually:
+audio capture
+realtime transcription
+question boundaries
+window behavior
+latency
+
+ChatGPT answering the question is the easy part.
+31. What the first genuinely usable version should look like
+You launch it.
+Click:
+Continue with ChatGPT
+
+Then:
+Start Meeting
+
+The overlay shrinks to:
+● Listening
+
+Someone in Google Meet says:
+What was the reason we decided not to launch this week?
+
+About a second later:
+┌──────────────────────────────────────────┐
+│ What was the reason we decided not to   │
+│ launch this week?                        │
+│                                          │
+│ The main blocker was the checkout issue. │
+│ The team wanted that fixed before        │
+│ pushing the release.                     │
+└──────────────────────────────────────────┘
+
+You read it aloud.
+The other participants never see the overlay in the supported capture path.
+That is the MVP.

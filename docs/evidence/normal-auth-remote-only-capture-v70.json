@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-10-11T01:12:09.591Z",
+  "source": {
+    "file": "src-tauri/src/audio/mod.rs",
+    "sha256": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c"
+  },
+  "nativeBinary": {
+    "file": "src-tauri/target/debug/meeting-copilot.exe",
+    "sha256": "c2be20fafd990f6436989fd1885d3370de5791206acef9e01508649b5d6bd078"
+  },
+  "referenceRecording": {
+    "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+    "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9"
+  },
+  "skipGuardLine": 74,
+  "featureGuard": "all(feature=\"acceptance\",debug_assertions)",
+  "remoteOnlyRequiresAcceptanceAuthentication": false,
+  "normalAuthenticationCompatibleWithRemoteOnly": true,
+  "productionLogicChanged": false,
+  "backendPlaybackPending": true,
+  "scope": "Read-only source and binary binding. This exact debug binary and audio source were used by the clean completed remote-only systems recording. The microphone skip depends on the acceptance build feature and remote-only environment variable, independently of acceptance authentication. The normal-auth playback helper must retain this binary binding; runtime speech events are still recorded separately."
+}

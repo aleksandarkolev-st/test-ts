@@ -1,0 +1,134 @@
+{
+  "recordedAt": "2026-10-11T00:40:56.615Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+    "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9"
+  },
+  "executableChecks": {
+    "evidence": {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/code-review/independent-finite-field-oracle.json",
+      "sha256": "7d3c05296b58ae9000bece3edc1cd36779194012454102ddf982a3ec074a6789"
+    },
+    "bindings": [
+      {
+        "round": 20,
+        "questionSha256": "40d7d7880982f34f9c49f89e51fa7fb6d025bfdd801bb718ee697eac780c4474",
+        "answerSha256": "2f6f6a7639104e0a3f561e08c1ec1c0114cb7747ea0a8ddf3932b4e7c39ffeca",
+        "contextSha256": "e90a40bbe99db9c735d1f7c807b89040fdbbf4acdbab90228447d613cf76379b",
+        "phase": "complete",
+        "error": null,
+        "cancelled": false
+      },
+      {
+        "round": 43,
+        "questionSha256": "6808e1c0420b802197d0c5442e42c2fd61a090e74533902abf1b0136e915e62c",
+        "answerSha256": "8f6883e9d2ed1522cf0ee8e9991f927e6cfef268a8de6e9f2e1bfd2335f06f27",
+        "contextSha256": "c01d09355e8c43ab59d7c1188a3a80eb858380c364e6ae0c327488b20a22437c",
+        "phase": "complete",
+        "error": null,
+        "cancelled": false
+      }
+    ],
+    "decoderCases": 600,
+    "invalidAndInconsistentRejected": 6,
+    "suppliedRsaInstanceExhaustivelyChecked": 77,
+    "failures": 0,
+    "recordedSourceChanged": false,
+    "manualDecoderProof": "Within 2t+s <= n-d-1, at least d+1 correct known points form an enumerated interpolation subset. Two accepted degree-at-most-d candidates agree on at least n-s-2t>d distinct field points, so their difference is zero. Zero-error cases do not need a unique error-locator system. Finite code checks remain separate from this mathematical argument."
+  },
+  "manualMathematicalChecks": [
+    {
+      "round": 7,
+      "questionSha256": "ef2c4082a4911ad48a25baf90412def381584d52c32f47ad20343739accb1ba7",
+      "answerSha256": "616f4119384c945d20c8ae9006f6d3282940af8c352844054a85bf30acb9d841",
+      "contextSha256": "545d1c579e33fc1a9087bc78531462874ea6a7f88a752591bb12c4751fc56186",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "The three marginal disease-negative probabilities imply triple-positive disease probability at least 7/10 by the union bound. The no-disease triple-positive probability is at most 1/10. Monotonic Bayes gives 7/106; the recorded lower and upper joint distributions have the required marginals and positive conditioning probabilities. Their posteriors are exactly 7/106 and 1."
+    },
+    {
+      "round": 19,
+      "questionSha256": "bc16babf95aa6e4e7131c1e63ebb817cbf9179bd7beff7d0dd96f2c3eabd1d0e",
+      "answerSha256": "66f49be8e0d0f9d1b99eb06055dd352be9a88cde2404b91e24176d27f68f4a5d",
+      "contextSha256": "9abe6cacbd990848c9652af7b37a51fe2f1008f9375690f33a0954c4e0447e3d",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "Independently evaluated the recorded zero polynomial and (x-1)^2 at all five supplied field points. The recorded received vector has distance two from both distinct degree-two-or-less polynomials. Three revealed correct positions determine one polynomial by the root bound."
+    },
+    {
+      "round": 24,
+      "questionSha256": "c5636e3f29cfdbb8e5ffc1dd4214f62d734c2ce7052166a129ddaadb64b488ee",
+      "answerSha256": "d6f92c78e7c77677b3ae8ef9082b5168c117176a224d7f0a69f757769ea518d4",
+      "contextSha256": "a52e21f0ad05a240908eadfae09d5c9b9306931b73af55ebb90a3403de3efd07",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "The requested construction is impossible: the alleged 251- and at-most-249-error sets leave at least 500 shared evaluations, exceeding degree 499. The answer correctly rejects that premise. This is a mathematical check; the cancelled and unfinished decoder listing in round 22 is not certified."
+    }
+  ],
+  "olderImplementationRetention": {
+    "sourceBinding": {
+      "round": 8,
+      "questionSha256": "e8f23f23a4f36454d9730e297dec925ee9967d1bcc2d7e698156ab864fa67a1c",
+      "answerSha256": "a735a0c446b3190749f3eb8318ba31444ed378d3d6daf4bc0e2c676902a52147",
+      "contextSha256": "3289cbd0a76680097cf68c7b8bc9a8b4fddf67c66fbde708099fd970d470646c",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    },
+    "probeBinding": {
+      "round": 29,
+      "questionSha256": "33626510b726399baded234482a57b32c3fd3c1d027312578504e41c6fb85b41",
+      "answerSha256": "9e161619c20dceb991c3eea885346cd595d2365cca4debf80ee170658c64c292",
+      "contextSha256": "9f90a4f3b0f131bfdf7d916deb2be137ef0b6a324a21f20788f2ab8e8ad594b1",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    },
+    "interveningTurns": 20,
+    "originalBodyInActualSelectedContext": false,
+    "originalLeadSentenceInContext": false,
+    "originalBoundConstantInContext": false,
+    "originalResponseReproduced": false,
+    "answerRequestsOriginalCode": true,
+    "finding": "The pipeline did not retain/reproduce the original implementation for this probe. The answer declined to invent absent code. Later replacement code is present in the actual selected context. Hidden backend history is not reconstructed; selected public context alone cannot prove every internal memory source was empty. The spoken reference contains a clipped original-question prefix, so the incomplete exact-reproduction outcome is not treated as an unrelated numerical-constraint failure."
+  },
+  "raftManualCheck": {
+    "bindings": [
+      {
+        "round": 51,
+        "questionSha256": "03136ea94bada32095f95d4b992f11d815707e2db5deb046848857008f358508",
+        "answerSha256": "33cd8bae5a09a34c27472eda2a9e7b048856fb1fbcdd4ffbe4314885855ab1b9",
+        "contextSha256": "6c6f8a8097daa2349f78d85ea3a776659b8839473035f2544f605d4c5404dbd1",
+        "phase": "complete",
+        "error": null,
+        "cancelled": false
+      },
+      {
+        "round": 52,
+        "questionSha256": "0fe8bd69ad8ceadafe4dd32c659adbbeb7b84be0a6faf37a0bc76de8199a8bc4",
+        "answerSha256": "9f6765de82113c2aea472ab66f9c65e1aefb00523e2931725bed69e031e3b34c",
+        "contextSha256": "9cfee405152d4b2184df8a19cb6b881539cc76bf5161b94e7e27894d66893c97",
+        "phase": "complete",
+        "error": null,
+        "cancelled": false
+      }
+    ],
+    "primarySource": {
+      "title": "In Search of an Understandable Consensus Algorithm, extended version",
+      "url": "https://raft.github.io/raft.pdf",
+      "sections": [
+        "5.4.1",
+        "5.4.2",
+        "5.4.3"
+      ],
+      "consultedAt": "2026-10-11"
+    },
+    "finding": "The current-term commit rule and freshness comparison agree with the paper. For this fixed three-replica adjacent-term instance, a first later leader lacking the term-seven entry would need an intersecting vote; an older log fails freshness, and any newer log entry must come from the unique term-seven/eight leader or an intervening leader retaining the prefix. That contradicts the first-exception premise. The answer correctly distinguishes the conservative commit rule from the impossibility of the requested replacement trace.",
+    "scope": "The adjacent-term conclusion is an independent inference from the rules, under ordinary fixed-membership Raft with durable voting/log state. No distributed fault-injection or formal model checking was performed."
+  },
+  "independentModelReviewsPending": true,
+  "scope": "Selective source-bound executable and manual checks. They do not replace the denominator of 53 recorded turns, certify all CUDA/C++/SQL code, grade incomplete cancelled fragments as complete, or infer population accuracy. Earlier timeout and missing-visible-word findings remain recorded."
+}

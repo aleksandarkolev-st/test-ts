@@ -1,0 +1,485 @@
+{
+  "recordedAt": "2026-10-11T08:51:02.508Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/systems-hour-t/interview.json",
+    "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+    "status": "complete",
+    "stoppedCleanly": true
+  },
+  "evidence": {
+    "file": "artifacts\\deep-interview-v71\\systems-hour-t\\duration-audit.json",
+    "sha256": "3472f11f8044ade22c2dc5a87089af1a2f46498411d532b8275f7fe26b1c2a49"
+  },
+  "actualInterviewDurationMs": 3607978.0386,
+  "recordedTurns": 52,
+  "rows": [
+    {
+      "round": 1,
+      "question": "A batch-processing service occasionally stops completing work, but the process is still alive. How would you start investigating?",
+      "sourceQuestionSha256": "79335d8966f34cc3364483493ee025728c2fa5c52d942892f4f06df6584035ac",
+      "wordCount": 19,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 2,
+      "question": "Why?",
+      "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "wordCount": 1,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "ec30b49f-7ecf-451c-8898-af1b3b4bf0e2"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 3,
+      "question": "Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each thread loads its corresponding input into shared memory, calls __syncthreads, and thread zero sums the valid entries into the output. Immediate launch checks succeed; a sanitizer reports a divergent block barrier. Explain the violated invariant without claiming every device must hang. Provide compilable CUDA code and a host launch supporting valid from zero through 96, with defined output, no out-of-bounds reads, and a synchronization proof.",
+      "sourceQuestionSha256": "c862fbad3577bcdad22ee646625a07a4c091a1dffe04abd3a06be8987d7fcfc9",
+      "wordCount": 113,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 4,
+      "question": "Continue with your compilable kernel and host launch. Explain precisely what threads 70 through 95 do in the original kernel and why successful launch checks do not establish correctness. In your replacement, prove that every shared-memory value read by thread zero was initialized, and identify which thread writes the output when valid is zero. Keep the launch at one block of 96 threads for every valid value, including zero; do not handle zero by skipping the kernel or initializing the output on the host.",
+      "sourceQuestionSha256": "db0e153336591af0e47b7601486dee08584c3e1c5754d7115817b1d02498ba68",
+      "wordCount": 85,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "43e783b5-e178-4501-9ec3-8a4131dd1cbf"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 5,
+      "question": "Your replacement gives a local invariant; switch now to control theory and a global one. A discrete-time system may choose either matrix at every step: A has rows zero, a; zero, zero. B has rows zero, zero; b, zero. Both parameters are positive. Each matrix alone becomes zero after two steps. Does that imply stability under arbitrary switching? Derive the necessary and sufficient condition for uniform exponential stability, including the boundary case. Prove your condition using adversarial switching and a common diagonal quadratic Lyapunov function, explicitly deriving the inequalities its two positive weights must satisfy.",
+      "sourceQuestionSha256": "eaa1bdccb57ead3ad97482de4a022c7395626bd3ff1b79646d71a53af54acedf",
+      "wordCount": 96,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 6,
+      "question": "What if that changes?",
+      "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+      "wordCount": 4,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "937ebad9-cbce-4579-a0f8-76e0a3ec7f68"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 7,
+      "question": "The switching rule changes: neither matrix may appear three times consecutively; all other sequences are allowed. Since both matrices square to zero, this restriction should guarantee uniform exponential stability for every positive a and b, correct? Establish the exact necessary and sufficient condition, including the boundary case. Under that condition, finish deriving the strict inequalities for a common diagonal quadratic Lyapunov function and give explicit positive weights and a one-step contraction factor.",
+      "sourceQuestionSha256": "e2df32dcced417eba34b051cc4252663e3af0579918a432c1c28bf1662f6679a",
+      "wordCount": 73,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 8,
+      "question": "Now test an ownership invariant. CUDA calls succeed; explicit streams A and B have no implicit dependencies. A submits producer P1 and records event E. B submits a wait on E, then consumer C1. A submits P2 and records E again. Both producers overwrite the same allocation; C1 reads it. A query after the second record returns not ready. Which record does B's wait reference, and can P2 race with C1? Give a permitted execution trace. Then supply compilable CUDA host code for a two-slot loop using per-slot ready and consumed events, checked calls, and safe first use. Final condition: neither device-wide synchronization nor host synchronization between iterations is allowed.",
+      "sourceQuestionSha256": "8578d9229b4009e1d261b70e043d972fab86ff712b239210f21adfaff7249af4",
+      "wordCount": 114,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 9,
+      "question": "Debug this change to your exact implementation. Set N to four. Submit all four producer iterations first, retaining their consumed-event waits and ready-event records. Only afterward submit all four consumer iterations, retaining their ready-event waits and consumed-event records. No consumed event has ever been recorded when the producer loop runs. All calls succeed. What do those producer waits mean, which ready generations do the consumers capture, and is the program safe? Give a permitted execution trace with all four actual result values versus expected values. Can merely adding more event objects repair ownership while retaining this submission order and two slots? Prove your answer.",
+      "sourceQuestionSha256": "efc979c71f25484b770099091da5c5119ef152c9ddc4ea59c6f134166c2ef946",
+      "wordCount": 108,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 10,
+      "question": "Make the distinction precise: a never-recorded event versus a recorded event whose work is pending. For your four-iteration change, identify every captured ready generation and give one complete result trace. Then consider recording additional consumed events before submitting the producers, on stream B behind waits for those producers. Can that establish safe ownership without creating a dependency cycle? Name the exact operations in any cycle; do not treat a successful CUDA call as proof of progress.",
+      "sourceQuestionSha256": "6b91871790d8801db0c49ffe33191c887bb619fbe9857e17adabd6dc93181ce7",
+      "wordCount": 78,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 11,
+      "question": "And if, uh, that thing changes?",
+      "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+      "wordCount": 6,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "caabea48-1e52-40b1-aa36-f8022bed3ec0"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 12,
+      "question": "Switch to warp collectives. Stipulate 32-lane warps and synchronized shuffle support. A full warp computes mask using ballot with all lanes participating; only selected lanes then call your function. Implement executable device code for unsigned subset_sum(mask, value), returning the modulo two-to-the-32 sum to every selected lane. Masks can be arbitrary, including lanes zero, three, seven, eighteen, and thirty-one; empty masks make no calls. Handle a mask containing only lane thirty-one and a full mask. Prove every executed collective names exactly participating lanes, every consumed shuffle source belongs to the mask, and collective sequencing agrees. Compare work and shuffle count with a dense tree.",
+      "sourceQuestionSha256": "734570beb8bfc5fb99c86d022c1f1549043a89887a92a8fbcd04b4b6d1227bc2",
+      "wordCount": 110,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 13,
+      "question": "Your broadcast loop is legal, but uses 32 shuffle rounds for a full mask. Keep selected-only participation and arbitrary masks. Implement an alternative using at most six synchronized shuffle rounds, no shared memory, and no atomics, returning the sum to every selected lane. Give executable device code, including how you map physical lanes to selected-lane ranks and ranks back to physical lanes. Prove source validity and identical collective sequencing, especially for five selected lanes and only lane thirty-one. Account separately for shuffle rounds, additions, and the work needed to find source lanes; do not hide that work inside a helper.",
+      "sourceQuestionSha256": "f1721cb475185b0c584c2f96339835aa3e0d48ab4f059706a479d0b812552ca9",
+      "wordCount": 103,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "376b0e46-9076-4e48-9ba9-d7256f9e6514"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 14,
+      "question": "Why?",
+      "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "wordCount": 1,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "93370e90-17a7-4c1d-aeae-7627ae24a3bf"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 15,
+      "question": "Six shuffle rounds do not bound your local work. For your supplied descending-offset code, derive the exact total conditional additions and lowest-set-bit clearing iterations across participating lanes for a full mask and for five selected lanes. Then replace the rank-to-physical-lane search with executable device code using at most five binary partition steps, without extra collectives, shared memory, or atomics. Prove its invariant for arbitrary masks, including selecting rank zero from a mask containing only lane thirty-one, and account for population counts and shifts without invoking undefined behavior.",
+      "sourceQuestionSha256": "67ce9482c45c8c50e2375485b0206c0172567d810405517f6b188f7a0667b06c",
+      "wordCount": 94,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 16,
+      "question": "Your distinction between shuffle rounds and local work is correct. Switch to indexing: n is uint64_t, blocks have 192 threads, and grid.x is limited to two-to-the-31 minus one. Supply executable host launch arithmetic and a grid-stride kernel. Prove each index below n is visited exactly once, including n equal to zero, 193, two-to-the-32 plus 17, and UINT64_MAX conceptually. Separate index representability from allocation feasibility. Account for ceiling division, multiplication widths, and final-increment overflow. Final constraint: you may not reject UINT64_MAX merely because its allocation is physically impossible; no such allocation is requested.",
+      "sourceQuestionSha256": "3b938b06a0e13aa1f793b6f5183da97443be0f286ffbb9f3afedc184e86a4ed0",
+      "wordCount": 101,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "184c23ed-f7e4-40f6-b4db-a85ef127bbb2"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 17,
+      "question": "Your indexing proof separates representable states from feasible storage. Switch to automata theory. For a fixed integer k from one through 64, accept a binary string exactly when its kth symbol from the end is one; shorter strings are rejected. Construct a nondeterministic finite automaton with at most k plus one states, and prove the exact minimum number of deterministic states using distinguishable prefixes. Then supply executable C++20 streaming code using one uint64_t state, including initialization and acceptance. Handle k equal to 64 without shifting by 64 or overflowing a mask construction. Explain why the automaton lower bound does not contradict your compact implementation.",
+      "sourceQuestionSha256": "74f99af4ed3dbdca44daf0850afc5b4140ad997a501b37d049506cec4a7bd9d0",
+      "wordCount": 105,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 18,
+      "question": "What if that changes?",
+      "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+      "wordCount": 4,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "c24e3178-570b-4022-88d8-b89a0545ec4b"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 19,
+      "question": "Keep k fixed; change only the implementation claim. Since one uint64_t stores the state, surely the minimal deterministic automaton has at most 64 states, correct? Resolve that claim by proving the exact minimum using distinguishable prefixes. Then finish your executable C++20 streaming implementation for every k from one through 64, including initialization, rejection of shorter strings, and acceptance. Explain every shift and mask boundary, particularly k equal to 64, without shifting by 64.",
+      "sourceQuestionSha256": "5ec750f056be6618c4ccd9ebbae559761c3cabe1fb73cc1474f3123213362655",
+      "wordCount": 74,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 20,
+      "question": "Your compact state is private; now make state shared. In C++20, a producer writes a non-atomic payload, then stores true to an atomic ready flag using relaxed ordering. A consumer spins on relaxed loads, then reads the payload. Identify the language-level failure and minimal one-shot fix. Then supply executable bounded SPSC queue code with capacity 1024, uint64_t counters, and release/acquire publication and reclamation. Prove slot ownership under arbitrary scheduling, explain full and empty detection, and state your counter-wrap strategy. Address cache-line separation without inventing a hardware line size. Final condition: the queue must remain correct across counter wrap, not merely stop before it.",
+      "sourceQuestionSha256": "9a2a69bde3d515f4084b5bcb2616a08f086a7a2cc2ae83c97bc36b8f96283b51",
+      "wordCount": 110,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 21,
+      "question": "Extend your exact queue with blocking pop and producer-only close; close occurs after the final push, and the consumer must drain before reporting closed. Consider this proposal: on empty, the consumer calls write_.value.wait(observed_write, acquire); close stores true to a separate atomic closed flag and calls write_.value.notify_all without changing write_. Does that guarantee shutdown? Trace a consumer already waiting when close occurs. Then provide executable C++20 blocking-pop and close code with no polling, sleeps, or mutexes. Prove publication, drain-before-close, and freedom from missed wakeups under arbitrary scheduling, including counter wrap. State the lifetime requirements.",
+      "sourceQuestionSha256": "f8c39a5b0ceb09dc69aaaf82b6a67dfa0f617874d8264ecdeb7ca74baff32489",
+      "wordCount": 103,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 22,
+      "question": "Continue: why does notifying an unchanged write counter fail to guarantee shutdown? Give the waiting-consumer trace, then executable blocking-pop and producer-only close methods for your exact queue. Close follows the final push; queued items must drain before closed is returned. No polling, sleeps, or mutexes. If you introduce another atomic wait state, explain its transitions and whether wrap can restore the value a consumer is about to wait on. Prove the empty-check-to-wait race is safe, identify the release/acquire edges for payload and closure, and state when destruction is permitted.",
+      "sourceQuestionSha256": "ff1ddddd21dcd9c7c1386f7c82aa6eb4d351a00556a621760a7f3f28a969a1d4",
+      "wordCount": 96,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "3414f75c-1d9f-4796-91fc-e5d91bb3928a"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 23,
+      "question": "And if, uh, that thing changes?",
+      "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+      "wordCount": 6,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "004424db-ad34-41b5-ad6d-82c057d1a9cb"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 24,
+      "question": "Return to the FIRST completed implementation you supplied for this original question: Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+      "sourceQuestionSha256": "07abb64bb8fad23d9ba763016b160b5bff8ddd7a25fc8daf749cd51580771e8c",
+      "wordCount": 106,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 25,
+      "question": "Your first sum_valid used shared float values[96], guarded loads, an unconditional barrier, and thread zero’s sequential sum; its main launched one block of 96 threads. Revisit that version, not the later warp reductions. Change the launch to one block of 192 threads and valid’s range to zero through 192, but keep auxiliary shared storage limited to 96 floats. Input contains exactly valid readable floats. Supply compilable revised kernel and checked host launch, preserving sequential input-order binary32 addition and kernel-written zero output. Which original bounds invariant fails? Prove initialization, race freedom, barrier participation, and correctness for valid equal to 97 and 192.",
+      "sourceQuestionSha256": "2d1408dd0e4065be434adb0afe7fdb71e94b56445ef35e75749da63eabe61664",
+      "wordCount": 106,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "69c0572d-7b37-4774-aa7f-76d037c76e8b"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 26,
+      "question": "Why?",
+      "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "wordCount": 1,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "61ab0da6-3649-45a2-ba2e-d41c1c19551c"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 27,
+      "question": "Your barriers enforce ownership before storage reuse. Switch to database ownership: PostgreSQL snapshot isolation, bookings with half-open intervals, and no occupancy constraint. Two transactions each find no booking for room nine overlapping minutes sixty through one hundred twenty, then both insert that interval. Give a permitted commit trace; explain whether this is a phantom and why locking the empty result fails. Supply executable SQL preventing overlaps, including concurrent inserts and adjacent intervals. Then use PostgreSQL SERIALIZABLE instead: give whole-transaction retry pseudocode and a transactionally enforced boundary for sending a confirmation, without assuming the messaging service participates in the database transaction.",
+      "sourceQuestionSha256": "6d90363b46a5be3f82a845effc2a893b87e256b0aaecc373f8a9e71cdc77cf5d",
+      "wordCount": 102,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 28,
+      "question": "You say both can commit. Show the two snapshots, reads, inserts, and commits precisely. Then implement overlap prevention at PostgreSQL READ COMMITTED using SQL and a persistent row for each room. Explain exactly when the room lock is acquired and when the overlap query obtains its snapshot; prove concurrent inserts cannot both pass, while adjacent half-open intervals can. Include rollback behavior and identify which writers must follow this protocol. Final constraint: exclusion constraints and SERIALIZABLE are not available for this implementation.",
+      "sourceQuestionSha256": "6e971517af8710bc5563695a46701f8b41f1d3e15ba600410edf45fb5ad2ab2a",
+      "wordCount": 82,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "8a2d4251-14f1-4361-8cb0-fea159eca729"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 29,
+      "question": "Your proof depends on precisely separating two operations. Switch to error-correcting codes. Work modulo seventeen. Encode a polynomial of degree at most three by its evaluations at points one through eight. A receiver knows which positions are erased; other positions may be corrupted. Derive and prove the exact condition on error count e and erasure count s guaranteeing unique recovery for every transmitted polynomial. Then challenge the boundary: with two errors and one erasure, construct two distinct polynomials and one explicit received vector consistent with either transmission. Specify the erased position and every received value, and verify both error counts. No probabilistic assumptions.",
+      "sourceQuestionSha256": "4fc4174eb83f90c31d947a2d583313b2ad651026df5579b97ec09c0f2188a85b",
+      "wordCount": 104,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 30,
+      "question": "What if that changes?",
+      "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+      "wordCount": 4,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "f34d84b1-8605-4e55-af4b-7471c0fc3f6d"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 31,
+      "question": "Change only the counts to two errors and one known erasure. Since the erased position is known, surely unique recovery still holds, correct? Work modulo seventeen with degree-at-most-three polynomials evaluated at points one through eight. Resolve that claim by constructing two distinct polynomials and one received vector consistent with either transmission. Specify the erased position and all seven received values; verify each polynomial’s evaluations and exactly two corrupted non-erased positions for each candidate. Then derive and prove the exact inequality guaranteeing unique recovery for every transmitted polynomial.",
+      "sourceQuestionSha256": "ec3adac40c9a04599c188534488aba71c6c4281109ac741ca820b9ad9acf7648",
+      "wordCount": 92,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 32,
+      "question": "Your distance proof gives a guarantee; a checksum does not. Switch to log recovery. Each record contains little-endian uint32 payload length, uint64 sequence, payload, then uint32 CRC32C over encoded sequence and payload. Payloads are at most one MiB; sequences start at zero and increase by one without wrapping. A crash may leave any suffix absent or torn; CRC collisions remain possible. Supply executable C++20 recovery code using a supplied CRC32C function. Return the last valid byte offset, checking length, arithmetic, short reads, sequence continuity, and checksum. Explain what recovery can and cannot guarantee. Final condition: stop at the first invalid record; never search ahead for another plausible record.",
+      "sourceQuestionSha256": "e048612d2ce541228f5c2b9db541a874d72b56cc3f10576767be1d68c5ef10db",
+      "wordCount": 110,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 33,
+      "question": "Your recovery returns an offset without truncating. Suppose record zero is valid, followed by a torn record-one header. Restart appends a complete record one at physical EOF, fsyncs successfully, and acknowledges it. Trace the next recovery: does it necessarily retain that acknowledged record? Supply executable Linux restart-and-append code fixing this, including truncation, positioning, partial writes, EINTR, sequence selection, and acknowledgement ordering. Assume one writer, a preexisting file with durable directory entry, and successful fsync makes preceding file data and size changes durable; failed calls give no durability guarantee. Explain a crash between truncation and append, and distinguish checksum-valid recovery from guaranteed preservation of acknowledged records.",
+      "sourceQuestionSha256": "17d7541f772edda2b27263b5aa5dc42aa20af72da5154461a79e1d32c691300a",
+      "wordCount": 109,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 34,
+      "question": "Finish that claim concretely. Assume a supplied recovery helper returns the last check-valid offset and next sequence, or reports sequence exhaustion. Write executable Linux C++20 code that opens the existing log, removes its invalid suffix, and appends one encoded record. Handle offset conversion, partial writes, EINTR, and sequence exhaustion; acknowledge only after successful fsync. One writer owns the file. Under the stated durability guarantee, is a separate fsync between truncation and append necessary for preserving newly acknowledged records? Explain both crash-before-ack and crash-after-ack cases, without assuming CRC detects every torn write.",
+      "sourceQuestionSha256": "344a267882befb8c05144048f1c7ab8d346b71a8e63e89cd0bb02aa52596efed",
+      "wordCount": 97,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "13438344-ccdc-4177-b0ed-2456720aa08f"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 35,
+      "question": "And if, uh, that thing changes?",
+      "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+      "wordCount": 6,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "4b452e13-bc28-4741-bace-ba65b24b6928"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 36,
+      "question": "Change only single-writer ownership: two processes open the same existing log independently. Both recovery calls return offset L and next sequence seven. Each truncates to L, positions there, writes a different complete sequence-seven record, successfully fsyncs, and acknowledges. Give a permitted schedule where one acknowledged payload disappears. Then supply executable Linux C++20 code serializing recovery, truncation, append, and fsync across cooperating processes using an advisory file lock. Handle EINTR, lock lifetime, process crashes, and acknowledgement ordering. Does opening with O_APPEND alone repair sequence uniqueness or record integrity when writes can be partial? Retain the original durability guarantee.",
+      "sourceQuestionSha256": "c33ca6ff200cbbceb92768eea735f161a2cace1de8b74278fb5f3749a74f440c",
+      "wordCount": 100,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 37,
+      "question": "Revisit your earlier two_slots.cu implementation: per-slot ready and consumed events, interleaved host submissions, and producer reuse every two iterations. Change only consumption: each produced slot must now be read by two kernels on independent explicit streams B and C. Both reads must finish before reuse. Supply compilable CUDA host code establishing that ownership chain with two slots, checked calls, safe first use, and no host synchronization between iterations or device-wide synchronization. Identify exactly which original reclamation invariant fails if consumed is still recorded only on B. Prove event-generation capture and final cleanup safety for your revised implementation.",
+      "sourceQuestionSha256": "5373282729a679b0c4fc310fa8d0f4d90bec28ad0637a184e333909500de9306",
+      "wordCount": 101,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "99b16ee4-e72b-4436-b630-a704c8150276"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 38,
+      "question": "Why?",
+      "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "wordCount": 1,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "157f81f9-3a0b-4508-aa85-5acb75fb6caf"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 39,
+      "question": "Your CUDA proof uses explicit dependencies for publication and reclamation. Now use reliable-connected RDMA: a client writes 4096 payload bytes on QPdata and a ready flag on independent QPflag. The server sometimes sees ready with old payload, although both writes later complete locally. What ordering and visibility facts must you obtain before prescribing a fix? Then define a generation-and-length slot header and receiver validation/acknowledgement protocol preventing reuse during a remote read. Identify your required assumptions explicitly. Would moving both writes onto one queue pair alone prove CPU visibility, application consumption, and durability? Distinguish those guarantees.",
+      "sourceQuestionSha256": "1dd654676ab5cfbac3ca125cad4bb4b5e73b149f9e4797fa0371b7bf57422f47",
+      "wordCount": 99,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 40,
+      "question": "Your cross-queue ordering point is relevant. Now stipulate that a platform visibility operation makes completed incoming writes CPU-readable, and the sender receives an application acknowledgement over a separate channel. Design an exact slot state machine for a 4096-byte payload with generation and length. Give sender and receiver pseudocode, identify when validation is safe, and prove when the sender may overwrite the slot. Handle a delayed duplicate acknowledgement and generation exhaustion. State any additional transport-ordering assumptions you need. Final constraint: the receiver copies the payload before acknowledging; it does not obtain an atomic snapshot of header and payload.",
+      "sourceQuestionSha256": "9af62c4d0fcbc77640ebaa37c316f2a48711b7edccf6a58ec5e854a41318a78c",
+      "wordCount": 101,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 41,
+      "question": "Switch to Euclidean geometry. For an integer dimension d at least three, consider d plus one labeled points. Every pairwise squared distance equals one except the squared distance between points zero and one, which equals t. Derive the exact range of t permitting a nondegenerate simplex in d-dimensional Euclidean space, and its squared volume as a function of d and t. Prove necessity and sufficiency using a Gram matrix, not merely triangle inequalities. At both endpoints, determine the affine dimension and explain which points coincide, if any.",
+      "sourceQuestionSha256": "8f3ec9f4786952c76b7a2b82a5c5a139ac959f8367ecefd525a2f8bab22d485a",
+      "wordCount": 88,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": true
+    },
+    {
+      "round": 42,
+      "question": "What if that changes?",
+      "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+      "wordCount": 4,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "180fdf66-faee-4c1f-87b6-4801b94caa4d"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 43,
+      "question": "Keep the dimension and distance pattern unchanged. Change only the claim: surely checking every triangle guarantees a nondegenerate simplex whenever t is strictly between zero and four, correct? Resolve that claim for every integer d at least three using a Gram matrix. Derive the exact feasible interval and squared d-dimensional volume. At each endpoint, determine the affine dimension and identify any coincident labeled points. Prove sufficiency as well as necessity; triangle inequalities alone are not a proof.",
+      "sourceQuestionSha256": "5b775f7e2ff0a15d8749dcb57fca174db02b7c0c93dcda807ba6dfe5cbde71ba",
+      "wordCount": 78,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 44,
+      "question": "Your Gram argument distinguishes local checks from a global guarantee. Switch to payments: PostgreSQL READ COMMITTED, request R debits 7300 cents, commit succeeds, but the reply is lost. Two retries arrive concurrently; one reuses R with 7400 cents. Supply executable SQL and transaction pseudocode guaranteeing one debit, rejecting payload mismatch, and recovering the original result after a crash between commit and reply. Define the schema, exact conflict-handling operations, and sufficient-funds behavior. Trace concurrent first attempts and explain an ambiguous COMMIT outcome. Final condition: requests also trigger an external receipt service that cannot join the transaction; prevent receipts for rolled-back debits without claiming exactly-once network delivery.",
+      "sourceQuestionSha256": "9bff47ce33923e976eacbaf084cc602ac3f261f9d116e95f719acb2419ad4669",
+      "wordCount": 109,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 45,
+      "question": "Your outbox separates database commit from external completion. Now a three-node consensus cluster replaces receipt workers: A and B commit worker token 42 while partitioned C's old worker retains token 41 and valid external-store credentials. The store cannot join the consensus transaction. Give executable SQL for an atomic resource-side fencing and deduplication rule. Handle a delayed token-41 operation, equal-token retries, different operations under token 42, and reused operation IDs with changed payloads. Can token 41 still succeed before the store learns token 42? Define the activation boundary, token allocation, and outbox reconciliation after external success but before recording completion. Do not assume clock leases or exactly-once network delivery.",
+      "sourceQuestionSha256": "90471c9b2606a5fd9d1dcff2d4c52588fe0b161f0f36a24c03bf98739896ca76",
+      "wordCount": 115,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 46,
+      "question": "Continue from that pre-activation window. Supply executable PostgreSQL SQL for a persistent resource fence and operation-result table. Show the exact transactions for activating token 42 and applying an operation: serialize activation against mutation, reject token 41 after activation, allow distinct token-42 operations, and replay equal-token retries without repeating effects. Reject reused operation IDs with changed payloads. Trace activation racing a token-41 mutation and identify the linearization boundary. Then define how consensus allocates tokens and how an outbox reconciles external success followed by a worker crash before completion recording. No clock leases or cross-system transaction is available.",
+      "sourceQuestionSha256": "50b20d258145dcc9dbdc0ec74d5c1d59ac9fffc757989a69c8069dd143e52137",
+      "wordCount": 102,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "fa19a519-e598-4a74-aa14-097d026664f6"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 47,
+      "question": "And if, uh, that thing changes?",
+      "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+      "wordCount": 6,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "691e51c6-0508-4c99-987c-6d1cc9ce5ffb"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 48,
+      "question": "Change only retry ownership: token 41 committed operation R with payload 7300, but its reply was lost. Token 42 is now activated and must reconcile R. Supply executable PostgreSQL SQL that lets token 42 recover R’s stored result without repeating the effect, rejects R with payload 7400, permits a new operation under token 42, and prevents token 41 from creating new effects. Serialize activation and mutation on the persistent resource row. Specify whether stale-token requests may retrieve existing results, and prove that your ordering of fence validation and deduplication implements that policy. Trace concurrent activation, a token-41 retry, and token-42 reconciliation.",
+      "sourceQuestionSha256": "261c0445118ca938e379577cc119276e0bfaeaa8f0bf4425fb45bbde4e3ffd32",
+      "wordCount": 105,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 49,
+      "question": "Revisit your earlier SPSCQ: capacity 1024, uint64_t write and read counters, non-atomic slots, and release/acquire reclamation. Change only consumer count to two; retain one producer. Give an adversarial trace showing why replacing the read-counter store with fetch_add alone does not repair ownership. Then supply executable C++20 nonblocking push and pop code, without mutexes, preserving FIFO and safe slot reuse across uint64_t wrap. Distinguish reserving an item from finishing its read, prove publication and reclamation, and explain whether a paused consumer can prevent producer progress. State any additional per-slot metadata and its wrap invariant.",
+      "sourceQuestionSha256": "69b9e51281b144478f9ba0e89bc1bff82fc92d6f33e5d62e09546898fd246e4e",
+      "wordCount": 98,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "6aae9eee-c041-4116-8d61-0cb016a8b384"
+      ],
+      "immediateFollowup": true
+    },
+    {
+      "round": 50,
+      "question": "Why?",
+      "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "wordCount": 1,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "f0e959f2-9b1e-4748-ac0f-8168f3a32279"
+      ],
+      "immediateFollowup": false
+    },
+    {
+      "round": 51,
+      "question": "Your per-slot states enforce exclusive updates. Apply ownership to a CUDA histogram: input has two-to-the-27 uint16 keys, 4096 bins, and unrestricted positions; 99.9 percent of keys are zero. Output needs exact uint64 counts. No atomics anywhere, input modification, or more than 64 MiB auxiliary device storage. Partition into 2048 contiguous tiles with one private histogram each. Supply executable kernels and checked allocation and launches, including a race-free local update algorithm for arbitrary valid keys and reduction of partials. Derive exact storage and worst-case work. Does the skew improve your algorithm’s bound, or merely suggest an optimization? No hardware throughput is supplied.",
+      "sourceQuestionSha256": "f6886d8738689a4190b7a7252ddbd6588e2bca776ab0d386f060ee8d8acae371",
+      "wordCount": 109,
+      "otherAnswersStreamingAtPlaybackLaunch": [],
+      "immediateFollowup": false
+    },
+    {
+      "round": 52,
+      "question": "Complete your exclusive-bin ownership implementation with exactly 192 threads per block and 2048 tiles. Map all 4096 bins to owners, initialize every partial count, and show executable kernels plus checked allocation and launches. Prove coverage and race freedom when every nonzero key targets one bin. Calculate input inspections, partial writes, reduction additions, and auxiliary bytes exactly. Can owners cooperate to avoid each bin scanning its entire tile? Explain the required ownership transfer. Final constraint: neither shared-memory atomics nor library-internal atomics are permitted.",
+      "sourceQuestionSha256": "69b7fefb27c07def8463eab1fc6b450656b68fc7b9a940ee57e93e7223f880da",
+      "wordCount": 85,
+      "otherAnswersStreamingAtPlaybackLaunch": [
+        "94995911-44ff-45b6-9252-d76828f3f5cc"
+      ],
+      "immediateFollowup": false
+    }
+  ],
+  "actualStreamingOverlapLaunches": 24,
+  "scope": "Every actual source question and measured overlap is preserved without topic labels, round ranges or question-specific rules. Word counts are descriptive. Response correctness and latency require their separate source-bound measurements.",
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

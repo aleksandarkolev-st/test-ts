@@ -1,0 +1,96 @@
+{
+  "recordedAt": "2026-10-11T00:04:31.728Z",
+  "sources": [
+    {
+      "file": "scripts/summarize-deep-audio-interview.mjs",
+      "sha256": "44eceed9a870544f9533940410f9090589226b94fdbbcb62c6b1ec0514952052"
+    },
+    {
+      "file": "scripts/summarize-pressure-assessment.mjs",
+      "sha256": "113077f65984209f14a7b32881ea00ab9026fbf75bd2f20bf71ed314ceb284ae"
+    },
+    {
+      "file": "scripts/tests/deep-audio-assessment.test.mjs",
+      "sha256": "da64f702c44be079713cecd6554d7505f22c3effb7b6db4d5028216ce304ed81"
+    },
+    {
+      "file": ".local/run-independent-assessments-v70.ps1",
+      "sha256": "e3c26c774172813180a27788df110b9f4d0874024896dfa851574454d2a50a4f"
+    }
+  ],
+  "reportingChanges": [
+    "Removed the fixed 800 ms joint target and 95-percent pass/fail requirement from deferred interview summaries.",
+    "Report verdict counts, missing phrase measurements, cancellation and errors with all recorded rows retained.",
+    "Use the shared observed-latency distribution including the midpoint median for even sample sizes.",
+    "Describe the supplied recording rather than incorrectly calling full hours a three-pilot sample.",
+    "Keep pressure native-job endpoints explicitly separate from physical source-playback endpoints."
+  ],
+  "validation": {
+    "summaryTest": "node --test scripts/tests/deep-audio-assessment.test.mjs",
+    "summaryTestPassed": true,
+    "pressureInputBindings": {
+      "file": "artifacts/deep-interview-v70/continuous-pressure-t/pressure-review-input.json",
+      "sha256": "54aa2ddf6a787b63db89717a761ad1d506ed6826c6e641463522a9b91da79dd7",
+      "nativeJobs": 89,
+      "validatedAgainstOriginalJobAnswersQuestionsPhasesAndTimingRows": true
+    },
+    "pressureEarlierSourceChronology": {
+      "noEarlierProjectedQuestionExtendsBeyondCurrentRecognizedEnd": true,
+      "overlappingSourceSpanPairs": [
+        {
+          "priorRound": 7,
+          "currentRound": 8,
+          "priorSpan": {
+            "start": 279,
+            "end": 279
+          },
+          "currentSpan": {
+            "start": 279,
+            "end": 299
+          }
+        },
+        {
+          "priorRound": 38,
+          "currentRound": 39,
+          "priorSpan": {
+            "start": 1530,
+            "end": 1530
+          },
+          "currentSpan": {
+            "start": 1530,
+            "end": 1550
+          }
+        },
+        {
+          "priorRound": 54,
+          "currentRound": 55,
+          "priorSpan": {
+            "start": 2156,
+            "end": 2156
+          },
+          "currentSpan": {
+            "start": 2156,
+            "end": 2176
+          }
+        },
+        {
+          "priorRound": 85,
+          "currentRound": 86,
+          "priorSpan": {
+            "start": 3407,
+            "end": 3407
+          },
+          "currentSpan": {
+            "start": 3407,
+            "end": 3427
+          }
+        }
+      ],
+      "scope": "The four overlaps are a recorded partial Why job followed by its expanded question, not future trailing constraints supplied to an earlier job."
+    },
+    "reviewerLauncherPowerShellSyntaxPassed": true
+  },
+  "independentModelReviewExecuted": false,
+  "productionLogicChanged": false,
+  "scope": "Reporting and offline input-binding preparation only. No fabricated accuracy judgments, expected-answer injection or new inference during measured playback. Full model assessment, actual backend comparison and remaining live hours are still pending."
+}

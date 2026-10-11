@@ -1,0 +1,313 @@
+{
+  "recordedAt": "2026-10-10T22:44:19.714Z",
+  "records": [
+    {
+      "name": "cuda-to-phantom-reads",
+      "report": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads/duration-audit.json",
+      "reportSha256": "6aae5427d7e2b0e36b66be0902de8b057a1a4a09b5935133b8628d9550655bab",
+      "journalSha256": "24ce1d1c9ca243b2e3a9c7056085ce9cf0a7a07fee85b01fc335a81dea9ee4c3",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 2,
+      "firstVisibleWordMs": {
+        "count": 2,
+        "min": 2567,
+        "median": 4316,
+        "sampleP95": 6065,
+        "max": 6065
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 1,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 2,
+        "unavailableTurns": 0,
+        "referenceWords": 36,
+        "edits": 0,
+        "lexicalWordErrorRate": 0
+      },
+      "actualStreamingOverlapLaunches": 1
+    },
+    {
+      "name": "divergent-block-barrier",
+      "report": "artifacts/deep-interview-v70/hard-probes/divergent-block-barrier/duration-audit.json",
+      "reportSha256": "24f0c6882fbf16d814b608d257f80c6e13c38545bc68711aa1264520ad3eb30d",
+      "journalSha256": "5cbc92af7ccb26757df2ec0fe5270a77359ba5d23d000daf77ff71ea5ed26b70",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 2758,
+        "median": 2758,
+        "sampleP95": 2758,
+        "max": 2758
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 47,
+        "edits": 2,
+        "lexicalWordErrorRate": 0.0425531914893617
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "exact-launch-numbers",
+      "report": "artifacts/deep-interview-v70/hard-probes/exact-launch-numbers/duration-audit.json",
+      "reportSha256": "b6a69d64c02176ffe4fb6eccc20cd61762e411e8ce539f95b4bddae5424649e3",
+      "journalSha256": "98ea5fbd39b87730079f05608cb551055fe33e546f746a1edcff2fd71def70f3",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 2025,
+        "median": 2025,
+        "sampleP95": 2025,
+        "max": 2025
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 37,
+        "edits": 0,
+        "lexicalWordErrorRate": 0
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "fp32-association",
+      "report": "artifacts/deep-interview-v70/hard-probes/fp32-association/duration-audit.json",
+      "reportSha256": "3270a8e1701742d4634457d33c1c3cedfdabb8e918293fd4cf27deb49e00a1ee",
+      "journalSha256": "7cd5132ab20e51ed91403e2e842a4c4ad0e29a9a7df3cf83cae19d9170b4b859",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 5048,
+        "median": 5048,
+        "sampleP95": 5048,
+        "max": 5048
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 75,
+        "edits": 6,
+        "lexicalWordErrorRate": 0.08
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "histogram-late-reversal",
+      "report": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal/duration-audit.json",
+      "reportSha256": "da28ab51a5bf92da9cde2f4bf22997c72417295445e5427af2f770c958e979f6",
+      "journalSha256": "f65c48b8b369a0748e0174ad1234474f811ad2b54ad5fa851b5eb04a325b4c04",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 10773,
+        "median": 10773,
+        "sampleP95": 10773,
+        "max": 10773
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 63,
+        "edits": 39,
+        "lexicalWordErrorRate": 0.6190476190476191
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "long-question-essential-tail",
+      "report": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail/duration-audit.json",
+      "reportSha256": "4d3c7d51d780bf27a02c2f4833065a03b215688021d22ab06a470fbf826b2727",
+      "journalSha256": "d2779072873d9c21bebc5acc4fd81e87d23ceed3e223c6945a5b4a17197dbe01",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 2278,
+        "median": 2278,
+        "sampleP95": 2278,
+        "max": 2278
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 71,
+        "edits": 27,
+        "lexicalWordErrorRate": 0.38028169014084506
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "never-recorded-event",
+      "report": "artifacts/deep-interview-v70/hard-probes/never-recorded-event/duration-audit.json",
+      "reportSha256": "56a8f4263d2aab5cf4ec9fa671b78fe9743b04500a02c875c3f5ecd3445b2c3f",
+      "journalSha256": "0b32164230d9ae92a689d2f4e2f2db3f558f37a2fb687768e66764eaf35bc3fe",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 1,
+      "firstVisibleWordMs": {
+        "count": 1,
+        "min": 4397,
+        "median": 4397,
+        "sampleP95": 4397,
+        "max": 4397
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 0,
+      "provisionalPartialGrades": 0,
+      "asrLexicalComparison": {
+        "assessedTurns": 1,
+        "unavailableTurns": 0,
+        "referenceWords": 37,
+        "edits": 2,
+        "lexicalWordErrorRate": 0.05405405405405406
+      },
+      "actualStreamingOverlapLaunches": 0
+    },
+    {
+      "name": "warp-followups",
+      "report": "artifacts/deep-interview-v70/hard-probes/warp-followups/duration-audit.json",
+      "reportSha256": "9d3251390ecc36efaee0940bf5366382be05f3eaaf0b09fd3380d62c76208187",
+      "journalSha256": "ee7d962f0f703a6c9c50c785a48aee1fbbb1d5d1fe044ef63f65afcfddcc74a4",
+      "status": "complete",
+      "stoppedCleanly": true,
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "evaluatedTurns": 5,
+      "firstVisibleWordMs": {
+        "count": 5,
+        "min": 3985,
+        "median": 8304,
+        "sampleP95": 12995,
+        "max": 12995
+      },
+      "turnsWithoutVisibleWord": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "provisionalFullModelGrades": {
+        "correct": 4,
+        "incorrect": 0,
+        "incomplete": 0
+      },
+      "ungradedFullAnswers": 1,
+      "provisionalPartialGrades": 1,
+      "asrLexicalComparison": {
+        "assessedTurns": 5,
+        "unavailableTurns": 0,
+        "referenceWords": 414,
+        "edits": 78,
+        "lexicalWordErrorRate": 0.18840579710144928
+      },
+      "actualStreamingOverlapLaunches": 0
+    }
+  ],
+  "pending": [
+    "deep-code-memory"
+  ],
+  "selectiveEvidence": [
+    "docs/evidence/cuda-nineteen-lane-execution-v70.json",
+    "docs/evidence/atomic-free-histogram-compile-v70.json",
+    "docs/evidence/streaming-topic-switch-v70.json",
+    "artifacts/deep-interview-v70/hard-probes/fp32-association/fp32-execution-evidence.json"
+  ],
+  "scope": "Aggregate immutable reports from completed playback-only recordings. The application was not changed to supply canned answers. First visible-word latency measures rendering, independently of whether the answer is correct. Examiner grades are provisional; partial and missing grades remain separate. Evidence of compilation, finite symbolic execution and selective content checks does not establish full accuracy. Stale display failure is recorded separately from content grading. These small dependent samples do not estimate population p95.",
+  "fullIndependentAccuracyVerified": false,
+  "goalComplete": false
+}

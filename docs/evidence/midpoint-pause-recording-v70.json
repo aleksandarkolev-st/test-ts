@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-11T02:09:26.151Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-midpoint-pause/interview.json",
+    "sha256": "e1eedce7865854d398e01c70dd08e3df64fcf62825e98ee2708459e037b7ba8a"
+  },
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "speechConfiguration": {
+    "backend": "nemotron",
+    "chunkMs": 160,
+    "device": 0,
+    "deviceName": "AMD Radeon RX 9070 XT",
+    "acousticRefinements": false,
+    "eagerFinalReplacement": false,
+    "confirmedQuestionRefinements": false,
+    "agedFinalWait": false,
+    "settledUpdate": false,
+    "completedDraftReplacement": false,
+    "remoteOnly": true,
+    "selfCapture": {
+      "kind": "disabled",
+      "physicalMicrophoneUsed": false
+    }
+  },
+  "wave": {
+    "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-midpoint-pause/round-01.wav",
+    "sha256": "74c2e5ee699e65c4f77a7574bf0c4a2b5c40b515fd1f723af03f6ef26f594450",
+    "frames": 506559,
+    "durationMs": 31659.9375,
+    "durationWithoutPauseMs": 30159.9375,
+    "firstNonzeroFrame": 643,
+    "lastNonzeroFrame": 495516,
+    "pauseStartFrame": 227119,
+    "pauseEndFrame": 251119,
+    "exactZeroPauseMs": 1500,
+    "prefixVoicedSpanMs": 14154.75,
+    "tailVoicedSpanMs": 15274.875,
+    "prefixFractionOfVoicedSpan": 0.48096943131283526
+  },
+  "sourceQuestion": "Compute exact sums of batches of signed integer measurements before we consider optimizations. Some batches are empty, some contain one value, and others are much larger. Values can be positive or negative. Explain how you would validate an implementation and return useful error information. There is an essential final condition: use signed sixty-four-bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum.",
+  "recognizedQuestion": "Compute exact sums of batches of signed integer measurements before we consider optimizations Some batches are empty some contain one value and others are much larger Values can be positive or negative Explain how you would validate an implementation and return useful error information There is an essential final condition use signs sixty four bit output detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum",
+  "answer": "I’m interpreting “signs sixty four bit output” as signed 64-bit output. Compute each batch’s complete sum with arbitrary-precision integers, then reject it if the final total is outside −9,223,372,036,854,775,808 through 9,223,372,036,854,775,807; never wrap or return a partial sum. Intermediate totals outside that range are acceptable if later cancellation makes the final sum fit.\n\nValidate empty batches returning zero, single values, mixed signs, large batches, both boundaries, and totals just outside them. Include [9,223,372,036,854,775,807, 1, -1], which must succeed, and compare randomized cases with an independent exact reference. For rejection, return a structured error containing the batch index, an overflow code, and the permitted range; malformed measurements should also identify their measurement index. Must individual measurements themselves fit signed 64-bit?",
+  "answerSha256": "1419594db3c6a26afd39e793f7af54bef6faabd147af272afb4d4e283336319d",
+  "phase": "complete",
+  "error": null,
+  "cancelled": false,
+  "physicalVoicedEndHostBounds": {
+    "low": 1791682688050,
+    "high": 1791682688056
+  },
+  "visiblePaintsAllRevisions": 20,
+  "visibleRevisions": [
+    13
+  ],
+  "firstObservedVisiblePaintHostMs": 1791682690414,
+  "visiblePaintsBeforeFullVoicedEndpoint": 0,
+  "nativeCompletionHostBoundsFromRecordedAnchors": {
+    "low": 1791682693012,
+    "high": 1791682693016
+  },
+  "completionDefinitelyAfterFullVoicedEndpoint": true,
+  "firstCompleteJobObservation": {
+    "hostBeforeMs": 1791682693019,
+    "hostAfterMs": 1791682693023,
+    "nativeCompletedAt": 40981,
+    "phase": "complete",
+    "revision": 13
+  },
+  "completeJobObservationsBeforeFullVoicedEndpoint": 0,
+  "answerCompletedEventsForQuestion": 1,
+  "hiddenFirstAgentDeltaNativeMs": 7979,
+  "visibleFirstRetainedWord": {
+    "word": "I’m",
+    "characterRange": [
+      0,
+      3
+    ],
+    "observedHostMs": 1791682690414,
+    "latencyMs": {
+      "low": 2358,
+      "high": 2364
+    },
+    "responseRevision": 13,
+    "observedDuringStreaming": true,
+    "retainedInCurrentRecordedAnswer": true
+  },
+  "manualConditionCheck": {
+    "finalSigned64Range": true,
+    "exactFullBatchAccumulation": true,
+    "rejectOverflowWithoutWrappingOrPartialSum": true,
+    "allowsIntermediateCancellation": true,
+    "scope": "Manual reading of this retained answer; independent model review remains separate. No executable implementation was requested in this turn."
+  },
+  "scope": "Actual waveform bytes and every recorded visible paint revision for this question, with native completion mapped through recorded clock anchors. No early visible answer or completed native answer was observed before the entire source question ended. Hidden speculation is recorded separately. Polling cannot establish every unsampled instant; the gap has no device-position host marker, so nominal PCM timing is not presented as an exact host pause timestamp. No microphone or production changes."
+}

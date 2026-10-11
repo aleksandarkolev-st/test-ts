@@ -1,0 +1,151 @@
+{
+  "recordedAt": "2026-10-11T00:00:43.757Z",
+  "evidence": [
+    {
+      "file": "docs/evidence/refinement-queue-analysis-v70.json",
+      "sha256": "150807b5e0bf09c1c67e4eb3c9b54a105f23d42b91e7b39773717a034bd6cec2"
+    },
+    {
+      "file": "docs/evidence/systems-slow-turn-snapshot-v70.json",
+      "sha256": "8c644526cc56c96756d89b0d7d4ea5d885999b4dee7e883a2dff4f1ab0ec9209"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/round-12-completed-row-snapshot.json",
+      "sha256": "478d5812b12d295251678dd79994e5ff7fe7f61023f3ad5b93aef0f3ad596001"
+    }
+  ],
+  "sourceHashes": {
+    "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+    "src-tauri/src/runtime.rs": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f",
+    "src-tauri/src/openai/client.rs": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1",
+    "src-tauri/src/meeting/scheduler.rs": "adb27c422632a45a37b50163737170ee3fbb5596aedd01d7e57aaa991db5092a"
+  },
+  "observations": [
+    {
+      "name": "completed deep-code-memory",
+      "round": 9,
+      "firstRetainedVisibleWordMs": {
+        "low": 77751,
+        "high": 77757
+      },
+      "stages": {
+        "endpointToFinalConfirmationMs": {
+          "low": 589,
+          "high": 605
+        },
+        "confirmationToFinalSendMs": 32269,
+        "finalSendToConsumptionEventMs": 41937,
+        "consumptionToRetainedDeltaMs": 2949,
+        "retainedDeltaToNativeVisibleMs": 8
+      },
+      "confirmationAndConsumptionWaitMs": 74206,
+      "counters": {
+        "restarts": 1,
+        "steers": 4,
+        "followups": 1
+      }
+    },
+    {
+      "name": "completed response in unfinished systems hour",
+      "round": 12,
+      "firstRetainedVisibleWordMs": {
+        "low": 77539,
+        "high": 77544
+      },
+      "stages": {
+        "endpointToFinalConfirmationMs": {
+          "low": 827,
+          "high": 838
+        },
+        "confirmationToFinalSendMs": 37261,
+        "finalSendToConsumptionEventMs": 33454,
+        "consumptionToRetainedDeltaMs": 5926,
+        "retainedDeltaToNativeVisibleMs": 6
+      },
+      "confirmationAndConsumptionWaitMs": 70715,
+      "counters": {
+        "steers": 9,
+        "followups": 1,
+        "restarts": 1,
+        "initialPromptChars": 22106,
+        "restartPromptChars": 22447,
+        "totalRefinementChars": 182410
+      }
+    }
+  ],
+  "mechanism": [
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 463,
+      "source": "if (latest.confirmed || stable_partial) && (question_changed || context_changed) && pending_question.is_none() {",
+      "finding": "A changed final question waits until the prior pending question is cleared."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 335,
+      "source": "self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await",
+      "finding": "The only retry disables restart_stalled."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 515,
+      "source": "_=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{",
+      "finding": "The final-refinement deadline cannot trigger retirement on that second attempt."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 537,
+      "source": "if let Some(trace)=&trace{trace.input_consumed();}",
+      "finding": "The consumption trace is marked when the stream task processes the matching userMessage completion."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 741,
+      "source": "if let Some(sender)=sender { let _=sender.blocking_send(message); }",
+      "finding": "The one stdout reader waits when a per-thread event channel is full; later transport events can be delayed locally."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 361,
+      "source": "let (tx, mut events) = mpsc::channel(256);",
+      "finding": "Each answer stream has a bounded event channel."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 563,
+      "source": "tokio::select! { _=cancel.cancelled()=>return Err(\"cancelled\".into()), result=event(emitted)=>result? }",
+      "finding": "The stream task awaits delivery of each decoded delta before reading its next event."
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "line": 918,
+      "source": "let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Revision(text)=>Work::Revision(id.clone(),text),StreamEvent::QuestionDelta{question,context_key,text}=>Work::QuestionDelta(id.clone(),question,context_key,text),StreamEvent::NoReply{question,context_key}=>Work::NoReply(id.clone(),question,context_key),StreamEvent::QuestionCompleted{question,context_key}=>Work::QuestionComplete(id.clone(),question,context_key),StreamEvent::Completed=>Work::Complete(id.clone())};let tx=tx.clone();async move{tx.send(event).await.map_err(|_|\"Meeting receiver closed\".to_string())}}).await",
+      "finding": "The native answer callback awaits delivery to the runtime work channel."
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "line": 246,
+      "source": "let (work_tx, mut work) = mpsc::channel(256);",
+      "finding": "The runtime work channel is also bounded."
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "line": 289,
+      "source": "fn latest_semantic_reply_is_visible_while_older_code_is_still_streaming() {",
+      "finding": "The existing visibility-policy test explicitly retains an older answer until the new answer has a buffer."
+    }
+  ],
+  "conclusion": "Two recorded slow responses spend most of their endpoint-to-visible-word latency waiting for the final update to be sent and for its consumption event to be processed. The application serializes updates behind an outstanding input and disables its short refinement restart deadline after one retry. This supports a recurring architecture bottleneck, not a claim that all measured delay is provider reasoning.",
+  "transportUncertainty": "There is no per-message timestamp for receipt by the stdout reader or measured channel occupancy during these responses. Shared-reader blocking and awaited runtime delivery are possible local contributors supported by source, but their duration in these cases is unmeasured. Provider queue, reasoning and GPU time are also unmeasured.",
+  "visibilityFinding": "The retained-old-answer policy explains why an unrelated old answer can remain painted after a new topic is confirmed; separately recorded topic-switch and continuous-pressure examples already demonstrate that failure.",
+  "pending": [
+    "Bind the preserved systems response to the final cleanly stopped hour journal.",
+    "Run the planned final-prompt and actual playback ChatGPT comparisons after measured recordings finish.",
+    "Complete deferred independent accuracy assessment."
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "productionLogicChanged": false,
+  "scope": "Read-only source diagnosis and source-bound recorded timings. No expected answers injected, performance modifications, additional inference during measured playback, or claim of backend superiority."
+}

@@ -1,0 +1,154 @@
+{
+  "recordedAt": "2026-10-11T06:56:47.484Z",
+  "sourceHashes": {
+    "src-tauri/src/openai/codex.rs": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766",
+    "src-tauri/src/openai/client.rs": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1",
+    "src-tauri/src/meeting/context.rs": "bdaf1ccdf96aa82f5df9d027f35a1f06899ac9e9b00ec8e1288dddd60ada1666",
+    "src-tauri/src/runtime.rs": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f",
+    "src-tauri/src/meeting/intent.rs": "1da29ebdfab9758872fff5b048d38bdefbc95a313a90afafc9d6b7428170e38a"
+  },
+  "codexRuntime": {
+    "manifestSha256": "002b1dfc2e34a53aae929a9eec63f3302fce4c1b1e440f06c38f96fc6fa0d362",
+    "version": "0.160.1",
+    "binarySha256": "9e7c59c05cc1ce5677b1f94e835b2ac038ca3be14504e78d558eacdb0ea3f55d",
+    "actualBinarySha256": "9e7c59c05cc1ce5677b1f94e835b2ac038ca3be14504e78d558eacdb0ea3f55d"
+  },
+  "officialDocumentation": [
+    {
+      "url": "https://learn.chatgpt.com/docs/app-server",
+      "fetchedOn": "2026-10-11",
+      "section": "Steer an active turn",
+      "finding": "The app-server accepts additional input on the active turn and returns its turn identifier. It does not start a separate turn for that request."
+    },
+    {
+      "url": "https://developers.openai.com/api/docs/guides/steering",
+      "fetchedOn": "2026-10-11",
+      "section": "Queue input and handle the continuation",
+      "finding": "Responses steering acceptance acknowledges queued input. Application of the update can wait for current output and hosted work to finish.",
+      "qualification": "This documents the current Responses API. It does not establish that pinned Codex 0.160.1 used that exact transport or account route during these recordings."
+    }
+  ],
+  "sourceFindings": [
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 465,
+      "source": "if (latest.confirmed || stable_partial) && (question_changed || context_changed) && pending_question.is_none() {",
+      "claim": "The application permits one outstanding input frame before submitting another changed final question."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 335,
+      "source": "self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await",
+      "claim": "Its once-only second attempt disables the short final-refinement restart deadline."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 22,
+      "source": "const FINAL_CONSUMPTION_WAIT: Duration = Duration::from_millis(400);",
+      "claim": "The configured short final-refinement wait is 400ms, not a fixed ten-second sleep."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 491,
+      "source": "let steer=service.rpc(\"turn/steer\",json!({\"threadId\":id,\"expectedTurnId\":turn_id,\"input\":[{\"type\":\"text\",\"text\":text}]}),&service.dead).await;",
+      "claim": "The reply acknowledgement is distinct from the later matching userMessage consumption event."
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "line": 69,
+      "source": ".connect_timeout(std::time::Duration::from_secs(10))",
+      "claim": "The normal HTTP client has a ten-second connect timeout. Codex automatic answering takes the native app-server branch; that HTTP timeout is not evidence of a ten-second sleep on its steering path."
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "line": 266,
+      "source": "self.codex.as_ref().ok_or(\"Codex runtime is unavailable\")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,prompt,image,cancel,self.refill_policy,self.trace.clone(),updates,event).await",
+      "claim": "The selected Codex answer branch uses native app-server question updates."
+    },
+    {
+      "file": "src-tauri/src/meeting/context.rs",
+      "line": 10,
+      "source": "pub const ANSWER_CONTEXT_CHARS: usize = 8_000;",
+      "claim": "The nominal 8000-character value is not an enforced cap on the complete composite context."
+    },
+    {
+      "file": "src-tauri/src/meeting/context.rs",
+      "line": 199,
+      "source": "let history=if answers.is_empty(){String::new()}else{format!(\"\\n\\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\\n{answers}\")};",
+      "claim": "Exact code/prior-answer history is appended after selected transcript sections."
+    },
+    {
+      "file": "src-tauri/src/meeting/context.rs",
+      "line": 87,
+      "source": "while self.code_history.len()>1 && self.code_history.iter().map(|(_,_,q,a)|q.chars().count()+a.chars().count()).sum::<usize>()>MAX_CODE_HISTORY_CHARS {self.code_history.pop_front();}",
+      "claim": "The code archive evicts whole earlier entries when its archive budget is exceeded and preserves one accepted entry, even if its paired question takes it over the budget."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 435,
+      "source": "let partial_budget_available=prior_chars+history_chars+latest.question.chars().count()+selected_context.chars().count()+512<MAX_REUSABLE_HISTORY_CHARS;",
+      "claim": "The history-character heuristic suppresses extra partial refinements after the budget is spent; changed confirmed inputs still follow the final-update path."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 608,
+      "source": "&& prior_chars+history_chars<MAX_REUSABLE_HISTORY_CHARS;",
+      "claim": "The 80000-character condition restricts later native-history reuse; it is not a model token limit or a hard cap on all confirmed inputs within the current attempt."
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "line": 359,
+      "source": "if candidate_changed && intent_mode==meeting::intent::Mode::Existing {",
+      "claim": "The final-only control suppresses generation from candidate transcript changes. It still uses the normal confirmed-question route, so an internal pause can produce a confirmed fragment before the utterance continues."
+    }
+  ],
+  "observedTail": {
+    "file": "docs/evidence/architecture-tail-checkpoint-v71.json",
+    "sha256": "645731e14e953c287a32ac26e33231240d0250cbbb8e03a175f0c96276799473",
+    "round": 5,
+    "questionId": "2ebe80cc-d585-4b9f-b212-299100a3fc06",
+    "retainedVisibleWordMs": {
+      "low": 21297,
+      "high": 21302
+    },
+    "stages": {
+      "confirmationToFinalSendMs": 8629,
+      "sentToReaderReceiptMs": 10200,
+      "readerReceiptToConsumerMs": 0,
+      "consumerToRetainedDeltaMs": 1892,
+      "retainedDeltaToNativeVisibleMs": 10
+    },
+    "readerFullQueueCount": 0,
+    "readerQueuePeak": 13,
+    "readerSendMaxUs": 48,
+    "deltaCallbackMaxUs": 1716,
+    "promptChars": 5650,
+    "refinementChars": 8287
+  },
+  "conclusion": "The final-update serialization and disabled second-attempt short deadline are application mechanisms that permit long waits. The fresh recorded tail has no observed per-thread full queue and negligible reader-to-consumer processing delay. The ten-second pre-receipt interval cannot be assigned to a fixed HTTP connect wait or to provider-internal reasoning from these observations. Ongoing old-frame generation and repeated context transmission remain hypotheses to distinguish with event trajectories and matched fresh-meeting controls.",
+  "controls": {
+    "command": ".\\.local\\run-policy-controls-v71.ps1",
+    "plannedCases": 6,
+    "repetitions": 2,
+    "plannedNativeExecutions": 24,
+    "selection": "Slowest retained visible word and the nearest observed median from each of three freshly completed hours, subject to a bound recorded context and waveform. No correctness filter.",
+    "policies": [
+      "existing",
+      "final"
+    ],
+    "freezeSameContext": true,
+    "sameRecordedWave": true,
+    "newMeetingPerTrial": true,
+    "status": "prepared_helpers_only_not_executed",
+    "limitations": "Selected dependent cases do not estimate population p95. Final-only waits for normal confirmations, not a known physical end of a multipart question. The original full-hour cohort retains every turn."
+  },
+  "productionBehaviorChanged": false,
+  "goalComplete": false,
+  "pending": [
+    "Finish three new hour recordings and attached hard/pressure recordings",
+    "Run matched controls without concurrent examiner/grader inference",
+    "Bind tail trajectories and checkpoint to final journals",
+    "Complete deferred independent accuracy and substantive checks",
+    "Audit full requirements and publish the completed report"
+  ]
+}

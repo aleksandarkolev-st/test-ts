@@ -41,9 +41,55 @@ test('measurement keeps offscreen, revised, cancelled and incorrect trials in th
   assert.equal(result.summary.existing.evaluatedTurns,5);
   assert.equal(result.summary.existing.finitePhraseLatency.count,2);
   assert.equal(result.summary.existing.missingPhraseMeasurements,3);
-  assert.equal(result.summary.existing.under800MsJointProvisionalSuccesses,1);
-  assert.equal(result.summary.existing.successFraction,.2);
-  assert.equal(result.targetCertified,false);
+  assert.equal(result.summary.existing.correctAnswerAndVisibleUsefulPhraseCount,1);
+  assert.equal(result.summary.existing.cancelledTurns,1);
+  assert.deepEqual(result.summary.existing.modelVerdicts,{correct:4,incorrect:1,incomplete:0,unverified:0,missing:0});
+  assert.equal('under800MsJointProvisionalSuccesses' in result.summary.existing,false);
+  assert.equal('successFraction' in result.summary.existing,false);
+  assert.match(result.samplingScope,/5 retained turn rows/);
+  // Version two verifies original earlier public questions as well as the
+  // recognized prior context, so lost signs cannot silently change ground truth.
+  const revisedInput={answer:rows[1].answer,phase:rows[1].phase,publicPriorContext:rows[1].selectedContext,
+   recognizedQuestion:rows[1].recognizedQuestion,sourcePriorQuestions:[{question:rows[0].question,round:rows[0].round}],spokenQuestion:rows[1].question};
+  await writeFile(path.join(reviews,'trial-002.json'),JSON.stringify({inputSchemaVersion:2,inputSha256:hash(JSON.stringify(revisedInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
+  execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'version2')],{stdio:'pipe'});
+  rows[0].question='The earlier source specified negative 43.';
+  await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));
+  // Remove the older row's review so this check targets prior-source binding.
+  await rm(path.join(reviews,'trial-001.json'));
+  assert.throws(()=>execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'changed-prior')],{stdio:'pipe'}),/does not match recorded input/);
+  rows[0].question='What is the sum?';
+  await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));
+  const outcomeInput={answer:rows[1].answer,cancelled:rows[1].cancelled,error:rows[1].error??null,
+   phase:rows[1].phase,publicPriorContext:rows[1].selectedContext,recognizedQuestion:rows[1].recognizedQuestion,
+   sourcePriorQuestions:[{question:rows[0].question,round:rows[0].round}],spokenQuestion:rows[1].question};
+  await writeFile(path.join(reviews,'trial-002.json'),JSON.stringify({inputSchemaVersion:3,reviewerContinuity:false,inputSha256:hash(JSON.stringify(outcomeInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
+  execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'version3')],{stdio:'pipe'});
+  await writeFile(path.join(reviews,'trial-002.json'),JSON.stringify({inputSchemaVersion:3,reviewerContinuity:true,inputSha256:hash(JSON.stringify(outcomeInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
+  assert.throws(()=>execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'non-isolated-review')],{stdio:'pipe'}),/must use isolated reviewer history/);
+  await writeFile(path.join(reviews,'trial-002.json'),JSON.stringify({inputSchemaVersion:3,reviewerContinuity:false,inputSha256:hash(JSON.stringify(outcomeInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
+  rows[1].error='Recorded backend failure';
+  await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));
+  assert.throws(()=>execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'changed-outcome')],{stdio:'pipe'}),/does not match recorded input/);
+  delete rows[1].error;
+  rows[1].recordedSourcePriorQuestions=[{question:'The source interview specified a different earlier public question.',round:17}];
+  const separateInput={...outcomeInput,sourcePriorQuestions:rows[1].recordedSourcePriorQuestions.map(item=>({...item}))};
+  await writeFile(path.join(reviews,'trial-002.json'),JSON.stringify({inputSchemaVersion:3,reviewerContinuity:false,inputSha256:hash(JSON.stringify(separateInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
+  await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));
+  execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'separate-source-history')],{stdio:'pipe'});
+  rows[1].recordedSourcePriorQuestions[0].question='An altered source history must invalidate this cached review.';
+  await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));
+  assert.throws(()=>execFileSync(process.execPath,[tool,journal,reviews,path.join(directory,'altered-source-history')],{stdio:'pipe'}),/does not match recorded input/);
+  rows[1].recordedSourcePriorQuestions=separateInput.sourcePriorQuestions;
+  const firstInput={answer:rows[0].answer,phase:rows[0].phase,publicPriorContext:rows[0].selectedContext,
+   recognizedQuestion:rows[0].recognizedQuestion,spokenQuestion:rows[0].question};
+  await writeFile(path.join(reviews,'trial-001.json'),JSON.stringify({inputSha256:hash(JSON.stringify(firstInput)),
+   review:{verdict:'correct',usefulPhrase:'The sum is 43.'}}));
   // A changed answer must invalidate an existing independent review.
   rows[0].answer='A different answer.';
   await writeFile(journal,JSON.stringify({status:'complete',stoppedCleanly:true,rows,overlayPaintSamples:samples}));

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-10T22:23:02Z",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "playbackOutput": "T24E390",
+  "microphoneUsed": false,
+  "sourceJournalSha256": "24ce1d1c9ca243b2e3a9c7056085ce9cf0a7a07fee85b01fc335a81dea9ee4c3",
+  "requirement": 8,
+  "actualPreviousAnswerStreamingAtDatabaseQuestionLaunch": true,
+  "previousCudaAnswerVisibilityAfterDatabaseConfirmationMs": {
+    "low": 1872,
+    "high": 1877
+  },
+  "databaseAnswerContainsCudaTerms": false,
+  "displayRequirementPassed": false,
+  "finding": "The old CUDA answer remained in the recorded visible viewport after the new database question was confirmed, until its first answer word was available. The new database answer itself contained no CUDA terminology or assumptions. Content correctness and stale display are separate results.",
+  "rawEvidence": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads/confirmation-visibility-audit.json",
+  "scope": "One actual streaming topic switch, with host/native clock bounds and recorded viewport states carried until the next observed paint change. No claim of continuous unobstructed OS-level visibility, universal behavior, or full interview accuracy."
+}

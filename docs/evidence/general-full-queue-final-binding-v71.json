@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-10-11T08:08:52.283Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/general-hour-t/interview.json",
+    "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+    "status": "complete",
+    "stoppedCleanly": true
+  },
+  "evidence": [
+    {
+      "file": "docs/evidence/architecture-queue-checkpoint-v71.json",
+      "sha256": "96d617c1cb97b2e148373f6515a6c3c5ac8fbda159dfeff1a36e55b52134a85a"
+    },
+    {
+      "file": "docs/evidence/architecture-general-r22-final-row-v71.json",
+      "sha256": "efd0222af17171f5602f95eb21887f5de995c8ee0dcb01b548503b740d11cdbf"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/general-hour-t/duration-audit.json",
+      "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+    }
+  ],
+  "round": 22,
+  "responseVersion": "d1d9de7b-78d6-490f-9509-504541787326:35",
+  "question": "Complete analyze using the stated contract. How will each elimination pivot retain enough information to recover both a particular solution and a kernel basis? Supply executable Python three, then compute the rank of N restricted to that kernel without enumeration. [Interviewer pause: one point five seconds.] Trace the case where M is zero, N has exactly one nonzero column, d is zero, and first_tag is zero. Give both counts and explain why testing one kernel vector on which N vanishes can falsely suggest uniqueness. Include validation and complexity.",
+  "phase": "superseded",
+  "cancelled": true,
+  "error": null,
+  "firstRetainedVisibleStreamedWord": {
+    "word": "Each",
+    "characterRange": [
+      0,
+      4
+    ],
+    "observedHostMs": 1791701942740,
+    "latencyMs": {
+      "low": 30676,
+      "high": 30681
+    },
+    "responseRevision": 35,
+    "observedDuringStreaming": true,
+    "retainedInCurrentRecordedAnswer": true
+  },
+  "stagesMs": {
+    "confirmedToSend": 7179,
+    "sentToMatchingReader": 21418,
+    "readerToConsumer": 50,
+    "consumerToRetainedDelta": 1246,
+    "retainedDeltaToRender": 6
+  },
+  "readerQueue": {
+    "peak": 256,
+    "fullSendCount": 693,
+    "completedSendWaitTotalMs": 103.536,
+    "maximumCompletedSendWaitMs": 5.187
+  },
+  "callback": {
+    "count": 4070,
+    "totalCompletedWaitMs": 77.842,
+    "maximumCompletedWaitMs": 5.572
+  },
+  "scope": "The earlier live full-queue observation matches the final retained response in the completed, SHA-verified general interview. The cancelled, truncated code answer remains a recorded outcome. Completed queue waits are cumulative across this thread/attempts; they do not isolate a causal interval or exclude in-progress waits and other threads blocking the shared reader. These counters are not a provider compute measurement. Accuracy remains pending independent review.",
+  "goalComplete": false
+}

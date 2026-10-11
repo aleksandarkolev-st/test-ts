@@ -1,0 +1,277 @@
+{
+  "recordedAt": "2026-10-11T02:09:26.434Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/backend-playback-comparison/playback.json",
+      "sha256": "5dcbe21e7b060f0cf31f5fc0a76448fb1a5ed598f9ae5517738be05fb51587b1"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-response-diagnostic/response-diagnostic.json",
+      "sha256": "2a8153e0d196e4cd35e4c711eb044269eb6f728e76597654f1dbd49174e21b2c"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/chatgpt-response-diagnostic-no-tier/response-diagnostic.json",
+      "sha256": "d96b558b4fe43676cddc12feb69aa5b2a3e054ec6dd5f3f3713018cb8cbafbe2"
+    }
+  ],
+  "cases": [
+    {
+      "backend": "codex",
+      "name": "histogram-late-reversal-exact-pause",
+      "waveHashes": [
+        "dab7facd8a3a8afcda79fae1f57a26e5b94eeef3e4e80b7c6984c5fde6e0a002"
+      ],
+      "sourceQuestions": [
+        "Implement a parallel histogram on the GPU using atomics. The keys are unsigned integers in a known small finite range, the input length is arbitrary, and the output counts must be exact. Explain ownership and give executable CUDA code. Actually, no atomics are allowed, and the keys are highly skewed. Use the final restriction in your solution and explain how you avoid races."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": true,
+      "questionCandidateEvents": 142,
+      "questionConfirmedEvents": 5,
+      "answerStartedEvents": 1,
+      "answerCompletedEvents": 1,
+      "finalTranscripts": [
+        "Implement a parallel histogram on the GPU using atomics",
+        "The keys are unsigned integers in a known small finite range",
+        "The input length is arbitrary",
+        "and the output counts must be exact",
+        "Explain ownership and give executable CUDA code",
+        "actually",
+        "no atomics are allowed",
+        "and the keys are highly skewed.",
+        "Use the final restriction in your solution and explain how you avoid races"
+      ],
+      "timingRows": 1,
+      "pollErrors": 0
+    },
+    {
+      "backend": "chatgpt",
+      "name": "histogram-late-reversal-exact-pause",
+      "waveHashes": [
+        "dab7facd8a3a8afcda79fae1f57a26e5b94eeef3e4e80b7c6984c5fde6e0a002"
+      ],
+      "sourceQuestions": [
+        "Implement a parallel histogram on the GPU using atomics. The keys are unsigned integers in a known small finite range, the input length is arbitrary, and the output counts must be exact. Explain ownership and give executable CUDA code. Actually, no atomics are allowed, and the keys are highly skewed. Use the final restriction in your solution and explain how you avoid races."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": false,
+      "questionCandidateEvents": 0,
+      "questionConfirmedEvents": 0,
+      "answerStartedEvents": 0,
+      "answerCompletedEvents": 0,
+      "finalTranscripts": [
+        "Implement a parallel histogram on the GPU using atomics",
+        "The keys are unsigned integers in a known small finite range",
+        "The input length is arbitrary",
+        "and the output counts must be exact",
+        "Explain ownership and give executable CUDA code",
+        "actually",
+        "no atomics are allowed",
+        "and the keys are highly skewed.",
+        "Use the final restriction in your solution and explain how you avoid races"
+      ],
+      "timingRows": 0,
+      "pollErrors": 0
+    },
+    {
+      "backend": "chatgpt",
+      "name": "long-question-essential-tail-exact-pause",
+      "waveHashes": [
+        "f5595818e261b696ba34fe2908544e11e8a70e44f73fea46052b6b9f6f46f648"
+      ],
+      "sourceQuestions": [
+        "Compute exact sums of batches of signed integer measurements before we consider optimizations. Some batches are empty, some contain one value, and others are much larger. Values can be positive or negative. Explain how you would validate an implementation and return useful error information. There is an essential final condition: use signed sixty-four-bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": false,
+      "questionCandidateEvents": 0,
+      "questionConfirmedEvents": 0,
+      "answerStartedEvents": 0,
+      "answerCompletedEvents": 0,
+      "finalTranscripts": [
+        "Compute exact sums of batches of signed integer measurements before we consider optimizations",
+        "Some batches are empty",
+        "some contain one value",
+        "and others are much larger",
+        "Values can be positive or negative",
+        "Explain how you would validate an implementation and return useful error information.",
+        "There is an essential final condition",
+        "use signs sixty four bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum"
+      ],
+      "timingRows": 0,
+      "pollErrors": 0
+    },
+    {
+      "backend": "codex",
+      "name": "long-question-essential-tail-exact-pause",
+      "waveHashes": [
+        "f5595818e261b696ba34fe2908544e11e8a70e44f73fea46052b6b9f6f46f648"
+      ],
+      "sourceQuestions": [
+        "Compute exact sums of batches of signed integer measurements before we consider optimizations. Some batches are empty, some contain one value, and others are much larger. Values can be positive or negative. Explain how you would validate an implementation and return useful error information. There is an essential final condition: use signed sixty-four-bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": true,
+      "questionCandidateEvents": 156,
+      "questionConfirmedEvents": 5,
+      "answerStartedEvents": 1,
+      "answerCompletedEvents": 1,
+      "finalTranscripts": [
+        "Compute exact sums of batches of signed integer measurements before we consider optimizations",
+        "Some batches are empty",
+        "some contain one value",
+        "and others are much larger",
+        "Values can be positive or negative",
+        "Explain how you would validate an implementation and return useful error information.",
+        "There is an essential final condition",
+        "use signs sixty four bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum"
+      ],
+      "timingRows": 1,
+      "pollErrors": 0
+    },
+    {
+      "backend": "codex",
+      "name": "cuda-to-phantom-reads",
+      "waveHashes": [
+        "1a82c6ae71ed2b252ad34c6534b98367e48412f8bfa946ba874a56525f20483b",
+        "85f79d44243b04e557802129b8768c95279a502bc1f6afa4e6f0ec83676040f5"
+      ],
+      "sourceQuestions": [
+        "Explain CUDA global memory coalescing. Give a concrete indexing example, compare adjacent and strided lane addresses, and explain what assumptions are needed before predicting transaction counts.",
+        "Explain database phantom reads and how serializable isolation handles them."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": true,
+      "questionCandidateEvents": 88,
+      "questionConfirmedEvents": 2,
+      "answerStartedEvents": 3,
+      "answerCompletedEvents": 2,
+      "finalTranscripts": [
+        "Explain",
+        "CUDA global memory coalescing",
+        "give a concrete indexing example",
+        "Compare adjacent and strided lane addresses",
+        "and explain what assumptions are needed before predicting transaction counts",
+        "Explain database phantom reads and how serializable isolation handles them."
+      ],
+      "timingRows": 3,
+      "pollErrors": 0
+    },
+    {
+      "backend": "chatgpt",
+      "name": "cuda-to-phantom-reads",
+      "waveHashes": [
+        "1a82c6ae71ed2b252ad34c6534b98367e48412f8bfa946ba874a56525f20483b",
+        "85f79d44243b04e557802129b8768c95279a502bc1f6afa4e6f0ec83676040f5"
+      ],
+      "sourceQuestions": [
+        "Explain CUDA global memory coalescing. Give a concrete indexing example, compare adjacent and strided lane addresses, and explain what assumptions are needed before predicting transaction counts.",
+        "Explain database phantom reads and how serializable isolation handles them."
+      ],
+      "speechConfiguration": {
+        "remoteOnly": true,
+        "microphoneCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        },
+        "speechChunkMs": 160,
+        "speechBackend": "nemotron"
+      },
+      "stoppedCleanly": true,
+      "settledAfterPlayback": false,
+      "questionCandidateEvents": 0,
+      "questionConfirmedEvents": 0,
+      "answerStartedEvents": 0,
+      "answerCompletedEvents": 0,
+      "finalTranscripts": [
+        "Explain",
+        "CUDA global memory coalescing",
+        "give a concrete indexing example",
+        "compare adjacent and strided lane addresses",
+        "and explain what assumptions are needed before predicting transaction counts",
+        "explain database Phantom reads and how serializable isolation handles them"
+      ],
+      "timingRows": 0,
+      "pollErrors": 0
+    }
+  ],
+  "transportDiagnosis": {
+    "originalFastTierStatus": 400,
+    "actualErrorDetail": "Unsupported service_tier: fast",
+    "omitOptionalTierStatus": 200,
+    "scope": "One untimed follow-up diagnostic confirms HTTP acceptance when the optional tier is omitted. A 200 header alone is not a completed model answer or comparative latency measurement; separate preserved final-prompt trials are queued."
+  },
+  "detectionFinding": {
+    "nativeChatgptCases": 3,
+    "nativeChatgptWaveforms": 4,
+    "questionCandidateEvents": 0,
+    "questionConfirmedEvents": 0,
+    "answerStartedEvents": 0,
+    "explanation": "The captured imperative requests were transcribed but the ChatGPT route started no question jobs. Runtime sets semantic_intent only for Codex. The ChatGPT fallback requires interrogative score >=4 or an existing related question; these imperative openings do not qualify. Consequently these native cases did not reach the failing answer POST.",
+    "scope": "Observed on these exact cases, not every ChatGPT question or every speech style. The ChatGPT topic-switch source was eventually played after the recorder wait expired; it did not interrupt a streaming ChatGPT answer because none existed."
+  },
+  "correction": {
+    "supersedesArchitecturalFindingIn": "docs/evidence/backend-observation-policy-v70.json",
+    "priorFileSha256": "fde63a290f3f2ab2a4ca16fd87299ae994c09faee131ea2812ee28273cace582",
+    "previousFindingIncorrect": true,
+    "sourceUnchanged": true,
+    "actualNormalAuthHttpClient": {
+      "connectTimeoutSeconds": 10,
+      "totalTimeoutSeconds": 120,
+      "redirectPolicy": "none"
+    },
+    "explanation": "The earlier audit inspected reqwest library defaults and mistook the acceptance fixture Client::new branch for normal production construction. Normal saved authentication uses Client::builder with explicit 10-second connect and 120-second total timeout. The same source hash proves this is an audit correction, not a new production change. The comparison still has a shared outer 180-second observation budget; no trial exercised that branch."
+  },
+  "documentation": {
+    "url": "https://developers.openai.com/api/reference/python/resources/responses",
+    "accessedAt": "2026-10-11T02:09:26.435Z",
+    "observation": "Official Responses reference documents fast and priority and omission defaulting to auto. The actual account-backed endpoint rejected fast here; this is an observed route incompatibility, not a claim that fast is globally invalid."
+  },
+  "productionLogicChanged": false,
+  "scope": "Source-bound recording and corrected static architecture interpretation. Original failures, recordings and historical reports remain preserved. No expected answers, production fixes, performance threshold or backend winner is introduced."
+}

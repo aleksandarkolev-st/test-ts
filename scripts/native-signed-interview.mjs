@@ -78,6 +78,7 @@ const examiner=path.join(root,'src-tauri/target/debug/examples/adaptive-intervie
 await mkdir(output,{recursive:true});await mkdir(appDir,{recursive:true});await mkdir(dataDir,{recursive:true});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let app,vite,connection,invoke,started=false,appError='';
+let resourceTimer,resourcePending=Promise.resolve();
 const result={status:'in_progress',model,effort,tier:'fast',examinerModel,examinerEffort,scenario:name,rounds,realAudio,startedAt:new Date().toISOString(),measurement:realAudio?'Live adaptive synthetic English speech through WASAPI, local ASR, signed-in Codex, actual scheduler/context and overlay. Not human-interview certification. Model grades require independent technical review.':'Live signed-in Codex through actual native scheduler/context/rendering; simulated partial and final transcripts exclude ASR latency. Model grades require independent technical review.',rows:[]};
 result.interviewPlan={runId:randomUUID(),brief:process.env.COPILOT_NATIVE_INTERVIEW_BRIEF||null,requestedDurationMs:budget.durationMs,questionDelivery:realAudio?'synthetic spoken audio':'text'};
 result.primaryLatencyMetric='firstWordFromSpeechEndMs: receipt of the first alphanumeric character of the retained answer word, after protocol decoding and question/context gating. Does not wait for word or sentence completion. Rendering is separate.';
@@ -112,6 +113,11 @@ result.sourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/audio/m
 result.intentSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/intent.rs','src-tauri/src/meeting/context.rs','scripts/intent-encoder-worker.py','scripts/intent_tokens.py'].map(async file=>[file,hash(await readFile(file))])));
 result.diagnosticSourceHashes=Object.fromEntries(await Promise.all(['src-tauri/src/meeting/provisional.rs','src-tauri/src/openai/timing.rs','src-tauri/examples/adaptive-interview.rs','scripts/native-signed-interview.mjs','scripts/lib/examiner-retry.mjs','scripts/lib/rapid-interview.mjs','scripts/lib/rapid-wave.mjs','scripts/lib/deep-audio-interview.mjs','scripts/lib/deep-replay-context.mjs','scripts/lib/painted-answer-recorder.mjs','scripts/play-fixture-device.ps1','scripts/synthesize-interview-question.ps1'].map(async file=>[file,hash(await readFile(file))])));
 let persistence=Promise.resolve();
+Object.assign(result.diagnosticSourceHashes,Object.fromEntries(await Promise.all([
+ 'scripts/lib/deep-delivery.mjs','scripts/lib/deep-observations.mjs','scripts/lib/continuous-pressure.mjs',
+ 'scripts/lib/older-code-probe.mjs','scripts/lib/examiner-public-history.mjs','scripts/play-pressure-device.ps1',
+ 'scripts/lib/exact-pause-wave.mjs','scripts/sample-interview-process.ps1'
+].map(async file=>[file,hash(await readFile(file))]))));
 const persist=()=>{
   const snapshot=JSON.stringify(result,null,2);
   persistence=persistence.then(()=>writeFile(path.join(output,'interview.json'),snapshot));
@@ -216,6 +222,18 @@ try {
   if(selfLoopback)env.COPILOT_ACCEPTANCE_SELF_LOOPBACK='1';
   delete env.COPILOT_TEST_API;delete env.COPILOT_INTERVIEW_RESUME;
   app=spawn(path.join(appDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});
+  result.nativeProcessId=app.pid;
+  result.nativeResources=[];
+  const sampleNativeResources=()=>{
+    resourcePending=resourcePending.then(()=>new Promise(resolve=>{
+      const child=spawn('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/sample-interview-process.ps1'),'-ProcessId',String(app.pid),'-IncludeDescendants'],
+        {cwd:root,windowsHide:true,stdio:['ignore','pipe','ignore']});let output='';
+      child.stdout.on('data',chunk=>{output+=chunk;});
+      child.once('error',()=>resolve());
+      child.once('exit',()=>{try{result.nativeResources.push(JSON.parse(output));}catch{}resolve();});
+    }));
+  };
+  sampleNativeResources();resourceTimer=setInterval(sampleNativeResources,15000);
   app.stderr.on('data',chunk=>{appError=(appError+chunk).slice(-4000);});
   for(let i=0;i<600;i++){try{connection=await connectNativePages(port);break;}catch{if(app.exitCode!==null)throw Error(`Native app exited ${app.exitCode}: ${appError}`);await sleep(100);}}
   assert(connection,'Native main and overlay unavailable');
@@ -306,7 +324,7 @@ try {
   let offset=await eventCount();await event('started');const introEnd=await event('ended');await event('transcript',intro);
   result.introduction=await outcome(intro,offset,introEnd);await invoke('action',{action:'dismiss'});
   if(process.env.COPILOT_DEEP_AUDIO==='1'){
-    await runDeepAudioInterview({root,output,result,rounds,scenario,seedQuestion,invoke,connection,eventCount,events,runChild,persist,
+    await runDeepAudioInterview({root,output,result,rounds,budget,scenario,seedQuestion,invoke,connection,eventCount,events,runChild,persist,
       playbackName,examiner,examinerModel,examinerEffort});
   }else if(rapidMode){
     await runRapidInterview({root,output,result,budget,examiner,invoke,connection,event,events,eventCount,runChild,persist,realAudio,playbackName,examinerModel,examinerEffort});
@@ -356,6 +374,7 @@ try {
   }
 } catch(error){result.status='failed';result.failure=String(error);if(invoke){try{const snapshot=await invoke('get_snapshot');result.failureState={status:snapshot.status,error:snapshot.error};}catch{}}if(process.env.COPILOT_NEMO_DIAGNOSTICS==='1')result.nativeDiagnosticTail=appError;throw error;}
 finally {
+  clearInterval(resourceTimer);await resourcePending;
   if(connection){try{await writeFile(path.join(output,'event-log.json'),JSON.stringify(await events(),null,2));}catch{}}
   if(started&&invoke){try{await invoke('stop_meeting');const stopped=await invoke('get_snapshot');result.stoppedCleanly=!stopped.active&&!stopped.answer&&!stopped.questions.length;}catch(error){result.cleanupFailure=String(error);}}
   result.completedAt=new Date().toISOString();await persist();connection?.close();app?.kill();vite?.kill();

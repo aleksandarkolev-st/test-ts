@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-11T08:24:09.092Z",
+  "evidence": {
+    "file": "docs/evidence/architecture-systems-r36-missing-word-v71.json",
+    "sha256": "ab4e63b4669d025c103f5b9c62051621de493f8e87d693ba49494cbc51d18db0"
+  },
+  "sourceHashes": {
+    "scripts/summarize-deep-audio-duration.mjs": "c8324dac3951b7e16a98ac0e9986fe356930523840c74c102257f0749c8bebe6",
+    "scripts/lib/streamed-word-latency.mjs": "ac3264b6709deec358e74f3231bdf4e5723913ef274338b777ea70b6c8a47ca9"
+  },
+  "round": 36,
+  "responseVersion": "b9f61be1-b146-4a49-a756-8b9f02a615a5:52",
+  "question": "Change only single-writer ownership: two processes open the same existing log independently. Both recovery calls return offset L and next sequence seven. Each truncates to L, positions there, writes a different complete sequence-seven record, successfully fsyncs, and acknowledges. Give a permitted schedule where one acknowledged payload disappears. Then supply executable Linux C++20 code serializing recovery, truncation, append, and fsync across cooperating processes using an advisory file lock. Handle EINTR, lock lifetime, process crashes, and acknowledgement ordering. Does opening with O_APPEND alone repair sequence uniqueness or record integrity when writes can be partial? Retain the original durability guarantee.",
+  "phase": "complete",
+  "cancelled": false,
+  "error": "Codex answer timed out",
+  "answerCharacters": 0,
+  "retainedVisibleWordLatencyMs": null,
+  "latestInputReaderReceived": null,
+  "latestInputConsumed": null,
+  "durationsMs": {
+    "confirmedToLastSend": 33849,
+    "lastSendToAcknowledgement": 4,
+    "lastSendToCleanupStart": 38740,
+    "physicalEndpointToRecordedCompletion": {
+      "low": 73262,
+      "high": 73278
+    }
+  },
+  "scope": "An empty retained answer cannot contain a retained visible word, regardless of earlier provisional paint frames. The console diagnostic subtracts from null and prints a negative number; the duration summarizer explicitly returns null for an unset first-word timestamp, and the primary retained-word metric uses actual paint plus retained text. This failed recorded answer remains in the row/accuracy/error denominators and is a missing retained-word observation, not a negative, zero or successful response-time measurement. Earlier obsolete visible words, if any, are a separate measurement requiring the completed journal. Final journal binding and independent review remain pending.",
+  "finalJournalBindingPending": true,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

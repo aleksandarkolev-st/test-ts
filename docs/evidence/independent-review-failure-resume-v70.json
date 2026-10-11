@@ -1,0 +1,119 @@
+{
+  "recordedAt": "2026-10-11T02:16:16.042Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+    "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9"
+  },
+  "failure": {
+    "stage": "independent_model_review",
+    "sourceRound": 16,
+    "reviewerModel": "gpt-6.1-sol",
+    "reviewerEffort": "low",
+    "reviewerContinuity": false,
+    "inputSha256": "4a0daa9688fcb084aa161f725734d3654b1d6f9bdd19ebb57aff4d463fbba4f2",
+    "recordedTerminalError": "Codex answer timed out",
+    "terminalExecSession": 76300,
+    "terminalExecExitCode": 1,
+    "sourceLog": {
+      "file": "artifacts/deep-interview-v70/final-tail-runs.jsonl",
+      "sha256": "1665d5efcd21a15f1983e988cd03d262deafd04ad39eff9340f2681c044fad68"
+    },
+    "missingCompletedReviewFile": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-016.json",
+    "partialReviewerOutputSaved": false,
+    "scope": "The stderr was directly observed on the terminal exec session. The reviewer aborted before saving review 16. This is a grader failure, separate from the candidate recording outcomes; the helper did not retain any partial reviewer output."
+  },
+  "preservedCachedSystemsReviews": [
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-001.json",
+      "sha256": "204fb9f7f7effff6259b318f959b46084e0f27a8a7491fe15d1ea2e4afe3800b",
+      "inputSha256": "81e3a725d3f4732b5df17b86dfee5410a81017eb130a863731f8b603cd207fb0"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-002.json",
+      "sha256": "ba790d5723ed38d2cfe5c482a23aec2d924d8a0f329dc0cfc38c5206a8322ee3",
+      "inputSha256": "15d6c1b7221c5c43110ccb56d17312687ebdc41db0d57e0b9ad5aedbfdd4dd40"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-003.json",
+      "sha256": "9dbeec04c7e4c6c4e72b36ec55ad360cf223356b09062bc917bbee5d05784454",
+      "inputSha256": "0c42d653c2bb1ddf50203a2642e86cff61bef4b463a3e96bc0b38a07b41c1f3b"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-004.json",
+      "sha256": "5a0b2f6302adee7516de3b8e76a247a0cc62c36c54a3331951915897872002c0",
+      "inputSha256": "b8a4f55b3464cbed00773014eff2cf6b69049704e5fc3dbd7faeb0d0f28456d1"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-005.json",
+      "sha256": "6bfbde3c3684b2533dbac18de5a1066f1a707c935f4150ec9589d3e798d5efaa",
+      "inputSha256": "3218b2e49c316f4118756b68998c96ac38dcbbac999458427336d35e68fc1635"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-006.json",
+      "sha256": "3a14942fafc0de26c9534c9fd268191b74547abd4f514849fc3a91f0008890de",
+      "inputSha256": "79b7aecf63139048be565a2475d42777f909d78f0c62266d26296f3d919f4bee"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-007.json",
+      "sha256": "ed602f745f962f3579fa41587affad93fcda9099759f7259afa579d7ae4217fa",
+      "inputSha256": "fc1f15566d61e3bef85a8fe45ed6daa42548f8b6456e4ec1114c5c906be66444"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-008.json",
+      "sha256": "bc0ccf417ee1eaae644b9bf9f89abb462d62eaf96c5872c0c53fc41de0ba2d32",
+      "inputSha256": "35ee94d954888742d4397fb718bd4d57a9892e266f3f8c09b5babb745afcdcd5"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-009.json",
+      "sha256": "381465537798e650fa7eff52ea52d736d47e75fb1414a5bbc3187a5cb8b0f04b",
+      "inputSha256": "8f314f5c12ed4fd66f989d35cc49148340d92e656f14885eed26c6e3a49a786a"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-010.json",
+      "sha256": "889cf5a06dbd09577595429c14245cbc5249699898fe902b6a7728c8db352c79",
+      "inputSha256": "e77cbac27e0729447498d2b1fc0c69ec6b05b37f6031d0500cf315afd7786ed0"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-011.json",
+      "sha256": "53432764e22a901f89ba651365c10853fe20ce6afe21584e0b34008bd67d4601",
+      "inputSha256": "ba1b9f5c2d90e50d05a133a138eb1acca3acef8b4d13966c71da63826265941b"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-012.json",
+      "sha256": "12ea8259777750eb9b4ce8a8ee81f85852a11aa847baa792b7180a20913bd83d",
+      "inputSha256": "12e575c6151d6213bf29c96d3f92081ddfa81945db12667bf1abeef583512604"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-013.json",
+      "sha256": "bdce9e7d36c7f59e8364a8e7bddd277aec6adfe48771114f6a13949584c16283",
+      "inputSha256": "4b39b99cb94cfd977201458a708ee86ad6f07aaffd8a5e15c8b701e1acb13a29"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-014.json",
+      "sha256": "fc6c7d9e2bcf17fa7133a447e54f1a67770488275a51249a076d5cd4220d6735",
+      "inputSha256": "77c1840fb83c85d502f277edbebefe5e27532a2a3aafa1a40e293f4f8a4deafc"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-model-review-v70/trial-015.json",
+      "sha256": "9a1ced940a2b0cff6d9a4e1cae0ec583127c568878465ba9629e8a8810b7c41d",
+      "inputSha256": "e1cd19449b0837e73aa616251353ca459d65f20f200d3d32a8b0ae5c195136ce"
+    }
+  ],
+  "existingDsaReviews": 49,
+  "resume": {
+    "script": ".local/resume-final-reviews-v70.ps1",
+    "execSession": 24407,
+    "ownerPid": 2532,
+    "comparisonPidAtObservation": 47984,
+    "order": [
+      "separate_no_tier_paired_requests",
+      "remaining_recorded_reviews_using_completed_caches",
+      "all_backend_reviews"
+    ],
+    "identicalRecordedInput": true,
+    "completedCandidateRecordingsReplayed": false,
+    "completedReviewsOverwritten": false
+  },
+  "goalComplete": false,
+  "scope": "Records a terminal grader failure and the authorized cached continuation. No candidate answer, source waveform, model choice or accuracy verdict is replaced; reviewer retry is not an additional candidate trial."
+}

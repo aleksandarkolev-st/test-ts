@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {jobsAtObservation} from './deep-observations.mjs';
 
 const introduction='REMOTE: This is a technical interview. I will present hypothetical systems problems, ask you to analyze them, and keep drilling into your reasoning. Some challenges will be intentionally vague; ask for missing information rather than inventing it.';
 
@@ -23,7 +24,9 @@ export function replayContextCheckpoint(journal,row){
  const observation=(journal.deepObservations??[]).findLast(o=>
   o.hostAfterMs<=cutoff.hostBeforeMs&&o.nativeNow<=cutoff.nativeMs);
  assert(observation,'No authoritative native observation before playback');
- const checkpoint=publicContextCheckpoint(observation,{hostMs:observation.hostAfterMs,nativeMs:observation.nativeNow});
+ const states=journal.deepObservations??[];
+ const checkpoint=publicContextCheckpoint({...observation,jobs:jobsAtObservation(states,states.indexOf(observation))},
+  {hostMs:observation.hostAfterMs,nativeMs:observation.nativeNow});
  checkpoint.provenance.reconstructedFromRecordedPrePlaybackObservation=true;
  checkpoint.provenance.playbackCutoff=cutoff;
  return checkpoint;

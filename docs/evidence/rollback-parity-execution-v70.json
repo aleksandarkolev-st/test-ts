@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-10-11T00:16:54.142Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v70/algorithms-hour-t/interview.json",
+    "sha256": "d858228d7ada6711b0bcb1c334fa2d42c985553aae7c07f54e88b1a6ea282ae5",
+    "status": "complete"
+  },
+  "round": 16,
+  "questionSha256": "ed12c3465d20da5ceba7eb2ad5abbe82025504875cd04731ccdbda58700b2cf6",
+  "answerSha256": "7071de241b2a35b32209282b75014f269c4e8d0d777f4efcdcae962d0f0a3bd2",
+  "code": {
+    "file": "artifacts\\deep-interview-v70\\algorithms-hour-t\\code-review\\round16\\round-16-block-1.py",
+    "languageAnnotation": "python",
+    "bytes": 7339,
+    "sha256": "fff13071e6af8428e3c4225747a7afa8feee3214e8cf0cbab3721d340091fbee"
+  },
+  "priorPublicContract": [
+    {
+      "round": 13,
+      "question": "Switch to dynamic connectivity. Implement Python dynamic_connected(n, ops), returning booleans for ask operations. Operations are add(id,u,v), remove(id), and ask(u,v); queries see preceding operations. An id has at most one active edge, removals target active ids, and removed ids may be reused with different endpoints. Parallel edges and self-loops are valid. Both n and operation count are at most 200,000. Use a segment tree over time and rollback union-find. Supply executable snapshot and rollback code, explain activity boundaries and redundant unions, and derive time and storage bounds. Why can’t ordinary path compression remain with an unchanged union-only rollback log?",
+      "questionSha256": "e1375567da736519355dd7dc1869e6723f2c7ce4641bb3349246cfbc56c1754b"
+    },
+    {
+      "round": 15,
+      "question": "Now change ask to ('ask',u): return whether u’s current connected component is bipartite. Keep the same limits, edge lifetimes, parallel edges, and self-loops. Patch your executable code with rollback parity union-find. Your current `if a == b: return False` cannot simply discard every redundant edge. Explain why, and record enough state to undo contradictions and component merges exactly. Test a triangle that becomes bipartite after one edge is removed, and a self-loop in a separate component. What happens when two already non-bipartite components merge and that merge is rolled back? State invariants and updated time and storage bounds.",
+      "questionSha256": "7c05982e41fe20ed5db766368aa0b90f87e1f4c2d1a077cbc3ec49adfcdc7b14"
+    }
+  ],
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round16/round-16.manifest.json",
+      "sha256": "37a834a2e5854660892d71b66555d86a5d9a36c61b09cc66b1db43b8f4cfed62"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round16/independent-rollback-oracle.json",
+      "sha256": "6c6fcd14eb1b1736e0ca02127a6fbe1576287e74d8f28e60c927ff3f12f7f120"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "candidateAuthoredTests": "passed",
+  "independentChecks": {
+    "offline_sequences": 1200,
+    "component_queries": 24014,
+    "nested_rollback_sequences": 300,
+    "direct_component_queries": 228510,
+    "exact_snapshot_restorations": 5676
+  },
+  "exercisedFeatures": {
+    "self_loop_additions": 4914,
+    "parallel_active_additions": 9278,
+    "reused_edge_ids": 4468
+  },
+  "seed": 15075518658863753000,
+  "failures": 0,
+  "observedExecutionMs": 855.615200009197,
+  "originalSourcePatched": false,
+  "manualSourceReview": {
+    "parity": "For opposite-colored endpoints, the parity linking their roots is pu XOR pv XOR 1. XOR symmetry preserves this expression if roots are swapped for union by size.",
+    "contradictions": "A same-root inconsistent edge logs and increments that root’s bad count. A consistent redundant edge does not change state. Component merges aggregate bad counts; asks inspect only their own root.",
+    "rollback": "Reverse history restores old bad counts or detaches a merged root and restores the parent root’s old size and bad count. The detached root was a root before its merge, so resetting its parent to itself and parity to zero is valid; its size and bad count were retained.",
+    "lifetimes": "An active edge lifetime covers [addition,removal), or ends at the operation count if not removed. Its disjoint segment-tree placement contributes it exactly once on each applicable ask leaf’s ancestor path. Reused IDs have separate lifetimes.",
+    "bounds": "The visible implementation supports the stated O(N + T + (A log(T+1) + Q) log(N+1)) work under expected constant-time ID dictionary operations, and O(N + T + A log(T+1)) storage. Contradictions can generate O(A) live history entries; history is not limited to structural merges. These are source-level arguments, not measured maximum-size performance."
+  },
+  "scope": "Selective execution and manual reasoning about the full unchanged DSA round-16 source. The 1200 offline operation sequences and 300 nested rollback sequences are finite dependent functional checks, not independent interview samples or a whole-interview accuracy rate. Valid small graphs only; invalid inputs, maximum-size performance and all possible executions remain unverified."
+}

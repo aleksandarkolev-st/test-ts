@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-10T21:35:31Z",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "round": 28,
+  "sourceSha256": "79bc0fe0f3a8bdb86f359b8125e8c81f520b434b2d21b56ab3ac90788ea0688e",
+  "answerSha256": "cf61f6c94e50cef8b1a8c9b31d2e5772cd1df119adf4aa4a4c0ce9387b3d14ae",
+  "originalSourcePatched": false,
+  "independentOracle": {
+    "method": "Timestamp-filtered list sorted anew for the lower median",
+    "seed": "3391043247354049158",
+    "episodes": 150,
+    "medianChecks": 60000,
+    "publicOperations": 102049,
+    "failures": 0,
+    "coverage": "Signed 64-bit extremes, duplicate values, equal timestamps, exact 10,000 ms expiration, queries without additions"
+  },
+  "candidateSuppliedTests": {
+    "error": null,
+    "increasingAdditions": 1000000,
+    "peakCombinedPhysicalHeapEntries": 20063,
+    "rebuilds": 99,
+    "finalHeapSizes": [0, 0]
+  },
+  "runtimeMs": 8244.334199931473,
+  "rawEvidence": "artifacts/deep-interview-v70/algorithms-hour-t/code-review/round28/oracle-evidence.json",
+  "scope": "Selective execution of untouched recorded Python while a live audio interview continued. Candidate-supplied tests are distinct from independent oracle checks. Finite passing cases do not certify all inputs, amortized proof, full interview accuracy or hour duration. Playback output is T24E390; microphone is disabled."
+}

@@ -1,0 +1,353 @@
+{
+  "recordedAt": "2026-10-10T23:49:11.836Z",
+  "source": {
+    "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+    "sha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996"
+  },
+  "rounds": [
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round25/independent-reconstruction-oracle.json",
+      "recordedAtUnixMs": 1791676065517,
+      "round": 25,
+      "sourceSha256": "292790c19672a6b24daffa06ea08d4cb6ee71f685c92eb442cde1b46c5067f67",
+      "answerSha256": "1c9009ca84910090a3d9ae80304bab4424a18e142ed9fcf82b8c23ff6a598754",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "originalSourcePatched": false,
+      "seed": 7806113605685386000,
+      "independentSubsetCases": 1998,
+      "failures": 0,
+      "firstFailures": [],
+      "candidateOwnTestsPassed": true,
+      "candidateOwnTestsStdout": "Tests passed\n",
+      "maximumSizeBoundaryPassed": true,
+      "maximumSizeBoundaryProfit": 50000000000000,
+      "retainedJobListReferenceProfiles": [
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 2,
+          "totalJobs": 258,
+          "correctResult": true,
+          "jobListSlots": 516,
+          "listLengths": [
+            258,
+            257,
+            1
+          ],
+          "candidateFrameNames": [
+            "reconstruct",
+            "reconstruct",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 4,
+          "totalJobs": 260,
+          "correctResult": true,
+          "jobListSlots": 778,
+          "listLengths": [
+            260,
+            258,
+            257,
+            2,
+            1
+          ],
+          "candidateFrameNames": [
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 8,
+          "totalJobs": 264,
+          "correctResult": true,
+          "jobListSlots": 1046,
+          "listLengths": [
+            264,
+            260,
+            258,
+            257,
+            4,
+            2,
+            1
+          ],
+          "candidateFrameNames": [
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 16,
+          "totalJobs": 272,
+          "correctResult": true,
+          "jobListSlots": 1326,
+          "listLengths": [
+            272,
+            264,
+            260,
+            258,
+            257,
+            8,
+            4,
+            2,
+            1
+          ],
+          "candidateFrameNames": [
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 32,
+          "totalJobs": 288,
+          "correctResult": true,
+          "jobListSlots": 1630,
+          "listLengths": [
+            288,
+            272,
+            264,
+            260,
+            258,
+            257,
+            16,
+            8,
+            4,
+            2,
+            1
+          ],
+          "candidateFrameNames": [
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "reconstruct",
+            "best_schedule"
+          ]
+        }
+      ],
+      "runtimeMs": 225.52830004133284,
+      "oracle": "Enumerate all subsets of at most K original ids; test touching-compatible intervals independently; maximize (profit, negative cardinality) and verify chronological witness.",
+      "referenceMeasurement": "Unmodified Python sys.settrace call-boundary observations at best_schedule/reconstruct/split. Count slots in distinct four-field job-record lists reachable from active candidate frames, recursively traversing pending stack containers. Aliases to the same list count once. Does not measure full peak RAM, score/work arrays, allocator overhead, or all transient allocations.",
+      "scope": "Finite independent correctness cases, maximum supported-size boundary, candidate own tests and structured live-reference observations. Does not prove all-input correctness, asymptotic complexity, or whole-interview accuracy."
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round26/independent-reconstruction-oracle.json",
+      "recordedAtUnixMs": 1791676065780,
+      "round": 26,
+      "sourceSha256": "94755271888c1132932b55deab93a55ae51415381c9e0ac4cd14cc8cb1b231f5",
+      "answerSha256": "af02f6859ea18fe979c8f506e554b044a3372d6de9717d02535c3c1f6cf9c33f",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "originalSourcePatched": false,
+      "seed": 7806113605685386000,
+      "independentSubsetCases": 1998,
+      "failures": 0,
+      "firstFailures": [],
+      "candidateOwnTestsPassed": true,
+      "candidateOwnTestsStdout": "Tests passed\n",
+      "maximumSizeBoundaryPassed": true,
+      "maximumSizeBoundaryProfit": 50000000000000,
+      "retainedJobListReferenceProfiles": [
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 2,
+          "totalJobs": 258,
+          "correctResult": true,
+          "jobListSlots": 258,
+          "listLengths": [
+            258
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 4,
+          "totalJobs": 260,
+          "correctResult": true,
+          "jobListSlots": 260,
+          "listLengths": [
+            260
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 8,
+          "totalJobs": 264,
+          "correctResult": true,
+          "jobListSlots": 264,
+          "listLengths": [
+            264
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 16,
+          "totalJobs": 272,
+          "correctResult": true,
+          "jobListSlots": 272,
+          "listLengths": [
+            272
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 32,
+          "totalJobs": 288,
+          "correctResult": true,
+          "jobListSlots": 288,
+          "listLengths": [
+            288
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        }
+      ],
+      "runtimeMs": 253.48630000371486,
+      "oracle": "Enumerate all subsets of at most K original ids; test touching-compatible intervals independently; maximize (profit, negative cardinality) and verify chronological witness.",
+      "referenceMeasurement": "Unmodified Python sys.settrace call-boundary observations at best_schedule/reconstruct/split. Count slots in distinct four-field job-record lists reachable from active candidate frames, recursively traversing pending stack containers. Aliases to the same list count once. Does not measure full peak RAM, score/work arrays, allocator overhead, or all transient allocations.",
+      "scope": "Finite independent correctness cases, maximum supported-size boundary, candidate own tests and structured live-reference observations. Does not prove all-input correctness, asymptotic complexity, or whole-interview accuracy."
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/code-review/round27/independent-reconstruction-oracle.json",
+      "recordedAtUnixMs": 1791676065985,
+      "round": 27,
+      "sourceSha256": "7c95ac00aa4142ca374f17b204b9c06ca7a6f86e264ae1b44f5ab882f892ba98",
+      "answerSha256": "1c212417aaba674e7d7cdb086f235776119923ce7fb706c52262397cbef6ba03",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "originalSourcePatched": false,
+      "seed": 7806113605685386000,
+      "independentSubsetCases": 1998,
+      "failures": 0,
+      "firstFailures": [],
+      "candidateOwnTestsPassed": true,
+      "candidateOwnTestsStdout": "Tests passed\n",
+      "maximumSizeBoundaryPassed": true,
+      "maximumSizeBoundaryProfit": 50000000000000,
+      "retainedJobListReferenceProfiles": [
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 2,
+          "totalJobs": 258,
+          "correctResult": true,
+          "jobListSlots": 516,
+          "listLengths": [
+            258,
+            258
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 4,
+          "totalJobs": 260,
+          "correctResult": true,
+          "jobListSlots": 520,
+          "listLengths": [
+            260,
+            260
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 8,
+          "totalJobs": 264,
+          "correctResult": true,
+          "jobListSlots": 528,
+          "listLengths": [
+            264,
+            264
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 16,
+          "totalJobs": 272,
+          "correctResult": true,
+          "jobListSlots": 544,
+          "listLengths": [
+            272,
+            272
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        },
+        {
+          "negativePrefixJobs": 256,
+          "capacity": 32,
+          "totalJobs": 288,
+          "correctResult": true,
+          "jobListSlots": 576,
+          "listLengths": [
+            288,
+            288
+          ],
+          "candidateFrameNames": [
+            "split",
+            "best_schedule"
+          ]
+        }
+      ],
+      "runtimeMs": 188.99709999095649,
+      "oracle": "Enumerate all subsets of at most K original ids; test touching-compatible intervals independently; maximize (profit, negative cardinality) and verify chronological witness.",
+      "referenceMeasurement": "Unmodified Python sys.settrace call-boundary observations at best_schedule/reconstruct/split. Count slots in distinct four-field job-record lists reachable from active candidate frames, recursively traversing pending stack containers. Aliases to the same list count once. Does not measure full peak RAM, score/work arrays, allocator overhead, or all transient allocations.",
+      "scope": "Finite independent correctness cases, maximum supported-size boundary, candidate own tests and structured live-reference observations. Does not prove all-input correctness, asymptotic complexity, or whole-interview accuracy."
+    }
+  ],
+  "findings": {
+    "finiteCorrectness": "All three untouched listings passed the same 1998 independent subset-oracle cases, their supplied tests and the supported N=2000/K=50 boundary. The oracle checks both optimal profit and minimum cardinality, unique valid identifiers and chronological compatibility.",
+    "recursiveStorage": "On the supplied negative-prefix family with M negative jobs followed by K=2^d positive unit-profit jobs, the recursive listing retains distinct ancestor left lists. Measured call-boundary job-list slots equal M(d+1)+3K-2, including the retained root and pending right siblings. For M=256/K=32, 1630 slots remain live across 288 records. Deleting the child end_order variable does not release caller-owned left lists.",
+    "correctedStorage": "The explicit-stack listing had 288 job-list slots at observed split-call boundaries for the same family; the two-ordering listing had 576. These are job-reference measurements, not total peak RAM. Source inspection shows helpers return before child processing and caller parent aliases are removed before pushing children.",
+    "complexityScope": "The recursive ownership argument omits overlapping ancestor lists. Under the usual parameterized analysis, this family gives a retained-list term proportional to M log K. The listing enforces finite K<=50 and N<=2000; finite measurements do not by themselves prove an unbounded asymptotic lower bound. The explicit-stack and two-ordering corrections require their separate full work-array/partition accounting.",
+    "twoOrderingWorkArgument": "After two global sorts, a node of size n and capacity c performs O(nc) arithmetic operations. At each depth, child job sets are disjoint and capacities are at most ceil(C/2^d), with C=min(K,N); clamping only reduces them. Summing disjoint node sizes and the halving capacities gives O(NC) reconstruction work. This is an arithmetic-operation argument, not a bound on arbitrary-size integer bit operations."
+  },
+  "productionLogicChanged": false,
+  "scope": "Selective independent execution and source/ownership review of three complete recorded answers. No listing was patched. Does not certify other rounds, all inputs, full peak memory, or whole-interview accuracy."
+}

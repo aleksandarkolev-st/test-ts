@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-10-11T01:37:35.613Z",
+  "manifest": {
+    "file": "artifacts/deep-interview-v70/backend-comparison-cases.json",
+    "sha256": "69f43c9ce0cdda90960fff58092392d7380da285c6c2c73aa75d3d3b8303d841"
+  },
+  "sourceHashes": {
+    "src-tauri/Cargo.toml": "a6ed0fd7f9e3476ddfee7c88bd8825c5fe6fc7eaa3215b3f04fafd247f99898d",
+    "src-tauri/Cargo.lock": "71f190ada4285d2c858890b7f9f9e019fdcaedc8e84781916f35eaa59c4ecc9b",
+    "src-tauri/src/openai/client.rs": "8032c7d64a49a246d6be9573979df01f7628e3efe8c5bf7bb6bdb4ebb150c5a1",
+    "src-tauri/src/openai/codex.rs": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+    "src-tauri/examples/compare-answer-backends.rs": "70c64aa4ae0af2ae0867c5f5b1a65902e0e9aa0a73bd783cb6202e93d6e07446",
+    ".local/prepare-backend-review-v70.mjs": "dfa900cecfd8de377cc19d423b39b9231411c2647c21864497c535dea022bc69",
+    "scripts/summarize-answer-backend-comparison.mjs": "71d4477ca2b2dbd210b9de1e312c3fee8ccff1bb2f13bb404b3c4b677b7d0f02"
+  },
+  "unchangedSourceCaseBindingsValidated": 12,
+  "pinnedReqwestDefaults": {
+    "version": "0.12.28",
+    "file": "C:/Users/polek/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.12.28/src/async_impl/client.rs",
+    "sha256": "8c30b009838be2126b90344ef97fb6141ac8bdf695f4e7bb00a3052a707d9b5c",
+    "connectTimeout": null,
+    "readTimeout": null,
+    "totalTimeout": null
+  },
+  "architecturalFinding": "The existing app ChatGPT HTTP client uses reqwest::Client::new and adds no request deadline around sending or reading the response. It remains cancellable. The existing Codex stream attempt has its own 120-second deadline.",
+  "experimentPolicy": {
+    "requestObservationBudgetMs": 180000,
+    "cleanupObservationBudgetMs": 15000,
+    "sharedByBothRoutes": true,
+    "cutoffsRemainInDenominator": true,
+    "cutoffErrorOrigin": "experiment_observation_limit",
+    "tokenRefreshAllowedToFinish": true,
+    "readOnlyCatalogRequestBounded": true,
+    "answerFrozenAtObservationEnd": true,
+    "rawCleanupOutputRetainedSeparately": true,
+    "cleanupCallbacksExcludedFromCanonicalTiming": true
+  },
+  "javascriptSyntaxChecksPassed": true,
+  "RustHelperBuildAndExecutionPending": true,
+  "productionLogicChanged": false,
+  "scope": "Read-only pinned-source deadline diagnosis and unexecuted comparison configuration. Observation windows bound the experiment and introduce no latency pass/fail target or expected-answer rule. Captured public question, recognition and selected context remain byte matched. The Rust cancellation/snapshot branch has not yet been compiled or exercised."
+}

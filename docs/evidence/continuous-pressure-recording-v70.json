@@ -1,0 +1,175 @@
+{
+  "recordedAt": "2026-10-10T23:34:32.376Z",
+  "source": {
+    "file": "artifacts/deep-interview-v70/continuous-pressure-t/interview.json",
+    "sha256": "e0a56329ce503b4bcda30b19d6f87256252b60a836a0aa32a9edc91506742ee5"
+  },
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "microphoneUsed": false,
+  "status": "complete",
+  "stoppedCleanly": true,
+  "playbackMs": 1812962,
+  "sourceDurationMs": 1812930,
+  "sourceSegments": 158,
+  "uniqueSourceClips": 28,
+  "repeatedSourceCycles": 5.642857142857143,
+  "endpointMarkers": 158,
+  "clockAnchors": [
+    {
+      "hostBeforeMs": 1791673381056,
+      "hostAfterMs": 1791673381060,
+      "nativeMs": 16021
+    },
+    {
+      "hostBeforeMs": 1791675194771,
+      "hostAfterMs": 1791675194776,
+      "nativeMs": 1829734
+    }
+  ],
+  "nativeJobMeasurements": {
+    "nativeJobs": 89,
+    "sourceSegments": 158,
+    "nativeEndpointToFirstVisibleWordMs": {
+      "count": 56,
+      "min": 1850,
+      "median": 3087,
+      "sampleP95": 8701,
+      "max": 11021
+    },
+    "missingVisibleWords": 33,
+    "cancelled": 35,
+    "errors": 0,
+    "phases": {
+      "complete": 48,
+      "superseded": 31,
+      "cancelled": 9,
+      "confirmed": 1
+    }
+  },
+  "differentQuestionVisibility": {
+    "differentConfirmedNativeQuestionWindows": 85,
+    "windowsWithDifferentQuestionVisible": 84,
+    "differentQuestionVisibleMs": 1451350,
+    "maxPerWindowMs": 51216,
+    "scope": "Observable different-question visibility after the latest distinct native job confirmation, ending at its replacement, ignore event, or playback-end clock anchor. Same-ID clause refinements are excluded. Duration treats each paint as held until the next observed paint; strict confirmation upper and next-confirmation lower bounds reduce clock-boundary ambiguity. Earlier/later job order is native detection order. These intervals require semantic review before classifying inappropriate stale answers; this does not assume each source utterance creates one native job.",
+    "semanticAssessmentPending": true
+  },
+  "eventRecording": {
+    "file": "artifacts/deep-interview-v70/continuous-pressure-t/native-events-observer.jsonl",
+    "sha256": "1d572195283be52e9ae2ad5dac28363db4d709d21d76d9b21b1cb1daee99fc95",
+    "counts": {
+      "meeting.started": 1,
+      "speech.started": 373,
+      "speech.ended": 373,
+      "transcript": 519,
+      "answer.started": 90,
+      "asr.finalization_ready": 348,
+      "question.confirmed": 348,
+      "answer.frame_received": 64,
+      "answer.completed": 49,
+      "speech.activity": 718,
+      "asr.raw_boundary": 518,
+      "question.ignored": 5,
+      "meeting.stopped": 1
+    },
+    "coverage": {
+      "retainedEvents": 3407,
+      "initialReadStartsAtNativeEventIndex": 0,
+      "firstFinalTranscript": {
+        "eventIndex": 3,
+        "id": "d47e4a79-4d1b-4bb8-99fe-f16322577fad",
+        "source": "remote",
+        "text": "This is a technical interview. I will present hypothetical systems problems, ask you to analyze them, and keep drilling into your reasoning. Some challenges will be intentionally vague; ask for missing information rather than inventing it.",
+        "startedAt": 42,
+        "endedAt": 42,
+        "final": true,
+        "startedHostMs": {
+          "low": 1791673365079,
+          "high": 1791673365081
+        },
+        "endedHostMs": {
+          "low": 1791673365079,
+          "high": 1791673365081
+        }
+      },
+      "lastFinalTranscript": {
+        "eventIndex": 53330,
+        "id": "Remote-c6aa54d5-0668-4852-9d55-27f33055252e",
+        "source": "remote",
+        "text": "give both actual results",
+        "startedAt": 1826206,
+        "endedAt": 1828611,
+        "final": true,
+        "startedHostMs": {
+          "low": 1791675191243,
+          "high": 1791675191245
+        },
+        "endedHostMs": {
+          "low": 1791675193648,
+          "high": 1791675193650
+        }
+      },
+      "lastSourceEndpointHostMs": {
+        "low": 1791675193056,
+        "high": 1791675193061
+      },
+      "lastSuccessfulReadAfterLastSourceEndpointMs": 3755,
+      "lastFinalBoundaryRelativeToLastSourceEndpointMs": {
+        "low": 587,
+        "high": 594
+      }
+    },
+    "instrumentation": {
+      "observerStartedAfterPlaybackMs": 757240,
+      "initialReadBackfilledRetainedEvents": true,
+      "scope": "The additional observer began during playback and read previously retained events. Its CPU/memory and CDP polling are extra instrumentation; native process-tree and main recorder measurements exclude this separate observer. Timing drift across its start is not an isolated model or app effect."
+    }
+  },
+  "resources": {
+    "nativeSamples": 123,
+    "nativeWorkingSetBytes": {
+      "first": 28758016,
+      "last": 55267328,
+      "max": 55906304
+    },
+    "nativePrivateBytes": {
+      "first": 4460544,
+      "last": 19034112,
+      "max": 20406272
+    },
+    "nativeTreePrivateBytes": {
+      "first": 244011008,
+      "last": 6000386048
+    },
+    "recorder": {
+      "first": {
+        "hostMs": 1791673367623,
+        "pollMs": 17,
+        "rss": 50348032,
+        "heapTotal": 11014144,
+        "heapUsed": 9274392,
+        "external": 3980435,
+        "arrayBuffers": 444090,
+        "scope": "Node recording process memory, not native app or GPU memory."
+      },
+      "last": {
+        "hostMs": 1791675192913,
+        "pollMs": 5,
+        "rss": 165965824,
+        "heapTotal": 51646464,
+        "heapUsed": 48449728,
+        "external": 70709021,
+        "arrayBuffers": 67176701,
+        "scope": "Node recording process memory, not native app or GPU memory."
+      }
+    },
+    "pollErrors": 0,
+    "scope": "Native process, current descendants and Node recorder are separate measurements. Descendant working-set sums can double count shared pages. GPU allocations, sibling playback/examiner processes and the additional event observer are excluded."
+  },
+  "independentAccuracyPending": true,
+  "sourceClauseMatchingPending": true,
+  "latencyDriftAssessmentPending": true,
+  "scope": "Completed uninterrupted synthetic audio pressure recording. Native jobs and source clips have separate denominators. Missing, cancelled and unfinished answers remain recorded. Event tail coverage and zero polling errors do not establish semantic correctness or absence of clause loss. No product logic changed."
+}

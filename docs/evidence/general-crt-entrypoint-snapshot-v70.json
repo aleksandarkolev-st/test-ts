@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-11T01:16:19.299Z",
+  "sourceJournal": {
+    "file": "artifacts/deep-interview-v70/general-hour-t/interview.json",
+    "sha256AtSnapshot": "98d9e1613ed7e3603d6e1f5eae830841a430d3361b8ec34ca30ce72f06bda051",
+    "statusAtSnapshot": "in_progress"
+  },
+  "rowSnapshot": {
+    "file": "artifacts/deep-interview-v70/general-hour-t/round-36-completed-row-snapshot.json",
+    "sha256": "2a927d25d7c1e3f1c35727d643bf46f446a9774550d4f9b5f982d2010d5eac2a"
+  },
+  "round": 36,
+  "requestedSourceEntryPoint": "crt_candidates",
+  "recognizedQuestion": "the cop rime requirement changes allow any integer moduli greater than one retaining your residue validation and duplicate handling supply executable Python three named CRT underscore candidates returning sorted distinct solutions from zero through the least common multiple minus one compute bizout coefficients yourself test modulus six with residues one and three against modulus nine with residues four and six plus an incompatible pair and duplicates derive the compatibility condition and reconstruction prove completeness and uniqueness and bound input reading distinct pair sorting and storage costs explain exactly why your earlier modular inverse cannot simply be reused",
+  "definedTopLevelFunctions": [
+    "_extended_gcd",
+    "_validated_residues",
+    "CRT_candidates",
+    "_expect_value_error",
+    "test"
+  ],
+  "sourceCodeSha256": "3c22bd728301dd4e92e7f01d11eced29e608677d01abe8a710afad23ea184bd1",
+  "answerSha256": "3129f78f956f12feee4ce34cc4a466866de390cc77a2f3f714605ffc9c0bf8ab",
+  "requestedEntryPointPresent": false,
+  "mathematicalAlgorithmExecutionPending": true,
+  "finalJournalBindingPending": true,
+  "scope": "Read-only inspection of an actual completed retained listing. The exact source-text entry-point contract and mathematical behavior are separate. Spoken identifier capitalization may be ambiguous; this does not isolate ASR versus generation as the cause. No identifier is renamed or alias injected. This immutable row snapshot will be checked against the clean final journal before final assessment."
+}

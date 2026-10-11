@@ -1,0 +1,49 @@
+{
+  "recordedAt": "2026-10-10T22:55:55.691Z",
+  "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+  "sourceSnapshotSha256": "ca17a9e644f9a08e983f8c3a7b253a69c1c5df6b5d72611987d1b3a9e8fa1b0e",
+  "sourceSnapshotStatus": "in_progress",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "output": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "sourceRound": 1,
+  "probeRound": 22,
+  "interveningTurns": 20,
+  "sourceAnswerSha256": "ea8362563da570e618ec6f9925db61da9bc4571a888da8b8f50184bb66dd2af5",
+  "originalCodeBlockSha256": [
+    "b90907a02faab18fc153f0ca9fc5d963b69e4c5db4bdcf652e5b773fdd058406"
+  ],
+  "firstReference": {
+    "round": 22,
+    "question": "Return to your earlier implementation for this question: Implement Python best schedule for weighted nonoverlapping jobs. Each input job has integer start, end and signed profit, start is less than end, intervals are half-open, and input indices are job identifiers. There are at most two thousand jobs and K is between zero and Refer to the exact implementation you supplied, including its entry-point signature and return contract. Identify any actual correction or superseded version from our conversation. Explain which constraints still apply. Reproduce the retained implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+    "answer": "I need the earlier implementation of `best_schedule`, including its signature and return contract, to reproduce it faithfully. The supplied excerpts contain extensions to `RestrictedOptimalSets`, but not the underlying scheduling implementation, so I can’t identify an actual correction or retained version.\n\nThe recorded constraints are N ≤ 2000, 0 ≤ K ≤ 50, exactly K jobs, signed profits, half-open intervals, and original input indices as identifiers. That version also includes nonnegative cleanup, exempts the chronological final job from cleanup, returns None when infeasible, and otherwise reports optimal profit, chronological identifiers, and the optimal-set count modulo 1,000,000,007.\n\nCould you paste the earlier `best_schedule` implementation and confirm whether that cleanup-and-count return contract is still intended, rather than a simpler non-overlapping-jobs version?",
+    "questionSha256": "4fef6c1a6e8b73fd59ef7f002a267317e59b7af9253715bce7a9f799a4564295",
+    "answerSha256": "055874936ad9cbf199faa8e632447d2485775189e3f27a3c9042b792ad7b9048",
+    "responseVersion": "6c0aaad3-90f9-4d22-99af-cae2b2e694fc:60",
+    "firstVisibleWordLatencyHighMs": 3598,
+    "closedCodeBlocks": 0,
+    "selectedContextSha256": "256b2aeb35114481f649babd92b9524e416e55f79df21d033cc9b7c0bfddec8e",
+    "selectedContextContainsEveryOriginalCodeBlock": false
+  },
+  "clarifiedReference": {
+    "round": 23,
+    "question": "The truncated reference means your original three-field, at-most-K implementation, not any cleanup or counting extension. K is between zero and fifty. Its entry point was best_schedule with jobs and K, returning optimal profit and original identifiers. Reproduce that recorded implementation, including validation, predecessor search, tables, and reconstruction. Explain why clamping K to the number of jobs and initializing all profit states to zero are correct for this contract but not the later exactly-K contract. Distinguish actual corrections from changes of contract; do not import later cleanup, counting, or sampling requirements.",
+    "answer": "Clamping k to N and zero-initializing every profit state are correct for the original at-most-k contract, not bugs requiring correction. No schedule uses more than N jobs, and every “at most j jobs” state permits the empty schedule with profit zero.\n\nFor exactly K, clamping changes the requested cardinality; K > N must be infeasible. Positive-cardinality states must initially be unreachable rather than zero, or nonexistent schedules can incorrectly beat valid negative-profit schedules. Switching to exactly K is a change of contract, not a correction to the original algorithm.\n\nYour requested contract is `best_schedule(jobs, k)`, returning optimal profit and original identifiers, with three-field integer jobs, start < end, half-open intervals, N ≤ 2000, and 0 ≤ k ≤ 50. No cleanup, counting, or sampling requirements apply.\n\nThe recorded function body is not included in the supplied excerpts, so I cannot reproduce its validation, predecessor search, tables, or reconstruction faithfully, or verify any actual code corrections. Could you paste that original function body?",
+    "questionSha256": "a6502259ec6a8ffb458454c3f330719836a44a7703782e290207a7638a7b7281",
+    "answerSha256": "3e295205004a2df7c9eba4cd09ed6d5f3be4aacdd4274ad5f2964c1531a6be74",
+    "responseVersion": "94bd4a47-548f-4971-8859-b011c95ba06d:50",
+    "firstVisibleWordLatencyHighMs": 2534,
+    "closedCodeBlocks": 0,
+    "selectedContextSha256": "ba276bf095dab6a3771f30bc45be8e5e197d44e8b29b9234db3a7db439c326a0",
+    "selectedContextContainsEveryOriginalCodeBlock": false
+  },
+  "review": {
+    "type": "Selective source-grounded recording-agent review",
+    "clarifiedRequestVerdict": "incomplete",
+    "originalConstraintDistinctionCorrect": true,
+    "recordedImplementationReproduced": false,
+    "finding": "The clarified request explicitly selected the original three-field, at-most-K version. The completed response correctly distinguished it from exactly-K, cleanup, counting and sampling revisions, but supplied no implementation and asked for the original function body again.",
+    "firstProbeLimitation": "The automatic reference cut the original question off mid-sentence before its K upper bound and at-most-K contract. Its clarification response is not treated as a definitive version-tracking failure. The examiner supplied a clear subsequent reference without giving the original code."
+  },
+  "scope": "Actual recorded questions, source answers, context strings and completed responses. Literal code absence in selected context does not reconstruct hidden backend thread history or prove the sole cause. The journal is ongoing; verify these answer identities again after termination. This is a selective memory/completeness finding, not a full interview accuracy rate. Application answer logic was unchanged."
+}

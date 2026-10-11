@@ -1,0 +1,1111 @@
+{
+  "recordedAt": "2026-10-11T03:00:40.059Z",
+  "status": "partial_accuracy_reviews_pending",
+  "goalComplete": false,
+  "sources": [
+    {
+      "file": "docs/evidence/refinement-queue-analysis-v70.json",
+      "sha256": "150807b5e0bf09c1c67e4eb3c9b54a105f23d42b91e7b39773717a034bd6cec2"
+    },
+    {
+      "file": "docs/evidence/completed-systems-recording-v70.json",
+      "sha256": "82ab49e5b00a629f98fa82094c12939071ab0ec2a986e1638778cc2b7279aa0c"
+    },
+    {
+      "file": "docs/evidence/backend-routing-differences-v70.json",
+      "sha256": "462b374f99ab9192b36b7b9658a7547ca5b7db25aa33a549aaa39e755012018a"
+    },
+    {
+      "file": "docs/evidence/backend-runtime-findings-v70.json",
+      "sha256": "f31a02a7c0944deca5a8bd85bb574e1cf0d5210b3769709edd09c4780118955c"
+    },
+    {
+      "file": "docs/evidence/no-tier-backend-request-timing-v70.json",
+      "sha256": "9c4a12c99a62975da84a5f8be4e8ba3ae31d1f524588eebfab2ee944f296e888"
+    },
+    {
+      "file": "docs/evidence/pressure-continuation-and-background-v70.json",
+      "sha256": "63ff99d556934e0763fc16714bc7e4dfd9ec1f49032e83335f4f0de9d468b894"
+    },
+    {
+      "file": "docs/evidence/pressure-stale-display-v70.json",
+      "sha256": "e63188eafc0ed7c1d0097fbebcf12bcd35f4699350404ee6e09805f5a86c74ea"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/duration-audit-unassigned-turn-fix.json",
+      "sha256": "7dd44cc7abe32f47cf57aca3c40d094d5a85b8d21e628d8c1b79949efbcc5451"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/algorithms-hour-t/independent-assessment-v70/assessment.json",
+      "sha256": "d8efbb8ca7ccec775f70753b997dbf516e4fe6a47dcacc7c0a7254f601544edf"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/duration-audit.json",
+      "sha256": "a30f73b1a30b7a812576184308eb0f837d2f28ccb699137a2290fecc450259b1"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/independent-assessment-v70/assessment.json",
+      "sha256": "b957abe949eb040125955e4d08d64730fb849d30f79578136a9b1ec2e5718b63"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/duration-audit.json",
+      "sha256": "936fa03004fb18b6bc76f3a8c984aab4511438d0e3344664515863f26c600b99"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/general-hour-t/independent-assessment-v70/assessment.json",
+      "sha256": "0e50ce6388b63333198f44ddaefdc3d7faee9203fb3e4f7e98202ad6ba1eddab"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads/duration-audit.json",
+      "sha256": "6aae5427d7e2b0e36b66be0902de8b057a1a4a09b5935133b8628d9550655bab"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/duration-audit.json",
+      "sha256": "796e7d9beae353f99dcb33329a49b68aa6cfd9a873e013fc73feb74de7358b5a"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/divergent-block-barrier/duration-audit.json",
+      "sha256": "24f0c6882fbf16d814b608d257f80c6e13c38545bc68711aa1264520ad3eb30d"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/exact-launch-numbers/duration-audit.json",
+      "sha256": "b6a69d64c02176ffe4fb6eccc20cd61762e411e8ce539f95b4bddae5424649e3"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/fp32-association/duration-audit.json",
+      "sha256": "3270a8e1701742d4634457d33c1c3cedfdabb8e918293fd4cf27deb49e00a1ee"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal/duration-audit.json",
+      "sha256": "da28ab51a5bf92da9cde2f4bf22997c72417295445e5427af2f770c958e979f6"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/duration-audit.json",
+      "sha256": "cf938ae4eec2c5f50380938dfe6ff5821ed922c1e4df3070de1593c2a5805d1d"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail/duration-audit.json",
+      "sha256": "4d3c7d51d780bf27a02c2f4833065a03b215688021d22ab06a470fbf826b2727"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-exact-pause/duration-audit.json",
+      "sha256": "40c9e36383304d3add8273873f532bfa0606777e44c175d35214212510f4b276"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-midpoint-pause/duration-audit.json",
+      "sha256": "ce18b71bbce8ec2c40c7e1bf3f05cd8f5b79244558a09e9e2e1aa14e4072284f"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/never-recorded-event/duration-audit.json",
+      "sha256": "56a8f4263d2aab5cf4ec9fa671b78fe9743b04500a02c875c3f5ecd3445b2c3f"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/hard-probes/warp-followups/duration-audit.json",
+      "sha256": "9d3251390ecc36efaee0940bf5366382be05f3eaaf0b09fd3380d62c76208187"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/final-tail-path-resume-v70.jsonl",
+      "sha256": "dc45ca84e14364ae9fab5ddb912fd8488f6c71fe78274c96ea083805db18f57e"
+    }
+  ],
+  "configuration": {
+    "candidateModel": "gpt-6.1-sol",
+    "candidateEffort": "low",
+    "reviewerModel": "gpt-6.1-sol",
+    "reviewerEffort": "low",
+    "output": "T24E390",
+    "microphoneUsed": false,
+    "productionLogicChanged": false
+  },
+  "architecture": {
+    "conclusion": "The measured tail includes delayed final-question updates in the application lifecycle. Source and trace identify a pending-update gate and a disabled refinement deadline on the second attempt. Backend choice also changes question detection and steering, so faster fixed-prompt responses do not establish better live behavior.",
+    "original77SecondTrace": {
+      "file": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/round-09-latency-stage-audit.json",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "round": 9,
+      "physicalEndpointNativeMs": {
+        "low": 778592,
+        "high": 778608
+      },
+      "visibleWord": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791671472165,
+        "latencyMs": {
+          "low": 77751,
+          "high": 77757
+        },
+        "responseRevision": 28,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "stages": {
+        "endpointToFinalConfirmationMs": {
+          "low": 589,
+          "high": 605
+        },
+        "finalConfirmationToFinalInputSentMs": 32269,
+        "finalInputRpcAckMs": 7,
+        "finalInputSentToConsumptionEventMs": 41937,
+        "consumptionEventToRetainedFirstDeltaMs": 2949,
+        "retainedFirstDeltaToNativeVisibleMs": 8
+      },
+      "counters": {
+        "restarts": 1,
+        "steers": 4,
+        "followups": 1
+      },
+      "textSizes": {
+        "initialPromptChars": 34635,
+        "restartPromptChars": 35303,
+        "totalRefinementChars": 177251
+      }
+    },
+    "hourReplica": {
+      "round": 12,
+      "recordedQuestionAnswerErrorPhaseCancellationVersionLatencyAndPlaybackUnchanged": true,
+      "successfulAnswerDelivery": false,
+      "firstRetainedVisibleWordMs": {
+        "low": 77539,
+        "high": 77544
+      },
+      "stages": {
+        "physicalEndpointToFinalConfirmationMs": {
+          "low": 827,
+          "high": 838
+        },
+        "finalConfirmationToFinalInputSentMs": 37261,
+        "finalInputRpcAckMs": 5,
+        "finalInputSentToConsumptionEventMs": 33454,
+        "consumptionEventToRetainedFirstDeltaMs": 5926,
+        "retainedFirstDeltaToNativeVisibleMs": 6,
+        "foregroundSemaphoreWaitMs": 0
+      },
+      "error": "Codex answer timed out"
+    },
+    "mechanisms": [
+      {
+        "file": "src-tauri/src/openai/codex.rs",
+        "line": 463,
+        "source": "if (latest.confirmed || stable_partial) && (question_changed || context_changed) && pending_question.is_none() {",
+        "finding": "Changed confirmed input is sent only when the prior pending input has cleared."
+      },
+      {
+        "file": "src-tauri/src/openai/codex.rs",
+        "line": 335,
+        "source": "self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await",
+        "finding": "The second attempt disables restart_stalled; the outer function retries only once."
+      },
+      {
+        "file": "src-tauri/src/openai/codex.rs",
+        "line": 515,
+        "source": "_=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{",
+        "finding": "The pending-final deadline can trigger refinement retirement only while restart_stalled is enabled."
+      },
+      {
+        "file": "src-tauri/src/openai/codex.rs",
+        "line": 540,
+        "source": "let (_,question,context)=pending_question.take().unwrap();active_question=question;",
+        "finding": "A matching completed userMessage event clears the pending update and activates its question/context frame."
+      }
+    ],
+    "distinctBackendRouting": [
+      {
+        "file": "src-tauri/src/runtime.rs",
+        "line": 323,
+        "finding": "Selecting Codex enables semantic_intent on both the detector and scheduler. Selecting ChatGPT disables it."
+      },
+      {
+        "file": "src-tauri/src/meeting/questions.rs",
+        "line": 203,
+        "finding": "The semantic-intent candidate branch admits nonempty remote utterances subject to its short-partial guard. The other branch uses the local grammar score and related-prefix fallback. Confirmation and clause-continuation logic also branch on semantic_intent."
+      },
+      {
+        "file": "src-tauri/src/runtime.rs",
+        "line": 889,
+        "finding": "Only Codex sets job.steer_supported true. This affects whether a running job can accept speculative question growth without replacement."
+      },
+      {
+        "file": "src-tauri/src/openai/client.rs",
+        "line": 265,
+        "finding": "Codex stream_question carries a live update receiver; the ChatGPT branch sends one rendered prompt through streaming HTTP."
+      },
+      {
+        "file": "src-tauri/src/meeting/scheduler.rs",
+        "line": 289,
+        "finding": "Existing scheduler test latest_semantic_reply_is_visible_while_older_code_is_still_streaming explicitly expects the old answer to remain visible until the new answer has a buffer. The observed CUDA-to-database stale display is consistent with this visibility policy."
+      }
+    ],
+    "nativeChatgptDetection": {
+      "nativeChatgptCases": 3,
+      "nativeChatgptWaveforms": 4,
+      "questionCandidateEvents": 0,
+      "questionConfirmedEvents": 0,
+      "answerStartedEvents": 0,
+      "explanation": "The captured imperative requests were transcribed but the ChatGPT route started no question jobs. Runtime sets semantic_intent only for Codex. The ChatGPT fallback requires interrogative score >=4 or an existing related question; these imperative openings do not qualify. Consequently these native cases did not reach the failing answer POST.",
+      "scope": "Observed on these exact cases, not every ChatGPT question or every speech style. The ChatGPT topic-switch source was eventually played after the recorder wait expired; it did not interrupt a streaming ChatGPT answer because none existed."
+    },
+    "transportCompatibility": {
+      "originalFastTierStatus": 400,
+      "actualErrorDetail": "Unsupported service_tier: fast",
+      "omitOptionalTierStatus": 200,
+      "scope": "One untimed follow-up diagnostic confirms HTTP acceptance when the optional tier is omitted. A 200 header alone is not a completed model answer or comparative latency measurement; separate preserved final-prompt trials are queued."
+    },
+    "correctedHttpDeadline": {
+      "connectTimeoutSeconds": 10,
+      "totalTimeoutSeconds": 120,
+      "redirectPolicy": "none"
+    },
+    "uncertainties": [
+      "Consumption is the application processing a matching item/completed userMessage event, not measured provider GPU/reasoning/queue time.",
+      "Large prompt and refinement character counts are recorded; their causal contribution has not been isolated.",
+      "Backend selection also changes detection, continuation and steering. A final-prompt comparison alone cannot establish end-to-end superiority."
+    ],
+    "interpretation": "Send-to-consumption measures when the app processes a matching consumption event. It is not a measured provider GPU or reasoning interval. Shared queue backpressure is a source-supported possibility, not an isolated cause.",
+    "displayAndBackgroundEvidence": [
+      "docs/evidence/streaming-topic-switch-v70.json",
+      "docs/evidence/pressure-stale-display-v70.json",
+      "docs/evidence/pressure-continuation-and-background-v70.json"
+    ],
+    "staleDisplayScope": null,
+    "backgroundScope": "Concrete manual continuation, background and conflicting stale-display findings bound to the completed pressure recording. No source text, runtime logic, answer or timing is repaired. These do not certify all 158 utterances as semantically correct; deferred per-job model reviews and substantive checks remain separate."
+  },
+  "backendFixedPromptTiming": {
+    "configuration": "Optional service_tier omitted in a separate comparison; original fast-tier failures preserved.",
+    "measurements": {
+      "codex": {
+        "trials": 24,
+        "errors": 0,
+        "observationLimits": 0,
+        "cleanupLimits": 0,
+        "missingRetainedWords": 0,
+        "firstRetainedCompleteWordFromRequestMs": {
+          "count": 24,
+          "min": 2865,
+          "median": 5679.5,
+          "sampleP95": 16574,
+          "max": 18824
+        },
+        "operationElapsedMs": {
+          "count": 24,
+          "min": 4620,
+          "median": 9451.5,
+          "sampleP95": 63686,
+          "max": 66067
+        },
+        "reportedTierCounts": {
+          "unreported": 24
+        }
+      },
+      "chatgpt": {
+        "trials": 24,
+        "errors": 0,
+        "observationLimits": 0,
+        "cleanupLimits": 0,
+        "missingRetainedWords": 0,
+        "firstRetainedCompleteWordFromRequestMs": {
+          "count": 24,
+          "min": 1784,
+          "median": 3430.5,
+          "sampleP95": 10184,
+          "max": 10937
+        },
+        "operationElapsedMs": {
+          "count": 24,
+          "min": 3279,
+          "median": 10301.5,
+          "sampleP95": 64407,
+          "max": 75494
+        },
+        "reportedTierCounts": {
+          "default": 24
+        }
+      }
+    },
+    "pairs": {
+      "total": 24,
+      "chatgptEarlier": 23,
+      "codexEarlier": 1,
+      "tied": 0,
+      "missingEither": 0
+    },
+    "accuracyPending": true,
+    "scope": "12 captured questions, two dependent repetitions per route, same recognized question and captured context. Clock excludes authentication, thread preparation, ASR, live updates and native overlay. Native protocol differs. ChatGPT reports default; Codex does not report its actual tier."
+  },
+  "hours": [
+    {
+      "name": "algorithms-hour-t",
+      "minutes": 62.08914165166667,
+      "turns": 49,
+      "firstRetainedVisibleWordMs": {
+        "count": 48,
+        "min": 2184,
+        "median": 6731,
+        "sampleP95": 45135,
+        "max": 49544
+      },
+      "missingVisibleWords": 1,
+      "cancelled": 11,
+      "errors": 0,
+      "independentModelVerdicts": {
+        "correct": 29,
+        "incorrect": 6,
+        "incomplete": 13,
+        "unverified": 1
+      },
+      "independentPhraseTimingAndDelivery": {
+        "existing": {
+          "evaluatedTurns": 49,
+          "finitePhraseLatency": {
+            "count": 32,
+            "min": 2348,
+            "median": 7231.5,
+            "sampleP95": 46023,
+            "max": 49698
+          },
+          "missingPhraseMeasurements": 17,
+          "modelVerdicts": {
+            "correct": 29,
+            "incorrect": 6,
+            "incomplete": 13,
+            "unverified": 1,
+            "missing": 0
+          },
+          "wrongOrMissingTurnsRemainInDenominator": true,
+          "correctAnswerAndVisibleUsefulPhraseCount": 25,
+          "nativePhaseCounts": {
+            "complete": 37,
+            "superseded": 11,
+            "no_job": 1
+          },
+          "cancelledTurns": 11,
+          "errorTurns": 0,
+          "accuracyScope": "Independent model verdicts describe these recorded answers only and remain provisional until substantive checks. No latency threshold, population accuracy estimate or pass/fail performance target is applied."
+        }
+      },
+      "resourceObservations": {
+        "native": {
+          "workingSetBytes": {
+            "first": 28446720,
+            "last": 60256256,
+            "count": 248,
+            "min": 28446720,
+            "median": 59375616,
+            "sampleP95": 61665280,
+            "max": 63279104
+          },
+          "privateBytes": {
+            "first": 4431872,
+            "last": 26701824,
+            "count": 248,
+            "min": 4431872,
+            "median": 25219072,
+            "sampleP95": 28323840,
+            "max": 31698944
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 268,
+            "last": 430,
+            "count": 248,
+            "min": 268,
+            "median": 430,
+            "sampleP95": 436,
+            "max": 440
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 248,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 27,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recorder": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 50343936,
+            "last": 2536448000,
+            "count": 369,
+            "min": 50343936,
+            "median": 1437716480,
+            "sampleP95": 2421170176,
+            "max": 2536448000
+          },
+          "heapUsed": {
+            "first": 9362496,
+            "last": 1883279712,
+            "count": 369,
+            "min": 9362496,
+            "median": 1043297744,
+            "sampleP95": 1807034144,
+            "max": 1894995912
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 15,
+            "last": 17,
+            "count": 369,
+            "min": 4,
+            "median": 9,
+            "sampleP95": 14,
+            "max": 2641
+          }
+        },
+        "nativeTree": {
+          "sha256": "8bfe09634a1394bf5e107ee61e841ff120e1a07c8a68dc02abd49e2b1603300b",
+          "observations": 197,
+          "firstHostMs": 1791666822009,
+          "lastHostMs": 1791669821694,
+          "privateAllocationBytes": {
+            "count": 197,
+            "min": 6170394624,
+            "median": 6387113984,
+            "sampleP95": 6581325824,
+            "max": 6643343360
+          },
+          "summedWorkingSetBytes": {
+            "count": 197,
+            "min": 1221738496,
+            "median": 1510875136,
+            "sampleP95": 1674932224,
+            "max": 1800667136
+          },
+          "scope": "Read-only native process tree plus recorder. Working-set sum may count shared pages more than once. GPU allocations and pre-existing non-child services are excluded. This observer starts mid-interview; it cannot reconstruct startup resource use."
+        }
+      },
+      "descriptiveLatencyHalves": {
+        "first": {
+          "count": 25,
+          "min": 2184,
+          "median": 5692,
+          "sampleP95": 43645,
+          "max": 45870
+        },
+        "second": {
+          "count": 23,
+          "min": 3179,
+          "median": 8310,
+          "sampleP95": 45135,
+          "max": 49544
+        }
+      },
+      "orthographicSourceComparison": {
+        "assessedTurns": 48,
+        "unavailableTurns": 1,
+        "referenceWords": 3642,
+        "edits": 474,
+        "lexicalWordErrorRate": 0.1301482701812191
+      }
+    },
+    {
+      "name": "systems-hour-t",
+      "minutes": 60.58685777666667,
+      "turns": 53,
+      "firstRetainedVisibleWordMs": {
+        "count": 52,
+        "min": 2056,
+        "median": 8379,
+        "sampleP95": 53701,
+        "max": 77544
+      },
+      "missingVisibleWords": 1,
+      "cancelled": 13,
+      "errors": 1,
+      "independentModelVerdicts": {
+        "correct": 36,
+        "incorrect": 1,
+        "incomplete": 14,
+        "unverified": 2
+      },
+      "independentPhraseTimingAndDelivery": {
+        "existing": {
+          "evaluatedTurns": 53,
+          "finitePhraseLatency": {
+            "count": 33,
+            "min": 2998,
+            "median": 6795,
+            "sampleP95": 33893,
+            "max": 54297
+          },
+          "missingPhraseMeasurements": 20,
+          "modelVerdicts": {
+            "correct": 36,
+            "incorrect": 1,
+            "incomplete": 14,
+            "unverified": 2,
+            "missing": 0
+          },
+          "wrongOrMissingTurnsRemainInDenominator": true,
+          "correctAnswerAndVisibleUsefulPhraseCount": 31,
+          "nativePhaseCounts": {
+            "complete": 39,
+            "superseded": 13,
+            "confirmed": 1
+          },
+          "cancelledTurns": 13,
+          "errorTurns": 1,
+          "accuracyScope": "Independent model verdicts describe these recorded answers only and remain provisional until substantive checks. No latency threshold, population accuracy estimate or pass/fail performance target is applied."
+        }
+      },
+      "resourceObservations": {
+        "native": {
+          "workingSetBytes": {
+            "first": 28446720,
+            "last": 56012800,
+            "count": 243,
+            "min": 28446720,
+            "median": 55930880,
+            "sampleP95": 58023936,
+            "max": 59465728
+          },
+          "privateBytes": {
+            "first": 4427776,
+            "last": 23961600,
+            "count": 243,
+            "min": 4427776,
+            "median": 21417984,
+            "sampleP95": 24571904,
+            "max": 26501120
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 269,
+            "last": 429,
+            "count": 243,
+            "min": 269,
+            "median": 429,
+            "sampleP95": 434,
+            "max": 441
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 243,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 27,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recorder": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 50016256,
+            "last": 827412480,
+            "count": 362,
+            "min": 50016256,
+            "median": 454893568,
+            "sampleP95": 797798400,
+            "max": 836927488
+          },
+          "heapUsed": {
+            "first": 9687032,
+            "last": 595761168,
+            "count": 362,
+            "min": 9577424,
+            "median": 303628924,
+            "sampleP95": 565176440,
+            "max": 595761168
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 16,
+            "last": 12,
+            "count": 362,
+            "min": 3,
+            "median": 10,
+            "sampleP95": 14,
+            "max": 440
+          }
+        },
+        "nativeTree": {
+          "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 243,
+          "firstHostMs": 1791675270284,
+          "lastHostMs": 1791678907015,
+          "privateAllocationBytes": {
+            "count": 243,
+            "min": 225013760,
+            "median": 6333698048,
+            "sampleP95": 6474493952,
+            "max": 6508830720
+          },
+          "summedWorkingSetBytes": {
+            "count": 243,
+            "min": 430718976,
+            "median": 1402138624,
+            "sampleP95": 1555099648,
+            "max": 1657876480
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        }
+      },
+      "descriptiveLatencyHalves": {
+        "first": {
+          "count": 26,
+          "min": 2416,
+          "median": 7558.5,
+          "sampleP95": 54176,
+          "max": 77544
+        },
+        "second": {
+          "count": 26,
+          "min": 2056,
+          "median": 9262,
+          "sampleP95": 39427,
+          "max": 41738
+        }
+      },
+      "orthographicSourceComparison": {
+        "assessedTurns": 53,
+        "unavailableTurns": 0,
+        "referenceWords": 3903,
+        "edits": 547,
+        "lexicalWordErrorRate": 0.140148603638227
+      }
+    },
+    {
+      "name": "general-hour-t",
+      "minutes": 60.46859625666667,
+      "turns": 58,
+      "firstRetainedVisibleWordMs": {
+        "count": 57,
+        "min": 1960,
+        "median": 5375,
+        "sampleP95": 27592,
+        "max": 44309
+      },
+      "missingVisibleWords": 1,
+      "cancelled": 14,
+      "errors": 0,
+      "independentModelVerdicts": {
+        "correct": 39,
+        "incorrect": 1,
+        "incomplete": 16,
+        "unverified": 2
+      },
+      "independentPhraseTimingAndDelivery": {
+        "existing": {
+          "evaluatedTurns": 58,
+          "finitePhraseLatency": {
+            "count": 38,
+            "min": 1987,
+            "median": 4538.5,
+            "sampleP95": 42095,
+            "max": 44621
+          },
+          "missingPhraseMeasurements": 20,
+          "modelVerdicts": {
+            "correct": 39,
+            "incorrect": 1,
+            "incomplete": 16,
+            "unverified": 2,
+            "missing": 0
+          },
+          "wrongOrMissingTurnsRemainInDenominator": true,
+          "correctAnswerAndVisibleUsefulPhraseCount": 34,
+          "nativePhaseCounts": {
+            "complete": 42,
+            "superseded": 14,
+            "cancelled": 1,
+            "confirmed": 1
+          },
+          "cancelledTurns": 14,
+          "errorTurns": 0,
+          "accuracyScope": "Independent model verdicts describe these recorded answers only and remain provisional until substantive checks. No latency threshold, population accuracy estimate or pass/fail performance target is applied."
+        }
+      },
+      "resourceObservations": {
+        "native": {
+          "workingSetBytes": {
+            "first": 28454912,
+            "last": 56291328,
+            "count": 243,
+            "min": 28454912,
+            "median": 54644736,
+            "sampleP95": 56860672,
+            "max": 58114048
+          },
+          "privateBytes": {
+            "first": 4440064,
+            "last": 24788992,
+            "count": 243,
+            "min": 4440064,
+            "median": 20729856,
+            "sampleP95": 23785472,
+            "max": 27627520
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 269,
+            "last": 428,
+            "count": 243,
+            "min": 269,
+            "median": 428,
+            "sampleP95": 431,
+            "max": 444
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 243,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 26,
+            "max": 37
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recorder": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 50495488,
+            "last": 826126336,
+            "count": 362,
+            "min": 50495488,
+            "median": 365606912,
+            "sampleP95": 796102656,
+            "max": 826126336
+          },
+          "heapUsed": {
+            "first": 9558824,
+            "last": 578306216,
+            "count": 362,
+            "min": 9558824,
+            "median": 225806080,
+            "sampleP95": 550805952,
+            "max": 578306216
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 14,
+            "last": 13,
+            "count": 362,
+            "min": 3,
+            "median": 9,
+            "sampleP95": 14,
+            "max": 622
+          }
+        },
+        "nativeTree": {
+          "sha256": "920f6a0c4461fd5d9c89e1e888da721ddfb4900ee0621061246dda50baf3e8bf",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 243,
+          "firstHostMs": 1791678992152,
+          "lastHostMs": 1791682629745,
+          "privateAllocationBytes": {
+            "count": 243,
+            "min": 219914240,
+            "median": 6159572992,
+            "sampleP95": 6355685376,
+            "max": 6514458624
+          },
+          "summedWorkingSetBytes": {
+            "count": 243,
+            "min": 424980480,
+            "median": 1240690688,
+            "sampleP95": 1426882560,
+            "max": 1503473664
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        }
+      },
+      "descriptiveLatencyHalves": {
+        "first": {
+          "count": 28,
+          "min": 1960,
+          "median": 3798,
+          "sampleP95": 27119,
+          "max": 44309
+        },
+        "second": {
+          "count": 29,
+          "min": 2188,
+          "median": 7138,
+          "sampleP95": 27592,
+          "max": 41758
+        }
+      },
+      "orthographicSourceComparison": {
+        "assessedTurns": 58,
+        "unavailableTurns": 0,
+        "referenceWords": 4266,
+        "edits": 378,
+        "lexicalWordErrorRate": 0.08860759493670886
+      }
+    }
+  ],
+  "allHourModelVerdicts": {
+    "correct": 104,
+    "incorrect": 8,
+    "incomplete": 43,
+    "unverified": 5
+  },
+  "accuracyScope": "Provisional independent model judgments against intended source text. Selected executable/manual checks are separate. Honest clarification when code is absent can be content-correct while the app fails the memory requirement. Source spelling and symbol pronunciation have no independently verified phonetic ground truth. All missing, cancelled, incorrect, incomplete and unverified outcomes remain counted.",
+  "reviewProgress": {
+    "hardProbes": [
+      {
+        "name": "cuda-to-phantom-reads",
+        "recordedTurns": 2,
+        "completedReviewRows": 2
+      },
+      {
+        "name": "deep-code-memory",
+        "recordedTurns": 27,
+        "completedReviewRows": 4
+      },
+      {
+        "name": "divergent-block-barrier",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "exact-launch-numbers",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "fp32-association",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "histogram-late-reversal",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "histogram-late-reversal-exact-pause",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "long-question-essential-tail",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "long-question-essential-tail-exact-pause",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "long-question-essential-tail-midpoint-pause",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "never-recorded-event",
+        "recordedTurns": 1,
+        "completedReviewRows": 0
+      },
+      {
+        "name": "warp-followups",
+        "recordedTurns": 5,
+        "completedReviewRows": 0
+      }
+    ],
+    "latestRunnerRecord": {
+      "recordedAt": "2026-10-11T02:58:48.0960575+00:00",
+      "event": "starting",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "reason": "Previous runner passed absolute hard-probe output paths to a workspace-relative reviewer; use relative paths and preserve all cached judgments",
+      "stage": "remaining_recorded_independent_reviews",
+      "ownerPid": 6788
+    },
+    "runnerExecSession": 70827,
+    "ownerLiveness": "This is a timestamped stage snapshot, not a current process-liveness assertion."
+  },
+  "remaining": [
+    "Finish hard-probe, pressure and backend reviews",
+    "Validate all source bindings and consolidate all ten requirements, accuracy, latency, resource and failure scopes"
+  ],
+  "recordingScope": "Playback-only synthetic speech on T24E390, microphone disabled. No answer-specific candidate rules or production behavior changes. No population accuracy certificate, latency target or hardware CUDA runtime certificate."
+}

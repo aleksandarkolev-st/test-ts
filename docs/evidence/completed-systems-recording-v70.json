@@ -1,0 +1,394 @@
+{
+  "recordedAt": "2026-10-11T00:38:15.353Z",
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+      "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/round-12-completed-row-snapshot.json",
+      "sha256": "478d5812b12d295251678dd79994e5ff7fe7f61023f3ad5b93aef0f3ad596001"
+    },
+    {
+      "file": "docs/evidence/systems-slow-turn-outcome-v70.json",
+      "sha256": "2a0b1d6b11146bb582c38d5c0d8e3e6710f06860af2777a68d184931bcc1c400"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/duration-audit.json",
+      "sha256": "a30f73b1a30b7a812576184308eb0f837d2f28ccb699137a2290fecc450259b1"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/delivery-coverage-audit.json",
+      "sha256": "7d3e80c89a215cc4f68e322280ad7b19a67cb90a2c4a6f40b3bab56e8be32b6e"
+    },
+    {
+      "file": "artifacts/deep-interview-v70/systems-hour-t/observed-turn-state-audit.json",
+      "sha256": "13d87a40a30ea50d7a750c9d558d3c952393ade1af0f48c3bec4cd31e5294868"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "examinerModel": "gpt-6.1-sol",
+  "examinerEffort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "actualInterviewDurationMs": 3635211.4666,
+  "requestedDurationMs": 3600000,
+  "turns": 53,
+  "primaryMetric": {
+    "count": 52,
+    "min": 2056,
+    "median": 8379,
+    "sampleP95": 53701,
+    "max": 77544
+  },
+  "missingVisibleWordMeasurements": 1,
+  "cancelledTurns": 13,
+  "errorTurns": 1,
+  "finalSlowTurnBinding": {
+    "round": 12,
+    "recordedQuestionAnswerErrorPhaseCancellationVersionLatencyAndPlaybackUnchanged": true,
+    "successfulAnswerDelivery": false,
+    "firstRetainedVisibleWordMs": {
+      "low": 77539,
+      "high": 77544
+    },
+    "stages": {
+      "physicalEndpointToFinalConfirmationMs": {
+        "low": 827,
+        "high": 838
+      },
+      "finalConfirmationToFinalInputSentMs": 37261,
+      "finalInputRpcAckMs": 5,
+      "finalInputSentToConsumptionEventMs": 33454,
+      "consumptionEventToRetainedFirstDeltaMs": 5926,
+      "retainedFirstDeltaToNativeVisibleMs": 6,
+      "foregroundSemaphoreWaitMs": 0
+    },
+    "error": "Codex answer timed out"
+  },
+  "observedTurnStateSummary": {
+    "capturedTurns": 53,
+    "capturedComplete": 39,
+    "lastObservedComplete": 39,
+    "changedAnswers": 0,
+    "changedCancellationStates": 0,
+    "capturedCancelled": 13,
+    "lastObservedCancelled": 13
+  },
+  "deliverySummary": {
+    "sourceQuestions": 53,
+    "allQuestionAndBackgroundWaveHashesValidated": true,
+    "questionWaveDurationMs": {
+      "count": 53,
+      "min": 1145,
+      "median": 42780,
+      "sampleP95": 57825,
+      "max": 65690
+    },
+    "sourceWordCount": {
+      "count": 53,
+      "min": 1,
+      "median": 93,
+      "sampleP95": 113,
+      "max": 118
+    },
+    "shortestQuestions": [
+      {
+        "round": 2,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 6,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 11,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 14,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 18,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 23,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 26,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 30,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 35,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 38,
+        "question": "Why?",
+        "sourceWordCount": 1
+      },
+      {
+        "round": 42,
+        "question": "What if that changes?",
+        "sourceWordCount": 4
+      },
+      {
+        "round": 47,
+        "question": "And if, uh, that thing changes?",
+        "sourceWordCount": 6
+      },
+      {
+        "round": 50,
+        "question": "Why?",
+        "sourceWordCount": 1
+      }
+    ],
+    "incomingDeliveryOrigins": {
+      "initial_question": 1,
+      "prepared_contextual_probe_after_actual_visible_answer": 13,
+      "examiner_generated_followup": 26,
+      "examiner_generated_from_actual_partial_answer": 12,
+      "public_older_implementation_reference": 1
+    },
+    "deliveryByIncomingOrigin": {
+      "initial_question": {
+        "questions": 1,
+        "precedingJobOverlapLaunches": 0,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      },
+      "prepared_contextual_probe_after_actual_visible_answer": {
+        "questions": 13,
+        "precedingJobOverlapLaunches": 12,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 13,
+          "min": 577,
+          "median": 954,
+          "sampleP95": 1980,
+          "max": 1980
+        }
+      },
+      "examiner_generated_followup": {
+        "questions": 26,
+        "precedingJobOverlapLaunches": 0,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 0,
+          "min": null,
+          "median": null,
+          "sampleP95": null,
+          "max": null
+        }
+      },
+      "examiner_generated_from_actual_partial_answer": {
+        "questions": 12,
+        "precedingJobOverlapLaunches": 6,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 12,
+          "min": 7638,
+          "median": 12316.5,
+          "sampleP95": 20612,
+          "max": 20612
+        }
+      },
+      "public_older_implementation_reference": {
+        "questions": 1,
+        "precedingJobOverlapLaunches": 1,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 1,
+          "min": 1238,
+          "median": 1238,
+          "sampleP95": 1238,
+          "max": 1238
+        }
+      }
+    },
+    "activeAnswerOverlapLaunches": 23,
+    "precedingJobOverlapLaunches": 19,
+    "priorVisiblePrefixBasisCount": 25,
+    "priorAnswerBasisToPlaybackSubmissionMs": {
+      "count": 26,
+      "min": 577,
+      "median": 1767,
+      "sampleP95": 15946,
+      "max": 20612
+    },
+    "backgroundUtterances": 4
+  },
+  "resourceSummary": {
+    "native": {
+      "workingSetBytes": {
+        "first": 28446720,
+        "last": 56012800,
+        "count": 243,
+        "min": 28446720,
+        "median": 55930880,
+        "sampleP95": 58023936,
+        "max": 59465728
+      },
+      "privateBytes": {
+        "first": 4427776,
+        "last": 23961600,
+        "count": 243,
+        "min": 4427776,
+        "median": 21417984,
+        "sampleP95": 24571904,
+        "max": 26501120
+      },
+      "rss": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "heapUsed": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "handles": {
+        "first": 269,
+        "last": 429,
+        "count": 243,
+        "min": 269,
+        "median": 429,
+        "sampleP95": 434,
+        "max": 441
+      },
+      "threads": {
+        "first": 10,
+        "last": 22,
+        "count": 243,
+        "min": 10,
+        "median": 22,
+        "sampleP95": 27,
+        "max": 36
+      },
+      "pollMs": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      }
+    },
+    "recorder": {
+      "workingSetBytes": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "privateBytes": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "rss": {
+        "first": 50016256,
+        "last": 827412480,
+        "count": 362,
+        "min": 50016256,
+        "median": 454893568,
+        "sampleP95": 797798400,
+        "max": 836927488
+      },
+      "heapUsed": {
+        "first": 9687032,
+        "last": 595761168,
+        "count": 362,
+        "min": 9577424,
+        "median": 303628924,
+        "sampleP95": 565176440,
+        "max": 595761168
+      },
+      "handles": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "threads": {
+        "first": null,
+        "last": null,
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "pollMs": {
+        "first": 16,
+        "last": 12,
+        "count": 362,
+        "min": 3,
+        "median": 10,
+        "sampleP95": 14,
+        "max": 440
+      }
+    },
+    "nativeTree": {
+      "sha256": "2198cefea9055f47740a9a6143a399ab36695f0bde41bcb295518eb885e6a7d9",
+      "source": "interview.json nativeResources[].nativeTree",
+      "observations": 243,
+      "firstHostMs": 1791675270284,
+      "lastHostMs": 1791678907015,
+      "privateAllocationBytes": {
+        "count": 243,
+        "min": 225013760,
+        "median": 6333698048,
+        "sampleP95": 6474493952,
+        "max": 6508830720
+      },
+      "summedWorkingSetBytes": {
+        "count": 243,
+        "min": 430718976,
+        "median": 1402138624,
+        "sampleP95": 1555099648,
+        "max": 1657876480
+      },
+      "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+    }
+  },
+  "independentAccuracyPending": true,
+  "scope": "Binds the earlier sparse slow-turn analysis to the final clean systems-hour journal. Its raw answer and measured timing remain unchanged. The timeout is not counted as successful delivery. All turn rows, cancelled answers and absent visible words remain in the recording; independent accuracy and substantive checks are separate."
+}

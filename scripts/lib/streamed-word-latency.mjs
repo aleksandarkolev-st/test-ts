@@ -1,6 +1,7 @@
 // Primary user-requested metric: playback speech end to the first visible
 // streamed word. It never waits for completion or independent grading.
 const wordPattern=/[\p{L}\p{N}_]+(?:['’_-][\p{L}\p{N}_]+)*/u;
+import {jobsAtObservation} from './deep-observations.mjs';
 
 function firstCompletedWord(text){
  const match=text.match(wordPattern);
@@ -14,9 +15,9 @@ function firstCompletedWord(text){
 export function streamedWordLatency(journal,row){
  const before=row.audio?.clockAnchors?.[0]?.nativeMs;
  let id=row.responseVersion?.split(':')[0];
- if(!id){
-  const state=journal.deepObservations?.at(-1);
-  id=state?.jobs?.filter(j=>j.confirmed&&j.question.detectedAt>=before)
+ if(!id&&row.phase!=='no_job'){
+  const records=journal.deepObservations??[];
+  id=jobsAtObservation(records,records.length-1).filter(j=>j.confirmed&&j.question.detectedAt>=before)
    .sort((a,b)=>a.question.detectedAt-b.question.detectedAt).at(-1)?.question.id;
  }
  const observed=journal.deepObservations?.findLast(o=>o.jobs?.some(j=>j.question.id===id))?.jobs.find(j=>j.question.id===id);
@@ -45,7 +46,7 @@ export function streamedWordLatency(journal,row){
   firstWordVisibleWhileStillStreaming:streaming[0]??null,
   firstWordHiddenUntilAfterStreaming:Boolean(measurements.length&&!measurements[0].observedDuringStreaming),
   phase:observed?.phase??row.phase,error:observed?.error??row.error??null,
-  missingReason:measurements.length?null:!id?'question_not_yet_confirmed':
+  missingReason:measurements.length?null:!id?(row.phase==='no_job'?'no_native_question_assigned':'question_not_yet_confirmed'):
    !samples.some(s=>s.recorderVersion===2)?'viewport_visibility_unverified':
    !visible.length?'no_answer_observed_in_visible_viewport':'no_complete_first_word_observed_as_visible',
   scope:'First complete streamed word observed in the actual overlay, measured against the synthetic playback last-nonzero PCM endpoint. Correctness is assessed separately; completion is not required. Paint and device-position observations bound timing resolution.'};

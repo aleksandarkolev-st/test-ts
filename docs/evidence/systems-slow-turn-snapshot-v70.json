@@ -1,0 +1,61 @@
+{
+  "recordedAt": "2026-10-10T23:56:51.465Z",
+  "completedRowSnapshot": {
+    "file": "artifacts/deep-interview-v70/systems-hour-t/round-12-completed-row-snapshot.json",
+    "sha256": "478d5812b12d295251678dd79994e5ff7fe7f61023f3ad5b93aef0f3ad596001"
+  },
+  "source": {
+    "file": "artifacts/deep-interview-v70/systems-hour-t/interview.json",
+    "sha256": "9c65cf4518f6ad97ff29d0d1330deb8f50e7c0ae989dba413bbacbe0f58d2fe0",
+    "status": "in_progress"
+  },
+  "round": 12,
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "question": "The host-submission assumption changes: two host threads now submit adjacent chunks concurrently to nonblocking streams P and C, sharing two buffer slots, reusable events, and one accumulator. The event contracts and serial-fold requirement stay unchanged. Give a concrete interleaving that breaks a naive upload, record, wait, consume protocol. [pause 1.5 seconds] Then provide executable CUDA C++ submission code with explicit slot ownership and host synchronization. Prove chunk-order preservation, event-generation binding, and safe host and device buffer reuse. On any asynchronous failure, stop submission and do not return a sum.",
+  "questionSha256": "7647fa45e77fa7c390c678c4b9d5ae2cea913fb92402260dbaf528d88a9fcaa3",
+  "answerSha256": "ab51805414b5de86f8e616ce912641af1e46693459854a40f405c49ecd994233",
+  "codexSourceSha256": "3df1a6b5458e5bbfc07d09b001dfb7a3c8696b9f7bc9e7a0f7d9e6d048f69e95",
+  "visibleWord": {
+    "word": "Use",
+    "characterRange": [
+      0,
+      3
+    ],
+    "observedHostMs": 1791676000646,
+    "latencyMs": {
+      "low": 77539,
+      "high": 77544
+    },
+    "responseRevision": 32,
+    "observedDuringStreaming": true,
+    "retainedInCurrentRecordedAnswer": true
+  },
+  "physicalEndpointNativeMs": {
+    "low": 644328,
+    "high": 644339
+  },
+  "stages": {
+    "physicalEndpointToFinalConfirmationMs": {
+      "low": 827,
+      "high": 838
+    },
+    "finalConfirmationToFinalInputSentMs": 37261,
+    "finalInputRpcAckMs": 5,
+    "finalInputSentToConsumptionEventMs": 33454,
+    "consumptionEventToRetainedFirstDeltaMs": 5926,
+    "retainedFirstDeltaToNativeVisibleMs": 6,
+    "foregroundSemaphoreWaitMs": 0
+  },
+  "counters": {
+    "steers": 9,
+    "followups": 1,
+    "restarts": 1,
+    "initialPromptChars": 22106,
+    "restartPromptChars": 22447,
+    "totalRefinementChars": 182410
+  },
+  "finalJournalBindingPending": true,
+  "scope": "A completed response preserved from the live, unfinished systems-hour recording. Exact row, question, answer, audio endpoint and source-code hashes are retained; bind these to the final journal after clean termination. Consumption is an application-observed matching userMessage completion event, not measured provider-internal queue, reasoning or GPU time. This does not certify full-hour duration or overall accuracy. No product logic changed."
+}

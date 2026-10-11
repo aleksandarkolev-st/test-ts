@@ -1,0 +1,109 @@
+{
+  "recordedAt": "2026-10-11T07:51:50.314Z",
+  "evidence": {
+    "file": "docs/evidence/architecture-systems-r3-clocks-v71.json",
+    "sha256": "98b8133fd11dcd51968de0b380ec9f561e1b2420035259b511adf32ec3cedc03"
+  },
+  "source": {
+    "file": "src-tauri/src/openai/codex.rs",
+    "sha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766"
+  },
+  "round": 3,
+  "responseVersion": "43e783b5-e178-4501-9ec3-8a4131dd1cbf:17",
+  "physicalVoicedEndpointNativeMs": {
+    "low": 85447,
+    "high": 85456
+  },
+  "clockOffsetIntervalMs": {
+    "low": -1791704350221,
+    "high": -1791704350217
+  },
+  "restartCount": 1,
+  "cleanupStartedAt": 75005,
+  "cleanupTerminalAt": 75007,
+  "cleanupTerminalBeforePhysicalSpeechEndMs": {
+    "low": 10440,
+    "high": 10449
+  },
+  "firstDecodedPrefixAfterCleanup": {
+    "atCap": false,
+    "capChars": 256,
+    "contextKey": [
+      138,
+      101,
+      131,
+      1,
+      87,
+      5,
+      114,
+      144,
+      47,
+      246,
+      191,
+      25,
+      21,
+      22,
+      241,
+      199,
+      164,
+      64,
+      218,
+      210,
+      176,
+      6,
+      165,
+      127,
+      216,
+      90,
+      160,
+      14,
+      97,
+      129,
+      228,
+      51
+    ],
+    "firstWordObservedAt": 76876,
+    "id": "43e783b5-e178-4501-9ec3-8a4131dd1cbf",
+    "observedAt": 76876,
+    "prefix": "The",
+    "question": "Only one GPU worker is affected the host control endpoint responds but its dedicated streams completion event remains not ready A minimized kernel launches one block of ninety six threads with valid equal to seventy inside an if statement testing thread index less than valid Each thread loads its corresponding input into shared memory calls underscore underscore sync threads, and thread zero sums the valid entries into the output immediate launch checks succeed a sanitizer reports a divergent block barrier Explain the violated invariant without claiming every device must hang",
+    "revision": 9,
+    "scope": "Unvalidated decoded prefix: not display authorization, retained-answer timing, or proof of semantic validity."
+  },
+  "postCleanupPrefixBeforePhysicalSpeechEndMs": {
+    "low": 8571,
+    "high": 8580
+  },
+  "exactRestartRequestSentAt": null,
+  "mechanisms": [
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 324,
+      "source": "if result.as_ref().err().map(String::as_str)!=Some(REFINEMENT_STALLED){return result;}",
+      "meaning": "Only this failed-refinement outcome triggers the one outer retry."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 330,
+      "source": "if let Some(trace)=&trace{trace.refinement_restarted();trace.reset_answer();}",
+      "meaning": "The retry count increments after obsolete-thread terminal cleanup."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 335,
+      "source": "self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await",
+      "meaning": "The second attempt disables restart_stalled."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 521,
+      "source": "_=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{",
+      "meaning": "The short final-refinement deadline is enabled only while restart_stalled is true."
+    }
+  ],
+  "interpretation": "A once-only refinement retry is already active and decoding a still-incomplete question frame more than eight seconds before the actual source utterance ends. The final question then reaches the second attempt, whose short refinement-restart deadline is disabled. This demonstrates that the short restart can be spent during a multipart question rather than reserving it for its actual final condition. The final submission gate and matching-input receipt waits in the preserved row remain directly measured; the exact fresh restart-request send timestamp and provider-internal scheduling are not captured.",
+  "scope": "Source-bound immutable live-row checkpoint with physical playback/native clock calibration. This is a measured application lifecycle example, not an isolated causal intervention, answer grade or complete systems-hour result. Native ASR-final segments and question confirmations are distinct from the physical end of a multipart source utterance.",
+  "finalJournalBindingPending": true,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

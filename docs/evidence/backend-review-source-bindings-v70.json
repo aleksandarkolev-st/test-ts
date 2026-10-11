@@ -1,0 +1,93 @@
+{
+  "recordedAt": "2026-10-11T00:28:59.017Z",
+  "manifest": {
+    "file": "artifacts/deep-interview-v70/backend-comparison-cases.json",
+    "sha256": "cb7882fc1feeb018021ca2c3ae52dadd26e09a17d0e6cc5f1e63fa4bfcb855bb"
+  },
+  "sourceHashes": {
+    "src-tauri/examples/assess-recorded-interview.rs": "6808ba8ba222072dadd6538b084657df3dde292c0600b1baaff488121da149c1",
+    "scripts/summarize-deep-audio-interview.mjs": "59c1240b9f61911cca9160334c8b546bea2ff44ac3ee3b49f0aa5ab643a1f6ef",
+    "scripts/tests/deep-audio-assessment.test.mjs": "16c771278b20e76749dd64e593610785f59aa8473a14717238046e7aabd47322",
+    ".local/prepare-backend-review-v70.mjs": "5db9d15908900254c5c36ae6f128466f0ba323ff27b941028c15e1ffe1432599"
+  },
+  "boundCases": [
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/warp-followups/interview.json",
+      "journalSha256": "ee7d962f0f703a6c9c50c785a48aee1fbbb1d5d1fe044ef63f65afcfddcc74a4",
+      "sourceRound": 4,
+      "earlierSourceQuestions": 3
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/divergent-block-barrier/interview.json",
+      "journalSha256": "5cbc92af7ccb26757df2ec0fe5270a77359ba5d23d000daf77ff71ea5ed26b70",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/never-recorded-event/interview.json",
+      "journalSha256": "0b32164230d9ae92a689d2f4e2f2db3f558f37a2fb687768e66764eaf35bc3fe",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/fp32-association/interview.json",
+      "journalSha256": "7cd5132ab20e51ed91403e2e842a4c4ad0e29a9a7df3cf83cae19d9170b4b859",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/histogram-late-reversal-exact-pause/interview.json",
+      "journalSha256": "ba254a92f1e234c14ef93f7c6d5523c94de0e1efd870eae0e6939e17c75c274c",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/long-question-essential-tail-exact-pause/interview.json",
+      "journalSha256": "7cb4d0ea9914dc68b442a7c9fa5869e4e569b6085affff6c60a41dbd5a69c0c8",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/exact-launch-numbers/interview.json",
+      "journalSha256": "98ea5fbd39b87730079f05608cb551055fe33e546f746a1edcff2fd71def70f3",
+      "sourceRound": 1,
+      "earlierSourceQuestions": 0
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/cuda-to-phantom-reads/interview.json",
+      "journalSha256": "24ce1d1c9ca243b2e3a9c7056085ce9cf0a7a07fee85b01fc335a81dea9ee4c3",
+      "sourceRound": 2,
+      "earlierSourceQuestions": 1
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "sourceRound": 9,
+      "earlierSourceQuestions": 8
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "sourceRound": 11,
+      "earlierSourceQuestions": 10
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "sourceRound": 19,
+      "earlierSourceQuestions": 18
+    },
+    {
+      "sourceJournal": "artifacts/deep-interview-v70/hard-probes/deep-code-memory/interview.json",
+      "journalSha256": "54feacc10bbc0f8181a78402bdbca5c3df761f468803dff8a2fe5c9fbcc27996",
+      "sourceRound": 23,
+      "earlierSourceQuestions": 22
+    }
+  ],
+  "reviewerInputSchemaVersion": 3,
+  "sourceHistoryPerCase": true,
+  "sourceQuestionContextAndRecognitionByteMatched": true,
+  "independentModelInferenceExecuted": false,
+  "backendComparisonExecuted": false,
+  "scope": "Offline preparation validates each comparison case against its completed original recording and binds only its earlier source questions. Cases from other comparisons are not treated as conversation history. Qualitative error/cancellation outcomes remain in future reviewer inputs; examiner grades and numerical timing are excluded."
+}

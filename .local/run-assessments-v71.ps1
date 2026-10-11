@@ -1,0 +1,83 @@
+param([string]$TaskRoot='artifacts/deep-interview-v71')
+$ErrorActionPreference='Stop'
+$taskQueue=Get-Content -LiteralPath ($taskRoot+'/recording-queue.jsonl') -Encoding UTF8 | ForEach-Object { $_ | ConvertFrom-Json }
+$taskState=Get-Content -LiteralPath ($taskRoot+'/recording-queue.jsonl') -Tail 1 -Encoding UTF8 | ConvertFrom-Json
+if($taskState.event -ne 'recordings_terminal'){throw 'Finish all fresh measured recordings before deferred assessments'}
+$taskLive=Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'meeting-copilot.exe' -or ($_.Name -eq 'node.exe' -and $_.CommandLine -match 'native-signed-interview|record-backend-playback') }
+if($taskLive){throw 'A measured native session is still active'}
+$taskControl=Get-Content -LiteralPath ($taskRoot+'/policy-playback/playback.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$taskManifest=Get-Content -LiteralPath ($taskRoot+'/policy-playback/manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$taskExpectedTrials=$taskManifest.cases.Count*$taskManifest.repetitions*$taskManifest.policies.Count
+if($taskControl.status -ne 'complete' -or !$taskControl.stoppedCleanly -or $taskControl.trials.Count -ne $taskExpectedTrials){throw 'Finish all matched fresh-meeting policy controls before deferred assessment'}
+$taskPressure=$taskRoot+'/continuous-pressure-t'
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-events-audit.json'))){
+ node scripts/audit-pressure-event-recording.mjs $taskPressure
+ if($LASTEXITCODE -ne 0){throw 'Pressure event binding failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-lexical-alignment.json'))){
+ node .local/audit-pressure-clauses-v71.mjs
+ if($LASTEXITCODE -ne 0){throw 'Pressure source alignment failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-token-alignment.json'))){
+ node .local/audit-pressure-clauses-v71.mjs --tokens-only
+ if($LASTEXITCODE -ne 0){throw 'Pressure token binding failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-review-input.json'))){
+ node .local/prepare-pressure-review-v71.mjs
+ if($LASTEXITCODE -ne 0){throw 'Pressure review projection failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-source-coverage-audit.json'))){
+ node scripts/audit-pressure-source-coverage.mjs $taskPressure
+ if($LASTEXITCODE -ne 0){throw 'Pressure source coverage binding failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-drift-audit.json'))){
+ node .local/audit-pressure-drift-v71.mjs
+ if($LASTEXITCODE -ne 0){throw 'Pressure resource and latency drift audit failed'}
+}
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-visibility-audit.json'))){
+ node .local/audit-pressure-visibility-v71.mjs
+ if($LASTEXITCODE -ne 0){throw 'Pressure display attribution audit failed'}
+}
+$taskSources=@($taskQueue | Where-Object { $_.event -eq 'finished' -and $_.kind -eq 'elapsed_hour' } | ForEach-Object { $_.source })
+if(!$taskSources.Count -or @($taskSources | Sort-Object -Unique).Count -ne $taskSources.Count){throw 'Missing or duplicate completed recordings in queue'}
+$taskSources+=Get-ChildItem -LiteralPath ($taskRoot+'/hard-probes') -Directory | Sort-Object Name | ForEach-Object { $taskRoot+'/hard-probes/'+$_.Name+'/interview.json' }
+$taskSources+=$taskPressure+'/pressure-review-input.json'
+$taskSources+=$taskControl.trials | ForEach-Object { $_.outputDirectory+'/interview.json' }
+$taskConfiguration=$taskQueue | Where-Object event -eq 'started' | Select-Object -First 1
+$env:COPILOT_INDEPENDENT_MODEL=$taskConfiguration.model
+$env:COPILOT_INDEPENDENT_EFFORT=$taskConfiguration.effort
+if(!(Test-Path -LiteralPath ($taskRoot+'/decoder-benchmark/results.json'))){
+ node --expose-gc --max-old-space-size=6144 .local/benchmark-decoder-v71.mjs $taskRoot
+ if($LASTEXITCODE -ne 0){throw 'Offline decoder benchmark failed; preserve source and raw output'}
+}
+cargo build --manifest-path src-tauri/Cargo.toml --example assess-recorded-interview --features acceptance
+if($LASTEXITCODE -ne 0){throw 'Independent reviewer build failed'}
+foreach($taskSource in $taskSources){
+ $taskParent=Split-Path -Path $taskSource -Parent
+ $taskReviews=$taskParent+'/independent-model-review-v71'
+ $taskSummary=$taskParent+'/independent-assessment-v71'
+ if($taskSource -notmatch 'pressure-review-input.json$'){
+  if(!(Test-Path -LiteralPath ($taskParent+'/architecture-audit-v71.json'))){
+   node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent
+   if($LASTEXITCODE -ne 0){throw ('Architecture source/timing audit failed: '+$taskSource)}
+  }
+  if(!(Test-Path -LiteralPath ($taskParent+'/delivery-coverage-audit.json'))){
+   node --max-old-space-size=6144 scripts/audit-interview-delivery-coverage.mjs $taskParent
+   if($LASTEXITCODE -ne 0){throw ('Waveform and delivery coverage audit failed: '+$taskSource)}
+  }
+ }
+ & .\src-tauri\target\debug\examples\assess-recorded-interview.exe $taskSource $taskReviews
+ if($LASTEXITCODE -ne 0){throw ('Independent review failed; preserve cached judgments: '+$taskSource)}
+ if(Test-Path -LiteralPath ($taskSummary+'/assessment.json')){
+  $taskExisting=Get-Content -LiteralPath ($taskSummary+'/assessment.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+  $taskBound=if($taskExisting.journal){$taskExisting.journal.sha256}else{($taskExisting.evidence | Where-Object file -match 'pressure-review-input.json$').sha256}
+  if($taskBound -ne (Get-FileHash -LiteralPath $taskSource -Algorithm SHA256).Hash.ToLowerInvariant()){throw 'Existing assessment source changed'}
+ }elseif($taskSource -match 'pressure-review-input.json$'){
+  node scripts/summarize-pressure-assessment.mjs $taskParent $taskReviews $taskSummary
+  if($LASTEXITCODE -ne 0){throw 'Pressure assessment binding failed'}
+ }else{
+  node --max-old-space-size=6144 scripts/summarize-deep-audio-interview.mjs $taskSource $taskReviews $taskSummary
+  if($LASTEXITCODE -ne 0){throw ('Source and useful-phrase timing binding failed: '+$taskSource)}
+ }
+}
+Write-Output 'All fresh recorded reviews and useful-phrase timings terminal. Architecture, code checks and final audit remain separate.'

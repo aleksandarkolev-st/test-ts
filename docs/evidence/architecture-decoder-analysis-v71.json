@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-10-11T07:13:38.686Z",
+  "source": {
+    "file": "src-tauri/src/openai/codex.rs",
+    "sha256": "e73497240c707b72a99320c10bfe51cde9c49d17c4c0db17f867d84fa7e15766"
+  },
+  "facts": [
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 72,
+      "source": "pub fn automatic_reply_schema()->Value {",
+      "meaning": "The automatic answer contains intent and text, without an echoed question field."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 95,
+      "source": "if intent!=Some(false){return Ok(None);}",
+      "meaning": "Text is not emitted until a complete answer intent has been decoded. A text-first answer cannot emit until the subsequent intent field arrives."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 99,
+      "source": "Ok((!delta.is_empty()).then_some(delta))",
+      "meaning": "Once answer intent is available, decoded nonempty text prefixes are emitted incrementally; closing the whole JSON object is not required."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 93,
+      "source": "let (intent,text)=reply_prefix(&self.raw)?;",
+      "meaning": "The accumulated JSON prefix is reparsed on each chunk; work can grow with cumulative output and chunk count. This is a source-level cost, not a measured tail attribution."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 565,
+      "source": "let gated=if automatic{reply_gate.feed(delta)?}else{Some(delta.to_string())};",
+      "meaning": "Decoder execution happens before the callback-duration timer; small callback times do not measure decoder cost."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 751,
+      "source": "if message[\"method\"]==\"item/agentMessage/delta\" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}",
+      "meaning": "FirstAgentDelta is marked in dispatch, before filtering blocked old agent items and before JSON gating. It is not reset per final answer frame."
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "line": 905,
+      "source": "fn intent_framing_preserves_exact_code_and_split_escapes_without_metadata() {",
+      "meaning": "The existing passing framing test checks incremental exact text and split escapes and withholding a text-first ignore reply; it is not a latency benchmark."
+    }
+  ],
+  "measurementLimitations": [
+    "Current recordings do not preserve raw agent JSON chunks or final-frame first raw delta timestamps. Actual field order and decoder execution time cannot be reconstructed reliably.",
+    "The measured same-response confirmation-to-send and send-to-reader waits occur before decoding the final response. JSON gating cannot explain those intervals.",
+    "Consumer-to-retained-delta includes backend output arrival, decoding, frame/context filtering and native processing; it is not isolated model compute time.",
+    "No production behavior, prompts, or backend routing changed. No new build or expensive decoder benchmark during measured capture."
+  ],
+  "newEmpiricalDecoderBenchmarkExecuted": false,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

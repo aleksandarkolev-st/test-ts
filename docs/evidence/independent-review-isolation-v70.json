@@ -1,0 +1,62 @@
+{
+  "recordedAt": "2026-10-11T01:05:38.899Z",
+  "sources": [
+    {
+      "file": "src-tauri/examples/assess-recorded-interview.rs",
+      "sha256": "a211bcd7ffc2763819c5ae2c30f6147b6414e3d15926d62ad9e9be19854e5323"
+    },
+    {
+      "file": "scripts/summarize-deep-audio-interview.mjs",
+      "sha256": "2a4c80c8256ac8cc146981650fa6989e031b27d6a462874e326313612f7b67e6"
+    },
+    {
+      "file": "scripts/summarize-pressure-assessment.mjs",
+      "sha256": "105cff18021e387035112e1fe2a715049988489eea40ccac5e4a71a2afaa2a6d"
+    },
+    {
+      "file": "scripts/lib/native-backend-projection.mjs",
+      "sha256": "c9dab53a33b994f021be3dab13ec068eae277861e9c2127f8cc56f327ba99ae7"
+    },
+    {
+      "file": "scripts/summarize-native-backend-assessment.mjs",
+      "sha256": "2e53603c6de00d69af7bdf004b7ec88d10c637c906cba2824c777a2b845d08c9"
+    },
+    {
+      "file": "scripts/summarize-answer-backend-comparison.mjs",
+      "sha256": "5392ecfd606738b9ed9c7a924f05488afb1e692d8be5de1719cd297f10c09710"
+    },
+    {
+      "file": ".local/prepare-native-backend-review-v70.mjs",
+      "sha256": "d868cd15b21d3b0db3b688cc3a34faae419909c0357a440818016d8001549f7d"
+    },
+    {
+      "file": ".local/record-backend-playback-v70.mjs",
+      "sha256": "0b2b28e468d1215f1e82ef00bccbb15e7a5ac31bc1f92324c74b3e28683a4fb4"
+    },
+    {
+      "file": ".local/run-backend-assessments-v70.ps1",
+      "sha256": "98004bfca28b15c16ffeea4fab828c37d3e4c1a01f8ed2edcfee437655c5542b"
+    },
+    {
+      "file": ".local/run-native-backend-assessments-v70.ps1",
+      "sha256": "fe1b929f91f24a96f124e7f240815ae129b5eab988915c41ec6efdecafb01372"
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "reviewerInputSchemaVersion": 3,
+  "reviewerContinuity": false,
+  "sourceHistoryPerCase": true,
+  "errorAndCancellationOutcomesIncluded": true,
+  "examinerGradesAndNumericalTimingExcluded": true,
+  "reviewerBinaryAndCompiledSourceHashesRecorded": true,
+  "modelReviewExecutionPending": true,
+  "RustBuildDeferredUntilMeasuredPlaybackStops": true,
+  "javascriptBindingAndWaveAttributionTestsPassed": true,
+  "nativeCaseIsolationSourceFinding": {
+    "runtimeStopClosesCodex": true,
+    "CodexCloseClearsPreparedThreads": true,
+    "productionLogicChanged": false
+  },
+  "scope": "Offline source-checked review isolation and reporting preparation. JavaScript source-binding and waveform attribution tests passed. The updated Rust reviewer has not yet been rebuilt or used for inference; the serial queue builds it only after measured playback. Independent model judgments remain provisional and separate from substantive checks. Native capture uses normal within-meeting behavior, with a stop and fresh meeting for each case."
+}

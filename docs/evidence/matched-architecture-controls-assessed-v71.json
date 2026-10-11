@@ -1,0 +1,1548 @@
+{
+  "recordedAt": "2026-10-11T14:52:44.711Z",
+  "kind": "architecture",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "selection": [
+    {
+      "domain": "general",
+      "sourceSha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+      "allTurns": 55,
+      "eligible": 55,
+      "excluded": [],
+      "observedMedianAmongEligibleMs": 8922,
+      "selected": [
+        {
+          "kind": "slowest_observed",
+          "round": 34
+        },
+        {
+          "kind": "nearest_observed_median",
+          "round": 13
+        }
+      ]
+    },
+    {
+      "domain": "systems",
+      "sourceSha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+      "allTurns": 52,
+      "eligible": 51,
+      "excluded": [
+        {
+          "round": 36,
+          "missingRetainedWord": true,
+          "missingExplicitContext": false
+        }
+      ],
+      "observedMedianAmongEligibleMs": 9763,
+      "selected": [
+        {
+          "kind": "slowest_observed",
+          "round": 32
+        },
+        {
+          "kind": "nearest_observed_median",
+          "round": 41
+        }
+      ]
+    },
+    {
+      "domain": "algorithms",
+      "sourceSha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+      "allTurns": 49,
+      "eligible": 48,
+      "excluded": [
+        {
+          "round": 14,
+          "missingRetainedWord": true,
+          "missingExplicitContext": true
+        }
+      ],
+      "observedMedianAmongEligibleMs": 12298.5,
+      "selected": [
+        {
+          "kind": "slowest_observed",
+          "round": 49
+        },
+        {
+          "kind": "nearest_observed_median",
+          "round": 12
+        }
+      ]
+    }
+  ],
+  "reviewAudit": {
+    "file": "artifacts\\deep-interview-v71\\review-cohort-audit.json",
+    "status": "recorded_review_inputs_verified",
+    "pendingOtherInputCohorts": 0,
+    "scope": "Every trial in this matched control protocol is required in the verified audit. Other recording cohorts can remain pending only when an explicit subset audit is supplied."
+  },
+  "summaries": [
+    {
+      "group": "baseline",
+      "recordedTrials": 12,
+      "measuredWords": 12,
+      "missingWords": 0,
+      "cancelled": 0,
+      "errors": 0,
+      "observationWindowsExpired": 0,
+      "primaryWordLatencyMs": {
+        "count": 12,
+        "min": 6008,
+        "median": 14013,
+        "sampleP95": 48298,
+        "max": 48298
+      },
+      "allTrialWordP95": {
+        "rank": 12,
+        "latencyMs": 48298,
+        "status": "finite_observed_sample_bound",
+        "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+      },
+      "independentModelVerdicts": {
+        "correct": 12,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "provisionalCorrectFractionOfAllTrials": 1
+    },
+    {
+      "group": "latest-question-wins",
+      "recordedTrials": 12,
+      "measuredWords": 11,
+      "missingWords": 1,
+      "cancelled": 0,
+      "errors": 1,
+      "observationWindowsExpired": 0,
+      "primaryWordLatencyMs": {
+        "count": 11,
+        "min": 7080,
+        "median": 10977,
+        "sampleP95": 16491,
+        "max": 16491
+      },
+      "allTrialWordP95": {
+        "rank": 12,
+        "latencyMs": null,
+        "status": "not_reached_within_recordings",
+        "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+      },
+      "independentModelVerdicts": {
+        "correct": 11,
+        "incorrect": 0,
+        "incomplete": 1,
+        "unverified": 0
+      },
+      "provisionalCorrectFractionOfAllTrials": 0.9166666666666666
+    }
+  ],
+  "pairs": [
+    {
+      "caseIndex": 0,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-baseline\\trials\\general-hour-t-round-34-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-latest-question-wins\\trials\\general-hour-t-round-34-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": 1066,
+        "high": 1078
+      },
+      "comparisonDefinitelyEarlier": false,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 0,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-baseline\\trials\\general-hour-t-round-34-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-latest-question-wins\\trials\\general-hour-t-round-34-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": 2618,
+        "high": 2630
+      },
+      "comparisonDefinitelyEarlier": false,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-baseline\\trials\\general-hour-t-round-13-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-latest-question-wins\\trials\\general-hour-t-round-13-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -6749,
+        "high": -6739
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-baseline\\trials\\general-hour-t-round-13-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-latest-question-wins\\trials\\general-hour-t-round-13-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": null,
+      "comparisonDefinitelyEarlier": null,
+      "referenceMissing": false,
+      "comparisonMissing": true,
+      "referenceError": null,
+      "comparisonError": "Codex question replacement budget exhausted",
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 0,
+        "incorrect": 0,
+        "incomplete": 1,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-baseline\\trials\\systems-hour-t-round-32-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-latest-question-wins\\trials\\systems-hour-t-round-32-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -37699,
+        "high": -37688
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-baseline\\trials\\systems-hour-t-round-32-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-latest-question-wins\\trials\\systems-hour-t-round-32-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -31160,
+        "high": -31148
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-baseline\\trials\\systems-hour-t-round-41-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-latest-question-wins\\trials\\systems-hour-t-round-41-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -2694,
+        "high": -2682
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-baseline\\trials\\systems-hour-t-round-41-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-latest-question-wins\\trials\\systems-hour-t-round-41-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -1593,
+        "high": -1583
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-baseline\\trials\\algorithms-hour-t-round-49-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -784,
+        "high": -773
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-baseline\\trials\\algorithms-hour-t-round-49-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": 621,
+        "high": 633
+      },
+      "comparisonDefinitelyEarlier": false,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 0,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-baseline\\trials\\algorithms-hour-t-round-12-rep-1-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-1-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": 5015,
+        "high": 5027
+      },
+      "comparisonDefinitelyEarlier": false,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 1,
+      "reference": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-baseline\\trials\\algorithms-hour-t-round-12-rep-2-baseline/interview.json",
+      "comparison": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-2-latest-question-wins/interview.json",
+      "referenceGroup": "baseline",
+      "comparisonGroup": "latest-question-wins",
+      "comparisonMinusReferenceMs": {
+        "low": -18684,
+        "high": -18673
+      },
+      "comparisonDefinitelyEarlier": true,
+      "referenceMissing": false,
+      "comparisonMissing": false,
+      "referenceError": null,
+      "comparisonError": null,
+      "referenceVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      },
+      "comparisonVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    }
+  ],
+  "rows": [
+    {
+      "caseIndex": 0,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-baseline\\trials\\general-hour-t-round-34-rep-1-baseline/interview.json",
+      "journalSha256": "303f32776f323f1c6024d9a6f42c7d7dbea2fc5dd25819cb3492ee0c746e79ee",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 34,
+        "index": 33
+      },
+      "contextSha256": "f3ef1b10cef6049740b4ee63ad187fe6ffb6de67d1a2c4171ea9e12d49eb7d1c",
+      "waveSha256": "0b59d9160deaa00ff7b0b8efbc9b8468207b7baff797a1a40d3b2b4d9df4d745",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791722563044,
+        "latencyMs": {
+          "low": 6002,
+          "high": 6008
+        },
+        "responseRevision": 9,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 0,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-latest-question-wins\\trials\\general-hour-t-round-34-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "7cface08743a2b75aca8e56a683a020258f9d287dfc4cf46691bfb67b541eac1",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 34,
+        "index": 33
+      },
+      "contextSha256": "f3ef1b10cef6049740b4ee63ad187fe6ffb6de67d1a2c4171ea9e12d49eb7d1c",
+      "waveSha256": "0b59d9160deaa00ff7b0b8efbc9b8468207b7baff797a1a40d3b2b4d9df4d745",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791722641830,
+        "latencyMs": {
+          "low": 7074,
+          "high": 7080
+        },
+        "responseRevision": 6,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-latest-question-wins\\trials\\general-hour-t-round-13-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "6f2b15a793456adf1c9e346f364e6a968bfcb253e1ddac3ca0278d8c40cd35fc",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 13,
+        "index": 12
+      },
+      "contextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+      "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791722735727,
+        "latencyMs": {
+          "low": 7296,
+          "high": 7301
+        },
+        "responseRevision": 14,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-baseline\\trials\\general-hour-t-round-13-rep-1-baseline/interview.json",
+      "journalSha256": "582c3e82304b4ae4e7e117c639cebde020359c4d1739cfbb0189a9f4ef8a11d5",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 13,
+        "index": 12
+      },
+      "contextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+      "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+      "word": {
+        "word": "Measure",
+        "characterRange": [
+          0,
+          7
+        ],
+        "observedHostMs": 1791722823723,
+        "latencyMs": {
+          "low": 14040,
+          "high": 14045
+        },
+        "responseRevision": 24,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-baseline\\trials\\systems-hour-t-round-32-rep-1-baseline/interview.json",
+      "journalSha256": "b6bcd0c1a88c905e35511da290b13d05edc3db86167614f1b4af13e53933fded",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 32,
+        "index": 31
+      },
+      "contextSha256": "345f58509b01745173eccb66495ea6b01ce019529797c3a84314bb2e1bfb31ed",
+      "waveSha256": "fca68cfe5f7dc28a4ad66c6e3d4f9af53ae0c1a78e9537edc39e618729fa8473",
+      "word": {
+        "word": "Scan",
+        "characterRange": [
+          0,
+          4
+        ],
+        "observedHostMs": 1791722949642,
+        "latencyMs": {
+          "low": 48293,
+          "high": 48298
+        },
+        "responseRevision": 17,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-latest-question-wins\\trials\\systems-hour-t-round-32-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "fd2f2c1cbc6625a3637de8709eff92b5c8347c8498b93809428f9093829a4c8a",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 32,
+        "index": 31
+      },
+      "contextSha256": "345f58509b01745173eccb66495ea6b01ce019529797c3a84314bb2e1bfb31ed",
+      "waveSha256": "fca68cfe5f7dc28a4ad66c6e3d4f9af53ae0c1a78e9537edc39e618729fa8473",
+      "word": {
+        "word": "Recover",
+        "characterRange": [
+          0,
+          7
+        ],
+        "observedHostMs": 1791723052309,
+        "latencyMs": {
+          "low": 10599,
+          "high": 10605
+        },
+        "responseRevision": 13,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-latest-question-wins\\trials\\systems-hour-t-round-41-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "9ffe9964e2f8946e869f4479ea1928004e8660fd2d739d5b9d0ba32bb26f4b45",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 41,
+        "index": 40
+      },
+      "contextSha256": "4ebf6282487ef466d57ac0d6637ca31b9a15e7f3b55a770a5a9e330d955a358f",
+      "waveSha256": "cdcd83dab148b4fe62b0b9e3ccaffeb090fcaaf926555967b303de0c63935c96",
+      "word": {
+        "word": "A",
+        "characterRange": [
+          0,
+          1
+        ],
+        "observedHostMs": 1791723132864,
+        "latencyMs": {
+          "low": 10971,
+          "high": 10977
+        },
+        "responseRevision": 5,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-baseline\\trials\\systems-hour-t-round-41-rep-1-baseline/interview.json",
+      "journalSha256": "6678d585785448d862b0e564d8bca3e5f72ee32a14fb183d2766f444a2a0b82e",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 41,
+        "index": 40
+      },
+      "contextSha256": "4ebf6282487ef466d57ac0d6637ca31b9a15e7f3b55a770a5a9e330d955a358f",
+      "waveSha256": "cdcd83dab148b4fe62b0b9e3ccaffeb090fcaaf926555967b303de0c63935c96",
+      "word": {
+        "word": "A",
+        "characterRange": [
+          0,
+          1
+        ],
+        "observedHostMs": 1791723204090,
+        "latencyMs": {
+          "low": 13659,
+          "high": 13665
+        },
+        "responseRevision": 7,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-baseline\\trials\\algorithms-hour-t-round-49-rep-1-baseline/interview.json",
+      "journalSha256": "3836b3226ce4b3b154c732a3116596af34502ce4a7256173f64d53e7b9eec53e",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 49,
+        "index": 48
+      },
+      "contextSha256": "e220ea9828382cc2656bd82ef83f75d8b3001f3e74627e69e0ddefbe532f93df",
+      "waveSha256": "af54237a625592ce0c9ba4ed1719aab70fd6b94b3f58ac9dbbd5fca184ea8ce1",
+      "word": {
+        "word": "For",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723292058,
+        "latencyMs": {
+          "low": 17264,
+          "high": 17269
+        },
+        "responseRevision": 12,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "3e35a2d59a6373b5397dcd0263200e79fbd0537613bd9b0760345ced06b16a07",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 49,
+        "index": 48
+      },
+      "contextSha256": "e220ea9828382cc2656bd82ef83f75d8b3001f3e74627e69e0ddefbe532f93df",
+      "waveSha256": "af54237a625592ce0c9ba4ed1719aab70fd6b94b3f58ac9dbbd5fca184ea8ce1",
+      "word": {
+        "word": "Use",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723407834,
+        "latencyMs": {
+          "low": 16485,
+          "high": 16491
+        },
+        "responseRevision": 7,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 0,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-1-latest-question-wins/interview.json",
+      "journalSha256": "6f1190a38637adcfcd4a9f0b496d10b710693838332d57aee2c1a8eda6259ca0",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 12,
+        "index": 11
+      },
+      "contextSha256": "a88e95c0ae96c30b8306a61f582abec99676b73706f3c2980292c74ecf32e9e0",
+      "waveSha256": "264b1c90dba2e9ca8bb98afd9026b32890633836a87569e93db41c2c588f48be",
+      "word": {
+        "word": "Yes",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723510348,
+        "latencyMs": {
+          "low": 13488,
+          "high": 13494
+        },
+        "responseRevision": 6,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 0,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-baseline\\trials\\algorithms-hour-t-round-12-rep-1-baseline/interview.json",
+      "journalSha256": "d643e41ac0a995a10d3ec78dab228b2aa765aa4ee0d0744140d24f12f06a1437",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 12,
+        "index": 11
+      },
+      "contextSha256": "a88e95c0ae96c30b8306a61f582abec99676b73706f3c2980292c74ecf32e9e0",
+      "waveSha256": "264b1c90dba2e9ca8bb98afd9026b32890633836a87569e93db41c2c588f48be",
+      "word": {
+        "word": "Yes",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723588661,
+        "latencyMs": {
+          "low": 8467,
+          "high": 8473
+        },
+        "responseRevision": 11,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 0,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-latest-question-wins\\trials\\general-hour-t-round-34-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "5364cad1ad0e3683e52840c044ed6cd1e275feee34edf7c00ce9cf8016778e49",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 34,
+        "index": 33
+      },
+      "contextSha256": "f3ef1b10cef6049740b4ee63ad187fe6ffb6de67d1a2c4171ea9e12d49eb7d1c",
+      "waveSha256": "0b59d9160deaa00ff7b0b8efbc9b8468207b7baff797a1a40d3b2b4d9df4d745",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723670208,
+        "latencyMs": {
+          "low": 8925,
+          "high": 8931
+        },
+        "responseRevision": 6,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 0,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-baseline\\trials\\general-hour-t-round-34-rep-2-baseline/interview.json",
+      "journalSha256": "99a66d8dbca7040281a55bba000d1099bba0c1a2fb0d460bd580b6e0ee336cbf",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 34,
+        "index": 33
+      },
+      "contextSha256": "f3ef1b10cef6049740b4ee63ad187fe6ffb6de67d1a2c4171ea9e12d49eb7d1c",
+      "waveSha256": "0b59d9160deaa00ff7b0b8efbc9b8468207b7baff797a1a40d3b2b4d9df4d745",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791723750809,
+        "latencyMs": {
+          "low": 6301,
+          "high": 6307
+        },
+        "responseRevision": 8,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-baseline\\trials\\general-hour-t-round-13-rep-2-baseline/interview.json",
+      "journalSha256": "54b2269ccd2d2f019df3ab28b397347322aa6d48f67a60756ebab6d618dcafa4",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 13,
+        "index": 12
+      },
+      "contextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+      "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+      "word": {
+        "word": "Measure",
+        "characterRange": [
+          0,
+          7
+        ],
+        "observedHostMs": 1791723853277,
+        "latencyMs": {
+          "low": 14308,
+          "high": 14313
+        },
+        "responseRevision": 25,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 1,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-latest-question-wins\\trials\\general-hour-t-round-13-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "ad8e9f87ea8e74960b6de04c92d28f7d28446be1da33ab59ba253faea781cccd",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+        "round": 13,
+        "index": 12
+      },
+      "contextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+      "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+      "word": null,
+      "phase": "complete",
+      "cancelled": false,
+      "error": "Codex question replacement budget exhausted",
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 0,
+        "incorrect": 0,
+        "incomplete": 1,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-latest-question-wins\\trials\\systems-hour-t-round-32-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "32431c5a94c22eed17b9ab062a1eb636f08575459dcf832af76c558e999eb80f",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 32,
+        "index": 31
+      },
+      "contextSha256": "345f58509b01745173eccb66495ea6b01ce019529797c3a84314bb2e1bfb31ed",
+      "waveSha256": "fca68cfe5f7dc28a4ad66c6e3d4f9af53ae0c1a78e9537edc39e618729fa8473",
+      "word": {
+        "word": "Recover",
+        "characterRange": [
+          0,
+          7
+        ],
+        "observedHostMs": 1791724009120,
+        "latencyMs": {
+          "low": 12010,
+          "high": 12016
+        },
+        "responseRevision": 15,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 2,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-baseline\\trials\\systems-hour-t-round-32-rep-2-baseline/interview.json",
+      "journalSha256": "9ca4b8475e5f80ab9b835b671f92016209d533136f7d57837bb5b65ffe0c5414",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 32,
+        "index": 31
+      },
+      "contextSha256": "345f58509b01745173eccb66495ea6b01ce019529797c3a84314bb2e1bfb31ed",
+      "waveSha256": "fca68cfe5f7dc28a4ad66c6e3d4f9af53ae0c1a78e9537edc39e618729fa8473",
+      "word": {
+        "word": "Recover",
+        "characterRange": [
+          0,
+          7
+        ],
+        "observedHostMs": 1791724153339,
+        "latencyMs": {
+          "low": 43164,
+          "high": 43170
+        },
+        "responseRevision": 17,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-baseline\\trials\\systems-hour-t-round-41-rep-2-baseline/interview.json",
+      "journalSha256": "221952f198366ec76b286d1348d15ab3e4b058393c0efccae322670747999a4e",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 41,
+        "index": 40
+      },
+      "contextSha256": "4ebf6282487ef466d57ac0d6637ca31b9a15e7f3b55a770a5a9e330d955a358f",
+      "waveSha256": "cdcd83dab148b4fe62b0b9e3ccaffeb090fcaaf926555967b303de0c63935c96",
+      "word": {
+        "word": "The",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791724233998,
+        "latencyMs": {
+          "low": 13976,
+          "high": 13981
+        },
+        "responseRevision": 7,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 3,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-latest-question-wins\\trials\\systems-hour-t-round-41-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "048210e9bd085bb2f49172fff1e83d84a6f50b4ce45859d3548f7ef46974b47d",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+        "round": 41,
+        "index": 40
+      },
+      "contextSha256": "4ebf6282487ef466d57ac0d6637ca31b9a15e7f3b55a770a5a9e330d955a358f",
+      "waveSha256": "cdcd83dab148b4fe62b0b9e3ccaffeb090fcaaf926555967b303de0c63935c96",
+      "word": {
+        "word": "A",
+        "characterRange": [
+          0,
+          1
+        ],
+        "observedHostMs": 1791724305482,
+        "latencyMs": {
+          "low": 12388,
+          "high": 12393
+        },
+        "responseRevision": 5,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "3fc7d2b92d8a86d40cc5ee5c6189db3d95d4af13b50a79c9ad5bad9fc1137113",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 49,
+        "index": 48
+      },
+      "contextSha256": "e220ea9828382cc2656bd82ef83f75d8b3001f3e74627e69e0ddefbe532f93df",
+      "waveSha256": "af54237a625592ce0c9ba4ed1719aab70fd6b94b3f58ac9dbbd5fca184ea8ce1",
+      "word": {
+        "word": "Use",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791724391408,
+        "latencyMs": {
+          "low": 14529,
+          "high": 14535
+        },
+        "responseRevision": 7,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 4,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-baseline\\trials\\algorithms-hour-t-round-49-rep-2-baseline/interview.json",
+      "journalSha256": "a67f69180f0617cb44ae35701d0e5957c4a31dfaff5126543025e9a693f22e19",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 49,
+        "index": 48
+      },
+      "contextSha256": "e220ea9828382cc2656bd82ef83f75d8b3001f3e74627e69e0ddefbe532f93df",
+      "waveSha256": "af54237a625592ce0c9ba4ed1719aab70fd6b94b3f58ac9dbbd5fca184ea8ce1",
+      "word": {
+        "word": "For",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791724506059,
+        "latencyMs": {
+          "low": 13902,
+          "high": 13908
+        },
+        "responseRevision": 9,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 1,
+      "group": "baseline",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-baseline\\trials\\algorithms-hour-t-round-12-rep-2-baseline/interview.json",
+      "journalSha256": "15d273994adfb528db7f6718eaafb5a8637e8283c1b4badbc6f11eb78321b8a2",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 12,
+        "index": 11
+      },
+      "contextSha256": "a88e95c0ae96c30b8306a61f582abec99676b73706f3c2980292c74ecf32e9e0",
+      "waveSha256": "264b1c90dba2e9ca8bb98afd9026b32890633836a87569e93db41c2c588f48be",
+      "word": {
+        "word": "Yes",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791724629540,
+        "latencyMs": {
+          "low": 28783,
+          "high": 28789
+        },
+        "responseRevision": 10,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    },
+    {
+      "caseIndex": 5,
+      "repetition": 1,
+      "group": "latest-question-wins",
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-2-latest-question-wins/interview.json",
+      "journalSha256": "eb5b752e51d1175f5d625e5cb2fa5ea87b984bb0857fb5f12b964b0221eef45d",
+      "source": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+        "round": 12,
+        "index": 11
+      },
+      "contextSha256": "a88e95c0ae96c30b8306a61f582abec99676b73706f3c2980292c74ecf32e9e0",
+      "waveSha256": "264b1c90dba2e9ca8bb98afd9026b32890633836a87569e93db41c2c588f48be",
+      "word": {
+        "word": "Yes",
+        "characterRange": [
+          0,
+          3
+        ],
+        "observedHostMs": 1791724704557,
+        "latencyMs": {
+          "low": 10105,
+          "high": 10110
+        },
+        "responseRevision": 6,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      },
+      "phase": "complete",
+      "cancelled": false,
+      "error": null,
+      "observationWindowExpired": false,
+      "independentModelVerdicts": {
+        "correct": 1,
+        "incorrect": 0,
+        "incomplete": 0,
+        "unverified": 0
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "file": "artifacts\\deep-interview-v71\\policy-playback\\manifest.json",
+      "sha256": "42582e2018dd59340575d1a126d60e96611f210e82b9d998322db6ab6a311887"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\comparison.json",
+      "sha256": "ea897e5c31a88e143876f8e641673f8d8a807f04214bd62025ade9856751f0f1"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\review-cohort-audit.json",
+      "sha256": "9c6d977f52c600a5eb4958807812914e8e94ff7f242f4f2ee97c4b91d7ea2f0c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-baseline\\trials\\general-hour-t-round-34-rep-1-baseline/interview.json",
+      "sha256": "303f32776f323f1c6024d9a6f42c7d7dbea2fc5dd25819cb3492ee0c746e79ee"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-latest-question-wins\\trials\\general-hour-t-round-34-rep-1-latest-question-wins/interview.json",
+      "sha256": "7cface08743a2b75aca8e56a683a020258f9d287dfc4cf46691bfb67b541eac1"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-latest-question-wins\\trials\\general-hour-t-round-13-rep-1-latest-question-wins/interview.json",
+      "sha256": "6f2b15a793456adf1c9e346f364e6a968bfcb253e1ddac3ca0278d8c40cd35fc"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-baseline\\trials\\general-hour-t-round-13-rep-1-baseline/interview.json",
+      "sha256": "582c3e82304b4ae4e7e117c639cebde020359c4d1739cfbb0189a9f4ef8a11d5"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-baseline\\trials\\systems-hour-t-round-32-rep-1-baseline/interview.json",
+      "sha256": "b6bcd0c1a88c905e35511da290b13d05edc3db86167614f1b4af13e53933fded"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-latest-question-wins\\trials\\systems-hour-t-round-32-rep-1-latest-question-wins/interview.json",
+      "sha256": "fd2f2c1cbc6625a3637de8709eff92b5c8347c8498b93809428f9093829a4c8a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-latest-question-wins\\trials\\systems-hour-t-round-41-rep-1-latest-question-wins/interview.json",
+      "sha256": "9ffe9964e2f8946e869f4479ea1928004e8660fd2d739d5b9d0ba32bb26f4b45"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-baseline\\trials\\systems-hour-t-round-41-rep-1-baseline/interview.json",
+      "sha256": "6678d585785448d862b0e564d8bca3e5f72ee32a14fb183d2766f444a2a0b82e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-baseline\\trials\\algorithms-hour-t-round-49-rep-1-baseline/interview.json",
+      "sha256": "3836b3226ce4b3b154c732a3116596af34502ce4a7256173f64d53e7b9eec53e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-1-latest-question-wins/interview.json",
+      "sha256": "3e35a2d59a6373b5397dcd0263200e79fbd0537613bd9b0760345ced06b16a07"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-1-latest-question-wins/interview.json",
+      "sha256": "6f1190a38637adcfcd4a9f0b496d10b710693838332d57aee2c1a8eda6259ca0"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-baseline\\trials\\algorithms-hour-t-round-12-rep-1-baseline/interview.json",
+      "sha256": "d643e41ac0a995a10d3ec78dab228b2aa765aa4ee0d0744140d24f12f06a1437"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-latest-question-wins\\trials\\general-hour-t-round-34-rep-2-latest-question-wins/interview.json",
+      "sha256": "5364cad1ad0e3683e52840c044ed6cd1e275feee34edf7c00ce9cf8016778e49"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-baseline\\trials\\general-hour-t-round-34-rep-2-baseline/interview.json",
+      "sha256": "99a66d8dbca7040281a55bba000d1099bba0c1a2fb0d460bd580b6e0ee336cbf"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-baseline\\trials\\general-hour-t-round-13-rep-2-baseline/interview.json",
+      "sha256": "54b2269ccd2d2f019df3ab28b397347322aa6d48f67a60756ebab6d618dcafa4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-latest-question-wins\\trials\\general-hour-t-round-13-rep-2-latest-question-wins/interview.json",
+      "sha256": "ad8e9f87ea8e74960b6de04c92d28f7d28446be1da33ab59ba253faea781cccd"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-latest-question-wins\\trials\\systems-hour-t-round-32-rep-2-latest-question-wins/interview.json",
+      "sha256": "32431c5a94c22eed17b9ab062a1eb636f08575459dcf832af76c558e999eb80f"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-baseline\\trials\\systems-hour-t-round-32-rep-2-baseline/interview.json",
+      "sha256": "9ca4b8475e5f80ab9b835b671f92016209d533136f7d57837bb5b65ffe0c5414"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-baseline\\trials\\systems-hour-t-round-41-rep-2-baseline/interview.json",
+      "sha256": "221952f198366ec76b286d1348d15ab3e4b058393c0efccae322670747999a4e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-latest-question-wins\\trials\\systems-hour-t-round-41-rep-2-latest-question-wins/interview.json",
+      "sha256": "048210e9bd085bb2f49172fff1e83d84a6f50b4ce45859d3548f7ef46974b47d"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-2-latest-question-wins/interview.json",
+      "sha256": "3fc7d2b92d8a86d40cc5ee5c6189db3d95d4af13b50a79c9ad5bad9fc1137113"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-baseline\\trials\\algorithms-hour-t-round-49-rep-2-baseline/interview.json",
+      "sha256": "a67f69180f0617cb44ae35701d0e5957c4a31dfaff5126543025e9a693f22e19"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-baseline\\trials\\algorithms-hour-t-round-12-rep-2-baseline/interview.json",
+      "sha256": "15d273994adfb528db7f6718eaafb5a8637e8283c1b4badbc6f11eb78321b8a2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-2-latest-question-wins/interview.json",
+      "sha256": "eb5b752e51d1175f5d625e5cb2fa5ea87b984bb0857fb5f12b964b0221eef45d"
+    }
+  ],
+  "independentAccuracyPending": false,
+  "scope": "Dependent diagnostic cases deliberately selected from original tails and medians, replayed with frozen context and fresh meetings. Descriptive matched observations, not population p95 or isolated provider compute. Word latency retains erroneous and cancelled trials with visible words; missing words remain explicit. Independent verdicts, when available, are provisional model judgments over all recorded trials, not executable correctness certification.",
+  "goalComplete": false
+}

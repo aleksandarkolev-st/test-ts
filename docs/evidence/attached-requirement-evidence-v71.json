@@ -1,0 +1,75 @@
+{
+  "scope": "Manual mapping of the user's attached test requirements to recorded evaluation evidence. This manifest is read only by reporting tools, never by answer generation, routing or scheduling. Outcome labels describe these observations and are not universal certifications.",
+  "requirements": [
+    {
+      "number": 1,
+      "cohorts": ["warp-followups"],
+      "manualOutcome": "qualified_support",
+      "finding": "Five dependent answers were independently reviewed. The two requested reduction implementations compiled unchanged; the illustrative kernel plus namespace-level host launch did not compile standalone. Mathematical participation checks are separate from unavailable NVIDIA hardware execution.",
+      "evidence": ["docs/evidence/warp-source-bound-manual-checks-v71.json", "docs/evidence/recorded-substantive-checks-v71.json"]
+    },
+    {
+      "number": 2,
+      "cohorts": ["divergent-block-barrier"],
+      "manualOutcome": "qualified_support",
+      "finding": "The answer rejected the unconditional safety guarantee but assumed a one-dimensional block. The spoken source did not specify dimensions, so the explanation is not certified for all 128-thread layouts.",
+      "evidence": ["docs/evidence/exact-probe-source-checks-v71.json"]
+    },
+    {
+      "number": 3,
+      "cohorts": ["never-recorded-event"],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The answer rejected retroactive synchronization and qualified the recognized event-name change. The check is API-semantic rather than hardware execution.",
+      "evidence": ["docs/evidence/exact-probe-source-checks-v71.json"]
+    },
+    {
+      "number": 4,
+      "cohorts": ["fp32-association"],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "Independent per-operation binary32 evaluation confirms the actual differing results and the explanation under the stated rounding and no-reassociation assumptions.",
+      "evidence": ["docs/evidence/exact-probe-source-checks-v71.json"]
+    },
+    {
+      "number": 5,
+      "cohorts": ["histogram-late-reversal", "histogram-late-reversal-exact-pause"],
+      "manualOutcome": "partially_supported",
+      "finding": "The final no-atomics code compiled unchanged in both recordings. Independent verdicts differ and complete absence of every obsolete intermediate display is not certified. Compilation is not a hardware correctness proof.",
+      "evidence": ["docs/evidence/recorded-substantive-checks-v71.json"]
+    },
+    {
+      "number": 6,
+      "cohorts": ["long-question-essential-tail", "long-question-essential-tail-exact-pause", "long-question-essential-tail-midpoint-pause"],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The dedicated midpoint waveform supplies the requested voiced duration and exact inserted pause; its retained answer includes the essential final overflow condition. Other pause placements remain separate observations.",
+      "evidence": ["docs/evidence/midpoint-pause-physical-proof-v71.json", "docs/evidence/essential-tail-exact-pause-physical-proof-v71.json"]
+    },
+    {
+      "number": 7,
+      "cohorts": ["exact-launch-numbers"],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The recorded recognition and answer preserve the required element and block-size values, with independently checked integer ceiling division.",
+      "evidence": ["docs/evidence/exact-probe-source-checks-v71.json"]
+    },
+    {
+      "number": 8,
+      "cohorts": ["cuda-to-phantom-reads"],
+      "manualOutcome": "qualified_support",
+      "finding": "The database answer was independently judged correct and did not inherit CUDA assumptions. A short different-question paint interval remains recorded, so literal zero stale display is not claimed.",
+      "evidence": ["docs/evidence/switch-prior-question-display-v71.json"]
+    },
+    {
+      "number": 9,
+      "cohorts": ["deep-code-memory"],
+      "manualOutcome": "required_behavior_not_demonstrated",
+      "finding": "The reference occurred after twenty intervening turns, but the original code was absent from selected context and not reproduced. Requesting its source can be an appropriate clarification while still failing the strict retention expectation. The interviewer also truncated its public reference.",
+      "evidence": ["docs/evidence/recorded-substantive-checks-v71.json", "docs/evidence/completed-deep-memory-measurements-v71.json"]
+    },
+    {
+      "number": 10,
+      "cohorts": ["continuous-pressure-t"],
+      "manualOutcome": "required_behavior_contradicted_or_unverified",
+      "finding": "Actual continuous playback exceeded the requested duration. A long unrelated prior-answer display contradicts the no-leak expectation. Lexical alignment does not certify semantic clause preservation, and descriptive latency/resource drift does not establish no significant degradation.",
+      "evidence": ["docs/evidence/continuous-pressure-measurements-v71.json", "docs/evidence/pressure-prior-question-display-v71.json"]
+    }
+  ]
+}

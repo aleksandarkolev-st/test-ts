@@ -1,0 +1,1201 @@
+{
+  "recordedAt": "2026-10-11T14:56:14.064Z",
+  "status": "recording_and_review_scope_verified",
+  "configuration": {
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "output": "T24E390",
+    "microphone": false
+  },
+  "attachment": {
+    "file": "C:/Users/polek/.codex/attachments/93ef9b35-9207-44e2-827f-2b2f551e98c1/pasted-text-1.txt",
+    "bytes": 2708,
+    "sha256": "ac48b32dcf39cc99dfd96c4daa2701b430d0200b45f7c00c1d659f2ac0fd8b86"
+  },
+  "hours": [
+    {
+      "name": "general-hour-t",
+      "journalSha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+      "actualDurationMs": 3664484.5214,
+      "requestedDurationMs": 3600000,
+      "turns": 55,
+      "independentModelVerdicts": {
+        "correct": 43,
+        "incorrect": 0,
+        "incomplete": 12,
+        "unverified": 0
+      },
+      "firstRetainedVisibleWord": {
+        "count": 55,
+        "min": 2453,
+        "median": 8922,
+        "sampleP95": 36223,
+        "max": 64862
+      },
+      "allTrialWordP95": {
+        "nearestRank": 53,
+        "totalTrials": 55,
+        "deliveredWords": 55,
+        "missingWords": 0,
+        "valueMs": 36223,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "deliverySummary": {
+        "sourceQuestions": 55,
+        "allQuestionAndBackgroundWaveHashesValidated": true,
+        "questionWaveDurationMs": {
+          "count": 55,
+          "min": 1145,
+          "median": 47590,
+          "sampleP95": 58470,
+          "max": 59790
+        },
+        "sourceWordCount": {
+          "count": 55,
+          "min": 1,
+          "median": 101,
+          "sampleP95": 119,
+          "max": 120
+        },
+        "shortestQuestions": [
+          {
+            "round": 2,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 6,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 11,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 14,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 18,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 23,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 26,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 30,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 35,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 38,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 42,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 47,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 50,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 54,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          }
+        ],
+        "incomingDeliveryOrigins": {
+          "initial_question": 1,
+          "prepared_contextual_probe_after_actual_visible_answer": 14,
+          "examiner_generated_followup": 26,
+          "examiner_generated_from_actual_partial_answer": 13,
+          "public_older_implementation_reference": 1
+        },
+        "deliveryByIncomingOrigin": {
+          "initial_question": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "prepared_contextual_probe_after_actual_visible_answer": {
+            "questions": 14,
+            "precedingJobOverlapLaunches": 14,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 14,
+              "min": 446,
+              "median": 895.5,
+              "sampleP95": 1971,
+              "max": 1971
+            }
+          },
+          "examiner_generated_followup": {
+            "questions": 26,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "examiner_generated_from_actual_partial_answer": {
+            "questions": 13,
+            "precedingJobOverlapLaunches": 3,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 13,
+              "min": 10302,
+              "median": 13454,
+              "sampleP95": 18002,
+              "max": 18002
+            }
+          },
+          "public_older_implementation_reference": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 1,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 1,
+              "min": 928,
+              "median": 928,
+              "sampleP95": 928,
+              "max": 928
+            }
+          }
+        },
+        "activeAnswerOverlapLaunches": 22,
+        "precedingJobOverlapLaunches": 18,
+        "priorVisiblePrefixBasisCount": 28,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 28,
+          "min": 446,
+          "median": 1642.5,
+          "sampleP95": 15620,
+          "max": 18002
+        },
+        "backgroundUtterances": 4
+      }
+    },
+    {
+      "name": "systems-hour-t",
+      "journalSha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+      "actualDurationMs": 3607978.0386,
+      "requestedDurationMs": 3600000,
+      "turns": 52,
+      "independentModelVerdicts": {
+        "correct": 35,
+        "incorrect": 0,
+        "incomplete": 17,
+        "unverified": 0
+      },
+      "firstRetainedVisibleWord": {
+        "count": 51,
+        "min": 2504,
+        "median": 9763,
+        "sampleP95": 36166,
+        "max": 42981
+      },
+      "allTrialWordP95": {
+        "nearestRank": 50,
+        "totalTrials": 52,
+        "deliveredWords": 51,
+        "missingWords": 1,
+        "valueMs": 39360,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "deliverySummary": {
+        "sourceQuestions": 52,
+        "allQuestionAndBackgroundWaveHashesValidated": true,
+        "questionWaveDurationMs": {
+          "count": 52,
+          "min": 1145,
+          "median": 47037.5,
+          "sampleP95": 57210,
+          "max": 60070
+        },
+        "sourceWordCount": {
+          "count": 52,
+          "min": 1,
+          "median": 96.5,
+          "sampleP95": 113,
+          "max": 115
+        },
+        "shortestQuestions": [
+          {
+            "round": 2,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 6,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 11,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 14,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 18,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 23,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 26,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 30,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 35,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 38,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 42,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 47,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 50,
+            "question": "Why?",
+            "sourceWordCount": 1
+          }
+        ],
+        "incomingDeliveryOrigins": {
+          "initial_question": 1,
+          "prepared_contextual_probe_after_actual_visible_answer": 13,
+          "examiner_generated_followup": 24,
+          "examiner_generated_from_actual_partial_answer": 13,
+          "public_older_implementation_reference": 1
+        },
+        "deliveryByIncomingOrigin": {
+          "initial_question": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "prepared_contextual_probe_after_actual_visible_answer": {
+            "questions": 13,
+            "precedingJobOverlapLaunches": 13,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 13,
+              "min": 431,
+              "median": 989,
+              "sampleP95": 1439,
+              "max": 1439
+            }
+          },
+          "examiner_generated_followup": {
+            "questions": 24,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "examiner_generated_from_actual_partial_answer": {
+            "questions": 13,
+            "precedingJobOverlapLaunches": 7,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 13,
+              "min": 9432,
+              "median": 14090,
+              "sampleP95": 19728,
+              "max": 19728
+            }
+          },
+          "public_older_implementation_reference": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 1,
+              "min": 841,
+              "median": 841,
+              "sampleP95": 841,
+              "max": 841
+            }
+          }
+        },
+        "activeAnswerOverlapLaunches": 24,
+        "precedingJobOverlapLaunches": 20,
+        "priorVisiblePrefixBasisCount": 27,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 27,
+          "min": 431,
+          "median": 1439,
+          "sampleP95": 19237,
+          "max": 19728
+        },
+        "backgroundUtterances": 4
+      }
+    },
+    {
+      "name": "algorithms-hour-t",
+      "journalSha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+      "actualDurationMs": 3687061.4709,
+      "requestedDurationMs": 3600000,
+      "turns": 49,
+      "independentModelVerdicts": {
+        "correct": 30,
+        "incorrect": 4,
+        "incomplete": 15,
+        "unverified": 0
+      },
+      "firstRetainedVisibleWord": {
+        "count": 48,
+        "min": 3523,
+        "median": 12298.5,
+        "sampleP95": 50936,
+        "max": 78626
+      },
+      "allTrialWordP95": {
+        "nearestRank": 47,
+        "totalTrials": 49,
+        "deliveredWords": 48,
+        "missingWords": 1,
+        "valueMs": 73951,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "deliverySummary": {
+        "sourceQuestions": 49,
+        "allQuestionAndBackgroundWaveHashesValidated": true,
+        "questionWaveDurationMs": {
+          "count": 49,
+          "min": 1145,
+          "median": 42015,
+          "sampleP95": 54115,
+          "max": 56105
+        },
+        "sourceWordCount": {
+          "count": 49,
+          "min": 1,
+          "median": 95,
+          "sampleP95": 116,
+          "max": 119
+        },
+        "shortestQuestions": [
+          {
+            "round": 2,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 6,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 11,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 14,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 18,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 23,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 26,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 30,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 35,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 38,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 42,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 47,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          }
+        ],
+        "incomingDeliveryOrigins": {
+          "initial_question": 1,
+          "prepared_contextual_probe_after_actual_visible_answer": 12,
+          "examiner_generated_followup": 23,
+          "examiner_generated_from_actual_partial_answer": 12,
+          "public_older_implementation_reference": 1
+        },
+        "deliveryByIncomingOrigin": {
+          "initial_question": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "prepared_contextual_probe_after_actual_visible_answer": {
+            "questions": 12,
+            "precedingJobOverlapLaunches": 12,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 12,
+              "min": 422,
+              "median": 811,
+              "sampleP95": 1303,
+              "max": 1303
+            }
+          },
+          "examiner_generated_followup": {
+            "questions": 23,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "examiner_generated_from_actual_partial_answer": {
+            "questions": 12,
+            "precedingJobOverlapLaunches": 7,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 12,
+              "min": 10268,
+              "median": 13759.5,
+              "sampleP95": 17125,
+              "max": 17125
+            }
+          },
+          "public_older_implementation_reference": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 1,
+              "min": 13872,
+              "median": 13872,
+              "sampleP95": 13872,
+              "max": 13872
+            }
+          }
+        },
+        "activeAnswerOverlapLaunches": 25,
+        "precedingJobOverlapLaunches": 19,
+        "priorVisiblePrefixBasisCount": 25,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 25,
+          "min": 422,
+          "median": 10268,
+          "sampleP95": 17029,
+          "max": 17125
+        },
+        "backgroundUtterances": 4
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "number": 1,
+      "cohorts": [
+        {
+          "name": "warp-followups",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/interview.json",
+            "sha256": "c5c5089282bc803edcd2ca51b527258289892adbd531556445c1da70c68845e5"
+          },
+          "turns": 5,
+          "independentModelVerdicts": {
+            "correct": 5,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "qualified_support",
+      "finding": "Five dependent answers were independently reviewed. The two requested reduction implementations compiled unchanged; the illustrative kernel plus namespace-level host launch did not compile standalone. Mathematical participation checks are separate from unavailable NVIDIA hardware execution.",
+      "evidence": [
+        {
+          "file": "docs/evidence/warp-source-bound-manual-checks-v71.json",
+          "sha256": "2e228bf4d104c162debeaa44997af71de736b3649ed1daafb88f29d433369d2f"
+        },
+        {
+          "file": "docs/evidence/recorded-substantive-checks-v71.json",
+          "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 2,
+      "cohorts": [
+        {
+          "name": "divergent-block-barrier",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/interview.json",
+            "sha256": "c1d3a5a105de6de365179dd2681503c9bae0c854904ec34962ca0791e2426710"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "qualified_support",
+      "finding": "The answer rejected the unconditional safety guarantee but assumed a one-dimensional block. The spoken source did not specify dimensions, so the explanation is not certified for all 128-thread layouts.",
+      "evidence": [
+        {
+          "file": "docs/evidence/exact-probe-source-checks-v71.json",
+          "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 3,
+      "cohorts": [
+        {
+          "name": "never-recorded-event",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/interview.json",
+            "sha256": "f4b3c14e549ade51c306793b216587b75a8628a969cf73a5fb3061ba54a8f3cf"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The answer rejected retroactive synchronization and qualified the recognized event-name change. The check is API-semantic rather than hardware execution.",
+      "evidence": [
+        {
+          "file": "docs/evidence/exact-probe-source-checks-v71.json",
+          "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 4,
+      "cohorts": [
+        {
+          "name": "fp32-association",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/interview.json",
+            "sha256": "505336f6bdcff4cc5966ab4ef5dce1eb1862131eca8a5946b22b7042f8235c81"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "Independent per-operation binary32 evaluation confirms the actual differing results and the explanation under the stated rounding and no-reassociation assumptions.",
+      "evidence": [
+        {
+          "file": "docs/evidence/exact-probe-source-checks-v71.json",
+          "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 5,
+      "cohorts": [
+        {
+          "name": "histogram-late-reversal",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal/interview.json",
+            "sha256": "1a28c30a14a4b59a1faba52c2d5066d0bef4acf3603b7fc6c8a7cfbbfc68db31"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 0,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 1
+          },
+          "cancelled": 0,
+          "errors": 0
+        },
+        {
+          "name": "histogram-late-reversal-exact-pause",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal-exact-pause/interview.json",
+            "sha256": "781fd0763a71930ec59313c280fc7b8895e6c98fbdb94f785e4bbef8b2df14c4"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "partially_supported",
+      "finding": "The final no-atomics code compiled unchanged in both recordings. Independent verdicts differ and complete absence of every obsolete intermediate display is not certified. Compilation is not a hardware correctness proof.",
+      "evidence": [
+        {
+          "file": "docs/evidence/recorded-substantive-checks-v71.json",
+          "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 6,
+      "cohorts": [
+        {
+          "name": "long-question-essential-tail",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail/interview.json",
+            "sha256": "5fbe6735d98ad5bb8c84a908a6951bc063b207bb342522e39c8b28ec6b16f056"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        },
+        {
+          "name": "long-question-essential-tail-exact-pause",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-exact-pause/interview.json",
+            "sha256": "d2e6eb979ccac24021115c8e1423024f38fd3e44150d41e22ec1486fb26192bc"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        },
+        {
+          "name": "long-question-essential-tail-midpoint-pause",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-midpoint-pause/interview.json",
+            "sha256": "36dd9f02e1f8a119e802f03f4a806d92847f8b0f9f74db37edc11d2b8111be71"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The dedicated midpoint waveform supplies the requested voiced duration and exact inserted pause; its retained answer includes the essential final overflow condition. Other pause placements remain separate observations.",
+      "evidence": [
+        {
+          "file": "docs/evidence/midpoint-pause-physical-proof-v71.json",
+          "sha256": "a83597c2babbceac576837cd914bd98603be80356dc0c6f5b09a50c428609af5"
+        },
+        {
+          "file": "docs/evidence/essential-tail-exact-pause-physical-proof-v71.json",
+          "sha256": "901f5d8736befd12e67963ed23a870f13dbab8ca088dcd695420a0dda30ea792"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 7,
+      "cohorts": [
+        {
+          "name": "exact-launch-numbers",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/interview.json",
+            "sha256": "63021dc669aadf01a5576b7ad016c0fa1da7b73212748c83863c0c36ed085540"
+          },
+          "turns": 1,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 0,
+            "unverified": 0
+          },
+          "cancelled": 0,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "supported_in_recorded_sample",
+      "finding": "The recorded recognition and answer preserve the required element and block-size values, with independently checked integer ceiling division.",
+      "evidence": [
+        {
+          "file": "docs/evidence/exact-probe-source-checks-v71.json",
+          "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 8,
+      "cohorts": [
+        {
+          "name": "cuda-to-phantom-reads",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/interview.json",
+            "sha256": "f476e5f7acca8b6dc489fbf1c6213b6378a83998d1eaecee7dbbe6e793a76203"
+          },
+          "turns": 2,
+          "independentModelVerdicts": {
+            "correct": 1,
+            "incorrect": 0,
+            "incomplete": 1,
+            "unverified": 0
+          },
+          "cancelled": 1,
+          "errors": 0
+        }
+      ],
+      "manualOutcome": "qualified_support",
+      "finding": "The database answer was independently judged correct and did not inherit CUDA assumptions. A short different-question paint interval remains recorded, so literal zero stale display is not claimed.",
+      "evidence": [
+        {
+          "file": "docs/evidence/switch-prior-question-display-v71.json",
+          "sha256": "c782d118a75ff6f46d66e55a4d3f3454f7ee38a4d8b78a1a65ab6b62a3dc3c81"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 9,
+      "cohorts": [
+        {
+          "name": "deep-code-memory",
+          "kind": "specified_probe",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/interview.json",
+            "sha256": "090e2bbf98d5a2aab4819bb38e802ce02b89d9bbe52cd7e6ea5de62c845a6bc9"
+          },
+          "turns": 27,
+          "independentModelVerdicts": {
+            "correct": 14,
+            "incorrect": 2,
+            "incomplete": 10,
+            "unverified": 1
+          },
+          "cancelled": 3,
+          "errors": 5
+        }
+      ],
+      "manualOutcome": "required_behavior_not_demonstrated",
+      "finding": "The reference occurred after twenty intervening turns, but the original code was absent from selected context and not reproduced. Requesting its source can be an appropriate clarification while still failing the strict retention expectation. The interviewer also truncated its public reference.",
+      "evidence": [
+        {
+          "file": "docs/evidence/recorded-substantive-checks-v71.json",
+          "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+        },
+        {
+          "file": "docs/evidence/completed-deep-memory-measurements-v71.json",
+          "sha256": "954fefe3a6f37a9fa689b4a6a24b5f049aca9edcfa7922cfbb726b8d5a54f040"
+        }
+      ],
+      "executionAndReviewCovered": true
+    },
+    {
+      "number": 10,
+      "cohorts": [
+        {
+          "name": "continuous-pressure-t",
+          "kind": "continuous_pressure_jobs",
+          "journal": {
+            "file": "artifacts/deep-interview-v71/continuous-pressure-t/pressure-review-input.json",
+            "sha256": "e46703d15569c9d8109cbe1d04fdda98e3429adba59c0574d379e81868961842"
+          },
+          "turns": 91,
+          "independentModelVerdicts": {
+            "correct": 32,
+            "incorrect": 0,
+            "incomplete": 56,
+            "unverified": 3
+          },
+          "cancelled": 51,
+          "errors": 1
+        }
+      ],
+      "manualOutcome": "required_behavior_contradicted_or_unverified",
+      "finding": "Actual continuous playback exceeded the requested duration. A long unrelated prior-answer display contradicts the no-leak expectation. Lexical alignment does not certify semantic clause preservation, and descriptive latency/resource drift does not establish no significant degradation.",
+      "evidence": [
+        {
+          "file": "docs/evidence/continuous-pressure-measurements-v71.json",
+          "sha256": "8dae100806882c2ad82ca6c8f56f9209c0700662af4a0b787743ee7758e75d46"
+        },
+        {
+          "file": "docs/evidence/pressure-prior-question-display-v71.json",
+          "sha256": "9e0387cb069e3794aad96cd0cbd3ad5e990fefef1f01c5d440293115dbc399bf"
+        }
+      ],
+      "executionAndReviewCovered": true
+    }
+  ],
+  "reviewCohorts": 64,
+  "reviewJudgments": 338,
+  "pressureDurationMs": 1813466,
+  "matchedControlSummaries": {
+    "policy": [
+      {
+        "group": "existing",
+        "recordedTrials": 12,
+        "measuredWords": 12,
+        "missingWords": 0,
+        "cancelled": 0,
+        "errors": 0,
+        "observationWindowsExpired": 0,
+        "primaryWordLatencyMs": {
+          "count": 12,
+          "min": 8548,
+          "median": 11480,
+          "sampleP95": 58232,
+          "max": 58232
+        },
+        "allTrialWordP95": {
+          "rank": 12,
+          "latencyMs": 58232,
+          "status": "finite_observed_sample_bound",
+          "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+        },
+        "independentModelVerdicts": {
+          "correct": 11,
+          "incorrect": 1,
+          "incomplete": 0,
+          "unverified": 0
+        },
+        "provisionalCorrectFractionOfAllTrials": 0.9166666666666666
+      },
+      {
+        "group": "final",
+        "recordedTrials": 12,
+        "measuredWords": 12,
+        "missingWords": 0,
+        "cancelled": 0,
+        "errors": 2,
+        "observationWindowsExpired": 0,
+        "primaryWordLatencyMs": {
+          "count": 12,
+          "min": 7834,
+          "median": 12304,
+          "sampleP95": 82483,
+          "max": 82483
+        },
+        "allTrialWordP95": {
+          "rank": 12,
+          "latencyMs": 82483,
+          "status": "finite_observed_sample_bound",
+          "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+        },
+        "independentModelVerdicts": {
+          "correct": 9,
+          "incorrect": 1,
+          "incomplete": 2,
+          "unverified": 0
+        },
+        "provisionalCorrectFractionOfAllTrials": 0.75
+      }
+    ],
+    "architecture": [
+      {
+        "group": "baseline",
+        "recordedTrials": 12,
+        "measuredWords": 12,
+        "missingWords": 0,
+        "cancelled": 0,
+        "errors": 0,
+        "observationWindowsExpired": 0,
+        "primaryWordLatencyMs": {
+          "count": 12,
+          "min": 6008,
+          "median": 14013,
+          "sampleP95": 48298,
+          "max": 48298
+        },
+        "allTrialWordP95": {
+          "rank": 12,
+          "latencyMs": 48298,
+          "status": "finite_observed_sample_bound",
+          "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+        },
+        "independentModelVerdicts": {
+          "correct": 12,
+          "incorrect": 0,
+          "incomplete": 0,
+          "unverified": 0
+        },
+        "provisionalCorrectFractionOfAllTrials": 1
+      },
+      {
+        "group": "latest-question-wins",
+        "recordedTrials": 12,
+        "measuredWords": 11,
+        "missingWords": 1,
+        "cancelled": 0,
+        "errors": 1,
+        "observationWindowsExpired": 0,
+        "primaryWordLatencyMs": {
+          "count": 11,
+          "min": 7080,
+          "median": 10977,
+          "sampleP95": 16491,
+          "max": 16491
+        },
+        "allTrialWordP95": {
+          "rank": 12,
+          "latencyMs": null,
+          "status": "not_reached_within_recordings",
+          "scope": "Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile."
+        },
+        "independentModelVerdicts": {
+          "correct": 11,
+          "incorrect": 0,
+          "incomplete": 1,
+          "unverified": 0
+        },
+        "provisionalCorrectFractionOfAllTrials": 0.9166666666666666
+      }
+    ]
+  },
+  "allSpecifiedTestsExecutedAndReviewed": true,
+  "allRequiredProductBehaviorsDemonstrated": false,
+  "candidateUniversalImprovementEstablished": false,
+  "goalComplete": false,
+  "evidence": [
+    {
+      "file": "artifacts/deep-interview-v71/preparation.json",
+      "sha256": "ce8199cd87aaf2dce3671eea0ca11596c1832f438b0eb5f39e9119f06fd9b822"
+    },
+    {
+      "file": "C:/Users/polek/.codex/attachments/93ef9b35-9207-44e2-827f-2b2f551e98c1/pasted-text-1.txt",
+      "bytes": 2708,
+      "sha256": "ac48b32dcf39cc99dfd96c4daa2701b430d0200b45f7c00c1d659f2ac0fd8b86"
+    },
+    {
+      "file": "docs/evidence/attached-requirement-evidence-v71.json",
+      "sha256": "6c1efb05fef4027dee424bc8ba8f481c97ad94cbf7e982fe9cfce7f3c49bd8ed"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/review-cohort-audit.json",
+      "sha256": "9c6d977f52c600a5eb4958807812914e8e94ff7f242f4f2ee97c4b91d7ea2f0c"
+    },
+    {
+      "file": "docs/evidence/full-independent-review-audit-v71.json",
+      "sha256": "9c6d977f52c600a5eb4958807812914e8e94ff7f242f4f2ee97c4b91d7ea2f0c"
+    },
+    {
+      "file": "docs/evidence/all-trial-hour-word-latency-v71.json",
+      "sha256": "0ea893ec9cf5fcac2fd8d86975e3e63ef62ac625911611e74d5f7354a6eeb5c8"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/duration-audit.json",
+      "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/duration-audit.json",
+      "sha256": "3472f11f8044ade22c2dc5a87089af1a2f46498411d532b8275f7fe26b1c2a49"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/duration-audit.json",
+      "sha256": "9940ef9b6b9c50e2c64f6a4f839c0af483b88d5333e2bc0eeb6c708026c1df47"
+    },
+    {
+      "file": "docs/evidence/warp-source-bound-manual-checks-v71.json",
+      "sha256": "2e228bf4d104c162debeaa44997af71de736b3649ed1daafb88f29d433369d2f"
+    },
+    {
+      "file": "docs/evidence/recorded-substantive-checks-v71.json",
+      "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+    },
+    {
+      "file": "docs/evidence/exact-probe-source-checks-v71.json",
+      "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+    },
+    {
+      "file": "docs/evidence/exact-probe-source-checks-v71.json",
+      "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+    },
+    {
+      "file": "docs/evidence/exact-probe-source-checks-v71.json",
+      "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+    },
+    {
+      "file": "docs/evidence/recorded-substantive-checks-v71.json",
+      "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+    },
+    {
+      "file": "docs/evidence/midpoint-pause-physical-proof-v71.json",
+      "sha256": "a83597c2babbceac576837cd914bd98603be80356dc0c6f5b09a50c428609af5"
+    },
+    {
+      "file": "docs/evidence/essential-tail-exact-pause-physical-proof-v71.json",
+      "sha256": "901f5d8736befd12e67963ed23a870f13dbab8ca088dcd695420a0dda30ea792"
+    },
+    {
+      "file": "docs/evidence/exact-probe-source-checks-v71.json",
+      "sha256": "1d0b788f6947d17f7347761b3d31e54f6599ed947d62120897e772bb9935b7a9"
+    },
+    {
+      "file": "docs/evidence/switch-prior-question-display-v71.json",
+      "sha256": "c782d118a75ff6f46d66e55a4d3f3454f7ee38a4d8b78a1a65ab6b62a3dc3c81"
+    },
+    {
+      "file": "docs/evidence/recorded-substantive-checks-v71.json",
+      "sha256": "02a313acc31ff844e8ab33a698da5d2ec11d698560c4547aee0cacc6c76161cb"
+    },
+    {
+      "file": "docs/evidence/completed-deep-memory-measurements-v71.json",
+      "sha256": "954fefe3a6f37a9fa689b4a6a24b5f049aca9edcfa7922cfbb726b8d5a54f040"
+    },
+    {
+      "file": "docs/evidence/continuous-pressure-measurements-v71.json",
+      "sha256": "8dae100806882c2ad82ca6c8f56f9209c0700662af4a0b787743ee7758e75d46"
+    },
+    {
+      "file": "docs/evidence/pressure-prior-question-display-v71.json",
+      "sha256": "9e0387cb069e3794aad96cd0cbd3ad5e990fefef1f01c5d440293115dbc399bf"
+    },
+    {
+      "file": "docs/evidence/continuous-pressure-measurements-v71.json",
+      "sha256": "8dae100806882c2ad82ca6c8f56f9209c0700662af4a0b787743ee7758e75d46"
+    },
+    {
+      "file": "docs/evidence/matched-policy-controls-final-audit-v71.json",
+      "sha256": "751228e7ff038692072760e3ce8c70716961f353e2365b152a5f84d233f4ba4c"
+    },
+    {
+      "file": "docs/evidence/matched-architecture-controls-assessed-v71.json",
+      "sha256": "cc0147da65eda4341d974bf7cf66516ed54b644a212c6a6e1e784227ef3beae7"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\audit-goal-measurements-v71.mjs",
+      "sha256": "e8df2806434cf1cc704927ba61871ff251c2f6393fb7d8d232b85cf60d3949aa"
+    }
+  ],
+  "scope": "Completion of this measured recording/review scope is separate from achieving every required product behavior or the full thread goal. Manual findings and contradictions remain explicit. No universal correctness, latency, no-degradation, hardware or Git push success certificate is created."
+}

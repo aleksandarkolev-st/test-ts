@@ -767,6 +767,12 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     #[tokio::test]
     async fn latest_question_replaces_unconsumed_work_on_multiple_attempts() {
         let (codex,service,mut requests)=question_fixture();
+        // Existing completed histories may coexist with empty prepared threads.
+        // Initial inference may reuse one; corrections must select neither.
+        let key=codex.prepared.lock().unwrap()[0].key.clone();
+        for (id,turns) in [("fixture-initial-history",8),("fixture-other-history",7)] {
+            codex.prepared.lock().unwrap().push(PreparedThread{key:key.clone(),id:id.into(),acknowledged:std::time::Instant::now(),turns,history_chars:100});
+        }
         let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:"provisional".into(),context:None,confirmed:false,acoustic_quiet:false});
         let server=async {
             let mut retired=Vec::new();
@@ -776,7 +782,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
                 let turn=format!("turn-{index}");
                 let text=request["params"]["input"][0]["text"].as_str().unwrap();
                 assert!(text.contains("literal reference"));
-                if index>0{assert!(text.contains(&format!("confirmed-{index}")));}
+                if index>0{assert!(text.contains(&format!("confirmed-{index}")));assert!(thread.starts_with("fixture-thread-"),"Replacement must not inherit another completed conversation");}
+                else{assert_eq!(thread,"fixture-initial-history");}
                 assert!(!retired.contains(&thread),"Replacement must have a fresh thread");
                 acknowledge(&service,&request,json!({"turn":{"id":turn}}));
                 if index<2 {

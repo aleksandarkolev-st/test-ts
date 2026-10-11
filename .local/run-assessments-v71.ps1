@@ -10,7 +10,7 @@ $taskManifest=Get-Content -LiteralPath ($taskRoot+'/policy-playback/manifest.jso
 $taskExpectedTrials=$taskManifest.cases.Count*$taskManifest.repetitions*$taskManifest.policies.Count
 if($taskControl.status -ne 'complete' -or !$taskControl.stoppedCleanly -or $taskControl.trials.Count -ne $taskExpectedTrials){throw 'Finish all matched fresh-meeting policy controls before deferred assessment'}
 if(Test-Path -LiteralPath '.local/latest-question-wins/src-tauri/Cargo.toml'){
- & .\.local\test-question-architecture-v71.ps1 -TaskRoot $TaskRoot
+ & .\.local\run-architecture-comparison-v71.ps1 -TaskRoot $TaskRoot
 }
 $taskPressure=$taskRoot+'/continuous-pressure-t'
 if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-events-audit.json'))){
@@ -51,6 +51,12 @@ $taskHourSources=@($taskSources)
 $taskSources+=Get-ChildItem -LiteralPath ($taskRoot+'/hard-probes') -Directory | Sort-Object Name | ForEach-Object { $taskRoot+'/hard-probes/'+$_.Name+'/interview.json' }
 $taskSources+=$taskPressure+'/pressure-review-input.json'
 $taskSources+=$taskControl.trials | ForEach-Object { $_.outputDirectory+'/interview.json' }
+$taskComparison=$TaskRoot+'/architecture-comparison/comparison.json'
+if(Test-Path -LiteralPath $taskComparison){
+ $taskArchitecture=Get-Content -LiteralPath $taskComparison -Raw -Encoding UTF8 | ConvertFrom-Json
+ if($taskArchitecture.status -ne 'complete' -or !$taskArchitecture.stoppedCleanly){throw 'Architecture comparison did not finish cleanly'}
+ $taskSources+=$taskArchitecture.trials | ForEach-Object { $_.recording }
+}
 $taskConfiguration=$taskQueue | Where-Object event -eq 'started' | Select-Object -First 1
 $env:COPILOT_INDEPENDENT_MODEL=$taskConfiguration.model
 $env:COPILOT_INDEPENDENT_EFFORT=$taskConfiguration.effort
@@ -72,7 +78,11 @@ foreach($taskSource in $taskSources){
  }
  if($taskSource -notmatch 'pressure-review-input.json$'){
   if(!(Test-Path -LiteralPath ($taskParent+'/architecture-audit-v71.json'))){
-   node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent
+   if($taskSource -match 'architecture-comparison/'){
+    node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent --numeric-only
+   }else{
+    node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent
+   }
    if($LASTEXITCODE -ne 0){throw ('Architecture source/timing audit failed: '+$taskSource)}
   }
   if(!(Test-Path -LiteralPath ($taskParent+'/delivery-coverage-audit.json'))){

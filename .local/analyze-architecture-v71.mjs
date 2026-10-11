@@ -8,13 +8,16 @@ const root=path.resolve(directory);assert(root.startsWith(process.cwd()+path.sep
 const snapshot=process.argv.includes('--snapshot'),file=path.join(root,'interview.json');
 if(snapshot&&(await stat(file)).size>8*1024*1024){console.log(JSON.stringify({deferred:true,reason:'Avoid parsing a large live recorder journal during measured inference',file}));process.exit(0);}
 const bytes=await readFile(file),journal=JSON.parse(bytes),hash=x=>createHash('sha256').update(x).digest('hex');
+const numericOnly=process.argv.includes('--numeric-only');
+const sourceRoot=path.resolve(numericOnly?(journal.sourceRoot??process.cwd()):process.cwd());
+assert(sourceRoot===process.cwd()||sourceRoot.startsWith(process.cwd()+path.sep),'Source root must remain in the workspace');
 assert(snapshot||(journal.status==='complete'&&journal.stoppedCleanly),'Final architecture analysis requires a clean completed recording');
 const sourceFiles=['src-tauri/src/openai/codex.rs','src-tauri/src/openai/timing.rs','src-tauri/src/runtime.rs','src-tauri/src/meeting/scheduler.rs'];
 const recorderFiles=['scripts/native-signed-interview.mjs','scripts/lib/deep-audio-interview.mjs'];
 const loadedSourceFiles=[...sourceFiles,...recorderFiles.filter(f=>journal.sourceHashes?.[f]||journal.diagnosticSourceHashes?.[f])];
-const sources={};for(const sourceFile of loadedSourceFiles){const raw=await readFile(sourceFile);sources[sourceFile]={sha256:hash(raw),text:raw.toString()};assert.equal(sources[sourceFile].sha256,journal.sourceHashes[sourceFile]??journal.diagnosticSourceHashes[sourceFile]);}
+const sources={};for(const sourceFile of loadedSourceFiles){const raw=await readFile(path.join(sourceRoot,sourceFile));sources[sourceFile]={sha256:hash(raw),text:raw.toString()};assert.equal(sources[sourceFile].sha256,journal.sourceHashes[sourceFile]??journal.diagnosticSourceHashes[sourceFile]);}
 const locate=(file,needle,meaning)=>{const lines=sources[file].text.split('\n'),index=lines.findIndex(line=>line.includes(needle));assert(index>=0,needle);return {file,line:index+1,source:lines[index].trim(),meaning};};
-const sourceMechanisms=[
+const sourceMechanisms=numericOnly?[]:[
  locate(sourceFiles[0],'&& pending_question.is_none() {','A changed final input waits for the outstanding input to clear.'),
  locate(sourceFiles[0],'reuse,false,Some(corrected.context)','The second and last attempt disables the short restart deadline.'),
  locate(sourceFiles[0],'if restart_stalled&&!terminal_pending&&!consumption_pending=>','The refinement deadline cannot retire a stalled second attempt.'),
@@ -29,8 +32,8 @@ const sourceMechanisms=[
  locate(sourceFiles[2],'let (work_tx, mut work) = mpsc::channel(256);','The native runtime work queue is also bounded.'),
  locate(sourceFiles[3],'fn latest_semantic_reply_is_visible_while_older_code_is_still_streaming()','Existing display policy retains the previous answer until the new buffer is available.')
 ];
-if(sources[recorderFiles[0]])sourceMechanisms.push(locate(recorderFiles[0],'const snapshot=JSON.stringify(result,null,2);','The recording helper serializes its growing observation history synchronously before writing; this instrumentation adds CPU and memory load.'));
-if(sources[recorderFiles[1]])sourceMechanisms.push(locate(recorderFiles[1],'if(Date.now()-lastSave>10000)','The interview recorder periodically saves its full journal during capture; its overhead is part of this measurement regime.'));
+if(!numericOnly&&sources[recorderFiles[0]])sourceMechanisms.push(locate(recorderFiles[0],'const snapshot=JSON.stringify(result,null,2);','The recording helper serializes its growing observation history synchronously before writing; this instrumentation adds CPU and memory load.'));
+if(!numericOnly&&sources[recorderFiles[1]])sourceMechanisms.push(locate(recorderFiles[1],'if(Date.now()-lastSave>10000)','The interview recorder periodically saves its full journal during capture; its overhead is part of this measurement regime.'));
 const subtract=(end,start)=>Number.isFinite(end)&&Number.isFinite(start)?end-start:null;
 const rows=journal.rows.map(row=>{
  const m=streamedWordLatency(journal,row),p=row.latency?.pipeline??{},anchors=row.audio?.clockAnchors??[],endpoint=row.audio?.playback;
@@ -112,7 +115,7 @@ const tailTrajectories=slowest.map(row=>{
 });
 const report={recordedAt:new Date().toISOString(),source:{file,sha256:hash(bytes),status:journal.status,stoppedCleanly:journal.stoppedCleanly},
  sourceHashes:Object.fromEntries(loadedSourceFiles.map(f=>[f,sources[f].sha256])),model:journal.model,effort:journal.effort,outputDevice:journal.outputDevice,
- nativeBinarySha256:journal.nativeBinarySha256,sourceMechanisms,rows,distributions,tailTrajectories,
+ nativeBinarySha256:journal.nativeBinarySha256,sourceRoot,analysisMode:numericOnly?'numeric_timeline_only':'baseline_source_and_timeline',sourceMechanisms,rows,distributions,tailTrajectories,
  summary:{all:group(()=>true),withRestart:group(r=>r.counters.restarts>0),withoutRestart:group(r=>r.counters.restarts===0),
   readerObservedFull:group(r=>r.counters.readerFullQueueCount>0),noReaderFullObserved:group(r=>r.counters.readerFullQueueCount===0),
   sequentialInputTimelines:rows.filter(r=>r.inputTimelineOrdered).length,missingOrNonsequentialInputTimelines:rows.filter(r=>!r.inputTimelineOrdered).length,

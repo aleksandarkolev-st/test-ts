@@ -1,7 +1,7 @@
 // Run only after measured playback and deferred independent reviews finish.
 // Verify every recorded review input; retain all outcomes and source files.
 import assert from 'node:assert/strict';
-import {readFile,writeFile,readdir} from 'node:fs/promises';
+import {readFile,writeFile,readdir,access} from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
@@ -25,6 +25,28 @@ for(const item of (await readdir(root+'/hard-probes',{withFileTypes:true})).filt
  inputs.push({kind:'specified_probe',name:item.name,file:root+'/hard-probes/'+item.name+'/interview.json'});
 inputs.push({kind:'continuous_pressure_jobs',name:'continuous-pressure-t',file:root+'/continuous-pressure-t/pressure-review-input.json'});
 for(const trial of playback.trials)inputs.push({kind:'selected_policy_control',name:path.basename(trial.outputDirectory),file:trial.outputDirectory+'/interview.json'});
+const architectureFile=root+'/architecture-comparison/comparison.json';
+if(await access(architectureFile).then(()=>true,()=>false)){
+ const architecture=await load(architectureFile);assert.equal(architecture.status,'complete');assert(architecture.stoppedCleanly);
+ assert.equal(architecture.trials.length,controls.cases.length*controls.repetitions*architecture.variants.length);
+ assert.equal(architecture.manifestSha256,await fileHash(root+'/policy-playback/manifest.json'));
+ const protocol=await load(architecture.protocolTests.file);
+ assert.equal(await fileHash(architecture.protocolTests.file),architecture.protocolTests.sha256);
+ assert.equal(protocol.exitCode,0);assert.deepEqual(protocol.sourceChangedDuringCompilation,[]);
+ assert.equal(protocol.sourceFingerprint,architecture.protocolTests.sourceFingerprint);
+ assert.deepEqual(protocol.sourceFiles,architecture.candidateSourceFiles);
+ assert.equal(architecture.build.exitCode,0);
+ for(const log of [architecture.build.stdout,architecture.build.stderr])assert.equal(await fileHash(log.file),log.sha256);
+ const combinations=new Set();
+ for(const trial of architecture.trials){
+  const combination=JSON.stringify([trial.caseIndex,trial.repetition,trial.variant]);assert(!combinations.has(combination),'Duplicate architecture trial');combinations.add(combination);
+  assert(Number.isInteger(trial.caseIndex)&&trial.caseIndex>=0&&trial.caseIndex<controls.cases.length);
+  assert(Number.isInteger(trial.repetition)&&trial.repetition>=0&&trial.repetition<controls.repetitions);
+  assert(architecture.variants.some(variant=>variant.name===trial.variant));
+  assert.equal(await fileHash(trial.recording),trial.journalSha256);assert.equal(await fileHash(trial.playback),trial.playbackSha256);
+  inputs.push({kind:'selected_architecture_control',name:path.basename(path.dirname(trial.recording)),file:trial.recording});
+ }
+}
 const verdictNames=['correct','incorrect','incomplete','unverified'];
 const reviewerProvenance=new Map();
 for(const entry of inputs){

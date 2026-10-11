@@ -44,11 +44,16 @@ for(const trial of protocol.trials){
 }
 const summaries=groups.map(group=>{
  const trials=rows.filter(r=>r.group===group),counts={};
+ const observedLatencies=trials.map(r=>r.word?.latencyMs.high).filter(Number.isFinite).sort((a,b)=>a-b);
+ const allTrialP95Rank=Math.ceil(trials.length*.95);
  for(const trial of trials)for(const [verdict,count] of Object.entries(trial.independentModelVerdicts??{}))counts[verdict]=(counts[verdict]??0)+count;
  return {group,recordedTrials:trials.length,measuredWords:trials.filter(r=>r.word).length,missingWords:trials.filter(r=>!r.word).length,
   cancelled:trials.filter(r=>r.cancelled).length,errors:trials.filter(r=>r.error).length,
   observationWindowsExpired:trials.filter(r=>r.observationWindowExpired).length,
   primaryWordLatencyMs:latencyDistribution(trials.map(r=>r.word?.latencyMs.high)),
+  allTrialWordP95:{rank:allTrialP95Rank,latencyMs:observedLatencies[allTrialP95Rank-1]??null,
+   status:observedLatencies.length>=allTrialP95Rank?'finite_observed_sample_bound':'not_reached_within_recordings',
+   scope:'Nearest-rank first-word delivery statistic with every recorded trial in the denominator. A missing retained word is an unsatisfied delivery outcome, never replaced with an invented numeric latency. This is separate from the observed-word-only distribution and from answer correctness; it is not a population percentile.'},
   independentModelVerdicts:cohort?counts:null,provisionalCorrectFractionOfAllTrials:cohort?(counts.correct??0)/trials.length:null};
 });
 const pairs=[];

@@ -30,6 +30,10 @@ if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-source-coverage-audit.json
  node scripts/audit-pressure-source-coverage.mjs $taskPressure
  if($LASTEXITCODE -ne 0){throw 'Pressure source coverage binding failed'}
 }
+if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-physical-latency-audit.json'))){
+ node --max-old-space-size=6144 scripts/audit-pressure-physical-latency.mjs $taskPressure
+ if($LASTEXITCODE -ne 0){throw 'Pressure physical source endpoint audit failed'}
+}
 if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-drift-audit.json'))){
  node .local/audit-pressure-drift-v71.mjs
  if($LASTEXITCODE -ne 0){throw 'Pressure resource and latency drift audit failed'}
@@ -40,6 +44,7 @@ if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-visibility-audit.json'))){
 }
 $taskSources=@($taskQueue | Where-Object { $_.event -eq 'finished' -and $_.kind -eq 'elapsed_hour' } | ForEach-Object { $_.source })
 if(!$taskSources.Count -or @($taskSources | Sort-Object -Unique).Count -ne $taskSources.Count){throw 'Missing or duplicate completed recordings in queue'}
+$taskHourSources=@($taskSources)
 $taskSources+=Get-ChildItem -LiteralPath ($taskRoot+'/hard-probes') -Directory | Sort-Object Name | ForEach-Object { $taskRoot+'/hard-probes/'+$_.Name+'/interview.json' }
 $taskSources+=$taskPressure+'/pressure-review-input.json'
 $taskSources+=$taskControl.trials | ForEach-Object { $_.outputDirectory+'/interview.json' }
@@ -56,6 +61,12 @@ foreach($taskSource in $taskSources){
  $taskParent=Split-Path -Path $taskSource -Parent
  $taskReviews=$taskParent+'/independent-model-review-v71'
  $taskSummary=$taskParent+'/independent-assessment-v71'
+ if($taskHourSources -contains $taskSource){
+  if(!(Test-Path -LiteralPath ($taskParent+'/older-code-reference-audit.json'))){
+   node --max-old-space-size=6144 scripts/audit-older-code-reference.mjs $taskParent
+   if($LASTEXITCODE -ne 0){throw ('Recorded older-code reference audit failed: '+$taskSource)}
+  }
+ }
  if($taskSource -notmatch 'pressure-review-input.json$'){
   if(!(Test-Path -LiteralPath ($taskParent+'/architecture-audit-v71.json'))){
    node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent

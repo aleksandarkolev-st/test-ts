@@ -12,6 +12,8 @@ if($taskControl.status -ne 'complete' -or !$taskControl.stoppedCleanly -or $task
 if(Test-Path -LiteralPath '.local/latest-question-wins/src-tauri/Cargo.toml'){
  & .\.local\run-architecture-comparison-v71.ps1 -TaskRoot $TaskRoot
 }
+& .\.local\prepare-cuda-compiler-v71.ps1 -TaskRoot $TaskRoot
+$taskCudaToolchain=$TaskRoot+'/cuda-compiler/toolchain.json'
 $taskPressure=$taskRoot+'/continuous-pressure-t'
 if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-events-audit.json'))){
  node scripts/audit-pressure-event-recording.mjs $taskPressure
@@ -78,6 +80,8 @@ foreach($taskSource in $taskSources){
   if($LASTEXITCODE -ne 0){throw ('Code-check evidence binding failed: '+$taskSource)}
  }
  if($taskSource -notmatch 'pressure-review-input.json$'){
+  node --max-old-space-size=6144 .local/compile-recorded-cuda-v71.mjs $taskSource $taskCudaToolchain ($taskParent+'/code-review/nvcc-compilation-v71')
+  if($LASTEXITCODE -ne 0){throw ('Recorded compiler evidence binding failed: '+$taskSource)}
   if(!(Test-Path -LiteralPath ($taskParent+'/older-code-reference-audit.json'))){
    node --max-old-space-size=6144 scripts/audit-older-code-reference.mjs $taskParent
    if($LASTEXITCODE -ne 0){throw ('Recorded older-code reference audit failed: '+$taskSource)}

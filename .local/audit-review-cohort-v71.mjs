@@ -97,6 +97,13 @@ for(const entry of inputs){
  }
  let duration=null,architecture=null,delivery=null;
  if(entry.kind!=='continuous_pressure_jobs'){
+  const compilation=await load(directory+'/code-review/nvcc-compilation-v71/compilation.json');assert.equal(compilation.journal.sha256,journalSha256);
+  assert.equal(await fileHash(compilation.toolchain.file),compilation.toolchain.sha256);
+  for(const block of compilation.blocks){
+   assert.equal(await fileHash(block.code.file),block.code.sha256);
+   for(const log of [block.stdout,block.stderr])assert.equal(await fileHash(log.file),log.sha256);
+   if(block.object)assert.equal(await fileHash(block.object.file),block.object.sha256);
+  }
   architecture=await load(directory+'/architecture-audit-v71.json');assert.equal(architecture.source.sha256,journalSha256);
   delivery=await load(directory+'/delivery-coverage-audit.json');assert.equal(delivery.journal.sha256,journalSha256);assert(delivery.summary.allQuestionAndBackgroundWaveHashesValidated);
   const visibility=await load(directory+'/interview-visibility-audit-v71.json');assert.equal(visibility.journal.sha256,journalSha256);

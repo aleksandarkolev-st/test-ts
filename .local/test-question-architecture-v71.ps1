@@ -35,8 +35,8 @@ foreach($taskResource in @('models','dist','.local/codex','.local/nemotron','.lo
 $taskStarted=[DateTimeOffset]::UtcNow.ToString('o')
 $taskManifest=Join-Path $taskCandidate 'src-tauri/Cargo.toml'
 $taskTargetDir=Join-Path $taskWorkspace 'src-tauri/target'
-$taskArguments=@('test','--offline','--manifest-path',('"'+$taskManifest+'"'),'--target-dir',('"'+$taskTargetDir+'"'),'--features','acceptance','--lib','openai::codex::tests::','--','--skip','live_','--test-threads=1')
-$taskProcess=Start-Process -FilePath 'cargo.exe' -ArgumentList $taskArguments -WorkingDirectory $taskWorkspace -WindowStyle Hidden -PassThru -RedirectStandardOutput ($taskOutput+'/stdout.log') -RedirectStandardError ($taskOutput+'/stderr.log') -Wait
+$taskArguments=@('test','--offline','--manifest-path',$taskManifest,'--target-dir',$taskTargetDir,'--features','acceptance','--lib','openai::codex::tests::','--','--skip','live_','--test-threads=1')
+$taskProcess=& .\.local\invoke-cargo-capture-v71.ps1 -Arguments $taskArguments -WorkingDirectory $taskWorkspace -Stdout ($taskOutput+'/stdout.log') -Stderr ($taskOutput+'/stderr.log')
 $taskChanged=@($taskSourceManifest.Keys | Where-Object { (Get-FileHash -LiteralPath (Join-Path $taskCandidate $_) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskSourceManifest[$_] })
 $taskResult=@{startedAt=$taskStarted;completedAt=[DateTimeOffset]::UtcNow.ToString('o');candidate=$taskCandidate;sourceSha256=$taskSourceHash;sourceFingerprint=$taskFingerprint;sourceFiles=$taskSourceManifest;sourceChangedDuringCompilation=$taskChanged;processId=$taskProcess.Id;exitCode=$taskProcess.ExitCode;command=$taskArguments;goalComplete=$false;scope='Real candidate crate compilation and non-live Codex protocol tests. No provider, accuracy, audio or latency improvement certification.'}
 [IO.File]::WriteAllText((Join-Path $taskWorkspace ($taskOutput+'/result.json')),($taskResult | ConvertTo-Json -Depth 6),(New-Object Text.UTF8Encoding($false)))

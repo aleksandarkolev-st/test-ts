@@ -40,11 +40,13 @@ $env:COPILOT_INTENT_MODE='existing'
 $env:COPILOT_TRACE_PROVISIONAL='1'
 $env:COPILOT_NEMO_DIAGNOSTICS='1'
 $taskObserver=Start-Process -FilePath 'node' -ArgumentList @('.local/observe-pressure-events-v71.mjs',$env:COPILOT_NATIVE_INTERVIEW_OUTPUT) -WindowStyle Hidden -PassThru -RedirectStandardOutput 'artifacts/deep-interview-v71/pressure-observer.log' -RedirectStandardError 'artifacts/deep-interview-v71/pressure-observer.err'
+$taskObserverHandle=$taskObserver.Handle
 node scripts/native-signed-interview.mjs
 $taskExit=$LASTEXITCODE
 $taskObserver.WaitForExit(30000) | Out-Null
 if(!$taskObserver.HasExited){throw 'Pressure observer still active after native recording stop; inspect its owner'}
-if($taskObserver.ExitCode -ne 0){throw 'Pressure event observer failed; preserve capture and inspect'}
+if($null -eq $taskObserver.ExitCode){throw 'Pressure observer exit code unavailable; inspect its saved terminal report'}
+if($taskObserver.ExitCode -ne 0){throw ('Pressure event observer exited '+$taskObserver.ExitCode+'; preserve capture and inspect')}
 node scripts/summarize-deep-audio-duration.mjs $env:COPILOT_NATIVE_INTERVIEW_OUTPUT
 if($LASTEXITCODE -ne 0){throw 'Pressure metric audit failed'}
 node scripts/summarize-continuous-pressure.mjs $env:COPILOT_NATIVE_INTERVIEW_OUTPUT

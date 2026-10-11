@@ -40,8 +40,8 @@ $taskTestFile=$TaskRoot+'/candidate-tests/'+$taskFingerprint+'/result.json'
 $taskTest=Get-Content -LiteralPath $taskTestFile -Raw -Encoding UTF8 | ConvertFrom-Json
 if($taskTest.exitCode -ne 0 -or @($taskTest.sourceChangedDuringCompilation).Count -or $taskTest.sourceFingerprint -ne $taskFingerprint){throw 'Candidate build does not match successful protocol test inputs'}
 $taskTestProof=@{file=$taskTestFile;sha256=(Get-FileHash -LiteralPath $taskTestFile -Algorithm SHA256).Hash.ToLowerInvariant();sourceFingerprint=$taskFingerprint}
-$taskArguments=@('build','--offline','--manifest-path',('"'+(Join-Path $taskCandidate 'src-tauri/Cargo.toml')+'"'),'--target-dir',('"'+(Join-Path $taskWorkspace 'src-tauri/target')+'"'),'--features','acceptance','--bin','meeting-copilot')
-$taskBuild=Start-Process -FilePath 'cargo.exe' -ArgumentList $taskArguments -WorkingDirectory $taskWorkspace -WindowStyle Hidden -PassThru -RedirectStandardOutput ($taskOut+'/build.stdout.log') -RedirectStandardError ($taskOut+'/build.stderr.log') -Wait
+$taskArguments=@('build','--offline','--manifest-path',(Join-Path $taskCandidate 'src-tauri/Cargo.toml'),'--target-dir',(Join-Path $taskWorkspace 'src-tauri/target'),'--features','acceptance','--bin','meeting-copilot')
+$taskBuild=& .\.local\invoke-cargo-capture-v71.ps1 -Arguments $taskArguments -WorkingDirectory $taskWorkspace -Stdout ($taskOut+'/build.stdout.log') -Stderr ($taskOut+'/build.stderr.log')
 if($taskBuild.ExitCode -ne 0){throw ('Candidate build failed; original logs retained in '+$taskOut)}
 $taskChanged=@($taskCandidateSource.Keys | Where-Object { (Get-FileHash -LiteralPath (Join-Path $taskCandidate $_) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskCandidateSource[$_] })
 if($taskChanged.Count){throw 'Candidate sources changed during build'}

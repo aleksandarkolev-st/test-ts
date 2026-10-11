@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-11T11:48:39Z",
+  "scope": "Recording-wrapper diagnosis and recovery; no accuracy or architecture-improvement claim.",
+  "reproduction": {
+    "command": "Start-Process node.exe -ArgumentList @('-e','\"process.exit(0)\"') -WindowStyle Hidden -PassThru with redirected stdout/stderr; WaitForExit(5000)",
+    "waitReturned": true,
+    "hasExited": true,
+    "exitCode": null,
+    "processId": 27472,
+    "logs": "artifacts/deep-interview-v71/process-exit-reproduction-2"
+  },
+  "cargoCaptureSmoke": {
+    "command": "cargo --version through Diagnostics.Process with direct asynchronous stream capture",
+    "exitCode": 0,
+    "processId": 28856,
+    "stdout": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "startedAt": "2026-10-11T11:48:39.2337976+00:00",
+    "completedAt": "2026-10-11T11:48:39.6005212+00:00"
+  },
+  "pressureRecording": {
+    "status": "complete",
+    "stoppedCleanly": true,
+    "actualInterviewDurationMs": 1813466,
+    "requestedDurationMs": 1800000,
+    "segments": 158,
+    "nativeJobs": 91,
+    "journalSha256": "2597f2bf7975b01b222391fcf7380f0f345dce11eb0f3855bc7112eae04907fd",
+    "observerEvents": 3382,
+    "observerRecords": 2163,
+    "observerStopReason": "native_owner_exited",
+    "observerEventsSha256": "49c5610a3575f5fc108660b71b302727047911f7774cf62778bee12e1c8d36e1",
+    "observerStderrBytes": 0,
+    "originalObserverNumericExitCode": null,
+    "observerStartedRelativeToPlaybackMs": -10772,
+    "auditProseCorrection": "pressure-events-audit.json incorrectly describes the observer as starting during playback. Its numeric timing proves it started 10.772 seconds before playback. The original audit is preserved."
+  },
+  "recovery": {
+    "helper": ".local/resume-deferred-v71.ps1",
+    "preservesOriginalFailedQueueEntries": true,
+    "repeatsOriginalRecordings": false,
+    "requiresOriginalOwnersAbsent": true,
+    "validatesBaselineSourceAndBinaryHashes": true,
+    "validatesCompletedJournalAndObserverHashes": true,
+    "continuesPolicyControlsThenCandidateValidationAndIndependentReviews": true
+  },
+  "goalComplete": false
+}

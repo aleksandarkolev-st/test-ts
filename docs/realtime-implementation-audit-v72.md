@@ -22,7 +22,7 @@ Work is on `feat/persistent-conversation-controller`; it has not been merged. Th
 
 ## Validation status
 
-The final source passes **156 Rust tests**, with 14 explicitly ignored legacy authenticated/credential tests; **2 frontend tests**; and **11 measurement/pause/reference tests**. Ignored tests are not claimed as passed live tests. Native authenticated replay is separate evidence.
+The final source passes **156 Rust tests**, with 14 explicitly ignored legacy authenticated/credential tests; **2 frontend tests**; and **13 measurement/pause/reference tests**. Ignored tests are not claimed as passed live tests. Native authenticated replay is separate evidence.
 
 On the final source-range binary, the first thirty-turn typed contextual run has 29 manually reviewed correct completed answers, one deliberate interruption, no missing replies and no recorded application error. Accepted-to-actual-Codex-write sample p95 is **5 ms**. Correct viewport useful feedback has median **3,618 ms**, sample p95 **5,655 ms** across 29 answers; the ten manifest-declared ordinary follow-ups have all-row p95 **7,958 ms**. The proposed 3-second gate fails in this sample. This is a structured fixture workload with a signed-in backend, not population or high-stakes interview certification.
 

@@ -28,6 +28,23 @@ test('a planned audio interruption that never becomes a request is not a success
  assert.equal(measured.counts.observedPlannedInterruptions,0);
  assert.equal(measured.counts.missing,1);
 });
+test('injected cold recovery and incomplete work are not healthy dispatch or correct completion samples',()=>{
+ const rows=[{round:1,phase:'complete',answer:'Correct',latency:{questionConfirmedAt:10,completedAt:30,pipeline:{transportWrittenAt:12}}},
+  {round:2,phase:'complete',answer:'Omitted constraints',faultInjection:{injected:true},latency:{questionConfirmedAt:40,completedAt:3000,pipeline:{transportWrittenAt:2140}}}];
+ const measured=measureJournal({rows},{rows:[{round:1,completed:true,correctness:'correct'},{round:2,completed:false,correctness:'incorrect'}]});
+ assert.equal(measured.acceptedToWriteMs.count,2);
+ assert.equal(measured.nonFaultProbeAcceptedToWriteMs.sampleP95,2);
+ assert.equal(measured.faultProbeAcceptedToWriteMs.sampleP95,2100);
+ assert.equal(measured.acceptedToProtocolCompletionMs.count,2);
+ assert.equal(measured.acceptedToCorrectWorkCompletionMs.count,1);
+ assert.equal(measured.acceptedToCorrectWorkCompletionMs.sampleP95,20);
+});
+test('a requested but unsupported fault is separated without claiming it was injected',()=>{
+ const measured=measureJournal({rows:[{round:1,disconnectBackend:true,faultInjection:{injected:false},phase:'complete',answer:'Reply',latency:{questionConfirmedAt:1,pipeline:{transportWrittenAt:5}}}]},{});
+ assert.equal(measured.rows[0].injectedTransportFault,false);
+ assert.equal(measured.nonFaultProbeAcceptedToWriteMs.count,0);
+ assert.equal(measured.faultProbeAcceptedToWriteMs.count,1);
+});
 test('generation mismatch is rejected instead of combining timing',()=>{
  assert.throws(()=>measureJournal({rows:[{round:1,responseVersion:'a:0',latency:{pipeline:{generationId:'b'}}}]},{}));
 });

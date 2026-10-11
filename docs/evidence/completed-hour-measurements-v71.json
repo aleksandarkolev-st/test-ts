@@ -1,0 +1,746 @@
+{
+  "recordedAt": "2026-10-11T09:47:44.009Z",
+  "queueSnapshot": {
+    "file": "artifacts\\deep-interview-v71\\recording-queue.jsonl",
+    "sha256": "dae57354c50d38223e8f807b155481a355f2351109450841f8aa156c566bf60c",
+    "latestEvent": {
+      "recordedAt": "2026-10-11T09:42:33.4587489+00:00",
+      "ownerPid": 24692,
+      "event": "starting",
+      "kind": "attached_hard_tests"
+    }
+  },
+  "collectorSourceHashes": {
+    "file:///C:/Users/polek/Downloads/test-ts/.local/summarize-completed-hours-v71.mjs": "39d4f54fe9cfcb4b871e7d842a1e7804b38fb3d626580d59afb3ff88af77c263",
+    ".local/lib/recorded-cohort.mjs": "c05ee6683365629ca0efb2ddfe2fadc2236f22667976dae7745fbb33ce8e7ac4"
+  },
+  "hours": [
+    {
+      "name": "general-hour-t",
+      "domain": "general",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\duration-audit.json",
+        "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "settledUpdate": false,
+        "completedDraftReplacement": false,
+        "remoteOnly": true,
+        "selfCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        }
+      },
+      "actualInterviewDurationMs": 3664484.5214,
+      "summary": {
+        "evaluatedTurns": 55,
+        "firstVisibleWordMs": {
+          "count": 55,
+          "min": 2453,
+          "median": 8922,
+          "sampleP95": 36223,
+          "max": 64862
+        },
+        "firstRetainedVisibleWordMs": {
+          "count": 55,
+          "min": 2453,
+          "median": 8922,
+          "sampleP95": 36223,
+          "max": 64862
+        },
+        "firstHalfVisibleWordMs": {
+          "count": 28,
+          "min": 2453,
+          "median": 8192.5,
+          "sampleP95": 36223,
+          "max": 36313
+        },
+        "secondHalfVisibleWordMs": {
+          "count": 27,
+          "min": 3242,
+          "median": 10463,
+          "sampleP95": 27141,
+          "max": 64862
+        },
+        "turnsWithoutVisibleWord": 0,
+        "cancelled": 9,
+        "errors": 0,
+        "fullModelGrades": {
+          "correct": 27,
+          "incorrect": 0,
+          "incomplete": 0
+        },
+        "ungradedFullAnswers": 28,
+        "partialModelGrades": 13,
+        "actualStreamingOverlapLaunches": 22,
+        "immediateContextFollowups": 14,
+        "asr": {
+          "assessedTurns": 55,
+          "unavailableTurns": 0,
+          "referenceWords": 4327,
+          "edits": 109,
+          "lexicalWordErrorRate": 0.025190663277097295
+        },
+        "counters": {
+          "restarts": 48,
+          "steers": 272,
+          "followups": 52
+        },
+        "nativeProcessResources": {
+          "workingSetBytes": {
+            "first": 28393472,
+            "last": 60133376,
+            "count": 245,
+            "min": 28393472,
+            "median": 60170240,
+            "sampleP95": 62107648,
+            "max": 63848448
+          },
+          "privateBytes": {
+            "first": 4444160,
+            "last": 21467136,
+            "count": 245,
+            "min": 4444160,
+            "median": 19247104,
+            "sampleP95": 21524480,
+            "max": 23236608
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 268,
+            "last": 427,
+            "count": 245,
+            "min": 268,
+            "median": 427,
+            "sampleP95": 430,
+            "max": 442
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 245,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 26,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recordingProcessResources": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 50176000,
+            "last": 787181568,
+            "count": 366,
+            "min": 50176000,
+            "median": 332988416,
+            "sampleP95": 748003328,
+            "max": 789471232
+          },
+          "heapUsed": {
+            "first": 9024928,
+            "last": 523827680,
+            "count": 366,
+            "min": 9024928,
+            "median": 198235500,
+            "sampleP95": 506999056,
+            "max": 544124992
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 13,
+            "last": 10,
+            "count": 366,
+            "min": 3,
+            "median": 8,
+            "sampleP95": 12,
+            "max": 18
+          }
+        },
+        "nativeProcessTreeResources": {
+          "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 245,
+          "firstHostMs": 1791700584673,
+          "lastHostMs": 1791704248603,
+          "privateAllocationBytes": {
+            "count": 245,
+            "min": 218873856,
+            "median": 6119763968,
+            "sampleP95": 6227988480,
+            "max": 6325698560
+          },
+          "summedWorkingSetBytes": {
+            "count": 245,
+            "min": 421814272,
+            "median": 1193533440,
+            "sampleP95": 1323794432,
+            "max": 1409290240
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        },
+        "pollErrors": []
+      }
+    },
+    {
+      "name": "systems-hour-t",
+      "domain": "systems",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\duration-audit.json",
+        "sha256": "3472f11f8044ade22c2dc5a87089af1a2f46498411d532b8275f7fe26b1c2a49"
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "settledUpdate": false,
+        "completedDraftReplacement": false,
+        "remoteOnly": true,
+        "selfCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        }
+      },
+      "actualInterviewDurationMs": 3607978.0386,
+      "summary": {
+        "evaluatedTurns": 52,
+        "firstVisibleWordMs": {
+          "count": 51,
+          "min": 2504,
+          "median": 9763,
+          "sampleP95": 36166,
+          "max": 42981
+        },
+        "firstRetainedVisibleWordMs": {
+          "count": 51,
+          "min": 2504,
+          "median": 9763,
+          "sampleP95": 36166,
+          "max": 42981
+        },
+        "firstHalfVisibleWordMs": {
+          "count": 26,
+          "min": 2504,
+          "median": 9956.5,
+          "sampleP95": 36166,
+          "max": 39360
+        },
+        "secondHalfVisibleWordMs": {
+          "count": 25,
+          "min": 3644,
+          "median": 8599,
+          "sampleP95": 31220,
+          "max": 42981
+        },
+        "turnsWithoutVisibleWord": 1,
+        "cancelled": 14,
+        "errors": 1,
+        "fullModelGrades": {
+          "correct": 21,
+          "incorrect": 1,
+          "incomplete": 3
+        },
+        "ungradedFullAnswers": 27,
+        "partialModelGrades": 13,
+        "actualStreamingOverlapLaunches": 24,
+        "immediateContextFollowups": 13,
+        "asr": {
+          "assessedTurns": 52,
+          "unavailableTurns": 0,
+          "referenceWords": 3840,
+          "edits": 570,
+          "lexicalWordErrorRate": 0.1484375
+        },
+        "counters": {
+          "restarts": 45,
+          "steers": 167,
+          "followups": 58
+        },
+        "nativeProcessResources": {
+          "workingSetBytes": {
+            "first": 28393472,
+            "last": 54398976,
+            "count": 242,
+            "min": 28393472,
+            "median": 54863872,
+            "sampleP95": 56651776,
+            "max": 57868288
+          },
+          "privateBytes": {
+            "first": 4427776,
+            "last": 22224896,
+            "count": 242,
+            "min": 4427776,
+            "median": 20604928,
+            "sampleP95": 23592960,
+            "max": 24727552
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 268,
+            "last": 427,
+            "count": 242,
+            "min": 268,
+            "median": 427,
+            "sampleP95": 432,
+            "max": 444
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 242,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 26,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recordingProcessResources": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 52789248,
+            "last": 889069568,
+            "count": 360,
+            "min": 52789248,
+            "median": 475715584,
+            "sampleP95": 844369920,
+            "max": 889069568
+          },
+          "heapUsed": {
+            "first": 9470216,
+            "last": 603962904,
+            "count": 360,
+            "min": 9452600,
+            "median": 304905524,
+            "sampleP95": 578613032,
+            "max": 603962904
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 13,
+            "last": 12,
+            "count": 360,
+            "min": 3,
+            "median": 9,
+            "sampleP95": 14,
+            "max": 705
+          }
+        },
+        "nativeProcessTreeResources": {
+          "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 242,
+          "firstHostMs": 1791704341581,
+          "lastHostMs": 1791707964068,
+          "privateAllocationBytes": {
+            "count": 242,
+            "min": 221941760,
+            "median": 6202320896,
+            "sampleP95": 6479183872,
+            "max": 6540722176
+          },
+          "summedWorkingSetBytes": {
+            "count": 242,
+            "min": 424878080,
+            "median": 1306482688,
+            "sampleP95": 1517035520,
+            "max": 1613344768
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        },
+        "pollErrors": []
+      }
+    },
+    {
+      "name": "algorithms-hour-t",
+      "domain": "algorithms",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\duration-audit.json",
+        "sha256": "9940ef9b6b9c50e2c64f6a4f839c0af483b88d5333e2bc0eeb6c708026c1df47"
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "speechConfiguration": {
+        "backend": "nemotron",
+        "chunkMs": 160,
+        "device": 0,
+        "deviceName": "AMD Radeon RX 9070 XT",
+        "acousticRefinements": false,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "settledUpdate": false,
+        "completedDraftReplacement": false,
+        "remoteOnly": true,
+        "selfCapture": {
+          "kind": "disabled",
+          "physicalMicrophoneUsed": false
+        }
+      },
+      "actualInterviewDurationMs": 3687061.4709,
+      "summary": {
+        "evaluatedTurns": 49,
+        "firstVisibleWordMs": {
+          "count": 48,
+          "min": 3523,
+          "median": 12298.5,
+          "sampleP95": 50936,
+          "max": 78626
+        },
+        "firstRetainedVisibleWordMs": {
+          "count": 48,
+          "min": 3523,
+          "median": 12298.5,
+          "sampleP95": 50936,
+          "max": 78626
+        },
+        "firstHalfVisibleWordMs": {
+          "count": 24,
+          "min": 3523,
+          "median": 12630.5,
+          "sampleP95": 41963,
+          "max": 43801
+        },
+        "secondHalfVisibleWordMs": {
+          "count": 24,
+          "min": 3619,
+          "median": 10369,
+          "sampleP95": 73951,
+          "max": 78626
+        },
+        "turnsWithoutVisibleWord": 1,
+        "cancelled": 14,
+        "errors": 0,
+        "fullModelGrades": {
+          "correct": 19,
+          "incorrect": 2,
+          "incomplete": 2
+        },
+        "ungradedFullAnswers": 26,
+        "partialModelGrades": 12,
+        "actualStreamingOverlapLaunches": 25,
+        "immediateContextFollowups": 13,
+        "asr": {
+          "assessedTurns": 48,
+          "unavailableTurns": 1,
+          "referenceWords": 3638,
+          "edits": 370,
+          "lexicalWordErrorRate": 0.1017042330951072
+        },
+        "counters": {
+          "restarts": 45,
+          "steers": 181,
+          "followups": 37
+        },
+        "nativeProcessResources": {
+          "workingSetBytes": {
+            "first": 28397568,
+            "last": 63844352,
+            "count": 247,
+            "min": 28397568,
+            "median": 61976576,
+            "sampleP95": 64098304,
+            "max": 65679360
+          },
+          "privateBytes": {
+            "first": 4435968,
+            "last": 23703552,
+            "count": 247,
+            "min": 4435968,
+            "median": 20709376,
+            "sampleP95": 23703552,
+            "max": 25546752
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 268,
+            "last": 427,
+            "count": 247,
+            "min": 268,
+            "median": 427,
+            "sampleP95": 430,
+            "max": 442
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 247,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 26,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recordingProcessResources": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 48549888,
+            "last": 753479680,
+            "count": 368,
+            "min": 48549888,
+            "median": 341530624,
+            "sampleP95": 737714176,
+            "max": 759570432
+          },
+          "heapUsed": {
+            "first": 9252208,
+            "last": 514242048,
+            "count": 368,
+            "min": 9252208,
+            "median": 209563904,
+            "sampleP95": 496389248,
+            "max": 523364064
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 14,
+            "last": 12,
+            "count": 368,
+            "min": 3,
+            "median": 9,
+            "sampleP95": 14,
+            "max": 159
+          }
+        },
+        "nativeProcessTreeResources": {
+          "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 247,
+          "firstHostMs": 1791708051123,
+          "lastHostMs": 1791711747759,
+          "privateAllocationBytes": {
+            "count": 247,
+            "min": 221118464,
+            "median": 6149062656,
+            "sampleP95": 6315290624,
+            "max": 6344519680
+          },
+          "summedWorkingSetBytes": {
+            "count": 247,
+            "min": 427896832,
+            "median": 1259073536,
+            "sampleP95": 1414979584,
+            "max": 1506848768
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        },
+        "pollErrors": []
+      }
+    }
+  ],
+  "scope": "Completed recordings discovered from actual queue events. Per-recording descriptive sample percentiles and all missing/error/cancellation denominators remain separate. Provisional examiner grades are not independent accuracy. Resource growth includes recorder history retention and does not establish a native leak. This snapshot does not certify population p95, pressure-test completion or candidate improvement.",
+  "independentAccuracyPending": true,
+  "candidatePerformanceVerified": false,
+  "goalComplete": false
+}

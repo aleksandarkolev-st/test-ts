@@ -1,0 +1,63 @@
+{
+  "recordedAt": "2026-10-11T09:48:11.254Z",
+  "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+  "liveFileMetadata": {
+    "bytes": 162421085,
+    "modifiedAt": "2026-10-11T09:42:32.648Z"
+  },
+  "rowSnapshotSha256": "380558ccab2ba95f173716dbe96051701ab99f0a8821679f26db522897119542",
+  "collectorSourceHashes": {
+    "file:///C:/Users/polek/Downloads/test-ts/.local/capture-recorded-checkpoint-v71.mjs": "3f0da960a32b2b5872e087741bbea1ef207bfbbdd567c88e409968ea4851517f",
+    ".local/lib/recorded-row.mjs": "1c949bd005f8f7b9e283f568218fa2b0f74262ddee6a0cf1e36c001b86c575f5"
+  },
+  "round": 14,
+  "question": "Why?",
+  "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+  "recognizedQuestion": null,
+  "responseVersion": null,
+  "answer": "",
+  "phase": "no_job",
+  "error": null,
+  "cancelled": false,
+  "pipeline": {},
+  "latency": null,
+  "audioClockAnchors": [
+    {
+      "hostBeforeMs": 1791708879590,
+      "hostAfterMs": 1791708879596,
+      "nativeMs": 820387
+    },
+    {
+      "hostBeforeMs": 1791708881322,
+      "hostAfterMs": 1791708881329,
+      "nativeMs": 822119
+    }
+  ],
+  "audioPlayback": {
+    "sampleRate": 16000,
+    "lastNonzeroFrame": 7199,
+    "sourceFrames": 18320,
+    "submitBeforeHostMs": 1791708880146,
+    "submitAfterHostMs": 1791708880146,
+    "lastVoicedDevicePositionLowerHostMs": 1791708880605,
+    "lastVoicedDevicePositionUpperHostMs": 1791708880611,
+    "positionAtEnd": 7263,
+    "completedHostMs": 1791708881299
+  },
+  "firstStreamedWordMeasurement": {
+    "questionId": null,
+    "firstVisibleStreamedWord": null,
+    "firstRetainedVisibleStreamedWord": null,
+    "firstWordVisibleWhileStillStreaming": null,
+    "firstWordHiddenUntilAfterStreaming": false,
+    "phase": "no_job",
+    "error": null,
+    "missingReason": "no_native_question_assigned",
+    "scope": "First complete streamed word observed in the actual overlay, measured against the synthetic playback last-nonzero PCM endpoint. Correctness is assessed separately; completion is not required. Paint and device-position observations bound timing resolution."
+  },
+  "frameEvents": [],
+  "scope": "Exact complete row bytes extracted with bounded memory. Source journal may still be recording. Decoded-prefix activity is limited to this row capture window and this native question ID; absence does not establish absence of inference. Final journal SHA binding and independent accuracy review remain required.",
+  "finalJournalBindingPending": true,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

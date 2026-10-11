@@ -39,7 +39,7 @@ $taskArguments=@('test','--offline','--manifest-path',('"'+$taskManifest+'"'),'-
 $taskProcess=Start-Process -FilePath 'cargo.exe' -ArgumentList $taskArguments -WorkingDirectory $taskWorkspace -WindowStyle Hidden -PassThru -RedirectStandardOutput ($taskOutput+'/stdout.log') -RedirectStandardError ($taskOutput+'/stderr.log') -Wait
 $taskChanged=@($taskSourceManifest.Keys | Where-Object { (Get-FileHash -LiteralPath (Join-Path $taskCandidate $_) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskSourceManifest[$_] })
 $taskResult=@{startedAt=$taskStarted;completedAt=[DateTimeOffset]::UtcNow.ToString('o');candidate=$taskCandidate;sourceSha256=$taskSourceHash;sourceFingerprint=$taskFingerprint;sourceFiles=$taskSourceManifest;sourceChangedDuringCompilation=$taskChanged;processId=$taskProcess.Id;exitCode=$taskProcess.ExitCode;command=$taskArguments;goalComplete=$false;scope='Real candidate crate compilation and non-live Codex protocol tests. No provider, accuracy, audio or latency improvement certification.'}
-$taskResult | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath ($taskOutput+'/result.json') -Encoding UTF8
+[IO.File]::WriteAllText((Join-Path $taskWorkspace ($taskOutput+'/result.json')),($taskResult | ConvertTo-Json -Depth 6),(New-Object Text.UTF8Encoding($false)))
 if($taskChanged.Count){throw 'Candidate sources changed during compilation; result cannot certify the current sources'}
 if($taskProcess.ExitCode -ne 0){throw ('Candidate protocol tests failed; inspect '+$taskOutput)}
 Write-Output ('Candidate protocol tests passed: '+$taskOutput)

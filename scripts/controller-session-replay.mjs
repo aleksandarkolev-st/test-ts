@@ -42,7 +42,7 @@ try {
  await mkdir(path.join(out,'data'),{recursive:true});
  app=spawn(path.join(root,applicationDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});journal.nativeProcessId=app.pid;
  for(let i=0;i<600;i++){try{connection=await connectNativePages(9251);break;}catch{assert.equal(app.exitCode,null);await sleep(100);}}assert(connection);
- invoke=(name,args={})=>connection.main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
+ invoke=async(name,args={})=>{const result=await connection.main.evaluate(async({name,args})=>{try{return{ok:true,value:await window.__TAURI_INTERNALS__.invoke(name,args)};}catch(error){return{ok:false,error:String(error)};}},{name,args});if(!result.ok)throw Error(name+': '+result.error);return result.value;};
  await connection.main.evaluate(async()=>{window.replayEvents=[];for(const [event,name]of [['copilot:event',null],['copilot:transcript','transcript']])await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event,target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>window.replayEvents.push(name?{name,payload:e.payload,receivedHostMs:Date.now()}:{...e.payload,receivedHostMs:Date.now()}))});});
  for(let i=0;i<600;i++){if(await connection.overlay.evaluate(()=>Boolean(document.querySelector('.answer-content'))))break;await sleep(100);}await connection.overlay.evaluate(installPaintedAnswerRecorder);
  let boot=await invoke('bootstrap');assert(boot.debug&&!boot.snapshot.active);

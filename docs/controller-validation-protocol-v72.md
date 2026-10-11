@@ -21,9 +21,12 @@ node scripts/prepare-controller-validation.mjs artifacts/controller-v72/prepared
 node scripts/prepare-controller-marathon.mjs artifacts/controller-v72/prepared/marathon-session.json
 node scripts/controller-session-replay.mjs artifacts/controller-v72/plans/hour-final.json .local/controller-app artifacts/controller-v72/native/hour-final-codex codex
 node scripts/run-controller-validation.mjs artifacts/controller-v72
+node scripts/run-controller-plan-validation.mjs artifacts/controller-v72 .local/controller-plan-app
 ```
 
 The sequential runner waits for the already-started interim Codex hour to finish, then runs final contextual and reasoning probes, behavior waveforms and a fresh elapsed hour on Codex before the corresponding direct ChatGPT-plan HTTP cells. It also runs a continuous three-hour Codex session, history controls, fresh application controls, brief/detailed controls, and interleaved baseline/controller pairs. It preserves failed runs and requires a new trial name for retries. It never merges a branch.
+
+Ordinary acceptance mode intentionally disables saved plan credential loading. The explicit fifth replay argument `saved-plan`, supported by `3533bfa`, opts into normal saved credential loading and refresh persistence, with the normal authentication instance lock. Local HTTP fixtures cannot enable this mode. Use it only for the authorized authenticated comparison; there is no token copying or billed API fallback. The supplemental plan runner waits for the original queue to finish, first repeats short Codex tests on the same auth-enabled binary, then runs plan HTTP and interleaved paired history controls. Initial isolated-auth and expired/revoked-account failures remain recorded. Browser sign-in is required if the existing normal account is expired; a successful model catalog alone is not proof of successful inference.
 
 The elapsed-hour plan uses actual wall-clock scheduling for 60 minutes, spoken source audio, typed exact-code probes, a decision recognized near the beginning and queried after 30 and approximately 57 minutes, a spoken follow-up triggered by visible output, and identical fixed-context questions at the start/end. A 3,600-turn virtual-clock Rust test is a separate fixture and cannot satisfy the elapsed-hour requirement.
 

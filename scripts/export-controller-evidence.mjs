@@ -16,13 +16,13 @@ assert.equal(j.model,'gpt-6.1-sol');assert.equal(j.effort,'low');
 const verdicts=new Map(reviews.rows.map(r=>[r.round,r]));
 for(const row of j.rows){assert(verdicts.has(row.round),'Every row requires explicit review');assert.equal(verdicts.get(row.round).answerSha256,sha(row.answer));}
 const checks=[];
-for(const file of checkFiles){const data=await readFile(file),check=JSON.parse(data);assert.equal(check.journalSha256,sha(bytes),'Code checks must bind this exact capture');
+for(const file of checkFiles){const data=await readFile(file),check=JSON.parse(data);assert.equal(check.journalSha256??check.journal?.sha256,sha(bytes),'Code checks must bind this exact capture');
  checks.push({file:path.relative(root,path.resolve(file)),sha256:sha(data),result:check});}
 const evidence={schemaVersion:1,scope:j.scope,reviewScope:reviews.scope,
  journalFile:path.relative(root,path.resolve(journalFile)),journalSha256:sha(bytes),reviewSha256:sha(reviewBytes),
  measurementSourceSha256:sha(await readFile('scripts/lib/controller-measurements.mjs')),
  collectorSha256:j.collectorSha256,nativeBinarySha256:j.nativeBinarySha256,buildEvidence:j.buildEvidence,
- renderer:j.renderer,backend:j.backend,model:j.model,effort:j.effort,tier:j.tier,capabilities:j.capabilities,
+ renderer:j.renderer,backend:j.backend,authMode:j.authMode??'isolated',model:j.model,effort:j.effort,tier:j.tier,capabilities:j.capabilities,
  outputDevice:j.outputDevice,manifestSha256:j.manifestSha256,startedAt:j.startedAt,sessionStartedAt:j.sessionStartedAt,
  actualInterviewDurationMs:j.actualInterviewDurationMs,stoppedCleanly:j.stoppedCleanly,pollErrors:j.pollErrors,
  archive:j.archive,resourceSamples:j.resourceSamples,measurements:measureJournal(j,reviews),checks,

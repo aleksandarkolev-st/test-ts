@@ -1,0 +1,99 @@
+{
+  "recordedAt": "2026-10-11T10:24:26.572Z",
+  "rows": [
+    {
+      "name": "divergent-block-barrier",
+      "finding": "Rejecting an unconditional safety guarantee is appropriate. For a 128-by-1-by-1 block, only16 threads reach the barrier; moving it outside the conditional is valid. However, the spoken question did not explicitly specify block dimensions. A blockDim of8-by16-by1 has128 threads and every thread satisfies x<16. The answer assumes a one-dimensional block without qualification, so it is not a universally correct dimensional explanation.",
+      "qualification": "The requested one-dimensional scenario was not explicitly stated in this source question; do not certify all block layouts.",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/interview.json",
+        "sha256": "c1d3a5a105de6de365179dd2681503c9bae0c854904ec34962ca0791e2426710"
+      },
+      "round": 1,
+      "question": "I put the CUDA block barrier, spelled underscore underscore syncthreads, inside an if condition where thread index x is less than sixteen, in a block of one hundred twenty-eight threads. That guarantees safety, correct? All one hundred twenty-eight threads are live and executing this kernel.",
+      "recognizedQuestion": "I put the CUDA block barrier spelled underscore underscore sync threads inside an if condition where thread index x is less than sixteen in a block of one hundred twenty eight threads that guarantees safety correct all one hundred twenty eight threads are live and executing this kernel.",
+      "responseVersion": "d1c4f22b-06e4-4c57-9960-4aca8a9b71c3:8",
+      "questionSha256": "64900c17ab0f12e0cf97a4363926ef6a1a04979ede3f68ffcba8249a5757ec7a",
+      "answerSha256": "93028c867c38d1024b1a861bf323dfad5dfd2ce86376321e4bad268b443e380a",
+      "exactRowSha256": "706bf0c010be5a576cb220b981898e8bd5b23c3712909ed28676baaf05bfda23",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    },
+    {
+      "name": "never-recorded-event",
+      "finding": "A wait on an event that has never been recorded has empty prior captured work; a later record does not retroactively change that wait. The answer also explicitly handles the recognized E-to-Z change without relying on the wrong name.",
+      "qualification": "Successful APIs and no other dependency are the public assumptions. This is an API-semantic check, not a GPU run.",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/interview.json",
+        "sha256": "f4b3c14e549ade51c306793b216587b75a8628a969cf73a5fb3061ba54a8f3cf"
+      },
+      "round": 1,
+      "question": "Stream B waits on event E before E has ever been recorded. Later, stream A records E. Does that earlier wait now synchronize B? Assume valid streams and event, successful API calls, and no other ordering dependency.",
+      "recognizedQuestion": "Stream B waits on event E before E has ever been recorded later stream A record Z does that earlier wait now synchronize B assume valid streams and event successful Api calls and no other ordering dependency.",
+      "responseVersion": "51aa820b-5583-42eb-bd67-4ed8d93cf2a8:7",
+      "questionSha256": "5ea1e4b2165148b4cd0e3fdd4255a2dac9e1932920c4def255755272ec222f39",
+      "answerSha256": "33d2d0f0fea7ed4f8df6e3aa9a38df3131cabdc392bb60f2b8760b9e4a1fb5f9",
+      "exactRowSha256": "ac2b6b0e03b52df2d6ce4f991cc5bdaa64b13078e1f33a894d548fad08bfd69c",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    },
+    {
+      "name": "fp32-association",
+      "finding": "Independent per-operation binary32 rounding yields1 for the first parenthesization and positive0 for the second. The stored positive and negative values cancel exactly, while adding1 to the large negative rounds back to it.",
+      "oracle": {
+        "positive": 100000002004087730000,
+        "first": 1,
+        "second": 0,
+        "method": "JavaScript Math.fround applied after each operation, without reassociation."
+      },
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/interview.json",
+        "sha256": "505336f6bdcff4cc5966ab4ef5dce1eb1862131eca8a5946b22b7042f8235c81"
+      },
+      "round": 1,
+      "question": "In F P thirty-two, use a positive value of one times ten to the power twenty, its negative, and one. Evaluate two expressions. First, add the positive and negative large values, then add one. Second, add the negative large value and one first, then add the positive large value. Round each operation to F P thirty-two, nearest with ties to even; do not reassociate. Give both actual results and explain why they differ.",
+      "recognizedQuestion": "In FP thirty two use a positive value of one times ten to the power twenty it's negative and one evaluate two expressions first add the positive and negative large values then add one. Second add the negative large value and one first then add the positive large value round each operation to FP thirty two nearest with ties to even do not reassociate give both actual results and explain why they differ",
+      "responseVersion": "c6bdd713-fd31-495d-938f-46a5950b3c66:16",
+      "questionSha256": "a8821a2e744255afa23f55dc31cd1f951179e2a0fa6cb96505e0591396795523",
+      "answerSha256": "a155475c439e0507187878125d97e60feb18caec96cd62372becef33ff780d17",
+      "exactRowSha256": "b42b37cb46b84cba12cb302d3a25f687820c5d01c9b9804705255286f839b3c1",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    },
+    {
+      "name": "exact-launch-numbers",
+      "finding": "Integer ceiling division requires53 blocks. The answer preserves the stated192 threads rather than128, launches10176 total, and identifies176 excess guarded threads.",
+      "oracle": {
+        "elements": 10000,
+        "threadsPerBlock": 192,
+        "blocks": 53,
+        "launchedThreads": 10176,
+        "excess": 176
+      },
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/interview.json",
+        "sha256": "63021dc669aadf01a5576b7ad016c0fa1da7b73212748c83863c0c36ed085540"
+      },
+      "round": 1,
+      "question": "There are ten thousand elements. Use one hundred ninety-two threads per block, not one hundred twenty-eight. How many blocks do we need? Use one thread per element and enough blocks to cover the whole input.",
+      "recognizedQuestion": "There are ten thousand elements Use one hundred ninety two threads per block not one hundred twenty eight How many blocks do we need Use one thread per element and enough blocks to cover the whole input.",
+      "responseVersion": "ccda6d4e-5efe-4de0-a30d-eb1ec53fe82d:8",
+      "questionSha256": "a477c0e08de9109d138a9d907cda2831bb16ec447e2a7ed3e1fe92aed92af11d",
+      "answerSha256": "41960ac45d8f2c9e5257c617b5044d6301b62ce854f90419b1edb61c923b320a",
+      "exactRowSha256": "7b811d6d75ee5aa764c1e3a86b96c50b81234c9a80feeb77f264f1c6ba30530f",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false
+    }
+  ],
+  "primarySources": [
+    "https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html",
+    "https://docs.nvidia.com/cuda/cuda-runtime-api/cuda_runtime_api/group__CUDART__EVENT.html"
+  ],
+  "scope": "Source-bound manual checks and independently evaluated arithmetic on selected completed probes. Dimensional ambiguity remains recorded. These are not full-cohort grades, CUDA hardware results, or production answer rules.",
+  "independentModelAccuracyPending": true,
+  "goalComplete": false
+}

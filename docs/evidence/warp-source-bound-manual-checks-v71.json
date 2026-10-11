@@ -1,0 +1,85 @@
+{
+  "recordedAt": "2026-10-11T10:23:25.647Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/interview.json",
+    "sha256": "c5c5089282bc803edcd2ca51b527258289892adbd531556445c1da70c68845e5"
+  },
+  "status": "selected_source_bound_manual_checks",
+  "rows": [
+    {
+      "round": 1,
+      "responseVersion": "2f34f8e8-b2f2-4b82-8907-2734ad8c7ac3:1",
+      "sourceQuestionSha256": "23bd9da1a2a7fd2f6c2b12c406f0dd829914f55b2d8fc5bd2704987604674447",
+      "answerSha256": "3af260e7f8d1d6dffb4726268f543e68b094c1a5a77c8391fbef4a6bb7144503",
+      "selectedContextSha256": "5d754bb2ce1510710d5d89f64894e5875087ec044ad947074833cc558d13a09c",
+      "exactRowSha256": "13c910367b2cbbed76766b5e0e401eefea2c263c09ee39ae6486578deb7f69cb",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "The initial explanation identifies 32-lane SIMT execution, path divergence and convergent synchronized shuffles. This conceptual check does not validate a kernel."
+    },
+    {
+      "round": 2,
+      "responseVersion": "58c1bc04-82ae-4616-b518-f51d91e9ea0c:15",
+      "sourceQuestionSha256": "34dc75345412a4d3cd886572f28a462234c85da55127ad0845886cca34f08a44",
+      "answerSha256": "538067a8dbe0bf3ba8022550743000ec872d241bba662992ba10b9b33668e42f",
+      "selectedContextSha256": "cfc6a53080ece28799686f8f4864708b095318f448b363b3a38787fb4a2ea595",
+      "exactRowSha256": "cb1670a0e67f733194931645eca6ce9e2c1af09366d8ea17c3b094a952fce56d",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "The answer computes the 19-lane cohort with a converged full-warp ballot before branching. Its shuffles name only that cohort and source lane 18 participates. The given 32-thread launch supplies all full-mask ballot callers. Computing activemask only inside the branch would not guarantee this cohort."
+    },
+    {
+      "round": 3,
+      "responseVersion": "c3804fa0-7aea-4528-bdb8-c231c52b07b4:13",
+      "sourceQuestionSha256": "d647b059bc2d56c843fcb1cbc23aeaf2642adb837549d24d1b0c51affdcf3a0e",
+      "answerSha256": "f86b63feb535f8cc07f2135f80b1bd75daa51e2291531266facac2bce96ddb51",
+      "selectedContextSha256": "8570076a8c73857e3c539345e36aeb0df809ff2af2aeb721a7f0229493c65901",
+      "exactRowSha256": "d342633a94a60767d35c3fe29c5de9444d480bd13eee59284deee24483b7e10c",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "At each reduction offset, represented indices correspond to distinct subset sums of previously processed powers of two, with invalid partners excluded. Adding the next power partitions subsets into two disjoint classes. Lane zero covers indices zero through eighteen after offsets 16,8,4,2,1; a sixth shuffle copies its expression. Self-source on invalid partners participates; only addition is conditional. All 19 named callers execute matching six collectives. Finite inputs may overflow."
+    },
+    {
+      "round": 4,
+      "responseVersion": "89c9c8bd-214f-4c12-bac3-a23531060be2:17",
+      "sourceQuestionSha256": "911a0c8bb6469b88738637077fe83f61a6f564ce937e4ab6903587b7f82666e1",
+      "answerSha256": "a4c737d52e1818fc23a5602dfd2637bb032022879225c17fa54ee16635e21068",
+      "selectedContextSha256": "d429c74a5269d64419d6453ec13c5d0b3d195cc94531e08776bad6f242d21bcd",
+      "exactRowSha256": "15a911820235eb8a7d00e2f7246e7250e0d78071634c2f712711d77107eab7f2",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "Each lane builds cyclic intervals of lengths 2,4,8,16. The saved pair shuffled from offset16 supplies offsets16 and17; the unchanged original shuffled from offset18 supplies the remaining input. The intervals partition all19 offsets, and modulo19 sources always participate. All named callers perform six collectives, with no final completed-sum broadcast. Different cyclic floating-point orders may differ, which the question allows."
+    },
+    {
+      "round": 5,
+      "responseVersion": "a0666bce-4ee9-4d9c-9c61-45999b8d26b1:27",
+      "sourceQuestionSha256": "b7a5a4fe885bb064c5d773ed8ef3aa65d78f1dfea8ec051b821d8855b1de5ef0",
+      "answerSha256": "846d40472602cc940bab7583919d4ace0bb714b81a8e1e6b7c575fea5e9d6b5e",
+      "selectedContextSha256": "2d219ebaff6d66ce9e98f972d1a275a1125ac25bb6af12d534a0d621c4396662",
+      "exactRowSha256": "81b2eab789a8b82d0081ec4de82f1b7930080596e7bb3b3ef6cb1a68d90442a2",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "finding": "With a pending write observed only at A, a first read of A/B/C can return the new tag; a subsequent read of B/C/D returns the old tag. No linearization preserves both real-time reads. Read writeback to an acknowledged majority prevents this regression: majority intersection supplies at least the previous tag, and ordering operations by tags supports a register linearization under the stated crash and single-writer assumptions."
+    }
+  ],
+  "primarySources": [
+    {
+      "title": "CUDA C++ language extensions: synchronized shuffle requirements",
+      "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/cpp-language-extensions.html"
+    },
+    {
+      "title": "Using CUDA warp-level primitives",
+      "url": "https://developer.nvidia.com/blog/using-cuda-warp-level-primitives"
+    }
+  ],
+  "cudaCompilationPerformed": false,
+  "cudaHardwareExecutionPerformed": false,
+  "independentModelAccuracyPending": true,
+  "goalComplete": false,
+  "scope": "Manual mathematical and protocol checks against these exact retained answers and public source questions. They do not establish compiler acceptance, hardware behavior, full-cohort accuracy, or correctness of cancelled alternatives. No answer or topic rule was added to production."
+}

@@ -1,0 +1,137 @@
+{
+  "recordedAt": "2026-10-11T09:09:51.076Z",
+  "source": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+    "liveFileMetadata": {
+      "bytes": 58447905,
+      "modifiedAt": "2026-10-11T09:09:48.392Z"
+    },
+    "rowSnapshotSha256": "176da9f277c1e250086a48acc5603f61e89907767c13d334f693f36eb3420c60"
+  },
+  "sourceHashEvidence": {
+    "file": "artifacts/deep-interview-v71/algorithms-hour-t/source-hash-snapshot-for-capture-audit.json",
+    "sha256": "a3fa3cf3ec222fb51aa465e9c9f9a8251983e01f02695a681c15f720b465f7dc"
+  },
+  "sources": [
+    {
+      "file": "src-tauri/src/transcription/nemotron.rs",
+      "sha256": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c"
+    },
+    {
+      "file": "src-tauri/src/transcription/vad.rs",
+      "sha256": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca"
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "sha256": "f20ccfea0e240211f83201d75d157793e44fd35ffcb4b378c67a98b19daaf30f"
+    }
+  ],
+  "round": 14,
+  "question": "Why?",
+  "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+  "phase": "no_job",
+  "responseVersion": null,
+  "recognizedQuestion": null,
+  "answerCharacters": 0,
+  "error": null,
+  "cancelled": false,
+  "recoveredByDismiss": true,
+  "wave": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\round-14.wav",
+    "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+    "waveform": {
+      "sampleRate": 16000,
+      "sourceFrames": 18320,
+      "sourceDurationMs": 1145,
+      "firstNonzeroFrame": 720,
+      "lastNonzeroFrame": 7198,
+      "longestInternalExactZeroSpan": {
+        "startFrame": 1647,
+        "endFrame": 1659,
+        "durationMs": 0.75
+      },
+      "requestedPause": {
+        "split": 0,
+        "pauseMs": 1500,
+        "kind": "no_inserted_pause"
+      },
+      "sourceDurationMinusRequestedPauseMs": 1145,
+      "targetSpeechDurationMs": null,
+      "targetDurationWithinTolerance": null,
+      "scope": "Digital PCM waveform evidence. Exact zero frames and requested SSML pause are not acoustic-room or semantic-completeness measurements."
+    },
+    "nonzeroSpanMs": 404.9375
+  },
+  "playback": {
+    "sampleRate": 16000,
+    "lastNonzeroFrame": 7199,
+    "sourceFrames": 18320,
+    "submitBeforeHostMs": 1791708880146,
+    "submitAfterHostMs": 1791708880146,
+    "lastVoicedDevicePositionLowerHostMs": 1791708880605,
+    "lastVoicedDevicePositionUpperHostMs": 1791708880611,
+    "positionAtEnd": 7263,
+    "completedHostMs": 1791708881299
+  },
+  "clockAnchors": [
+    {
+      "hostBeforeMs": 1791708879590,
+      "hostAfterMs": 1791708879596,
+      "nativeMs": 820387
+    },
+    {
+      "hostBeforeMs": 1791708881322,
+      "hostAfterMs": 1791708881329,
+      "nativeMs": 822119
+    }
+  ],
+  "eventCounts": {
+    "speech.started": 1,
+    "speech.activity": 1,
+    "speech.ended": 1,
+    "transcript": 0,
+    "asr.candidate_observed": 0,
+    "question.candidate": 0,
+    "question.confirmed": 0,
+    "question.ignored": 0
+  },
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": false,
+        "source": "remote",
+        "timestamp": 820787,
+        "turnStartedAt": 820787
+      }
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 821450,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 821267
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 821267
+      }
+    }
+  ],
+  "recordedPriorRunningAnswerIds": [
+    "375c99a3-26a3-40d4-8d41-e4a76acd82bc"
+  ],
+  "speechActivityWithoutRecordedTranscript": true,
+  "collectorSourceHashes": {
+    ".local/inspect-turn-capture-v71.mjs": "fb230b1aa942577c13e54d96535c22fbf1ec41c33dd842a08706181705fbe8e9",
+    ".local/lib/recorded-row.mjs": "1c949bd005f8f7b9e283f568218fa2b0f74262ddee6a0cf1e36c001b86c575f5"
+  },
+  "scope": "Caller-selected recorded turn, unchanged SHA-verified source waveform and observed ASR/lifecycle events. Speech/VAD activity is distinct from recognition, confirmation, answer correctness and visible text. Absence of a transcript event in this recorded window does not isolate local ASR inference, its socket, native dispatch or event-capture internals. The prior running answer IDs are contextual evidence and are not assigned to this source turn. Live row and source-hash snapshots require final completed-journal binding; unanswered turns remain in the full-cohort denominator.",
+  "finalJournalBindingPending": true,
+  "independentAccuracyPending": true,
+  "goalComplete": false
+}

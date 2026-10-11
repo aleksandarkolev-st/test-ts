@@ -14,6 +14,14 @@ test('Missing and interrupted answers stay in denominator; missing wire timing i
  const j={rows:[{round:1,phase:'no_job',answer:''},{round:2,phase:'cancelled',answer:'Opening',settle:false},{round:3,phase:'complete',answer:'Answer',latency:{questionConfirmedAt:5,pipeline:{modelRequestSent:7}}}]};
  const m=measureJournal(j,{});assert.equal(m.counts.all,3);assert.equal(m.counts.missing,1);assert.equal(m.counts.complete,1);assert.equal(m.counts.intentionallyInterrupted,1);assert.equal(m.acceptedToWriteMs.count,0);
 });
+test('provider completion does not certify completion of the requested work',()=>{
+ const measured=measureJournal({rows:[{round:1,phase:'complete',answer:'One omitted constraint'}]},
+  {rows:[{round:1,completed:false,correctness:'incorrect',reasoningVerdict:'fail'}]});
+ assert.equal(measured.counts.complete,1);
+ assert.equal(measured.counts.requestedWorkComplete,0);
+ assert.equal(measured.counts.requestedWorkIncomplete,1);
+ assert.equal(measured.counts.incorrect,1);
+});
 test('generation mismatch is rejected instead of combining timing',()=>{
  assert.throws(()=>measureJournal({rows:[{round:1,responseVersion:'a:0',latency:{pipeline:{generationId:'b'}}}]},{}));
 });

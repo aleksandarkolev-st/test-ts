@@ -103,6 +103,7 @@ export function measureJournal(journal,reviews){
   const duration=Number.isFinite(row.latency?.completedAt)&&Number.isFinite(p.firstAgentDelta)?row.latency.completedAt-p.firstAgentDelta:null;
   return {round:row.round,name:row.name,kind:row.audio?'native_audio':'typed',phase:row.phase,error:row.error??null,
    intentionalInterruption:row.settle===false,ordinaryFollowup:row.ordinaryFollowup??review?.ordinaryFollowup??false,completed:row.phase==='complete'&&!row.cancelled&&!row.error,
+   requestedWorkComplete:review?.completed??null,
    missing:!row.answer?.trim(),correctness:review?.correctness??'pending',reasoningVerdict:review?.reasoningVerdict??'pending',
    acceptedToActualWriteMs:write,usefulFeedbackMs:useful,firstWordMs:row.firstStreamedWordMeasurement?.firstRetainedVisibleStreamedWord?.latencyMs??null,
    sourceSpeechEndToTranscriptFinalMs:nativeEventAfterSpeech(row,row.latency?.transcriptFinalAt),
@@ -125,6 +126,8 @@ export function measureJournal(journal,reviews){
   rows:measured,counts:{all:measured.length,expectedReplies:expected.length,complete:expected.filter(r=>r.completed).length,
    missing:expected.filter(r=>r.missing).length,errors:expected.filter(r=>r.error).length,intentionallyInterrupted:expected.filter(r=>r.intentionalInterruption).length,
    correct:expected.filter(r=>r.correctness==='correct').length,incorrect:expected.filter(r=>r.correctness==='incorrect').length,
+   requestedWorkComplete:expected.filter(r=>r.requestedWorkComplete===true).length,requestedWorkIncomplete:expected.filter(r=>r.requestedWorkComplete===false).length,
+   requestedCompletionPending:expected.filter(r=>r.requestedWorkComplete==null).length,
    reasoningPass:expected.filter(r=>r.reasoningVerdict==='pass').length,reasoningFail:expected.filter(r=>r.reasoningVerdict==='fail').length,
    correctnessPending:expected.filter(r=>r.correctness==='pending').length},
   acceptedToWriteMs:latencyDistribution(measured.map(r=>r.acceptedToActualWriteMs)),

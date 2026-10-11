@@ -46,7 +46,7 @@ try {
  const settings={...boot.settings,answerBackend:backend,answerObjective:plan.objective??'detailed',model:plan.model,reasoningEffort:plan.effort,serviceTier:plan.serviceTier??null,output:outputs[0].id,microphone:'',projectPath:'',speechChunkMs:160};
  await invoke('save_settings',{settings});
  if(backend==='chatgpt'){boot=await invoke('bootstrap');const account=boot.accounts.find(a=>a.planEnabled);assert(account,'No saved authorized direct-plan account');await invoke('select_account',{clientId:account.clientId});}
- const models=await invoke('list_models');assert(models.some(m=>m.slug===plan.model));journal.capabilities={availableModel:true,effort:plan.effort,validatedBy:'Startup completes a real stream using these settings. Codex additionally checks supportedReasoningEfforts.',billedApiFallback:false};
+ const models=await invoke('list_models');const selectedModel=models.find(m=>m.slug===plan.model);assert(selectedModel);journal.capabilities={availableModel:true,catalogEntry:selectedModel,effort:plan.effort,validatedBy:'Startup completes a real stream using these settings. Codex additionally checks supportedReasoningEfforts.',billedApiFallback:false};
  await invoke('start_meeting',{settings});active=true;
  const start=Date.now();journal.sessionStartedAt=new Date(start).toISOString();
  const fingerprints=new Map(),latest=new Map();let paintOffset=0;
@@ -75,7 +75,10 @@ try {
   const before=await anchor(),eventOffset=await connection.main.evaluate(()=>window.replayEvents.length),row={round:index+1,...item,question:item.question,sourceBinding:item.sourceBinding??null,startedHostMs:Date.now(),applicationAgeMs:Date.now()-Date.parse(journal.startedAt),nativeStartedAt:before.nativeMs,runningAtSubmission:(await invoke('acceptance_jobs')).jobs.filter(j=>j.running).map(j=>j.question.id)};
   if(item.fixedContext!=null){await invoke('action',{action:'dismiss'});await invoke('acceptance_freeze_context',{context:item.fixedContext,policy:'existing'});}
   if(item.clearFixedContext){await invoke('action',{action:'dismiss'});await invoke('acceptance_freeze_context',{context:'',policy:'existing'});}
-  if(item.disconnectBackend)await invoke('acceptance_disconnect_answers');
+  if(item.disconnectBackend){
+   if(backend==='codex'){await invoke('acceptance_disconnect_answers');row.faultInjection={kind:'close_owned_codex_connection',injected:true};}
+   else row.faultInjection={kind:'transport_disconnect',injected:false,reason:'The available native fault command closes the Codex connection, not the public HTTP pool. HTTP forced reconnection is not certified by this probe.'};
+  }
   if(item.waveFile){const wave=await readFile(item.waveFile);assert.equal(hash(wave),item.waveSha256);const playing=(await invoke('acceptance_jobs')).jobs.filter(j=>j.running).map(j=>j.question.id);const playbackFile=path.join(out,`round-${String(index+1).padStart(2,'0')}.playback.json`);
    await child('powershell.exe',['-NoProfile','-File',path.resolve('scripts/play-fixture-device.ps1'),'-InputPath',path.resolve(item.waveFile),'-OutputName',journal.outputDevice,'-TimingPath',playbackFile]);row.audio={waveFile:item.waveFile,sha256:item.waveSha256,playback:JSON.parse(await readFile(playbackFile)),runningAtPlaybackLaunch:playing};
   } else {await invoke('ask',{question:item.question});row.measurement='Typed native request: no audio, ASR or automatic endpoint delay.';}

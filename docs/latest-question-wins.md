@@ -17,8 +17,12 @@ closes the owned service if terminal proof is unavailable. No replacement
 starts after failed cleanup. Replacement threads have no previous inference
 history, and their explicit context and literal project references are retained.
 The latest frame is sampled again immediately before submission, after thread
-preparation. Speech that resumes during cleanup is coalesced locally until
-confirmation, with a bounded 120-second confirmation wait.
+preparation. Speech that resumes during cleanup or thread preparation is
+coalesced locally until confirmation, using the same bounded 120-second
+confirmation deadline rather than extending it on each revision. Cancelled
+pre-submission waits retire their prepared thread before registering an event
+receiver. Sending thread retirement also has a five-second queue deadline;
+failure closes the owned service.
 
 Each stream allows at most three replacements (four generation attempts).
 Exhaustion retires the last obsolete turn and reports an error instead of

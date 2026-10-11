@@ -304,11 +304,12 @@ impl Codex {
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         let mut retry_context=None;
         let mut frame=prompt.cloned();
+        let mut confirmation_deadline=None;
         if updates.is_some(){if let Some(trace)=&trace{trace.question_policy("latest_confirmed",MAX_QUESTION_REPLACEMENTS,FINAL_CONSUMPTION_WAIT.as_millis()as u64);}}
         for replacement in 0..=MAX_QUESTION_REPLACEMENTS {
             let attempt_input=frame.as_ref().map(QuestionPrompt::render).unwrap_or_else(||input.to_owned());
             let question=frame.as_ref().map(|frame|frame.question.clone()).unwrap_or_else(||active_question.clone());
-            let result=self.stream_attempt(model,tier,effort,instructions,&attempt_input,image,cancel.clone(),policy,trace.clone(),updates.clone(),question,output_schema,reuse,replacement>0,frame.as_ref(),&mut retry_context,&mut event).await;
+            let result=self.stream_attempt(model,tier,effort,instructions,&attempt_input,image,cancel.clone(),policy,trace.clone(),updates.clone(),question,output_schema,reuse,confirmation_deadline,frame.as_ref(),&mut retry_context,&mut event).await;
             if result.as_ref().err().map(String::as_str)!=Some(REFINEMENT_STALLED){return result;}
             if cancel.is_cancelled(){return Err("cancelled".into());}
             // stream_attempt proved terminal cleanup before returning this
@@ -319,7 +320,8 @@ impl Codex {
                 return Err("Codex question replacement budget exhausted".into());
             }
             let mut receiver=updates.as_ref().ok_or("Missing refined question")?.clone();
-            let confirmation_deadline=tokio::time::Instant::now()+ANSWER_TIMEOUT;
+            let confirmed_by=tokio::time::Instant::now()+ANSWER_TIMEOUT;
+            confirmation_deadline=Some(confirmed_by);
             // Speech can resume during cleanup. Keep only its latest revision
             // and wait for confirmation rather than starting another fragment.
             let latest=loop {
@@ -328,7 +330,7 @@ impl Codex {
                 if latest.confirmed{break latest;}
                 tokio::select!{
                     _=cancel.cancelled()=>return Err("cancelled".into()),
-                    _=tokio::time::sleep_until(confirmation_deadline)=>return Err("Codex question confirmation timed out".into()),
+                    _=tokio::time::sleep_until(confirmed_by)=>return Err("Codex question confirmation timed out".into()),
                     changed=receiver.changed()=>changed.map_err(|_|"Question update channel closed")?,
                 }
             };
@@ -340,13 +342,14 @@ impl Codex {
     }
     #[allow(clippy::too_many_arguments)]
     async fn stream_attempt<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
-        input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, mut active_question:String, output_schema:Option<&Value>, reuse:bool, fresh:bool, prompt:Option<&QuestionPrompt>, retry_context:&mut Option<String>, mut event: F) -> Result<(), String>
+        input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, mut active_question:String, output_schema:Option<&Value>, reuse:bool, confirmation_deadline:Option<tokio::time::Instant>, prompt:Option<&QuestionPrompt>, retry_context:&mut Option<String>, mut event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         if let Some(trace)=&trace {trace.mark(Stage::StreamEntered);}
         let _slot=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),slot=self.slots.acquire()=>slot.map_err(|_|"Codex scheduler closed")?};
         if let Some(trace)=&trace {trace.mark(Stage::SemaphoreAcquired);}
         let service = self.ready(&cancel).await?;
         let epoch=self.epoch.load(Ordering::Acquire);
+        let fresh=confirmation_deadline.is_some();
         let key = json!([model,tier,effort,instructions]).to_string();
         let answer = instructions == super::prompts::answer_instructions(super::prompts::ANSWER);
         let wait_deadline=tokio::time::Instant::now()+RPC_TIMEOUT;
@@ -361,20 +364,21 @@ impl Codex {
         if answer && policy==RefillPolicy::Immediate {
             self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());refill_requested=true;
         }
-        if let Some(trace)=&trace { service.traces.lock().unwrap().insert(id.clone(),trace.clone()); }
-        let (tx, mut events) = mpsc::channel(256);
-        service.events.lock().unwrap().insert(id.clone(), tx);
         let automatic=updates.is_some();
         // Preparation may have waited while ASR advanced. Snapshot the latest
         // entire frame immediately before submission, preserving references.
-        let submitted_frame=prompt.map(|prompt|{
-            match updates.as_ref().map(|receiver|receiver.borrow().clone()) {
-                Some(latest)=>{
-                    if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
-                    prompt.revised(&latest.question,latest.context.as_ref().or(retry_context.as_ref()).map(String::as_str))
-                },None=>prompt.clone(),
-            }
-        });
+        let submitted_frame=match submission_frame(prompt,updates.as_mut(),retry_context,confirmation_deadline,&cancel,&service.dead).await {
+            Ok(frame)=>frame,
+            Err(error)=>{
+                // No turn was started. Retire the prepared thread without
+                // registering a receiver or leaking a cancelled watch wait.
+                retire_thread(&service,&id).await;
+                return Err(error);
+            },
+        };
+        if let Some(trace)=&trace { service.traces.lock().unwrap().insert(id.clone(),trace.clone()); }
+        let (tx, mut events) = mpsc::channel(256);
+        service.events.lock().unwrap().insert(id.clone(), tx);
         let submitted_input=submitted_frame.as_ref().map(QuestionPrompt::render).unwrap_or_else(||input.to_owned());
         if let Some(frame)=&submitted_frame{active_question=frame.question.clone();}
         if let Some(trace)=&trace{if automatic{if fresh{trace.restart_prompt_chars(submitted_input.chars().count());}else{trace.prompt_chars(submitted_input.chars().count());}}}
@@ -556,13 +560,38 @@ impl Codex {
                 }
             } else {retired.push(id.clone());}
         }
-        for retired in retired {let _=service.send(json!({"id":service.next_id(),"method":"thread/unsubscribe","params":{"threadId":retired}})).await;}
+        for retired in retired {retire_thread(&service,&retired).await;}
         if result.as_ref().err().map(String::as_str)==Some(REFINEMENT_STALLED)
             && (!turn_finished || service.dead.is_cancelled()) {
             return Err("Codex could not finish cleaning up the obsolete answer; no replacement request was started".into());
         }
         result
     }
+}
+async fn submission_frame(prompt:Option<&QuestionPrompt>,updates:Option<&mut tokio::sync::watch::Receiver<QuestionUpdate>>,retry_context:&mut Option<String>,confirmed_by:Option<tokio::time::Instant>,cancel:&CancellationToken,dead:&CancellationToken)->Result<Option<QuestionPrompt>,String> {
+    let Some(prompt)=prompt else{return Ok(None)};
+    let Some(receiver)=updates else{return Ok(Some(prompt.clone()))};
+    loop {
+        if cancel.is_cancelled(){return Err("cancelled".into());}
+        if dead.is_cancelled(){return Err("Codex connection closed".into());}
+        let latest=receiver.borrow_and_update().clone();
+        if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
+        if confirmed_by.is_none() || latest.confirmed {
+            return Ok(Some(prompt.revised(&latest.question,latest.context.as_ref().or(retry_context.as_ref()).map(String::as_str))));
+        }
+        tokio::select!{
+            _=cancel.cancelled()=>return Err("cancelled".into()),
+            _=dead.cancelled()=>return Err("Codex connection closed".into()),
+            _=tokio::time::sleep_until(confirmed_by.unwrap())=>return Err("Codex question confirmation timed out".into()),
+            changed=receiver.changed()=>changed.map_err(|_|"Question update channel closed")?,
+        }
+    }
+}
+async fn retire_thread(service:&Service,thread:&str) {
+    let request=service.send(json!({"id":service.next_id(),"method":"thread/unsubscribe","params":{"threadId":thread}}));
+    // The outgoing queue is bounded too. Terminal proof must not be followed
+    // by an unbounded queue wait while still holding the foreground slot.
+    if !matches!(tokio::time::timeout(Duration::from_secs(5),request).await,Ok(Ok(()))) {service.shutdown();}
 }
 async fn interrupt_and_wait(service:&Service,thread:&str,turn:&str,events:&mut mpsc::Receiver<Value>,limit:Duration,trace:Option<&Trace>)->bool {
     if let Some(trace)=trace{trace.cleanup_started(events.len());}
@@ -983,6 +1012,31 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         update.context=Some("context".into());
         assert!(stale.observe(&update,"same question","context",start+Duration::from_millis(100)));
         assert_eq!(stale.deadline,Some(start+FINAL_CONSUMPTION_WAIT));
+    }
+    #[tokio::test(start_paused=true)]
+    async fn replacement_submission_rechecks_resumed_speech_after_preparation() {
+        let prompt=QuestionPrompt::new("old context","earlier confirmation").with_reference("literal reference");
+        let (tx,mut rx)=tokio::sync::watch::channel(QuestionUpdate{question:"resumed fragment".into(),context:Some("new context".into()),confirmed:false,acoustic_quiet:false});
+        let cancel=CancellationToken::new();let dead=CancellationToken::new();let mut context=None;
+        let result=submission_frame(Some(&prompt),Some(&mut rx),&mut context,Some(tokio::time::Instant::now()+Duration::from_secs(1)),&cancel,&dead);tokio::pin!(result);
+        assert!(tokio::time::timeout(Duration::from_millis(100),&mut result).await.is_err());
+        tx.send_replace(QuestionUpdate{question:"latest complete question".into(),context:None,confirmed:true,acoustic_quiet:true});
+        let frame=result.await.unwrap().unwrap();
+        assert_eq!(frame.question,"latest complete question");assert_eq!(frame.context,"new context");assert_eq!(frame.reference,"literal reference");
+    }
+    #[tokio::test(start_paused=true)]
+    async fn replacement_confirmation_wait_does_not_extend_its_budget_on_revisions() {
+        let prompt=QuestionPrompt::new("context","initial");
+        let (tx,mut rx)=tokio::sync::watch::channel(QuestionUpdate{question:"fragment".into(),context:None,confirmed:false,acoustic_quiet:false});
+        let cancel=CancellationToken::new();let dead=CancellationToken::new();let mut context=None;
+        let deadline=tokio::time::Instant::now()+Duration::from_millis(300);
+        let result=submission_frame(Some(&prompt),Some(&mut rx),&mut context,Some(deadline),&cancel,&dead);tokio::pin!(result);
+        for index in 0..2 {
+            assert!(tokio::time::timeout(Duration::from_millis(100),&mut result).await.is_err());
+            tx.send_modify(|update|update.question=format!("newer fragment-{index}"));
+        }
+        assert_eq!(result.await.unwrap_err(),"Codex question confirmation timed out");
+        assert_eq!(tokio::time::Instant::now(),deadline);
     }
     #[test]
     fn intent_framing_preserves_exact_code_and_split_escapes_without_metadata() {

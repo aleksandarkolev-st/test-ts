@@ -15,42 +15,25 @@ pub(crate) fn context_key(context:&str)->[u8;32] {Sha256::digest(context.as_byte
 type Reply = oneshot::Sender<Result<Value, String>>;
 const RPC_TIMEOUT: Duration = Duration::from_secs(30);
 const PREPARED_POOL_SIZE: usize = 3;
-const PARTIAL_QUIET: Duration = Duration::from_millis(600);
-const PARTIAL_INTERVAL: Duration = Duration::from_millis(800);
-const PARTIAL_MAX_WAIT: Duration = Duration::from_millis(800);
 const MAX_REUSABLE_HISTORY_CHARS: usize = 80_000;
 const FINAL_CONSUMPTION_WAIT: Duration = Duration::from_millis(400);
+const MAX_QUESTION_REPLACEMENTS: usize = 3;
+const ANSWER_TIMEOUT: Duration = Duration::from_secs(120);
 const REFINEMENT_STALLED: &str = "__codex_final_refinement_wait__";
-fn aged_final_wait_enabled()->bool {
-    cfg!(all(feature="acceptance",debug_assertions))
-        &&std::env::var("COPILOT_AGE_FINAL_WAIT").as_deref()==Ok("1")
-}
-fn final_refinement_deadline(confirmed:tokio::time::Instant,pending_sent:Option<tokio::time::Instant>,aged:bool)->tokio::time::Instant {
-    let normal=confirmed+FINAL_CONSUMPTION_WAIT;
-    if aged {pending_sent.map(|sent|normal.min(sent+FINAL_CONSUMPTION_WAIT)).unwrap_or(normal)}else{normal}
-}
-fn eager_final_replacement() -> bool {
-    #[cfg(all(feature="acceptance",debug_assertions))]
-    { return std::env::var("COPILOT_EAGER_FINAL_REPLACEMENT").as_deref()==Ok("1"); }
-    #[cfg(not(all(feature="acceptance",debug_assertions)))]
-    false
-}
-fn confirmed_question_refinements() -> bool {
-    #[cfg(all(feature="acceptance",debug_assertions))]
-    { return std::env::var("COPILOT_CONFIRM_QUESTION_REFINEMENTS").as_deref()==Ok("1"); }
-    #[cfg(not(all(feature="acceptance",debug_assertions)))]
-    false
-}
-fn completed_draft_replacement()->bool {
-    cfg!(all(feature="acceptance",debug_assertions))
-        &&std::env::var("COPILOT_REPLACE_COMPLETED_DRAFT").as_deref()==Ok("1")
-}
-fn partial_refinement_deadline(stable_since:tokio::time::Instant,context_dirty_since:Option<tokio::time::Instant>,last_sent:Option<tokio::time::Instant>,acoustic_pause:Option<tokio::time::Instant>)->tokio::time::Instant {
-    // Prioritize changed facts; coalesce question-only growth until it is quiet.
-    let quiet=stable_since+PARTIAL_QUIET;
-    let due=context_dirty_since.map(|dirty|quiet.min(dirty+PARTIAL_MAX_WAIT)).unwrap_or(quiet);
-    let due=acoustic_pause.map(|pause|due.min(pause)).unwrap_or(due);
-    last_sent.map(|sent|due.max(sent+PARTIAL_INTERVAL)).unwrap_or(due)
+// Coalesce locally: an unchanged confirmed frame is current inference, even
+// before its userMessage echo arrives. Only obsolete work gets the short budget.
+#[derive(Default)]
+struct StaleQuestion { deadline:Option<tokio::time::Instant>, invalidated:bool }
+impl StaleQuestion {
+    fn observe(&mut self,latest:&QuestionUpdate,question:&str,context:&str,now:tokio::time::Instant)->bool {
+        let changed=!crate::meeting::scheduler::same_question(&latest.question,question)
+            || latest.context.as_deref().is_some_and(|latest|latest!=context);
+        self.invalidated|=changed;
+        if latest.confirmed && self.invalidated {
+            self.deadline.get_or_insert(now+FINAL_CONSUMPTION_WAIT);
+        } else {self.deadline=None;}
+        self.invalidated
+    }
 }
 #[derive(Clone, Debug)]
 pub struct QuestionUpdate { pub question: String, pub confirmed: bool, pub context:Option<String>, pub acoustic_quiet:bool }
@@ -320,23 +303,43 @@ impl Codex {
         input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, active_question:String, output_schema:Option<&Value>, prompt:Option<&QuestionPrompt>, reuse:bool, mut event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         let mut retry_context=None;
-        let result=self.stream_attempt(model,tier,effort,instructions,input,image,cancel.clone(),policy,trace.clone(),updates.clone(),active_question,output_schema,reuse,true,prompt.map(|frame|frame.context.clone()),&mut retry_context,&mut event).await;
-        if result.as_ref().err().map(String::as_str)!=Some(REFINEMENT_STALLED){return result;}
-        if cancel.is_cancelled(){return Err("cancelled".into());}
-        let latest=updates.as_ref().ok_or("Missing refined question")?.borrow().clone();
-        if !latest.confirmed{return Err("Refined question is no longer confirmed".into());}
-        // The failed attempt has observed terminal cleanup and retired its
-        // thread. A fresh prepared thread cannot inherit the obsolete draft.
-        if let Some(trace)=&trace{trace.refinement_restarted();trace.reset_answer();}
-        tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
-        let selected_context=latest.context.clone().or_else(||retry_context.clone());
-        let corrected=prompt.ok_or("Missing explicit question prompt")?.revised(&latest.question,selected_context.as_deref());
-        let corrected_input=corrected.render();if let Some(trace)=&trace{trace.restart_prompt_chars(corrected_input.chars().count());}
-        self.stream_attempt(model,tier,effort,instructions,&corrected_input,image,cancel,policy,trace,updates,latest.question,output_schema,reuse,false,Some(corrected.context),&mut retry_context,event).await
+        let mut frame=prompt.cloned();
+        for replacement in 0..=MAX_QUESTION_REPLACEMENTS {
+            let attempt_input=frame.as_ref().map(QuestionPrompt::render).unwrap_or_else(||input.to_owned());
+            let question=frame.as_ref().map(|frame|frame.question.clone()).unwrap_or_else(||active_question.clone());
+            let result=self.stream_attempt(model,tier,effort,instructions,&attempt_input,image,cancel.clone(),policy,trace.clone(),updates.clone(),question,output_schema,reuse,replacement>0,frame.as_ref(),&mut retry_context,&mut event).await;
+            if result.as_ref().err().map(String::as_str)!=Some(REFINEMENT_STALLED){return result;}
+            if cancel.is_cancelled(){return Err("cancelled".into());}
+            // stream_attempt proved terminal cleanup before returning this
+            // signal. Every subsequent attempt retains the same stale guard.
+            if let Some(trace)=&trace{trace.reset_answer();}
+            tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
+            if replacement==MAX_QUESTION_REPLACEMENTS {
+                return Err("Codex question replacement budget exhausted".into());
+            }
+            let mut receiver=updates.as_ref().ok_or("Missing refined question")?.clone();
+            let confirmation_deadline=tokio::time::Instant::now()+ANSWER_TIMEOUT;
+            // Speech can resume during cleanup. Keep only its latest revision
+            // and wait for confirmation rather than starting another fragment.
+            let latest=loop {
+                let latest=receiver.borrow_and_update().clone();
+                if let Some(context)=&latest.context{retry_context=Some(context.clone());}
+                if latest.confirmed{break latest;}
+                tokio::select!{
+                    _=cancel.cancelled()=>return Err("cancelled".into()),
+                    _=tokio::time::sleep_until(confirmation_deadline)=>return Err("Codex question confirmation timed out".into()),
+                    changed=receiver.changed()=>changed.map_err(|_|"Question update channel closed")?,
+                }
+            };
+            let selected_context=latest.context.as_ref().or(retry_context.as_ref());
+            frame=Some(prompt.ok_or("Missing explicit question prompt")?.revised(&latest.question,selected_context.map(String::as_str)));
+            if let Some(trace)=&trace{trace.refinement_restarted();}
+        }
+        unreachable!("Question replacement loop always returns")
     }
     #[allow(clippy::too_many_arguments)]
     async fn stream_attempt<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
-        input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, mut active_question:String, output_schema:Option<&Value>, reuse:bool, restart_stalled:bool, initial_context:Option<String>, retry_context:&mut Option<String>, mut event: F) -> Result<(), String>
+        input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, mut active_question:String, output_schema:Option<&Value>, reuse:bool, fresh:bool, prompt:Option<&QuestionPrompt>, retry_context:&mut Option<String>, mut event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         if let Some(trace)=&trace {trace.mark(Stage::StreamEntered);}
         let _slot=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),slot=self.slots.acquire()=>slot.map_err(|_|"Codex scheduler closed")?};
@@ -347,8 +350,8 @@ impl Codex {
         let answer = instructions == super::prompts::answer_instructions(super::prompts::ANSWER);
         let wait_deadline=tokio::time::Instant::now()+RPC_TIMEOUT;
         let warm = loop {
-            let warm={ let mut pool=self.prepared.lock().unwrap(); let index=pool.iter().enumerate().filter(|(_,t)|t.key==key).max_by_key(|(_,t)|t.turns).map(|(i,_)|i); index.map(|i|pool.remove(i)) };
-            if warm.is_some() || !answer {break warm;}
+            let warm={ let mut pool=self.prepared.lock().unwrap(); let index=pool.iter().enumerate().filter(|(_,t)|t.key==key && (!fresh || t.turns==0)).max_by_key(|(_,t)|t.turns).map(|(i,_)|i); index.map(|i|pool.remove(i)) };
+            if warm.is_some() || !answer || fresh {break warm;}
             if tokio::time::Instant::now()>=wait_deadline{return Err("No prepared Codex answer thread is available".into());}
             tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),_=service.dead.cancelled()=>return Err("Codex connection closed".into()),_=tokio::time::sleep(Duration::from_millis(10))=>{}}
         };
@@ -361,36 +364,33 @@ impl Codex {
         let (tx, mut events) = mpsc::channel(256);
         service.events.lock().unwrap().insert(id.clone(), tx);
         let automatic=updates.is_some();
-        let initial_input=if automatic{format!("AUTOMATIC REMOTE TURN\n{input}")}else{input.to_string()};
+        // Preparation may have waited while ASR advanced. Snapshot the latest
+        // entire frame immediately before submission, preserving references.
+        let submitted_frame=prompt.map(|prompt|{
+            match updates.as_ref().map(|receiver|receiver.borrow().clone()) {
+                Some(latest)=>{
+                    if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
+                    prompt.revised(&latest.question,latest.context.as_ref().or(retry_context.as_ref()).map(String::as_str))
+                },None=>prompt.clone(),
+            }
+        });
+        let submitted_input=submitted_frame.as_ref().map(QuestionPrompt::render).unwrap_or_else(||input.to_owned());
+        if let Some(frame)=&submitted_frame{active_question=frame.question.clone();}
+        if let Some(trace)=&trace{if automatic{if fresh{trace.restart_prompt_chars(submitted_input.chars().count());}else{trace.prompt_chars(submitted_input.chars().count());}}}
+        let initial_input=if automatic{format!("AUTOMATIC REMOTE TURN\n{submitted_input}")}else{submitted_input};
         let mut history_chars=initial_input.chars().count();
-        let mut started_turns=1;
+        let started_turns=1;
         let mut turn_input = vec![json!({"type":"text","text":initial_input})];
         if let Some(image) = image { turn_input.push(json!({"type":"image","url":image})); }
         let mut turn_id = None;
         let mut turn_finished = false;
-        let mut pending_question:Option<(String,String,Option<String>)>=None;
-        let mut pending_final_deadline:Option<tokio::time::Instant>=None;
-        let mut pending_sent_at:Option<tokio::time::Instant>=None;
-        let mut pending_input_key:Option<[u8;32]>=None;
-        let mut pending_steer=false;
-        let mut active_context=initial_context.unwrap_or_else(||input.to_owned());
-        let mut active_context_key=context_key(&active_context);
+        let active_context=submitted_frame.map(|frame|frame.context).unwrap_or_else(||input.to_owned());
+        let active_context_key=context_key(&active_context);
         let mut active_has_delta=false;
-        let mut agent_ids=std::collections::HashSet::<String>::new();
         let mut blocked_agents=std::collections::HashSet::<String>::new();
         let mut reply_gate=ReplyGate::default();
-        let mut stable_question=active_question.clone();
-        let mut stable_context=active_context.clone();
-        let mut stable_since=tokio::time::Instant::now();
-        let mut last_partial_sent:Option<tokio::time::Instant>=None;
-        let mut context_dirty_since:Option<tokio::time::Instant>=None;
-        let mut partial_deadline:Option<tokio::time::Instant>=None;
-        let replace_final=eager_final_replacement();
-        let aged_final_wait=aged_final_wait_enabled();
-        if let Some(trace)=&trace{trace.aged_final_wait(aged_final_wait);}
-        if let Some(trace)=&trace{trace.eager_final_replacement(replace_final);}
-        let confirm_question_refinements=confirmed_question_refinements();
-        if let Some(trace)=&trace{trace.confirmed_question_refinements(confirm_question_refinements);}
+        let mut stale=StaleQuestion::default();
+        let mut obsolete_output_hidden=false;
         let result = async {
             // Keep the acknowledgement even if speech resumes during the RPC:
             // we need its turn id to interrupt before releasing the slot.
@@ -399,115 +399,20 @@ impl Codex {
             if let Some(trace)=&trace{trace.input_sent();}
             let turn=service.rpc("turn/start", json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":turn_input,"outputSchema":output_schema}), &service.dead).await?;
             if let Some(trace)=&trace {trace.mark(Stage::TurnStartAck);trace.input_ack();}
-            turn_id=turn["turn"]["id"].as_str().map(String::from);
-            let deadline = tokio::time::sleep(Duration::from_secs(120));tokio::pin!(deadline);
+            turn_id=Some(turn["turn"]["id"].as_str().ok_or("Codex returned no turn ID")?.to_owned());
+            let deadline = tokio::time::sleep(ANSWER_TIMEOUT);tokio::pin!(deadline);
             loop {
-                // A completed notification may be queued behind an earlier
-                // delta's delivery. Drain through that exact turn's terminal
-                // event before deciding whether new input needs a steer or a
-                // replacement. An active output stream never takes this path.
-                let terminal_pending=!turn_finished && turn_id.as_ref().is_some_and(|turn|
-                    service.completed_turns.lock().unwrap().get(&id)==Some(turn));
-                // The reader may already have received the consumption event
-                // while this task is still draining preceding output. Preserve
-                // that current work rather than racing an expired age budget.
-                let consumption_pending=aged_final_wait&&pending_steer&&turn_id.as_ref().zip(pending_input_key.as_ref())
-                    .is_some_and(|(turn,key)|service.input_received(&id,turn,key));
-                if !terminal_pending {
-                // Coalesce ASR/context changes, with one pending update and a
-                // minimum cadence. Changed context has a maximum wait; plain
-                // question growth waits for quiet to avoid queued fragments.
                 if let Some(receiver)=updates.as_mut() {
-                    let latest=receiver.borrow_and_update().clone();
+                    let mut latest=receiver.borrow_and_update().clone();
                     if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
-                    if latest.confirmed && pending_question.is_some() && pending_steer {
-                        if pending_final_deadline.is_none(){
-                            let now=tokio::time::Instant::now();
-                            let deadline=final_refinement_deadline(now,pending_sent_at,aged_final_wait);
-                            pending_final_deadline=Some(deadline);
-                            if let Some(trace)=&trace{trace.pending_at_confirmation(
-                                pending_sent_at.map(|sent|now.saturating_duration_since(sent).as_millis()as u64),
-                                deadline.saturating_duration_since(now).as_millis()as u64);}
-                        }
-                    } else if !latest.confirmed {pending_final_deadline=None;}
-                    let selected_context=latest.context.clone().or_else(||retry_context.clone()).unwrap_or_else(||active_context.clone());
-                    if stable_question!=latest.question || stable_context!=selected_context {stable_question=latest.question.clone();stable_context=selected_context.clone();stable_since=tokio::time::Instant::now();}
-                    let partial_budget_available=prior_chars+history_chars+latest.question.chars().count()+selected_context.chars().count()+512<MAX_REUSABLE_HISTORY_CHARS;
-                    let question_changed=!crate::meeting::scheduler::same_question(&latest.question,&active_question);
-                    let context_changed=selected_context!=active_context;
-                    // A completed obsolete answer can anchor a follow-up even
-                    // though its text was hidden. Compare a separate prepared
-                    // thread with explicit current context, after terminal proof.
-                    if completed_draft_replacement()&&restart_stalled&&latest.confirmed
-                        &&turn_finished&&pending_question.is_none()&&(question_changed||context_changed) {
-                        if let Some(trace)=&trace{trace.completed_draft_replaced();}
-                        return Err(REFINEMENT_STALLED.into());
+                    latest.context=latest.context.or_else(||retry_context.clone());
+                    let changed=stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now());
+                    if changed && !obsolete_output_hidden {
+                        obsolete_output_hidden=true;
+                        tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
+                        if let Some(trace)=&trace{trace.reset_answer();}
                     }
-                    // A new turn already started with this exact final frame
-                    // may not have emitted its userMessage event yet. It is
-                    // current work, not an obsolete draft to interrupt.
-                    let starting_final=!pending_steer && pending_question.as_ref().is_some_and(|(_,question,context)|
-                        crate::meeting::scheduler::same_question(question,&latest.question)
-                        && context.as_ref().unwrap_or(&active_context)==&selected_context);
-                    // Experiment: retire an active obsolete draft as soon as
-                    // the final input is confirmed, rather than queueing it.
-                    // stream_inner still requires actual terminal cleanup,
-                    // checks confirmation again, and retries only once.
-                    if replace_final && restart_stalled && latest.confirmed && !turn_finished
-                        && !starting_final && (question_changed || context_changed) {
-                        return Err(REFINEMENT_STALLED.into());
-                    }
-                    if context_changed{context_dirty_since.get_or_insert_with(tokio::time::Instant::now);}else{context_dirty_since=None;}
-                    // Experiment: coalesce question-only growth through pauses;
-                    // selected-context corrections keep their existing deadline.
-                    partial_deadline=(partial_budget_available&&!latest.question.trim().is_empty()&&(question_changed||context_changed)&&(!confirm_question_refinements||context_changed)).then(||partial_refinement_deadline(stable_since,context_dirty_since,last_partial_sent,latest.acoustic_quiet.then(tokio::time::Instant::now)));
-                    let stable_partial=partial_deadline.is_some_and(|deadline|deadline<=tokio::time::Instant::now());
-                    if (latest.confirmed || stable_partial) && (question_changed || context_changed) && pending_question.is_none() {
-                        // Retrieval depends on the complete topic. Refresh it
-                        // when growth changes the selected excerpts, without
-                        // resending unchanged context or explicit attachments.
-                        let refreshed=context_changed.then_some(selected_context);
-                        let context=refreshed.as_ref().map(|context|format!("UPDATED MEETING EXCERPTS (replace the earlier selected excerpts)\n{context}\n\n")).unwrap_or_default();
-                        let text=format!("AUTOMATIC REMOTE TURN\n{context}The latest CURRENT QUESTION is:\n{}\nDecide reply intent and answer this latest utterance using the supplied meeting context. Disregard your earlier answer to the provisional question.",latest.question);
-                        if turn_finished {
-                            pending_steer=false;
-                            pending_sent_at=None;pending_input_key=None;
-                            #[cfg(all(feature="acceptance",debug_assertions))]
-                            if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&text));}
-                            if let Some(trace)=&trace{trace.input_sent();}
-                            let turn=service.rpc("turn/start",json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":[{"type":"text","text":text}],"outputSchema":output_schema}),&service.dead).await?;
-                            if let Some(trace)=&trace{trace.input_ack();}
-                            history_chars+=text.chars().count();started_turns+=1;
-                            turn_id=turn["turn"]["id"].as_str().map(String::from);turn_finished=false;
-                            if let Some(trace)=&trace{trace.followup();}
-                            if !latest.confirmed && latest.acoustic_quiet{if let Some(trace)=&trace{trace.acoustic_refined();}}
-                            if !latest.confirmed{last_partial_sent=Some(tokio::time::Instant::now());context_dirty_since=None;}
-                        } else {
-                            let sent_at=tokio::time::Instant::now();
-                            service.received_inputs.lock().unwrap().remove(&id);
-                            #[cfg(all(feature="acceptance",debug_assertions))]
-                            if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&text));}
-                            if let Some(trace)=&trace{trace.input_sent();}
-                            let steer=service.rpc("turn/steer",json!({"threadId":id,"expectedTurnId":turn_id,"input":[{"type":"text","text":text}]}),&service.dead).await;
-                            if steer.is_ok(){if let Some(trace)=&trace{trace.input_ack();}}
-                            // Completion may race the RPC. Observe its terminal
-                            // event, then retry as a turn on the same thread.
-                            if steer.is_err() {pending_question=None;pending_steer=false;pending_sent_at=None;pending_input_key=None;}
-                            else {pending_sent_at=Some(sent_at);pending_input_key=Some(context_key(&text));history_chars+=text.chars().count();if let Some(trace)=&trace{trace.steered();trace.refinement_chars(text.chars().count());if !latest.confirmed && latest.acoustic_quiet{trace.acoustic_refined();}}if !latest.confirmed{last_partial_sent=Some(tokio::time::Instant::now());context_dirty_since=None;}pending_question=Some((text,latest.question,refreshed));pending_steer=true;}
-                            if steer.is_err(){
-                                let wait=tokio::time::sleep(Duration::from_secs(1));tokio::pin!(wait);
-                                loop {
-                                    let message=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),_=service.dead.cancelled()=>return Err("Codex connection closed".into()),_=&mut wait=>return Err("Codex did not accept the completed question".into()),message=events.recv()=>message.ok_or("Codex stream ended")?};
-                                    if message["method"]=="turn/completed" {check_completion(&message["params"]["turn"])?;turn_finished=true;break;}
-                                }
-                                continue;
-                            }
-                            continue;
-                        }
-                        if let Some(trace)=&trace{trace.refinement_chars(text.chars().count());}
-                        pending_question=Some((text,latest.question,refreshed));
-                    }
-                    if turn_finished && latest.confirmed && pending_question.is_none() {
+                    if turn_finished && latest.confirmed && !changed {
                         if reply_gate.ignored {
                             tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::NoReply{question:active_question.clone(),context_key:active_context_key})=>result?};return Ok(());
                         }
@@ -515,22 +420,37 @@ impl Codex {
                         tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::QuestionCompleted{question:active_question.clone(),context_key:active_context_key})=>result?};return Ok(());
                     }
                 }
-                }
                 let message = tokio::select! {
                     _=cancel.cancelled()=>return Err("cancelled".into()), _=service.dead.cancelled()=>return Err("Codex connection closed".into()), _=&mut deadline=>return Err("Codex answer timed out".into()),
-                    _=async {match pending_final_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if restart_stalled&&!terminal_pending&&!consumption_pending=>{
-                        if updates.as_ref().is_some_and(|receiver|!receiver.borrow().confirmed){pending_final_deadline=None;continue;}
+                    _=async {match stale.deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}}=>{
+                        // Recheck the watch value if confirmation changed at
+                        // the deadline. Never extend a continuously stale frame.
+                        if let Some(receiver)=updates.as_ref() {
+                            let mut latest=receiver.borrow().clone();
+                            latest.context=latest.context.or_else(||retry_context.clone());
+                            stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now());
+                            if stale.deadline.is_none(){continue;}
+                        }
                         return Err(REFINEMENT_STALLED.into());
                     },
-                    changed=async {match updates.as_mut(){Some(receiver)=>receiver.changed().await.map_err(|_|"Question update channel closed"),None=>std::future::pending().await}},if !terminal_pending=>{changed?;continue;},
-                    _=async{match partial_deadline{Some(deadline)=>tokio::time::sleep_until(deadline).await,None=>std::future::pending().await}},if !terminal_pending && updates.is_some() && pending_question.is_none() && partial_deadline.is_some()=>continue,
+                    changed=async {match updates.as_mut(){Some(receiver)=>receiver.changed().await.map_err(|_|"Question update channel closed"),None=>std::future::pending().await}}=>{changed?;continue;},
                     msg=events.recv(),if !turn_finished=>msg.ok_or("Codex stream ended")?
                 };
+                if let Some(event_turn)=message["params"]["turnId"].as_str().or(message["params"]["turn"]["id"].as_str()) {
+                    if Some(event_turn)!=turn_id.as_deref(){continue;}
+                }
+                // A revision can race a ready output/terminal notification.
+                // Check its current value before accepting either notification.
+                if let Some(receiver)=updates.as_ref() {
+                    let mut latest=receiver.borrow().clone();
+                    if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
+                    latest.context=latest.context.or_else(||retry_context.clone());
+                    stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now());
+                }
                 match message["method"].as_str() {
                     Some("item/started") if message["params"]["item"]["type"]=="agentMessage" => {
                         let item=&message["params"]["item"];
                         let item_id=item["id"].as_str().ok_or("Agent message has no ID")?.to_owned();
-                        agent_ids.insert(item_id.clone());
                         if item["phase"]=="commentary"{blocked_agents.insert(item_id);continue;}
                         if active_has_delta {
                             tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
@@ -539,21 +459,7 @@ impl Codex {
                     }
                     Some("item/completed") if message["params"]["item"]["type"]=="userMessage" => {
                         let item=&message["params"]["item"];
-                        if pending_question.as_ref().is_some_and(|(text,_,_)|item["content"].as_array().is_some_and(|content|content.iter().any(|part|part["text"].as_str()==Some(text)))) {
-                            if let Some(trace)=&trace{trace.input_consumed();}
-                            pending_final_deadline=None;pending_sent_at=None;pending_input_key=None;
-                            pending_steer=false;
-                            let (_,question,context)=pending_question.take().unwrap();active_question=question;
-                            if let Some(context)=context{active_context=context;active_context_key=context_key(&active_context);}
-                            // A refined utterance is a new response version even
-                            // when its earlier deltas were filtered upstream.
-                            // Reset the renderer acknowledgement and retained
-                            // timing before displaying the refined answer.
-                            tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(StreamEvent::Revision(String::new()))=>result?};
-                            active_has_delta=false;
-                            blocked_agents.extend(agent_ids.iter().cloned());
-                            reply_gate=ReplyGate::default();
-                        } else if pending_question.is_none() && item["content"].as_array().is_some_and(|content|content.iter().any(|part|part["text"].as_str()==Some(&initial_input))) {
+                        if item["content"].as_array().is_some_and(|content|content.iter().any(|part|part["text"].as_str()==Some(&initial_input))) {
                             if let Some(trace)=&trace{trace.input_consumed();}
                         }
                     }
@@ -561,6 +467,7 @@ impl Codex {
                         history_chars+=message["params"]["delta"].as_str().map_or(0,|delta|delta.chars().count());
                         if message["params"]["itemId"].as_str().is_some_and(|id|blocked_agents.contains(id)){continue;}
                         if answer && policy==RefillPolicy::FirstToken && !refill_requested {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());refill_requested=true;}
+                        if stale.invalidated{continue;}
                         let delta = message["params"]["delta"].as_str().ok_or("Invalid Codex text delta")?;
                         let gated=if automatic{reply_gate.feed(delta)?}else{Some(delta.to_string())};
                         let Some(delta)=gated else{continue};
@@ -568,14 +475,29 @@ impl Codex {
                         let emitted=if updates.is_some(){StreamEvent::QuestionDelta{question:active_question.clone(),context_key:active_context_key,text:delta}}else{StreamEvent::Delta(delta)};
                         #[cfg(all(feature="acceptance",debug_assertions))]
                         let callback_started=std::time::Instant::now();
-                        tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(emitted)=>result? }
+                        let delivery=event(emitted);tokio::pin!(delivery);
+                        loop {
+                            tokio::select! {
+                                _=cancel.cancelled()=>return Err("cancelled".into()),
+                                result=&mut delivery=>{result?;break;},
+                                changed=async {match updates.as_mut(){Some(receiver)=>receiver.changed().await.map_err(|_|"Question update channel closed"),None=>std::future::pending().await}}=>{
+                                    changed?;
+                                    if let Some(receiver)=updates.as_ref() {
+                                        let mut latest=receiver.borrow().clone();
+                                        if let Some(context)=&latest.context{*retry_context=Some(context.clone());}
+                                        latest.context=latest.context.or_else(||retry_context.clone());
+                                        if stale.observe(&latest,&active_question,&active_context,tokio::time::Instant::now()){break;}
+                                    }
+                                },
+                            }
+                        }
                         #[cfg(all(feature="acceptance",debug_assertions))]
                         if let Some(trace)=&trace{trace.diagnostic_delta_callback(callback_started.elapsed().as_micros()as u64);}
                     }
                     Some("turn/completed") => {
                         turn_finished = true;
+                        if stale.invalidated {continue;}
                         check_completion(&message["params"]["turn"])?;
-                        if pending_question.is_some(){return Err("Codex completed without consuming the final question".into());}
                         if automatic{reply_gate.finish()?;}
                         if updates.is_some() {continue;}
                         tokio::select! { _=cancel.cancelled()=>return Err("cancelled".into()), result=event(StreamEvent::Completed)=>result? }
@@ -774,6 +696,104 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let (outgoing,receiver)=mpsc::channel(16);
         (Arc::new(Service{received_inputs:Mutex::new(HashMap::new()),completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()}),receiver)
     }
+    fn question_fixture()->(Arc<Codex>,Arc<Service>,mpsc::Receiver<Value>) {
+        let (service,requests)=transport_fixture();
+        let codex=Codex::new(PathBuf::new(),PathBuf::new());
+        *codex.service.lock().unwrap()=Some(service.clone());
+        let key=json!(["fixture-model",None::<&str>,None::<&str>,"fixture instructions"]).to_string();
+        for index in 0..=MAX_QUESTION_REPLACEMENTS {
+            codex.prepared.lock().unwrap().push(PreparedThread{key:key.clone(),id:format!("fixture-thread-{index}"),acknowledged:std::time::Instant::now(),turns:0,history_chars:0});
+        }
+        (codex,service,requests)
+    }
+    async fn question_request(requests:&mut mpsc::Receiver<Value>)->Value {
+        loop {
+            let request=tokio::time::timeout(Duration::from_secs(2),requests.recv()).await.expect("Protocol request stalled").unwrap();
+            if request["method"]!="thread/unsubscribe"{return request;}
+        }
+    }
+    fn acknowledge(service:&Arc<Service>,request:&Value,result:Value) {
+        assert!(dispatch(&Arc::downgrade(service),json!({"id":request["id"],"result":result})));
+    }
+    fn end_fixture_turn(service:&Arc<Service>,thread:&str,turn:&str,status:&str) {
+        assert!(dispatch(&Arc::downgrade(service),json!({"method":"turn/completed","params":{"threadId":thread,"turn":{"id":turn,"status":status}}})));
+    }
+    #[tokio::test]
+    async fn latest_question_replaces_unconsumed_work_on_multiple_attempts() {
+        let (codex,service,mut requests)=question_fixture();
+        let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:"provisional".into(),context:None,confirmed:false,acoustic_quiet:false});
+        let server=async {
+            let mut retired=Vec::new();
+            for index in 0..3 {
+                let request=question_request(&mut requests).await;assert_eq!(request["method"],"turn/start");
+                let thread=request["params"]["threadId"].as_str().unwrap().to_owned();
+                let turn=format!("turn-{index}");
+                let text=request["params"]["input"][0]["text"].as_str().unwrap();
+                assert!(text.contains("literal reference"));
+                if index>0{assert!(text.contains(&format!("confirmed-{index}")));}
+                assert!(!retired.contains(&thread),"Replacement must have a fresh thread");
+                acknowledge(&service,&request,json!({"turn":{"id":turn}}));
+                if index<2 {
+                    // No userMessage echo for the obsolete input. A second
+                    // correction must still interrupt the replacement attempt.
+                    tx.send_replace(QuestionUpdate{question:format!("confirmed-{}",index+1),context:Some(format!("context-{}",index+1)),confirmed:true,acoustic_quiet:true});
+                    let interrupt=question_request(&mut requests).await;assert_eq!(interrupt["method"],"turn/interrupt");
+                    assert_eq!(interrupt["params"]["turnId"],turn);
+                    acknowledge(&service,&interrupt,json!({}));
+                    end_fixture_turn(&service,&thread,&turn,"interrupted");retired.push(thread);
+                } else {
+                    // Fresh current inference can take longer than 400 ms
+                    // without a userMessage echo or being interrupted.
+                    assert!(tokio::time::timeout(FINAL_CONSUMPTION_WAIT+Duration::from_millis(100),requests.recv()).await.is_err());
+                    for old in &retired {
+                        assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":old,"delta":"obsolete"}})));
+                    }
+                    assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"current-answer"}}})));
+                    assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"current-answer","delta":"{\"intent\":\"answer\",\"text\":\"current answer\"}"}})));
+                    end_fixture_turn(&service,&thread,&turn,"completed");
+                }
+            }
+            tx
+        };
+        let mut text=String::new();let mut completed=false;
+        let trace=Trace::new(std::time::Instant::now(),0);
+        let prompt=QuestionPrompt::new("initial context","provisional").with_reference("\nliteral reference");
+        let result=codex.stream_question("fixture-model",None,None,"fixture instructions",&prompt,None,CancellationToken::new(),RefillPolicy::Disabled,Some(trace.clone()),rx,|event|{
+            match event {
+                StreamEvent::Revision(replacement)=>text=replacement,
+                StreamEvent::QuestionDelta{question,context_key:key,text:delta}=>{assert_eq!(question,"confirmed-2");assert_eq!(key,context_key("context-2"));text.push_str(&delta);},
+                StreamEvent::QuestionCompleted{question,..}=>{assert_eq!(question,"confirmed-2");completed=true;},_=>{},
+            }
+            std::future::ready(Ok(()))
+        });
+        let (result,sender)=tokio::join!(result,server);result.unwrap();drop(sender);
+        assert_eq!(text,"current answer");assert!(completed);
+        assert_eq!(trace.snapshot().refinement_restart_count,2);
+        assert_eq!(trace.snapshot().steering_count,0);
+        assert!(service.events.lock().unwrap().is_empty());assert!(service.pending.lock().unwrap().is_empty());codex.close();
+    }
+    #[tokio::test]
+    async fn replacement_exhaustion_cleans_the_last_obsolete_turn_without_another_start() {
+        let (codex,service,mut requests)=question_fixture();
+        let (tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:"initial".into(),context:None,confirmed:false,acoustic_quiet:false});
+        let server=async {
+            for index in 0..=MAX_QUESTION_REPLACEMENTS {
+                let request=question_request(&mut requests).await;assert_eq!(request["method"],"turn/start");
+                let thread=request["params"]["threadId"].as_str().unwrap();let turn=format!("turn-{index}");
+                acknowledge(&service,&request,json!({"turn":{"id":turn}}));
+                tx.send_replace(QuestionUpdate{question:format!("correction-{index}"),context:None,confirmed:true,acoustic_quiet:true});
+                let interrupt=question_request(&mut requests).await;assert_eq!(interrupt["method"],"turn/interrupt");
+                acknowledge(&service,&interrupt,json!({}));end_fixture_turn(&service,thread,&turn,"interrupted");
+            }
+            tx
+        };
+        let prompt=QuestionPrompt::new("context","initial");
+        let result=codex.stream_question("fixture-model",None,None,"fixture instructions",&prompt,None,CancellationToken::new(),RefillPolicy::Disabled,None,rx,|_|std::future::ready(Ok(())));
+        let (result,sender)=tokio::join!(result,server);drop(sender);
+        assert_eq!(result.unwrap_err(),"Codex question replacement budget exhausted");
+        while let Ok(request)=requests.try_recv(){assert_eq!(request["method"],"thread/unsubscribe");}
+        assert!(service.events.lock().unwrap().is_empty());assert!(service.pending.lock().unwrap().is_empty());assert!(!service.dead.is_cancelled());codex.close();
+    }
     #[tokio::test]
     async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
         let (service,_requests)=transport_fixture();let (output,mut events)=mpsc::channel(1);
@@ -877,29 +897,35 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let retained=frame.revised(latest,None);assert_eq!(retained.context,context);assert_eq!(retained.reference,reference);
     }
     #[test]
-    fn pending_final_budget_counts_existing_queue_age_without_extending_it() {
-        let sent=tokio::time::Instant::now();
-        let recent=sent+Duration::from_millis(100);
-        assert_eq!(final_refinement_deadline(recent,Some(sent),true),sent+FINAL_CONSUMPTION_WAIT);
-        let old=sent+Duration::from_millis(900);
-        assert!(final_refinement_deadline(old,Some(sent),true)<old);
-        assert_eq!(final_refinement_deadline(old,Some(sent),false),old+FINAL_CONSUMPTION_WAIT);
-        assert_eq!(final_refinement_deadline(old,None,true),old+FINAL_CONSUMPTION_WAIT);
+    fn stale_budget_survives_further_confirmed_revisions_and_retracts_with_speech() {
+        let start=tokio::time::Instant::now();let mut stale=StaleQuestion::default();
+        let mut update=QuestionUpdate{question:"first correction".into(),context:None,confirmed:true,acoustic_quiet:true};
+        assert!(stale.observe(&update,"initial","context",start));
+        assert_eq!(stale.deadline,Some(start+FINAL_CONSUMPTION_WAIT));
+        update.question="latest correction".into();
+        stale.observe(&update,"initial","context",start+Duration::from_millis(300));
+        assert_eq!(stale.deadline,Some(start+FINAL_CONSUMPTION_WAIT));
+        update.confirmed=false;
+        stale.observe(&update,"initial","context",start+Duration::from_millis(350));
+        assert_eq!(stale.deadline,None);
+        update.confirmed=true;
+        stale.observe(&update,"initial","context",start+Duration::from_millis(900));
+        assert_eq!(stale.deadline,Some(start+Duration::from_millis(900)+FINAL_CONSUMPTION_WAIT));
     }
     #[test]
-    fn changed_context_has_a_deadline_while_question_growth_waits_for_quiet() {
-        let origin=tokio::time::Instant::now();
-        assert_eq!(partial_refinement_deadline(origin+Duration::from_millis(700),Some(origin),None,None),origin+Duration::from_millis(800));
-        assert_eq!(partial_refinement_deadline(origin,None,None,None),origin+Duration::from_millis(600));
-        assert_eq!(partial_refinement_deadline(origin+Duration::from_millis(700),None,None,None),origin+Duration::from_millis(1300));
-        assert_eq!(partial_refinement_deadline(origin+Duration::from_millis(700),Some(origin),Some(origin+Duration::from_millis(750)),None),origin+Duration::from_millis(1550));
-    }
-    #[test]
-    fn acoustic_pause_advances_refinement_but_keeps_cadence_and_can_retract() {
-        let origin=tokio::time::Instant::now();let pause=origin+Duration::from_millis(150);
-        assert_eq!(partial_refinement_deadline(origin,None,None,Some(pause)),pause);
-        assert_eq!(partial_refinement_deadline(origin,None,Some(origin),Some(pause)),origin+PARTIAL_INTERVAL);
-        assert_eq!(partial_refinement_deadline(origin,None,None,None),origin+PARTIAL_QUIET);
+    fn current_input_gets_normal_generation_budget_and_context_changes_invalidate_it() {
+        let start=tokio::time::Instant::now();let mut stale=StaleQuestion::default();
+        let mut update=QuestionUpdate{question:"same question".into(),context:Some("context".into()),confirmed:true,acoustic_quiet:true};
+        assert!(!stale.observe(&update,"same question","context",start));
+        assert!(!stale.observe(&update,"same question","context",start+Duration::from_secs(60)));
+        assert_eq!(stale.deadline,None);
+        update.context=Some("corrected context".into());
+        assert!(stale.observe(&update,"same question","context",start));
+        assert_eq!(stale.deadline,Some(start+FINAL_CONSUMPTION_WAIT));
+        // Returning to the original text cannot revive a partly hidden answer.
+        update.context=Some("context".into());
+        assert!(stale.observe(&update,"same question","context",start+Duration::from_millis(100)));
+        assert_eq!(stale.deadline,Some(start+FINAL_CONSUMPTION_WAIT));
     }
     #[test]
     fn intent_framing_preserves_exact_code_and_split_escapes_without_metadata() {
@@ -1019,10 +1045,9 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             let (result,sender)=tokio::join!(result,update);result.unwrap();drop(sender.unwrap());
             assert!(text.to_lowercase().contains("february") && text.contains("19"),"Final answer: {text}");
             let timeline=trace.snapshot();assert!(!timeline.cancelled);
-            let retired_completed=completed_draft_replacement()&&early_completion;
-            assert_eq!(timeline.followup_count,usize::from(early_completion&&!retired_completed));
-            if retired_completed {assert_eq!(timeline.refinement_restart_count,1);assert_eq!(timeline.completed_draft_replacement_count,1);}
-            if !early_completion {assert_eq!(timeline.steering_count,1);}
+            assert_eq!(timeline.followup_count,0);
+            assert_eq!(timeline.steering_count,0);
+            assert_eq!(timeline.refinement_restart_count,1);
             assert!(timeline.latest_input_sent>=timeline.turn_start_ack);
             assert!(timeline.latest_input_ack>=timeline.latest_input_sent);
             let pool=codex.prepared.lock().unwrap();let thread=pool.iter().max_by_key(|thread|thread.turns).unwrap();
@@ -1052,7 +1077,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             tokio::time::sleep(Duration::from_millis(100)).await;
             tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:"What is our launch date?".into(),confirmed:false,context:Some("The launch date was February 19.".into())});
             let deadline=tokio::time::Instant::now()+Duration::from_secs(30);
-            while observed.snapshot().latest_input_consumed.is_none()||observed.snapshot().steering_count+observed.snapshot().followup_count==0 {assert!(tokio::time::Instant::now()<deadline);tokio::time::sleep(Duration::from_millis(10)).await;}
+            while observed.snapshot().latest_input_consumed.is_none() {assert!(tokio::time::Instant::now()<deadline);tokio::time::sleep(Duration::from_millis(10)).await;}
             tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:final_copy.clone(),confirmed:false,context:Some("LATEST SPOKEN CORRECTION: the launch date changed to March 22. February 19 is obsolete.".into())});
             tokio::time::sleep(Duration::from_secs(4)).await;
             let prefinal=observed.snapshot();let confirmed=clock.elapsed().as_millis()as u64;observed.confirmed_at(confirmed);
@@ -1070,7 +1095,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
         assert!(text.to_lowercase().contains("march")&&text.contains("22"),"Use the latest context: {text}");
-        assert!(prefinal.steering_count+prefinal.followup_count>=2,"Send further stable refinements before confirmation");
+        assert_eq!(prefinal.steering_count+prefinal.followup_count,0,"Keep provisional revisions local");
         println!("Multi-refinement evidence: {evidence}");codex.close();
     }
     #[tokio::test]
@@ -1115,8 +1140,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let output=PathBuf::from(std::env::var("COPILOT_CONTEXT_CORRECTION_TEST_OUTPUT").expect("Explicit context evidence path required"));
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
-        assert_eq!(trace.snapshot().refinement_restart_count,0,"Process received completion and preserve an already-started final turn");
-        assert_eq!(trace.snapshot().followup_count,1,"The corrected context should use one follow-up on the completed thread");
+        assert_eq!(trace.snapshot().refinement_restart_count,1,"Replace the obsolete completed thread");
+        assert_eq!(trace.snapshot().followup_count,0,"Do not anchor the correction to obsolete thread history");
         assert!(old_text.contains("19"),"First establish an obsolete answer: {old_text}");
         assert!(text.to_lowercase().contains("march")&&text.contains("22"),"Use the corrected context: {text}");
         assert!(revisions>0&&corrected_completion);println!("Context correction evidence: {evidence}");codex.close();
@@ -1181,10 +1206,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let root=PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_owned();assert!(output.is_absolute()&&output.starts_with(&root));
         std::fs::write(output,serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
         assert!(text.to_lowercase().contains("march")&&text.contains("22"),"Use the actual supplied fact: {text}");
-        if context_correction{assert!(prefinal.steering_count+prefinal.followup_count>0,"Changed context must be submitted before confirmation");}
-        else if prefinal.confirmed_question_refinements{assert_eq!(prefinal.steering_count+prefinal.followup_count,0,"The experimental policy must coalesce question-only updates through pauses");}
-        else if acoustic_pause==Some(true){assert!(prefinal.acoustic_refinement_count>0,"The acoustic pause must submit a refinement before confirmation");}
-        else if acoustic_pause.is_none(){assert_eq!(prefinal.steering_count+prefinal.followup_count,0,"Continuous question-only growth should coalesce until confirmation");}
+        assert_eq!(prefinal.steering_count+prefinal.followup_count,0,"Keep provisional revisions local");
         println!("Continuous growth evidence: {evidence}");codex.close();
     }
     #[tokio::test]
@@ -1259,7 +1281,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     }
     #[tokio::test]
     #[ignore = "Uses the signed-in Codex account for a controlled pre-confirmation refinement"]
-    async fn live_stable_partial_refines_before_confirmation_and_retains_context() {
+    async fn live_stable_partial_coalesces_until_confirmation_and_retains_context() {
         let binary=PathBuf::from(std::env::var("COPILOT_CODEX_TEST_RUNTIME").expect("Explicit live Codex runtime required"));
         let codex=Codex::new(binary,std::env::current_dir().unwrap().join(".local/live-stable-test"));
         let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
@@ -1270,7 +1292,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             tokio::time::sleep(Duration::from_millis(100)).await;
             tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:"What is our launch date".into(),confirmed:false,context:Some("Updated meeting fact: the launch date moved to March 22.".into())});
             let deadline=tokio::time::Instant::now()+Duration::from_secs(40);
-            while observed.snapshot().steering_count+observed.snapshot().followup_count==0 {assert!(tokio::time::Instant::now()<deadline);tokio::time::sleep(Duration::from_millis(10)).await;}
+            while observed.snapshot().latest_input_consumed.is_none() {assert!(tokio::time::Instant::now()<deadline);tokio::time::sleep(Duration::from_millis(10)).await;}
             assert!(!tx.borrow().confirmed);tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:"What is our launch date".into(),confirmed:true,context:None});tx
         });
         let mut text=String::new();
@@ -1281,6 +1303,6 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let (result,sender)=tokio::join!(result,update);result.unwrap();drop(sender.unwrap());
         assert!(text.to_lowercase().contains("march") && text.contains("22"),"Refreshed context answer: {text}");
-        assert_eq!(trace.snapshot().steering_count+trace.snapshot().followup_count,1);assert!(!trace.snapshot().cancelled);codex.close();
+        assert_eq!(trace.snapshot().steering_count+trace.snapshot().followup_count,0);assert_eq!(trace.snapshot().refinement_restart_count,1);assert!(!trace.snapshot().cancelled);codex.close();
     }
 }

@@ -103,6 +103,7 @@ export function measureJournal(journal,reviews){
   const duration=Number.isFinite(row.latency?.completedAt)&&Number.isFinite(p.firstAgentDelta)?row.latency.completedAt-p.firstAgentDelta:null;
   return {round:row.round,name:row.name,kind:row.audio?'native_audio':'typed',phase:row.phase,error:row.error??null,
    intentionalInterruption:row.settle===false,ordinaryFollowup:row.ordinaryFollowup??review?.ordinaryFollowup??false,completed:row.phase==='complete'&&!row.cancelled&&!row.error,
+   observedPlannedInterruption:row.settle===false&&(row.cancelled||['superseded','cancelled'].includes(row.phase)),
    requestedWorkComplete:review?.completed??null,
    missing:!row.answer?.trim(),correctness:review?.correctness??'pending',reasoningVerdict:review?.reasoningVerdict??'pending',
    acceptedToActualWriteMs:write,usefulFeedbackMs:useful,firstWordMs:row.firstStreamedWordMeasurement?.firstRetainedVisibleStreamedWord?.latencyMs??null,
@@ -125,6 +126,7 @@ export function measureJournal(journal,reviews){
  return {scope:'Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.',
   rows:measured,counts:{all:measured.length,expectedReplies:expected.length,complete:expected.filter(r=>r.completed).length,
    missing:expected.filter(r=>r.missing).length,errors:expected.filter(r=>r.error).length,intentionallyInterrupted:expected.filter(r=>r.intentionalInterruption).length,
+   observedPlannedInterruptions:expected.filter(r=>r.observedPlannedInterruption).length,
    correct:expected.filter(r=>r.correctness==='correct').length,incorrect:expected.filter(r=>r.correctness==='incorrect').length,
    requestedWorkComplete:expected.filter(r=>r.requestedWorkComplete===true).length,requestedWorkIncomplete:expected.filter(r=>r.requestedWorkComplete===false).length,
    requestedCompletionPending:expected.filter(r=>r.requestedWorkComplete==null).length,

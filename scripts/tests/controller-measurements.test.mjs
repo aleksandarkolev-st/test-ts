@@ -22,6 +22,12 @@ test('provider completion does not certify completion of the requested work',()=
  assert.equal(measured.counts.requestedWorkIncomplete,1);
  assert.equal(measured.counts.incorrect,1);
 });
+test('a planned audio interruption that never becomes a request is not a successful interruption',()=>{
+ const measured=measureJournal({rows:[{round:1,phase:'complete',answer:'Finished original code',settle:false},{round:2,phase:'no_job',answer:''}]},{});
+ assert.equal(measured.counts.intentionallyInterrupted,1);
+ assert.equal(measured.counts.observedPlannedInterruptions,0);
+ assert.equal(measured.counts.missing,1);
+});
 test('generation mismatch is rejected instead of combining timing',()=>{
  assert.throws(()=>measureJournal({rows:[{round:1,responseVersion:'a:0',latency:{pipeline:{generationId:'b'}}}]},{}));
 });

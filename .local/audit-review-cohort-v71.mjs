@@ -52,6 +52,14 @@ const reviewerProvenance=new Map();
 for(const entry of inputs){
  const directory=path.dirname(entry.file),journal=await load(entry.file),journalSha256=await fileHash(entry.file);
  assert.equal(journal.status,'complete');assert(journal.stoppedCleanly);
+ if(journal.olderCodeProbe){
+  const older=await load(directory+'/older-code-reference-audit.json');assert.equal(older.journal.sha256,journalSha256);
+  assert.equal(older.recordedReference.sourceAnswerSha256,journal.olderCodeProbe.sourceAnswerSha256);
+  assert.equal(older.probe.round,journal.olderCodeProbe.probeRound);
+  const originalIndex=journal.rows.findIndex(row=>row.round===journal.olderCodeProbe.sourceRound);
+  const probeIndex=journal.rows.findIndex(row=>row.round===journal.olderCodeProbe.probeRound);
+  assert.equal(older.probe.interveningTurns,probeIndex<0?null:probeIndex-originalIndex-1);
+ }
  assert.equal(journal.model,recorded.configuration.model);assert.equal(journal.effort,recorded.configuration.effort);assert(journal.outputDevice?.includes(recorded.configuration.output));
  if(journal.speechConfiguration){assert.equal(journal.speechConfiguration.remoteOnly,true);assert.equal(journal.speechConfiguration.selfCapture?.physicalMicrophoneUsed??journal.speechConfiguration.microphoneCapture?.physicalMicrophoneUsed,false);}
  const assessmentFile=directory+'/independent-assessment-v71/assessment.json',assessment=await load(assessmentFile);
@@ -81,6 +89,8 @@ for(const entry of inputs){
  if(entry.kind!=='continuous_pressure_jobs'){
   architecture=await load(directory+'/architecture-audit-v71.json');assert.equal(architecture.source.sha256,journalSha256);
   delivery=await load(directory+'/delivery-coverage-audit.json');assert.equal(delivery.journal.sha256,journalSha256);assert(delivery.summary.allQuestionAndBackgroundWaveHashesValidated);
+  const visibility=await load(directory+'/interview-visibility-audit-v71.json');assert.equal(visibility.journal.sha256,journalSha256);
+  assert.equal(visibility.windows.length,journal.rows.length);
   assert.equal(delivery.rows.length,journal.rows.length);
   for(const delivered of [...delivery.rows,...delivery.background])assert.equal(await fileHash(delivered.wave.file),delivered.wave.sha256);
  }

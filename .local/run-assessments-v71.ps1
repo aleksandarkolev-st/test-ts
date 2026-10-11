@@ -70,7 +70,7 @@ foreach($taskSource in $taskSources){
  $taskParent=Split-Path -Path $taskSource -Parent
  $taskReviews=$taskParent+'/independent-model-review-v71'
  $taskSummary=$taskParent+'/independent-assessment-v71'
- if($taskHourSources -contains $taskSource){
+ if($taskSource -notmatch 'pressure-review-input.json$'){
   if(!(Test-Path -LiteralPath ($taskParent+'/older-code-reference-audit.json'))){
    node --max-old-space-size=6144 scripts/audit-older-code-reference.mjs $taskParent
    if($LASTEXITCODE -ne 0){throw ('Recorded older-code reference audit failed: '+$taskSource)}
@@ -88,6 +88,10 @@ foreach($taskSource in $taskSources){
   if(!(Test-Path -LiteralPath ($taskParent+'/delivery-coverage-audit.json'))){
    node --max-old-space-size=6144 scripts/audit-interview-delivery-coverage.mjs $taskParent
    if($LASTEXITCODE -ne 0){throw ('Waveform and delivery coverage audit failed: '+$taskSource)}
+  }
+  if(!(Test-Path -LiteralPath ($taskParent+'/interview-visibility-audit-v71.json'))){
+   node --max-old-space-size=6144 .local/audit-interview-visibility-v71.mjs $taskParent
+   if($LASTEXITCODE -ne 0){throw ('Question display attribution failed: '+$taskSource)}
   }
  }
  & .\src-tauri\target\debug\examples\assess-recorded-interview.exe $taskSource $taskReviews

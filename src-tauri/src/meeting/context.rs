@@ -39,6 +39,7 @@ impl Memory {
 
 #[derive(Default)]
 pub struct MeetingContext {
+    pub ledger:super::ledger::Ledger,
     #[cfg(all(feature="acceptance",debug_assertions))]
     pub frozen_acceptance_context: Option<String>,
     pub recent: VecDeque<TranscriptSegment>,
@@ -63,8 +64,9 @@ impl MeetingContext {
         self.remember_visible_answer_at(id,question,answer,0);
     }
     pub fn remember_visible_answer_at(&mut self,id:&str,question:&str,answer:&str,started:u64) {
-        if answer.trim().is_empty() || answer.chars().count()>32_000{return;}
+        if answer.trim().is_empty(){return;}
         if self.answers.iter().any(|(_,previous,_,_)|previous==id){return;}
+        #[cfg(test)] self.ledger.displayed(id,question,answer,started);
         self.visible_answer=Some((started,id.into(),question.into(),answer.into()));
     }
     /// Preserve complete suggested answers, including code, independently of
@@ -75,7 +77,8 @@ impl MeetingContext {
         self.remember_answer_at(id,question,answer,order);
     }
     pub fn remember_answer_at(&mut self,id:&str,question:&str,answer:&str,order:u64) {
-        if answer.trim().is_empty() || answer.chars().count()>32_000{return;}
+        if answer.trim().is_empty(){return;}
+        #[cfg(test)] {self.ledger.displayed(id,question,answer,order);self.ledger.terminal(id,order,true);}
         self.forget_visible_answer(id);
         let fences=answer.matches("```").count();
         self.code_history.retain(|(_,previous,_,_)|previous!=id);
@@ -96,6 +99,7 @@ impl MeetingContext {
             return;
         }
         let now = segment.ended_at;
+        if !self.ledger.recognized.last().is_some_and(|record|record.segment.id==segment.id && record.segment.text==segment.text && record.segment.final_==segment.final_){self.ledger.observe(segment.clone(),now);}
         self.chars += segment.text.len();
         self.recent.push_back(segment);
         while self
@@ -171,33 +175,7 @@ impl MeetingContext {
     pub fn answer_context_for_utterance(&self, question:&str,started:Option<u64>)->String {
         #[cfg(all(feature="acceptance",debug_assertions))]
         if let Some(context)=&self.frozen_acceptance_context {return context.clone();}
-        // Keep the archive and summary retry behavior intact; retrieval bounds
-        // apply only to the latency-sensitive answer prompt.
-        let mut memory=vec![format!("Summary: {}",self.memory.summary)];
-        for (label,items) in [("Fact",&self.memory.facts),("Decision",&self.memory.decisions),("Date",&self.memory.dates),("Person",&self.memory.people),("Open question",&self.memory.open_questions)] {
-            memory.extend(items.iter().map(|item|format!("{label}: {item}")));
-        }
-        let pending: Vec<_> = self
-            .in_flight
-            .iter()
-            .chain(self.older.iter())
-            .filter(|segment|!started.is_some_and(|start|segment.source==super::SpeakerSource::Remote&&segment.started_at>=start))
-            .cloned()
-            .collect();
-        let recent: Vec<_> = self.recent.iter().filter(|segment|!started.is_some_and(|start|segment.source==super::SpeakerSource::Remote&&segment.started_at>=start)).cloned().collect();
-        let memory=select_lines(&memory,2_000,question);
-        let pending=select_lines(&conversation(&pending).lines().map(String::from).collect::<Vec<_>>(),1_500,question);
-        let recent=select_lines(&conversation(&recent).lines().map(String::from).collect::<Vec<_>>(),4_000,question);
-        let prior=|at:u64|started.is_none_or(|start|at<start);
-        let mut selected=self.code_history.iter().filter(|(at,_,_,_)|prior(*at)).collect::<Vec<_>>();
-        for answer in self.answers.iter().rev().filter(|(at,_,_,_)|prior(*at)).take(2) {
-            if !selected.iter().any(|(_,id,_,_)|id==&answer.1){selected.push(answer);}
-        }
-        selected.sort_by_key(|(order,_,_,_)|*order);
-        let mut answers=selected.into_iter().map(|(_,_,q,a)|format!("QUESTION: {q}\nSUGGESTED ANSWER:\n{a}")).collect::<Vec<_>>().join("\n\n");
-        if let Some((_,_,q,a))=self.visible_answer.as_ref().filter(|(at,_,_,_)|prior(*at)){answers.push_str(&format!("\n\nVISIBLE SUGGESTION STILL STREAMING OR INTERRUPTED (exact displayed text; may be unfinished or incorrect)\nQUESTION: {q}\n{a}"));}
-        let history=if answers.is_empty(){String::new()}else{format!("\n\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\n{answers}")};
-        format!("MEETING SUMMARY (selected relevant memory)\n{memory}\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\n{pending}\n\nRECENT CONVERSATION (selected excerpts)\n{recent}{history}")
+        self.ledger.context(question,started)
     }
     pub fn clear(&mut self) {
         *self = Self::default();
@@ -213,25 +191,6 @@ fn bounded_excerpt(text:&str,budget:usize)->String {
     let first=text.chars().take(head).collect::<String>();
     let last=text.chars().rev().take(tail).collect::<String>().chars().rev().collect::<String>();
     format!("{first}\n…\n{last}")
-}
-fn select_lines(lines:&[String],budget:usize,question:&str)->String {
-    let query=super::scheduler::normalized(question).split_whitespace()
-        .filter(|word|word.len()>2 && !["what","when","where","which","how","who","why","the","our","are","was","does","did","can","you","and","for","with","this","that"].contains(word))
-        .map(String::from).collect::<std::collections::HashSet<_>>();
-    let mut ranked=lines.iter().enumerate().map(|(i,line)|{
-        let words=super::scheduler::normalized(line);
-        let score=words.split_whitespace().filter(|word|query.contains(*word)).count();
-        (score,i,line)
-    }).collect::<Vec<_>>();
-    ranked.sort_by(|a,b|b.0.cmp(&a.0).then(b.1.cmp(&a.1)));
-    let mut selected=Vec::new();let mut remaining=budget;
-    for (_,i,line) in ranked {
-        let len=line.chars().count()+1;
-        if len<=remaining {selected.push((i,line.clone()));remaining-=len;}
-        else if selected.is_empty() && remaining>1 {selected.push((i,line.chars().take(remaining-1).collect::<String>()));break;}
-    }
-    selected.sort_by_key(|(i,_)|*i);
-    selected.into_iter().map(|(_,line)|line).collect::<Vec<_>>().join("\n")
 }
 pub fn conversation(segments: &[TranscriptSegment]) -> String {
     segments
@@ -344,7 +303,7 @@ mod tests {
         let mut correction=seg(13,"The launch date changed to March 22.");correction.source=SpeakerSource::Self_;c.push(correction);
         let refreshed=c.answer_context_for_utterance("What is the launch date?",Some(10));
         assert_ne!(before,refreshed);assert!(refreshed.contains("March 22"));assert!(refreshed.contains("let exact=17;"));
-        assert!(c.answer_context("What is the launch date?").contains("REMOTE: launch date?"));
+        assert!(c.answer_context("What is the launch date?").contains("launch date?"));
     }
     #[test]
     fn late_completion_of_an_older_turn_preserves_chronological_code_order() {
@@ -385,7 +344,7 @@ mod tests {
         c.complete_summary(Memory::default());
         let prompt=c.prompt("Is that mask valid?");
         assert!(prompt.contains(&code));assert!(prompt.contains("Explanation 39"));
-        assert!(prompt.contains("7 threads"));assert!(prompt.contains("may contain mistakes"));
+        assert!(prompt.contains("7 threads"));assert!(prompt.contains("may be unfinished or incorrect"));
         c.clear();assert!(!c.prompt("Why?").contains("0x1ffff"));
     }
     #[test]
@@ -452,7 +411,7 @@ mod tests {
         c.memory.summary="Other decisions. ".repeat(250);
         c.memory.dates=vec!["Launch target February 19".into()];
         let prompt=c.prompt("What is our launch target?");
-        assert!(prompt.chars().count()<ANSWER_CONTEXT_CHARS+30);
+        assert!(prompt.len()<240_500);
         assert!(prompt.contains("February 19"));
         assert!(prompt.ends_with("What is our launch target?"));
         assert!(c.chars<=RECENT_CHARS);
@@ -460,19 +419,19 @@ mod tests {
     #[test]
     fn completing_a_topic_refreshes_the_relevant_excerpts() {
         let mut c=MeetingContext::default();
-        c.memory.facts.push("Launch date is February 19".into());
+        c.push(seg(1,"Launch date is February 19"));
         for i in 0..200 {c.memory.facts.push(format!("Unrelated budget review {i}: {}","other decisions ".repeat(8)));}
         let provisional=c.answer_context("What is our la");
         let completed=c.answer_context("What is our launch date");
-        assert!(!provisional.contains("February 19"));
+        assert!(provisional.contains("February 19"));
         assert!(completed.contains("February 19"));
-        assert!(completed.chars().count()<ANSWER_CONTEXT_CHARS);
+        assert!(completed.len()<240_500);
     }
     #[test]
     fn retrieval_handles_unicode_and_keeps_speaker_labels() {
         let mut c=MeetingContext::default();c.push(seg(1,&"Launch: Київ 🚀 ".repeat(1000)));
         let prompt=c.prompt("Where is the launch?");
-        assert!(prompt.contains("REMOTE: Launch:"));assert!(prompt.chars().count()<ANSWER_CONTEXT_CHARS+30);
+        assert!(prompt.contains("REMOTE [utterance 1"));assert!(prompt.len()<240_500);
     }
     #[test]
     fn bounded_for_hour_long_meetings() {

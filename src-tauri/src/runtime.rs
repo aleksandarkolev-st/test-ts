@@ -2,7 +2,7 @@ use crate::{
     audio,
     meeting::{
         self,
-        state::{CurrentQuestion, Engine, Latency, Snapshot},
+        state::{Engine, Latency, Snapshot},
         InputEvent, SpeakerSource,
     },
     openai::{
@@ -33,6 +33,9 @@ pub enum SpeechBackend { #[default] Nemotron, Whisper }
 fn default_chunk() -> u32 { 160 }
 fn default_gpu() -> u32 { 1 }
 fn default_reasoning() -> Option<String> { Some("low".into()) }
+#[derive(Clone,Copy,Default,Serialize,Deserialize)]
+#[serde(rename_all="lowercase")]
+pub enum AnswerObjective {#[default] Brief,Detailed}
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Settings {
@@ -50,6 +53,7 @@ pub struct Settings {
     #[serde(default)]
     pub nemotron_device_name: Option<String>,
     pub model: String,
+    #[serde(default)] pub answer_objective: AnswerObjective,
     #[serde(default = "default_reasoning")]
     pub reasoning_effort: Option<String>,
     #[serde(default)]
@@ -62,7 +66,7 @@ pub struct Settings {
     pub project_path: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -204,6 +208,8 @@ async fn start_session(mut settings:Settings, events:mpsc::Sender<InputEvent>, l
         let instructions=prompts::answer_instructions(prompts::ANSWER);
         codex.prewarm(&settings.model,settings.service_tier.as_deref(),settings.reasoning_effort.as_deref(),&instructions,&cancel).await?;
         codex.prime(&settings.model,settings.service_tier.as_deref(),settings.reasoning_effort.as_deref(),&instructions,&cancel).await?;
+        let brief=prompts::answer_instructions(prompts::BRIEF);
+        codex.prewarm(&settings.model,settings.service_tier.as_deref(),settings.reasoning_effort.as_deref(),&brief,&cancel).await?;
     }
     if settings.speech_backend==SpeechBackend::Nemotron {
         let devices=transcription::nemotron::devices(&settings.nemotron_runtime,&cancel).await?;
@@ -231,6 +237,7 @@ async fn actor(
     timings: crate::openai::timing::Registry,
 ) {
     let mut engine = Engine::default();
+    engine.detector.conversation_endpoints=true;
     engine.view.protection = view.lock().unwrap().protection;
     let mut session: Option<Session> = None;
     let mut starting: Option<Starting> = None;
@@ -264,13 +271,13 @@ async fn actor(
                             "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
                             "error":job.error,"latency":latency,"selectedContext":job.updates.borrow().context.clone()})
                     }).collect::<Vec<_>>();
-                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs}));
+                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version}}));
                 },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::FreezeContext(context,policy,reply)=>{
                     if !engine.view.active || !answers.jobs.is_empty() || generation.is_some() {
                         let _=reply.send(Err("Frozen replay context requires an active, dismissed meeting".into()));
                     } else {
-                        engine.context.frozen_acceptance_context=Some(context);
+                        engine.context.frozen_acceptance_context=(!context.is_empty()).then_some(context);
                         intent_mode=if policy=="final" {meeting::intent::Mode::FinalOnly}else{meeting::intent::Mode::Existing};
                         let _=reply.send(Ok(()));
                     }
@@ -302,9 +309,9 @@ async fn actor(
                     publish(&app,&mut engine,&view);
                 }},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
-                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),question,now,now,prompts::ANSWER));publish(&app,&mut engine,&view);}}},
+                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question,now,now,now,Some(context));engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
-                Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),q.text,now,now,prompts::EXPAND));publish(&app,&mut engine,&view);}}},
+                Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&q.text);let id=answers.confirm_with_context(q.text.clone(),now,now,now,Some(context));if let Some(job)=answers.find_mut(&id){job.detailed=true;job.parent_generation_id=Some(q.id);}engine.context.ledger.accept(&id,&q.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
                 Control::Project(path)=>{if let Some(s)=session.as_ref(){
                     let path=path.unwrap_or_else(||s.settings.project_path.clone());
                     if path.trim().is_empty(){engine.view.error=Some("Choose a project folder in the main window first".into());publish(&app,&mut engine,&view);continue;}
@@ -320,7 +327,7 @@ async fn actor(
                 }}},
                 Control::ClearScreenshot=>{screenshot_request=None;engine.screenshot_data=None;engine.view.screenshot=None;engine.view.attachment_busy=project_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();if session.is_some(){window::show(&app,&hidden);}publish(&app,&mut engine,&view);},
             }},
-            event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=s.settings.answer_backend==AnswerBackend::Codex;engine.detector.independent_asr_endpoint=s.settings.speech_backend==SpeechBackend::Nemotron;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
+            event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=true;engine.detector.conversation_endpoints=true;engine.detector.independent_asr_endpoint=s.settings.speech_backend==SpeechBackend::Nemotron;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
                 match event {
                     #[cfg(all(feature="acceptance",debug_assertions))]
                     InputEvent::RawTranscriptBoundary(source,final_,text,started,ended)=>{
@@ -348,6 +355,7 @@ async fn actor(
                     InputEvent::Transcript(segment)=>{
                         if segment.source==SpeakerSource::Remote && !segment.final_ {speech_metrics.first_remote_partial_at.get_or_insert(now);speech_metrics.remote_partial_updates+=1;}
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
+                        engine.context.ledger.observe(segment.clone(),now);
                         if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
                         let candidate_changed=engine.detector.transcript(&segment);
                         #[cfg(all(feature="acceptance",debug_assertions))]
@@ -394,10 +402,10 @@ async fn actor(
                         Work::NoReply(_,_,_) if valid=>{job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.buffer.clear();job.latency.completed_at=Some(now);emit(&app,"question.ignored",serde_json::json!({"id":id,"timestamp":now}));},
                         Work::Sent(_,t) if valid=>job.latency.request_sent_at=t,
                         Work::Revision(_,text) if valid=>{engine.context.forget_visible_answer(&id);job.buffer=text;job.latency.first_token_at=None;job.latency.first_word_at=None;job.latency.response_revision+=1;if let Some(trace)=timings.lock().unwrap().get(&id){trace.reset_answer();}},
-                        Work::Delta(_,delta) if valid=>{job.latency.observe_answer_delta(&delta,now);if job.latency.first_token_at==Some(now){job.latency.first_token_at=Some(now);if let Some(trace)=timings.lock().unwrap().get(&id){trace.retained_delta_at(now);}}if job.buffer.len()+delta.len()>32_000 {job.cancel.cancel();job.error=Some("Answer exceeds display size limit".into());job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}}else{job.buffer.push_str(&delta);}},
+                        Work::Delta(_,delta) if valid=>{job.output_observed_at=now;engine.context.ledger.generated(&id,&job.question.text,&delta);job.latency.observe_answer_delta(&delta,now);if job.latency.first_token_at==Some(now){job.latency.first_token_at=Some(now);if let Some(trace)=timings.lock().unwrap().get(&id){trace.retained_delta_at(now);}}if job.buffer.len()+delta.len()>32_000 {job.cancel.cancel();job.error=Some("Answer exceeds display size limit".into());job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}}else{job.buffer.push_str(&delta);}},
                         Work::Complete(_) if valid=>{job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}emit(&app,"answer.completed",serde_json::json!({"id":id}));},
                         Work::Error(_,e) if valid=>{job.error=Some(e);job.latency.completed_at=Some(now);if job.confirmed{job.phase=meeting::scheduler::Phase::Complete;}},
-                        Work::Finished(_)=>{job.running=false;},_=>{}
+                        Work::Finished(_)=>{job.running=false;engine.context.ledger.terminal(&id,now,valid&&job.error.is_none()&&job.phase==meeting::scheduler::Phase::Complete);},_=>{}
                     }
                     sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);continue;
                 }}
@@ -421,12 +429,12 @@ async fn actor(
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
                 Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
                     project_request=None;engine.view.attachment_busy=screenshot_request.is_some();
-                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),"Give a concise overview of this project and explain its main architecture.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Give a concise overview of this project and explain its main architecture.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question.clone(),now,now,now,Some(context));engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     publish(&app,&mut engine,&view);
                 }},
                 Work::Screenshot(session_id,id,result)=>{if session.is_some(){window::show(&app,&hidden);}if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&screenshot_request.as_ref()==Some(&id)){
                     screenshot_request=None;engine.view.attachment_busy=project_request.is_some();
-                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();let now=s.clock.elapsed().as_millis()as u64;generation=Some(generate(&app,&mut engine,s,&auth,&client,&timings,work_tx.clone(),"Explain what is on this screen and help me with the visible task.".into(),now,now,prompts::ANSWER));},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Explain what is on this screen and help me with the visible task.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question.clone(),now,now,now,Some(context));engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
             }},
@@ -494,11 +502,11 @@ async fn actor(
                             answers.resumed();emit(&app,"intent.background_ignored",serde_json::json!({"timestamp":now,"floor":engine.detector.remote_turn_started_at}));
                             sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
                         } else {
-                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);if let Some(job)=answers.find_mut(&id){job.context_version=engine.context.ledger.version;job.utterance_revision=revision;}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
                         }
                     }
                     if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
-                    if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
+                    if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
                 }
                 let (remote,self_)=*levels.lock().unwrap();if (engine.view.remote_level-remote).abs()>0.002||(engine.view.self_level-self_).abs()>0.002{engine.view.remote_level=remote;engine.view.self_level=self_;publish(&app,&mut engine,&view);}
             }}
@@ -511,65 +519,6 @@ fn cancel_answer(app: &tauri::AppHandle, generation: &mut Option<CancellationTok
         emit(app, "answer.cancelled", ());
     }
 }
-#[allow(clippy::too_many_arguments)]
-fn generate(
-    app: &tauri::AppHandle,
-    engine: &mut Engine,
-    s: &Session,
-    auth: &Arc<Auth>,
-    client: &Client,
-    timings: &crate::openai::timing::Registry,
-    tx: mpsc::Sender<Work>,
-    question: String,
-    stopped: u64,
-    transcript: u64,
-    instructions: &'static str,
-) -> CancellationToken {
-    let id = uuid::Uuid::new_v4().to_string();
-    let now = s.clock.elapsed().as_millis() as u64;
-    let mut input = engine.context.prompt(&question);
-    if let Some(project) = &engine.project { input.push_str(&project.prompt()); }
-    let screenshot = engine.screenshot_data.clone();
-    engine.view.question = Some(CurrentQuestion {
-        id: id.clone(),
-        text: question,
-        detected_at: now,
-    });
-    engine.view.answer.clear();
-    engine.view.error = None;
-    engine.view.status = "thinking".into();
-    engine.view.expanded = instructions == prompts::EXPAND;
-    let instructions = prompts::answer_instructions(instructions);
-    engine.view.latency = Some(Latency {
-        speech_stopped_at: stopped,
-        transcript_final_at: transcript,
-        question_confirmed_at: now,
-        request_sent_at: now,
-        ..Default::default()
-    });
-    emit(app, "answer.started", serde_json::json!({"id":id}));
-    let cancel = CancellationToken::new();
-    let abort = cancel.clone();
-    let auth = auth.clone();
-    let client = client
-        .clone()
-        .with_backend(s.settings.answer_backend, s.settings.service_tier.as_deref())
-        .with_reasoning(s.settings.reasoning_effort.as_deref());
-    let model = s.settings.model.clone();
-    let clock = s.clock;
-    let trace=crate::openai::timing::Trace::new(clock,now);trace.prompt_chars(input.chars().count());trace.confirmed_at(now);crate::openai::timing::register(timings,id.clone(),trace.clone());
-    let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
-    tauri::async_runtime::spawn(async move {
-        let result=async{let token=answer_token(&auth,&client,&abort).await?;if abort.is_cancelled(){return Err("cancelled".into());}tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed")?;client.stream_with_image(&token,&model,&instructions,&input,screenshot.as_deref(),abort.clone(),|event|{let event=match event{StreamEvent::Delta(d)=>Work::Delta(id.clone(),d),StreamEvent::Revision(text)=>Work::Revision(id.clone(),text),StreamEvent::QuestionDelta{question,context_key,text}=>Work::QuestionDelta(id.clone(),question,context_key,text),StreamEvent::NoReply{question,context_key}=>Work::NoReply(id.clone(),question,context_key),StreamEvent::QuestionCompleted{question,context_key}=>Work::QuestionComplete(id.clone(),question,context_key),StreamEvent::Completed=>Work::Complete(id.clone())};let queue=tx.clone();async move{queue.send(event).await.map_err(|_|"Meeting stream receiver closed".to_string())}}).await}.await;
-        if !abort.is_cancelled() {
-            if let Err(error) = result {
-                let _ = tx.send(Work::Error(id, error)).await;
-            }
-        }
-    });
-    cancel
-}
-
 #[tauri::command]
 async fn bootstrap(rt: State<'_, Runtime>) -> Result<Bootstrap, String> {
     let mut settings = load_settings(&rt.db)?;
@@ -653,6 +602,15 @@ fn answer_visible(rt:State<'_,Runtime>,id:String,revision:Option<u64>) {
     if view.active && !view.answer.is_empty() && view.question.as_ref().is_some_and(|q|q.id==id) && revision.is_none_or(|revision|view.latency.as_ref().is_some_and(|latency|latency.response_revision==revision)) {
         if let Some(trace)=rt.timings.lock().unwrap().get(&id){trace.mark(crate::openai::timing::Stage::FirstVisible);}
     }
+}
+#[tauri::command]
+fn acceptance_disconnect_answers(rt:State<'_,Runtime>)->Result<(),String> {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    if crate::openai::acceptance_mode(){
+        rt.client.codex.as_ref().ok_or("Codex runtime is unavailable")?.close();
+        return Ok(());
+    }
+    let _=rt;Err("Connection faults are available only in acceptance/debug mode".into())
 }
 #[tauri::command]
 async fn acceptance_event(
@@ -754,6 +712,7 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
     if let Some(j)=answers.visible() {
+        if !j.buffer.is_empty(){engine.context.ledger.displayed(&j.generation_id,&j.question.text,&j.buffer,j.output_observed_at);}
         if j.error.is_none() && j.latency.completed_at.is_none(){engine.context.remember_visible_answer_at(&j.question.id,&j.question.text,&j.buffer,j.latency.remote_speech_started_at.unwrap_or(j.question.detected_at));}
         engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=j.error.clone();
         engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
@@ -768,14 +727,14 @@ mod answer_view_tests {
     #[test]
     fn continued_question_does_not_feed_its_retracted_visible_draft_back_as_context() {
         let mut engine=Engine::default();
-        let mut answers=meeting::scheduler::Scheduler{semantic_intent:true,..Default::default()};
+        let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:true,..Default::default()};
         engine.context.remember_answer("previous","Implement","```rust\nlet exact=17;\n```");
         let question="Explain the invariant";
         let baseline=engine.context.answer_context_for_utterance(question,Some(100));
         let id=answers.confirm_with_context(question.into(),400,300,350,Some(baseline.clone()));
         answers.next(400);
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.latency.remote_speech_started_at=Some(100);
-        job.buffer="The unfinished draft assumes a different boundary.".into();
+        job.buffer="The unfinished draft assumes a different boundary.".into();job.output_observed_at=450;
         sync_answers(&mut engine,&answers);
         assert!(engine.context.prompt("Why that boundary?").contains(&engine.view.answer));
         assert!(resume_answer_question(&mut answers,&mut engine.context,question,Some(5000)).is_none());
@@ -790,7 +749,7 @@ mod answer_view_tests {
     }
     #[test]
     fn resumed_remote_clause_rejects_queued_terminal_events_until_reconfirmed() {
-        let mut answers=meeting::scheduler::Scheduler{semantic_intent:true,..Default::default()};
+        let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:true,..Default::default()};
         let question="Evaluate -1 and x < y";
         let id=answers.confirm_with_context(question.into(),300,100,200,Some("Exact previous code".into()));answers.next(300);
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.latency.remote_speech_started_at=Some(0);
@@ -811,7 +770,7 @@ mod answer_view_tests {
     }
     #[test]
     fn queued_old_completion_and_ignore_do_not_close_a_corrected_question() {
-        let mut answers=meeting::scheduler::Scheduler{semantic_intent:true,..Default::default()};
+        let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:true,..Default::default()};
         let question="What is the launch date?";
         let id=answers.propose(question.into(),0,0,0);
         let old=crate::openai::codex::context_key("February 19");
@@ -832,7 +791,7 @@ mod answer_view_tests {
     #[test]
     fn ignored_automatic_turn_returns_to_listening_without_overwriting_manual_input() {
         let mut engine=Engine::default();engine.view.active=true;engine.view.status="question".into();
-        let mut answers=meeting::scheduler::Scheduler::default();
+        let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:false,..Default::default()};
         let id=answers.confirm("The issue has been resolved".into(),0,0,0);
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.latency.completed_at=Some(1);
         sync_answers(&mut engine,&answers);
@@ -843,7 +802,7 @@ mod answer_view_tests {
     #[test]
     fn next_question_can_reference_the_exact_visible_streaming_suggestion() {
         let mut engine=Engine::default();engine.view.active=true;
-        let mut answers=meeting::scheduler::Scheduler::default();
+        let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:false,..Default::default()};
         let id=answers.confirm("Implement it".into(),0,0,0);answers.next(0);
         let job=answers.find_mut(&id).unwrap();job.steer_supported=true;job.buffer="```rust\nlet changed=7;".into();
         sync_answers(&mut engine,&answers);
@@ -886,16 +845,18 @@ fn update_acoustic_quiet(answers:&mut meeting::scheduler::Scheduler,detector:&me
 fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>,client:&Client,timings:&crate::openai::timing::Registry,tx:mpsc::Sender<Work>,answers:&mut meeting::scheduler::Scheduler,now:u64) {
     while let Some(id)=answers.next(now) {
         let job=answers.find_mut(&id).unwrap();let cancel=job.cancel.clone();
-        job.steer_supported=s.settings.answer_backend==AnswerBackend::Codex;
+        job.steer_supported=false;
         let selected_context=job.updates.borrow().context.clone().unwrap_or_else(||engine.context.answer_context_for_utterance(&job.question.text,job.latency.remote_speech_started_at));
         job.set_context(selected_context.clone());
         let updates=job.updates.subscribe();
         let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default());
+        let instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
         let image=engine.screenshot_data.clone();let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
         let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);trace.prompt_chars(input.render().chars().count());if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
+        trace.frame(&s.id,job.latency.remote_speech_started_at,job.utterance_revision,job.context_version,&job.generation_id,crate::openai::codex::context_key(&input.render()));
         crate::openai::timing::register(timings,id.clone(),trace.clone());let client=client.with_refill(s.settings.codex_refill_policy).with_trace(trace);
-        emit(app,"answer.started",serde_json::json!({"id":id,"speculative":!job.confirmed}));
+        emit(app,"answer.started",serde_json::json!({"id":id,"generationId":job.generation_id,"sessionId":s.id,"utteranceId":job.latency.remote_speech_started_at,"utteranceRevision":job.utterance_revision,"contextVersion":job.context_version,"parentGenerationId":job.parent_generation_id,"inputHash":crate::openai::codex::context_key(&input.render()),"speculative":!job.confirmed}));
         #[cfg(all(feature="acceptance",debug_assertions))]
         let diagnostic_app=app.clone();
         tauri::async_runtime::spawn(async move {
@@ -903,7 +864,7 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
             let mut prefix=meeting::provisional::Prefix::default();
             let result=async {let token=answer_token(&auth,&client,&cancel).await?;
                 tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed".to_string())?;
-                client.stream_question(&token,&model,&prompts::answer_instructions(prompts::ANSWER),&input,image.as_deref(),cancel.clone(),updates,|event|{
+                client.stream_question(&token,&model,&instructions,&input,image.as_deref(),cancel.clone(),updates,|event|{
                     #[cfg(all(feature="acceptance",debug_assertions))]
                     if std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
                         match &event {
@@ -1017,6 +978,16 @@ async fn start_meeting(rt: State<'_, Runtime>, settings: Settings) -> Result<(),
     let models = client.models(&token).await?;
     if !models.iter().any(|m| m.slug == settings.model) {
         return Err("Choose a model from the account catalog".into());
+    }
+    if settings.answer_backend==AnswerBackend::Codex {
+        rt.client.codex.as_ref().ok_or("Codex runtime unavailable")?.validate_reasoning(&settings.model,settings.reasoning_effort.as_deref()).await?;
+    } else if settings.answer_backend==AnswerBackend::Chatgpt && !crate::openai::http_fixture_mode() {
+        // Verify the account route and configured model/effort through actual
+        // completed streaming before audio capture. Do not change credentials,
+        // silently substitute an effort, or fall back to a billed API key.
+        let warmed=client.with_reasoning(settings.reasoning_effort.as_deref()).text(&token,&settings.model,
+            "Transport startup check. Reply with one word. No meeting content.","Ready?",CancellationToken::new()).await?;
+        if warmed.trim().is_empty(){return Err("ChatGPT plan startup stream returned no text".into());}
     }
     rt.db.set(
         "audio_settings",
@@ -1165,6 +1136,7 @@ pub fn run() {
             get_answer_timings,
             get_snapshot,
             acceptance_event,
+            acceptance_disconnect_answers,
             acceptance_jobs,
             acceptance_freeze_context,
             acceptance_protection,

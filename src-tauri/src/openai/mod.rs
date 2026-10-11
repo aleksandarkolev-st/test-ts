@@ -1,5 +1,6 @@
 pub mod auth;
 pub mod client;
+mod mailbox;
 pub mod codex;
 pub mod prompts;
 pub mod timing;

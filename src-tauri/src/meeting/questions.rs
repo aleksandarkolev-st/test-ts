@@ -78,6 +78,9 @@ pub struct QuestionDetector {
     /// Cache-aware ASR endpoints independently of our acoustic VAD. Whisper's
     /// audio-chunk finalization instead requires the full VAD endpoint fence.
     pub independent_asr_endpoint: bool,
+    /// Acoustic endpoint plus conservative, topic-independent completeness
+    /// wait. ASR final alone never authorizes an answer.
+    pub conversation_endpoints: bool,
     pub remote_speaking: bool,
     pub remote_quiet: bool,
     pub self_speaking: bool,
@@ -93,6 +96,7 @@ pub struct QuestionDetector {
     last_remote_activity: Option<u64>,
     asr_pending: bool,
     partial: String,
+    final_segments:Vec<(String,String)>,
 }
 impl QuestionDetector {
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
@@ -101,8 +105,9 @@ impl QuestionDetector {
             SpeakerSource::Remote => {
                 self.remote_quiet=false;
                 resumed=self.semantic_intent&&!self.remote_turn_interrupted
+                    && (!self.conversation_endpoints || !self.text.is_empty() || self.last_question_turn_started_at!=self.remote_turn_started_at)
                     &&self.remote_turn_started_at.is_some()
-                    &&self.stopped_at.is_some_and(|t|now.saturating_sub(t)<=REMOTE_CLAUSE_GAP_MS);
+                    &&self.stopped_at.is_some_and(|t|now.saturating_sub(t)<=if self.conversation_endpoints{self.endpoint_wait_ms().max(REMOTE_CLAUSE_GAP_MS)}else{REMOTE_CLAUSE_GAP_MS});
                 if resumed {
                     // A VAD pause is not a semantic turn boundary. Final ASR
                     // segments may arrive on either side of the next Started.
@@ -118,7 +123,7 @@ impl QuestionDetector {
                     self.text.clear();
                     self.continued=false;
                 }
-                if !resumed {self.remote_turn_started_at=Some(now);}
+                if !resumed {self.remote_turn_started_at=Some(now);self.final_segments.clear();}
                 self.remote_turn_interrupted=false;
                 self.remote_speaking = true;
                 self.partial.clear();
@@ -149,6 +154,15 @@ impl QuestionDetector {
         if segment.source != SpeakerSource::Remote {
             return false;
         }
+        if self.conversation_endpoints && segment.final_ {
+            if let Some(index)=self.final_segments.iter().position(|(id,_)|id==&segment.id) {
+                if self.final_segments[index].1==segment.text.trim(){return false;}
+                self.final_segments[index].1=segment.text.trim().into();
+                self.text=self.final_segments.iter().map(|(_,text)|text.as_str()).collect::<Vec<_>>().join(" ");
+                self.partial.clear();self.asr_pending=false;self.final_through=Some(segment.ended_at);
+                self.awaiting_final=!self.finalization_ready();return self.candidate().is_some();
+            }
+        }
         // ASR can finalize the next words before VAD delivers their Started.
         // Confirmation moved the earlier clauses out of text; restore only
         // those confirmed on this same uninterrupted, recent acoustic floor.
@@ -170,6 +184,7 @@ impl QuestionDetector {
         }
         let text = segment.text.trim();
         if !text.is_empty() {
+            if self.conversation_endpoints {self.final_segments.push((segment.id.clone(),text.into()));}
             if !self.text.is_empty() {
                 self.text.push(' ');
             }
@@ -228,7 +243,7 @@ impl QuestionDetector {
             || !self.partial.is_empty()
             || !self
                 .stopped_at
-                .is_some_and(|t| now.saturating_sub(t) >= END_WAIT_MS)
+                .is_some_and(|t| now.saturating_sub(t) >= self.endpoint_wait_ms())
         {
             return None;
         }
@@ -241,6 +256,14 @@ impl QuestionDetector {
         self.last_question_turn_started_at=self.remote_turn_started_at;
         self.continued = false;
         Some((text, self.stopped_at.unwrap()))
+    }
+    pub fn endpoint_wait_ms(&self)->u64 {
+        if !self.conversation_endpoints{return END_WAIT_MS;}
+        // A general acoustic policy, not a catalogue of question phrases.
+        // Semantic reply intent is decided by the answering call itself.
+        // Completion remains uncertain: any later speech or ASR correction
+        // supersedes computation without discarding the recognized source.
+        if self.text.split_whitespace().count()>8 {1800}else{END_WAIT_MS}
     }
     pub fn continue_question(&mut self) {
         self.text = self.last_question.clone();
@@ -255,7 +278,8 @@ impl QuestionDetector {
     pub fn clear(&mut self) {
         let semantic_intent=self.semantic_intent;
         let independent_asr_endpoint=self.independent_asr_endpoint;
-        *self = Self {semantic_intent,independent_asr_endpoint,..Self::default()};
+        let conversation_endpoints=self.conversation_endpoints;
+        *self = Self {semantic_intent,independent_asr_endpoint,conversation_endpoints,..Self::default()};
     }
 }
 

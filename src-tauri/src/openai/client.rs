@@ -68,6 +68,8 @@ impl Default for Client {
             http: reqwest::Client::builder()
                 .connect_timeout(std::time::Duration::from_secs(10))
                 .timeout(std::time::Duration::from_secs(120))
+                .pool_idle_timeout(None)
+                .tcp_keepalive(std::time::Duration::from_secs(30))
                 .redirect(reqwest::redirect::Policy::none())
                 .build()
                 .expect("HTTP client"),
@@ -232,7 +234,7 @@ impl Client {
                         }
                     }
                     "response.completed" => {
-                        if let Some(trace)=&self.trace { trace.response_metadata(&value["response"]); trace.mark(super::timing::Stage::TurnCompleted); }
+                        if let Some(trace)=&self.trace { trace.response_metadata(&value["response"]);trace.usage(&value["response"]["usage"]); trace.mark(super::timing::Stage::TurnCompleted); }
                         complete = true;
                         tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Completed)=>r?};
                     }
@@ -260,11 +262,29 @@ impl Client {
     }
     #[allow(clippy::too_many_arguments)]
     pub async fn stream_question<F, Fut>(&self, token: &str, model: &str, instructions: &str, prompt: &super::codex::QuestionPrompt,
-        image: Option<&str>, cancel: CancellationToken, updates: tokio::sync::watch::Receiver<super::codex::QuestionUpdate>, event: F) -> Result<(), String>
+        image: Option<&str>, cancel: CancellationToken, updates: tokio::sync::watch::Receiver<super::codex::QuestionUpdate>, mut event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
+        let frame=updates.borrow().clone();
+        if !frame.confirmed || frame.question!=prompt.question || frame.context.as_deref()!=Some(&prompt.context) {return Err("Only an immutable accepted conversation frame may be submitted".into());}
+        let question=prompt.question.clone();let key=super::codex::context_key(&prompt.context);
+        let mut gate=super::codex::ReplyGate::default();
+        let mut decode=|raw|{
+            let decoded=match raw {
+                StreamEvent::Delta(text)=>match gate.feed(&text) {Ok(Some(text))=>Some(Ok(StreamEvent::QuestionDelta{question:question.clone(),context_key:key,text})),Ok(None)=>None,Err(e)=>Some(Err(e))},
+                StreamEvent::Completed=>Some(gate.finish().map(|()|if gate.ignored{StreamEvent::NoReply{question:question.clone(),context_key:key}}else{StreamEvent::QuestionCompleted{question:question.clone(),context_key:key}})),
+                _=>Some(Err("Unexpected event for an immutable conversation generation".into())),
+            };
+            // Return a single concrete future type, including no-text prefixes.
+            let (error,future)=match decoded.transpose() {Ok(Some(value))=>(None,Some(event(value))),Ok(None)=>(None,None),Err(e)=>(Some(e),None)};
+            async move {if let Some(e)=error{Err(e)}else if let Some(future)=future{future.await}else{Ok(())}}
+        };
         if self.backend == AnswerBackend::Codex {
-            self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,prompt,image,cancel,self.refill_policy,self.trace.clone(),updates,event).await
-        } else { self.stream_with_image(token,model,instructions,&prompt.render(),image,cancel,event).await }
+            self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,prompt,image,cancel,self.refill_policy,self.trace.clone(),updates,&mut decode).await
+        } else {
+            let result=self.stream_with_image(token,model,instructions,&format!("AUTOMATIC REMOTE TURN\n{}",prompt.render()),image,cancel.clone(),&mut decode).await;
+            if cancel.is_cancelled(){if let Some(trace)=&self.trace{trace.cancelled();}}
+            result
+        }
     }
     pub async fn text(
         &self,
@@ -435,6 +455,21 @@ mod tests {
             },
             task,
         )
+    }
+    #[tokio::test]
+    async fn plan_adapter_uses_the_same_immutable_generation_protocol() {
+        let raw=serde_json::json!({"intent":"answer","text":"Because Foo < -1 is the exact guard.\n```cpp\nreturn x < -1;\n```"}).to_string();
+        let body=format!("data: {}\n\ndata: {{\"type\":\"response.completed\"}}\n\n",serde_json::json!({"type":"response.output_text.delta","delta":raw}));
+        let (client,server)=server(&body,0).await;
+        let prompt=super::super::codex::QuestionPrompt::new("Exact preceding code", "Why?");
+        let (_,rx)=tokio::sync::watch::channel(super::super::codex::QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let mut text=String::new();let mut completed=false;
+        client.stream_question("fixture-token","gpt-6.1-sol",&super::super::prompts::answer_instructions(super::super::prompts::ANSWER),&prompt,None,CancellationToken::new(),rx,|event| {
+            match event {StreamEvent::QuestionDelta{question,context_key,text:delta}=>{assert_eq!(question,"Why?");assert_eq!(context_key,super::super::codex::context_key("Exact preceding code"));text.push_str(&delta);},StreamEvent::QuestionCompleted{..}=>completed=true,_=>panic!("Unexpected event")};std::future::ready(Ok(()))
+        }).await.unwrap();
+        assert!(completed&&text.contains("return x < -1;"));let sent=server.await.unwrap();
+        assert_eq!(sent["store"],false);assert_eq!(sent["stream"],true);assert_eq!(sent["input"].as_array().unwrap().len(),1);
+        for unsupported in ["previous_response_id","conversation","background","max_output_tokens","prompt_cache_retention"]{assert!(sent.get(unsupported).is_none());}
     }
     #[tokio::test]
     async fn real_http_stream_contract() {

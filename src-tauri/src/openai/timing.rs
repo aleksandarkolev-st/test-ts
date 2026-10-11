@@ -5,6 +5,17 @@ use std::{collections::HashMap, sync::{Arc, Mutex}, time::Instant};
 #[derive(Clone, Default, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Timeline {
+    #[serde(default)] pub generation_id:Option<String>,
+    #[serde(default)] pub session_id:Option<String>,
+    #[serde(default)] pub utterance_id:Option<u64>,
+    #[serde(default)] pub utterance_revision:u64,
+    #[serde(default)] pub context_version:u64,
+    #[serde(default)] pub input_hash:Option<[u8;32]>,
+    #[serde(default)] pub transport_written_at:Option<u64>,
+    #[serde(default)] pub input_tokens:Option<u64>,
+    #[serde(default)] pub output_tokens:Option<u64>,
+    #[serde(default)] pub reasoning_tokens:Option<u64>,
+    #[serde(default)] pub remote_termination_confirmed:Option<bool>,
     pub candidate_detected: Option<u64>,
     pub codex_stream_entered: Option<u64>,
     pub semaphore_acquired: Option<u64>,
@@ -77,6 +88,17 @@ pub struct Trace { clock: Instant, data: Arc<Mutex<Timeline>>,
     expected_input: Arc<Mutex<Option<[u8;32]>>>,
 }
 impl Trace {
+    pub fn frame(&self,session:&str,utterance:Option<u64>,revision:u64,version:u64,generation:&str,key:[u8;32]) {
+        let mut data=self.data.lock().unwrap();data.session_id=Some(session.into());data.utterance_id=utterance;data.utterance_revision=revision;data.context_version=version;data.generation_id=Some(generation.into());data.input_hash=Some(key);
+    }
+    pub fn transport_written(&self) {self.data.lock().unwrap().transport_written_at=Some(self.clock.elapsed().as_millis()as u64);}
+    pub fn usage(&self,usage:&serde_json::Value) {
+        let mut data=self.data.lock().unwrap();
+        data.input_tokens=usage["inputTokens"].as_u64().or(usage["input_tokens"].as_u64());
+        data.output_tokens=usage["outputTokens"].as_u64().or(usage["output_tokens"].as_u64());
+        data.reasoning_tokens=usage["reasoningOutputTokens"].as_u64().or(usage["output_tokens_details"]["reasoning_tokens"].as_u64());
+        if let Some(cached)=usage["cachedInputTokens"].as_u64(){data.cached_input_tokens=Some(cached);}
+    }
     pub fn new(clock: Instant, candidate: u64) -> Self {
         Self { clock, data: Arc::new(Mutex::new(Timeline { candidate_detected: Some(candidate), ..Default::default() })),
             #[cfg(all(feature="acceptance",debug_assertions))]
@@ -99,13 +121,13 @@ impl Trace {
             Stage::FirstVisible => &mut t.first_visible,
             Stage::RefillCompleted => &mut t.refill_completed,
         };
-        if matches!(stage,Stage::TurnCompleted) {*slot=Some(now);} else {slot.get_or_insert(now);}
+        if matches!(stage,Stage::TurnCompleted) {*slot=Some(now);t.remote_termination_confirmed=Some(true);} else {slot.get_or_insert(now);}
     }
     pub fn confirmed_at(&self, now: u64) { self.data.lock().unwrap().question_confirmed = Some(now); }
     pub fn prepared_age(&self, age: u64) { self.data.lock().unwrap().prepared_thread_age_ms = Some(age); }
     pub fn refill_thread_created(&self) { self.data.lock().unwrap().refill_threads_created += 1; }
     pub fn refill_failed(&self) { self.data.lock().unwrap().refill_error = true; }
-    pub fn cancelled(&self) { self.data.lock().unwrap().cancelled = true; }
+    pub fn cancelled(&self) { let mut data=self.data.lock().unwrap();data.cancelled=true;data.remote_termination_confirmed.get_or_insert(false); }
     pub fn steered(&self) { self.data.lock().unwrap().steering_count += 1; }
     pub fn followup(&self) { self.data.lock().unwrap().followup_count += 1; }
     pub fn prompt_chars(&self, count:usize) { self.data.lock().unwrap().prompt_chars=count; }
@@ -152,7 +174,7 @@ impl Trace {
     pub fn cleanup_started(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_started_at=Some(self.clock.elapsed().as_millis()as u64);t.interrupt_ack_at=None;t.cleanup_terminal_at=None;t.cleanup_max_queued_events=queued;}
     pub fn cleanup_queue_depth(&self,queued:usize) {let mut t=self.data.lock().unwrap();t.cleanup_max_queued_events=t.cleanup_max_queued_events.max(queued);}
     pub fn interrupt_ack(&self) {self.data.lock().unwrap().interrupt_ack_at=Some(self.clock.elapsed().as_millis()as u64);}
-    pub fn cleanup_terminal(&self) {self.data.lock().unwrap().cleanup_terminal_at=Some(self.clock.elapsed().as_millis()as u64);}
+    pub fn cleanup_terminal(&self) {let mut data=self.data.lock().unwrap();data.cleanup_terminal_at=Some(self.clock.elapsed().as_millis()as u64);data.remote_termination_confirmed=Some(true);}
     pub fn snapshot(&self) -> Timeline { self.data.lock().unwrap().clone() }
     pub fn backend(&self, backend: &str) { self.data.lock().unwrap().backend = Some(backend.into()); }
     pub fn request_sent(&self) { self.data.lock().unwrap().model_request_sent.get_or_insert(self.clock.elapsed().as_millis() as u64); }

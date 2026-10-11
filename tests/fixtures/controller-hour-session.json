@@ -1,0 +1,384 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "objective": "detailed",
+  "serviceTier": null,
+  "minimumDurationMs": 3600000,
+  "turns": [
+    {
+      "name": "fixed-age-start",
+      "question": "What is the launch date and why must the replay preserve it?",
+      "fixedContext": "REMOTE: The team explicitly decided to launch on February 19, 2027. The reason is the signed customer deadline.",
+      "atMs": 0
+    },
+    {
+      "name": "first-code",
+      "question": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "clearFixedContext": true,
+      "atMs": 20000
+    },
+    {
+      "name": "session-decision",
+      "question": "We have agreed that release Delta uses a retention period of exactly thirty seven days. Mira owns it, and the checkpoint identifier is Foo underscore seventeen. Keep this decision for the rest of this meeting.",
+      "atMs": 50000,
+      "waveFile": "artifacts/controller-v72/plans/decision.wav",
+      "waveSha256": "79fd3989cc28399bd7abaa2834e641df30590054cb8dd803a9bd136a000f65fe"
+    },
+    {
+      "name": "saved-audio-1",
+      "question": "Explain CUDA warps.",
+      "waveFile": "artifacts/deep-interview-v71/hard-probes/warp-followups/round-01.wav",
+      "waveSha256": "1ed27a1c9745acd8c66b7740a6ca059142d71ae594ab61367c42f602785cce83",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\interview.json",
+        "row": 0
+      },
+      "atMs": 100000,
+      "sampleResources": true
+    },
+    {
+      "name": "spoken-why-warps",
+      "question": "Why?",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-02.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "atMs": 130000
+    },
+    {
+      "name": "saved-audio-2",
+      "question": "You mentioned shuffles and explicit synchronization. On Volta or newer, a full physical warp starts converged. Only physical lanes zero through eighteen enter a branch. Inside it, each calls __activemask(), then passes that mask to __shfl_sync to read physical lane eighteen's float, using width thirty-two. Is every caller guaranteed to receive that float? Explain the precise participation and source-validity contracts, then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics. The other thirteen lanes must not call the shuffle.",
+      "waveFile": "artifacts/deep-interview-v71/hard-probes/warp-followups/round-02.wav",
+      "waveSha256": "863d650a99096babab5a994064ce6add6605fe84379b3e5754ca3f9f3f974537",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\interview.json",
+        "row": 1
+      },
+      "atMs": 225000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-3",
+      "question": "On Volta or newer, a full physical warp has exactly physical lanes zero through eighteen participating, each supplying one finite float. All nineteen named lanes call your device function once; no other lanes call it. Write compilable CUDA code returning their sum to every caller, without shared memory or atomics, using at most six float shuffle calls per caller. Floating-point rounding is allowed; specify your addition order. Do not assume implicit lockstep execution. Prove that each input contributes exactly once to each returned sum, every shuffle source participates, and every named lane executes matching collectives even when a lane has no partner.",
+      "waveFile": "artifacts/deep-interview-v71/hard-probes/warp-followups/round-03.wav",
+      "waveSha256": "e3bc3651d4a38d388fa9d809f25a61d7ca8123ffc16041c1bca9086b9884b868",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\interview.json",
+        "row": 2
+      },
+      "atMs": 350000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-4",
+      "question": "You proposed five reduction shuffles followed by a broadcast. Change the design: on Volta or newer, a full physical warp has exactly lanes zero through eighteen participating, each supplying one finite float. Those nineteen lanes each call once; no other lanes call. Supply compilable CUDA returning the sum to every caller with at most six float shuffle calls per caller, without shared memory, atomics, or implicit lockstep. Specify the addition order and prove exact-once input coverage, participating sources, and matching collectives. However, you may not finish by broadcasting one lane\u2019s completed sum.",
+      "waveFile": "artifacts/deep-interview-v71/hard-probes/warp-followups/round-04.wav",
+      "waveSha256": "852dff66384402cd65e42c2bbfe57f96a60e2c124181a610de15f65d86416736",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\interview.json",
+        "row": 3
+      },
+      "atMs": 475000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-5",
+      "question": "Switch to distributed systems. Five replicas initially store tag zero and value zero. One writer assigns increasing integer tags, sends each tagged value to all replicas, and completes after three acknowledgments. Replicas retain only the highest tag received. A reader queries any three replicas and returns the highest-tagged value, without writing back. Messages may be delayed arbitrarily; replicas do not fail. Is this register linearizable? Give an explicit execution proving your answer, naming replicas and operation ordering. Then determine whether making each reader write its selected tagged value to three replicas before returning restores linearizability, including with concurrent readers and an unfinished write. Prove your conclusion.",
+      "waveFile": "artifacts/deep-interview-v71/hard-probes/warp-followups/round-05.wav",
+      "waveSha256": "5b4ae97f88abd85f9a3fb051138e8fbaa03f223e7d3ba6df64b325d2a0b18d6b",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\interview.json",
+        "row": 4
+      },
+      "atMs": 600000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-6",
+      "question": "Our route-selection code sometimes returns a result that looks wrong, but the small tests pass. How would you start investigating, and what would you need to know before changing the algorithm?",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-01.wav",
+      "waveSha256": "aef1e7d68aaa7dadaa4e374ce16db069b8728c8644462e1ebb5e58b1e0923c30",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 0
+      },
+      "atMs": 725000,
+      "sampleResources": true
+    },
+    {
+      "name": "saved-audio-7",
+      "question": "Why?",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-02.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 1
+      },
+      "atMs": 850000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-8",
+      "question": "Here, \u201croute\u201d means a minimum-cost walk from vertex s to vertex t in a directed graph. Integer weights may be negative; walks may repeat edges and vertices. Parallel edges and self-loops are allowed. [pause] Write executable Python 3 classify_route(n, edges, s, t), returning a pair: status and cost. Status is UNREACHABLE, FINITE, or UNBOUNDED; cost is an integer only for FINITE, otherwise None. UNBOUNDED means arbitrarily negative costs are possible. Vertices are zero-based; n is between one and two thousand, edges number at most ten thousand, and absolute weights are at most one trillion. Give an invariant and justified worst-case time and memory bounds. Which negative cycles affect this query?",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-03.wav",
+      "waveSha256": "e97cf000b055bc4e4dda3c6b20cbad497a8e06b5eca7905578b4a664eb137e4a",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 2
+      },
+      "atMs": 975000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-9",
+      "question": "Correct: both reachability conditions matter. Complete classify_route in executable Python 3, including unreachable targets and the case where s equals t. Explain exactly which relaxation establishes unboundedness, state your invariant, and justify worst-case time and memory. [pause] How does your code prevent an unreachable distance from participating in arithmetic? One final constraint: your runtime bound must hold for every allowed input, not merely in expectation; do not rely on a heuristic queue algorithm having linear runtime.",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-04.wav",
+      "waveSha256": "a744d51f1389937c6296690687d15f17af6d40bfc029011c63c5df25fca49f2a",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 3
+      },
+      "atMs": 1100000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-10",
+      "question": "Your exact-integer argument avoids overflow; abruptly switch to numerical analysis. Python 3 floats here use IEEE 754 binary64, round-to-nearest ties-to-even, with gradual underflow. Implement f(x) for every finite nonnegative float x, approximating square root of x squared plus one, minus x. Direct evaluation suffers cancellation and overflow. [pause] Your result must remain positive even at x equal to ten to the power 308. You may use math.hypot, assumed correctly rounded. Give executable code, justify every intermediate's range, and derive a relative-error bound where the exact result is normal. What guarantee remains when it is subnormal?",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-05.wav",
+      "waveSha256": "18654adecfeb6991a62a2a95354c19d3bada670d071eb959d18466d3d26296cd",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 4
+      },
+      "atMs": 1225000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-11",
+      "question": "What if that changes?",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-06.wav",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 5
+      },
+      "atMs": 1350000,
+      "sampleResources": true
+    },
+    {
+      "name": "saved-audio-12",
+      "question": "I mean gradual underflow. Keep round-to-nearest, ties-to-even, but now every operation flushes a subnormal result to zero; inputs still retain all finite binary64 values. Since rationalization removes cancellation, it should still guarantee a positive result at x equal to ten to the power 308, correct? [pause] Reject or defend that premise. Can any function returning a float through those operations guarantee both positivity and relative error below one percent for every finite nonnegative input? Prove your answer using the smallest positive normal value, and state what output-contract change would permit an accurate representation.",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-07.wav",
+      "waveSha256": "f347d1c69f0684e958f12c93dfae253b40f8df6b245032b403884514d84caa8b",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 6
+      },
+      "atMs": 1475000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-13",
+      "question": "Switch to GPU correctness guarantees. A hypothetical discrete GPU supports asynchronous copies from pinned host memory. A host enqueues a copy, immediately rewrites its source buffer, then enqueues a consuming kernel in the same explicit stream. What ordering holds, and what contract is violated? [pause] Specify a two-buffer protocol with events and exact ownership transitions. Each input is 64 MiB; measured copy throughput is 16 GiB per second, and its kernel takes 2 milliseconds. Derive serial time and an ideal overlap lower bound for eight inputs, stating required hardware assumptions. Final condition: host buffers may be reused only after their copies finish, and device buffers only after their kernels finish.",
+      "waveFile": "artifacts/deep-interview-v71/algorithms-hour-t/round-08.wav",
+      "waveSha256": "baa7de8b56437ff5df8cff2897c2201cdce5d50bd357cd2d9daa2b2a75dff3c7",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "row": 7
+      },
+      "atMs": 1600000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-14",
+      "question": "A batch-processing service occasionally stops completing work, but the process is still alive. How would you start investigating?",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-01.wav",
+      "waveSha256": "898fd684f4f7dfa03045ed5ba86a9f31f765edbc4b5693682157e9b105fcdaae",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 0
+      },
+      "atMs": 1725000,
+      "sampleResources": false
+    },
+    {
+      "name": "decision-after-30-minutes",
+      "question": "What exact retention period, owner and checkpoint identifier did we agree on near the beginning of this meeting? Use the recognized decision.",
+      "atMs": 1800000
+    },
+    {
+      "name": "interrupted-coding-task",
+      "question": "Implement a complete C++17 bounded FIFO class with push, pop, capacity 17 and overflow rejection. Include a test main that asserts empty-pop failure, fills all 17 slots, rejects overflow, drains in FIFO order, and exercises wraparound. Give a useful opening before the code.",
+      "atMs": 1810000,
+      "settle": false
+    },
+    {
+      "name": "spoken-why-during-coding",
+      "question": "Why?",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-02.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "atMs": 1810001,
+      "afterDisplayed": true
+    },
+    {
+      "name": "saved-audio-15",
+      "question": "Why?",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-02.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 1
+      },
+      "atMs": 1850000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-16",
+      "question": "Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream\u2019s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each thread loads its corresponding input into shared memory, calls __syncthreads, and thread zero sums the valid entries into the output. Immediate launch checks succeed; a sanitizer reports a divergent block barrier. Explain the violated invariant without claiming every device must hang. Provide compilable CUDA code and a host launch supporting valid from zero through 96, with defined output, no out-of-bounds reads, and a synchronization proof.",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-03.wav",
+      "waveSha256": "467942c4996d8aaabfc6a7367d4da40a2eaeb424bc99b622dc7898674be2939d",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 2
+      },
+      "atMs": 1975000,
+      "sampleResources": true
+    },
+    {
+      "name": "saved-audio-17",
+      "question": "Continue with your compilable kernel and host launch. Explain precisely what threads 70 through 95 do in the original kernel and why successful launch checks do not establish correctness. In your replacement, prove that every shared-memory value read by thread zero was initialized, and identify which thread writes the output when valid is zero. Keep the launch at one block of 96 threads for every valid value, including zero; do not handle zero by skipping the kernel or initializing the output on the host.",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-04.wav",
+      "waveSha256": "40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 3
+      },
+      "atMs": 2100000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-18",
+      "question": "Your replacement gives a local invariant; switch now to control theory and a global one. A discrete-time system may choose either matrix at every step: A has rows zero, a; zero, zero. B has rows zero, zero; b, zero. Both parameters are positive. Each matrix alone becomes zero after two steps. Does that imply stability under arbitrary switching? Derive the necessary and sufficient condition for uniform exponential stability, including the boundary case. Prove your condition using adversarial switching and a common diagonal quadratic Lyapunov function, explicitly deriving the inequalities its two positive weights must satisfy.",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-05.wav",
+      "waveSha256": "a0e8e84e3530a72de0d31dd6d5eccbb1388e0c7c1f69d5c9baf3f81b59605829",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 4
+      },
+      "atMs": 2225000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-19",
+      "question": "What if that changes?",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-06.wav",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 5
+      },
+      "atMs": 2350000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-20",
+      "question": "The switching rule changes: neither matrix may appear three times consecutively; all other sequences are allowed. Since both matrices square to zero, this restriction should guarantee uniform exponential stability for every positive a and b, correct? Establish the exact necessary and sufficient condition, including the boundary case. Under that condition, finish deriving the strict inequalities for a common diagonal quadratic Lyapunov function and give explicit positive weights and a one-step contraction factor.",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-07.wav",
+      "waveSha256": "c0655bd8df664a0187b55353cdfd455478d196c88f6a5f0b1a1592aae838290d",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 6
+      },
+      "atMs": 2475000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-21",
+      "question": "Now test an ownership invariant. CUDA calls succeed; explicit streams A and B have no implicit dependencies. A submits producer P1 and records event E. B submits a wait on E, then consumer C1. A submits P2 and records E again. Both producers overwrite the same allocation; C1 reads it. A query after the second record returns not ready. Which record does B's wait reference, and can P2 race with C1? Give a permitted execution trace. Then supply compilable CUDA host code for a two-slot loop using per-slot ready and consumed events, checked calls, and safe first use. Final condition: neither device-wide synchronization nor host synchronization between iterations is allowed.",
+      "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-08.wav",
+      "waveSha256": "ef020444fcd5eb860a7e759f69b31fd8e76fcf9886643e1162678b9f8b5b7508",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 7
+      },
+      "atMs": 2600000,
+      "sampleResources": true
+    },
+    {
+      "name": "saved-audio-22",
+      "question": "Customers are increasingly calling a refill-delivery service unreliable. How would you work out what is happening and decide what to do first?",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-01.wav",
+      "waveSha256": "1589403e326c42fecf218caa71cb4765b7dbd773bad1b9d225592770d4518661",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "row": 0
+      },
+      "atMs": 2725000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-23",
+      "question": "Why?",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-02.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "row": 1
+      },
+      "atMs": 2850000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-24",
+      "question": "You proposed comparing complaints with delivery performance. Two consecutive twenty-eight-day periods each had twelve thousand orders. Late means delivered after the promised calendar date; timestamps are complete. Late orders increased from nine hundred to one thousand four hundred forty, while complaint-producing orders fell from six hundred to five hundred forty. Each order counts at most once in each measure; overlap is unknown. Calculate both rates and their percentage-point changes. [Interviewer pause: one point five seconds.] What can you conclude about reliability, what cannot you conclude about complaints among late orders, and what evidence would you request next before choosing an intervention?",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-03.wav",
+      "waveSha256": "880563a0d0533a43e0a73394e88640aa8e9d7d96453ac284cd617a2fbe61606a",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "row": 2
+      },
+      "atMs": 2975000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-25",
+      "question": "You correctly calculated first-period lateness as seven point five percent. With the supplied order and complaint counts, what are the sharp lower and upper bounds on the percentage of late orders that produced complaints in each period? Give feasible overlap counts showing whether that conditional complaint rate could have risen or fallen despite fewer complaints overall. [Interviewer pause: one point five seconds.] Explain why your bounds are attainable. Crucially, complaints are not restricted to late orders, and you must not assume independence.",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-04.wav",
+      "waveSha256": "943fb8d3aea3b83141b3baae03b22dc4e2a696350fe20a5ebe2db12965b9fff2",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "row": 3
+      },
+      "atMs": 3100000,
+      "sampleResources": false
+    },
+    {
+      "name": "saved-audio-26",
+      "question": "Switch to database concurrency: your overlap constructions preserved all counts; now test whether transactions preserve an invariant. PostgreSQL has two doctor rows, Alice and Bob, both marked on call. At repeatable-read isolation, each transaction counts on-call doctors and, if the count exceeds one, marks its own doctor off call. Alice and Bob run concurrently. Show an exact interleaving where both commit and nobody remains on call. Why does updating different rows matter? [Interviewer pause: one point five seconds.] Provide executable SQL using serializable isolation that preserves at least one on-call doctor, specify exactly what must be retried after a serialization failure, and justify correctness.",
+      "waveFile": "artifacts/deep-interview-v71/general-hour-t/round-05.wav",
+      "waveSha256": "e96f72914a151482951dfe10b40f92111f9389c0cd1e3b6756ba743a2ecbde43",
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "row": 4
+      },
+      "atMs": 3225000,
+      "sampleResources": true
+    },
+    {
+      "name": "code-after-20-plus-turns",
+      "question": "Repeat the exact original Foo code from the first exchange in one code fence, byte-for-byte. Preserve capitalization, guard, signs and constants. Do not use the later guard variant.",
+      "atMs": 3380000
+    },
+    {
+      "name": "decision-after-55-minutes",
+      "question": "What exact retention, owner and checkpoint identifier did we decide near the beginning of this session? Use our actual recorded decision, not generic policy.",
+      "atMs": 3460000
+    },
+    {
+      "name": "fixed-age-end",
+      "question": "What is the launch date and why must the replay preserve it?",
+      "fixedContext": "REMOTE: The team explicitly decided to launch on February 19, 2027. The reason is the signed customer deadline.",
+      "atMs": 3600000,
+      "sampleResources": true
+    }
+  ],
+  "scope": "Final controller revision: actual wall-clock hour technical meeting simulation. Remote speech uses T24E390 and Nemotron. Exact code sharing, recall probes and fixed-context aging controls are explicitly typed. Includes a spoken Why during a displayed coding response; overlap is verified from observed generations, not assumed."
+}

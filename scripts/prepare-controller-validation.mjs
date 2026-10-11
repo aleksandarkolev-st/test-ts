@@ -11,6 +11,8 @@ assert(out.startsWith(root+path.sep));await mkdir(out,{recursive:true});
 const sha=x=>createHash('sha256').update(x).digest('hex'),relative=x=>path.relative(root,x).replaceAll('\\','/');
 const base={model:'gpt-6.1-sol',effort:'low',objective:'detailed',serviceTier:null};
 const save=(name,plan)=>writeFile(path.join(out,`${name}.json`),JSON.stringify(plan,null,2)+'\n');
+const hourBytes=await readFile('tests/fixtures/controller-hour-session.json');
+await save('hour-session',{...JSON.parse(hourBytes),sourceFixtureSha256:sha(hourBytes)});
 for(const name of ['contextual-session','reasoning-probes']){
  const bytes=await readFile(`tests/fixtures/controller-${name}.json`);await save(name,{...JSON.parse(bytes),sourceFixtureSha256:sha(bytes)});
 }

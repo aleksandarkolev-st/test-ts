@@ -9,6 +9,7 @@ import {connectNativePages} from './lib/native-cdp.mjs';
 import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
 import {changedJobObservation} from './lib/deep-observations.mjs';
 import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
+import {servedRenderer} from './lib/served-renderer.mjs';
 if(process.argv[2]==='--stop'){
  const connection=await connectNativePages(9251);
  try{await connection.main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}finally{connection.close();}
@@ -31,6 +32,9 @@ for(const key of ['COPILOT_TEST_API','COPILOT_ACCEPTANCE_INPUT_ONLY','COPILOT_AC
 const child=(file,args)=>new Promise((resolve,reject)=>{const p=spawn(file,args,{cwd:root,windowsHide:true,env,stdio:['ignore','pipe','pipe']});let error='',stdout='';p.stderr.on('data',x=>error=(error+x).slice(-4000));p.stdout.on('data',x=>stdout+=x);p.once('error',reject);p.once('exit',code=>code===0?resolve(stdout):reject(Error(`${file} exited ${code}: ${error}`)));});
 try {
  try{await fetch('http://127.0.0.1:1420');}catch{vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');break;}catch{await sleep(100);}}}
+ journal.renderer=await servedRenderer();
+ journal.collectorSha256=hash(await readFile(new URL(import.meta.url)));
+ try{journal.buildEvidence=JSON.parse(await readFile(path.join(applicationDir,'build.json')));}catch(error){if(error.code!=='ENOENT')throw error;}
  await mkdir(path.join(out,'data'),{recursive:true});
  app=spawn(path.join(root,applicationDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});journal.nativeProcessId=app.pid;
  for(let i=0;i<600;i++){try{connection=await connectNativePages(9251);break;}catch{assert.equal(app.exitCode,null);await sleep(100);}}assert(connection);
@@ -67,7 +71,7 @@ try {
  };
  for(const [index,item]of plan.turns.entries()){
   if(item.atMs!=null){while(Date.now()-start<item.atMs)await sleep(Math.min(1000,item.atMs-(Date.now()-start)));}
-  if(item.afterDisplayed){const previous=journal.rows.at(-1),end=Date.now()+120000;let met=false;while(Date.now()<end){const state=await invoke('acceptance_jobs');const target=state.jobs.filter(j=>j.confirmed&&j.question.detectedAt>=previous.nativeStartedAt).at(-1);if(target&&state.view.question?.id===target.question.id&&state.view.answer.length>25){met=true;break;}await sleep(50);}item.displayedConditionMet=met;}
+  if(item.afterDisplayed){const previous=journal.rows.at(-1),end=Date.now()+120000;let met=false;while(Date.now()<end){const state=await invoke('acceptance_jobs');const target=state.jobs.filter(j=>j.confirmed&&j.question.detectedAt>=previous.nativeStartedAt).at(-1);if(target&&await connection.overlay.evaluate(id=>window.deepPaintSamples.some(p=>p.questionId===id&&p.visible&&p.visibleEnd-p.visibleStart>25),target.question.id)){met=true;break;}await sleep(50);}item.displayedConditionMet=met;}
   const before=await anchor(),eventOffset=await connection.main.evaluate(()=>window.replayEvents.length),row={round:index+1,...item,question:item.question,sourceBinding:item.sourceBinding??null,startedHostMs:Date.now(),applicationAgeMs:Date.now()-Date.parse(journal.startedAt),nativeStartedAt:before.nativeMs,runningAtSubmission:(await invoke('acceptance_jobs')).jobs.filter(j=>j.running).map(j=>j.question.id)};
   if(item.fixedContext!=null){await invoke('action',{action:'dismiss'});await invoke('acceptance_freeze_context',{context:item.fixedContext,policy:'existing'});}
   if(item.clearFixedContext){await invoke('action',{action:'dismiss'});await invoke('acceptance_freeze_context',{context:'',policy:'existing'});}

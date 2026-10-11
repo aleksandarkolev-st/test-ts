@@ -31,7 +31,7 @@ for(const row of journal.rows)for(const [index,block] of fencedSources(row.answe
  if(!/^(?:cuda|cpp|c\+\+)$/iu.test(block.languageAnnotation))continue;
  const caseDirectory=path.join(out,`round-${row.round}-block-${index}`);await mkdir(caseDirectory);
  const source=path.join(caseDirectory,'recorded.cu'),object=path.join(caseDirectory,'recorded.obj');await writeFile(source,block.text,{flag:'wx'});
- const command=['--device-c','--std=c++20','-arch=sm_70','--cudart=none','-ccbin',path.dirname(toolchain.hostCompiler),...includes.flatMap(include=>['-I',include]),'-Xcompiler','/utf-8','recorded.cu','-o','recorded.obj'];
+ const command=['--device-c','--std=c++17','-arch=sm_70','--cudart=none','-ccbin',path.dirname(toolchain.hostCompiler),...includes.flatMap(include=>['-I',include]),'-Xcompiler','/utf-8','recorded.cu','-o','recorded.obj'];
  const startedAt=new Date().toISOString(),result=await run(command,caseDirectory);
  const stdoutFile=path.join(caseDirectory,'stdout.log'),stderrFile=path.join(caseDirectory,'stderr.log');
  await writeFile(stdoutFile,result.stdout,{flag:'wx'});await writeFile(stderrFile,result.stderr,{flag:'wx'});
@@ -50,7 +50,6 @@ const report={recordedAt:new Date().toISOString(),journal:{file:journalFile,sha2
  blocks,summary:{recordedCudaOrCppBlocks:blocks.length,compiled:blocks.filter(block=>block.exitCode===0).length,
   failed:blocks.filter(block=>block.exitCode!==0).length,timedOut:blocks.filter(block=>block.timedOut).length},
  hardwareExecutionPerformed:false,goalComplete:false,
- scope:'Unchanged CUDA/C++-annotated fenced bodies compiled as individual C++20 translation units with real pinned NVIDIA nvcc and MSVC, using relocatable device compilation for sm_70. No missing includes, launch wrappers or answer repairs are added. Compilation failures remain recorded, including snippets not intended as standalone units and dependency or requested-standard mismatches. Compiler acceptance does not prove numerical or collective correctness, hardware behavior, or full-interview accuracy.'};
+ scope:'Unchanged CUDA/C++-annotated fenced bodies compiled as individual C++17 translation units with real pinned NVIDIA nvcc and MSVC, using relocatable device compilation for sm_70. No missing includes, launch wrappers or answer repairs are added. Compilation failures remain recorded, including snippets not intended as standalone units and dependency or requested-standard mismatches. Compiler acceptance does not prove numerical or collective correctness, hardware behavior, or full-interview accuracy.'};
 await writeFile(path.join(out,'compilation.json'),JSON.stringify(report,null,2),{flag:'wx'});
 console.log(JSON.stringify({file:path.join(out,'compilation.json'),summary:report.summary}));
-

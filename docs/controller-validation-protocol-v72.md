@@ -2,7 +2,7 @@
 
 The implementation is on `feat/persistent-conversation-controller`. The starting tree was `main` at `c704a75`, with only the user-supplied `realtime-assistant-architecture-decision.md` untracked. Candidate `c359e4d` remains separate; its actual failed event trace is a regression fixture, not a merged implementation.
 
-Production changes were committed as `432e59f`. Its acceptance binary has SHA256 `69b7b50b4b11eb6ab2d8cf460fdd00adaed51a9915a6fae12e288fea30e8e72b`. The rebuilt `c704a75` comparison binary has SHA256 `a9ac4e6e2ac6cadbe9b432ad28515613e751f5b99fa236a67faa2e9a4b4f739a`. Earlier experiments used different binaries and must retain their own identifiers.
+The first production changes were committed as `432e59f`. Its acceptance binary has SHA256 `69b7b50b4b11eb6ab2d8cf460fdd00adaed51a9915a6fae12e288fea30e8e72b`. This is an interim build: subsequent HTTP retirement and actual renderer acknowledgement fixes require new source-bound captures. The rebuilt `c704a75` comparison binary has SHA256 `a9ac4e6e2ac6cadbe9b432ad28515613e751f5b99fa236a67faa2e9a4b4f739a`. Earlier experiments retain their own identifiers.
 
 ## Questions and capture
 
@@ -18,13 +18,18 @@ Build the acceptance application and preserve its binary hash before capture. Th
 
 ```powershell
 node scripts/prepare-controller-validation.mjs artifacts/controller-v72/prepared
+node scripts/prepare-controller-marathon.mjs artifacts/controller-v72/prepared/marathon-session.json
 node scripts/controller-session-replay.mjs artifacts/controller-v72/plans/hour-final.json .local/controller-app artifacts/controller-v72/native/hour-final-codex codex
 node scripts/run-controller-validation.mjs artifacts/controller-v72
 ```
 
-The sequential runner waits for the already-started Codex hour to finish, then runs final contextual and reasoning probes, behavior waveforms, the same elapsed-hour plan on direct ChatGPT-plan HTTP, history controls, fresh application controls, brief/detailed controls, and interleaved baseline/controller pairs. It preserves failed runs and requires a new trial name for retries. It never merges a branch.
+The sequential runner waits for the already-started interim Codex hour to finish, then runs final contextual and reasoning probes, behavior waveforms and a fresh elapsed hour on Codex before the corresponding direct ChatGPT-plan HTTP cells. It also runs a continuous three-hour Codex session, history controls, fresh application controls, brief/detailed controls, and interleaved baseline/controller pairs. It preserves failed runs and requires a new trial name for retries. It never merges a branch.
 
 The elapsed-hour plan uses actual wall-clock scheduling for 60 minutes, spoken source audio, typed exact-code probes, a decision recognized near the beginning and queried after 30 and approximately 57 minutes, a spoken follow-up triggered by visible output, and identical fixed-context questions at the start/end. A 3,600-turn virtual-clock Rust test is a separate fixture and cannot satisfy the elapsed-hour requirement.
+
+The three-hour plan never restarts the application or session. It contains 109 turns, repeats identical source audio with the accumulating conversation, changes a code comparison operator and a separately scoped retention decision, and asks for original versus corrected versions after intervening technical discussions. A probe at 180 actual elapsed minutes checks three-hour recall. Repeated source material is explicitly identified; this is a structured synthetic workload, not three hours of independently authored human speech.
+
+HTTP local closure cannot prove remote cancellation. An unknown retirement holds local capacity for 1,500 ms, and unavailable local capacity fails after 2,500 ms. These are bounds on local resources and recovery, not a guarantee about the provider's outstanding computation. Codex uses actual terminal events or retires the owned connection on a bounded deadline.
 
 History controls use finalized recognized speech from the v71 general hour up to native timestamps 0, 10, 30 and 60 minutes. Every cell appends exactly the same immediate exchange and target question. The resulting context bytes and waveform hashes are held constant across adapters. Fresh versus aged fixed-context cells isolate history length from application age; provider drift and observer overhead remain possible confounders. Interleaving reduces time confounding but does not remove it.
 

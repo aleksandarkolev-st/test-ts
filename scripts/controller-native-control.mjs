@@ -7,6 +7,7 @@ import {connectNativePages} from './lib/native-cdp.mjs';
 import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
 import {changedJobObservation} from './lib/deep-observations.mjs';
 import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
+import {servedRenderer} from './lib/served-renderer.mjs';
 
 const root=process.cwd(),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms)),hash=b=>createHash('sha256').update(b).digest('hex');
 const [runRoot,applicationDirectory,sourceDirectory,outputDirectory,caseArgument,repetitionArgument,variant]=process.argv.slice(2);
@@ -47,6 +48,7 @@ try{
   vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});
   let ready=false;for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');ready=true;break;}catch{await sleep(100);}}assert(ready);
  }
+ result.renderer=await servedRenderer();
  app=spawn(path.join(appDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});result.nativeProcessId=app.pid;
  for(let i=0;i<600;i++){try{connection=await connectNativePages(9245);break;}catch{assert(app.exitCode===null);await sleep(100);}}assert(connection);
  invoke=(name,args={})=>connection.main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});

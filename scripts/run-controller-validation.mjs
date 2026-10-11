@@ -7,7 +7,7 @@ import path from 'node:path';
 const root=process.cwd(),runRoot=path.resolve(process.argv[2]??'artifacts/controller-v72');
 assert(runRoot.startsWith(root+path.sep));const relative=x=>path.relative(root,x),sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const finalHour=path.join(runRoot,'native/hour-final-codex/interview.json');
-// The Codex hour was explicitly started first with the final production build.
+// Preserve and wait for the first elapsed-hour capture before rebuilding.
 while(true){const journal=JSON.parse(await readFile(finalHour));if(journal.status!=='in_progress')break;await sleep(5000);}
 const tasks=[];
 const replay=(name,plan,backend)=>tasks.push({name,backend,args:['scripts/controller-session-replay.mjs',relative(plan),'.local/controller-app',relative(path.join(runRoot,'native',name)),backend],journal:path.join(runRoot,'native',name,'interview.json')});
@@ -15,8 +15,11 @@ for(const backend of ['codex','chatgpt']){
  replay(`contextual-final-${backend}`,path.join(runRoot,'prepared/contextual-session.json'),backend);
  replay(`reasoning-${backend}`,path.join(runRoot,'prepared/reasoning-probes.json'),backend);
  replay(`meeting-behavior-${backend}`,path.join(runRoot,'prepared/meeting-behavior.json'),backend);
+ replay(`hour-display-${backend}`,path.join(runRoot,'prepared/hour-session.json'),backend);
 }
-replay('hour-final-chatgpt',path.join(runRoot,'plans/hour-final.json'),'chatgpt');
+// One continuous application/session, with real 60/120/180-minute recall and
+// version corrections. Repeating reset sessions cannot satisfy this cell.
+replay('marathon-three-hours-codex',path.join(runRoot,'prepared/marathon-session.json'),'codex');
 // Interleave adapter pairs. Every history cell uses the same bytes of frozen
 // context and question, and one identical waveform. History and process age
 // are measured in different cells.

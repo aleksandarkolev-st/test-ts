@@ -26,7 +26,7 @@ for(const item of spec.checks){
  result.codeSha256=sha(code);
  let source=code;
  if(item.kind==='foo-exact'){
-  result.exactOriginal=code.trim()==='int Foo(int x) { return x < -1 ? 17 : 19; }';
+  result.exactOriginal=code==='int Foo(int x) { return x < -1 ? 17 : 19; }\n';
   source='#include <cassert>\n'+code+'\nint main(){ for(int x=-1000;x<=1000;x++) assert(Foo(x)==(x < -1 ? 17 : 19)); }\n';
  }else if(item.kind==='cuda-sum19'){
   assert(/^[A-Za-z_][A-Za-z_0-9]*$/.test(item.function),'Specify the recorded entry point without editing it');
@@ -36,7 +36,7 @@ for(const item of spec.checks){
   const adapted=code.replace(laneRead,(_,variable)=>`${variable} = threadIdx.x;`);
   result.environmentAdaptations={cudaHeader:'test-only CPU intrinsic shim',ptxLaneReadsReplaced:[...code.matchAll(laneRead)].length,
    algorithmRepaired:false,adaptedCodeSha256:sha(adapted)};
-  source=`#include ${JSON.stringify(path.resolve('tests/fixtures/cuda-collective-harness.hpp').replaceAll('\\','/'))}\n${adapted}\nint main(){check_sum19(${item.function});}\n`;
+  source=`#include <iostream>\n#include ${JSON.stringify(path.resolve('tests/fixtures/cuda-collective-harness.hpp').replaceAll('\\','/'))}\n${adapted}\nint main(){try{check_sum19(${item.function});}catch(const std::exception& error){std::cerr<<error.what();return 2;}}\n`;
  }else assert.equal(item.kind,'cpp-self-test','Unknown execution contract');
  const sourceFile=path.join(output,`round-${item.round}.cpp`),exe=path.join(output,`round-${item.round}.exe`);await writeFile(sourceFile,source);
  result.compile=await run(spec.compiler??'clang++',['-std=c++17','-O0','-fno-fast-math','-I',path.resolve('tests/fixtures'),sourceFile,'-o',exe]);
@@ -45,4 +45,4 @@ for(const item of spec.checks){
 }
 await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',results,
  scope:'CPU compilation/execution of recorded algorithm plus explicit test harness. CUDA header/intrinsics and PTX lane-id read are adapted to the documented CPU environment; algorithm is not repaired. This does not certify NVIDIA hardware, nvcc or a proof for arbitrary inputs.'},null,2));
-console.log(JSON.stringify(results.map(r=>({round:r.round,pass:r.pass??false,failure:r.failure??r.compile?.error??r.compile?.stderr??null}))));
+console.log(JSON.stringify(results.map(r=>({round:r.round,pass:r.pass??false,failure:r.pass?null:r.failure??r.compile?.error??r.compile?.stderr??null}))));

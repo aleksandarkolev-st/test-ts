@@ -132,6 +132,7 @@ def main():
         row = next(row for row in journal["rows"] if row["round"] == item["round"])
         blocks = re.findall(r"```(?:python|py|python3)\s*\n([\s\S]*?)```", row["answer"])
         result = {"round": item["round"], "kind": item["kind"], "entryPoint": item["function"],
+                  "contractScope": item.get("scope", "Original required source contract"),
                   "answerSha256": hashlib.sha256(row["answer"].encode()).hexdigest()}
         results.append(result)
         try:

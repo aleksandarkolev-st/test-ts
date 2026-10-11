@@ -30,6 +30,15 @@ export function usefulPaint(journal,row,review){
   high:sample.hostMs-accepted-Math.max(...offsets.map(o=>o[0])),origin:'typed request acceptance; excludes ASR'};
 }
 
+function nativeEventAfterSpeech(row,nativeMs){
+ const endpoint=row.audio?.playback,anchors=row.audio?.clockAnchors??[];
+ if(!endpoint||!anchors.length||!Number.isFinite(nativeMs))return null;
+ const lowOffset=Math.max(...anchors.map(a=>a.hostBeforeMs-a.nativeMs));
+ const highOffset=Math.min(...anchors.map(a=>a.hostAfterMs-a.nativeMs));
+ return {low:nativeMs+lowOffset-endpoint.lastVoicedDevicePositionUpperHostMs,
+  high:nativeMs+highOffset-endpoint.lastVoicedDevicePositionLowerHostMs};
+}
+
 export function wordError(source,recognized){
  if(recognized==null)return null;
  const words=s=>s.toLowerCase().match(/[\p{L}\p{N}_]+/gu)??[];
@@ -39,7 +48,16 @@ export function wordError(source,recognized){
   previous=next;
  }
  return {distance:previous.at(-1),referenceWords:expected.length,rate:expected.length?previous.at(-1)/expected.length:null,
-  scope:'Lexical WER; spoken numerals/identifiers are not normalized and semantic ASR errors need manual review.'};
+  scope:'Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review.'};
+}
+
+function finalizedSourceText(row){
+ const latest=new Map();
+ for(const event of row.events??[]){const s=event.payload;
+  if(event.name==='transcript'&&s?.final&&s.source==='remote'&&s.startedAt>=row.nativeStartedAt)latest.set(s.source+':'+s.id,s);
+ }
+ const records=[...latest.values()].sort((a,b)=>a.startedAt-b.startedAt||a.endedAt-b.endedAt);
+ return records.length?records.map(s=>s.text).join(' '):null;
 }
 
 export function auditPanelTransitions(journal){
@@ -87,11 +105,20 @@ export function measureJournal(journal,reviews){
    intentionalInterruption:row.settle===false,ordinaryFollowup:row.ordinaryFollowup??review?.ordinaryFollowup??false,completed:row.phase==='complete'&&!row.cancelled&&!row.error,
    missing:!row.answer?.trim(),correctness:review?.correctness??'pending',reasoningVerdict:review?.reasoningVerdict??'pending',
    acceptedToActualWriteMs:write,usefulFeedbackMs:useful,firstWordMs:row.firstStreamedWordMeasurement?.firstRetainedVisibleStreamedWord?.latencyMs??null,
+   sourceSpeechEndToTranscriptFinalMs:nativeEventAfterSpeech(row,row.latency?.transcriptFinalAt),
+   sourceSpeechEndToAcceptedMs:nativeEventAfterSpeech(row,row.latency?.questionConfirmedAt),
+   acceptedToRequestAttemptMs:Number.isFinite(p.modelRequestSent)&&Number.isFinite(row.latency?.questionConfirmedAt)?p.modelRequestSent-row.latency.questionConfirmedAt:null,
+   acceptedToFirstProviderDeltaMs:Number.isFinite(p.firstAgentDelta)&&Number.isFinite(row.latency?.questionConfirmedAt)?p.firstAgentDelta-row.latency.questionConfirmedAt:null,
+   submissionAckMs:Number.isFinite(p.turnStartAck)&&Number.isFinite(p.transportWrittenAt)?p.turnStartAck-p.transportWrittenAt:null,
+   submittedToInputReaderReceiptMs:Number.isFinite(p.latestInputReaderReceived)&&Number.isFinite(p.transportWrittenAt)?p.latestInputReaderReceived-p.transportWrittenAt:null,
    acceptanceAfterTranscriptFinalMs:Number.isFinite(row.latency?.transcriptFinalAt)&&Number.isFinite(row.latency?.questionConfirmedAt)?row.latency.questionConfirmedAt-row.latency.transcriptFinalAt:null,
    inputTokens:p.inputTokens??null,cachedInputTokens:p.cachedInputTokens??null,outputTokens:p.outputTokens??null,reasoningTokens:p.reasoningTokens??null,
    outputTokensPerStreamingSecond:duration>0&&Number.isFinite(p.outputTokens)?p.outputTokens/(duration/1000):null,
    refinementChars:p.refinementChars??null,steeringCount:p.steeringCount??null,remoteTerminationConfirmed:p.remoteTerminationConfirmed??null,
-   asr:row.audio?wordError(row.question,row.recognizedQuestion):null};
+   localRetirementHoldMs:Number.isFinite(p.localRetirementReleasedAt)&&Number.isFinite(p.localRetirementStartedAt)?p.localRetirementReleasedAt-p.localRetirementStartedAt:null,
+   acceptedGenerationsInSourceWindow:(row.events??[]).filter(e=>e.name==='question.confirmed').length,
+   selectedRequestWER:row.audio?wordError(row.question,row.recognizedQuestion):null,
+   finalizedSourceWER:row.audio?wordError(row.question,finalizedSourceText(row)):null};
  });
  const expected=measured.filter(r=>journal.rows.find(x=>x.round===r.round)?.expectedReply!==false);
  return {scope:'Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.',

@@ -1,0 +1,65 @@
+{
+  "recordedAt": "2026-10-11T10:54:36.179Z",
+  "journal": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\hard-probes\\long-question-essential-tail-exact-pause\\interview.json",
+    "sha256": "d2e6eb979ccac24021115c8e1423024f38fd3e44150d41e22ec1486fb26192bc"
+  },
+  "collectorSha256": "830a9b43073407bcc81a61f0442dd9e1165e45b9a9cf66aafd4228e9e96e580e",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "rows": [
+    {
+      "round": 1,
+      "question": "Compute exact sums of batches of signed integer measurements before we consider optimizations. Some batches are empty, some contain one value, and others are much larger. Values can be positive or negative. Explain how you would validate an implementation and return useful error information. There is an essential final condition: use signed sixty-four-bit output, detect overflow, and reject an overflowing batch rather than wrapping or returning a partial sum.",
+      "recognizedQuestion": "Compute exact sums of batches of signed integer measurements before we consider optimizations Some batches are empty some contain one value and others are much larger Values can be positive or negative. Explain how you would validate an implementation and return useful error information There is an essential final condition use signs sixty four bit output detect overflow and reject an overflowing batch rather than wrapping or returning a partial sum.",
+      "answer": "Interpreting “signs sixty four bit” as signed 64-bit output, I’d accumulate each batch exactly using arbitrary-precision integers, then accept only final totals from −2^63 through 2^63−1. Checking the final total matters: [2^63−1, 1, −1] is valid despite temporarily exceeding that range; an out-of-range final total rejects the entire batch without wrapping or returning a partial sum.\n\nI’d validate against an independent exact-sum reference, testing empty batches, single values, mixed signs, large batches, both range boundaries, and totals just outside them. An overflow error should include the batch identifier or index, an OVERFLOW code, and the allowed range, with no successful sum for that batch; malformed-input errors should also identify the offending value’s position.",
+      "responseVersion": "151d7dce-d996-422e-8efe-c7873795f5f1:12",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "sourceQuestionSha256": "b26880550b7a39cf59ae1385dff5d166dd1d278b83a327b2cc423f71c72ccd07",
+      "answerSha256": "08a8f113c153e982715b6ad82adf2b45f77992a3a46f7b940d0453fce43a37d9",
+      "wave": {
+        "file": "artifacts\\deep-interview-v71\\hard-probes\\long-question-essential-tail-exact-pause\\round-01.wav",
+        "sha256": "f5595818e261b696ba34fe2908544e11e8a70e44f73fea46052b6b9f6f46f648",
+        "sourceFrames": 506717,
+        "firstNonzeroFrame": 643,
+        "lastNonzeroFrame": 495674,
+        "sourceDurationMs": 31669.8125,
+        "measuredInsertedPauseMs": 1500,
+        "requestedPauseMs": 1500,
+        "matchesRequestedPause": true,
+        "prefixSpanMs": 11209.8125,
+        "tailSpanMs": 18229.6875,
+        "firstToLastVoicedSpanExcludingInsertedPauseMs": 29439.5,
+        "prefixFractionExcludingInsertedPause": 0.3807745545950169,
+        "providedTargetSpeechDurationMs": 30000,
+        "providedTargetDurationWithinTolerance": true
+      },
+      "calibratedPhysicalEndNativeMs": {
+        "low": 35719,
+        "high": 35728
+      },
+      "completedJobSnapshotsBeforeFinalPhysicalSpeechEnd": [],
+      "firstRetainedVisibleWord": {
+        "word": "Interpreting",
+        "characterRange": [
+          0,
+          12
+        ],
+        "observedHostMs": 1791715759823,
+        "latencyMs": {
+          "low": 6057,
+          "high": 6063
+        },
+        "responseRevision": 12,
+        "observedDuringStreaming": true,
+        "retainedInCurrentRecordedAnswer": true
+      }
+    }
+  ],
+  "independentAccuracyPending": true,
+  "goalComplete": false,
+  "scope": "Actual unchanged PCM, exact internal zero gap, waveOut final frame position and calibrated native observation evidence. Prefix fraction is measured rather than assumed. Completed snapshots before final speech end distinguish confirmed and speculative work; their absence in sparse observations is not proof that no transient early completion occurred. Gap host crossing times were not recorded and are not invented from nominal playback rate. Final constraint retention and visible obsolete text require semantic and paint review."
+}

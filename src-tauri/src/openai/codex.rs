@@ -759,10 +759,16 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         }
     }
     fn acknowledge(service:&Arc<Service>,request:&Value,result:Value) {
-        assert!(dispatch(&Arc::downgrade(service),json!({"id":request["id"],"result":result})));
+        assert!(fixture_reader_dispatch(service,json!({"id":request["id"],"result":result})));
+    }
+    fn fixture_reader_dispatch(service:&Arc<Service>,message:Value)->bool {
+        // Match the real transport: blocking_send runs on the stdout reader,
+        // outside Tokio. Fixture notifications are bounded and never fill it.
+        let reader=Arc::downgrade(service);
+        std::thread::spawn(move||dispatch(&reader,message)).join().unwrap()
     }
     fn end_fixture_turn(service:&Arc<Service>,thread:&str,turn:&str,status:&str) {
-        assert!(dispatch(&Arc::downgrade(service),json!({"method":"turn/completed","params":{"threadId":thread,"turn":{"id":turn,"status":status}}})));
+        assert!(fixture_reader_dispatch(service,json!({"method":"turn/completed","params":{"threadId":thread,"turn":{"id":turn,"status":status}}})));
     }
     #[tokio::test]
     async fn latest_question_replaces_unconsumed_work_on_multiple_attempts() {
@@ -799,10 +805,10 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
                     // without a userMessage echo or being interrupted.
                     assert!(tokio::time::timeout(FINAL_CONSUMPTION_WAIT+Duration::from_millis(100),requests.recv()).await.is_err());
                     for old in &retired {
-                        assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":old,"delta":"obsolete"}})));
+                        assert!(fixture_reader_dispatch(&service,json!({"method":"item/agentMessage/delta","params":{"threadId":old,"delta":"obsolete"}})));
                     }
-                    assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"current-answer"}}})));
-                    assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"current-answer","delta":"{\"intent\":\"answer\",\"text\":\"current answer\"}"}})));
+                    assert!(fixture_reader_dispatch(&service,json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"current-answer"}}})));
+                    assert!(fixture_reader_dispatch(&service,json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"current-answer","delta":"{\"intent\":\"answer\",\"text\":\"current answer\"}"}})));
                     end_fixture_turn(&service,&thread,&turn,"completed");
                 }
             }
@@ -856,8 +862,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             let request=question_request(&mut requests).await;assert_eq!(request["method"],"turn/start");
             let thread=request["params"]["threadId"].as_str().unwrap();
             acknowledge(&service,&request,json!({"turn":{"id":"old-turn"}}));
-            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"old-answer"}}})));
-            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"old-answer","delta":"{\"intent\":\"answer\",\"text\":\"obsolete draft\"}"}})));
+            assert!(fixture_reader_dispatch(&service,json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"old-answer"}}})));
+            assert!(fixture_reader_dispatch(&service,json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"old-answer","delta":"{\"intent\":\"answer\",\"text\":\"obsolete draft\"}"}})));
             tokio::time::timeout(Duration::from_secs(2),old_delivery).await.unwrap().unwrap();
             tx.send_replace(QuestionUpdate{question:"early pause".into(),context:None,confirmed:true,acoustic_quiet:true});
             let interrupt=question_request(&mut requests).await;assert_eq!(interrupt["method"],"turn/interrupt");
@@ -871,8 +877,8 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             assert!(text.contains("complete latest question")&&text.contains("latest facts"));
             assert!(!text.contains("early pause")&&!text.contains("continuing fragment"));
             let thread=request["params"]["threadId"].as_str().unwrap();acknowledge(&service,&request,json!({"turn":{"id":"new-turn"}}));
-            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"new-answer"}}})));
-            assert!(dispatch(&Arc::downgrade(&service),json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"new-answer","delta":"{\"intent\":\"answer\",\"text\":\"latest answer\"}"}})));
+            assert!(fixture_reader_dispatch(&service,json!({"method":"item/started","params":{"threadId":thread,"item":{"type":"agentMessage","id":"new-answer"}}})));
+            assert!(fixture_reader_dispatch(&service,json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"itemId":"new-answer","delta":"{\"intent\":\"answer\",\"text\":\"latest answer\"}"}})));
             end_fixture_turn(&service,thread,"new-turn","completed");tx
         };
         let mut text=String::new();let prompt=QuestionPrompt::new("initial facts","initial");

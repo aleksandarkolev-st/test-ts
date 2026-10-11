@@ -15,8 +15,11 @@ assert.equal(protocol.manifestSha256,evidence.find(e=>e.file===manifestFile).sha
 const groups=kind==='policy'?manifest.policies:protocol.variants.map(v=>v.name);
 assert(groups.length>=2&&new Set(groups).size===groups.length);
 assert.equal(protocol.trials.length,manifest.cases.length*manifest.repetitions*groups.length);
-const cohortFile=path.join(root,'review-cohort-audit.json');let cohort=null;
+const reviewArgument=process.argv.find(argument=>argument.startsWith('--review-audit='));
+const cohortFile=reviewArgument?.slice('--review-audit='.length)??path.join(root,'review-cohort-audit.json');let cohort=null;
 try{await access(cohortFile);cohort=await load(cohortFile);}catch(error){if(error.code!=='ENOENT')throw error;}
+if(reviewArgument)assert(cohort,'Explicit review audit is required');
+if(cohort)assert(['recorded_review_inputs_verified','completed_review_subset_inputs_verified'].includes(cohort.status));
 const rows=[],combinations=new Set();
 for(const trial of protocol.trials){
  const group=kind==='policy'?trial.policy:trial.variant;
@@ -70,6 +73,8 @@ for(let caseIndex=0;caseIndex<manifest.cases.length;caseIndex++)for(let repetiti
  }
 }
 const report={recordedAt:new Date().toISOString(),kind,model:manifest.model,effort:manifest.effort,selection:manifest.selection,
+ reviewAudit:cohort?{file:cohortFile,status:cohort.status,pendingOtherInputCohorts:cohort.pendingInputCohorts,
+  scope:'Every trial in this matched control protocol is required in the verified audit. Other recording cohorts can remain pending only when an explicit subset audit is supplied.'}:null,
  summaries,pairs,rows,evidence,independentAccuracyPending:!cohort,
  scope:'Dependent diagnostic cases deliberately selected from original tails and medians, replayed with frozen context and fresh meetings. Descriptive matched observations, not population p95 or isolated provider compute. Word latency retains erroneous and cancelled trials with visible words; missing words remain explicit. Independent verdicts, when available, are provisional model judgments over all recorded trials, not executable correctness certification.',goalComplete:false};
 await writeFile(output,JSON.stringify(report,null,2),{flag:'wx'});

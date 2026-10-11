@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-10-11T14:42:57.191Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/interview.json",
+    "sha256": "f476e5f7acca8b6dc489fbf1c6213b6378a83998d1eaecee7dbbe6e793a76203"
+  },
+  "audit": {
+    "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/interview-visibility-audit-v71.json",
+    "sha256": "40fe60030090a35fa99322f03378cf0c3a9cedcc24a59407fde944b48920d8ad"
+  },
+  "collector": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\summarize-prior-question-display-v71.mjs",
+    "sha256": "55ff799ef66f69e35992ecb91dccda52e9aea8c1ae822439b39242717c176f4e"
+  },
+  "summary": {
+    "recordedRows": 2,
+    "measuredConfirmationWindows": 2,
+    "missingWindows": 0,
+    "windowsWithDifferentQuestionVisible": 1,
+    "differentQuestionVisibleMs": 3,
+    "verifiedPaintSamples": 65,
+    "maxPerWindowMs": 3
+  },
+  "longestSingleRecordedOtherQuestionPaintInterval": {
+    "confirmedQuestionId": "17431c09-0d50-41ef-8c3e-2ef12c4f0ad1",
+    "recognizedQuestion": "Explain database Phantom reads and how serializable isolation handles them.",
+    "confirmationHostMs": {
+      "low": 1791712578998,
+      "high": 1791712579002
+    },
+    "shownRecognizedQuestion": "Explain CUDA global memory coalescing Give a concrete indexing example Compare adjacent and strided lane addresses and explain what assumptions are needed before predicting transaction counts",
+    "shownFinalPhase": "superseded",
+    "shownFinalAnswerSha256": "91a35ccd9aaa141b77a981c833e07d5228c836cbdd784677b063f060d9b5748e",
+    "interval": {
+      "startHostMs": 1791712579002,
+      "endHostMs": 1791712579005,
+      "durationMs": 3,
+      "shownQuestionId": "79253eb0-eecf-42be-b93b-0a0a3882143f",
+      "shownRevision": 4,
+      "sourceOrder": "earlier_native_job",
+      "visibleText": "CUDA global memory coalescing means combining the addresses requested by active lanes of a warp for one memory instruction into as few memory accesses as possible. Nearby addresses usually coalesce well; widely strided addresses usually require more accesses.\n\nFor a concrete example, assume a 32-lane warp, all lanes active, each loading one 4-byte float, and a base address "
+    }
+  },
+  "scope": "Longest individual different-question paint interval selected by duration, without topic or expected-answer filtering. This describes earlier displayed text held until the next observed paint, not new stale-token generation or rendering compute. Semantic appropriateness requires reviewing the recorded questions and text; this observation alone is not a universal failure rate."
+}

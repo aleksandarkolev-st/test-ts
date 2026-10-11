@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-10-11T14:42:57.396Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/continuous-pressure-t/interview.json",
+    "sha256": "2597f2bf7975b01b222391fcf7380f0f345dce11eb0f3855bc7112eae04907fd"
+  },
+  "audit": {
+    "file": "artifacts/deep-interview-v71/continuous-pressure-t/pressure-visibility-audit.json",
+    "sha256": "e9d827e9dc881d826e4d12616dcd8a7ee7a412d700b0576c67684c91375e8d3a"
+  },
+  "collector": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\summarize-prior-question-display-v71.mjs",
+    "sha256": "55ff799ef66f69e35992ecb91dccda52e9aea8c1ae822439b39242717c176f4e"
+  },
+  "summary": {
+    "differentConfirmedNativeQuestionWindows": 86,
+    "windowsWithDifferentQuestionVisible": 85,
+    "differentQuestionVisibleMs": 1517261,
+    "maxPerWindowMs": 51577
+  },
+  "longestSingleRecordedOtherQuestionPaintInterval": {
+    "confirmedQuestionId": "eacf1b26-4bee-4afe-8509-c17935ac1998",
+    "recognizedQuestion": "explain the invariant for a sliding window median readings expire exactly ten seconds after their timestamp duplicates count separately and the lower median is required Why? What if that changes and if uh the other one the earlier thing changes compute exact sums of batches of signed integer measurements before considering optimizations some batches are empty some contain one value and others contain many values values can be positive or negative explain validation and useful errors including cancellation of large positive and negative values",
+    "confirmationHostMs": {
+      "low": 1791716197295,
+      "high": 1791716197297
+    },
+    "shownRecognizedQuestion": "What if it accelerates instead",
+    "shownFinalPhase": "complete",
+    "shownFinalAnswerSha256": "5f6caeacd5c5d7522b044f75eb6d76c3241b1506d84cc086eb21ed0c73c76e4c",
+    "interval": {
+      "startHostMs": 1791716197297,
+      "endHostMs": 1791716248874,
+      "durationMs": 51577,
+      "shownQuestionId": "57727455-c618-41bb-a865-adef2c411381",
+      "shownRevision": 2,
+      "sourceOrder": "earlier_native_job",
+      "visibleText": "If it accelerates, the distance depends on how its velocity changes; we need the acceleration or a velocity-versus-time description. If 20 meters per second is the initial velocity and acceleration a is constant, displacement after 30 seconds is 20 × 30 + ½ × a × 30² = 600 + 450a meters, with a measured in meters per second squared. That also equals distance traveled provided the vehicle never reverses direction."
+    }
+  },
+  "scope": "Longest individual different-question paint interval selected by duration, without topic or expected-answer filtering. This describes earlier displayed text held until the next observed paint, not new stale-token generation or rendering compute. Semantic appropriateness requires reviewing the recorded questions and text; this observation alone is not a universal failure rate."
+}

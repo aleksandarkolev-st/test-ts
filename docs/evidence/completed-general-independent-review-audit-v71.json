@@ -1,0 +1,2157 @@
+{
+  "recordedAt": "2026-10-11T13:46:54.882Z",
+  "status": "completed_review_subset_inputs_verified",
+  "expectedInputCohorts": 64,
+  "auditedInputCohorts": 1,
+  "pendingInputCohorts": 63,
+  "cohorts": [
+    {
+      "kind": "elapsed_hour",
+      "name": "general-hour-t",
+      "domain": "general",
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+      "requestedDurationMs": 3600000,
+      "journalSha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+      "turns": 55,
+      "independentModelVerdicts": {
+        "correct": 43,
+        "incorrect": 0,
+        "incomplete": 12,
+        "unverified": 0
+      },
+      "correctFractionOfAllRecordedRows": 0.7818181818181819,
+      "cancelled": 9,
+      "errors": 0,
+      "durationMinutes": 61.074742023333336,
+      "primaryWordMeasurements": {
+        "evaluatedTurns": 55,
+        "firstVisibleWordMs": {
+          "count": 55,
+          "min": 2453,
+          "median": 8922,
+          "sampleP95": 36223,
+          "max": 64862
+        },
+        "firstRetainedVisibleWordMs": {
+          "count": 55,
+          "min": 2453,
+          "median": 8922,
+          "sampleP95": 36223,
+          "max": 64862
+        },
+        "firstHalfVisibleWordMs": {
+          "count": 28,
+          "min": 2453,
+          "median": 8192.5,
+          "sampleP95": 36223,
+          "max": 36313
+        },
+        "secondHalfVisibleWordMs": {
+          "count": 27,
+          "min": 3242,
+          "median": 10463,
+          "sampleP95": 27141,
+          "max": 64862
+        },
+        "turnsWithoutVisibleWord": 0,
+        "cancelled": 9,
+        "errors": 0,
+        "fullModelGrades": {
+          "correct": 27,
+          "incorrect": 0,
+          "incomplete": 0
+        },
+        "ungradedFullAnswers": 28,
+        "partialModelGrades": 13,
+        "actualStreamingOverlapLaunches": 22,
+        "immediateContextFollowups": 14,
+        "asr": {
+          "assessedTurns": 55,
+          "unavailableTurns": 0,
+          "referenceWords": 4327,
+          "edits": 109,
+          "lexicalWordErrorRate": 0.025190663277097295
+        },
+        "counters": {
+          "restarts": 48,
+          "steers": 272,
+          "followups": 52
+        },
+        "nativeProcessResources": {
+          "workingSetBytes": {
+            "first": 28393472,
+            "last": 60133376,
+            "count": 245,
+            "min": 28393472,
+            "median": 60170240,
+            "sampleP95": 62107648,
+            "max": 63848448
+          },
+          "privateBytes": {
+            "first": 4444160,
+            "last": 21467136,
+            "count": 245,
+            "min": 4444160,
+            "median": 19247104,
+            "sampleP95": 21524480,
+            "max": 23236608
+          },
+          "rss": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "heapUsed": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "handles": {
+            "first": 268,
+            "last": 427,
+            "count": 245,
+            "min": 268,
+            "median": 427,
+            "sampleP95": 430,
+            "max": 442
+          },
+          "threads": {
+            "first": 10,
+            "last": 22,
+            "count": 245,
+            "min": 10,
+            "median": 22,
+            "sampleP95": 26,
+            "max": 36
+          },
+          "pollMs": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          }
+        },
+        "recordingProcessResources": {
+          "workingSetBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "privateBytes": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "rss": {
+            "first": 50176000,
+            "last": 787181568,
+            "count": 366,
+            "min": 50176000,
+            "median": 332988416,
+            "sampleP95": 748003328,
+            "max": 789471232
+          },
+          "heapUsed": {
+            "first": 9024928,
+            "last": 523827680,
+            "count": 366,
+            "min": 9024928,
+            "median": 198235500,
+            "sampleP95": 506999056,
+            "max": 544124992
+          },
+          "handles": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "threads": {
+            "first": null,
+            "last": null,
+            "count": 0,
+            "min": null,
+            "median": null,
+            "sampleP95": null,
+            "max": null
+          },
+          "pollMs": {
+            "first": 13,
+            "last": 10,
+            "count": 366,
+            "min": 3,
+            "median": 8,
+            "sampleP95": 12,
+            "max": 18
+          }
+        },
+        "nativeProcessTreeResources": {
+          "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+          "source": "interview.json nativeResources[].nativeTree",
+          "observations": 245,
+          "firstHostMs": 1791700584673,
+          "lastHostMs": 1791704248603,
+          "privateAllocationBytes": {
+            "count": 245,
+            "min": 218873856,
+            "median": 6119763968,
+            "sampleP95": 6227988480,
+            "max": 6325698560
+          },
+          "summedWorkingSetBytes": {
+            "count": 245,
+            "min": 421814272,
+            "median": 1193533440,
+            "sampleP95": 1323794432,
+            "max": 1409290240
+          },
+          "scope": "Native app and current descendants. Working-set sum can double count shared pages. Excludes GPU allocations, pre-existing non-child services and recorder/examiner/playback sibling processes. Processes that exit between samples are not observed."
+        },
+        "pollErrors": []
+      },
+      "independentUsefulPhraseSummary": {
+        "existing": {
+          "evaluatedTurns": 55,
+          "finitePhraseLatency": {
+            "count": 34,
+            "min": 3023,
+            "median": 6005.5,
+            "sampleP95": 36373,
+            "max": 52328
+          },
+          "missingPhraseMeasurements": 21,
+          "modelVerdicts": {
+            "correct": 43,
+            "incorrect": 0,
+            "incomplete": 12,
+            "unverified": 0,
+            "missing": 0
+          },
+          "wrongOrMissingTurnsRemainInDenominator": true,
+          "correctAnswerAndVisibleUsefulPhraseCount": 33,
+          "nativePhaseCounts": {
+            "complete": 46,
+            "superseded": 9
+          },
+          "cancelledTurns": 9,
+          "errorTurns": 0,
+          "accuracyScope": "Independent model verdicts describe these recorded answers only and remain provisional until substantive checks. No latency threshold, population accuracy estimate or pass/fail performance target is applied."
+        }
+      },
+      "deliverySummary": {
+        "sourceQuestions": 55,
+        "allQuestionAndBackgroundWaveHashesValidated": true,
+        "questionWaveDurationMs": {
+          "count": 55,
+          "min": 1145,
+          "median": 47590,
+          "sampleP95": 58470,
+          "max": 59790
+        },
+        "sourceWordCount": {
+          "count": 55,
+          "min": 1,
+          "median": 101,
+          "sampleP95": 119,
+          "max": 120
+        },
+        "shortestQuestions": [
+          {
+            "round": 2,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 6,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 11,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 14,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 18,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 23,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 26,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 30,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 35,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 38,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 42,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          },
+          {
+            "round": 47,
+            "question": "And if, uh, that thing changes?",
+            "sourceWordCount": 6
+          },
+          {
+            "round": 50,
+            "question": "Why?",
+            "sourceWordCount": 1
+          },
+          {
+            "round": 54,
+            "question": "What if that changes?",
+            "sourceWordCount": 4
+          }
+        ],
+        "incomingDeliveryOrigins": {
+          "initial_question": 1,
+          "prepared_contextual_probe_after_actual_visible_answer": 14,
+          "examiner_generated_followup": 26,
+          "examiner_generated_from_actual_partial_answer": 13,
+          "public_older_implementation_reference": 1
+        },
+        "deliveryByIncomingOrigin": {
+          "initial_question": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "prepared_contextual_probe_after_actual_visible_answer": {
+            "questions": 14,
+            "precedingJobOverlapLaunches": 14,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 14,
+              "min": 446,
+              "median": 895.5,
+              "sampleP95": 1971,
+              "max": 1971
+            }
+          },
+          "examiner_generated_followup": {
+            "questions": 26,
+            "precedingJobOverlapLaunches": 0,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 0,
+              "min": null,
+              "median": null,
+              "sampleP95": null,
+              "max": null
+            }
+          },
+          "examiner_generated_from_actual_partial_answer": {
+            "questions": 13,
+            "precedingJobOverlapLaunches": 3,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 13,
+              "min": 10302,
+              "median": 13454,
+              "sampleP95": 18002,
+              "max": 18002
+            }
+          },
+          "public_older_implementation_reference": {
+            "questions": 1,
+            "precedingJobOverlapLaunches": 1,
+            "priorAnswerBasisToPlaybackSubmissionMs": {
+              "count": 1,
+              "min": 928,
+              "median": 928,
+              "sampleP95": 928,
+              "max": 928
+            }
+          }
+        },
+        "activeAnswerOverlapLaunches": 22,
+        "precedingJobOverlapLaunches": 18,
+        "priorVisiblePrefixBasisCount": 28,
+        "priorAnswerBasisToPlaybackSubmissionMs": {
+          "count": 28,
+          "min": 446,
+          "median": 1642.5,
+          "sampleP95": 15620,
+          "max": 18002
+        },
+        "backgroundUtterances": 4
+      },
+      "rows": [
+        {
+          "trial": 1,
+          "round": 1,
+          "question": "Customers are increasingly calling a refill-delivery service unreliable. How would you work out what is happening and decide what to do first?",
+          "sourceQuestionSha256": "8ee39a3e42336907f1fe2e9b2a366c5936ad675b652b42a7ab979f5b6a426ee1",
+          "responseVersion": "049b3da5-d4e3-43e6-8996-77063e41fb5e:4",
+          "answerSha256": "1412ec0729070632a4cad7704990f4a242e72f2c1e57087debdc9b69e545b16e",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-001.json",
+          "inputSha256": "0a14d4a99749fdbbfcc3834263ff21d6508a3357e03627dfc83a9a4a76696f76"
+        },
+        {
+          "trial": 2,
+          "round": 2,
+          "question": "Why?",
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "responseVersion": "fb0c21e5-4054-4149-9824-75ab04d1973d:0",
+          "answerSha256": "fd1ec2bf82caf54d97157593e4cf5a37e6b52ced813343e7a74929cd45b8886e",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-002.json",
+          "inputSha256": "1b3ee98a4bb1c933d51a9550c0629c72be12456da94652bc7bbcf593f4e8d127"
+        },
+        {
+          "trial": 3,
+          "round": 3,
+          "question": "You proposed comparing complaints with delivery performance. Two consecutive twenty-eight-day periods each had twelve thousand orders. Late means delivered after the promised calendar date; timestamps are complete. Late orders increased from nine hundred to one thousand four hundred forty, while complaint-producing orders fell from six hundred to five hundred forty. Each order counts at most once in each measure; overlap is unknown. Calculate both rates and their percentage-point changes. [Interviewer pause: one point five seconds.] What can you conclude about reliability, what cannot you conclude about complaints among late orders, and what evidence would you request next before choosing an intervention?",
+          "sourceQuestionSha256": "cf1c580105e3e187d62ccf009ac6cfd867a79d0de4ae941b7a0a75a2e91744fe",
+          "responseVersion": "4020bb8c-bfbe-4b80-b362-4510f3c4c0a2:22",
+          "answerSha256": "b206b4a33b176edbf4ab16891e119276bbc2b11bf9f88fb14e6dbad6da7cc8f5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-003.json",
+          "inputSha256": "1b908264ba486f955a9eac4ad934c2fa3c7ebfdf8389690207c321e3a68e5b8f"
+        },
+        {
+          "trial": 4,
+          "round": 4,
+          "question": "You correctly calculated first-period lateness as seven point five percent. With the supplied order and complaint counts, what are the sharp lower and upper bounds on the percentage of late orders that produced complaints in each period? Give feasible overlap counts showing whether that conditional complaint rate could have risen or fallen despite fewer complaints overall. [Interviewer pause: one point five seconds.] Explain why your bounds are attainable. Crucially, complaints are not restricted to late orders, and you must not assume independence.",
+          "sourceQuestionSha256": "e54c0772e7e32ab4af113fa6f0564c3285f255e24119424fbed513e23c0ce4ca",
+          "responseVersion": "9fa141ea-f4c6-4e62-ba17-df7a8606f133:14",
+          "answerSha256": "431453cfbef0005edf7879265daf256affdc1db94c7ce441614625209c45cb83",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-004.json",
+          "inputSha256": "092251ab0da01d0b4729a6366cde6d7aed44aa5004ee39d4c9e234247cb0e954"
+        },
+        {
+          "trial": 5,
+          "round": 5,
+          "question": "Switch to database concurrency: your overlap constructions preserved all counts; now test whether transactions preserve an invariant. PostgreSQL has two doctor rows, Alice and Bob, both marked on call. At repeatable-read isolation, each transaction counts on-call doctors and, if the count exceeds one, marks its own doctor off call. Alice and Bob run concurrently. Show an exact interleaving where both commit and nobody remains on call. Why does updating different rows matter? [Interviewer pause: one point five seconds.] Provide executable SQL using serializable isolation that preserves at least one on-call doctor, specify exactly what must be retried after a serialization failure, and justify correctness.",
+          "sourceQuestionSha256": "06659063e908d43c40ef868dba21812fb1c7e1d287713d7e7ed55b316abde0be",
+          "responseVersion": "2ebe80cc-d585-4b9f-b212-299100a3fc06:23",
+          "answerSha256": "a0ec12ad0a2834df27c0b61f422269d42a6a72db0d3523378447def415e722c8",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-005.json",
+          "inputSha256": "37e1a9e4a10e51ab5da2a3e896ab65af7adae9f1b23a024373be27ceb666a36b"
+        },
+        {
+          "trial": 6,
+          "round": 6,
+          "question": "What if that changes?",
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "responseVersion": "ba06f70e-5291-4f28-ae36-b6352da8d650:5",
+          "answerSha256": "10eada55750bd72c777906a265f3309be48b27e6108fb5417ce89ac26f736e91",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-006.json",
+          "inputSha256": "bf42b574b89c03c4f6d3e04aab8598c8a5a23f9f874834df44fdc96bb89bda70"
+        },
+        {
+          "trial": 7,
+          "round": 7,
+          "question": "The isolation level changes to PostgreSQL serializable; they still update different rows. Since those writes cannot conflict, both transactions must still commit, correct? Explain precisely. [Interviewer pause: one point five seconds.] Supply executable SQL for one doctor's transaction, assuming doctors has a text primary key named name and a nonnull boolean named on_call. Initially Alice and Bob are both on call; every writer follows your protocol. Identify the SQLSTATE requiring retry, exactly which operations must rerun, and why retrying only the failed statement cannot preserve the invariant.",
+          "sourceQuestionSha256": "0956d78559eba8c40ad093c0d49377dc37b4db5a84ec216075189502218ccba4",
+          "responseVersion": "faec2a68-62f3-4cfe-bad2-dd2416c5777d:14",
+          "answerSha256": "65c762ec068397c5a7515e7a728d860d971d8450331bd4e5b59eced095d248b0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-007.json",
+          "inputSha256": "189653e5e2b6f4774b4527a5cc1071490b953b5f7b8e1899ca5b245699124375"
+        },
+        {
+          "trial": 8,
+          "round": 8,
+          "question": "You distinguished direct conflicts from system-level correctness. Now assess a randomized offer: twenty thousand visitors split equally; control records eight hundred purchases, treatment nine hundred twenty. Each purchase contributes thirty currency units; treatment costs zero point four currency units per assigned visitor. Calculate conversion uplift, incremental contribution per treatment-assigned visitor, and its approximate ninety-five percent interval, assuming independent Bernoulli purchases. Recommend whether to launch. [Interviewer pause: one point five seconds.] Crucially, one thousand treatment-assigned visitors never saw the offer; their seventy purchases are included in the nine hundred twenty. A colleague excludes them and claims a stronger causal profit estimate. Evaluate that claim and state what remains identifiable.",
+          "sourceQuestionSha256": "83be0e40f25f72a4320efb0ef6771f5935848b6c4dbc09f98148c54e2eac91a4",
+          "responseVersion": "264c5c71-d338-490b-b17c-57ee1b204e7f:36",
+          "answerSha256": "1661e438aebbb52e186c7be69b978d1e4285b01da54fe4f5bc3ba5e689dba8c6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-008.json",
+          "inputSha256": "99ae1e51741dc2b61b8180bc8b599a4372ae6b949e53352120b318925f14af0d"
+        },
+        {
+          "trial": 9,
+          "round": 9,
+          "question": "Your selected-viewer calculation subtracted zero point four currency units per viewer. Debug that accounting: all ten thousand treatment assignments incurred the cost. If the colleague divides total treatment cost by nine thousand viewers, what descriptive net contrast results, and why is it still noncausal? [Interviewer pause: one point five seconds.] Now suppose fixing rendering leaves the existing viewers’ outcomes unchanged and affects only the one thousand non-viewers. Full delivery still costs zero point four currency units per assignment. With no assumptions about those non-viewers’ purchase responses, derive sharp bounds on full-delivery incremental contribution per assigned visitor, using observed control conversion as the benchmark. Show outcome configurations attaining both endpoints.",
+          "sourceQuestionSha256": "72ab3d59d88e6ce0058d71af1cab11e2e343508401f40b62996768b93747e476",
+          "responseVersion": "241e32f1-fc70-4415-ba28-095a44555c16:24",
+          "answerSha256": "585c8103231d28837cdfaf83b60be3fd6d06c50ed3369d308e1f866c1dafea0a",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-009.json",
+          "inputSha256": "aeb522a48b8667efe717fbfb958d2abb2d8bc3a0096149f28381aecbb443e2e7"
+        },
+        {
+          "trial": 10,
+          "round": 10,
+          "question": "Your negative zero point zero one one is correctly rounded. Complete the noncausality explanation, then implement executable Python three code named bounds for this problem. Accept control assignments, control purchases, treatment assignments, existing viewers, and viewer purchases as integer arguments. Reject booleans, impossible counts, and nonpositive assignment totals with ValueError. Keep thirty currency units per purchase and zero point four currency units per treatment assignment. Return exact lower and upper contribution bounds using Fraction, allowing every non-viewer either purchase outcome while existing viewers remain unchanged. Apply it to our counts, exhibit endpoint configurations, and explain why the bounds are sharp.",
+          "sourceQuestionSha256": "afc1971e89a0604954851232af1158c994004692beb36a2e1a203bfb62de8567",
+          "responseVersion": "a0b98681-6a53-4946-8066-0cdc4fd5a7a7:20",
+          "answerSha256": "1b8ce16f2e92de8865eb98ad5b49069aff0f3f02f1d02d3509c0e991d60de3fd",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-010.json",
+          "inputSha256": "a03e8ea6ef488af30427fa5ffa9a002bd02f459a3fa87ed8c986ad7f0695be03"
+        },
+        {
+          "trial": 11,
+          "round": 11,
+          "question": "And if, uh, that thing changes?",
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "responseVersion": "78837607-96fb-45c2-8ba0-c6a872f33e32:8",
+          "answerSha256": "768a391d841596b8c376c0a3cd4b4bd440507141d03acdd404c716de16d231e6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-011.json",
+          "inputSha256": "d9fcd9866c8de94d16028f1dcac90d6bbe5dce7998fa585c169a283792b462c8"
+        },
+        {
+          "trial": 12,
+          "round": 12,
+          "question": "The unchanged-viewer assumption changes: fixing rendering may alter purchase outcomes for at most two hundred of the nine thousand existing viewers. Previously, eight hundred fifty viewers purchased; the one thousand non-viewers remain unrestricted. Control still has eight hundred purchases among ten thousand assignments. Treatment still costs zero point four currency units per assignment; each purchase contributes thirty. [Interviewer pause: one point five seconds.] Write executable Python three bounds accepting the five earlier counts plus a nonnegative integer change budget. Reject booleans and invalid counts with ValueError; return exact Fraction endpoints. Derive the sharp endpoints for these figures and give attaining configurations. Your function must also handle budgets larger than the viewer count.",
+          "sourceQuestionSha256": "0ec090646672ed3fac19be19e2fd1615f3b13f40c1f3e5dceec6d5671191cdfd",
+          "responseVersion": "c62c00c9-cc42-4b6d-a2e3-dcef9b7d753d:30",
+          "answerSha256": "255bdb458f7b5ac8fec82a31c0a0755269ac63a564ddceaeaea91cd1dde8d4cd",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-012.json",
+          "inputSha256": "befff74673e18575648951e3ea5f27c66f7d36ef63d9d3407bff84255ffaa427"
+        },
+        {
+          "trial": 13,
+          "round": 13,
+          "question": "Your bounds separated observations from assumptions. Switch to cooling: two kilograms of well-mixed water starts at sixty degrees Celsius in a room held at twenty degrees. It reaches forty degrees after ten minutes and thirty after twenty. Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible; no evaporation or internal heating occurs. Heat-loss power equals constant conductance times water temperature minus room temperature. Derive conductance with units. [Interviewer pause: one point five seconds.] A later run starts at sixty and reaches twenty-seven after twenty minutes; its constant ambient temperature was not logged. Construct two exact explanations, one retaining conductance and one retaining twenty-degree ambient. What experiment distinguishes them?",
+          "sourceQuestionSha256": "824e3b8d6ddfce6ac8527dd29ff6f3eb5a7a3c28ec609a236dddb588aa20c765",
+          "responseVersion": "fc6fee5b-b880-4485-9607-7d9403850c3d:40",
+          "answerSha256": "542991a2e92dc6d39ac1ac4c49048d6f043721d06ad020bfc8b04613f045dc89",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-013.json",
+          "inputSha256": "cd6fa5db1defee7f8b868e9517bd4e830d5b2fc3688c7f2a63f25592235139f4"
+        },
+        {
+          "trial": 14,
+          "round": 14,
+          "question": "Why?",
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "responseVersion": "035fb897-56a3-4549-a66c-d6ef779ad67b:0",
+          "answerSha256": "e9cb5b93781e6932f43ad03d6294a176aa3a14f4db435ba0c104ef3760f25768",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-014.json",
+          "inputSha256": "6d25a567614ea2a9f7de1b39068280363e30cc0d7d5f06c6891004a5d3dcb39b"
+        },
+        {
+          "trial": 15,
+          "round": 15,
+          "question": "Your derivation was complete. I meant: why does an intermediate reading distinguish the explanations? Deepen that claim: initial water temperature is exactly sixty degrees Celsius; readings at ten and twenty minutes are thirty-eight and twenty-seven degrees. Ambient temperature and positive conductance are unknown constants; heat capacity remains eight thousand four hundred joules per kelvin. Derive whether these readings uniquely identify both parameters, requiring ambient below every water reading. [Interviewer pause: one point five seconds.] Now each later reading has independently bounded error of plus or minus zero point two degrees Celsius. Derive sharp bounds on ambient temperature and justify which error configurations attain them.",
+          "sourceQuestionSha256": "5b13f43dca9b8bc0ba3edbb3b969381a70722940589a1f7fc04c4ecd8b1e50c2",
+          "responseVersion": "fa0726cd-3612-4b8c-84bf-c89b6e8114df:58",
+          "answerSha256": "d52708cae47c8341564a3d05c199901ed577e4f198489583e4959fda96a7c247",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-015.json",
+          "inputSha256": "b4e2101e00bf7e94e036181a9739163dea078ae1423f22e9eec163ee6ea1fb7e"
+        },
+        {
+          "trial": 16,
+          "round": 16,
+          "question": "Your stated ambient endpoints are correct for independent errors. Now suppose both later readings come from one thermometer with a shared additive calibration offset, bounded between negative zero point two and positive zero point two degrees Celsius. The displayed readings remain thirty-eight and twenty-seven degrees; the initial sixty-degree temperature is independently exact. Derive sharp ambient-temperature bounds and identify the offsets attaining them. Does either bound occur at an interior offset? [Interviewer pause: one point five seconds.] Crucially, there is no additional measurement noise: the two later errors are not independently selectable.",
+          "sourceQuestionSha256": "0aa0840b43790738a348958a677d4a309ef8253426d118eef4985fec3d957a82",
+          "responseVersion": "3fd2df67-a8a8-43d8-bca9-ce5093f916db:52",
+          "answerSha256": "fae7c58290e6122c9e8ef40e629ec87ae8d82da5e71869b0929740c8d6136946",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-016.json",
+          "inputSha256": "3feb5cccc40c09d5c356f21ad177c49a037412812b7732a45540c6931e7336f8"
+        },
+        {
+          "trial": 17,
+          "round": 17,
+          "question": "Switch to cryptography. A simplified authentication scheme operates in a field with two to the power one hundred twenty-eight elements. Addition is bitwise exclusive OR. For a one-block ciphertext C, its tag equals S plus C times H squared plus L times H. H is a secret field element; S is a nonce-dependent mask; L is a public length block. Two distinct ciphertexts use the same nonce and length, exposing both ciphertexts and tags. [Interviewer pause: one point five seconds.] Derive how an attacker recovers H and S, prove whether recovery is unique, and construct a valid tag for any third one-block ciphertext under that nonce. Does this also recover the encryption key?",
+          "sourceQuestionSha256": "30330f52431018d35abe0f1c56bff80142a84625dd4b52d30a376a2aac621891",
+          "responseVersion": "78cc3b14-1644-4d9d-80de-094b77788bbc:36",
+          "answerSha256": "07cdf396dc4022c78d873ec3dbe67d965fce41f0e08f8f851754d60097aa1301",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-017.json",
+          "inputSha256": "26428b1bb5439ba5cc09f7baecedcad100764dc02615717207057dab7490e842"
+        },
+        {
+          "trial": 18,
+          "round": 18,
+          "question": "What if that changes?",
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "responseVersion": "eceaee4d-94b6-493c-8e18-5eb55d058b4d:6",
+          "answerSha256": "b3fcc85b29a1973ab54ace39e843396b6c9e84a5dba6e862f7b578d3cddb3c9e",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-018.json",
+          "inputSha256": "4f04aacf01bd43f959784743b422d3f4c789c94dd16c8ce800a150c04fce0e41"
+        },
+        {
+          "trial": 19,
+          "round": 19,
+          "question": "The equal-length assumption changes. Two distinct one-block ciphertexts reuse a nonce, but their public length blocks differ; retain the stated tag formula. A colleague says distinct ciphertexts still guarantee unique recovery of H because squaring is bijective. Is that correct? Derive the equation for H, determine exactly how many solutions it has for these genuine observed tags, and characterize when a chosen third ciphertext and length has the same predicted tag under every compatible pair of H and S. [Interviewer pause: one point five seconds.] Use field operations and justify each uniqueness or ambiguity claim.",
+          "sourceQuestionSha256": "225284609df3686b65cf39ea790dae02b08019c68b3ec6efda7956725ee53237",
+          "responseVersion": "76f011b1-ac85-4c1f-9f28-7ddabdfa8481:22",
+          "answerSha256": "bd90957459888610619af07f0b26d29b9dd9a523f3e25b7336a7fe19fc43c828",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-019.json",
+          "inputSha256": "157dbe6e419309897314806efd86fbfbe3fc35ec8126646b0ab52a3828a801d6"
+        },
+        {
+          "trial": 20,
+          "round": 20,
+          "question": "Keep your unequal-length setup, but expose only ninety-six bits of each tag through a known linear projection P of rank ninety-six over the two-element field. Define a, b, and d as before, with d now the projected tag difference. Derive the exact possible numbers of compatible H values for genuine observations, and characterize when each number occurs using the kernel of P and the field trace. [Interviewer pause: one point five seconds.] Then characterize when a third projected tag is identical across all compatible pairs. Crucially, the nonce mask remains an unrestricted secret field element; do not assume its hidden bits are known.",
+          "sourceQuestionSha256": "3449ec81ad225af6089ec7b4638a8a84ace403619c041aaa9b33b45af4fed84f",
+          "responseVersion": "ab2a9abf-3edf-4a3b-87d8-cf74f32d7a82:46",
+          "answerSha256": "127fd500ac744c11b662963cf5010a05cc9eee7515b664de88320627565dfc8a",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-020.json",
+          "inputSha256": "e12b36127e5181d8e0971c4a4b3eda447fefbbdc03eb9a8a0fc1f5f5f7cefbe4"
+        },
+        {
+          "trial": 21,
+          "round": 21,
+          "question": "Turn your kernel criterion into executable Python three: analyze(m_columns, n_columns, d, first_tag). Each column list contains exactly one hundred twenty-eight nonnegative integers below two to the power ninety-six, encoding the respective linear map’s columns; d and first_tag have the same range. Return the number of compatible H values, the number of distinct third projected tags, and the unique third tag if determined, otherwise None. Reject booleans, malformed inputs, and inconsistent observations with ValueError. [Interviewer pause: one point five seconds.] Use exclusive OR elimination, not enumeration. Trace a case where checking only the original two-element ambiguity gives the wrong answer, and prove your counting formulas and complexity.",
+          "sourceQuestionSha256": "e81e313a43374384e5ca0a80841aaafb13bc95f89dee1d297730d8666e42c988",
+          "responseVersion": "dba70ba7-976c-4e0c-ac72-9f50ae0cbc4d:34",
+          "answerSha256": "4def6afa10271272437e5849b5f320afae470b65eaae0cf8ecc87623e3fb3e9b",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-021.json",
+          "inputSha256": "3a21b7661b4b2d956b0dcf74ff9e6d521430fa9ca60e1566a65cc7cfde1729ae"
+        },
+        {
+          "trial": 22,
+          "round": 22,
+          "question": "Complete analyze using the stated contract. How will each elimination pivot retain enough information to recover both a particular solution and a kernel basis? Supply executable Python three, then compute the rank of N restricted to that kernel without enumeration. [Interviewer pause: one point five seconds.] Trace the case where M is zero, N has exactly one nonzero column, d is zero, and first_tag is zero. Give both counts and explain why testing one kernel vector on which N vanishes can falsely suggest uniqueness. Include validation and complexity.",
+          "sourceQuestionSha256": "b5aeb594d1d3e8fcc22cbf58a92b0068c7e50f67b72610002863d8e87f249232",
+          "responseVersion": "d1d9de7b-78d6-490f-9509-504541787326:35",
+          "answerSha256": "cda508dd933f37ed48706338bf73d28e9389e6e1cb4bf6966aee3d3bc9a8099e",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-022.json",
+          "inputSha256": "54e7ee17ea7c109fa24e3a7ebc4cbb6105f4db4dcfc068618e9b60e61b368517"
+        },
+        {
+          "trial": 23,
+          "round": 23,
+          "question": "And if, uh, that thing changes?",
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "responseVersion": "e2c56eae-76ea-4197-9d89-6ad667680518:7",
+          "answerSha256": "ae2be43e1f49f1514b15d21d7017b366e41f49d208d75960c48e2dc290946b01",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-023.json",
+          "inputSha256": "f9fc3f4d8a9fb986dd6775896a0c12069ae88278bb028a432bf06af46be83a72"
+        },
+        {
+          "trial": 24,
+          "round": 24,
+          "question": "The input contract changes: each column collection may now be a one-shot iterable, still containing exactly one hundred twenty-eight integers below two to the power ninety-six. Everything else remains unchanged. Complete executable Python three analyze, rejecting booleans, invalid lengths, invalid values, and inconsistent observations with ValueError, without mutating inputs. Return both counts and the unique third tag, or None. [Interviewer pause: one point five seconds.] Preserve input masks through exclusive OR elimination to recover a particular solution and a full kernel basis. Trace zero M with exactly one nonzero N column and zero observed tags. Prove the counting formulas and state complexity.",
+          "sourceQuestionSha256": "d0fdc5726821000e23ff9770a7c4fe1f7a98495f2b63055799498c315e122ea1",
+          "responseVersion": "726d5f61-7826-4a0a-bf0a-028e51848a2c:48",
+          "answerSha256": "3d281f33996048c4d70cb46884ef0dad3e12491c213e64d195284eca91171c47",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-024.json",
+          "inputSha256": "f622b3741342a32a2f67269d945d0f7cf0964de02b72dfb08a390e13fc9be6c4"
+        },
+        {
+          "trial": 25,
+          "round": 25,
+          "question": "Revisit your earlier SQL beginning “BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE.” Change it to repeatable read and insert SELECT pg_advisory_xact_lock(42) before counting doctors. Every writer acquires this same lock. A colleague claims serialization failures are now unnecessary because the lock serializes decisions. Is that correct? [Interviewer pause: one point five seconds.] Trace Alice and Bob starting with both on call, including exactly when each snapshot is established and what Bob sees after waiting. Then supply executable SQL that safely uses this lock, justify the isolation level you choose, and prove that at least one doctor remains on call.",
+          "sourceQuestionSha256": "08a0a41c181fb7027ed95acdd197e1903b57a106ac84ea6b18976edfa79b1f43",
+          "responseVersion": "8037ec97-eed1-4516-90f2-542e55c11c41:60",
+          "answerSha256": "384fe32b70d69e8670e4c9af4ee15359e1b26a3d6cfe58598077e3e6b81d776a",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-025.json",
+          "inputSha256": "1b5fcd13872156f67ac63df7d9ba8954f17cc3b43ad6fc44b7c3c0f7d43d2329"
+        },
+        {
+          "trial": 26,
+          "round": 26,
+          "question": "Why?",
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "responseVersion": "3269931a-ba54-4c6d-afe5-7a7714031d52:0",
+          "answerSha256": "92b0ff9b8ee75a2f68700877c7908268fdcd1a5b3e4f4036fd1727d543bda279",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-026.json",
+          "inputSha256": "1d245f46ad0c9b15697d02eeb9c54bea823d2ed752f1b3e21ad0d1883cdd0ebd"
+        },
+        {
+          "trial": 27,
+          "round": 27,
+          "question": "Your locking protocol guarantees an invariant; distinguish that from meeting demand in expectation. A manufacturer needs ten thousand acceptable units. Supplier A charges twelve currency units per delivered unit, with acceptance probability ninety-eight percent and capacity eight thousand. Supplier B charges eleven point five, with acceptance probability ninety-four percent and capacity six thousand. Unit acceptances are independent; purchases are integers; total delivered-unit storage is eleven thousand. Find the cheapest purchase plan meeting expected demand. [Interviewer pause: one point five seconds.] Does it guarantee a ninety-nine percent probability of meeting actual demand? Give an exact probability expression and a rigorous method to find the cheapest plan satisfying that probability threshold, or establish infeasibility.",
+          "sourceQuestionSha256": "f74f70e2eaed3047ec536c8341a937c1fd0c17d8a944feba663d0d2aca5aea2b",
+          "responseVersion": "a03ea71a-a83e-440f-96e8-5270fd37d7c0:46",
+          "answerSha256": "b103f79d22d40bef2bd399a5c0fe47be206dd509fa13681ac571a4318ac8b553",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-027.json",
+          "inputSha256": "1f97439feda8276bb371fb1be43c87afef96d53d9f0ade0404a2621737b9df01"
+        },
+        {
+          "trial": 28,
+          "round": 28,
+          "question": "Return to the FIRST completed implementation you supplied for this original question: The isolation level changes to PostgreSQL serializable; they still update different rows. Since those writes cannot conflict, both transactions must still commit, correct? Explain precisely. [Interviewer pause: one point five seconds.] Supply executable SQL for one doctor's transaction, assuming doctors has a text primary key Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+          "sourceQuestionSha256": "0bf14a02dde60311d28cefb6237bbb7bc3fbc906cb6be28f6f9b3e53a24de7c0",
+          "responseVersion": "748ef253-71c5-48fa-bb57-4b6f39ea5c1a:93",
+          "answerSha256": "6a5bf9069b951ebc98c00d846dc8a4344e033d00d5b8d9fdce51a570767a6221",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-028.json",
+          "inputSha256": "2c28d4c2d1bfd79e8905cdc1419467db27824ac90989fe9e354052a29086db7e"
+        },
+        {
+          "trial": 29,
+          "round": 29,
+          "question": "Switch to C plus plus twenty memory ordering. Atomic integers x and y initially contain zero. Four threads run once: one release-stores one to x; another release-stores one to y; a third acquire-loads x, then y; a fourth acquire-loads y, then x. Each thread preserves its stated order. An acquire load synchronizes with a release store whose value it reads; each atomic has its own modification order. Can both readers obtain one followed by zero? Construct the dependency graph and check coherence. [Interviewer pause: one point five seconds.] Now make all six operations sequentially consistent, requiring one total order consistent with thread order. Prove whether the same outcome remains possible.",
+          "sourceQuestionSha256": "7e175e43918ff1eaf49727308d7daa073ce7d588937dcbf2aa71ba894cd8c675",
+          "responseVersion": "f6f951e0-64f6-4454-bb61-63016413e0e6:44",
+          "answerSha256": "fe5f2ccc04e79c4c9799a8421eb22a92b922d7d6bfd3b9ad9dd48a50d17a2a0b",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-029.json",
+          "inputSha256": "060b30bf2bc52aef64ce1f80bc81e729a4ae426fd1decb17d801e3b172da1feb"
+        },
+        {
+          "trial": 30,
+          "round": 30,
+          "question": "What if that changes?",
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "responseVersion": "af2cdf3e-77e0-453a-bc91-bf90633fc34c:4",
+          "answerSha256": "b0cabd6d79f72e8957ff0ab307c43c7188f4d95ee34b229f1cec783feb4222bc",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-030.json",
+          "inputSha256": "ce83ec4413d9039abb486bb359859d329e8a3fca9b1d5ffd4762cd308386ec4b"
+        },
+        {
+          "trial": 31,
+          "round": 31,
+          "question": "The ordering changes: all stores and loads are now relaxed. Each writer places a sequentially consistent fence after its store; each reader places a sequentially consistent fence between its two loads. A colleague claims that fences do not make the accesses sequentially consistent, so both readers can still obtain one followed by zero. Is that conclusion correct under C plus plus twenty? [Interviewer pause: one point five seconds.] Derive the required ordering between the four fences from the observed values and per-atomic coherence. Prove whether the outcome is allowed, distinguishing fence order from synchronization and happens-before.",
+          "sourceQuestionSha256": "b6bad69ebbd90d6e6480be54da36c53720c8c1c6af7afc3510e07edf151def29",
+          "responseVersion": "34f10abb-e264-4e5c-8cf5-93feee8a8d08:40",
+          "answerSha256": "9c5a5e4157e02544e7cf0571318de2619ee004adaf1b6cce6f97fc00db9ac34b",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-031.json",
+          "inputSha256": "82e485f693cf411356c2ad8cd30eb64330519ba21efb7a6dbc1da70d63cf6a39"
+        },
+        {
+          "trial": 32,
+          "round": 32,
+          "question": "Return to your offer experiment. Change one assumption: control conversion is now known exactly as eight percent. Treatment purchases are independent Bernoulli outcomes with unknown constant probability p. Contribution remains thirty currency units per purchase, minus zero point four per assignment. You inspect results after every visitor. Derive the break-even probability. Construct a likelihood-ratio process against that null boundary using ten percent as the alternative. [Interviewer pause: one point five seconds.] Prove validity for every unprofitable p, give a stopping threshold controlling false profitable declarations at five percent, and express the process after nine hundred twenty purchases among ten thousand assignments. Crucially, stopping time is unrestricted; a fixed-sample confidence interval is insufficient.",
+          "sourceQuestionSha256": "c932683cc2a11bb021ebce00932cc236a7747760f6a2ada605cd68a2e6db5648",
+          "responseVersion": "c651be08-9ce9-4da6-b900-6c9e4836d947:59",
+          "answerSha256": "f82660f2a28aaa5456411abb9289d59760f2fb68de1af3fbce53723bbbef3feb",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-032.json",
+          "inputSha256": "bcc0974aab215d54a317ee5d22cd8c4a7909bc0745103396bb1a4c20599e27f1"
+        },
+        {
+          "trial": 33,
+          "round": 33,
+          "question": "Debug this modification of your process. After observing each outcome, code chooses the alternative probability as ten percent for a purchase and nine percent otherwise, then multiplies by that outcome’s likelihood ratio against seven seventy-fifths. A colleague claims your supermartingale proof still applies. Compute both multipliers and prove whether false declarations remain controlled at five percent over unrestricted time. [Interviewer pause: one point five seconds.] Give a deterministic upper bound on the number of observations needed to cross twenty, if one exists. Then supply executable Python three for a valid adaptive alternative chosen from previous outcomes only, explaining the precise range restriction and conditional-expectation invariant.",
+          "sourceQuestionSha256": "4811ddc94c806742def44fce05d665fc6ab8ba93fcddcc4e0dad6100f3479968",
+          "responseVersion": "b62cd754-92b3-4a36-8043-cd4aa72b2509:53",
+          "answerSha256": "f5d87de26a86ebb28d082fb706341809c73e3b25b0ee02552761d1941faec6e4",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-033.json",
+          "inputSha256": "ca841891df472c20039a95ec582356c05f4ccecc413d1ca30003f8f9b3c71fbf"
+        },
+        {
+          "trial": 34,
+          "round": 34,
+          "question": "Complete your argument for eight hundred seventeen observations: give both multipliers and prove the bound. Then implement monitor(outcomes), consuming a one-shot iterable of integer zeros and ones and rejecting booleans or other values with ValueError. Before each outcome, choose ten percent if previous purchases exceed seven seventy-fifths times previous assignments; otherwise choose the break-even probability. Use exact Fraction arithmetic. Return the first index at which the process reaches twenty, or None, but validate the entire finite input even after crossing. Why is this predictable rule valid over unrestricted time, whereas choosing after observing the outcome is not?",
+          "sourceQuestionSha256": "de65fd788def0ff0839246708b4aabac0b305f9062fdf55212a429bbac6d24c1",
+          "responseVersion": "9c86dc93-7d21-4f24-b96f-45c5ef6142e4:42",
+          "answerSha256": "9ead1c2ca3f701f89e1ccede77e3150f3e1a33eba5b8a553c64fbfd134b1cdd0",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-034.json",
+          "inputSha256": "a2ca43d7f20336271155e21494882526437304e33ad60aace02a74130040f1f1"
+        },
+        {
+          "trial": 35,
+          "round": 35,
+          "question": "And if, uh, that thing changes?",
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "responseVersion": "1e1f3f6e-98b0-41e5-a8bb-32eb06f5c10c:10",
+          "answerSha256": "5e1bcac42d942432d6fa901ec4e88401b71df412a5a0929845a2594efc16d354",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-035.json",
+          "inputSha256": "81489ae164a5aa5bcaf5ec28d68f8b2b6b493be32a0016ab1f77a0cd585eba4b"
+        },
+        {
+          "trial": 36,
+          "round": 36,
+          "question": "Outcome independence changes; your predictable rule and full-input validation requirement remain unchanged. Each outcome individually has purchase probability seven seventy-fifths, but dependence is unrestricted. A colleague says the same five-percent guarantee follows from these marginal probabilities. Test this using one Bernoulli variable Z with that probability and setting every outcome equal to Z. [Interviewer pause: one point five seconds.] Derive the first crossing index on each possible infinite sequence and the false-declaration probability. Then identify a conditional-probability assumption sufficient to restore your supermartingale proof without independence. Explain precisely why marginal bounds do not supply that assumption.",
+          "sourceQuestionSha256": "d5e2541c0de8e9975d3399895d9d0be4c276711f06a57cd796260b5284565e79",
+          "responseVersion": "0908ccbb-f541-4335-9d41-c08bc341f36c:47",
+          "answerSha256": "3c6f62d47b6700fb33fca70ffba684b811d396b7534c8c4241f0d3307fbb834a",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-036.json",
+          "inputSha256": "c2b900bc2dcfcb91609ce47b2572615e325920774fc7ba4372fe6084fd09e797"
+        },
+        {
+          "trial": 37,
+          "round": 37,
+          "question": "Revisit your original SQL beginning “BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE,” with no advisory lock. Now every successful departure must trigger an external notification. Sending before commit risks notifying after rollback; sending afterward risks a crash before notification. [Interviewer pause: one point five seconds.] Revise that transaction using an outbox. Assume outbox has request_id as a text primary key, doctor as nonnull text, and sent as nonnull boolean. A request identifier remains stable across retries. Supply executable SQL that makes the departure and outbox insertion atomic and handles duplicate requests. Then trace a worker crash after sending but before marking sent. Can you guarantee exactly one notification without cooperation from the recipient?",
+          "sourceQuestionSha256": "dbbbf581271bbb13435cfaa6fc5be07e52cca4bf00c8b516074541433810efbc",
+          "responseVersion": "cae67c5a-8f59-4cca-a205-fdf9f1108211:53",
+          "answerSha256": "df2e97814f1d064c334a2afa64ad5a80eb954bf1cf08518f6d4d1c26a1c55fdc",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-037.json",
+          "inputSha256": "d5db0a8e3e596396248a92c1303fb25251717707649e374942b837c328a2af41"
+        },
+        {
+          "trial": 38,
+          "round": 38,
+          "question": "Why?",
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "responseVersion": "b477ad3f-8847-4e0f-abf5-fd5bab1a63d5:0",
+          "answerSha256": "ad4a8bcd22bb48d30662833a30f0c2c18e45f1e9959de1bc5135e120371e62ab",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-038.json",
+          "inputSha256": "51736098f1e8b89657b1190e3f53bee7979c1c8d91318764126a60e877748e5d"
+        },
+        {
+          "trial": 39,
+          "round": 39,
+          "question": "You distinguished durable intent from guaranteed outcomes. Return to procurement: supplier A offers a one-percent discount on twelve currency units per delivered unit, requiring eight thousand units monthly for six months. Acceptance remains ninety-eight percent. Supplier B remains eleven point five with ninety-four-percent acceptance and six-thousand-unit capacity. This month requires ten thousand acceptable units; later demand is unknown. Unused units cannot carry forward or be resold. [Interviewer pause: one point five seconds.] Compare six-month costs if demand stays constant versus disappears after month one, using integer purchases that meet expected demand. Derive the probability threshold favoring commitment under those two scenarios. Without that probability, recommend concrete reservation terms rather than inventing a forecast.",
+          "sourceQuestionSha256": "c0f47a348e83f951ef8e70d2534f8bd7cabe17f3acdfdf75c94096cc7c2554b6",
+          "responseVersion": "db3dad92-34fd-466f-a796-9e92eb478665:53",
+          "answerSha256": "ec8096e430d9d3fcc9b4626ea2885e34b300ae82a58953266d12a528bdce786a",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-039.json",
+          "inputSha256": "7b6904b824d053328cfe59b527874681c0a6d66b8a928eb5243d109ec2c5ece5"
+        },
+        {
+          "trial": 40,
+          "round": 40,
+          "question": "Complete your capacity-reservation proposal. Compare the discounted commitment with buying without commitment in both demand scenarios, using integer purchases meeting expected demand. Derive the probability threshold favoring commitment. [Interviewer pause: one point five seconds.] Now suppose A instead offers an optional monthly call on eight thousand units at the discounted price, charging a nonrefundable six-month reservation fee upfront; unused calls cost nothing. Derive the largest fee worth paying as a function of the probability that demand continues, and propose terms when that probability is unknown. Crucially, the reservation does not oblige you to buy eight thousand units in any month.",
+          "sourceQuestionSha256": "3220d6fea39a35a8a2d4095c590b79410041f389a8bd659aa1c19e642a2c5f49",
+          "responseVersion": "3316bf8e-fbdd-423b-b85a-5cf2839cf1fb:43",
+          "answerSha256": "cf11d83325a36536877e98994970cae50d1ba192307c7f0d11e0be0d9ded752c",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-040.json",
+          "inputSha256": "5fc154f198a9177dfa3d17e63269b9e9807594d0cfd4510d503c87a2f3ca914b"
+        },
+        {
+          "trial": 41,
+          "round": 41,
+          "question": "Switch to computer graphics. A triangle has projected vertices at screen coordinates zero zero, one zero, and zero one. Their positive clip-space w values are one, two, and four; scalar vertex attributes are zero, ten, and twenty. Attributes vary affinely on the original three-dimensional triangle before perspective division. At screen coordinates one quarter, one quarter, derive the correct interpolated attribute and explain why ordinary screen-space interpolation fails. [Interviewer pause: one point five seconds.] Derive the general interpolation formula from homogeneous coordinates. Then split the original edge joining the first two vertices at its three-dimensional midpoint. Compute the new vertex’s projected position and attribute, and prove that triangulating with this vertex preserves the interpolated field.",
+          "sourceQuestionSha256": "6ae1464aa858f62711141d719ccc76e46fbe96fbea3b23b2dd50e52576595bc6",
+          "responseVersion": "f60bda17-4892-4f30-a230-48c6c90f6580:46",
+          "answerSha256": "b2a35bbfdbeced1508b2979e4762a2b87fc36572dee523e27c72968295c4d042",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-041.json",
+          "inputSha256": "f281d69a443d10ba99432d5f6ee6bdfa8c6f9d2ae19e8841e58aded25676c2e4"
+        },
+        {
+          "trial": 42,
+          "round": 42,
+          "question": "What if that changes?",
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "responseVersion": "51d8099a-a996-4f2f-b189-49561c4c06b3:6",
+          "answerSha256": "983d00e8df0f09ad394303f99ae58fca23eee206fcd5a16c79468f34fc993902",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-042.json",
+          "inputSha256": "f1e84fda537f307de78f353ccf12d41126626676061e115b42ad67cd06e417df"
+        },
+        {
+          "trial": 43,
+          "round": 43,
+          "question": "The subdivision rule changes: insert a vertex at the screen-space midpoint of the edge joining the first two vertices, rather than its three-dimensional midpoint. A colleague assigns it attribute five and clip-space w equal to one point five, claiming midpoint interpolation preserves the field. Is that correct? [Interviewer pause: one point five seconds.] Derive the original-edge barycentric weights, attribute, and clip-space w of the actual point projecting to that screen midpoint. Then prove whether using those corrected values preserves perspective-correct interpolation throughout both subtriangles, not merely along the split edge.",
+          "sourceQuestionSha256": "28824de529a1e2ad2b1612d5876e46e2214bedd6e1e13612085ba6add6a694f2",
+          "responseVersion": "409341fd-4446-4db2-9a43-32c2c2e67b37:33",
+          "answerSha256": "5f2b415057a912e7ae3227cddd63b823e8d488f7bb05d3493cc69d206fe3de79",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-043.json",
+          "inputSha256": "523e739ce55ff1daf7fd4a5c75261364c5c5022286d98bc2ecac9773dcac028b"
+        },
+        {
+          "trial": 44,
+          "round": 44,
+          "question": "Your affine numerator-and-denominator proof establishes field preservation. Now replace the scalar attribute with texture coordinates: A has zero, zero; B has one, zero; C has zero, one. Keep the same screen vertices and clip-space w values. Derive the perspective-correct texture map and its exact Jacobian at screen coordinates one quarter, one quarter. [Interviewer pause: one point five seconds.] The texture is one thousand twenty-four texels square; a screen pixel spans one hundredth in each coordinate. Compute both singular values of the local texel-footprint matrix and their ratio. Compare them with forward differences over one pixel. Crucially, distinguish the infinitesimal footprint from the exact finite-pixel image; is that image necessarily a parallelogram?",
+          "sourceQuestionSha256": "600e138a80d38703e67d22042cbe9ccd94ebc2e57cc3c365b290aa8222d5b591",
+          "responseVersion": "57c4e9e0-d94f-4290-8863-f007d19bd5c6:52",
+          "answerSha256": "db0b59ec6d1fa64b47c3839e92c7cffe3847bff245b4a736f1f359ccc53d1b6e",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-044.json",
+          "inputSha256": "6c7144ff53b31752188f1fd654ec2904cfdfdb11c1a4d9c1fdac982ad14e0d7e"
+        },
+        {
+          "trial": 45,
+          "round": 45,
+          "question": "Debug a renderer using your forward-difference matrix: it reports the absolute determinant as the exact pixel-image area in square texels. For your pixel with lower-left corner one quarter, one quarter and side one hundredth, calculate the exact area from your four mapped corners. Compare it with both that renderer’s estimate and the Jacobian determinant estimate, giving exact ratios and signed relative errors. [Interviewer pause: one point five seconds.] Independently derive the exact area by integrating the Jacobian determinant over the screen square. Explain why the forward-difference columns do not suffice, and derive a general exact area formula for an axis-aligned pixel under this texture map, wherever its denominator stays positive.",
+          "sourceQuestionSha256": "ac2dc1ad59801a3e9884a5b54b9f6cba98d93fc40944bbbb1aba316e2835234b",
+          "responseVersion": "7451eee6-ca5e-4a81-8dcb-aacb3e3272a3:37",
+          "answerSha256": "ce0ae009fc12500711fe148f11b8e3925af5f20ee6e712120236ee187d33b0bb",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-045.json",
+          "inputSha256": "d83a76a5bd98146963706e65dc4e6661ad35be66a2f2ffda53ef8310c63ca0f6"
+        },
+        {
+          "trial": 46,
+          "round": 46,
+          "question": "Complete your area calculation, then implement pixel_area(x, y, h) in executable Python three using Fraction inputs and exact arithmetic. Use our texture map. Reject nonpositive h and any square whose denominator is not positive throughout. Return the exact area in square texels, the forward-difference determinant estimate, and the Jacobian determinant estimate. For our pixel, give exact ratios and signed relative errors, defined as estimate divided by true area minus one. [Interviewer pause: one point five seconds.] Prove your formula independently by integrating the Jacobian determinant, and explain which missing geometric information makes the renderer’s estimate inexact.",
+          "sourceQuestionSha256": "3996d10dfff8316d4ae6c497604caaf7a826d010aefa57c50dd19c5c5525ba00",
+          "responseVersion": "504e3c51-ac69-44e0-b667-9b587aefd602:33",
+          "answerSha256": "b6d57457495d1b20a214f25b035cf5bd4aed675d943769bfc10cdb48457fd496",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-046.json",
+          "inputSha256": "b5b88d062d5ec9bd3e79fb948825a5837d1e662896303d564dd74da48b4931ae"
+        },
+        {
+          "trial": 47,
+          "round": 47,
+          "question": "And if, uh, that thing changes?",
+          "sourceQuestionSha256": "0c9ec1952d6c26e0c4b09f966e3fa0a72eea6ccef40ddfd6e897567b342bc12f",
+          "responseVersion": "d5ece4fc-9811-4bcb-a21d-b1c66bcbf541:9",
+          "answerSha256": "d86a58a6abe8e555046eadee0379e1913137d49ac2c2d058d7f79fcf575083b6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-047.json",
+          "inputSha256": "094317334a59b1d3a0554de1cbca3e983a8078bb54db5a3560453a166f8cea8d"
+        },
+        {
+          "trial": 48,
+          "round": 48,
+          "question": "The pixel shape changes to a rotated square. Keep your texture map and denominator-positivity requirement. Its vertices, in boundary order, are p, p plus e, p plus e plus f, and p plus f, where e and f are perpendicular vectors of equal nonzero length. [Interviewer pause: one point five seconds.] Supply executable Python three rotated_area using Fraction coordinates, returning exact image area in square texels. Reject invalid squares and nonpositive denominators. Derive a formula using the four corner denominators and the absolute determinant of e and f. Prove it remains valid when the denominator is constant along one edge direction, without dividing by that direction’s denominator change.",
+          "sourceQuestionSha256": "d0e1f2f7e612d0a15427261a722412351f3d66f404f4b5da18fb91126b4769e2",
+          "responseVersion": "203da043-abd5-4df0-892f-d329f12eb740:47",
+          "answerSha256": "8faf8b964519538548444ab41b60698b88b749360a66f2d250415cc82f63f5b9",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-048.json",
+          "inputSha256": "bddd98692f3cee095282653abd89403820bf4a625480da772c6b83fce7981288"
+        },
+        {
+          "trial": 49,
+          "round": 49,
+          "question": "Revisit your earlier six-argument bounds implementation, which used max of zero and viewer purchases minus change budget. Replace uniform purchases and flip costs: each existing viewer now has an observed integer outcome, zero or one, a nonnegative integer purchase contribution, and a positive integer flip cost. There are no non-viewers. A shared integer budget limits total flip cost, not the number changed. [Interviewer pause: one point five seconds.] Write executable Python three contribution_bounds(records, budget), returning exact minimum and maximum total contribution. Records may be one-shot; reject booleans and invalid values. At most two hundred records; budget at most two thousand. Require order records times budget time, order budget auxiliary space, and prove your state invariant.",
+          "sourceQuestionSha256": "799d2a687b0dcba2acf3c3cd2c9a3e85c26d24bc59b12f6849f52da4e187cebf",
+          "responseVersion": "5ac77a61-936e-4ea6-af23-0b7f6c357be1:59",
+          "answerSha256": "8c7addffeb04d8b500bbe5588a208dd120be8a82dac69ce740c62d6dde212ee4",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-049.json",
+          "inputSha256": "6f621e2b7d998c2f49a3a6f712c6e3ac02fbc2cbf7e34c324e13c623f8753f8b"
+        },
+        {
+          "trial": 50,
+          "round": 50,
+          "question": "Why?",
+          "sourceQuestionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+          "responseVersion": "31e9f269-028d-41c9-8267-fa1ee055e625:0",
+          "answerSha256": "06936816e710f01756f4ef999865de9be9bb2cb1ba67d9e1498e7e92fc261302",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-050.json",
+          "inputSha256": "16917c7568801822aa7aa05c387545a94fc9b5ec6a00c7faa375ad0c9a42af74"
+        },
+        {
+          "trial": 51,
+          "round": 51,
+          "question": "Change one constraint: total flip cost must equal the budget exactly, rather than merely stay within it. Now counterproductive flips may be necessary. [Interviewer pause: one point five seconds.] Write executable Python three contribution_bounds_exact with the same input validation, one-shot support, and complexity bounds; return None if infeasible. Otherwise return minimum and maximum total contribution. Prove your unreachable-state representation and descending-update invariant. Trace two records: an observed purchaser contributing ten with flip cost two, and an observed nonpurchaser contributing seven with flip cost one, with budget three. Explain why your earlier separation into two tables by observed outcome no longer works.",
+          "sourceQuestionSha256": "42cf5b28a49737c8f918309db25351cd8cd44b58b0c756ea4378f877a8f2f8b0",
+          "responseVersion": "7fbeda39-114b-4977-8859-b6a7839e3293:42",
+          "answerSha256": "10eb0d0ad53281b2d421f62b56789959600401f8ef47c996d34a9131ba5eabb6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-051.json",
+          "inputSha256": "d5d106b9c5f09df25f85257531330c05645bb5dc60f72094223c919ad6301690"
+        },
+        {
+          "trial": 52,
+          "round": 52,
+          "question": "Complete contribution_bounds_exact using signed changes across all records. Trace the purchaser contributing ten at cost two and nonpurchaser contributing seven at cost one, with exact budget three. Explain how descending updates preserve both minimum and maximum reachable changes, and why an unreachable source must never enter a transition. [Interviewer pause: one point five seconds.] Include validation, one-shot consumption, and the required complexity. Contributions have no upper bound; zero and negative changes are valid, so do not use a finite numeric sentinel or treat zero as unreachable.",
+          "sourceQuestionSha256": "b0c78f6be30802c1ea995418b164d5affca0f3c9d247122e14a47153eee1ffe7",
+          "responseVersion": "7c368af9-464f-439c-8f58-87eaf816c95e:43",
+          "answerSha256": "46fc387cf720b8e1a293e9947125f2f6b9ba866faf2b89dd25f05261c133a068",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-052.json",
+          "inputSha256": "dffc4ad10348cc12f54b9a712e69f587eda55b800b56bcc635e632a9399ad95c"
+        },
+        {
+          "trial": 53,
+          "round": 53,
+          "question": "Switch to error-correcting codes. Arithmetic is modulo the prime one hundred one. An unknown polynomial of degree at most two was evaluated at integers zero through six. Received values, in that order, are three, seven, eleven, eighteen, twenty-seven, forty, fifty-one; at most two are corrupted. Recover the polynomial and locate the errors. [Interviewer pause: one point five seconds.] Derive a linear decoding system using a monic degree-two error-locator polynomial E and a polynomial Q of degree at most four, satisfying Q at each evaluation point equals its received value times E there. Prove unique recovery, and explain why fewer than two actual errors can make E nonunique without making the decoded polynomial ambiguous.",
+          "sourceQuestionSha256": "bd4149842555b85b7cbb41139e9045d6d61ad04a70f0225afeb1f076533d04bb",
+          "responseVersion": "e0079ed0-e858-4ad0-895e-43d692a84f5b:45",
+          "answerSha256": "238525c60535c8d91a4b6d7729ca9e17656b98898fa98f0a1ed2bdef58767514",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "verdict": "incomplete",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-053.json",
+          "inputSha256": "2bd54f28d9f2f017c8548a8550a91338eb157af81cedfd48c5409fe469be2414"
+        },
+        {
+          "trial": 54,
+          "round": 54,
+          "question": "What if that changes?",
+          "sourceQuestionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+          "responseVersion": "065391dd-5729-4892-9e6f-d3037867a1e1:5",
+          "answerSha256": "40fef67c3756befc2d6fc4acc1cb6b3a38f217bb9557c910ac9273dba10354cb",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-054.json",
+          "inputSha256": "cfd27352ee74811fae8369d791ecd568e352728429a7682f3bc51e4a4357ab43"
+        },
+        {
+          "trial": 55,
+          "round": 55,
+          "question": "The evaluation count changes to six, at integers zero through five; modulus one hundred one, degree at most two, and at most two corruptions remain unchanged. A colleague claims six samples still guarantee unique recovery because the monic error locator gives a linear system. Is that correct? [Interviewer pause: one point five seconds.] Construct an explicit received vector and two distinct quadratic polynomials, each disagreeing with it at exactly two positions. Prove your construction and identify exactly where the earlier uniqueness argument fails. Explain why a linear decoding system cannot resolve this ambiguity.",
+          "sourceQuestionSha256": "58e991988846f65b90de52fc5d1cca899b1c91666fa01659d288780966f9a669",
+          "responseVersion": "ce7e7823-1be1-46f7-814b-68ddf2677899:34",
+          "answerSha256": "3d9e73a0d6c85f143ebda24a0e39c76caf023e9506f4e63f42b0f9d81321e890",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "verdict": "correct",
+          "reviewFile": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-055.json",
+          "inputSha256": "e93097b4f895a3048056579133d8da54991160b3d2bc201828ccf9f419d3b8f7"
+        }
+      ]
+    }
+  ],
+  "allHourIndependentModelVerdicts": null,
+  "completedHourIndependentModelVerdicts": {
+    "correct": 43,
+    "incorrect": 0,
+    "incomplete": 12,
+    "unverified": 0
+  },
+  "auditedReviewCount": 55,
+  "reviewerProvenance": [
+    {
+      "binarySha256": "db94bbe441c68194e3d7da2f9ad4ac13804102dd23f19426024948424ae3c366",
+      "sourceSha256": "317160d0fb926aa2be396cf6e41928aa6b0cb33cf8212490498976aebb9dbc3f",
+      "judgments": 55
+    }
+  ],
+  "sources": [
+    {
+      "file": "artifacts/deep-interview-v71/recording-queue.jsonl",
+      "sha256": "e4fde5f61e27bce2c96b44a019d457c8eb06b3a25384c255c619dfe470f336a5"
+    },
+    {
+      "file": "docs/evidence/recorded-code-selections-v71.json",
+      "sha256": "a219bd8f3e61114c3cbd740eceb1bfc7b668612c7dc09f862f038e4d6a5c80b1"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/policy-playback/playback.json",
+      "sha256": "c4c599a123a38e46f537ec4d56d7378c2412d5e08173ff3175784ed7254a1160"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/policy-playback/manifest.json",
+      "sha256": "42582e2018dd59340575d1a126d60e96611f210e82b9d998322db6ab6a311887"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/comparison.json",
+      "sha256": "ea897e5c31a88e143876f8e641673f8d8a807f04214bd62025ade9856751f0f1"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/candidate-tests/89df8a576260eca9c10c2195bc1ac812cade685d3b5d41ef89a86edb8d50aec0/result.json",
+      "sha256": "45f31204e1197a6984c35d6a2e23ebcdd1a811c9c09dedafb8d5f277e8945765"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/build.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/build.stderr.log",
+      "sha256": "1ccbdc7df8dd75695b6f9a371a88471310a85213784fc4491b2859c1a653522a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-baseline\\trials\\general-hour-t-round-34-rep-1-baseline/interview.json",
+      "sha256": "303f32776f323f1c6024d9a6f42c7d7dbea2fc5dd25819cb3492ee0c746e79ee"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-0-rep-0-baseline/playback.json",
+      "sha256": "88324526cd78479c4eef758dd875bbb5f2f4e3879c8394111cbdb09438518084"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-0-latest-question-wins\\trials\\general-hour-t-round-34-rep-1-latest-question-wins/interview.json",
+      "sha256": "7cface08743a2b75aca8e56a683a020258f9d287dfc4cf46691bfb67b541eac1"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-0-rep-0-latest-question-wins/playback.json",
+      "sha256": "d75d12a257408f576b7aeb6f47972fee4683a7a8a0187562bcb8d6df18317754"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-latest-question-wins\\trials\\general-hour-t-round-13-rep-1-latest-question-wins/interview.json",
+      "sha256": "6f2b15a793456adf1c9e346f364e6a968bfcb253e1ddac3ca0278d8c40cd35fc"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-1-rep-0-latest-question-wins/playback.json",
+      "sha256": "fcb4c6a87279cca7735f59f3871e61fee603a6bc92880b6c21fdb6e8da7e45f9"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-0-baseline\\trials\\general-hour-t-round-13-rep-1-baseline/interview.json",
+      "sha256": "582c3e82304b4ae4e7e117c639cebde020359c4d1739cfbb0189a9f4ef8a11d5"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-1-rep-0-baseline/playback.json",
+      "sha256": "f375e1f5fa2b13881eba714d75da355b9196e32b74975a911f6642b75f27f47a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-baseline\\trials\\systems-hour-t-round-32-rep-1-baseline/interview.json",
+      "sha256": "b6bcd0c1a88c905e35511da290b13d05edc3db86167614f1b4af13e53933fded"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-2-rep-0-baseline/playback.json",
+      "sha256": "ab8276538aecb56cf8cb0d9b9b034f3c8ab207a0c25d29a8221d4878f61ab577"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-0-latest-question-wins\\trials\\systems-hour-t-round-32-rep-1-latest-question-wins/interview.json",
+      "sha256": "fd2f2c1cbc6625a3637de8709eff92b5c8347c8498b93809428f9093829a4c8a"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-2-rep-0-latest-question-wins/playback.json",
+      "sha256": "9c1011a715d5cae61dd860ff43c4bf85ba0d038bb9831b90e3d87dc2876d8896"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-latest-question-wins\\trials\\systems-hour-t-round-41-rep-1-latest-question-wins/interview.json",
+      "sha256": "9ffe9964e2f8946e869f4479ea1928004e8660fd2d739d5b9d0ba32bb26f4b45"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-3-rep-0-latest-question-wins/playback.json",
+      "sha256": "f8823224f0f4c309ea433ae697e3af82649ffa00845c5c4d5159464d34f71701"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-0-baseline\\trials\\systems-hour-t-round-41-rep-1-baseline/interview.json",
+      "sha256": "6678d585785448d862b0e564d8bca3e5f72ee32a14fb183d2766f444a2a0b82e"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-3-rep-0-baseline/playback.json",
+      "sha256": "50e0d7c0b4f3d247b8a452162bfb9283a8deb53e6cad4f0fd5755b726e103d37"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-baseline\\trials\\algorithms-hour-t-round-49-rep-1-baseline/interview.json",
+      "sha256": "3836b3226ce4b3b154c732a3116596af34502ce4a7256173f64d53e7b9eec53e"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-4-rep-0-baseline/playback.json",
+      "sha256": "5202cdecd10593f1868a7da4b7480a7763b4445407784875e0892e676323954c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-1-latest-question-wins/interview.json",
+      "sha256": "3e35a2d59a6373b5397dcd0263200e79fbd0537613bd9b0760345ced06b16a07"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-4-rep-0-latest-question-wins/playback.json",
+      "sha256": "802826de7ae2bd37c6661f8dad35de64aa3261f8d9003f510ee066258614d8b7"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-1-latest-question-wins/interview.json",
+      "sha256": "6f1190a38637adcfcd4a9f0b496d10b710693838332d57aee2c1a8eda6259ca0"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-5-rep-0-latest-question-wins/playback.json",
+      "sha256": "5d6567afd3675693fd2a08f2f7e9ba9c228dfc6f6b22b35769beb06a3f6a1ad6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-0-baseline\\trials\\algorithms-hour-t-round-12-rep-1-baseline/interview.json",
+      "sha256": "d643e41ac0a995a10d3ec78dab228b2aa765aa4ee0d0744140d24f12f06a1437"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-5-rep-0-baseline/playback.json",
+      "sha256": "c8a32b419336a57255fbdd62cf14c5826caa5cf8eb61a1768be63b01ebf4d13d"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-latest-question-wins\\trials\\general-hour-t-round-34-rep-2-latest-question-wins/interview.json",
+      "sha256": "5364cad1ad0e3683e52840c044ed6cd1e275feee34edf7c00ce9cf8016778e49"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-0-rep-1-latest-question-wins/playback.json",
+      "sha256": "a0c605f96a6f19cc6528d03d96ac9db3f10e5d54ae144db4e048c9065703f496"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-0-rep-1-baseline\\trials\\general-hour-t-round-34-rep-2-baseline/interview.json",
+      "sha256": "99a66d8dbca7040281a55bba000d1099bba0c1a2fb0d460bd580b6e0ee336cbf"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-0-rep-1-baseline/playback.json",
+      "sha256": "0f9176f97cb9aded2ba17499ffeb7e83d79a88a6a81f16b6883c6fe5c812ff7b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-baseline\\trials\\general-hour-t-round-13-rep-2-baseline/interview.json",
+      "sha256": "54b2269ccd2d2f019df3ab28b397347322aa6d48f67a60756ebab6d618dcafa4"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-1-rep-1-baseline/playback.json",
+      "sha256": "d0916e86dacbb1f61ef2f3255a23876ff80fb5ec0e71c21987a99d9693073a46"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-1-rep-1-latest-question-wins\\trials\\general-hour-t-round-13-rep-2-latest-question-wins/interview.json",
+      "sha256": "ad8e9f87ea8e74960b6de04c92d28f7d28446be1da33ab59ba253faea781cccd"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-1-rep-1-latest-question-wins/playback.json",
+      "sha256": "948d5556e7a951f5f3b21189965f336204e254479b025eb0fd1299b789326cd4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-latest-question-wins\\trials\\systems-hour-t-round-32-rep-2-latest-question-wins/interview.json",
+      "sha256": "32431c5a94c22eed17b9ab062a1eb636f08575459dcf832af76c558e999eb80f"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-2-rep-1-latest-question-wins/playback.json",
+      "sha256": "b482589ff37051a0881db8919281080ee0f53b6729d4c5a632182717e5417504"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-2-rep-1-baseline\\trials\\systems-hour-t-round-32-rep-2-baseline/interview.json",
+      "sha256": "9ca4b8475e5f80ab9b835b671f92016209d533136f7d57837bb5b65ffe0c5414"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-2-rep-1-baseline/playback.json",
+      "sha256": "0ed689e92ee8bfe9b13a3099e029913a8dce405700405a0240826118f36f32c2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-baseline\\trials\\systems-hour-t-round-41-rep-2-baseline/interview.json",
+      "sha256": "221952f198366ec76b286d1348d15ab3e4b058393c0efccae322670747999a4e"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-3-rep-1-baseline/playback.json",
+      "sha256": "e793c2260ea789ff75176d28dd1425f5238031750df7a8ad45c457d17c32753b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-3-rep-1-latest-question-wins\\trials\\systems-hour-t-round-41-rep-2-latest-question-wins/interview.json",
+      "sha256": "048210e9bd085bb2f49172fff1e83d84a6f50b4ce45859d3548f7ef46974b47d"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-3-rep-1-latest-question-wins/playback.json",
+      "sha256": "092863f7443cb40e7cd9266880ec32248c816448a34f2c44f71d14037af44886"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-49-rep-2-latest-question-wins/interview.json",
+      "sha256": "3fc7d2b92d8a86d40cc5ee5c6189db3d95d4af13b50a79c9ad5bad9fc1137113"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-4-rep-1-latest-question-wins/playback.json",
+      "sha256": "2f1db5c349ea6333252c6701f590b8107b8695a8b7b54ec5edff7bde694f4986"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-4-rep-1-baseline\\trials\\algorithms-hour-t-round-49-rep-2-baseline/interview.json",
+      "sha256": "a67f69180f0617cb44ae35701d0e5957c4a31dfaff5126543025e9a693f22e19"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-4-rep-1-baseline/playback.json",
+      "sha256": "add6af9a70405e1775eae8f494b50ec43c2c18ae8dda2275ef53c8e02f8f0515"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-baseline\\trials\\algorithms-hour-t-round-12-rep-2-baseline/interview.json",
+      "sha256": "15d273994adfb528db7f6718eaafb5a8637e8283c1b4badbc6f11eb78321b8a2"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-5-rep-1-baseline/playback.json",
+      "sha256": "7f81513aa553b2b7c5517ae51aa6b6cc758dc2358dda69146f563b186d73f6ec"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\architecture-comparison\\runs\\case-5-rep-1-latest-question-wins\\trials\\algorithms-hour-t-round-12-rep-2-latest-question-wins/interview.json",
+      "sha256": "eb5b752e51d1175f5d625e5cb2fa5ea87b984bb0857fb5f12b964b0221eef45d"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/architecture-comparison/runs/case-5-rep-1-latest-question-wins/playback.json",
+      "sha256": "c78125f31d4474ee747c7de2ecd28338eda9e035162439ab470789819275ced5"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+      "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/older-code-reference-audit.json",
+      "sha256": "8ee892e3980035c4b0df850e4d5e34c004b03d0ac7b42732c5d8b54bf1ed2218"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-assessment-v71/assessment.json",
+      "sha256": "72ad114b44c8411cd8e1a29e995c1fb3211d1738d2f96446df54360f8b191a58"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-001.json",
+      "sha256": "23b044e0b52464cae0ea9671cc1ec8f0e418582bc19b2140cf97171aa58c29cc"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-001-attempt-001.json",
+      "sha256": "7b3644880ab263b0d856dffb3cdeed3e89b4e2153495aff933c0a0ba372d4ebf"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-002.json",
+      "sha256": "3d1d5d562e66f1fdb5ce4d7bdf3f8768f950be92185fa6d717c0fc0a2602354e"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-002-attempt-001.json",
+      "sha256": "165c6c075cd19f73d6f1b566fb3b83f2d57eb080846d8745f58ded97d7ece208"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-003.json",
+      "sha256": "74e7e5141d786529159ab114e7632d814d8d580de997aa6e91ac84e90c99fa02"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-003-attempt-001.json",
+      "sha256": "2d8e8bccbde729c38680b4bfba1187314b6b62469b85d0d545733bd7dd9f23e1"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-004.json",
+      "sha256": "6947367e6496f3cb3900e4d0b9a9c18be33adffc45b4dd200819739e4be4bb30"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-004-attempt-001.json",
+      "sha256": "ebe8a84dfe0a7210f83a39b23d51af8759216d361ad5132a904ff6fd5f96d7a0"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-005.json",
+      "sha256": "f6e44fb3f625cb253beaa27422f1c68dcf80be0086494567de9a92b9de982eec"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-005-attempt-001.json",
+      "sha256": "0aa8be8eb5fe6438e82a6cd95446ac52166d67599ae0f8efea14ac3ba60f9033"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-006.json",
+      "sha256": "029d7ca45749646287df4dc8b4b199569c99fd5a8cb15eecb0ae941a8ee5a791"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-006-attempt-001.json",
+      "sha256": "a62b4e40cc70a94c30eaec284c068ca4d6aee5041d691e9dca3433f0b69ea3b0"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-007.json",
+      "sha256": "4bb86055acfda932c94cde4cb434d4885866d1ad01f0b2feb791c4d1f845f2d5"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-007-attempt-001.json",
+      "sha256": "706412d1dda9181f4fdf79bcdf26833937df04ea03ef8d0773824f910329f377"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-008.json",
+      "sha256": "fec15265d03d12d6341bb676a910387be46db4d2177b3e7edf30e6fc3a526a4c"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-008-attempt-001.json",
+      "sha256": "3fd9115154dfff5868eb471634f872c8b4143d022767c6ce3c101ecebcbc6527"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-009.json",
+      "sha256": "c24a8db5a082e5393936d4a7e3e133f3880c1965b810915ad9ea9589125766ea"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-009-attempt-001.json",
+      "sha256": "9a5205efca32861f8788be2a20c6e87ede7d278b982a2c64afd8d96124471413"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-010.json",
+      "sha256": "ab858bc796ecfb3c3d52d288ea6301fa4f1de71b257e21741af3b9b1550d46b6"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-010-attempt-001.json",
+      "sha256": "623311e343e56b5314f06e1a5e86939e30b142b5e4ac6c73d1cbb7656b178524"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-011.json",
+      "sha256": "eb0df8a36aa2df96cbc6a9016193771d47aea726081be3cc597f929e869a9a15"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-011-attempt-001.json",
+      "sha256": "5035e7d614fd1cde5073a99788387204c46e3e649b09a546392e5c59fe4de3d2"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-012.json",
+      "sha256": "26f5ff4c155acdac35e7144eb9ffb3968fc14e9c29e334a3e446891fbf607ba3"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-012-attempt-001.json",
+      "sha256": "b16f2be8832f28e89cf03a3d072e4b41e019a10713586869ac85b455955003f9"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-013.json",
+      "sha256": "16ce9f035a122fedfb3dc23c5a8c68bed6578d5873ffed16cfd42315b7508b24"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-013-attempt-001.json",
+      "sha256": "0a62dd06997fad82c862e6ad81510ece3c208e851a2498f6e72887d967d2407e"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-014.json",
+      "sha256": "ff5e96bcc64f12c62d9da3a50148d24eb2a7a2a67e24acb7276e6388419a9a14"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-014-attempt-001.json",
+      "sha256": "1903ff2c6cebf1a008cef4f7f300118e7f6109183ea8a5675e10f0393c5923a8"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-015.json",
+      "sha256": "bfe255018b44536b7255875659cf26c8071f9f332db84793eb18aa2c6d7e1a9f"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-015-attempt-001.json",
+      "sha256": "5e8147e906d52122bb5277c3be700b6611fe92bc69e9c56740a09d75769fd7ea"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-016.json",
+      "sha256": "288172794d671734cc4e06216c457e020fd6e6ef16ede55d9ed45751db35cdd8"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-016-attempt-001.json",
+      "sha256": "c8ec6e17a7f25cb836e602bc881e35db9cc24ef3374cef7141cf399337718b0a"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-017.json",
+      "sha256": "b129946fb67f60fbc08cfa79aae75072a01d06b3febe8be4b330e36f70ebd6da"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-017-attempt-001.json",
+      "sha256": "f0892025dba5a2ad29e6d7e98d3e78d55aa6085bade5ebb4125571c9cac4c570"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-018.json",
+      "sha256": "1e24c6be2a23efdebfc4b6156c7896be1e053b98dde3c98810082a9290de4781"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-018-attempt-001.json",
+      "sha256": "6a91ac75b78a03c0956c96514ce6a0729dac25fc0f9cf08e27f8cf13973cac2f"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-019.json",
+      "sha256": "87335886e681061ff15a1240af94f6ca90f181e7af63637ef871b5a2f75feb74"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-019-attempt-001.json",
+      "sha256": "96e811b1100a8d49a0434eff836c785517dbd002110d94edad9b69e646525ed1"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-020.json",
+      "sha256": "0407f10c71d6f8aace347abee8efb14a1e7af39ba1a3d709b2a8f24d6b0f114f"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-020-attempt-001.json",
+      "sha256": "a101a8d8895a0f645c5a32e1208cf570632db3e47490ce8feccf67e8be47b763"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-021.json",
+      "sha256": "5eb4bc12bdb8e672bcdb8e02e81ad3fd15835aeaf43b093290c5111c118ecc02"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-021-attempt-001.json",
+      "sha256": "82aadcec4ed51029bc0aa5b3fb401931df05b905a02391a4996bcc59628fa5b1"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-022.json",
+      "sha256": "c8b9a55cea252f81485741c11c67c65dbd99fcd018b02dc085259d58ea3f73b2"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-022-attempt-001.json",
+      "sha256": "91740785ab9a93c68f08a3da156f71cbe99dd284d385f639a197952b50b88411"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-023.json",
+      "sha256": "6f626a0903b17746bcbcd95628a7ee6b8b701acaeaeef84b8c05afa8340f3d6c"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-023-attempt-001.json",
+      "sha256": "f1d69641f53ce87f15f34e40d970875f2c797a45443924f98a8f5e86d70a70c7"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-024.json",
+      "sha256": "abb72a3fc5084a373e1cf904de2dbf0d032eb04b5296782d10ba43f91e333735"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-024-attempt-001.json",
+      "sha256": "6772d552594a64c3ebba1a88c98b7f67d044dea586f297db48a83d91e57f9a41"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-025.json",
+      "sha256": "83adcf97ccc61c2111d3d19a192a022cc11562c386be80edced57f53acfbccc8"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-025-attempt-001.json",
+      "sha256": "35443d35bfbfbfae78437ce6e66ed56cda774b41b91ebdf33f415b90d5053664"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-026.json",
+      "sha256": "9c5e93deab26339a64784851a8d1b288d41ade0e9c83301eccba41228d244e63"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-026-attempt-001.json",
+      "sha256": "e5aabe65fc2d4edf8c2b9e91d626c527abc51d0e4ddaa1203fc1570dc13495d9"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-027.json",
+      "sha256": "6ab148cf1fc588642d56e81ea5d38cb7b6993c5517f4b3bfb267836098ae2ec3"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-027-attempt-001.json",
+      "sha256": "2a21c6d8634afb3eabdf06610870dda952160060dde862d38082dd4c90377c21"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-028.json",
+      "sha256": "f894719f8ee93501e89b6b7993fa4fb248b929c8bf2a1d1c4a04c8615bc19960"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-028-attempt-001.json",
+      "sha256": "aaf47966c612e5d950d4f122cfc626b3bdbe25bd44409ba06039eb0a67740720"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-029.json",
+      "sha256": "1b0102c91864901c610ea6f87758bffc52d531ebd8dc6947d7eeebfbe6c09be0"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-029-attempt-001.json",
+      "sha256": "229c9d3fc93955e7fb0fe11b9b29c7d17f5f04540ee65ee88c10d0ec52c82181"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-030.json",
+      "sha256": "ced02e7e2f7a11e7bbd9bc8aeaa59f374bd23441208c128f1ad5690dfb523272"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-030-attempt-001.json",
+      "sha256": "2c7dee971214e20368cdf7b55991e4f06c8e42b6b9ebef03edb45558b556f008"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-031.json",
+      "sha256": "eb4cdf273f3239a0552bac2d315927f5952cbaf3f957090fc21cd7a8f48c530e"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-031-attempt-001.json",
+      "sha256": "b0ba82ae95e540674779ffc9b740732ce1745cae8f83d6a4221a6bf79798c072"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-032.json",
+      "sha256": "82348cc3ad1056347a119d24507c29a05a5d0325a8a1b37d759efd470a7605ce"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-032-attempt-001.json",
+      "sha256": "3f042f908eff2f2f955bcd97d87b3f7c49c2823598692f1739710f584441eb45"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-033.json",
+      "sha256": "5569bb170656148fc093de3d776f5a1b874a09c1a14c7524c48d449f6db75c3c"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-033-attempt-001.json",
+      "sha256": "34f657e3aa4200a6155a3b4634d11ac2a8b179359bf83558c99d1cfc673e0503"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-034.json",
+      "sha256": "c5dafc413bf61253889fd9879e03ae5e34b0f3113aed73174cb2fdc553cd5897"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-034-attempt-001.json",
+      "sha256": "4ec7cb4f1395cd3540b4a3c65ddcceac040b0d36fbc9e88779014c7b4d393435"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-035.json",
+      "sha256": "5c89039fddb90fc8dbcdc5c43002807c100d1ef071744d3aff4ff47bd33659ba"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-035-attempt-001.json",
+      "sha256": "258dccfbec0ad2423270b60327b6fed24805ba7faba30399d68349aa50c7bfd1"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-036.json",
+      "sha256": "28ca022deb4cdbba9a0642d42a9c853bed600c011c90e083627383af44cf88b5"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-036-attempt-001.json",
+      "sha256": "a524c9fad21088c0bafcbdf112b4ae715f3fa48d3283e821f8a8a78f790cf1ac"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-037.json",
+      "sha256": "dee2888b15ac3fe64ec97b7fffce02a61c21dd7773f3027c735f21f95f117f07"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-037-attempt-001.json",
+      "sha256": "9d6133455dedfe2557b4ba07a3b2f7848890b9db69433adef78ef044ab0f055b"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-038.json",
+      "sha256": "fdd3d11db610a9e4fa0922b6ff20a9f379c22a74b6dc86e0d25e7b8e67e541f4"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-038-attempt-001.json",
+      "sha256": "3550857d72bb5c94ce373243101a59c944114b4deb8547455963b6569622a04e"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-039.json",
+      "sha256": "8f2c746f65b55a25943b175a46d40f1bb66a794669a0bb6a0736a07a1963c4d7"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-039-attempt-001.json",
+      "sha256": "3f13d4d3ad1f2cdc54f536fedbc195745133dd900b7832bc2ddc4076e2987762"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-040.json",
+      "sha256": "2974d04557dd68d3deddd3ce806fdbb4cd30d50abce2b45e8f5f2e6dd580b860"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-040-attempt-001.json",
+      "sha256": "35c5dc4a611358bf62d1367db6101fd97c307f1a5b6de7bdd63b9017dd748e1b"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-041.json",
+      "sha256": "91e3e929c31a5107bdd648b187dc9d4e61e7373ca3df54283e25aa41546a9590"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-041-attempt-001.json",
+      "sha256": "69eed65b74685e469da33e71d161d43d9bfb7c68ba73568ab75244e7dc5b1582"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-042.json",
+      "sha256": "2a839a9711ac7e4ca18fa1669c065c5977f32d18fef14497ce0ca8a5cfa2bfcb"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-042-attempt-001.json",
+      "sha256": "2c40c10c49435aac5b430e9843a3a513092a309dc1b0b78d31a3f933b37913ac"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-043.json",
+      "sha256": "5998675151177300d107ffe5934c4cfea068eaf7aae9cdcd878a165c969ad510"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-043-attempt-001.json",
+      "sha256": "1bcc9f3ddbd0d3eb5e1dbc5b2a2a966322e0596e9699262a5af6d66e1c7f5c83"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-044.json",
+      "sha256": "e7006e6cd455c1e0597011c853e8e368278cc926c0b096add19eadf2e560569c"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-044-attempt-001.json",
+      "sha256": "960d7e60ff551a7115ac26f8e425e62e8903d3847a5bae28545c3bbcdd7380de"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-045.json",
+      "sha256": "f7e5706142ae810743feb023d5eded34f0bba566c6747b33a8507a060d6adeb8"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-045-attempt-001.json",
+      "sha256": "406d2e072daa3b6ab8334ddfc2b292fea09ecaa988d80f5aaa15530e4cf20dd3"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-046.json",
+      "sha256": "84b82b4748ae020de47d752250c47e42765cb83bed4f2f566a3ff2fb2242820a"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-046-attempt-001.json",
+      "sha256": "8be8bd04588ab287db875c46517c32868d2e59e2ad9285ea5bfc76cf1eeebb3b"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-047.json",
+      "sha256": "61bedd9cb4ed0499181e42acc80cbdf68dc4ab8850b66e8035c93539fa8acef3"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-047-attempt-001.json",
+      "sha256": "e9073bf0d28bc671475d286f40b48ee89e88a91c58f54ea70014468697ee5358"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-048.json",
+      "sha256": "6e1b6b3a95e4373eeff34e9178f331c426d7e9fd8396efeec29002f3f6880b9f"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-048-attempt-001.json",
+      "sha256": "f3a52743659d03cc2f2f2df1516162515f7120887131d858d6b57ec008d603ca"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-049.json",
+      "sha256": "8c053c2e867bc14659b96cebe969c4a9b3146a916ae7f5ef8bb6aeda73043df2"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-049-attempt-001.json",
+      "sha256": "daaadf3426d062fb533f49a82040c412ea122139b4953c61512f6da6a31d9b27"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-050.json",
+      "sha256": "5ea95e50ec844f4cab3adde458336a91c01c0ffc537ba73b3344f84f08858197"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-050-attempt-001.json",
+      "sha256": "f15c72d122935d2e92d5db32cf4676ba275482b3bb3ede7334a4cf3c054e1950"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-051.json",
+      "sha256": "9cf6959aa85f92260b3adbbcb2f7a57d29fdf7059a349b67c5226845c6b188ea"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-051-attempt-001.json",
+      "sha256": "e0d1523774e7cb4d626099680a54c14ad318a12357298d2b07dc9e723726a535"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-052.json",
+      "sha256": "512a07b8f533ff84aeba916e05390cf1538e3c5e14b2cbb3edaf4bbe20b54467"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-052-attempt-001.json",
+      "sha256": "45174ef76ec2f102cc7b28769f671685b0a2e0988948d2f2a1268220f82d41f6"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-053.json",
+      "sha256": "c699261e027c5ec4c6d9390ad42f20b0b94a2ab8fd11ceaf9fbbfc8dc38b3b9f"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-053-attempt-001.json",
+      "sha256": "9dc64ddf6fe2bf2a6096fc8881bbcc2b6d2df2764c5ec280d525d17e1c29b82a"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-054.json",
+      "sha256": "7c19783dcf9dccabbf1d9dec837a5e2813650ec4a8fa847d883ece4a6a56b51b"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-054-attempt-001.json",
+      "sha256": "9c85cb03a429516273579c99b422e8869a8d87822e20d72271c70405d1c49886"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-055.json",
+      "sha256": "ed3f4b1af61914d058cbc92f895e3058db41b88edfa7089749ced0e81452be66"
+    },
+    {
+      "file": "\\\\?\\C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\independent-model-review-v71\\attempts\\trial-055-attempt-001.json",
+      "sha256": "ee803b4f6cb91c114a7c9938bf3cd14e856d8731c9265bcd950c4e0d663cd05c"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "bbbe6feafc3f376ea2853e2db6096214469cab80a93a2444bfad0495418fe99a"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/cuda-compiler/toolchain.json",
+      "sha256": "82c88817fb7b7f17293ace6c290842c7738d9145de411f2e26703097a30105d3"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/architecture-audit-v71.json",
+      "sha256": "f441e2ab3fcfa5dc949f123b52a9384a6fdbb0227a95b373449b7de3bc3135b4"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/delivery-coverage-audit.json",
+      "sha256": "4d6b4eef7184a939ac6277e54339ca4d1bd70a6814b931fd9d777d6370b261df"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/interview-visibility-audit-v71.json",
+      "sha256": "78901a3796078b61663a04ea80ad5f5b4411fa01c6524a246e7314beefecc7cb"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-01.wav",
+      "sha256": "1589403e326c42fecf218caa71cb4765b7dbd773bad1b9d225592770d4518661"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-02.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-03.wav",
+      "sha256": "880563a0d0533a43e0a73394e88640aa8e9d7d96453ac284cd617a2fbe61606a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-04.wav",
+      "sha256": "943fb8d3aea3b83141b3baae03b22dc4e2a696350fe20a5ebe2db12965b9fff2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-05.wav",
+      "sha256": "e96f72914a151482951dfe10b40f92111f9389c0cd1e3b6756ba743a2ecbde43"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-06.wav",
+      "sha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-07.wav",
+      "sha256": "282cbdea032cfc89822fc06aaca14785b4c17da17e0bfd2e86da591eccb6ab99"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-08.wav",
+      "sha256": "26f57e1890513870043f6df317e5655bc5c7454ff2616aa5f219c8e4ad4d0a81"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-09.wav",
+      "sha256": "db8e60ac51041a56d94f79391a110d66bb3976793d14d91698ef9a5b4118b51d"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-10.wav",
+      "sha256": "3d8150def10602fb9ff114e782078a22dd25893b794e0920d9b7c71da7ef71b7"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-11.wav",
+      "sha256": "501814f5d8509f00e5660f0db0f76c2f7f7323f46e79cb5298c0eb0b7a8578f2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-12.wav",
+      "sha256": "19397ca3b8ae867a2dba16d8bbd5b14294c32529ec1c68cdef67935f97bd2fe4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-13.wav",
+      "sha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-14.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-15.wav",
+      "sha256": "204c7992c665cde2b745dece1f91f8da2ca0883720c5dac1119cf1cb8a69a314"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-16.wav",
+      "sha256": "118672e184b52e27341f2854fab11c00d6c0caacfb0ee445536bd813ff6f92a3"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-17.wav",
+      "sha256": "29388f23ca18d7d190e7dca69131343cbee7271ab7b8fdb6da6c5963c11956f9"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-18.wav",
+      "sha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-19.wav",
+      "sha256": "ee7c3f661770134345f0a8e5b607b1de05258613f138131df3b9405e0656df64"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-20.wav",
+      "sha256": "d66733183bab53dae33d458d78d41db189d48f4dd71cce86d7d517d6ab7960c4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-21.wav",
+      "sha256": "7eaf9dea4ca41e8f20ee97acbf909a186cdd24985f71c9a57aa8e463f7600915"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-22.wav",
+      "sha256": "3e904a2963939b5f3dc2aa236db2f646603e12a787a212e7572ca86542a50539"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-23.wav",
+      "sha256": "501814f5d8509f00e5660f0db0f76c2f7f7323f46e79cb5298c0eb0b7a8578f2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-24.wav",
+      "sha256": "46bfdc86ca670e80f20407c87cb3015248fffd272859c70b1cd8bf6ede54893f"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-25.wav",
+      "sha256": "60a9c673e4a0464567f76d56149624f339d9712480b72ba9a84a56ee57534ef4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-26.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-27.wav",
+      "sha256": "f8688304de081b0449e1fe9d2b811e820dc6c9459285b81ee3e2c9055960d4c0"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-28.wav",
+      "sha256": "c577e1b4952e4967ee0fb6518989900ca633fafe6a8f837e475ec10026a698e6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-29.wav",
+      "sha256": "41fef6bdb24eb697ad788192b39868134fd42682c1a8dc478a036fc0d25b87be"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-30.wav",
+      "sha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-31.wav",
+      "sha256": "3c420bddfdf8ed6eafa167c5e298cf22bc5915818ab7ddfe87953f0ed6238732"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-32.wav",
+      "sha256": "c898de8d3e7901a8bb265fd8825d8cf146a3f7db68e9a5bf8eda12ab6be6297e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-33.wav",
+      "sha256": "430e544484d164f25b1318839adb01ade95038159d97ae8cc265b6d5b7a898cf"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-34.wav",
+      "sha256": "0b59d9160deaa00ff7b0b8efbc9b8468207b7baff797a1a40d3b2b4d9df4d745"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-35.wav",
+      "sha256": "501814f5d8509f00e5660f0db0f76c2f7f7323f46e79cb5298c0eb0b7a8578f2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-36.wav",
+      "sha256": "900a4c64110fb45d5d9196d5fa7541766f2531a565ce3415e397d588d6f11a01"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-37.wav",
+      "sha256": "4fd7461a09ccf40f950cb08f17227f85556ff05fda8734ad200ffb3a8f533370"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-38.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-39.wav",
+      "sha256": "90094e5a92775415dfd7bce9d3aa7df248b34b18c3f2f9b4ddf4491294c8f60a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-40.wav",
+      "sha256": "a766070e3a0ddaeeb0edbe20060e45e42bae75f04e55925b538ede5f501c59c0"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-41.wav",
+      "sha256": "958a47aa9c63e1cb14859136f6082978ab56d2d73beae526f8989997103dfbdf"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-42.wav",
+      "sha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-43.wav",
+      "sha256": "2e02c10bda41cc6f96026e6e0144c12438a96f7b532fdb471306deafbe10a711"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-44.wav",
+      "sha256": "3a26caa5447ed55ee9ba57574b31c164d3d5ca24bd02fc9d0c095b8caa01943f"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-45.wav",
+      "sha256": "c4f00fd51535b12e1247d2abca43fb0655d77aebb0199f21810fefec8c48273b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-46.wav",
+      "sha256": "675b3ac89ccbdc985a636f08dba9863bb1db44d4db7555aeec1f979964ed2f70"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-47.wav",
+      "sha256": "501814f5d8509f00e5660f0db0f76c2f7f7323f46e79cb5298c0eb0b7a8578f2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-48.wav",
+      "sha256": "e4df5901cbfa722a305c0e0f1cb0057845a85d44dc085e5cacd514eb1d0970fb"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-49.wav",
+      "sha256": "4b1abe8bc4915db1a43bb14833bf73e7acb161d9e235583ca48a264bd790962e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-50.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-51.wav",
+      "sha256": "62d31383657732e7119be986e433bb3dbf0f862fa694d7f56f36fd3be6b992bb"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-52.wav",
+      "sha256": "455de5f7c1845e1162945eb8635d3878da95f4e6b6f8daf0329f3af41a2c6570"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-53.wav",
+      "sha256": "ef55feff4778e7b5c4841c892ea022aeeb83ef9ba22e2207bb15162be2fe217c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-54.wav",
+      "sha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\round-55.wav",
+      "sha256": "de8d1bc0151fc129f387364a706404d6d92c925ca16f145cb0ceff77debb7599"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\background-before-13.wav",
+      "sha256": "5892d2759a3419b1fff1f606ddf4b50d0793abc15369866c682088720b815652"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\background-before-25.wav",
+      "sha256": "5892d2759a3419b1fff1f606ddf4b50d0793abc15369866c682088720b815652"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\background-before-37.wav",
+      "sha256": "5892d2759a3419b1fff1f606ddf4b50d0793abc15369866c682088720b815652"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\general-hour-t\\background-before-49.wav",
+      "sha256": "5892d2759a3419b1fff1f606ddf4b50d0793abc15369866c682088720b815652"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/duration-audit.json",
+      "sha256": "cef1ded64893003902ef43da73f8d44fa6bb070577348004a0ce112bd1c412d3"
+    }
+  ],
+  "scope": "Every independent model review binds its original recorded question, recognized wording, public context, prior source questions and untouched answer. Cancelled, erroneous, incomplete and unverified rows remain in denominators. Correct fractions are descriptive provisional model judgments, not population estimates or executable correctness certificates. Useful-phrase timing excludes cancelled/error outcomes by the existing summarizer; primary first-word timing does not use accuracy filtering. Pressure timing uses native-job endpoints, while hour/control playback uses physical recorded endpoints. Selected policy controls are dependent diagnostic cases. Topic and ten-requirement coverage, substantive code checks, tail interpretation and final goal completion require separate source-bound audits.",
+  "goalComplete": false
+}

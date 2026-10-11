@@ -7,6 +7,11 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {recordedCohort} from './lib/recorded-cohort.mjs';
 const root=process.argv[2]??'artifacts/deep-interview-v71',sources=new Map(),cohorts=[];
+const partial=process.argv.includes('--partial');
+const outputArgument=process.argv.find(argument=>argument.startsWith('--output='));
+const output=outputArgument?.slice('--output='.length)??root+'/review-cohort-audit.json';
+assert(!partial||outputArgument,'Partial verification needs a distinct explicit output file');
+assert(!partial||path.resolve(output)!==path.resolve(root,'review-cohort-audit.json'),'Do not replace the final cohort audit with a subset');
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 async function load(file){const bytes=await readFile(file);sources.set(path.resolve(file),{file,sha256:digest(bytes)});return JSON.parse(bytes);}
 async function fileHash(file){
@@ -18,7 +23,7 @@ async function terminal(file,event){const rows=(await readFile(file,'utf8')).tri
 await terminal(root+'/recording-queue.jsonl','recordings_terminal');
 const recorded=await recordedCohort(root);
 const codeSelections=await load('docs/evidence/recorded-code-selections-v71.json');
-await terminal(root+'/deferred-queue.jsonl','reviews_terminal');
+if(!partial)await terminal(root+'/deferred-queue.jsonl','reviews_terminal');
 const playback=await load(root+'/policy-playback/playback.json');assert.equal(playback.status,'complete');assert(playback.stoppedCleanly);
 const controls=await load(root+'/policy-playback/manifest.json');assert.equal(playback.trials.length,controls.cases.length*controls.repetitions*controls.policies.length);
 const inputs=[...recorded.hours];
@@ -50,7 +55,16 @@ if(await access(architectureFile).then(()=>true,()=>false)){
 }
 const verdictNames=['correct','incorrect','incomplete','unverified'];
 const reviewerProvenance=new Map();
+const selectedInputs=[];
 for(const entry of inputs){
+ if(partial){
+  try{await access(path.join(path.dirname(entry.file),'independent-assessment-v71/assessment.json'));}
+  catch(error){if(error.code==='ENOENT')continue;throw error;}
+ }
+ selectedInputs.push(entry);
+}
+assert(selectedInputs.length,'No complete review assessments available to verify');
+for(const entry of selectedInputs){
  const directory=path.dirname(entry.file),journal=await load(entry.file),journalSha256=await fileHash(entry.file);
  assert.equal(journal.status,'complete');assert(journal.stoppedCleanly);
  for(const selection of codeSelections.checks.filter(check=>path.resolve(check.file)===path.resolve(entry.file))){
@@ -122,9 +136,13 @@ for(const entry of inputs){
  globalThis.gc?.();
 }
 const totals=Object.fromEntries(verdictNames.map(verdict=>[verdict,cohorts.filter(cohort=>cohort.kind==='elapsed_hour').reduce((sum,cohort)=>sum+cohort.independentModelVerdicts[verdict],0)]));
-const report={recordedAt:new Date().toISOString(),status:'recorded_review_inputs_verified',cohorts,allHourIndependentModelVerdicts:totals,
+const report={recordedAt:new Date().toISOString(),status:partial?'completed_review_subset_inputs_verified':'recorded_review_inputs_verified',
+ expectedInputCohorts:inputs.length,auditedInputCohorts:cohorts.length,pendingInputCohorts:inputs.length-cohorts.length,
+ cohorts,allHourIndependentModelVerdicts:partial?null:totals,completedHourIndependentModelVerdicts:totals,
  auditedReviewCount:cohorts.reduce((sum,cohort)=>sum+cohort.turns,0),reviewerProvenance:[...reviewerProvenance.values()],sources:[...sources.values()],
  scope:'Every independent model review binds its original recorded question, recognized wording, public context, prior source questions and untouched answer. Cancelled, erroneous, incomplete and unverified rows remain in denominators. Correct fractions are descriptive provisional model judgments, not population estimates or executable correctness certificates. Useful-phrase timing excludes cancelled/error outcomes by the existing summarizer; primary first-word timing does not use accuracy filtering. Pressure timing uses native-job endpoints, while hour/control playback uses physical recorded endpoints. Selected policy controls are dependent diagnostic cases. Topic and ten-requirement coverage, substantive code checks, tail interpretation and final goal completion require separate source-bound audits.',
  goalComplete:false};
-await writeFile(root+'/review-cohort-audit.json',JSON.stringify(report,null,2),{flag:'wx'});
-console.log(JSON.stringify({file:root+'/review-cohort-audit.json',cohorts:cohorts.length,auditedReviewCount:report.auditedReviewCount,allHourIndependentModelVerdicts:totals}));
+if(partial)report.scope='Partial verification of completed review cohorts only; pending cohorts remain explicitly unverified. '+report.scope;
+await writeFile(output,JSON.stringify(report,null,2),{flag:'wx'});
+console.log(JSON.stringify({file:output,partial,cohorts:cohorts.length,pendingInputCohorts:report.pendingInputCohorts,
+ auditedReviewCount:report.auditedReviewCount,completedHourIndependentModelVerdicts:totals}));

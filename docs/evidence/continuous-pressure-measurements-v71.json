@@ -1,0 +1,399 @@
+{
+  "recordedAt": "2026-10-11T13:42:05.880Z",
+  "journalSha256": "2597f2bf7975b01b222391fcf7380f0f345dce11eb0f3855bc7112eae04907fd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "duration": {
+    "requestedDurationMs": 1800000,
+    "actualInterviewDurationMs": 1813466,
+    "durationVerified": true,
+    "stoppedCleanly": true,
+    "speechConfiguration": {
+      "backend": "nemotron",
+      "chunkMs": 160,
+      "device": 0,
+      "deviceName": "AMD Radeon RX 9070 XT",
+      "acousticRefinements": false,
+      "eagerFinalReplacement": false,
+      "confirmedQuestionRefinements": false,
+      "agedFinalWait": false,
+      "settledUpdate": false,
+      "completedDraftReplacement": false,
+      "remoteOnly": true,
+      "selfCapture": {
+        "kind": "disabled",
+        "physicalMicrophoneUsed": false
+      }
+    }
+  },
+  "nativeEndpointMeasurements": {
+    "nativeJobs": 91,
+    "sourceSegments": 158,
+    "nativeEndpointToFirstVisibleWordMs": {
+      "count": 45,
+      "min": 2398,
+      "median": 3741,
+      "sampleP95": 10544,
+      "max": 11458
+    },
+    "missingVisibleWords": 46,
+    "cancelled": 51,
+    "errors": 1,
+    "phases": {
+      "complete": 36,
+      "superseded": 46,
+      "cancelled": 7,
+      "speculative": 1,
+      "confirmed": 1
+    }
+  },
+  "physicalSourcePairMeasurements": {
+    "sourceUtterances": 158,
+    "mappedSourceJobPairs": 176,
+    "sourcesWithoutAnyMappedNativeJob": 0,
+    "sourcesWithoutAnyRetainedVisibleWord": 68,
+    "pairsWithRetainedVisibleWord": 96,
+    "pairsMissingRetainedVisibleWord": 80,
+    "pairsWithPartialSourceRepresentation": 29,
+    "sourceEndpointToRetainedVisibleWordMs": {
+      "count": 96,
+      "min": -7683,
+      "median": 13298,
+      "sampleP95": 41819,
+      "max": 43822
+    },
+    "sourceKinds": {
+      "question": {
+        "sourceUtterances": 28,
+        "mappedPairs": 28,
+        "missingRetainedWords": 19,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 9,
+          "min": 2300,
+          "median": 39985,
+          "sampleP95": 43822,
+          "max": 43822
+        }
+      },
+      "followup": {
+        "sourceUtterances": 45,
+        "mappedPairs": 46,
+        "missingRetainedWords": 14,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 32,
+          "min": 3283,
+          "median": 16729,
+          "sampleP95": 41819,
+          "max": 41975
+        }
+      },
+      "incomplete": {
+        "sourceUtterances": 17,
+        "mappedPairs": 17,
+        "missingRetainedWords": 11,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 6,
+          "min": 29263,
+          "median": 32653.5,
+          "sampleP95": 34217,
+          "max": 34217
+        }
+      },
+      "long-question": {
+        "sourceUtterances": 6,
+        "mappedPairs": 12,
+        "missingRetainedWords": 0,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 12,
+          "min": -7683,
+          "median": 319,
+          "sampleP95": 4015,
+          "max": 4015
+        }
+      },
+      "background": {
+        "sourceUtterances": 11,
+        "mappedPairs": 11,
+        "missingRetainedWords": 5,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 6,
+          "min": 12880,
+          "median": 13298,
+          "sampleP95": 20204,
+          "max": 20204
+        }
+      },
+      "topic-switch": {
+        "sourceUtterances": 33,
+        "mappedPairs": 33,
+        "missingRetainedWords": 15,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 18,
+          "min": 2263,
+          "median": 3669,
+          "sampleP95": 19738,
+          "max": 19738
+        }
+      },
+      "false-premise": {
+        "sourceUtterances": 6,
+        "mappedPairs": 6,
+        "missingRetainedWords": 0,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 6,
+          "min": 3003,
+          "median": 3313.5,
+          "sampleP95": 4691,
+          "max": 4691
+        }
+      },
+      "false-start": {
+        "sourceUtterances": 6,
+        "mappedPairs": 6,
+        "missingRetainedWords": 3,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 3,
+          "min": 19759,
+          "median": 20687,
+          "sampleP95": 21021,
+          "max": 21021
+        }
+      },
+      "late-reversal": {
+        "sourceUtterances": 6,
+        "mappedPairs": 17,
+        "missingRetainedWords": 13,
+        "sourceEndpointToRetainedVisibleWordMs": {
+          "count": 4,
+          "min": 3190,
+          "median": 3671,
+          "sampleP95": 4939,
+          "max": 4939
+        }
+      }
+    }
+  },
+  "sourceCoverage": {
+    "sourceUtterances": 158,
+    "sourceWords": 3557,
+    "asrDeletedSourceWords": 0,
+    "asrSubstitutedSourceWords": 30,
+    "utterancesWithoutAnyFinalNativeJob": 0,
+    "utterancesWithRecognizedWordsAbsentFromFinalNativeQuestions": 0,
+    "utterancesRepresentedAcrossMultipleNativeJobs": 13,
+    "backgroundOnlyFinalNativeJobs": 0,
+    "sourceKinds": {
+      "question": 28,
+      "followup": 45,
+      "incomplete": 17,
+      "long-question": 6,
+      "background": 11,
+      "topic-switch": 33,
+      "false-premise": 6,
+      "false-start": 6,
+      "late-reversal": 6
+    }
+  },
+  "visibility": {
+    "differentConfirmedNativeQuestionWindows": 86,
+    "windowsWithDifferentQuestionVisible": 85,
+    "differentQuestionVisibleMs": 1517261,
+    "maxPerWindowMs": 51577
+  },
+  "temporalHalves": {
+    "first": {
+      "nativeJobs": 44,
+      "observedVisibleWords": 23,
+      "missingVisibleWords": 21,
+      "cancelled": 26,
+      "phases": {
+        "complete": 17,
+        "superseded": 24,
+        "cancelled": 3
+      },
+      "nativeEndpointToFirstVisibleWordMs": {
+        "count": 23,
+        "min": 2398,
+        "median": 3547,
+        "sampleP95": 7644,
+        "max": 11458
+      },
+      "completeJobsNativeEndpointToFirstVisibleWordMs": {
+        "count": 17,
+        "min": 2770,
+        "median": 3514,
+        "sampleP95": 11458,
+        "max": 11458
+      }
+    },
+    "second": {
+      "nativeJobs": 47,
+      "observedVisibleWords": 22,
+      "missingVisibleWords": 25,
+      "cancelled": 25,
+      "phases": {
+        "superseded": 22,
+        "complete": 19,
+        "cancelled": 4,
+        "speculative": 1,
+        "confirmed": 1
+      },
+      "nativeEndpointToFirstVisibleWordMs": {
+        "count": 22,
+        "min": 2461,
+        "median": 4090.5,
+        "sampleP95": 10544,
+        "max": 11311
+      },
+      "completeJobsNativeEndpointToFirstVisibleWordMs": {
+        "count": 19,
+        "min": 2461,
+        "median": 4119,
+        "sampleP95": 11311,
+        "max": 11311
+      }
+    }
+  },
+  "resources": {
+    "native": {
+      "workingSetBytes": {
+        "first": 28413952,
+        "last": 54878208,
+        "count": 123,
+        "min": 28413952,
+        "median": 53501952,
+        "sampleP95": 55160832,
+        "max": 56586240
+      },
+      "privateBytes": {
+        "first": 4431872,
+        "last": 18657280,
+        "count": 123,
+        "min": 4431872,
+        "median": 17625088,
+        "sampleP95": 19341312,
+        "max": 20602880
+      },
+      "handles": {
+        "first": 268,
+        "last": 427,
+        "count": 123,
+        "min": 268,
+        "median": 427,
+        "sampleP95": 433,
+        "max": 438
+      },
+      "threads": {
+        "first": 10,
+        "last": 22,
+        "count": 123,
+        "min": 10,
+        "median": 22,
+        "sampleP95": 28,
+        "max": 36
+      }
+    },
+    "recorder": {
+      "rss": {
+        "first": 50384896,
+        "last": 172187648,
+        "count": 182,
+        "min": 50384896,
+        "median": 161329152,
+        "sampleP95": 182800384,
+        "max": 327438336
+      },
+      "heapUsed": {
+        "first": 9523264,
+        "last": 54022600,
+        "count": 182,
+        "min": 9220240,
+        "median": 32452804,
+        "sampleP95": 52854848,
+        "max": 149933616
+      },
+      "pollMs": {
+        "first": 14,
+        "last": 5,
+        "count": 182,
+        "min": 3,
+        "median": 5,
+        "sampleP95": 6,
+        "max": 14
+      }
+    },
+    "childTree": {
+      "nativeTreePrivateBytes": {
+        "first": 242974720,
+        "last": 5981655040,
+        "count": 123,
+        "min": 242974720,
+        "median": 6024634368,
+        "sampleP95": 6080618496,
+        "max": 6093529088
+      },
+      "nativeTreeSumWorkingSetBytes": {
+        "first": 501342208,
+        "last": 1136955392,
+        "count": 123,
+        "min": 501342208,
+        "median": 1182703616,
+        "sampleP95": 1238642688,
+        "max": 1251573760
+      }
+    }
+  },
+  "instrumentation": {
+    "observerStartedAfterPlaybackMs": -10772,
+    "observerStartRelation": "before_playback",
+    "initialReadBackfilledRetainedEvents": true,
+    "correction": "The original event and drift audit prose says the observer began during playback. The saved numeric offset determines its actual relation above. Original files remain unchanged; this derived report corrects the prose rather than changing any timing."
+  },
+  "evidence": [
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\interview.json",
+      "sha256": "2597f2bf7975b01b222391fcf7380f0f345dce11eb0f3855bc7112eae04907fd"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\duration-audit.json",
+      "sha256": "c3b89578cc1f1061ff23c6a0490d0e3367d29ba1057083cdd067befe553d718a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-drift-audit.json",
+      "sha256": "d6d41d58e3d67d739bd15784e9a8fb6201bf4d096630e9985984c12d4b7e6d88"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-audit.json",
+      "sha256": "0d4a128f57bd089f129776142aa638dae26ef3ea6aa72eddfb4b74cb7dc6c583"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-visibility-audit.json",
+      "sha256": "e9d827e9dc881d826e4d12616dcd8a7ee7a412d700b0576c67684c91375e8d3a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-source-coverage-audit.json",
+      "sha256": "9f4bd8acd79f5c5b40fadcac453b7fc8db621153bee2ca7659fc1eaa35916bda"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-physical-latency-audit.json",
+      "sha256": "af288ebe0307e1a94a2d601fd7c9f1840fd46b916733dee4539e3457ca480d7b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-events-audit.json",
+      "sha256": "48fcc1384661e89b8fea5ebc594de927325709ea5692d3e9ba86b04535ffabb7"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-review-input.json",
+      "sha256": "e46703d15569c9d8109cbe1d04fdda98e3429adba59c0574d379e81868961842"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\continuous-pressure-t\\pressure-token-alignment.json",
+      "sha256": "36080bb0b0871eba6185d5232361f634ccd988cb550c18c51fcbe736a0e68e4a"
+    }
+  ],
+  "independentAccuracyPending": true,
+  "semanticClauseAssessmentPending": true,
+  "goalComplete": false,
+  "scope": "Completed playback-only recording. Native-job endpoint and original-source endpoint distributions remain separate. Physical source/native-job pairs are dependent and may be split or merged; missing and background sources remain explicit. Lexical retention is not semantic answer coverage or correctness. Prior-question visibility intervals require semantic interpretation and may overlap. Temporal halves have unequal outcomes and dependent repeated workloads; no significance threshold, memory-leak conclusion or population p95 is invented."
+}

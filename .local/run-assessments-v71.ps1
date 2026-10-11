@@ -9,6 +9,9 @@ $taskControl=Get-Content -LiteralPath ($taskRoot+'/policy-playback/playback.json
 $taskManifest=Get-Content -LiteralPath ($taskRoot+'/policy-playback/manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $taskExpectedTrials=$taskManifest.cases.Count*$taskManifest.repetitions*$taskManifest.policies.Count
 if($taskControl.status -ne 'complete' -or !$taskControl.stoppedCleanly -or $taskControl.trials.Count -ne $taskExpectedTrials){throw 'Finish all matched fresh-meeting policy controls before deferred assessment'}
+if(Test-Path -LiteralPath '.local/latest-question-wins/src-tauri/Cargo.toml'){
+ & .\.local\test-question-architecture-v71.ps1 -TaskRoot $TaskRoot
+}
 $taskPressure=$taskRoot+'/continuous-pressure-t'
 if(!(Test-Path -LiteralPath ($taskPressure+'/pressure-events-audit.json'))){
  node scripts/audit-pressure-event-recording.mjs $taskPressure

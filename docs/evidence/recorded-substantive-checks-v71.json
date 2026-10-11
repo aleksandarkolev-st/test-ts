@@ -1,0 +1,1611 @@
+{
+  "recordedAt": "2026-10-11T14:41:37.896Z",
+  "compilations": [
+    {
+      "name": "general-hour-t",
+      "kind": "elapsed_hour",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6"
+      },
+      "compilation": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "bbbe6feafc3f376ea2853e2db6096214469cab80a93a2444bfad0495418fe99a"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "systems-hour-t",
+      "kind": "elapsed_hour",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159"
+      },
+      "compilation": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "b2de19b71f5bdc3e8ad8cd28cc3fa8f879206b000a7f987c101b30a3b99b59e6"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 17,
+        "compiled": 15,
+        "failed": 2,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 3,
+          "block": 0,
+          "answerSha256": "58b8f058fcff396f07ce748bf3ea0dcac4a68326865466dfff64434f4629cbd1",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.cu",
+            "sha256": "d988f9528d0673a083147ae94e4f91bc016af79900558b4d379cac635b044666",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.obj",
+            "sha256": "85d511aaaf10db3c372e1ca872584e4af2ca89e564897c7a10b71b2bc07f2c15"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 4,
+          "block": 0,
+          "answerSha256": "27c5b01685af14fafa2738d21bf8817079d149570e63939e5219312a9c5157e8",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.cu",
+            "sha256": "c5e97a541ec798c8db51635d23ca6e09d727d563236fc57465bdea7dd74081ac",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 2,
+          "timedOut": false,
+          "object": null,
+          "diagnostics": {
+            "stdout": "recorded.cu(21): error: this declaration has no storage class or type specifier\r\n  sum_valid<<<1, 96, 0, stream>>>(device_input, device_output, valid);\r\n  ^\r\n\r\nrecorded.cu(21): error: declaration is incompatible with \"void sum_valid(const float *, float *, int)\" (declared at line 1)\r\n  sum_valid<<<1, 96, 0, stream>>>(device_input, device_output, valid);\r\n  ^\r\n\r\nrecorded.cu(21): error: expected a \";\"\r\n  sum_valid<<<1, 96, 0, stream>>>(device_input, device_output, valid);\r\n           ^\r\n\r\nrecorded.cu(22): error: this declaration has no storage class or type specifier\r\n  CHECK(cudaGetLastError());\r\n  ^\r\n\r\n4 errors detected in the compilation of \"recorded.cu\".\r\nnvcc warning : Support for offline compilation for architectures prior to '<compute/sm/lto>_75' will be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).\r\nrecorded.cu\r\n",
+            "stderr": ""
+          },
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 8,
+          "block": 0,
+          "answerSha256": "d73c600374f50e9bdd9a6a5d383ab10a3c202694344a6a6b6b753d9e673368a4",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\recorded.cu",
+            "sha256": "06ded5b37d9dd0d37e28a6d73ee3d71aadeb0678e010ee3817f7440f68c717f1",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\recorded.obj",
+            "sha256": "5573342be6a071b6e98a049c6628047e5e2e677896626fe62d81a33bc716fa3a"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 12,
+          "block": 0,
+          "answerSha256": "1f1664da7af90521dca2aee2fb8f18cc1592c34b5754f23d898bfbd384d50daf",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\recorded.cu",
+            "sha256": "c111b5afd7d97560ebcedb910ad5146c91f49d43c3a6ba22ec2cd5227ca9d3a0",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\recorded.obj",
+            "sha256": "d971369477e76880f818f9bb600c610b18e83daded421c33f351992da6f909c1"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 13,
+          "block": 0,
+          "answerSha256": "51185122265de6b6121b95f67f7492d39dc02ce02193e004ace0b1abc4079750",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\recorded.cu",
+            "sha256": "f22ad52f6956a73d9af141819f497f2fca5458aaf353f1973d66bd0b668f0bac",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\recorded.obj",
+            "sha256": "0a6b92b3bf35b5afefdd8c0ec672017025ebb11e60fbdbb53dc030c2e67d34f4"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 16,
+          "block": 0,
+          "answerSha256": "506c84f0dc3a12e0934b136b48126bd90eeff890d011cf1773053cf28256e73e",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\recorded.cu",
+            "sha256": "13fda6db9ddbdc52444d91bd319b7582287c0097fa0c9ec8d2bdb3b5b844b94c",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\recorded.obj",
+            "sha256": "cb9967df1afb034a1d55c7b6f701fdaad574266e1000a44d9bdbc06ae9a719db"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 19,
+          "block": 0,
+          "answerSha256": "e5745b77e353df139c726ce14e4acaaaf0709f7cd930b5c589004fbf5842c16f",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\recorded.cu",
+            "sha256": "5c395ec2cf999e99c5ef806a09fdd7122a0dde7500a47e198346ad67a7499f32",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\recorded.obj",
+            "sha256": "ff6c651dcc33d1adc08a38e13553cf11ede6084fa023b9a200f9bdbbb15280fc"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 20,
+          "block": 0,
+          "answerSha256": "8e0c7278d7ccb3e1197200e99d63bb4f232269c0f93a4a9ef714ae0738ba37f5",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-0\\recorded.cu",
+            "sha256": "3cde860f2d1b185106e104911424792c13b53901fbf807c9320d37a84d5f5a89",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 2,
+          "timedOut": false,
+          "object": null,
+          "diagnostics": {
+            "stdout": "recorded.cu(2): error: namespace \"std\" has no member \"atomic\"\r\n  std::atomic<bool> ready{false};\r\n       ^\r\n\r\nrecorded.cu(2): error: expected a \";\"\r\n  std::atomic<bool> ready{false};\r\n             ^\r\n\r\nrecorded.cu(5): error: this declaration has no storage class or type specifier\r\n  payload = 42;\r\n  ^\r\n\r\nrecorded.cu(5): error: variable \"payload\" has already been defined (previous definition at line 1)\r\n  payload = 42;\r\n  ^\r\n\r\nrecorded.cu(6): error: this declaration has no storage class or type specifier\r\n  ready.store(true, std::memory_order_release);\r\n  ^\r\n\r\nrecorded.cu(6): error: expected a \";\"\r\n  ready.store(true, std::memory_order_release);\r\n       ^\r\n\r\nrecorded.cu(9): error: expected a declaration\r\n  while (!ready.load(std::memory_order_acquire)) {}\r\n  ^\r\n\r\n7 errors detected in the compilation of \"recorded.cu\".\r\nnvcc warning : Support for offline compilation for architectures prior to '<compute/sm/lto>_75' will be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).\r\nrecorded.cu\r\n",
+            "stderr": ""
+          },
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 20,
+          "block": 1,
+          "answerSha256": "8e0c7278d7ccb3e1197200e99d63bb4f232269c0f93a4a9ef714ae0738ba37f5",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\recorded.cu",
+            "sha256": "acb657d46289e6b4d9e34585c6e44f28efbaddfed455a5c07f8185bb637c66fa",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\recorded.obj",
+            "sha256": "2e28a8b805572737c4f23adb1082dc060795b7e2e4d854ff1ca36e03125deb95"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 21,
+          "block": 0,
+          "answerSha256": "bd10ecc034d90f55686b12d84f61b54c84d4f28eecb3bb20a1a4f4d02aadd3ea",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\recorded.cu",
+            "sha256": "ee62129c8ba39a13b9e1b8c84f852456af5d98fad6d3fe2bf3f8b9fe8695f116",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\recorded.obj",
+            "sha256": "81bcc6a3bf2c867958531c6acdae747d9a62b722d36c5d5da76c9ae95e2e24ae"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 25,
+          "block": 0,
+          "answerSha256": "b1d38384e051204cf6faf3c6a51513a6c3911b1378a1142eac93ac2a520601d3",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\recorded.cu",
+            "sha256": "3c941425f456eb8b7dc5a86d953d7780b2d02f84516e0818c99d5f9ac020e643",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\recorded.obj",
+            "sha256": "660a0c988a4e60f665204eba1a268ee1991f5971d9c8ee456854ea3283a3275c"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 26,
+          "block": 0,
+          "answerSha256": "1c7ca85b486761e662e018d8f5972c0ba4f230dcf23677ce96b7c3a22c11e4d8",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\recorded.cu",
+            "sha256": "4cdf40cfcd18342323c79722d98e573ef4d28c673ff5de915b77e1f0a49ff385",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\recorded.obj",
+            "sha256": "d5e3f7f3d700ba0a9990869c09a6601b6f982390e6744eb688a3689d8cc03d2c"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 32,
+          "block": 0,
+          "answerSha256": "66973bf1b18a625f7c9e5504c42a89a86b9fb5266cc248f9795f15196c9ad037",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.cu",
+            "sha256": "47b4760d0a594acc969bca26f2b8df4b5d739968b4b13d809040e3cea9c9ac1c",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.obj",
+            "sha256": "5858282247ec82abdc256785347dab020ad75c15aee6d8fe0c3dec305356ac3d"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 37,
+          "block": 0,
+          "answerSha256": "c5d05d2e3e8326a154cae0619a1009de8c800e3ff25fc35088216cd49beff8aa",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\recorded.cu",
+            "sha256": "eac50b8a3c001bacff400bdf90b6c73a19e0657ff5e476438c13569da260445b",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\recorded.obj",
+            "sha256": "217be27d360137b2951e6a1baa5099b8ce464600f9e67d05a115b9630718fc21"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 38,
+          "block": 0,
+          "answerSha256": "1b4ac4202de6a3224eaef1ba6cefcc561ce0d058a63d323baea11eecc15423cb",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\recorded.cu",
+            "sha256": "960a66bdbbe7c6a2c61ebd22c3bc5d1b4f8e28f312c9b7751358dfb3a0566a01",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\recorded.obj",
+            "sha256": "759cbc939bcac2e3721e867da2490a8a93006eecab07dcfc32fd13c64be0bbce"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 49,
+          "block": 0,
+          "answerSha256": "dc7c72c8842e04498523599e72e652b958e082441342e8253541e6281e554d38",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\recorded.cu",
+            "sha256": "6d16e858b5ccf4dd7dcc600461cb77471aa327b626146b368e6acb0b744a5e55",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\recorded.obj",
+            "sha256": "c3cbf60ac5156049155447676413d3c5b1bffd80cc549d646148bf6e06421c59"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 50,
+          "block": 0,
+          "answerSha256": "0ac011e69c546273f5db8285f19e65d938adbd479984d8dcca31581d59e19286",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\recorded.cu",
+            "sha256": "871a1ce1855affcc47cb300284fe4851b758a6915e9946409f8d35c4ce135a71",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\recorded.obj",
+            "sha256": "293405e6377c87f5a8eea521189a792de05686c044004715c8d7743f7ad3f5de"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    },
+    {
+      "name": "algorithms-hour-t",
+      "kind": "elapsed_hour",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc"
+      },
+      "compilation": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "1c705d49fe0cf3b1226aa05dd2652d048f8225196b562db63660fca3f1a7b905"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 2,
+        "compiled": 2,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 32,
+          "block": 0,
+          "answerSha256": "1b968d9f4c8ce4fa57a0b95ebb391e495d2e55793bb3f6671927e97d5cdd9f95",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.cu",
+            "sha256": "6f536b367cb11276f290d25a41f7d620dfa7934d27a0640f91eaceafba4a956c",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.obj",
+            "sha256": "11385e1eeb4c95b389e172fbb72f71bb07962fff21c07490e3d81a013ba1e5d3"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 33,
+          "block": 0,
+          "answerSha256": "75631a1b3a700b55ec5d262e548f6f83c65e57d39c38753fcbb47522dddeef21",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\recorded.cu",
+            "sha256": "40aa1418f5f9e0b3b353e49f1580d0d58443c0efe303f47e068a98a897adb0bf",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\recorded.obj",
+            "sha256": "09759e7cf0bebac3bb7caf781c5dd14ea2c6ccac482cda8f6a10f046d6b5dd9c"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    },
+    {
+      "name": "cuda-to-phantom-reads",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/interview.json",
+        "sha256": "f476e5f7acca8b6dc489fbf1c6213b6378a83998d1eaecee7dbbe6e793a76203"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "f7a59dba37240bd01f901cb28a2db7d30b148b780968a83dbd391cdbd05a5b01"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "deep-code-memory",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/interview.json",
+        "sha256": "090e2bbf98d5a2aab4819bb38e802ce02b89d9bbe52cd7e6ea5de62c845a6bc9"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "e3cab3d992e35f32a186be20a6a40ae6f318b1191d80567bab4015dcb29067f5"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 2,
+        "compiled": 2,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 6,
+          "block": 0,
+          "answerSha256": "94f54287ae16c27014893bc6658c22d7bb194e9de9620d1c3e9e13fd18887e53",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\recorded.cu",
+            "sha256": "0b5c75e5720af97417cc163bbcdb01785624c37c4d6f9cc0f867dbe53ca719f4",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\recorded.obj",
+            "sha256": "d0d92f056278faa17bec5ef002bcd3a42e1c64c490976648fbea1c25c878f563"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 7,
+          "block": 0,
+          "answerSha256": "f5df9e98dd86ca651686ae5af3d97f8177060419c53e093b7f450684c2571b22",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\recorded.cu",
+            "sha256": "0b5c75e5720af97417cc163bbcdb01785624c37c4d6f9cc0f867dbe53ca719f4",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\recorded.obj",
+            "sha256": "96d7914a79870ea6015a48e444f2e196b49fcfade176de6a0cb9eef1da118075"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    },
+    {
+      "name": "divergent-block-barrier",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/interview.json",
+        "sha256": "c1d3a5a105de6de365179dd2681503c9bae0c854904ec34962ca0791e2426710"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "6e0c604fc8809c8005d86fa19de3b7c38534ee69153fed3b5e6f81cb7f226759"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "exact-launch-numbers",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/interview.json",
+        "sha256": "63021dc669aadf01a5576b7ad016c0fa1da7b73212748c83863c0c36ed085540"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "18e8c1a5054f911154781c839ee69f66d7f985287c06806f7863e9b250f560da"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "fp32-association",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/interview.json",
+        "sha256": "505336f6bdcff4cc5966ab4ef5dce1eb1862131eca8a5946b22b7042f8235c81"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "2392cc2149fda73790576fef4ab8ea96ca0d852e45d274210482b84b02d1fee5"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "histogram-late-reversal",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal/interview.json",
+        "sha256": "1a28c30a14a4b59a1faba52c2d5066d0bef4acf3603b7fc6c8a7cfbbfc68db31"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "54b517213bd2262150dbeb79c1fc16042fde1e571e8057c0bfd3ff0522f94f62"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 1,
+        "compiled": 1,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 1,
+          "block": 0,
+          "answerSha256": "27964c1083f4f24f94251aa9d9b14ac585de4c1b4f3647c8e4fc2bfa0679ef94",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.cu",
+            "sha256": "3762022ab8a72c789c2fb7fa291a596e145cdbd5df62a3068225d5e20febc43e",
+            "languageAnnotation": "cpp"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.obj",
+            "sha256": "d0779aa774c359195ed0e4b97b51ef85db7d0ca4f473d6598c627cb7015e0a90"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    },
+    {
+      "name": "histogram-late-reversal-exact-pause",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal-exact-pause/interview.json",
+        "sha256": "781fd0763a71930ec59313c280fc7b8895e6c98fbdb94f785e4bbef8b2df14c4"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal-exact-pause/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "0d71b7103f3b879ac08f614e4e95c60acd640b29a72aa2b964567663a35a30e9"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 1,
+        "compiled": 1,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 1,
+          "block": 0,
+          "answerSha256": "d7fa2ecbc35b1b9edba82db7153d49fb952ace9c5f9648d1f2592433d2b71539",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.cu",
+            "sha256": "c4fa60833d18a2be8522a852de8a4bcb029ceaaf19ed0b3173bb4bba7a48fdea",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.obj",
+            "sha256": "5cd6295a6a333c82d809a3d01c6eac03cde5966f00c350d6a400f6258c804a91"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    },
+    {
+      "name": "long-question-essential-tail",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail/interview.json",
+        "sha256": "5fbe6735d98ad5bb8c84a908a6951bc063b207bb342522e39c8b28ec6b16f056"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "54c61e7272c6550e14f0083a703a4224422c5b720346c2915ffc3054884c7eec"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "long-question-essential-tail-exact-pause",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-exact-pause/interview.json",
+        "sha256": "d2e6eb979ccac24021115c8e1423024f38fd3e44150d41e22ec1486fb26192bc"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-exact-pause/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "a3ed1d65b7387f3c63f5484c70e48a72c9367c37077432ebe70964ea427c9405"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "long-question-essential-tail-midpoint-pause",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-midpoint-pause/interview.json",
+        "sha256": "36dd9f02e1f8a119e802f03f4a806d92847f8b0f9f74db37edc11d2b8111be71"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-midpoint-pause/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "962ff2de89fd6b54b2728e0d5f6ec940e1e03f92662437c2fc9e3891fb0a1f50"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "never-recorded-event",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/interview.json",
+        "sha256": "f4b3c14e549ade51c306793b216587b75a8628a969cf73a5fb3061ba54a8f3cf"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "58076c873e18de6643792755f9a591331d540ba6acd02f37991c0f80a4bd5dd1"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 0,
+        "compiled": 0,
+        "failed": 0,
+        "timedOut": 0
+      },
+      "blocks": []
+    },
+    {
+      "name": "warp-followups",
+      "kind": "specified_probe",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/interview.json",
+        "sha256": "c5c5089282bc803edcd2ca51b527258289892adbd531556445c1da70c68845e5"
+      },
+      "compilation": {
+        "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/code-review/nvcc-compilation-v71/compilation.json",
+        "sha256": "1ac40e42b561809614fe389a545d3a62ffe6a395923da4c134460ad65edf8cf8"
+      },
+      "summary": {
+        "recordedCudaOrCppBlocks": 3,
+        "compiled": 2,
+        "failed": 1,
+        "timedOut": 0
+      },
+      "blocks": [
+        {
+          "round": 2,
+          "block": 0,
+          "answerSha256": "538067a8dbe0bf3ba8022550743000ec872d241bba662992ba10b9b33668e42f",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-2-block-0\\recorded.cu",
+            "sha256": "b25973e4e0b2a35c133432d600ca8bb80d203cbfb35840feb31b1fc0d6b6713d",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 2,
+          "timedOut": false,
+          "object": null,
+          "diagnostics": {
+            "stdout": "recorded.cu(18): error: this declaration has no storage class or type specifier\r\n  broadcast18<<<1, 32>>>(input, output);\r\n  ^\r\n\r\nrecorded.cu(18): error: declaration is incompatible with \"void broadcast18(const float *, float *)\" (declared at line 1)\r\n  broadcast18<<<1, 32>>>(input, output);\r\n  ^\r\n\r\nrecorded.cu(18): error: expected a \";\"\r\n  broadcast18<<<1, 32>>>(input, output);\r\n             ^\r\n\r\n3 errors detected in the compilation of \"recorded.cu\".\r\nnvcc warning : Support for offline compilation for architectures prior to '<compute/sm/lto>_75' will be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).\r\nrecorded.cu\r\n",
+            "stderr": ""
+          },
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 3,
+          "block": 0,
+          "answerSha256": "f86b63feb535f8cc07f2135f80b1bd75daa51e2291531266facac2bce96ddb51",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.cu",
+            "sha256": "c0e8c708f5fbd2f5a4192ffceda770a4a5a804dd897f8508a3b69028e8fe4a58",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.obj",
+            "sha256": "dd06a196a71db3b664b9a2aa0eec4ef5fb67f2cf808e9edca22f0491bceb6ff4"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        },
+        {
+          "round": 4,
+          "block": 0,
+          "answerSha256": "a4c737d52e1818fc23a5602dfd2637bb032022879225c17fa54ee16635e21068",
+          "code": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.cu",
+            "sha256": "b70667c4f2d21fea44337cffd96447f0296e0ecc7f7c8c27bd63351e1870c2f8",
+            "languageAnnotation": "cuda"
+          },
+          "exitCode": 0,
+          "timedOut": false,
+          "object": {
+            "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.obj",
+            "sha256": "84e4f404b6895dc1d41e02eada52f662a2801f6c89c1401802295d22f5c04f7c"
+          },
+          "diagnostics": null,
+          "scope": "Exact fenced source compiled as its own translation unit, without inserted headers or host wrappers. Context-dependent snippets can fail standalone compilation; compilation success does not prove behavior."
+        }
+      ]
+    }
+  ],
+  "olderReferences": [
+    {
+      "name": "general-hour-t",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+        "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/older-code-reference-audit.json",
+        "sha256": "8ee892e3980035c4b0df850e4d5e34c004b03d0ac7b42732c5d8b54bf1ed2218"
+      },
+      "sourceRound": 7,
+      "probeRound": 28,
+      "interveningTurns": 20,
+      "spokenQuestion": "Return to the FIRST completed implementation you supplied for this original question: The isolation level changes to PostgreSQL serializable; they still update different rows. Since those writes cannot conflict, both transactions must still commit, correct? Explain precisely. [Interviewer pause: one point five seconds.] Supply executable SQL for one doctor's transaction, assuming doctors has a text primary key Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+      "recognizedQuestion": "return to the first completed implementation you supplied for this original question the isolation level changes to postgreg SQL serializable they still update different rows since those writes cannot conflict both transactions must still commit correct explain precisely interviewer pause one point five seconds supply executable SQL for one doctor's transaction assuming doctors has a text primary key refer to that exact original implementation including its entry point signature and return contract distinguish it from later corrected or superseding versions in our conversation explain which original constraints apply reproduce that implementation rather than inventing a replacement if the reference is genuinely ambiguous ask a precise clarification",
+      "answer": "No. Different-row updates avoid a direct write–write conflict, but not a PostgreSQL SERIALIZABLE read–write dependency cycle. If both transactions count two, Alice reads Bob’s state before Bob changes it, and Bob reads Alice’s state before Alice changes it. Neither could run second in an equivalent serial execution and still count two, so PostgreSQL cannot commit both departures; at least one fails with SQLSTATE 40001.\n\nThe referenced original implementation is the standalone SERIALIZABLE transaction below. It has no function entry-point signature or return value: the anonymous DO block conditionally updates Alice, and COMMIT either succeeds or reports an error. This is not the later REPEATABLE READ advisory-lock variant or its READ COMMITTED correction.\n\n```sql\nBEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;\n\nDO $$\nDECLARE\n    on_call_count bigint;\nBEGIN\n    SELECT COUNT(*) INTO on_call_count\n    FROM doctors\n    WHERE on_call;\n\n    IF on_call_count > 1 THEN\n        UPDATE doctors\n        SET on_call = FALSE\n        WHERE name = 'Alice';\n    END IF;\nEND;\n$$;\n\nCOMMIT;\n```\n\nThe original constraints apply: doctors has text primary key name and non-null boolean on_call; initially Alice and Bob are both on call; every writer follows this SERIALIZABLE count-and-conditional-update protocol. Execute the entire script on one PostgreSQL connection; Bob substitutes 'Bob'. No advisory lock is used.\n\nOn SQLSTATE 40001, which may occur during a statement or at COMMIT, roll back if necessary and retry everything from BEGIN through COMMIT, including the count and decision, with a fresh snapshot. Retrying only the UPDATE skips the fresh check and could turn off the last doctor.\n\nIn any equivalent serial execution, a transaction removes at most one on-call doctor only when the count exceeds one. The first departure leaves one; the next counts one and skips its update. Consequently, committed transactions preserve at least one doctor on call.",
+      "selectedContextSha256": "1b468650f52ca27a89c299a9a8792b81683a137682e9e45553bfdbe22169635f",
+      "selectedContextCharacters": 27064,
+      "fullOriginalAnswerPresentInSelectedContext": true,
+      "sourceBlocks": [
+        {
+          "sha256": "bcf2f6cc7c369fa0295b5273e649b97a8be3c0605e641e92fc0648df00d2d21f",
+          "characters": 312,
+          "exactBodyPresentInSelectedContext": true,
+          "exactBodyReproducedInAnswer": true
+        }
+      ],
+      "independentReview": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-028.json",
+        "sha256": "f894719f8ee93501e89b6b7993fa4fb248b929c8bf2a1d1c4a04c8615bc19960",
+        "verdict": "correct",
+        "issues": []
+      },
+      "scope": "Recorded selected context only. Absence here does not prove the service had no historical input. The public spoken reference can be truncated by the evaluation interviewer; original code and expected answers were not inserted into the new question."
+    },
+    {
+      "name": "systems-hour-t",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/older-code-reference-audit.json",
+        "sha256": "410e8b0c98e59ccfa48e75edb77525f58f26d98a94f40cfe59df0801af622992"
+      },
+      "sourceRound": 3,
+      "probeRound": 24,
+      "interveningTurns": 20,
+      "spokenQuestion": "Return to the FIRST completed implementation you supplied for this original question: Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+      "recognizedQuestion": "return to the first completed implementation you supplied for this original question only one GPU worker is affected the host control endpoint responds but its dedicated stream's completion event remains not ready a minimized kernel launch is one block of ninety six threads with valid equal to seventy inside an if statement testing thread index less than valid each refer to that exact original implementation including its entry point signature and return contract distinguish it from later corrected or superseding versions in our conversation explain which original constraints apply reproduce that implementation rather than inventing a replacement if the reference is genuinely ambiguous ask a precise clarification",
+      "answer": "Please paste the first completed CUDA implementation for the 96-thread conditional-barrier problem, including its host entry point and return contract. That code is absent from the supplied record, so I cannot reproduce it or distinguish it from later corrected versions without inventing details.\n\nThe recorded constraints are one block of 96 threads for every valid value from 0 through 96, defined output with zero handled in the kernel, no out-of-bounds reads, compilable kernel and host-launch code, and a synchronization proof. The explanation must also distinguish launch success from execution correctness and must not claim every device necessarily hangs.",
+      "selectedContextSha256": "725ac844fd339888b71e525d87e1512fb63ba653b7f1da75e2183e9746c809f1",
+      "selectedContextCharacters": 38302,
+      "fullOriginalAnswerPresentInSelectedContext": false,
+      "sourceBlocks": [
+        {
+          "sha256": "d988f9528d0673a083147ae94e4f91bc016af79900558b4d379cac635b044666",
+          "characters": 2661,
+          "exactBodyPresentInSelectedContext": false,
+          "exactBodyReproducedInAnswer": false
+        }
+      ],
+      "independentReview": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/independent-model-review-v71/trial-024.json",
+        "sha256": "fa5a325a2f1882bed1888e29b37fefc3ad0e297428370f35e988d17fbde3beff",
+        "verdict": "correct",
+        "issues": []
+      },
+      "scope": "Recorded selected context only. Absence here does not prove the service had no historical input. The public spoken reference can be truncated by the evaluation interviewer; original code and expected answers were not inserted into the new question."
+    },
+    {
+      "name": "algorithms-hour-t",
+      "journal": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+        "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc"
+      },
+      "audit": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/older-code-reference-audit.json",
+        "sha256": "9c1317d0dd99557c63fab52a8c2c8d60be856b38bfbc7bd452ad3b61d5ed4259"
+      },
+      "sourceRound": 4,
+      "probeRound": 25,
+      "interveningTurns": 20,
+      "spokenQuestion": "Return to the FIRST completed implementation you supplied for this original question: Correct: both reachability conditions matter. Complete classify_route in executable Python 3, including unreachable targets and the case where s equals t. Explain exactly which relaxation establishes unboundedness, state your invariant, and justify worst-case time and memory. [pause] How does your code prevent an unreachable distance Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+      "recognizedQuestion": "return to the first completed implementation you supplied for this original question correct both reachability conditions matter complete classify underscore root in executable Python three including unreachable targets and the case where s equals t explain exactly which relaxation establishes unboundedness state your invariant and justify worst case time and memory pause how does your code prevent an unreachable distance refer to that exact original implementation including its entry point signature and return contract distinguish it from later corrected or superseding versions in our conversation explain which original constraints apply reproduce that implementation rather than inventing a replacement if the reference is genuinely ambiguous ask a precise clarification",
+      "answer": "The reference is clear: the first completed graph implementation shown here is `classify_root(N, edges, S, T)`, returning `('unreachable', None)`, `('finite', cost)`, or `('unbounded', None)`. I’m reproducing that implementation, not replacing it with a later version.\n\nIt applies to directed graphs with integer edge weights, including negative weights; vertices are numbered `0` through `N - 1`, and `S` and `T` are valid vertices. The empty walk is allowed. The supplied context does not independently establish the earlier suggestion’s weight bound of 10¹², so the arithmetic bounds below use a parameter W instead.\n\n```python\ndef classify_root(N, edges, S, T):\n    \"\"\"Return ('unreachable'|'finite'|'unbounded', cost_or_None).\n\n    Inputs satisfy the stated constraints. The empty walk is allowed.\n    \"\"\"\n    edges = list(edges)\n    forward = [[] for _ in range(N)]\n    reverse = [[] for _ in range(N)]\n    for u, v, w in edges:\n        forward[u].append(v)\n        reverse[v].append(u)\n\n    def reachable(start, adjacency):\n        seen = [False] * N\n        seen[start] = True\n        stack = [start]\n        while stack:\n            u = stack.pop()\n            for v in adjacency[u]:\n                if not seen[v]:\n                    seen[v] = True\n                    stack.append(v)\n        return seen\n\n    from_S = reachable(S, forward)\n    if not from_S[T]:\n        return ('unreachable', None)\n    to_T = reachable(T, reverse)\n\n    index = [-1] * N\n    K = 0\n    for v in range(N):\n        if from_S[v] and to_T[v]:\n            index[v] = K\n            K += 1\n\n    relevant = [\n        (index[u], index[v], w)\n        for u, v, w in edges\n        if index[u] != -1 and index[v] != -1\n    ]\n    dist = [None] * K\n    dist[index[S]] = 0\n\n    for _ in range(K - 1):\n        next_dist = dist.copy()\n        changed = False\n        for u, v, w in relevant:\n            if dist[u] is None:\n                continue\n            candidate = dist[u] + w\n            if next_dist[v] is None or candidate < next_dist[v]:\n                next_dist[v] = candidate\n                changed = True\n        dist = next_dist\n        if not changed:\n            return ('finite', dist[index[T]])\n\n    # Detect an improvement on the Kth pass, without updating dist.\n    for u, v, w in relevant:\n        if dist[u] is None:\n            continue\n        candidate = dist[u] + w\n        if dist[v] is None or candidate < dist[v]:\n            return ('unbounded', None)\n\n    return ('finite', dist[index[T]])\n\n\nif __name__ == '__main__':\n    assert classify_root(2, [], 0, 1) == ('unreachable', None)\n    assert classify_root(1, [], 0, 0) == ('finite', 0)\n    assert classify_root(1, [(0, 0, -1)], 0, 0) == ('unbounded', None)\n    assert classify_root(\n        2, [(0, 1, 5), (0, 1, -2)], 0, 1\n    ) == ('finite', -2)\n    # Reachable negative cycle cannot reach T.\n    assert classify_root(\n        3, [(0, 1, 4), (0, 2, 0), (2, 2, -1)], 0, 1\n    ) == ('finite', 4)\n    # Negative cycle can reach T but is unreachable from S.\n    assert classify_root(\n        3, [(0, 1, 4), (2, 2, -1), (2, 1, 0)], 0, 1\n    ) == ('finite', 4)\n    # S == T, with a negative cycle that returns to S.\n    assert classify_root(\n        2, [(0, 1, -2), (1, 0, 1)], 0, 0\n    ) == ('unbounded', None)\n    print('Tests passed')\n```\n\nSave as `classify_root.py` and run `python3 classify_root.py`. No dependencies are required. The function signature is the API; the `__main__` block is the original executable test entry point.\n\n**Reachability and invariant.** A negative cycle matters only if it is reachable from S and can reach T. The retained vertices satisfy both conditions. Every S-to-T walk stays in this retained graph, and every retained vertex has a path from S within it.\n\nAfter k synchronous passes, `dist[v]` is the minimum cost of a walk from S to v using at most k retained edges, or `None` when no such walk exists. Initialization represents the empty walk. Each pass copies the old distances and extends only walks from the previous pass, establishing the invariant inductively. An unchanged pass is a fixed point, so early return is safe.\n\n**The exact unboundedness test.** After K−1 passes, every retained vertex has a defined distance because a simple path to it uses at most K−1 edges. The final scan detects a retained edge `(u, v, w)` satisfying `dist[u] + w < dist[v]`; it does not update the distances. Thus the `dist[v] is None` branch cannot actually trigger at this stage for valid inputs.\n\nThat strict improvement gives a walk with at most K edges cheaper than every walk with at most K−1 edges to v. If it had no negative cycle, removing its nonnegative cycles would produce a simple walk with at most K−1 edges and no greater cost, a contradiction. Its negative cycle is retained, hence reachable from S and able to reach T; repeating it makes S-to-T costs arbitrarily negative.\n\nConversely, if no edge improves, the distances satisfy every retained edge inequality. Summing those inequalities around a cycle proves its weight is nonnegative. Removing cycles therefore leaves a minimum-cost simple S-to-T path, whose cost is the reported distance.\n\nFor `S == T`, the empty walk gives cost zero. Unboundedness requires a negative cycle reachable from S that can also return to S; otherwise the finite answer is zero.\n\n**Unreachable arithmetic.** Both arithmetic sites first execute `if dist[u] is None: continue`, so `None + w` is never evaluated. Destination tests use short-circuit `or`, preventing comparisons with `None` as well.\n\n**Deterministic worst-case bounds.** Let M be the original edge count and M′ the retained edge count. Reachability and filtering cost O(N+M). The passes and distance copies cost O(K(K+M′)). Since retained vertices are reachable from S, M′ ≥ K−1, giving total O(N+M+KM′), hence O(N+M+NM), under unit-cost arithmetic. Memory is O(N+M) stored entries. No heuristic queue-performance assumption is used.\n\nFor Python’s arbitrary-precision arithmetic, let W be the maximum absolute edge weight, or zero if there are no edges, and let B = O(1 + log₂(KW+1)). Every candidate represents at most K edges and has magnitude at most KW. Charging O(B) bit operations for addition and comparison gives O(N+M+KM′B) time under unit-cost graph indexing. Distance storage takes O(KB) bits, in addition to graph and input storage. These bit-cost qualifications clarify the original implementation’s bounds without changing its code or contract.",
+      "selectedContextSha256": "4055c3e330e9af21544d44753f9317c35b851561366485f7cc30ae97eeca18c0",
+      "selectedContextCharacters": 37132,
+      "fullOriginalAnswerPresentInSelectedContext": true,
+      "sourceBlocks": [
+        {
+          "sha256": "1253e3007104f9d9c7e04d7102cd85d2b435ffaecd13a4ee500f4ab8fd781074",
+          "characters": 2666,
+          "exactBodyPresentInSelectedContext": true,
+          "exactBodyReproducedInAnswer": true
+        }
+      ],
+      "independentReview": {
+        "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/independent-model-review-v71/trial-025.json",
+        "sha256": "150efcbde531487918d62dbe840cc31afea7c6bb04482a8e4a037ca45b33ba61",
+        "verdict": "incorrect",
+        "issues": [
+          "The recognized question changes classify_route to classify_root; the answer follows that pipeline error rather than the spoken API.",
+          "The answer returns lowercase statuses rather than UNREACHABLE, FINITE, and UNBOUNDED.",
+          "The source question and supplied prior implementation conflict on the function name and return contract. The answer declares the reference clear instead of asking the requested precise clarification.",
+          "Original graph-size and weight constraints are not accurately recovered.",
+          "There is no truncation, missing code, cancellation, or recorded error."
+        ]
+      },
+      "scope": "Recorded selected context only. Absence here does not prove the service had no historical input. The public spoken reference can be truncated by the evaluation interviewer; original code and expected answers were not inserted into the new question."
+    },
+    {
+      "name": "deep-code-memory",
+      "journal": {
+        "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/interview.json",
+        "sha256": "090e2bbf98d5a2aab4819bb38e802ce02b89d9bbe52cd7e6ea5de62c845a6bc9"
+      },
+      "audit": {
+        "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/older-code-reference-audit.json",
+        "sha256": "f92fbdc5662fa3b2a1b1ef55267cb09b42a25498e9f136d0ee7f65906c3d3167"
+      },
+      "sourceRound": 1,
+      "probeRound": 22,
+      "interveningTurns": 20,
+      "spokenQuestion": "Return to the FIRST completed implementation you supplied for this original question: Implement Python best schedule for weighted nonoverlapping jobs. Each input job has integer start, end and signed profit, start is less than end, intervals are half-open, and input indices are job identifiers. There are at most two thousand jobs and K is between zero and Refer to that exact original implementation, including its entry-point signature and return contract. Distinguish it from later corrected or superseding versions in our conversation. Explain which original constraints apply. Reproduce that implementation rather than inventing a replacement; if the reference is genuinely ambiguous, ask a precise clarification.",
+      "recognizedQuestion": "return to the first completed implementation you supplied for this original question implement Python best schedule for weighted non overlapping jobs each input job has integer start end and signed profit start is less than end intervals are half open and input indices are job identifiers there are at most two thousand jobs and K is between zero and refer to that exact original implementation including its entry point signature and return contract distinguish it from later corrected or superseding versions in our conversation explain which original constraints apply reproduce that implementation rather than inventing a replacement if the reference is genuinely ambiguous ask a precise clarification",
+      "answer": "Please paste the first completed three-field `best_schedule` implementation you mean. Its source is missing from the supplied excerpts, so I cannot reproduce its exact signature or return contract without inventing details. Your restatement establishes integer `(start, end, signed_profit)` jobs, start < end, half-open intervals, input-index identifiers, at most 2000 jobs, and 0 ≤ K ≤ 50; I should not import the later exactly-K, cleanup, counting, or lexicographic changes into that original version.",
+      "selectedContextSha256": "79d76e0f72f4652d9052ee578cac90253e13d85940fe81cb86a07d2206818581",
+      "selectedContextCharacters": 45148,
+      "fullOriginalAnswerPresentInSelectedContext": false,
+      "sourceBlocks": [
+        {
+          "sha256": "1c90e97c3c0daeaae9f03f8aa0a1a4d56fa18c5f92c56bb0781fddf708bd45bf",
+          "characters": 3050,
+          "exactBodyPresentInSelectedContext": false,
+          "exactBodyReproducedInAnswer": false
+        }
+      ],
+      "independentReview": {
+        "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/independent-model-review-v71/trial-022.json",
+        "sha256": "12ab13d46f9c424b05e0b50d5a869a12b12039a6896693dc68c53ff0646d6282",
+        "verdict": "correct",
+        "issues": [
+          "The original at-most-K selection requirement is omitted from the constraint summary.",
+          "The signature, return contract, and implementation remain unresolved pending clarification; this is not truncation."
+        ]
+      },
+      "scope": "Recorded selected context only. Absence here does not prove the service had no historical input. The public spoken reference can be truncated by the evaluation interviewer; original code and expected answers were not inserted into the new question."
+    }
+  ],
+  "codeChecks": [
+    {
+      "kind": "directed_graph_walk_classifier",
+      "check": {
+        "file": "artifacts/deep-interview-v71/algorithms-hour-t/code-review/independent-graph-oracle-v71/source-bound-check.json",
+        "sha256": "44e32c1f2d153770db068e0bd0a84eb7eb203046c357b6ede5fb41fc2c1a0ab2"
+      },
+      "row": {
+        "round": 4,
+        "exactSha256": "bd3960d67eba5bebc7e7b94eee597e561c745064531c6165f527660b7d824975",
+        "question": "Correct: both reachability conditions matter. Complete classify_route in executable Python 3, including unreachable targets and the case where s equals t. Explain exactly which relaxation establishes unboundedness, state your invariant, and justify worst-case time and memory. [pause] How does your code prevent an unreachable distance from participating in arithmetic? One final constraint: your runtime bound must hold for every allowed input, not merely in expectation; do not rely on a heuristic queue algorithm having linear runtime.",
+        "recognizedQuestion": "correct both reachability conditions matter Complete classify underscore root in executable Python three including unreachable targets and the case where s equals t explain exactly which relaxation establishes unboundedness state your invariant and justify worst case time and memory Pause how does your code prevent an unreachable distance from participating in arithmetic One final constraint your runtime bound must hold for every allowed input not merely in expectation Do not rely on a heuristic queue algorithm having linear runtime",
+        "answerSha256": "5c2232059de80120ce35c3df0883c8aceeef01b446e2f1e1828d869842272f6e",
+        "responseVersion": "e6a05368-ec8f-4ff0-9353-f0b69d724df5:17",
+        "phase": "complete",
+        "error": null,
+        "cancelled": false
+      },
+      "code": {
+        "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\recorded.py",
+        "sha256": "1253e3007104f9d9c7e04d7102cd85d2b435ffaecd13a4ee500f4ab8fd781074",
+        "languageAnnotation": "python"
+      },
+      "oracle": {
+        "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\oracle.json",
+        "sha256": "25703292cdb53ba4ad762da3d408ca0bbbda404cfd00cb2c0e7e517ee7b0afa9",
+        "exitCode": 0,
+        "status": "completed",
+        "sourceCodeSha256": "1253e3007104f9d9c7e04d7102cd85d2b435ffaecd13a4ee500f4ab8fd781074",
+        "pythonVersion": "3.14.7 | packaged by Anaconda, Inc. | (main, Aug 14 2026, 10:12:46) [MSC v.1942 64 bit (AMD64)]",
+        "pythonExecutable": "C:\\Users\\polek\\miniconda3\\python.exe",
+        "entryPoint": "classify_root",
+        "graphs": 20147,
+        "queries": 185696,
+        "failures": 0,
+        "failureSamples": [],
+        "expectedOutcomes": {
+          "unreachable": 24023,
+          "finite": 35073,
+          "unbounded": 126600
+        },
+        "exhaustiveFamilies": [
+          {
+            "vertices": 1,
+            "weightAlphabet": [
+              null,
+              -1,
+              0,
+              1
+            ],
+            "graphs": 4,
+            "queries": 4
+          },
+          {
+            "vertices": 2,
+            "weightAlphabet": [
+              null,
+              -1,
+              0,
+              1
+            ],
+            "graphs": 256,
+            "queries": 1024
+          },
+          {
+            "vertices": 3,
+            "weightAlphabet": [
+              null,
+              -1,
+              1
+            ],
+            "graphs": 19683,
+            "queries": 177147
+          }
+        ],
+        "randomizedFamily": {
+          "seedHex": "dfa84d55ee7d96b9",
+          "graphs": 200,
+          "queries": 7464,
+          "vertices": [
+            4,
+            8
+          ]
+        },
+        "durationSeconds": 1.2455688000191003,
+        "scope": "Independent Floyd-Warshall walk-classification oracle on finite declared test families. The recorded implementation is unchanged. This does not prove all inputs, interface naming, complexity, ASR accuracy, old-code retention, or full interview correctness."
+      },
+      "independentReview": {
+        "file": "artifacts/deep-interview-v71/algorithms-hour-t/independent-model-review-v71/trial-004.json",
+        "sha256": "fc1ccee6db2489625f98c9d4706e779d4274ebe2858b0dbd8a56dd9efed163e7",
+        "verdict": "incorrect",
+        "issues": [
+          "Defines classify_root rather than the required classify_route; calling the requested function would fail.",
+          "Returns lowercase status strings rather than the required UNREACHABLE, FINITE, and UNBOUNDED.",
+          "These discrepancies follow the recognized transcript but violate the actual spoken source contract.",
+          "The retained answer is complete, with no recorded error, cancellation, or apparent truncation."
+        ]
+      },
+      "scope": "Computational checks and source-interface judgments remain separate. Passing a finite oracle does not override an incorrect source API, missing requirements or other interview failures."
+    }
+  ],
+  "evidence": [
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+      "sha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "bbbe6feafc3f376ea2853e2db6096214469cab80a93a2444bfad0495418fe99a"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/cuda-compiler/toolchain.json",
+      "sha256": "82c88817fb7b7f17293ace6c290842c7738d9145de411f2e26703097a30105d3"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/older-code-reference-audit.json",
+      "sha256": "8ee892e3980035c4b0df850e4d5e34c004b03d0ac7b42732c5d8b54bf1ed2218"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t/independent-model-review-v71/trial-028.json",
+      "sha256": "f894719f8ee93501e89b6b7993fa4fb248b929c8bf2a1d1c4a04c8615bc19960"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+      "sha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "b2de19b71f5bdc3e8ad8cd28cc3fa8f879206b000a7f987c101b30a3b99b59e6"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.cu",
+      "sha256": "d988f9528d0673a083147ae94e4f91bc016af79900558b4d379cac635b044666"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\stdout.log",
+      "sha256": "ed7f8b34c71a8c5cdcce2ffea9592ef004ba18464389a69d445fed2a8187de31"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.obj",
+      "sha256": "85d511aaaf10db3c372e1ca872584e4af2ca89e564897c7a10b71b2bc07f2c15"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.cu",
+      "sha256": "c5e97a541ec798c8db51635d23ca6e09d727d563236fc57465bdea7dd74081ac"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-4-block-0\\stdout.log",
+      "sha256": "be9c0b47c7cc87f8a4e6d211560ab17920d41a7b809d96c2aa730017754dffd7"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-4-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\recorded.cu",
+      "sha256": "06ded5b37d9dd0d37e28a6d73ee3d71aadeb0678e010ee3817f7440f68c717f1"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\stdout.log",
+      "sha256": "49778633c2a178206737633ffcc1aafc8d06b76bc8a76dc4b8ad8c33ecb6b89b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-8-block-0\\recorded.obj",
+      "sha256": "5573342be6a071b6e98a049c6628047e5e2e677896626fe62d81a33bc716fa3a"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\recorded.cu",
+      "sha256": "c111b5afd7d97560ebcedb910ad5146c91f49d43c3a6ba22ec2cd5227ca9d3a0"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\stdout.log",
+      "sha256": "38d74079104b587dd8d26f4cda42ec148b1dd9ef280d58f5276ba007eab03dbc"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-12-block-0\\recorded.obj",
+      "sha256": "d971369477e76880f818f9bb600c610b18e83daded421c33f351992da6f909c1"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\recorded.cu",
+      "sha256": "f22ad52f6956a73d9af141819f497f2fca5458aaf353f1973d66bd0b668f0bac"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\stdout.log",
+      "sha256": "03de6b0044b4cd6038e4c8b7d8e5e9a4fe8ccda10d523bb58702666f1ef9c166"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-13-block-0\\recorded.obj",
+      "sha256": "0a6b92b3bf35b5afefdd8c0ec672017025ebb11e60fbdbb53dc030c2e67d34f4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\recorded.cu",
+      "sha256": "13fda6db9ddbdc52444d91bd319b7582287c0097fa0c9ec8d2bdb3b5b844b94c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\stdout.log",
+      "sha256": "8cbf7e996e49b2ee1cc14a762905d314bafd29cda4ce0920c3c119fc91fcb1bb"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-16-block-0\\recorded.obj",
+      "sha256": "cb9967df1afb034a1d55c7b6f701fdaad574266e1000a44d9bdbc06ae9a719db"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\recorded.cu",
+      "sha256": "5c395ec2cf999e99c5ef806a09fdd7122a0dde7500a47e198346ad67a7499f32"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\stdout.log",
+      "sha256": "967195d8466f2c92fee1d527a09a29f3aa56625d13a5230f8f360c28962127bf"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-19-block-0\\recorded.obj",
+      "sha256": "ff6c651dcc33d1adc08a38e13553cf11ede6084fa023b9a200f9bdbbb15280fc"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-0\\recorded.cu",
+      "sha256": "3cde860f2d1b185106e104911424792c13b53901fbf807c9320d37a84d5f5a89"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-0\\stdout.log",
+      "sha256": "a002c5bb9d52801f7b781ac6ac3140bf04abf11d78684b92028f7f9038130247"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\recorded.cu",
+      "sha256": "acb657d46289e6b4d9e34585c6e44f28efbaddfed455a5c07f8185bb637c66fa"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\stdout.log",
+      "sha256": "f45b1179ed7d51cc96c5ec5a83c5a6d3dab631633d41ea3e955941c4739fb395"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-20-block-1\\recorded.obj",
+      "sha256": "2e28a8b805572737c4f23adb1082dc060795b7e2e4d854ff1ca36e03125deb95"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\recorded.cu",
+      "sha256": "ee62129c8ba39a13b9e1b8c84f852456af5d98fad6d3fe2bf3f8b9fe8695f116"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\stdout.log",
+      "sha256": "3fb1f83d38adf0d47f744ab45199cb8d150393d82c93bf9e6f30a8555c461446"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-21-block-0\\recorded.obj",
+      "sha256": "81bcc6a3bf2c867958531c6acdae747d9a62b722d36c5d5da76c9ae95e2e24ae"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\recorded.cu",
+      "sha256": "3c941425f456eb8b7dc5a86d953d7780b2d02f84516e0818c99d5f9ac020e643"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\stdout.log",
+      "sha256": "616a760eb1ca690a839c275e5fcae1c4329dc57fd95e6b395a55a2af3475e8bd"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-25-block-0\\recorded.obj",
+      "sha256": "660a0c988a4e60f665204eba1a268ee1991f5971d9c8ee456854ea3283a3275c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\recorded.cu",
+      "sha256": "4cdf40cfcd18342323c79722d98e573ef4d28c673ff5de915b77e1f0a49ff385"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\stdout.log",
+      "sha256": "98301d3d6bdade5d4f37dcc4da650a7e6d4a26f9bf5fa2b8f36807856ff987d5"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-26-block-0\\recorded.obj",
+      "sha256": "d5e3f7f3d700ba0a9990869c09a6601b6f982390e6744eb688a3689d8cc03d2c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.cu",
+      "sha256": "47b4760d0a594acc969bca26f2b8df4b5d739968b4b13d809040e3cea9c9ac1c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\stdout.log",
+      "sha256": "546c6d276f2958c421132a3422d6e7bb5277e69d5a296e62f3f758281df7f6bc"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.obj",
+      "sha256": "5858282247ec82abdc256785347dab020ad75c15aee6d8fe0c3dec305356ac3d"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\recorded.cu",
+      "sha256": "eac50b8a3c001bacff400bdf90b6c73a19e0657ff5e476438c13569da260445b"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\stdout.log",
+      "sha256": "f45b1179ed7d51cc96c5ec5a83c5a6d3dab631633d41ea3e955941c4739fb395"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-37-block-0\\recorded.obj",
+      "sha256": "217be27d360137b2951e6a1baa5099b8ce464600f9e67d05a115b9630718fc21"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\recorded.cu",
+      "sha256": "960a66bdbbe7c6a2c61ebd22c3bc5d1b4f8e28f312c9b7751358dfb3a0566a01"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\stdout.log",
+      "sha256": "47f5df9d1eccac3b7beed7a40b1594849253fb42b7864e98250c05d188a8f2e5"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-38-block-0\\recorded.obj",
+      "sha256": "759cbc939bcac2e3721e867da2490a8a93006eecab07dcfc32fd13c64be0bbce"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\recorded.cu",
+      "sha256": "6d16e858b5ccf4dd7dcc600461cb77471aa327b626146b368e6acb0b744a5e55"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\stdout.log",
+      "sha256": "d7172ba272902ac3618893ced69b130a79411d635058f4c266e9a31dfc1772e8"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-49-block-0\\recorded.obj",
+      "sha256": "c3cbf60ac5156049155447676413d3c5b1bffd80cc549d646148bf6e06421c59"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\recorded.cu",
+      "sha256": "871a1ce1855affcc47cb300284fe4851b758a6915e9946409f8d35c4ce135a71"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\stdout.log",
+      "sha256": "6acb29561ba65586be9f3a6205d12f6d1244ff5f15720215d6ab11c63ffa255c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\systems-hour-t\\code-review\\nvcc-compilation-v71\\round-50-block-0\\recorded.obj",
+      "sha256": "293405e6377c87f5a8eea521189a792de05686c044004715c8d7743f7ad3f5de"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/older-code-reference-audit.json",
+      "sha256": "410e8b0c98e59ccfa48e75edb77525f58f26d98a94f40cfe59df0801af622992"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t/independent-model-review-v71/trial-024.json",
+      "sha256": "fa5a325a2f1882bed1888e29b37fefc3ad0e297428370f35e988d17fbde3beff"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/algorithms-hour-t/interview.json",
+      "sha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "1c705d49fe0cf3b1226aa05dd2652d048f8225196b562db63660fca3f1a7b905"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.cu",
+      "sha256": "6f536b367cb11276f290d25a41f7d620dfa7934d27a0640f91eaceafba4a956c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\stdout.log",
+      "sha256": "18f65b1356910b91fac37c529ed36ec56881a829d30444e67174d4f1b93fcf65"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-32-block-0\\recorded.obj",
+      "sha256": "11385e1eeb4c95b389e172fbb72f71bb07962fff21c07490e3d81a013ba1e5d3"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\recorded.cu",
+      "sha256": "40aa1418f5f9e0b3b353e49f1580d0d58443c0efe303f47e068a98a897adb0bf"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\stdout.log",
+      "sha256": "239c175e63dfb5657dcadc247d09fd1ccace770cca0c77f699e217611f67b9d8"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\nvcc-compilation-v71\\round-33-block-0\\recorded.obj",
+      "sha256": "09759e7cf0bebac3bb7caf781c5dd14ea2c6ccac482cda8f6a10f046d6b5dd9c"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/older-code-reference-audit.json",
+      "sha256": "9c1317d0dd99557c63fab52a8c2c8d60be856b38bfbc7bd452ad3b61d5ed4259"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t/independent-model-review-v71/trial-025.json",
+      "sha256": "150efcbde531487918d62dbe840cc31afea7c6bb04482a8e4a037ca45b33ba61"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/interview.json",
+      "sha256": "f476e5f7acca8b6dc489fbf1c6213b6378a83998d1eaecee7dbbe6e793a76203"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/cuda-to-phantom-reads/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "f7a59dba37240bd01f901cb28a2db7d30b148b780968a83dbd391cdbd05a5b01"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/interview.json",
+      "sha256": "090e2bbf98d5a2aab4819bb38e802ce02b89d9bbe52cd7e6ea5de62c845a6bc9"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "e3cab3d992e35f32a186be20a6a40ae6f318b1191d80567bab4015dcb29067f5"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\recorded.cu",
+      "sha256": "0b5c75e5720af97417cc163bbcdb01785624c37c4d6f9cc0f867dbe53ca719f4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\stdout.log",
+      "sha256": "cc4ee85ea53ecfbc70c4fe9b6e352ecf11a4a85a608e4516a6405bd90c9fca69"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-6-block-0\\recorded.obj",
+      "sha256": "d0d92f056278faa17bec5ef002bcd3a42e1c64c490976648fbea1c25c878f563"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\recorded.cu",
+      "sha256": "0b5c75e5720af97417cc163bbcdb01785624c37c4d6f9cc0f867dbe53ca719f4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\stdout.log",
+      "sha256": "4e91534f4740dae77246cc5984400f21ab797eb01008e428977caf15ab0e24f7"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\deep-code-memory\\code-review\\nvcc-compilation-v71\\round-7-block-0\\recorded.obj",
+      "sha256": "96d7914a79870ea6015a48e444f2e196b49fcfade176de6a0cb9eef1da118075"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/older-code-reference-audit.json",
+      "sha256": "f92fbdc5662fa3b2a1b1ef55267cb09b42a25498e9f136d0ee7f65906c3d3167"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/deep-code-memory/independent-model-review-v71/trial-022.json",
+      "sha256": "12ab13d46f9c424b05e0b50d5a869a12b12039a6896693dc68c53ff0646d6282"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/interview.json",
+      "sha256": "c1d3a5a105de6de365179dd2681503c9bae0c854904ec34962ca0791e2426710"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/divergent-block-barrier/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "6e0c604fc8809c8005d86fa19de3b7c38534ee69153fed3b5e6f81cb7f226759"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/interview.json",
+      "sha256": "63021dc669aadf01a5576b7ad016c0fa1da7b73212748c83863c0c36ed085540"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/exact-launch-numbers/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "18e8c1a5054f911154781c839ee69f66d7f985287c06806f7863e9b250f560da"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/interview.json",
+      "sha256": "505336f6bdcff4cc5966ab4ef5dce1eb1862131eca8a5946b22b7042f8235c81"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/fp32-association/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "2392cc2149fda73790576fef4ab8ea96ca0d852e45d274210482b84b02d1fee5"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal/interview.json",
+      "sha256": "1a28c30a14a4b59a1faba52c2d5066d0bef4acf3603b7fc6c8a7cfbbfc68db31"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "54b517213bd2262150dbeb79c1fc16042fde1e571e8057c0bfd3ff0522f94f62"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.cu",
+      "sha256": "3762022ab8a72c789c2fb7fa291a596e145cdbd5df62a3068225d5e20febc43e"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\stdout.log",
+      "sha256": "3e9bf6d7aec10352c40a2e0f05a5bb75b769250962d6d59e8c217c027bbdbe3f"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.obj",
+      "sha256": "d0779aa774c359195ed0e4b97b51ef85db7d0ca4f473d6598c627cb7015e0a90"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal-exact-pause/interview.json",
+      "sha256": "781fd0763a71930ec59313c280fc7b8895e6c98fbdb94f785e4bbef8b2df14c4"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/histogram-late-reversal-exact-pause/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "0d71b7103f3b879ac08f614e4e95c60acd640b29a72aa2b964567663a35a30e9"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.cu",
+      "sha256": "c4fa60833d18a2be8522a852de8a4bcb029ceaaf19ed0b3173bb4bba7a48fdea"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\stdout.log",
+      "sha256": "f20952768bcb77c3136acf774a97a7a007f94d9ed7f19b74ce0af16c672f8649"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\histogram-late-reversal-exact-pause\\code-review\\nvcc-compilation-v71\\round-1-block-0\\recorded.obj",
+      "sha256": "5cd6295a6a333c82d809a3d01c6eac03cde5966f00c350d6a400f6258c804a91"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail/interview.json",
+      "sha256": "5fbe6735d98ad5bb8c84a908a6951bc063b207bb342522e39c8b28ec6b16f056"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "54c61e7272c6550e14f0083a703a4224422c5b720346c2915ffc3054884c7eec"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-exact-pause/interview.json",
+      "sha256": "d2e6eb979ccac24021115c8e1423024f38fd3e44150d41e22ec1486fb26192bc"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-exact-pause/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "a3ed1d65b7387f3c63f5484c70e48a72c9367c37077432ebe70964ea427c9405"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-midpoint-pause/interview.json",
+      "sha256": "36dd9f02e1f8a119e802f03f4a806d92847f8b0f9f74db37edc11d2b8111be71"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/long-question-essential-tail-midpoint-pause/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "962ff2de89fd6b54b2728e0d5f6ec940e1e03f92662437c2fc9e3891fb0a1f50"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/interview.json",
+      "sha256": "f4b3c14e549ade51c306793b216587b75a8628a969cf73a5fb3061ba54a8f3cf"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/never-recorded-event/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "58076c873e18de6643792755f9a591331d540ba6acd02f37991c0f80a4bd5dd1"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/interview.json",
+      "sha256": "c5c5089282bc803edcd2ca51b527258289892adbd531556445c1da70c68845e5"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/hard-probes/warp-followups/code-review/nvcc-compilation-v71/compilation.json",
+      "sha256": "1ac40e42b561809614fe389a545d3a62ffe6a395923da4c134460ad65edf8cf8"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-2-block-0\\recorded.cu",
+      "sha256": "b25973e4e0b2a35c133432d600ca8bb80d203cbfb35840feb31b1fc0d6b6713d"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-2-block-0\\stdout.log",
+      "sha256": "8452b277d27184965b012b0f3e1ed46ee17c5445d83134f6948c297538d9b5ec"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-2-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.cu",
+      "sha256": "c0e8c708f5fbd2f5a4192ffceda770a4a5a804dd897f8508a3b69028e8fe4a58"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\stdout.log",
+      "sha256": "84c6e987cf6a32998cf32d58f5d85bc8b3bcbbe2d22732bd7e6cec91a530eb9c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-3-block-0\\recorded.obj",
+      "sha256": "dd06a196a71db3b664b9a2aa0eec4ef5fb67f2cf808e9edca22f0491bceb6ff4"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.cu",
+      "sha256": "b70667c4f2d21fea44337cffd96447f0296e0ecc7f7c8c27bd63351e1870c2f8"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\stdout.log",
+      "sha256": "b7994f92e2fde4dc2bac654eb64b21a4476c4bcf14872d71ef255a60818ee45c"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\hard-probes\\warp-followups\\code-review\\nvcc-compilation-v71\\round-4-block-0\\recorded.obj",
+      "sha256": "84e4f404b6895dc1d41e02eada52f662a2801f6c89c1401802295d22f5c04f7c"
+    },
+    {
+      "file": "docs/evidence/recorded-code-selections-v71.json",
+      "sha256": "a219bd8f3e61114c3cbd740eceb1bfc7b668612c7dc09f862f038e4d6a5c80b1"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/algorithms-hour-t/code-review/independent-graph-oracle-v71/source-bound-check.json",
+      "sha256": "44e32c1f2d153770db068e0bd0a84eb7eb203046c357b6ede5fb41fc2c1a0ab2"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\recorded.py",
+      "sha256": "1253e3007104f9d9c7e04d7102cd85d2b435ffaecd13a4ee500f4ab8fd781074"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\oracle.json",
+      "sha256": "25703292cdb53ba4ad762da3d408ca0bbbda404cfd00cb2c0e7e517ee7b0afa9"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\stdout.log",
+      "sha256": "ef693bdeae2e34c29d7f9444ba7408859dc89a9abf14f6a365153dc385745077"
+    },
+    {
+      "file": "artifacts\\deep-interview-v71\\algorithms-hour-t\\code-review\\independent-graph-oracle-v71\\stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "artifacts/deep-interview-v71/algorithms-hour-t/independent-model-review-v71/trial-004.json",
+      "sha256": "fc1ccee6db2489625f98c9d4706e779d4274ebe2858b0dbd8a56dd9efed163e7"
+    },
+    {
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\summarize-substantive-checks-v71.mjs",
+      "sha256": "1581edc94a390f6d695f6d027b82d35bbd91fc69c8695c27ff3883bbac37fb21"
+    }
+  ],
+  "scope": "Source-bound compiler, finite computational-oracle and older-code context observations. No answer repair, replacement implementation, verdict rewrite or runtime topic rule. Hardware execution and all-input mathematical correctness are not certified."
+}

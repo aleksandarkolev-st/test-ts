@@ -1,0 +1,1957 @@
+{
+  "recordedAt": "2026-10-11T14:40:10.804Z",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "T24E390",
+  "collector": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\summarize-all-trial-hours-v71.mjs",
+    "sha256": "59f0db165538da4439f690da8f2153caf757556948dcc04a5ad2e617035b311e"
+  },
+  "hours": [
+    {
+      "kind": "elapsed_hour",
+      "name": "general-hour-t",
+      "domain": "general",
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\general-hour-t\\interview.json",
+      "requestedDurationMs": 3600000,
+      "journalSha256": "33dc556d39d6935574a4c791a559b2c89c0073add0d25e2e4d08ba628e3343e6",
+      "turns": 55,
+      "finiteObservedRetainedWordLatencyMs": {
+        "count": 55,
+        "min": 2453,
+        "median": 8922,
+        "sampleP95": 36223,
+        "max": 64862
+      },
+      "allRecordedTrialsRetainedWordP95": {
+        "nearestRank": 53,
+        "totalTrials": 55,
+        "deliveredWords": 55,
+        "missingWords": 0,
+        "valueMs": 36223,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "rows": [
+        {
+          "round": 1,
+          "responseVersion": "049b3da5-d4e3-43e6-8996-77063e41fb5e:4",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3573,
+            "high": 3578
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 2,
+          "responseVersion": "fb0c21e5-4054-4149-9824-75ab04d1973d:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4900,
+            "high": 4906
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 3,
+          "responseVersion": "4020bb8c-bfbe-4b80-b362-4510f3c4c0a2:22",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4724,
+            "high": 4731
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 4,
+          "responseVersion": "9fa141ea-f4c6-4e62-ba17-df7a8606f133:14",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5828,
+            "high": 5834
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 5,
+          "responseVersion": "2ebe80cc-d585-4b9f-b212-299100a3fc06:23",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 21297,
+            "high": 21302
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 6,
+          "responseVersion": "ba06f70e-5291-4f28-ae36-b6352da8d650:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3532,
+            "high": 3537
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 7,
+          "responseVersion": "faec2a68-62f3-4cfe-bad2-dd2416c5777d:14",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12888,
+            "high": 12894
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 8,
+          "responseVersion": "264c5c71-d338-490b-b17c-57ee1b204e7f:36",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9613,
+            "high": 9618
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 9,
+          "responseVersion": "241e32f1-fc70-4415-ba28-095a44555c16:24",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 6381,
+            "high": 6386
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 10,
+          "responseVersion": "a0b98681-6a53-4946-8066-0cdc4fd5a7a7:20",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 28058,
+            "high": 28063
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 11,
+          "responseVersion": "78837607-96fb-45c2-8ba0-c6a872f33e32:8",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3270,
+            "high": 3275
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 12,
+          "responseVersion": "c62c00c9-cc42-4b6d-a2e3-dcef9b7d753d:30",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12974,
+            "high": 12980
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 13,
+          "responseVersion": "fc6fee5b-b880-4485-9607-7d9403850c3d:40",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8917,
+            "high": 8922
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 14,
+          "responseVersion": "035fb897-56a3-4549-a66c-d6ef779ad67b:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7828,
+            "high": 7833
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 15,
+          "responseVersion": "fa0726cd-3612-4b8c-84bf-c89b6e8114df:58",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8547,
+            "high": 8552
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 16,
+          "responseVersion": "3fd2df67-a8a8-43d8-bca9-ce5093f916db:52",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 15825,
+            "high": 15831
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 17,
+          "responseVersion": "78cc3b14-1644-4d9d-80de-094b77788bbc:36",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 2618,
+            "high": 2624
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 18,
+          "responseVersion": "eceaee4d-94b6-493c-8e18-5eb55d058b4d:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3051,
+            "high": 3057
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 19,
+          "responseVersion": "76f011b1-ac85-4c1f-9f28-7ddabdfa8481:22",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 18378,
+            "high": 18384
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 20,
+          "responseVersion": "ab2a9abf-3edf-4a3b-87d8-cf74f32d7a82:46",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 26749,
+            "high": 26755
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 21,
+          "responseVersion": "dba70ba7-976c-4e0c-ac72-9f50ae0cbc4d:34",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 10292,
+            "high": 10297
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 22,
+          "responseVersion": "d1d9de7b-78d6-490f-9509-504541787326:35",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 30676,
+            "high": 30681
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 23,
+          "responseVersion": "e2c56eae-76ea-4197-9d89-6ad667680518:7",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3836,
+            "high": 3842
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 24,
+          "responseVersion": "726d5f61-7826-4a0a-bf0a-028e51848a2c:48",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 36218,
+            "high": 36223
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 25,
+          "responseVersion": "8037ec97-eed1-4516-90f2-542e55c11c41:60",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 2694,
+            "high": 2699
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 26,
+          "responseVersion": "3269931a-ba54-4c6d-afe5-7a7714031d52:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5815,
+            "high": 5821
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 27,
+          "responseVersion": "a03ea71a-a83e-440f-96e8-5270fd37d7c0:46",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 36308,
+            "high": 36313
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 28,
+          "responseVersion": "748ef253-71c5-48fa-bb57-4b6f39ea5c1a:93",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 2448,
+            "high": 2453
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 29,
+          "responseVersion": "f6f951e0-64f6-4454-bb61-63016413e0e6:44",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11782,
+            "high": 11787
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 30,
+          "responseVersion": "af2cdf3e-77e0-453a-bc91-bf90633fc34c:4",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3237,
+            "high": 3242
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 31,
+          "responseVersion": "34f10abb-e264-4e5c-8cf5-93feee8a8d08:40",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 24987,
+            "high": 24993
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 32,
+          "responseVersion": "c651be08-9ce9-4da6-b900-6c9e4836d947:59",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 15852,
+            "high": 15857
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 33,
+          "responseVersion": "b62cd754-92b3-4a36-8043-cd4aa72b2509:53",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4274,
+            "high": 4280
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 34,
+          "responseVersion": "9c86dc93-7d21-4f24-b96f-45c5ef6142e4:42",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 64857,
+            "high": 64862
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 35,
+          "responseVersion": "1e1f3f6e-98b0-41e5-a8bb-32eb06f5c10c:10",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3573,
+            "high": 3579
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 36,
+          "responseVersion": "0908ccbb-f541-4335-9d41-c08bc341f36c:47",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 14760,
+            "high": 14765
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 37,
+          "responseVersion": "cae67c5a-8f59-4cca-a205-fdf9f1108211:53",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7959,
+            "high": 7965
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 38,
+          "responseVersion": "b477ad3f-8847-4e0f-abf5-fd5bab1a63d5:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4706,
+            "high": 4712
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 39,
+          "responseVersion": "db3dad92-34fd-466f-a796-9e92eb478665:53",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 16110,
+            "high": 16115
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 40,
+          "responseVersion": "3316bf8e-fbdd-423b-b85a-5cf2839cf1fb:43",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 25547,
+            "high": 25553
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 41,
+          "responseVersion": "f60bda17-4892-4f30-a230-48c6c90f6580:46",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 10457,
+            "high": 10463
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 42,
+          "responseVersion": "51d8099a-a996-4f2f-b189-49561c4c06b3:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4570,
+            "high": 4575
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 43,
+          "responseVersion": "409341fd-4446-4db2-9a43-32c2c2e67b37:33",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4867,
+            "high": 4872
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 44,
+          "responseVersion": "57c4e9e0-d94f-4290-8863-f007d19bd5c6:52",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 16089,
+            "high": 16094
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 45,
+          "responseVersion": "7451eee6-ca5e-4a81-8dcb-aacb3e3272a3:37",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 27136,
+            "high": 27141
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 46,
+          "responseVersion": "504e3c51-ac69-44e0-b667-9b587aefd602:33",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11356,
+            "high": 11362
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 47,
+          "responseVersion": "d5ece4fc-9811-4bcb-a21d-b1c66bcbf541:9",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4228,
+            "high": 4233
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 48,
+          "responseVersion": "203da043-abd5-4df0-892f-d329f12eb740:47",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 18998,
+            "high": 19004
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 49,
+          "responseVersion": "5ac77a61-936e-4ea6-af23-0b7f6c357be1:59",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9613,
+            "high": 9618
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 50,
+          "responseVersion": "31e9f269-028d-41c9-8267-fa1ee055e625:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5461,
+            "high": 5466
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 51,
+          "responseVersion": "7fbeda39-114b-4977-8859-b6a7839e3293:42",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4232,
+            "high": 4238
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 52,
+          "responseVersion": "7c368af9-464f-439c-8f58-87eaf816c95e:43",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 22699,
+            "high": 22705
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 53,
+          "responseVersion": "e0079ed0-e858-4ad0-895e-43d692a84f5b:45",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7636,
+            "high": 7641
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 54,
+          "responseVersion": "065391dd-5729-4892-9e6f-d3037867a1e1:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 6387,
+            "high": 6392
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 55,
+          "responseVersion": "ce7e7823-1be1-46f7-814b-68ddf2677899:34",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 18891,
+            "high": 18897
+          },
+          "firstVisibleWordMissingReason": null
+        }
+      ]
+    },
+    {
+      "kind": "elapsed_hour",
+      "name": "systems-hour-t",
+      "domain": "systems",
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+      "requestedDurationMs": 3600000,
+      "journalSha256": "3f0e2ad06f886d95c4acbe745a3fa90b77707e47d3395543f0e35e3f72d10159",
+      "turns": 52,
+      "finiteObservedRetainedWordLatencyMs": {
+        "count": 51,
+        "min": 2504,
+        "median": 9763,
+        "sampleP95": 36166,
+        "max": 42981
+      },
+      "allRecordedTrialsRetainedWordP95": {
+        "nearestRank": 50,
+        "totalTrials": 52,
+        "deliveredWords": 51,
+        "missingWords": 1,
+        "valueMs": 39360,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "rows": [
+        {
+          "round": 1,
+          "responseVersion": "ec30b49f-7ecf-451c-8898-af1b3b4bf0e2:4",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3993,
+            "high": 3998
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 2,
+          "responseVersion": "52962319-a890-44a8-b118-8e88850176a9:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3586,
+            "high": 3592
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 3,
+          "responseVersion": "43e783b5-e178-4501-9ec3-8a4131dd1cbf:17",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 32094,
+            "high": 32099
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 4,
+          "responseVersion": "bf01f908-482d-42a3-a673-cec42c1c04a1:18",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3849,
+            "high": 3854
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 5,
+          "responseVersion": "937ebad9-cbce-4579-a0f8-76e0a3ec7f68:19",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 16289,
+            "high": 16295
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 6,
+          "responseVersion": "abfcc188-ecf6-4cca-9ba9-71fec65d433f:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4837,
+            "high": 4842
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 7,
+          "responseVersion": "9e3470b3-eaf3-4f27-8b3c-ce83abe82819:11",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12756,
+            "high": 12762
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 8,
+          "responseVersion": "6082bf38-73d3-439e-a0f0-a4b753301db5:9",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12170,
+            "high": 12176
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 9,
+          "responseVersion": "0992d04f-1b5a-4578-bf90-fbb6a1ab358b:27",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8764,
+            "high": 8769
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 10,
+          "responseVersion": "caabea48-1e52-40b1-aa36-f8022bed3ec0:23",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 26202,
+            "high": 26208
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 11,
+          "responseVersion": "18881876-91a5-43ea-84dd-7913438b1648:11",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3075,
+            "high": 3081
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 12,
+          "responseVersion": "64c06da9-0873-47fc-8381-aa949994177f:32",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 13956,
+            "high": 13961
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 13,
+          "responseVersion": "93370e90-17a7-4c1d-aeae-7627ae24a3bf:30",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 39354,
+            "high": 39360
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 14,
+          "responseVersion": "f6c7a29e-a543-4da5-9708-bc032c3646dd:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7924,
+            "high": 7929
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 15,
+          "responseVersion": "184c23ed-f7e4-40f6-b4db-a85ef127bbb2:36",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 10171,
+            "high": 10177
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 16,
+          "responseVersion": "884566a6-170f-42a4-b9f3-e041a651c46b:51",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 19452,
+            "high": 19457
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 17,
+          "responseVersion": "c24e3178-570b-4022-88d8-b89a0545ec4b:33",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11549,
+            "high": 11555
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 18,
+          "responseVersion": "0527d8dd-8816-439b-ac7d-f67fe27a4a2a:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3188,
+            "high": 3193
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 19,
+          "responseVersion": "8e1bf284-05a5-4dc7-9d8e-b57a2d9d74cb:32",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 13612,
+            "high": 13617
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 20,
+          "responseVersion": "6c3a113e-7365-4cef-a0cb-31c27a8b1734:56",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 36160,
+            "high": 36166
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 21,
+          "responseVersion": "3414f75c-1d9f-4796-91fc-e5d91bb3928a:43",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9759,
+            "high": 9764
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 22,
+          "responseVersion": "004424db-ad34-41b5-ad6d-82c057d1a9cb:55",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 6062,
+            "high": 6067
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 23,
+          "responseVersion": "e3492609-5f6d-48a1-8c59-99529b94f5fd:10",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3201,
+            "high": 3206
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 24,
+          "responseVersion": "c8eaa103-83bc-4136-984c-fadc38dfe3f0:48",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 2499,
+            "high": 2504
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 25,
+          "responseVersion": "61ab0da6-3649-45a2-ba2e-d41c1c19551c:41",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 10143,
+            "high": 10149
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 26,
+          "responseVersion": "1834e4b8-a173-4a1e-8faf-3c9f7a522d2c:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7086,
+            "high": 7092
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 27,
+          "responseVersion": "8a2d4251-14f1-4361-8cb0-fea159eca729:45",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4944,
+            "high": 4949
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 28,
+          "responseVersion": "97a5929a-f76a-4a75-807a-44ecc8337f36:45",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 22412,
+            "high": 22417
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 29,
+          "responseVersion": "f34d84b1-8605-4e55-af4b-7471c0fc3f6d:46",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8214,
+            "high": 8220
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 30,
+          "responseVersion": "9283db1d-419a-4081-b804-b3d5b5f6cfe2:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5035,
+            "high": 5041
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 31,
+          "responseVersion": "bd8c623d-3701-4a76-b59d-00a15bb0977b:33",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8593,
+            "high": 8599
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 32,
+          "responseVersion": "00430991-6f55-4896-9841-410e0e0e6e5b:57",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 42976,
+            "high": 42981
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 33,
+          "responseVersion": "13438344-ccdc-4177-b0ed-2456720aa08f:48",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11514,
+            "high": 11519
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 34,
+          "responseVersion": "4b452e13-bc28-4741-bace-ba65b24b6928:38",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7923,
+            "high": 7928
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 35,
+          "responseVersion": "6d268aeb-a3f7-4ec2-aab8-eaf3ba0906aa:7",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4443,
+            "high": 4449
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 36,
+          "responseVersion": "b9f61be1-b146-4a49-a756-8b9f02a615a5:52",
+          "phase": "complete",
+          "cancelled": false,
+          "error": "Codex answer timed out",
+          "firstRetainedVisibleWordLatencyMs": null,
+          "firstVisibleWordMissingReason": "no_answer_observed_in_visible_viewport"
+        },
+        {
+          "round": 37,
+          "responseVersion": "157f81f9-3a0b-4508-aa85-5acb75fb6caf:58",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9782,
+            "high": 9787
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 38,
+          "responseVersion": "7702d3d7-7617-4c2b-83c8-32c18f714ae8:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 6401,
+            "high": 6407
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 39,
+          "responseVersion": "e8a900e8-0b4f-4f31-bfaf-87e2de828c0b:46",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 26564,
+            "high": 26569
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 40,
+          "responseVersion": "2d7268c2-eb43-4a20-bd17-59701ada349c:42",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 24580,
+            "high": 24586
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 41,
+          "responseVersion": "180fdf66-faee-4c1f-87b6-4801b94caa4d:29",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9758,
+            "high": 9763
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 42,
+          "responseVersion": "fc49def3-6310-443d-9258-1e78999e0a64:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3639,
+            "high": 3644
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 43,
+          "responseVersion": "fea3087b-da0e-4f25-854a-d6a918c0567a:37",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8321,
+            "high": 8326
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 44,
+          "responseVersion": "b377fd67-41a5-418e-8f6b-470a125ebce2:27",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11866,
+            "high": 11872
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 45,
+          "responseVersion": "fa19a519-e598-4a74-aa14-097d026664f6:51",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 8384,
+            "high": 8390
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 46,
+          "responseVersion": "691e51c6-0508-4c99-987c-6d1cc9ce5ffb:43",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5018,
+            "high": 5023
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 47,
+          "responseVersion": "984b0d67-f191-4131-90a7-f3e90badb666:12",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3770,
+            "high": 3776
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 48,
+          "responseVersion": "c5d20325-c181-4550-824d-3eb644bb99bd:33",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7029,
+            "high": 7035
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 49,
+          "responseVersion": "f0e959f2-9b1e-4748-ac0f-8168f3a32279:40",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 19696,
+            "high": 19702
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 50,
+          "responseVersion": "e5eb60ed-5f0a-415b-a3ac-b813f74b9935:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 31215,
+            "high": 31220
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 51,
+          "responseVersion": "94995911-44ff-45b6-9252-d76828f3f5cc:52",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 25421,
+            "high": 25427
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 52,
+          "responseVersion": "f61974ad-e030-4165-9005-173539094f39:23",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 19789,
+            "high": 19794
+          },
+          "firstVisibleWordMissingReason": null
+        }
+      ]
+    },
+    {
+      "kind": "elapsed_hour",
+      "name": "algorithms-hour-t",
+      "domain": "algorithms",
+      "file": "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\algorithms-hour-t\\interview.json",
+      "requestedDurationMs": 3600000,
+      "journalSha256": "dfa84d55ee7d96b95a30fedefa0941c664a83c83f8eff1c645138436a9e3a8bc",
+      "turns": 49,
+      "finiteObservedRetainedWordLatencyMs": {
+        "count": 48,
+        "min": 3523,
+        "median": 12298.5,
+        "sampleP95": 50936,
+        "max": 78626
+      },
+      "allRecordedTrialsRetainedWordP95": {
+        "nearestRank": 47,
+        "totalTrials": 49,
+        "deliveredWords": 48,
+        "missingWords": 1,
+        "valueMs": 73951,
+        "status": "rank_reached_among_recorded_trials"
+      },
+      "rows": [
+        {
+          "round": 1,
+          "responseVersion": "1cf5291d-6d01-4392-9070-85fe4b065677:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3756,
+            "high": 3762
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 2,
+          "responseVersion": "68f89b31-ce32-4761-93c7-f5a721221cde:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3517,
+            "high": 3523
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 3,
+          "responseVersion": "60ceedc5-2daa-4800-85b2-3e7e525009dc:16",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 27133,
+            "high": 27138
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 4,
+          "responseVersion": "e6a05368-ec8f-4ff0-9353-f0b69d724df5:17",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 19997,
+            "high": 20002
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 5,
+          "responseVersion": "7f3b9694-099b-4e94-80a9-ee128c483a6b:18",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 35467,
+            "high": 35472
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 6,
+          "responseVersion": "20a8765a-57ec-4f06-a740-58317993ce3a:6",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4341,
+            "high": 4346
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 7,
+          "responseVersion": "fcccd746-a572-4faa-9e61-39908b22a2c6:19",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12539,
+            "high": 12544
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 8,
+          "responseVersion": "7df97310-f160-413c-a2f6-ae5dba98a8a7:25",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 18487,
+            "high": 18492
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 9,
+          "responseVersion": "203b8b59-bbe6-4264-8ec4-844ec57ce7b0:24",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12711,
+            "high": 12717
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 10,
+          "responseVersion": "eaccc456-9a77-49e3-97c3-0634e6354f6b:18",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7308,
+            "high": 7313
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 11,
+          "responseVersion": "5a75507b-99dd-4e4f-9f46-80e54335a3ad:12",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3717,
+            "high": 3722
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 12,
+          "responseVersion": "4ef56246-74ab-42d4-85a4-423727254d8b:20",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12048,
+            "high": 12053
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 13,
+          "responseVersion": "375c99a3-26a3-40d4-8d41-e4a76acd82bc:32",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 17165,
+            "high": 17170
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 14,
+          "responseVersion": null,
+          "phase": "no_job",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": null,
+          "firstVisibleWordMissingReason": "no_native_question_assigned"
+        },
+        {
+          "round": 15,
+          "responseVersion": "d4abd325-425e-41e1-80bf-2be982f2e805:34",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5587,
+            "high": 5593
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 16,
+          "responseVersion": "4233f043-31c5-457a-8798-1d055d7c329d:38",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 15036,
+            "high": 15041
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 17,
+          "responseVersion": "ccdffe43-18f6-41a3-aa93-4f07f7bba1e9:28",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 10507,
+            "high": 10514
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 18,
+          "responseVersion": "27c8e9b0-0e41-4a84-b786-fcb6ade94236:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4819,
+            "high": 4825
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 19,
+          "responseVersion": "c4ab510b-d3a9-401a-a915-534493c7ee5f:29",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 41958,
+            "high": 41963
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 20,
+          "responseVersion": "684f498c-70b9-47b4-95aa-26a857ca5963:42",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 37570,
+            "high": 37576
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 21,
+          "responseVersion": "daaab67a-6a1d-4f84-bdd5-ff14fa84af1e:34",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 28058,
+            "high": 28063
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 22,
+          "responseVersion": "2d6686a1-df1e-420d-bdba-ee6a92f69ceb:41",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 43796,
+            "high": 43801
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 23,
+          "responseVersion": "80dc85d2-3a14-4f8f-8621-254be70ce19a:12",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4843,
+            "high": 4849
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 24,
+          "responseVersion": "aa3f148d-352b-44bb-905d-b5f0a5a045e8:46",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 38865,
+            "high": 38870
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 25,
+          "responseVersion": "1a9b5ef4-db67-4e12-86b2-b7ca93eade83:42",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5483,
+            "high": 5489
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 26,
+          "responseVersion": "90435fad-e473-4666-9060-bedcc843d3c8:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 6326,
+            "high": 6331
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 27,
+          "responseVersion": "bf6150fd-e774-4e2f-9d5e-afd084d65464:52",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7125,
+            "high": 7131
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 28,
+          "responseVersion": "8bbf0a62-877d-4298-b320-3e15e3205598:54",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 40572,
+            "high": 40577
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 29,
+          "responseVersion": "d4bd85d9-81cc-4a5c-811c-095c6e7b54c1:50",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7370,
+            "high": 7376
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 30,
+          "responseVersion": "81d33f81-1aba-4b6f-abe4-1478cc4a4fdf:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 4085,
+            "high": 4090
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 31,
+          "responseVersion": "e8812aee-0458-4ff7-ac30-e55acdf8f064:44",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 12674,
+            "high": 12679
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 32,
+          "responseVersion": "59f1b765-a620-49c8-bbea-ebd697823dbc:42",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 14192,
+            "high": 14198
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 33,
+          "responseVersion": "261a7c91-0d5f-4077-a4f0-8b2cfde0668a:46",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 42650,
+            "high": 42655
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 34,
+          "responseVersion": "7b93d768-d2e3-47f1-a188-9fb94a77535a:67",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 9357,
+            "high": 9363
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 35,
+          "responseVersion": "59fe2b6c-57cc-4a06-83ee-95795ce15f5e:10",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3959,
+            "high": 3964
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 36,
+          "responseVersion": "e31a3c0f-4dba-4a41-b61d-e0aeea011cb8:53",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3713,
+            "high": 3719
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 37,
+          "responseVersion": "ab49a1ee-a0f5-4b95-ac63-22556f5901e7:46",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 73945,
+            "high": 73951
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 38,
+          "responseVersion": "c54c12e2-5259-424f-b905-e6ffa9b9566b:0",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7814,
+            "high": 7820
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 39,
+          "responseVersion": "0e70ab79-7e9c-41b5-bbdf-98e06e01777d:45",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 7625,
+            "high": 7631
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 40,
+          "responseVersion": "f440772c-cf44-41a2-9a4d-40529e96c8c0:19",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 30651,
+            "high": 30656
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 41,
+          "responseVersion": "370c5866-f6dd-4004-85d8-1ca28fbf618b:34",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 11369,
+            "high": 11375
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 42,
+          "responseVersion": "673c2030-b02c-4b6c-a539-306947ede0d9:5",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3614,
+            "high": 3619
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 43,
+          "responseVersion": "1a4651fc-c27e-4327-961c-2e3e0b143033:35",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 17067,
+            "high": 17073
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 44,
+          "responseVersion": "60f5436c-62b5-4fce-8ddd-82044ee63e43:43",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 22502,
+            "high": 22508
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 45,
+          "responseVersion": "c220acca-7fd6-42cd-b01c-74000d05d4ee:42",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 39247,
+            "high": 39252
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 46,
+          "responseVersion": "c4717fc4-d694-44c4-bfc9-d3e26470e18a:48",
+          "phase": "superseded",
+          "cancelled": true,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 5908,
+            "high": 5913
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 47,
+          "responseVersion": "2c64e20f-84be-4694-bc60-697b5c661035:9",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 3727,
+            "high": 3732
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 48,
+          "responseVersion": "a1d48ea7-c8f1-4bcc-bb82-810aec1c3873:57",
+          "phase": "complete",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 50930,
+            "high": 50936
+          },
+          "firstVisibleWordMissingReason": null
+        },
+        {
+          "round": 49,
+          "responseVersion": "8a9f76f0-a5fa-499e-bd0d-093fdf8dbb19:49",
+          "phase": "confirmed",
+          "cancelled": false,
+          "error": null,
+          "firstRetainedVisibleWordLatencyMs": {
+            "low": 78620,
+            "high": 78626
+          },
+          "firstVisibleWordMissingReason": null
+        }
+      ]
+    }
+  ],
+  "scope": "All recorded source rows remain in the percentile denominator. Missing retained words rank after observed deliveries, without assigning an invented numerical latency. First-word delivery is measured separately from correctness, completion, cancellation and timeout; this is a dependent synthetic sample, not population p95."
+}

@@ -115,7 +115,7 @@ foreach($taskSource in $taskSources){
   node scripts/summarize-pressure-assessment.mjs $taskParent $taskReviews $taskSummary
   if($LASTEXITCODE -ne 0){throw 'Pressure assessment binding failed'}
  }else{
-  node --max-old-space-size=6144 scripts/summarize-deep-audio-interview.mjs $taskSource $taskReviews $taskSummary
+  node --max-old-space-size=6144 .local/summarize-recorded-review-v71.mjs $taskSource $taskReviews $taskSummary
   if($LASTEXITCODE -ne 0){throw ('Source and useful-phrase timing binding failed: '+$taskSource)}
  }
 }

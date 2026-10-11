@@ -1,0 +1,153 @@
+{
+  "recordedAt": "2026-10-11T14:38:20.702Z",
+  "status": "serialization_mismatch_isolated",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/policy-playback/trials/general-hour-t-round-34-rep-1-existing/interview.json",
+    "sha256": "18e031f3123126eb7ecd8a054a50c68be1e694ef8aefe14c9c005a67100198d9"
+  },
+  "review": {
+    "file": "artifacts/deep-interview-v71/policy-playback/trials/general-hour-t-round-34-rep-1-existing/independent-model-review-v71/trial-001.json",
+    "sha256": "c77aa90ce24bd11c8f82629e7439aa53d0321d3a3ead63fca36dedc9d384d38f"
+  },
+  "inputSha256": "93588937279162a965d114ce46cdcc241618c1f683bd68b9588194b5d814d1b2",
+  "priorUnsortedSerializationSha256": "b0c43fc8a6a1113c17f09cf482f056842a026181b9863655aa7c3f5e43698b6f",
+  "priorSourceObjectKeyOrders": [
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ],
+    [
+      "round",
+      "question"
+    ]
+  ],
+  "sourceValuesChanged": false,
+  "recordingRepeated": false,
+  "judgmentChanged": false,
+  "changedSourceValueStillRejected": true,
+  "scope": "JavaScript insertion-order serialization differed from the reviewer serde_json recursively sorted object keys. Canonical serialization preserves all source values, fields and array order; no expected answer or verdict is inserted."
+}

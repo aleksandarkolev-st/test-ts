@@ -6,6 +6,7 @@ import {createReadStream} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {recordedCohort} from './lib/recorded-cohort.mjs';
+import {serializeReviewInput} from './lib/serde-review-input.mjs';
 const root=process.argv[2]??'artifacts/deep-interview-v71',sources=new Map(),cohorts=[];
 const partial=process.argv.includes('--partial');
 const outputArgument=process.argv.find(argument=>argument.startsWith('--output='));
@@ -98,7 +99,7 @@ for(const entry of selectedInputs){
   const input={answer:row.answer??null,cancelled:row.cancelled??null,error:row.error??null,phase:row.phase??null,
    publicPriorContext:row.selectedContext??null,recognizedQuestion:row.recognizedQuestion??null,
    sourcePriorQuestions:row.recordedSourcePriorQuestions??journal.rows.slice(0,index).map(prior=>({question:prior.question??null,round:prior.round??null})),spokenQuestion:row.question??null};
-  assert.equal(record.inputSha256,digest(JSON.stringify(input)),reviewFile+' changed recorded input');
+  assert.equal(record.inputSha256,digest(serializeReviewInput(input)),reviewFile+' changed recorded input');
   const phrase=record.review.usefulPhrase;assert(phrase===null||(typeof phrase==='string'&&phrase.length>0&&(row.answer??'').includes(phrase)));
   const retained=assessment.rows[index];assert.equal(retained.independentReviewSha256,await fileHash(reviewFile));assert.deepEqual(retained.independentReview,record.review);
   for(const field of ['question','recognizedQuestion','answer','phase'])assert.equal(retained[field],row[field]);

@@ -1,6 +1,7 @@
 import type { Snapshot } from '../state/model';
 import { useEffect, useRef } from 'react';
 import { command, native } from '../bridge';
+import { visibleAnswerRange } from './paintedText';
 export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
   const recorded = useRef<string | null>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -10,8 +11,8 @@ export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
     cancelAnimationFrame(paint.current.first);
     cancelAnimationFrame(paint.current.second);
   }, []);
-  useEffect(() => {
-    if (!native() || !s.answer || paint.current.first || paint.current.second) return;
+  const queuePaint = () => {
+    if (!native() || paint.current.first || paint.current.second) return;
     // Coalesce renders, not answer text. Restarting on every token could defer
     // the acknowledgement until the stream ends. Read the DOM at the paint.
     paint.current.first = requestAnimationFrame(() => {
@@ -21,16 +22,30 @@ export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
         const element = content.current;
         const id = element?.dataset.questionId;
         const revision = Number(element?.dataset.responseRevision ?? 0);
-        const text = element?.querySelector('.answer p')?.textContent ?? '';
-        const version = `${id}:${revision}:${text}`;
-        if (!id || !text || acknowledged.current === version) return;
+        const paragraph = element?.querySelector<HTMLParagraphElement>('.answer p');
+        const text = paragraph?.textContent ?? '';
+        const [visibleStart, visibleEnd] = paragraph ? visibleAnswerRange(paragraph) : [0, 0];
+        const version = `${id}:${revision}:${visibleStart}:${visibleEnd}:${text}`;
+        if (!id || !text || visibleStart === visibleEnd || acknowledged.current === version) return;
         const paintHostMs = Date.now();
-        command('answer_displayed', { id, revision, text, paintHostMs }).then(() => {
+        command('answer_displayed', { id, revision, text, visibleStart, visibleEnd, paintHostMs }).then(() => {
           acknowledged.current = version;
         }).catch(() => {});
       });
     });
-  }, [s.question?.id, s.answer, s.latency?.responseRevision]);
+  };
+  useEffect(queuePaint, [s.question?.id, s.answer, s.latency?.responseRevision]);
+  useEffect(() => {
+    const element = content.current;
+    element?.addEventListener('scroll', queuePaint, { passive: true });
+    window.addEventListener('resize', queuePaint);
+    document.addEventListener('visibilitychange', queuePaint);
+    return () => {
+      element?.removeEventListener('scroll', queuePaint);
+      window.removeEventListener('resize', queuePaint);
+      document.removeEventListener('visibilitychange', queuePaint);
+    };
+  }, []);
   useEffect(() => {
     const revision = s.latency?.responseRevision ?? 0;
     const version = `${s.question?.id}:${revision}`;

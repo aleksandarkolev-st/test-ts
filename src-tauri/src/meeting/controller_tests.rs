@@ -69,6 +69,33 @@ fn late_acceptance_has_a_distinct_revision_but_a_new_floor_starts_at_zero() {
     assert_eq!(ledger.accepted_revision(20),0);assert_eq!(ledger.accepted_revision(10),2);
 }
 #[test]
+fn clipped_and_late_paint_ranges_never_become_previously_seen_text() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.generated("old","Explain","Opening. Clipped middle. Late tail.");
+    assert!(ledger.acknowledge_paint("old","Opening. Clipped middle. Late tail.",0,8,100));
+    assert!(ledger.acknowledge_paint("old","Opening. Clipped middle. Late tail.",25,35,300));
+    let early=ledger.context("Why?",Some(200));assert!(early.contains("Opening."));
+    assert!(!early.contains("Clipped middle"));assert!(!early.contains("Late tail"));
+    let later=ledger.context("Recall",Some(400));assert!(later.contains("Late tail."));
+    assert!(!later.contains("Clipped middle"));assert!(later.contains("undisplayed gap"));
+    assert_eq!(ledger.suggestions[0].generated,"Opening. Clipped middle. Late tail.");
+    assert!(!ledger.acknowledge_paint("old","Forged",0,6,100));
+}
+#[test]
+fn exact_archived_code_retrieval_does_not_present_unseen_tail_to_live_followup() {
+    let mut ledger=super::ledger::Ledger::default();
+    let code="```cpp\nint OriginalGuard(int x) { return x < -1 ? 17 : 19; }\n```";
+    ledger.generated("code","Implement OriginalGuard",code);
+    assert!(!ledger.context("Recall OriginalGuard",Some(200)).contains("return x"));
+    ledger.terminal("code",300,true);
+    assert!(!ledger.context("Recall OriginalGuard",Some(200)).contains("return x"));
+    let retrieved=ledger.context("Recall exact OriginalGuard",Some(400));
+    assert!(retrieved.contains(code));assert!(retrieved.contains("not evidence of speech or viewport visibility"));
+    assert!(!ledger.context("Why?",Some(400)).contains("return x"));
+    assert!(ledger.acknowledge_paint("code",code,0,code.len(),350));
+    assert_eq!(ledger.context("Recall OriginalGuard",Some(400)).matches(code).count(),1);
+}
+#[test]
 fn only_painted_prefix_enters_followup_context_and_retired_history_survives() {
     let mut ledger=super::ledger::Ledger::default();
     ledger.generated("old","Explain the invariant","Visible opening. Unseen tail.");

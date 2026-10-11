@@ -8,6 +8,7 @@ pub struct Suggestion {
     pub id:String,pub question:String,pub generated:String,
     pub displayed:Vec<(u64,String)>,pub completed_at:Option<u64>,pub interrupted_at:Option<u64>,
     pub display_versions:Vec<Vec<(u64,String)>>,
+    pub painted_ranges:Vec<(u64,usize,String)>,
 }
 #[derive(Default)]
 pub struct Ledger {
@@ -47,6 +48,15 @@ impl Ledger {
         if !text.starts_with(&previous){return false;}
         let question=s.question.clone();self.displayed(id,&question,text,now);true
     }
+    pub fn acknowledge_paint(&mut self,id:&str,text:&str,start:usize,end:usize,now:u64)->bool {
+        let Some(s)=self.suggestions.iter_mut().find(|s|s.id==id) else{return false;};
+        if start>=end||end>text.len()||!text.is_char_boundary(start)||!text.is_char_boundary(end)||!s.generated.starts_with(text){return false;}
+        let visible=&text[start..end];
+        if !s.painted_ranges.last().is_some_and(|(_,previous_start,previous)|*previous_start==start&&previous==visible){
+            s.painted_ranges.push((now,start,visible.into()));self.version+=1;
+        }
+        true
+    }
     pub fn displayed(&mut self,id:&str,question:&str,text:&str,now:u64) {
         let suggestion=self.suggestion(id,question);
         let previous=suggestion.displayed.iter().map(|(_,delta)|delta.as_str()).collect::<String>();
@@ -77,6 +87,37 @@ impl Ledger {
             items.push((record.segment.started_at,format!("{} [utterance {}, revision {}, {}..{} ms]: {}",label(record.segment.source),record.segment.id,record.revision,record.segment.started_at,record.segment.ended_at,record.segment.text)));
         }
         for suggestion in &self.suggestions {
+            // Exact code is a stable archived source, even if the viewport
+            // clipped part of it. Literal identifier retrieval is generic and
+            // locally bounded; it never predicts a question or reconstructs
+            // code. A current/late generated tail is ineligible at the cutoff.
+            if suggestion.completed_at.or(suggestion.interrupted_at).is_some_and(|at|at<cutoff){
+                let query=question.split(|c:char|!c.is_alphanumeric()&&c!='_').filter(|word|word.len()>=3).map(|word|word.to_lowercase()).collect::<Vec<_>>();
+                let parts=suggestion.generated.split("```").collect::<Vec<_>>();
+                for i in (1..parts.len().saturating_sub(1)).step_by(2){
+                    let code=parts[i];
+                    let matches=code.split(|c:char|!c.is_alphanumeric()&&c!='_').any(|identifier|query.iter().any(|word|word==&identifier.to_lowercase()));
+                    let exact=format!("```{code}```");
+                    let already_visible=suggestion.painted_ranges.iter().any(|(at,_,text)|*at<cutoff&&text.contains(&exact))||suggestion.displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,text)|text.as_str()).collect::<String>().contains(&exact);
+                    if matches&&!already_visible {
+                        items.push((suggestion.completed_at.or(suggestion.interrupted_at).unwrap(),format!("ARCHIVED EXACT GENERATED CODE [generation {}; may be incorrect; not evidence of speech or viewport visibility]\nQUESTION: {}\n{exact}",suggestion.id,suggestion.question)));
+                    }
+                }
+            }
+            let mut ranges=suggestion.painted_ranges.iter().filter(|(at,_,_)|*at<cutoff).collect::<Vec<_>>();
+            if !ranges.is_empty(){
+                let first=ranges.iter().map(|(at,_,_)|*at).min().unwrap();
+                ranges.sort_by_key(|(_,start,_)|*start);
+                let mut merged:Vec<(usize,usize)>=Vec::new();
+                for (_,start,text) in ranges {
+                    let end=start+text.len();
+                    if let Some(previous)=merged.last_mut().filter(|(_,previous_end)|*start<=*previous_end){previous.1=previous.1.max(end);}
+                    else{merged.push((*start,end));}
+                }
+                let text=merged.into_iter().map(|(start,end)|format!("[visible source bytes {start}..{end}]\n{}",&suggestion.generated[start..end])).collect::<Vec<_>>().join("\n[undisplayed gap]\n");
+                items.push((first,format!("COPILOT SUGGESTION [generation {}; may be unfinished or incorrect]\nQUESTION: {}\nEXACT DISPLAYED TEXT:\n{}",suggestion.id,suggestion.question,text)));
+                continue;
+            }
             let displayed=suggestion.display_versions.iter().chain(std::iter::once(&suggestion.displayed)).rev().find(|version|version.first().is_some_and(|(at,_)|*at<cutoff));
             if let Some(displayed)=displayed {
                 let text=displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,delta)|delta.as_str()).collect::<String>();

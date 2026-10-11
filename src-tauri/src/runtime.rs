@@ -124,7 +124,7 @@ enum Control {
     Pause,
     ManualOpen,
     Manual(String),
-    Displayed(String,u64,String,u64),
+    Displayed(String,u64,String,usize,usize,u64),
     Dismiss,
     Expand,
     Project(Option<String>),
@@ -275,6 +275,8 @@ async fn actor(
                     let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version,
                         "recognizedRevisionBytes":engine.context.ledger.recognized.iter().map(|r|r.segment.text.len()).sum::<usize>(),
                         "generatedBytes":engine.context.ledger.suggestions.iter().map(|s|s.generated.len()).sum::<usize>(),
+                        "paintedRanges":engine.context.ledger.suggestions.iter().map(|s|s.painted_ranges.len()).sum::<usize>(),
+                        "paintedRangeBytes":engine.context.ledger.suggestions.iter().flat_map(|s|s.painted_ranges.iter()).map(|(_,_,text)|text.len()).sum::<usize>(),
                         "displayedBytes":engine.context.ledger.suggestions.iter().map(|s|s.display_versions.iter().chain(std::iter::once(&s.displayed)).flat_map(|v|v.iter()).map(|(_,text)|text.len()).sum::<usize>()).sum::<usize>()}}));
                 },
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::FreezeContext(context,policy,reply)=>{
@@ -312,11 +314,15 @@ async fn actor(
                     else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
                     publish(&app,&mut engine,&view);
                 }},
-                Control::Displayed(id,revision,text,paint_host_ms)=>{if let Some(s)=session.as_ref(){
+                Control::Displayed(id,revision,text,visible_start,visible_end,paint_host_ms)=>{if let Some(s)=session.as_ref(){
                     let now=s.clock.elapsed().as_millis()as u64;
                     let host_now=std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis()as u64;
                     if revision==0 {if let Some(at)=display_session_time(now,host_now,paint_host_ms){
-                        engine.context.ledger.acknowledge_display(&id,&text,at);
+                        // Browser offsets are UTF-16, while the exact source
+                        // ledger uses UTF-8 byte boundaries.
+                        if let (Some(start),Some(end))=(utf16_byte_offset(&text,visible_start),utf16_byte_offset(&text,visible_end)){
+                            engine.context.ledger.acknowledge_paint(&id,&text,start,end,at);
+                        }
                     }}
                 }},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
@@ -620,10 +626,15 @@ fn answer_visible(rt:State<'_,Runtime>,id:String,revision:Option<u64>) {
 fn display_session_time(native_now:u64,host_now:u64,paint_host_ms:u64)->Option<u64> {
     native_now.checked_sub(host_now.checked_sub(paint_host_ms)?)
 }
+fn utf16_byte_offset(text:&str,offset:usize)->Option<usize>{
+    let mut units=0;
+    for (byte,c) in text.char_indices(){if units==offset{return Some(byte);}units+=c.len_utf16();if units>offset{return None;}}
+    (units==offset).then_some(text.len())
+}
 #[tauri::command]
-async fn answer_displayed(rt:State<'_,Runtime>,id:String,revision:u64,text:String,paint_host_ms:u64)->Result<(),String> {
+async fn answer_displayed(rt:State<'_,Runtime>,id:String,revision:u64,text:String,visible_start:usize,visible_end:usize,paint_host_ms:u64)->Result<(),String> {
     if text.len()>32_000{return Err("Displayed answer is oversized".into());}
-    send(&rt,Control::Displayed(id,revision,text,paint_host_ms)).await
+    send(&rt,Control::Displayed(id,revision,text,visible_start,visible_end,paint_host_ms)).await
 }
 #[tauri::command]
 fn acceptance_disconnect_answers(rt:State<'_,Runtime>)->Result<(),String> {
@@ -749,6 +760,8 @@ mod answer_view_tests {
         assert_eq!(display_session_time(1000,100_000,99_800),Some(800));
         assert_eq!(display_session_time(1000,100_000,100_001),None);
         assert_eq!(display_session_time(1000,100_000,98_999),None);
+        assert_eq!(utf16_byte_offset("a🎉z",3),Some(5));
+        assert_eq!(utf16_byte_offset("a🎉z",2),None);
     }
     #[test]
     fn continued_question_does_not_feed_its_retracted_visible_draft_back_as_context() {

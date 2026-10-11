@@ -1,0 +1,2105 @@
+{
+  "recordedAt": "2026-10-11T15:03:30.515Z",
+  "journal": {
+    "file": "artifacts/deep-interview-v71/continuous-pressure-t/interview.json",
+    "sha256": "2597f2bf7975b01b222391fcf7380f0f345dce11eb0f3855bc7112eae04907fd"
+  },
+  "collector": {
+    "file": "C:\\Users\\polek\\Downloads\\test-ts\\.local\\summarize-process-tree-v71.mjs",
+    "sha256": "e63706903727a18674e48438f4348957343c4985cae00925892001d30b61ff21"
+  },
+  "treeSamples": 123,
+  "temporalMidpointHostMs": 1791716780542.5,
+  "temporalMidpointBasis": "physical_playback_midpoint",
+  "processes": [
+    {
+      "processId": 39484,
+      "parentProcessId": 25772,
+      "name": "meeting-copilot.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 7340032,
+          "last": 18718720,
+          "count": 123,
+          "min": 7340032,
+          "median": 17645568,
+          "sampleP95": 19361792,
+          "max": 20602880
+        },
+        "workingSetBytes": {
+          "first": 39718912,
+          "last": 54931456,
+          "count": 123,
+          "min": 39718912,
+          "median": 53428224,
+          "sampleP95": 55177216,
+          "max": 56647680
+        },
+        "cpuSeconds": {
+          "first": 0.171875,
+          "last": 234.3125,
+          "count": 123,
+          "min": 0.171875,
+          "median": 112.703125,
+          "sampleP95": 223.15625,
+          "max": 234.3125
+        },
+        "handles": {
+          "first": 377,
+          "last": 427,
+          "count": 123,
+          "min": 377,
+          "median": 427,
+          "sampleP95": 433,
+          "max": 438
+        },
+        "threads": {
+          "first": 30,
+          "last": 22,
+          "count": 123,
+          "min": 22,
+          "median": 22,
+          "sampleP95": 28,
+          "max": 36
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 7340032,
+          "last": 16523264,
+          "count": 62,
+          "min": 7340032,
+          "median": 16709632,
+          "sampleP95": 18108416,
+          "max": 19509248
+        },
+        "workingSetBytes": {
+          "first": 39718912,
+          "last": 52678656,
+          "count": 62,
+          "min": 39718912,
+          "median": 52611072,
+          "sampleP95": 53977088,
+          "max": 54489088
+        },
+        "cpuSeconds": {
+          "first": 0.171875,
+          "last": 112.703125,
+          "count": 62,
+          "min": 0.171875,
+          "median": 53.0625,
+          "sampleP95": 106.828125,
+          "max": 112.703125
+        },
+        "handles": {
+          "first": 377,
+          "last": 425,
+          "count": 62,
+          "min": 377,
+          "median": 427,
+          "sampleP95": 435,
+          "max": 438
+        },
+        "threads": {
+          "first": 30,
+          "last": 23,
+          "count": 62,
+          "min": 22,
+          "median": 24,
+          "sampleP95": 30,
+          "max": 36
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 17641472,
+          "last": 18718720,
+          "count": 61,
+          "min": 16588800,
+          "median": 18391040,
+          "sampleP95": 19521536,
+          "max": 20602880
+        },
+        "workingSetBytes": {
+          "first": 53387264,
+          "last": 54931456,
+          "count": 61,
+          "min": 52756480,
+          "median": 54521856,
+          "sampleP95": 55488512,
+          "max": 56647680
+        },
+        "cpuSeconds": {
+          "first": 114.515625,
+          "last": 234.3125,
+          "count": 61,
+          "min": 114.515625,
+          "median": 174.765625,
+          "sampleP95": 228.921875,
+          "max": 234.3125
+        },
+        "handles": {
+          "first": 425,
+          "last": 427,
+          "count": 61,
+          "min": 424,
+          "median": 427,
+          "sampleP95": 427,
+          "max": 427
+        },
+        "threads": {
+          "first": 23,
+          "last": 22,
+          "count": 61,
+          "min": 22,
+          "median": 22,
+          "sampleP95": 23,
+          "max": 23
+        }
+      }
+    },
+    {
+      "processId": 36536,
+      "parentProcessId": 39484,
+      "name": "conhost.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 1466368,
+          "last": 1425408,
+          "count": 123,
+          "min": 1425408,
+          "median": 1425408,
+          "sampleP95": 1470464,
+          "max": 1470464
+        },
+        "workingSetBytes": {
+          "first": 9400320,
+          "last": 9457664,
+          "count": 123,
+          "min": 9379840,
+          "median": 9457664,
+          "sampleP95": 9482240,
+          "max": 9482240
+        },
+        "cpuSeconds": {
+          "first": 0,
+          "last": 0,
+          "count": 123,
+          "min": 0,
+          "median": 0,
+          "sampleP95": 0,
+          "max": 0
+        },
+        "handles": {
+          "first": 100,
+          "last": 100,
+          "count": 123,
+          "min": 100,
+          "median": 100,
+          "sampleP95": 100,
+          "max": 100
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 123,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 1466368,
+          "last": 1425408,
+          "count": 62,
+          "min": 1425408,
+          "median": 1425408,
+          "sampleP95": 1470464,
+          "max": 1470464
+        },
+        "workingSetBytes": {
+          "first": 9400320,
+          "last": 9457664,
+          "count": 62,
+          "min": 9379840,
+          "median": 9457664,
+          "sampleP95": 9482240,
+          "max": 9482240
+        },
+        "cpuSeconds": {
+          "first": 0,
+          "last": 0,
+          "count": 62,
+          "min": 0,
+          "median": 0,
+          "sampleP95": 0,
+          "max": 0
+        },
+        "handles": {
+          "first": 100,
+          "last": 100,
+          "count": 62,
+          "min": 100,
+          "median": 100,
+          "sampleP95": 100,
+          "max": 100
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 62,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 1425408,
+          "last": 1425408,
+          "count": 61,
+          "min": 1425408,
+          "median": 1425408,
+          "sampleP95": 1425408,
+          "max": 1425408
+        },
+        "workingSetBytes": {
+          "first": 9457664,
+          "last": 9457664,
+          "count": 61,
+          "min": 9457664,
+          "median": 9457664,
+          "sampleP95": 9457664,
+          "max": 9457664
+        },
+        "cpuSeconds": {
+          "first": 0,
+          "last": 0,
+          "count": 61,
+          "min": 0,
+          "median": 0,
+          "sampleP95": 0,
+          "max": 0
+        },
+        "handles": {
+          "first": 100,
+          "last": 100,
+          "count": 61,
+          "min": 100,
+          "median": 100,
+          "sampleP95": 100,
+          "max": 100
+        },
+        "threads": {
+          "first": 2,
+          "last": 2,
+          "count": 61,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "processId": 47336,
+      "parentProcessId": 39484,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 42692608,
+          "last": 47841280,
+          "count": 123,
+          "min": 42692608,
+          "median": 48316416,
+          "sampleP95": 49459200,
+          "max": 49659904
+        },
+        "workingSetBytes": {
+          "first": 128806912,
+          "last": 143613952,
+          "count": 123,
+          "min": 128806912,
+          "median": 144093184,
+          "sampleP95": 146554880,
+          "max": 146731008
+        },
+        "cpuSeconds": {
+          "first": 0.71875,
+          "last": 109.75,
+          "count": 123,
+          "min": 0.71875,
+          "median": 54.0625,
+          "sampleP95": 104.578125,
+          "max": 109.75
+        },
+        "handles": {
+          "first": 1346,
+          "last": 1443,
+          "count": 123,
+          "min": 1346,
+          "median": 1446,
+          "sampleP95": 1479,
+          "max": 1491
+        },
+        "threads": {
+          "first": 58,
+          "last": 50,
+          "count": 123,
+          "min": 48,
+          "median": 49,
+          "sampleP95": 55,
+          "max": 59
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 42692608,
+          "last": 47837184,
+          "count": 62,
+          "min": 42692608,
+          "median": 48308224,
+          "sampleP95": 49471488,
+          "max": 49659904
+        },
+        "workingSetBytes": {
+          "first": 128806912,
+          "last": 143552512,
+          "count": 62,
+          "min": 128806912,
+          "median": 145203200,
+          "sampleP95": 146644992,
+          "max": 146731008
+        },
+        "cpuSeconds": {
+          "first": 0.71875,
+          "last": 54.0625,
+          "count": 62,
+          "min": 0.71875,
+          "median": 26.2109375,
+          "sampleP95": 51.125,
+          "max": 54.0625
+        },
+        "handles": {
+          "first": 1346,
+          "last": 1446,
+          "count": 62,
+          "min": 1346,
+          "median": 1455,
+          "sampleP95": 1484,
+          "max": 1491
+        },
+        "threads": {
+          "first": 58,
+          "last": 50,
+          "count": 62,
+          "min": 48,
+          "median": 51,
+          "sampleP95": 56,
+          "max": 59
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 48013312,
+          "last": 47841280,
+          "count": 61,
+          "min": 47513600,
+          "median": 48332800,
+          "sampleP95": 49254400,
+          "max": 49463296
+        },
+        "workingSetBytes": {
+          "first": 143716352,
+          "last": 143613952,
+          "count": 61,
+          "min": 143233024,
+          "median": 144019456,
+          "sampleP95": 144973824,
+          "max": 145190912
+        },
+        "cpuSeconds": {
+          "first": 54.96875,
+          "last": 109.75,
+          "count": 61,
+          "min": 54.96875,
+          "median": 83,
+          "sampleP95": 107.125,
+          "max": 109.75
+        },
+        "handles": {
+          "first": 1445,
+          "last": 1443,
+          "count": 61,
+          "min": 1441,
+          "median": 1441,
+          "sampleP95": 1445,
+          "max": 1446
+        },
+        "threads": {
+          "first": 50,
+          "last": 50,
+          "count": 61,
+          "min": 48,
+          "median": 48,
+          "sampleP95": 50,
+          "max": 50
+        }
+      }
+    },
+    {
+      "processId": 47140,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 2592768,
+          "last": 2990080,
+          "count": 123,
+          "min": 2592768,
+          "median": 2990080,
+          "sampleP95": 3194880,
+          "max": 3575808
+        },
+        "workingSetBytes": {
+          "first": 14274560,
+          "last": 17276928,
+          "count": 123,
+          "min": 14274560,
+          "median": 17276928,
+          "sampleP95": 17317888,
+          "max": 23277568
+        },
+        "cpuSeconds": {
+          "first": 0.03125,
+          "last": 0.046875,
+          "count": 123,
+          "min": 0.03125,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 157,
+          "last": 177,
+          "count": 123,
+          "min": 157,
+          "median": 177,
+          "sampleP95": 191,
+          "max": 217
+        },
+        "threads": {
+          "first": 11,
+          "last": 8,
+          "count": 123,
+          "min": 7,
+          "median": 8,
+          "sampleP95": 11,
+          "max": 13
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 2592768,
+          "last": 2990080,
+          "count": 62,
+          "min": 2592768,
+          "median": 2994176,
+          "sampleP95": 3231744,
+          "max": 3575808
+        },
+        "workingSetBytes": {
+          "first": 14274560,
+          "last": 17276928,
+          "count": 62,
+          "min": 14274560,
+          "median": 17268736,
+          "sampleP95": 17317888,
+          "max": 23277568
+        },
+        "cpuSeconds": {
+          "first": 0.03125,
+          "last": 0.046875,
+          "count": 62,
+          "min": 0.03125,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 157,
+          "last": 177,
+          "count": 62,
+          "min": 157,
+          "median": 177,
+          "sampleP95": 191,
+          "max": 217
+        },
+        "threads": {
+          "first": 11,
+          "last": 8,
+          "count": 62,
+          "min": 7,
+          "median": 8,
+          "sampleP95": 12,
+          "max": 13
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 2990080,
+          "last": 2990080,
+          "count": 61,
+          "min": 2949120,
+          "median": 2990080,
+          "sampleP95": 2994176,
+          "max": 2994176
+        },
+        "workingSetBytes": {
+          "first": 17276928,
+          "last": 17276928,
+          "count": 61,
+          "min": 17260544,
+          "median": 17276928,
+          "sampleP95": 17281024,
+          "max": 17281024
+        },
+        "cpuSeconds": {
+          "first": 0.046875,
+          "last": 0.046875,
+          "count": 61,
+          "min": 0.046875,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 177,
+          "last": 177,
+          "count": 61,
+          "min": 177,
+          "median": 177,
+          "sampleP95": 177,
+          "max": 177
+        },
+        "threads": {
+          "first": 8,
+          "last": 8,
+          "count": 61,
+          "min": 7,
+          "median": 8,
+          "sampleP95": 8,
+          "max": 8
+        }
+      }
+    },
+    {
+      "processId": 31196,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 112058368,
+          "last": 109199360,
+          "count": 123,
+          "min": 92971008,
+          "median": 108351488,
+          "sampleP95": 109441024,
+          "max": 112058368
+        },
+        "workingSetBytes": {
+          "first": 104628224,
+          "last": 100495360,
+          "count": 123,
+          "min": 95318016,
+          "median": 100483072,
+          "sampleP95": 100687872,
+          "max": 104628224
+        },
+        "cpuSeconds": {
+          "first": 0.203125,
+          "last": 44.375,
+          "count": 123,
+          "min": 0.203125,
+          "median": 22.078125,
+          "sampleP95": 42.390625,
+          "max": 44.375
+        },
+        "handles": {
+          "first": 1239,
+          "last": 1235,
+          "count": 123,
+          "min": 1232,
+          "median": 1235,
+          "sampleP95": 1237,
+          "max": 1239
+        },
+        "threads": {
+          "first": 24,
+          "last": 27,
+          "count": 123,
+          "min": 24,
+          "median": 27,
+          "sampleP95": 28,
+          "max": 28
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 112058368,
+          "last": 108134400,
+          "count": 62,
+          "min": 92971008,
+          "median": 108130304,
+          "sampleP95": 108351488,
+          "max": 112058368
+        },
+        "workingSetBytes": {
+          "first": 104628224,
+          "last": 100458496,
+          "count": 62,
+          "min": 95318016,
+          "median": 99667968,
+          "sampleP95": 100577280,
+          "max": 104628224
+        },
+        "cpuSeconds": {
+          "first": 0.203125,
+          "last": 22.078125,
+          "count": 62,
+          "min": 0.203125,
+          "median": 9.9296875,
+          "sampleP95": 21.796875,
+          "max": 22.078125
+        },
+        "handles": {
+          "first": 1239,
+          "last": 1235,
+          "count": 62,
+          "min": 1232,
+          "median": 1235,
+          "sampleP95": 1237,
+          "max": 1239
+        },
+        "threads": {
+          "first": 24,
+          "last": 27,
+          "count": 62,
+          "min": 24,
+          "median": 27,
+          "sampleP95": 28,
+          "max": 28
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 108175360,
+          "last": 109199360,
+          "count": 61,
+          "min": 108175360,
+          "median": 109268992,
+          "sampleP95": 109453312,
+          "max": 109486080
+        },
+        "workingSetBytes": {
+          "first": 100454400,
+          "last": 100495360,
+          "count": 61,
+          "min": 100306944,
+          "median": 100548608,
+          "sampleP95": 100716544,
+          "max": 100786176
+        },
+        "cpuSeconds": {
+          "first": 22.25,
+          "last": 44.375,
+          "count": 61,
+          "min": 22.25,
+          "median": 33.4375,
+          "sampleP95": 42.734375,
+          "max": 44.375
+        },
+        "handles": {
+          "first": 1235,
+          "last": 1235,
+          "count": 61,
+          "min": 1232,
+          "median": 1235,
+          "sampleP95": 1237,
+          "max": 1237
+        },
+        "threads": {
+          "first": 27,
+          "last": 27,
+          "count": 61,
+          "min": 26,
+          "median": 27,
+          "sampleP95": 27,
+          "max": 27
+        }
+      }
+    },
+    {
+      "processId": 26000,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 13303808,
+          "last": 13946880,
+          "count": 123,
+          "min": 12951552,
+          "median": 14262272,
+          "sampleP95": 15462400,
+          "max": 15503360
+        },
+        "workingSetBytes": {
+          "first": 43245568,
+          "last": 46850048,
+          "count": 123,
+          "min": 43245568,
+          "median": 47128576,
+          "sampleP95": 48320512,
+          "max": 48345088
+        },
+        "cpuSeconds": {
+          "first": 0.109375,
+          "last": 9.671875,
+          "count": 123,
+          "min": 0.109375,
+          "median": 5.21875,
+          "sampleP95": 9.3125,
+          "max": 9.671875
+        },
+        "handles": {
+          "first": 361,
+          "last": 341,
+          "count": 123,
+          "min": 341,
+          "median": 341,
+          "sampleP95": 354,
+          "max": 361
+        },
+        "threads": {
+          "first": 24,
+          "last": 18,
+          "count": 123,
+          "min": 17,
+          "median": 18,
+          "sampleP95": 22,
+          "max": 24
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 13303808,
+          "last": 13778944,
+          "count": 62,
+          "min": 12951552,
+          "median": 14069760,
+          "sampleP95": 14884864,
+          "max": 15503360
+        },
+        "workingSetBytes": {
+          "first": 43245568,
+          "last": 46694400,
+          "count": 62,
+          "min": 43245568,
+          "median": 46893056,
+          "sampleP95": 47767552,
+          "max": 48345088
+        },
+        "cpuSeconds": {
+          "first": 0.109375,
+          "last": 5.21875,
+          "count": 62,
+          "min": 0.109375,
+          "median": 2.6640625,
+          "sampleP95": 4.90625,
+          "max": 5.21875
+        },
+        "handles": {
+          "first": 361,
+          "last": 341,
+          "count": 62,
+          "min": 341,
+          "median": 341.5,
+          "sampleP95": 354,
+          "max": 361
+        },
+        "threads": {
+          "first": 24,
+          "last": 18,
+          "count": 62,
+          "min": 17,
+          "median": 19,
+          "sampleP95": 24,
+          "max": 24
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 13942784,
+          "last": 13946880,
+          "count": 61,
+          "min": 13602816,
+          "median": 14299136,
+          "sampleP95": 15462400,
+          "max": 15503360
+        },
+        "workingSetBytes": {
+          "first": 46845952,
+          "last": 46850048,
+          "count": 61,
+          "min": 46534656,
+          "median": 47140864,
+          "sampleP95": 48320512,
+          "max": 48336896
+        },
+        "cpuSeconds": {
+          "first": 5.28125,
+          "last": 9.671875,
+          "count": 61,
+          "min": 5.28125,
+          "median": 7.671875,
+          "sampleP95": 9.5,
+          "max": 9.671875
+        },
+        "handles": {
+          "first": 341,
+          "last": 341,
+          "count": 61,
+          "min": 341,
+          "median": 341,
+          "sampleP95": 341,
+          "max": 341
+        },
+        "threads": {
+          "first": 18,
+          "last": 18,
+          "count": 61,
+          "min": 17,
+          "median": 18,
+          "sampleP95": 18,
+          "max": 18
+        }
+      }
+    },
+    {
+      "processId": 45356,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 7725056,
+          "last": 7659520,
+          "count": 123,
+          "min": 7659520,
+          "median": 7667712,
+          "sampleP95": 7778304,
+          "max": 7778304
+        },
+        "workingSetBytes": {
+          "first": 23998464,
+          "last": 24170496,
+          "count": 123,
+          "min": 23998464,
+          "median": 24170496,
+          "sampleP95": 24199168,
+          "max": 24240128
+        },
+        "cpuSeconds": {
+          "first": 0.046875,
+          "last": 0.046875,
+          "count": 123,
+          "min": 0.046875,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 184,
+          "last": 184,
+          "count": 123,
+          "min": 184,
+          "median": 184,
+          "sampleP95": 184,
+          "max": 184
+        },
+        "threads": {
+          "first": 9,
+          "last": 9,
+          "count": 123,
+          "min": 9,
+          "median": 9,
+          "sampleP95": 11,
+          "max": 11
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 7725056,
+          "last": 7667712,
+          "count": 62,
+          "min": 7667712,
+          "median": 7667712,
+          "sampleP95": 7778304,
+          "max": 7778304
+        },
+        "workingSetBytes": {
+          "first": 23998464,
+          "last": 24178688,
+          "count": 62,
+          "min": 23998464,
+          "median": 24178688,
+          "sampleP95": 24240128,
+          "max": 24240128
+        },
+        "cpuSeconds": {
+          "first": 0.046875,
+          "last": 0.046875,
+          "count": 62,
+          "min": 0.046875,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 184,
+          "last": 184,
+          "count": 62,
+          "min": 184,
+          "median": 184,
+          "sampleP95": 184,
+          "max": 184
+        },
+        "threads": {
+          "first": 9,
+          "last": 9,
+          "count": 62,
+          "min": 9,
+          "median": 9,
+          "sampleP95": 11,
+          "max": 11
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 7667712,
+          "last": 7659520,
+          "count": 61,
+          "min": 7659520,
+          "median": 7659520,
+          "sampleP95": 7659520,
+          "max": 7667712
+        },
+        "workingSetBytes": {
+          "first": 24178688,
+          "last": 24170496,
+          "count": 61,
+          "min": 24170496,
+          "median": 24170496,
+          "sampleP95": 24170496,
+          "max": 24178688
+        },
+        "cpuSeconds": {
+          "first": 0.046875,
+          "last": 0.046875,
+          "count": 61,
+          "min": 0.046875,
+          "median": 0.046875,
+          "sampleP95": 0.046875,
+          "max": 0.046875
+        },
+        "handles": {
+          "first": 184,
+          "last": 184,
+          "count": 61,
+          "min": 184,
+          "median": 184,
+          "sampleP95": 184,
+          "max": 184
+        },
+        "threads": {
+          "first": 9,
+          "last": 9,
+          "count": 61,
+          "min": 9,
+          "median": 9,
+          "sampleP95": 9,
+          "max": 9
+        }
+      }
+    },
+    {
+      "processId": 32644,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 27713536,
+          "last": 196751360,
+          "count": 123,
+          "min": 27713536,
+          "median": 212668416,
+          "sampleP95": 238727168,
+          "max": 248041472
+        },
+        "workingSetBytes": {
+          "first": 68521984,
+          "last": 246358016,
+          "count": 123,
+          "min": 68521984,
+          "median": 262668288,
+          "sampleP95": 286732288,
+          "max": 294588416
+        },
+        "cpuSeconds": {
+          "first": 0.15625,
+          "last": 282.40625,
+          "count": 123,
+          "min": 0.15625,
+          "median": 139.21875,
+          "sampleP95": 269.96875,
+          "max": 282.40625
+        },
+        "handles": {
+          "first": 268,
+          "last": 309,
+          "count": 123,
+          "min": 268,
+          "median": 309,
+          "sampleP95": 309,
+          "max": 311
+        },
+        "threads": {
+          "first": 13,
+          "last": 24,
+          "count": 123,
+          "min": 13,
+          "median": 24,
+          "sampleP95": 25,
+          "max": 26
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 27713536,
+          "last": 209784832,
+          "count": 62,
+          "min": 27713536,
+          "median": 206292992,
+          "sampleP95": 229888000,
+          "max": 240214016
+        },
+        "workingSetBytes": {
+          "first": 68521984,
+          "last": 258609152,
+          "count": 62,
+          "min": 68521984,
+          "median": 256196608,
+          "sampleP95": 278405120,
+          "max": 288264192
+        },
+        "cpuSeconds": {
+          "first": 0.15625,
+          "last": 139.21875,
+          "count": 62,
+          "min": 0.15625,
+          "median": 69.515625,
+          "sampleP95": 132.46875,
+          "max": 139.21875
+        },
+        "handles": {
+          "first": 268,
+          "last": 309,
+          "count": 62,
+          "min": 268,
+          "median": 309,
+          "sampleP95": 309,
+          "max": 309
+        },
+        "threads": {
+          "first": 13,
+          "last": 24,
+          "count": 62,
+          "min": 13,
+          "median": 24,
+          "sampleP95": 26,
+          "max": 26
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 211353600,
+          "last": 196751360,
+          "count": 61,
+          "min": 155078656,
+          "median": 220315648,
+          "sampleP95": 239403008,
+          "max": 248041472
+        },
+        "workingSetBytes": {
+          "first": 261091328,
+          "last": 246358016,
+          "count": 61,
+          "min": 205918208,
+          "median": 269193216,
+          "sampleP95": 288677888,
+          "max": 294588416
+        },
+        "cpuSeconds": {
+          "first": 141.875,
+          "last": 282.40625,
+          "count": 61,
+          "min": 141.875,
+          "median": 213.515625,
+          "sampleP95": 275.265625,
+          "max": 282.40625
+        },
+        "handles": {
+          "first": 309,
+          "last": 309,
+          "count": 61,
+          "min": 309,
+          "median": 309,
+          "sampleP95": 309,
+          "max": 311
+        },
+        "threads": {
+          "first": 24,
+          "last": 24,
+          "count": 61,
+          "min": 23,
+          "median": 24,
+          "sampleP95": 24,
+          "max": 24
+        }
+      }
+    },
+    {
+      "processId": 4240,
+      "parentProcessId": 47336,
+      "name": "msedgewebview2.exe",
+      "observedSamples": 123,
+      "firstHostBeforeMs": 1791715853186,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 28082176,
+          "last": 139415552,
+          "count": 123,
+          "min": 28082176,
+          "median": 135491584,
+          "sampleP95": 148254720,
+          "max": 159408128
+        },
+        "workingSetBytes": {
+          "first": 68747264,
+          "last": 190210048,
+          "count": 123,
+          "min": 68747264,
+          "median": 185462784,
+          "sampleP95": 199196672,
+          "max": 210325504
+        },
+        "cpuSeconds": {
+          "first": 0.140625,
+          "last": 48.390625,
+          "count": 123,
+          "min": 0.140625,
+          "median": 23.75,
+          "sampleP95": 46.359375,
+          "max": 48.390625
+        },
+        "handles": {
+          "first": 262,
+          "last": 304,
+          "count": 123,
+          "min": 262,
+          "median": 302,
+          "sampleP95": 304,
+          "max": 304
+        },
+        "threads": {
+          "first": 13,
+          "last": 22,
+          "count": 123,
+          "min": 13,
+          "median": 23,
+          "sampleP95": 24,
+          "max": 25
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 28082176,
+          "last": 141455360,
+          "count": 62,
+          "min": 28082176,
+          "median": 128684032,
+          "sampleP95": 144973824,
+          "max": 148955136
+        },
+        "workingSetBytes": {
+          "first": 68747264,
+          "last": 191504384,
+          "count": 62,
+          "min": 68747264,
+          "median": 178216960,
+          "sampleP95": 194699264,
+          "max": 199176192
+        },
+        "cpuSeconds": {
+          "first": 0.140625,
+          "last": 23.75,
+          "count": 62,
+          "min": 0.140625,
+          "median": 11.859375,
+          "sampleP95": 22.734375,
+          "max": 23.75
+        },
+        "handles": {
+          "first": 262,
+          "last": 302,
+          "count": 62,
+          "min": 262,
+          "median": 302,
+          "sampleP95": 302,
+          "max": 302
+        },
+        "threads": {
+          "first": 13,
+          "last": 23,
+          "count": 62,
+          "min": 13,
+          "median": 23,
+          "sampleP95": 25,
+          "max": 25
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 142680064,
+          "last": 139415552,
+          "count": 61,
+          "min": 120967168,
+          "median": 140652544,
+          "sampleP95": 152354816,
+          "max": 159408128
+        },
+        "workingSetBytes": {
+          "first": 193060864,
+          "last": 190210048,
+          "count": 61,
+          "min": 171991040,
+          "median": 191717376,
+          "sampleP95": 203534336,
+          "max": 210325504
+        },
+        "cpuSeconds": {
+          "first": 24.03125,
+          "last": 48.390625,
+          "count": 61,
+          "min": 24.03125,
+          "median": 36.046875,
+          "sampleP95": 47.140625,
+          "max": 48.390625
+        },
+        "handles": {
+          "first": 302,
+          "last": 304,
+          "count": 61,
+          "min": 299,
+          "median": 304,
+          "sampleP95": 304,
+          "max": 304
+        },
+        "threads": {
+          "first": 22,
+          "last": 22,
+          "count": 61,
+          "min": 22,
+          "median": 23,
+          "sampleP95": 23,
+          "max": 23
+        }
+      }
+    },
+    {
+      "processId": 10256,
+      "parentProcessId": 39484,
+      "name": "codex.exe",
+      "observedSamples": 122,
+      "firstHostBeforeMs": 1791715868183,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 80850944,
+          "last": 111665152,
+          "count": 122,
+          "min": 76677120,
+          "median": 143081472,
+          "sampleP95": 168771584,
+          "max": 179666944
+        },
+        "workingSetBytes": {
+          "first": 138092544,
+          "last": 167501824,
+          "count": 122,
+          "min": 130523136,
+          "median": 201535488,
+          "sampleP95": 228110336,
+          "max": 238137344
+        },
+        "cpuSeconds": {
+          "first": 1.28125,
+          "last": 58.515625,
+          "count": 122,
+          "min": 1.28125,
+          "median": 29.59375,
+          "sampleP95": 54.96875,
+          "max": 58.515625
+        },
+        "handles": {
+          "first": 461,
+          "last": 467,
+          "count": 122,
+          "min": 398,
+          "median": 458,
+          "sampleP95": 467,
+          "max": 483
+        },
+        "threads": {
+          "first": 55,
+          "last": 45,
+          "count": 122,
+          "min": 33,
+          "median": 44,
+          "sampleP95": 48,
+          "max": 55
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 80850944,
+          "last": 146001920,
+          "count": 61,
+          "min": 76677120,
+          "median": 116649984,
+          "sampleP95": 146001920,
+          "max": 147365888
+        },
+        "workingSetBytes": {
+          "first": 138092544,
+          "last": 204959744,
+          "count": 61,
+          "min": 130523136,
+          "median": 176746496,
+          "sampleP95": 204959744,
+          "max": 206462976
+        },
+        "cpuSeconds": {
+          "first": 1.28125,
+          "last": 29.21875,
+          "count": 61,
+          "min": 1.28125,
+          "median": 14.671875,
+          "sampleP95": 27.9375,
+          "max": 29.21875
+        },
+        "handles": {
+          "first": 461,
+          "last": 457,
+          "count": 61,
+          "min": 398,
+          "median": 456,
+          "sampleP95": 466,
+          "max": 483
+        },
+        "threads": {
+          "first": 55,
+          "last": 45,
+          "count": 61,
+          "min": 33,
+          "median": 45,
+          "sampleP95": 48,
+          "max": 55
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 141623296,
+          "last": 111665152,
+          "count": 61,
+          "min": 111665152,
+          "median": 157970432,
+          "sampleP95": 169713664,
+          "max": 179666944
+        },
+        "workingSetBytes": {
+          "first": 199761920,
+          "last": 167501824,
+          "count": 61,
+          "min": 167501824,
+          "median": 216170496,
+          "sampleP95": 229122048,
+          "max": 238137344
+        },
+        "cpuSeconds": {
+          "first": 29.96875,
+          "last": 58.515625,
+          "count": 61,
+          "min": 29.96875,
+          "median": 43.203125,
+          "sampleP95": 56.921875,
+          "max": 58.515625
+        },
+        "handles": {
+          "first": 458,
+          "last": 467,
+          "count": 61,
+          "min": 452,
+          "median": 459,
+          "sampleP95": 469,
+          "max": 476
+        },
+        "threads": {
+          "first": 45,
+          "last": 45,
+          "count": 61,
+          "min": 43,
+          "median": 44,
+          "sampleP95": 48,
+          "max": 48
+        }
+      }
+    },
+    {
+      "processId": 11056,
+      "parentProcessId": 10256,
+      "name": "conhost.exe",
+      "observedSamples": 122,
+      "firstHostBeforeMs": 1791715868183,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 1269760,
+          "last": 1232896,
+          "count": 122,
+          "min": 1232896,
+          "median": 1232896,
+          "sampleP95": 1269760,
+          "max": 1273856
+        },
+        "workingSetBytes": {
+          "first": 8282112,
+          "last": 8339456,
+          "count": 122,
+          "min": 8261632,
+          "median": 8339456,
+          "sampleP95": 8359936,
+          "max": 8364032
+        },
+        "cpuSeconds": {
+          "first": 0,
+          "last": 0.03125,
+          "count": 122,
+          "min": 0,
+          "median": 0.03125,
+          "sampleP95": 0.03125,
+          "max": 0.03125
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 122,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 122,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 1269760,
+          "last": 1232896,
+          "count": 61,
+          "min": 1232896,
+          "median": 1232896,
+          "sampleP95": 1273856,
+          "max": 1273856
+        },
+        "workingSetBytes": {
+          "first": 8282112,
+          "last": 8339456,
+          "count": 61,
+          "min": 8261632,
+          "median": 8339456,
+          "sampleP95": 8364032,
+          "max": 8364032
+        },
+        "cpuSeconds": {
+          "first": 0,
+          "last": 0.03125,
+          "count": 61,
+          "min": 0,
+          "median": 0.015625,
+          "sampleP95": 0.03125,
+          "max": 0.03125
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 61,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 61,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 1232896,
+          "last": 1232896,
+          "count": 61,
+          "min": 1232896,
+          "median": 1232896,
+          "sampleP95": 1232896,
+          "max": 1232896
+        },
+        "workingSetBytes": {
+          "first": 8339456,
+          "last": 8339456,
+          "count": 61,
+          "min": 8339456,
+          "median": 8339456,
+          "sampleP95": 8339456,
+          "max": 8339456
+        },
+        "cpuSeconds": {
+          "first": 0.03125,
+          "last": 0.03125,
+          "count": 61,
+          "min": 0.03125,
+          "median": 0.03125,
+          "sampleP95": 0.03125,
+          "max": 0.03125
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 61,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 2,
+          "last": 2,
+          "count": 61,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "processId": 47036,
+      "parentProcessId": 39484,
+      "name": "nemo-speech.exe",
+      "observedSamples": 122,
+      "firstHostBeforeMs": 1791715868183,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 5328429056,
+          "last": 5329571840,
+          "count": 122,
+          "min": 5328429056,
+          "median": 5329571840,
+          "sampleP95": 5329633280,
+          "max": 5329637376
+        },
+        "workingSetBytes": {
+          "first": 117739520,
+          "last": 119402496,
+          "count": 122,
+          "min": 117739520,
+          "median": 119402496,
+          "sampleP95": 119418880,
+          "max": 119435264
+        },
+        "cpuSeconds": {
+          "first": 1.046875,
+          "last": 119.5625,
+          "count": 122,
+          "min": 1.046875,
+          "median": 59.6875,
+          "sampleP95": 113.5625,
+          "max": 119.5625
+        },
+        "handles": {
+          "first": 551,
+          "last": 553,
+          "count": 122,
+          "min": 551,
+          "median": 553,
+          "sampleP95": 555,
+          "max": 555
+        },
+        "threads": {
+          "first": 19,
+          "last": 15,
+          "count": 122,
+          "min": 15,
+          "median": 15,
+          "sampleP95": 18,
+          "max": 19
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 5328429056,
+          "last": 5329571840,
+          "count": 61,
+          "min": 5328429056,
+          "median": 5329571840,
+          "sampleP95": 5329637376,
+          "max": 5329637376
+        },
+        "workingSetBytes": {
+          "first": 117739520,
+          "last": 119402496,
+          "count": 61,
+          "min": 117739520,
+          "median": 119390208,
+          "sampleP95": 119435264,
+          "max": 119435264
+        },
+        "cpuSeconds": {
+          "first": 1.046875,
+          "last": 59.234375,
+          "count": 61,
+          "min": 1.046875,
+          "median": 29.625,
+          "sampleP95": 56.40625,
+          "max": 59.234375
+        },
+        "handles": {
+          "first": 551,
+          "last": 553,
+          "count": 61,
+          "min": 551,
+          "median": 553,
+          "sampleP95": 555,
+          "max": 555
+        },
+        "threads": {
+          "first": 19,
+          "last": 15,
+          "count": 61,
+          "min": 15,
+          "median": 15,
+          "sampleP95": 19,
+          "max": 19
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 5329571840,
+          "last": 5329571840,
+          "count": 61,
+          "min": 5329571840,
+          "median": 5329571840,
+          "sampleP95": 5329571840,
+          "max": 5329571840
+        },
+        "workingSetBytes": {
+          "first": 119402496,
+          "last": 119402496,
+          "count": 61,
+          "min": 119402496,
+          "median": 119402496,
+          "sampleP95": 119402496,
+          "max": 119402496
+        },
+        "cpuSeconds": {
+          "first": 60.140625,
+          "last": 119.5625,
+          "count": 61,
+          "min": 60.140625,
+          "median": 89.59375,
+          "sampleP95": 116.609375,
+          "max": 119.5625
+        },
+        "handles": {
+          "first": 553,
+          "last": 553,
+          "count": 61,
+          "min": 553,
+          "median": 553,
+          "sampleP95": 553,
+          "max": 553
+        },
+        "threads": {
+          "first": 15,
+          "last": 15,
+          "count": 61,
+          "min": 15,
+          "median": 15,
+          "sampleP95": 15,
+          "max": 15
+        }
+      }
+    },
+    {
+      "processId": 44268,
+      "parentProcessId": 47036,
+      "name": "conhost.exe",
+      "observedSamples": 122,
+      "firstHostBeforeMs": 1791715868183,
+      "lastHostAfterMs": 1791717684440,
+      "metrics": {
+        "privateBytes": {
+          "first": 1273856,
+          "last": 1236992,
+          "count": 122,
+          "min": 1236992,
+          "median": 1236992,
+          "sampleP95": 1273856,
+          "max": 1273856
+        },
+        "workingSetBytes": {
+          "first": 8290304,
+          "last": 8347648,
+          "count": 122,
+          "min": 8269824,
+          "median": 8347648,
+          "sampleP95": 8368128,
+          "max": 8368128
+        },
+        "cpuSeconds": {
+          "first": 0.015625,
+          "last": 0.015625,
+          "count": 122,
+          "min": 0.015625,
+          "median": 0.015625,
+          "sampleP95": 0.015625,
+          "max": 0.015625
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 122,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 122,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "firstTemporalHalf": {
+        "privateBytes": {
+          "first": 1273856,
+          "last": 1236992,
+          "count": 61,
+          "min": 1236992,
+          "median": 1236992,
+          "sampleP95": 1273856,
+          "max": 1273856
+        },
+        "workingSetBytes": {
+          "first": 8290304,
+          "last": 8347648,
+          "count": 61,
+          "min": 8269824,
+          "median": 8347648,
+          "sampleP95": 8368128,
+          "max": 8368128
+        },
+        "cpuSeconds": {
+          "first": 0.015625,
+          "last": 0.015625,
+          "count": 61,
+          "min": 0.015625,
+          "median": 0.015625,
+          "sampleP95": 0.015625,
+          "max": 0.015625
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 61,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 3,
+          "last": 2,
+          "count": 61,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 3,
+          "max": 3
+        }
+      },
+      "secondTemporalHalf": {
+        "privateBytes": {
+          "first": 1236992,
+          "last": 1236992,
+          "count": 61,
+          "min": 1236992,
+          "median": 1236992,
+          "sampleP95": 1236992,
+          "max": 1236992
+        },
+        "workingSetBytes": {
+          "first": 8347648,
+          "last": 8347648,
+          "count": 61,
+          "min": 8347648,
+          "median": 8347648,
+          "sampleP95": 8347648,
+          "max": 8347648
+        },
+        "cpuSeconds": {
+          "first": 0.015625,
+          "last": 0.015625,
+          "count": 61,
+          "min": 0.015625,
+          "median": 0.015625,
+          "sampleP95": 0.015625,
+          "max": 0.015625
+        },
+        "handles": {
+          "first": 98,
+          "last": 98,
+          "count": 61,
+          "min": 98,
+          "median": 98,
+          "sampleP95": 98,
+          "max": 98
+        },
+        "threads": {
+          "first": 2,
+          "last": 2,
+          "count": 61,
+          "min": 2,
+          "median": 2,
+          "sampleP95": 2,
+          "max": 2
+        }
+      }
+    }
+  ],
+  "finalSnapshot": {
+    "hostBeforeMs": 1791717683986,
+    "hostAfterMs": 1791717684440,
+    "nativeTreePrivateBytes": 5981655040,
+    "nativeTreeSumWorkingSetBytes": 1136955392,
+    "processes": [
+      {
+        "processId": 47036,
+        "parentProcessId": 39484,
+        "name": "nemo-speech.exe",
+        "workingSetBytes": 119402496,
+        "privateBytes": 5329571840,
+        "cpuSeconds": 119.5625,
+        "handles": 553,
+        "threads": 15,
+        "fractionOfRecordedTreePrivateBytes": 0.8909861575701965
+      },
+      {
+        "processId": 32644,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 246358016,
+        "privateBytes": 196751360,
+        "cpuSeconds": 282.40625,
+        "handles": 309,
+        "threads": 24,
+        "fractionOfRecordedTreePrivateBytes": 0.032892461816052834
+      },
+      {
+        "processId": 4240,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 190210048,
+        "privateBytes": 139415552,
+        "cpuSeconds": 48.390625,
+        "handles": 304,
+        "threads": 22,
+        "fractionOfRecordedTreePrivateBytes": 0.02330718690190466
+      },
+      {
+        "processId": 10256,
+        "parentProcessId": 39484,
+        "name": "codex.exe",
+        "workingSetBytes": 167501824,
+        "privateBytes": 111665152,
+        "cpuSeconds": 58.515625,
+        "handles": 467,
+        "threads": 45,
+        "fractionOfRecordedTreePrivateBytes": 0.018667935755787082
+      },
+      {
+        "processId": 31196,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 100495360,
+        "privateBytes": 109199360,
+        "cpuSeconds": 44.375,
+        "handles": 1235,
+        "threads": 27,
+        "fractionOfRecordedTreePrivateBytes": 0.018255710045091467
+      },
+      {
+        "processId": 47336,
+        "parentProcessId": 39484,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 143613952,
+        "privateBytes": 47841280,
+        "cpuSeconds": 109.75,
+        "handles": 1443,
+        "threads": 50,
+        "fractionOfRecordedTreePrivateBytes": 0.007998000499875032
+      },
+      {
+        "processId": 39484,
+        "parentProcessId": 25772,
+        "name": "meeting-copilot.exe",
+        "workingSetBytes": 54931456,
+        "privateBytes": 18718720,
+        "cpuSeconds": 234.3125,
+        "handles": 427,
+        "threads": 22,
+        "fractionOfRecordedTreePrivateBytes": 0.00312935464763946
+      },
+      {
+        "processId": 26000,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 46850048,
+        "privateBytes": 13946880,
+        "cpuSeconds": 9.671875,
+        "handles": 341,
+        "threads": 18,
+        "fractionOfRecordedTreePrivateBytes": 0.002331608878602267
+      },
+      {
+        "processId": 45356,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 24170496,
+        "privateBytes": 7659520,
+        "cpuSeconds": 0.046875,
+        "handles": 184,
+        "threads": 9,
+        "fractionOfRecordedTreePrivateBytes": 0.0012805017923601292
+      },
+      {
+        "processId": 47140,
+        "parentProcessId": 47336,
+        "name": "msedgewebview2.exe",
+        "workingSetBytes": 17276928,
+        "privateBytes": 2990080,
+        "cpuSeconds": 0.046875,
+        "handles": 177,
+        "threads": 8,
+        "fractionOfRecordedTreePrivateBytes": 0.0004998750312421895
+      },
+      {
+        "processId": 36536,
+        "parentProcessId": 39484,
+        "name": "conhost.exe",
+        "workingSetBytes": 9457664,
+        "privateBytes": 1425408,
+        "cpuSeconds": 0,
+        "handles": 100,
+        "threads": 2,
+        "fractionOfRecordedTreePrivateBytes": 0.00023829659023600263
+      },
+      {
+        "processId": 44268,
+        "parentProcessId": 47036,
+        "name": "conhost.exe",
+        "workingSetBytes": 8347648,
+        "privateBytes": 1236992,
+        "cpuSeconds": 0.015625,
+        "handles": 98,
+        "threads": 2,
+        "fractionOfRecordedTreePrivateBytes": 0.000206797615664577
+      },
+      {
+        "processId": 11056,
+        "parentProcessId": 10256,
+        "name": "conhost.exe",
+        "workingSetBytes": 8339456,
+        "privateBytes": 1232896,
+        "cpuSeconds": 0.03125,
+        "handles": 98,
+        "threads": 2,
+        "fractionOfRecordedTreePrivateBytes": 0.00020611285534780687
+      }
+    ]
+  },
+  "scope": "Recorded native app descendants grouped by PID, parent PID and name; process creation identities were not sampled, so PID reuse is not independently excluded. Every aggregate sum is checked against its recorded process rows. Private committed bytes and resident working set are distinct. Shared working-set pages may be counted more than once; GPU, sibling recorder/examiner/playback and pre-existing non-child services are excluded. Temporal halves retain startup and unequal samples; no invented warm-up cutoff, leak diagnosis, significance threshold or causal latency attribution."
+}

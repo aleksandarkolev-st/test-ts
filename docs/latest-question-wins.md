@@ -41,7 +41,11 @@ does not establish the provider's compute cost or guarantee an improved p95.
 Protocol fixtures cover replacement without an obsolete input echo, a second
 correction after replacement, a current inference lasting beyond the stale
 grace period, literal-reference preservation, retired-thread output rejection,
-and finite-budget exhaustion with terminal cleanup. Compilation and execution
-are pending while the unchanged baseline hour and pressure recordings run.
-No latency improvement or independent accuracy result is claimed for this
-candidate yet.
+and finite-budget exhaustion with terminal cleanup. All 17 non-live Codex
+protocol tests passed in the real compiled crate on 2026-10-11. The first run
+recorded 14 passes and three fixture failures because blocking dispatch ran
+inside Tokio; the fixture now uses a dedicated reader thread, matching the
+real transport. Both attempts and source fingerprints are retained under
+`artifacts/deep-interview-v71/candidate-tests`. Native balanced audio
+comparisons and independent accuracy reviews remain pending. No latency
+improvement is claimed for this candidate yet.

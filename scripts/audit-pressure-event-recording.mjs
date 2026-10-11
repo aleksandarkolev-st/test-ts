@@ -41,7 +41,7 @@ const report={recordedAt:new Date().toISOString(),journalSha256:sha256(journalBy
  observer,clocksValid,clockOffsetMs:clocksValid?{low:offsetLow,high:offsetHigh}:null,eventCounts,
  instrumentation:{observerStartedAfterPlaybackMs:Date.parse(observer.startedAt)-pressure.playback?.submitBeforeHostMs,
   initialReadBackfilledRetainedEvents:true,
-  scope:'The additional observer began during playback and read previously retained events. Its CPU/memory and CDP polling are extra instrumentation; native process-tree and main recorder measurements exclude this separate observer. Timing drift across its start is not an isolated model or app effect.'},
+  scope:'Observer start relative to playback is recorded numerically above. Its initial read includes previously retained events. Its CPU/memory and CDP polling are extra instrumentation; native process-tree and main recorder measurements exclude this separate observer. Timing drift across its start is not an isolated model or app effect.'},
  coverage:{retainedEvents:events.length,initialReadStartsAtNativeEventIndex:records.find(r=>r.kind==='events')?.fromIndex,
   firstFinalTranscript:finalTranscripts[0],lastFinalTranscript:latestFinal,lastSourceEndpointHostMs:lastEndpoint,
   lastSuccessfulReadAfterLastSourceEndpointMs:lastEndpoint?observer.lastSuccessfulHostMs-lastEndpoint.high:null,

@@ -14,7 +14,9 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 // It adds no keyword, answer, or case routing to the application.
 const digest=createHash('sha256');for await(const chunk of createReadStream(file))digest.update(chunk);
 const journalSha256=digest.digest('hex'),{row,text}=await extractRecordedRow(file,round);
-const completed=JSON.parse(await readFile(file));assert.equal(completed.status,'complete');assert(completed.stoppedCleanly);
+const completedBytes=await readFile(file);assert.equal(hash(completedBytes),journalSha256,'Journal changed while checking its completion');
+const completed=JSON.parse(completedBytes);assert.equal(completed.status,'complete');assert(completed.stoppedCleanly);
+assert.deepEqual(row,completed.rows.find(candidate=>candidate.round===round),'Bounded extraction must match the actual recorded row');
 if(selectionFile){
  const selections=JSON.parse(await readFile(selectionFile)),selected=selections.checks.find(item=>path.resolve(item.file)===path.resolve(file)&&item.round===round);
  assert(selected,'Code check selection must bind this source and row');
@@ -33,7 +35,8 @@ try{
  console.log(JSON.stringify({cached:true,file:path.join(out,'source-bound-check.json'),status:prior.status,failures:prior.oracle?.failures??null}));
  process.exit(0);
 }catch(error){if(error.code!=='ENOENT')throw error;}
-await mkdir(out);const codeFile=path.join(out,'recorded.py'),oracleFile=path.join(out,'oracle.json');
+await mkdir(path.dirname(out),{recursive:true});await mkdir(out);
+const codeFile=path.join(out,'recorded.py'),oracleFile=path.join(out,'oracle.json');
 await writeFile(codeFile,blocks[0].text,{flag:'wx'});
 const checkerFile='.local/verify-recorded-graph-code-v71.py',checker=await readFile(checkerFile);
 const startedAt=new Date().toISOString();let stdout='',stderr='';

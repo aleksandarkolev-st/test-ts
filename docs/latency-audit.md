@@ -1,6 +1,6 @@
 # Live response latency audit
 
-The current measurements use **gpt-6.1-sol, low reasoning, T24E390 output and no microphone**. Three fresh synthetic interviews ran for at least an hour each. Their [completed recording summary](evidence/completed-hour-measurements-v71.json) retains unanswered and erroneous turns:
+The current measurements use **gpt-6.1-sol, low reasoning, T24E390 output and no microphone**. Three fresh synthetic interviews ran for at least an hour each. All recordings and reviews are complete; both main and the separate architecture candidate are [published to GitHub with verified remote heads](evidence/git-publication-v71.json). Their [completed recording summary](evidence/completed-hour-measurements-v71.json) retains unanswered and erroneous turns:
 
 | Interview | Recorded turns | Visible retained words | Median | Sample p95 | Maximum |
 | --- | ---: | ---: | ---: | ---: | ---: |

@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-10-11T15:20:46.925Z",
+  "origin": "https://github.com/aleksandarkolev-st/test-ts.git",
+  "branches": [
+    {
+      "branch": "main",
+      "localCommit": "fc3727971eccc32f29b92e51f83acc3a3698ce2d",
+      "remoteCommit": "fc3727971eccc32f29b92e51f83acc3a3698ce2d",
+      "matched": true
+    },
+    {
+      "branch": "fix/latest-question-wins",
+      "localCommit": "c359e4da5f240465b3148378c06bda9baf29bba1",
+      "remoteCommit": "c359e4da5f240465b3148378c06bda9baf29bba1",
+      "matched": true
+    }
+  ],
+  "status": "remote_heads_verified",
+  "sourceAudit": {
+    "file": "docs/evidence/measured-goal-scope-audit-v71.json",
+    "sha256": "0470f17bccb70cdb8ad0fb7b27e5f0815dd478e7023f876cc77a5591f01b8a2b"
+  },
+  "scope": "Published branch heads at verification time. Later documentation commits may advance main. Recording/review completion does not certify all expected product behaviors or universal candidate improvement.",
+  "allRequiredProductBehaviorsDemonstrated": false,
+  "candidateUniversalImprovementEstablished": false
+}

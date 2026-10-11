@@ -43,6 +43,12 @@ for(let block=0;block<3;block++){
     : 'Audit your reasoning across this meeting: select a CUDA synchronization claim and a numerical-stability claim, state the precise contract of each, and give a changed condition that invalidates it. If you made a wrong earlier claim, identify the exact statement and correct it rather than defending it.'});
  turns.push({name:`hour-${block+1}-why`,atMs:block*3600000+3540000,question:'Why?',ordinaryFollowup:true});
 }
+for(const [name,atMs] of [['ninety-minute',5400000],['late-third-hour',10440000]]){
+ turns.push({name:`${name}-exact-original-collective`,atMs,referenceTurn:'hour-1-saved-audio-3',
+  question:'Return to {{function}}, the original nineteen-lane device function from the first hour, before the later restriction forbidding a final broadcast. Repeat its complete original code fence exactly, including comments, identifiers and addition order. Do not substitute a different reduction algorithm. Then state whether a caller with no partner still executes a collective.'});
+ turns.push({name:`${name}-collective-reasoning`,atMs:atMs+45000,referenceTurn:'hour-1-saved-audio-3',
+  question:'For the original {{function}} you just recalled, identify the actual shuffle source chosen by a lane with no partner. Prove why it is participating and why that lane does not double-count its own input. Use the exact original code, not the later no-broadcast variant.'});
+}
 turns.push({name:'three-hour-original-recall',atMs:10800000,
  question:'After three hours, repeat the original first-hour Foo function exactly, then its corrected version separately. Recall the original Delta decision, Sigma\'s initial decision and its correction. Distinguish exact recognized source facts from any uncertainty or suggestion. Explain the branch result at -1 in each code version.'});
 turns.sort((a,b)=>a.atMs-b.atMs);

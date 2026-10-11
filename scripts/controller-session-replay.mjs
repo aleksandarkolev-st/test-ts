@@ -10,6 +10,7 @@ import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
 import {changedJobObservation} from './lib/deep-observations.mjs';
 import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
 import {servedRenderer} from './lib/served-renderer.mjs';
+import {recordedCodeReference} from './lib/recorded-code-reference.mjs';
 if(process.argv[2]==='--stop'){
  const connection=await connectNativePages(9251);
  try{await connection.main.evaluate(()=>window.__TAURI_INTERNALS__.invoke('stop_meeting'));}finally{connection.close();}
@@ -69,7 +70,8 @@ try {
   journal.rows.push(row);await persist();console.log(JSON.stringify({row:journal.rows.length,name:row.name,phase:row.phase,error:row.error,firstWord:row.firstStreamedWordMeasurement?.firstRetainedVisibleStreamedWord?.latencyMs??null,archive:journal.archive}));
   return row;
  };
- for(const [index,item]of plan.turns.entries()){
+ for(const [index,template]of plan.turns.entries()){
+  const item={...template,...recordedCodeReference(template,journal.rows)};
   if(item.atMs!=null){while(Date.now()-start<item.atMs)await sleep(Math.min(1000,item.atMs-(Date.now()-start)));}
   if(item.afterDisplayed){const previous=journal.rows.at(-1),end=Date.now()+120000;let met=false;while(Date.now()<end){const state=await invoke('acceptance_jobs');const target=state.jobs.filter(j=>j.confirmed&&j.question.detectedAt>=previous.nativeStartedAt).at(-1);if(target&&await connection.overlay.evaluate(id=>window.deepPaintSamples.some(p=>p.questionId===id&&p.visible&&p.visibleEnd-p.visibleStart>25),target.question.id)){met=true;break;}await sleep(50);}item.displayedConditionMet=met;}
   const before=await anchor(),eventOffset=await connection.main.evaluate(()=>window.replayEvents.length),row={round:index+1,...item,question:item.question,sourceBinding:item.sourceBinding??null,startedHostMs:Date.now(),applicationAgeMs:Date.now()-Date.parse(journal.startedAt),nativeStartedAt:before.nativeMs,runningAtSubmission:(await invoke('acceptance_jobs')).jobs.filter(j=>j.running).map(j=>j.question.id)};

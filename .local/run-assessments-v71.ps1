@@ -89,7 +89,7 @@ foreach($taskSource in $taskSources){
  }
  if($taskSource -notmatch 'pressure-review-input.json$'){
   if(!(Test-Path -LiteralPath ($taskParent+'/architecture-audit-v71.json'))){
-   if($taskSource -match 'architecture-comparison/'){
+   if($taskSource -match 'architecture-comparison[\\/]'){
     node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent --numeric-only
    }else{
     node --max-old-space-size=6144 .local/analyze-architecture-v71.mjs $taskParent

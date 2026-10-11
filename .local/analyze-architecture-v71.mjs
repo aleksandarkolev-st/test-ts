@@ -8,8 +8,11 @@ const root=path.resolve(directory);assert(root.startsWith(process.cwd()+path.sep
 const snapshot=process.argv.includes('--snapshot'),file=path.join(root,'interview.json');
 if(snapshot&&(await stat(file)).size>8*1024*1024){console.log(JSON.stringify({deferred:true,reason:'Avoid parsing a large live recorder journal during measured inference',file}));process.exit(0);}
 const bytes=await readFile(file),journal=JSON.parse(bytes),hash=x=>createHash('sha256').update(x).digest('hex');
-const numericOnly=process.argv.includes('--numeric-only');
-const sourceRoot=path.resolve(numericOnly?(journal.sourceRoot??process.cwd()):process.cwd());
+const sourceRoot=path.resolve(journal.sourceRoot??process.cwd());
+// A recording can declare a different, immutable source checkout. Validate
+// that checkout's hashes without applying baseline-specific source assertions.
+// This selection uses provenance, never the question or recording case name.
+const numericOnly=process.argv.includes('--numeric-only')||sourceRoot!==process.cwd();
 assert(sourceRoot===process.cwd()||sourceRoot.startsWith(process.cwd()+path.sep),'Source root must remain in the workspace');
 assert(snapshot||(journal.status==='complete'&&journal.stoppedCleanly),'Final architecture analysis requires a clean completed recording');
 const sourceFiles=['src-tauri/src/openai/codex.rs','src-tauri/src/openai/timing.rs','src-tauri/src/runtime.rs','src-tauri/src/meeting/scheduler.rs'];

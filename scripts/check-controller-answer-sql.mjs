@@ -5,7 +5,7 @@ import {readFile,writeFile,mkdir,access} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {recordedSqlTransaction,repeatableReadControlBegin} from './lib/recorded-sql-transaction.mjs';
+import {recordedSqlTransaction,recordedSqlProgram,repeatableReadControlBegin} from './lib/recorded-sql-transaction.mjs';
 const [journalFile,specFile,outDir]=process.argv.slice(2);
 assert(journalFile&&specFile&&outDir,'JOURNAL SPECS OUTPUT');
 const root=process.cwd(),out=path.resolve(outDir);assert(out.startsWith(root+path.sep));
@@ -46,7 +46,10 @@ try{
  for(const check of spec.checks){
   const row=j.rows.find(r=>r.round===check.round);assert(row);const blocks=[...row.answer.matchAll(/```sql\s*\n([\s\S]*?)```/gi)].map(m=>m[1]);
   const result={round:row.round,answerSha256:sha(row.answer),scope:'Actual unchanged SQL in PostgreSQL, with BEGIN/body/COMMIT sent separately to force overlap. Isolated synthetic database; no source repairs.',trials:[]};results.push(result);
-  const setup=blocks[check.setupBlock],sources=[blocks[check.aliceBlock],blocks[check.bobBlock]];
+  const program=check.programBlock==null?null:recordedSqlProgram(blocks[check.programBlock]??'');
+  if(check.programBlock!=null&&(!program||program.transactions.length!==2)){result.failure='Unsupported single-fence setup/two-transaction layout; no source repair';continue;}
+  const setup=program?.setup??blocks[check.setupBlock],sources=program?.transactions??[blocks[check.aliceBlock],blocks[check.bobBlock]];
+  result.sourceSelection=program?'single_fence_top_level_statement_boundaries':'separate_fences';
   if(setup==null||sources.some(s=>s==null)){result.failure='Required complete SQL fences absent';continue;}
   result.sourceSha256=[setup,...sources].map(sha);
   const parts=sources.map(recordedSqlTransaction);

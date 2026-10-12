@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {recordedSqlTransaction,repeatableReadControlBegin} from '../lib/recorded-sql-transaction.mjs';
+import {recordedSqlTransaction,recordedSqlProgram,repeatableReadControlBegin} from '../lib/recorded-sql-transaction.mjs';
 test('comments and procedural bodies survive unchanged scheduling boundaries',()=>{
  const source='-- Alice\nBEGIN ISOLATION LEVEL SERIALIZABLE;\nDO $$ BEGIN PERFORM 1; END; $$;\nCOMMIT; -- end\n';
  const parts=recordedSqlTransaction(source);assert(parts);
@@ -22,4 +22,15 @@ test('a comment cannot masquerade as a COMMIT and comment semicolons cannot spli
  const source='/* nested /* ; */ comment */ BEGIN /* ; */ ISOLATION LEVEL SERIALIZABLE;\nSELECT $$COMMIT;$$, \'semicolon;\';\nCOMMIT;';
  const parts=recordedSqlTransaction(source);assert(parts);assert.equal(parts.begin+parts.body+parts.commit,source);
  assert(parts.begin.includes('ISOLATION LEVEL SERIALIZABLE;'));assert(parts.body.includes('SELECT $$COMMIT;$$'));
+});
+
+test('single-fence setup and concurrent transaction sources preserve every byte',()=>{
+ const source='-- setup\nCREATE TABLE items (id int);\n-- first\nBEGIN ISOLATION LEVEL SERIALIZABLE;\nDO $$ BEGIN PERFORM \'COMMIT;\'; END; $$;\nCOMMIT;\n-- second\nBEGIN ISOLATION LEVEL SERIALIZABLE;\nSELECT 2;\nCOMMIT; -- trailing\n';
+ const program=recordedSqlProgram(source);assert(program);assert.equal(program.transactions.length,2);
+ assert.equal(program.setup+program.transactions.join(''),source);
+ for(const transaction of program.transactions)assert(recordedSqlTransaction(transaction));
+});
+
+test('ambiguous, nested and incomplete single-fence transactions are rejected',()=>{
+ for(const source of ['BEGIN; SELECT 1;','BEGIN; BEGIN; SELECT 1; COMMIT; COMMIT;','CREATE TABLE x(id int); COMMIT;','BEGIN; SELECT 1; COMMIT; DROP TABLE x;','BEGIN; SELECT 1; COMMIT; SELECT 2; BEGIN; SELECT 3; COMMIT;'])assert.equal(recordedSqlProgram(source),null);
 });

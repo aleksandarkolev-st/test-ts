@@ -40,3 +40,25 @@ export function repeatableReadControlBegin(begin){
  const start=match.index+match[0].length-match[1].length;
  return begin.slice(0,start)+'REPEATABLE READ'+begin.slice(start+match[1].length);
 }
+
+// A single answer fence may contain setup and multiple complete transactions.
+// Split only at top-level statements; preserve every original source byte.
+export function recordedSqlProgram(source){
+ const lex=lexicalBoundaries(source);if(!lex)return null;
+ const transactions=[];let setup=null,start=0,transactionStart=null;
+ for(const end of lex.ends){
+  const statement=lex.masked.slice(start,end);
+  if(/^\s*BEGIN\b[\s\S]*;\s*$/i.test(statement)){
+   if(transactionStart!=null)return null;
+   if(setup==null)setup=source.slice(0,start);
+   transactionStart=start;
+  }else if(/^\s*COMMIT\s*;\s*$/i.test(statement)){
+   if(transactionStart==null)return null;
+   transactions.push(source.slice(transactionStart,end));transactionStart=null;
+  }else if(transactionStart==null&&setup!=null)return null;
+  start=end;
+ }
+ if(transactionStart!=null||lex.masked.slice(start).trim()||setup==null||!transactions.length)return null;
+ transactions[transactions.length-1]+=source.slice(start);
+ return {setup,transactions};
+}

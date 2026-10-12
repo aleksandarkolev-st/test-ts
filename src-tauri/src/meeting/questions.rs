@@ -99,9 +99,12 @@ pub struct QuestionDetector {
     asr_pending: bool,
     partial: String,
     final_segments:Vec<(String,String)>,
+    minimum_remote_started_at:u64,
 }
 impl QuestionDetector {
+    pub fn remote_source_current(&self,started_at:u64)->bool {started_at>=self.minimum_remote_started_at}
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
+        if source==SpeakerSource::Remote&&!self.remote_source_current(now){return false;}
         let mut resumed=false;
         match source {
             SpeakerSource::Remote => {
@@ -147,6 +150,7 @@ impl QuestionDetector {
         resumed
     }
     pub fn speech_ended(&mut self, source: SpeakerSource, now: u64) {
+        if source==SpeakerSource::Remote&&!self.remote_source_current(now){return;}
         match source {
             SpeakerSource::Remote => {
                 self.remote_speaking = false;
@@ -164,6 +168,7 @@ impl QuestionDetector {
         if segment.source != SpeakerSource::Remote {
             return false;
         }
+        if !self.remote_source_current(segment.started_at){return false;}
         if self.conversation_endpoints && segment.final_ {
             if let Some(index)=self.final_segments.iter().position(|(id,_)|id==&segment.id) {
                 if self.final_segments[index].1==segment.text.trim(){return false;}
@@ -297,16 +302,46 @@ impl QuestionDetector {
                 .stopped_at
                 .is_some_and(|t| now.saturating_sub(t) <= 3000)
     }
+    /// A new typed request supersedes older remote drafts, not their ledger.
+    /// Delayed ASR/VAD for those floors must not take the newer request's focus.
+    /// Answer-now on the current spoken floor deliberately does not use this.
+    pub fn supersede_remote_before(&mut self,now:u64) {
+        self.minimum_remote_started_at=self.minimum_remote_started_at.max(now);
+        self.clear();
+    }
     pub fn clear(&mut self) {
         let semantic_intent=self.semantic_intent;
         let independent_asr_endpoint=self.independent_asr_endpoint;
         let conversation_endpoints=self.conversation_endpoints;
-        *self = Self {semantic_intent,independent_asr_endpoint,conversation_endpoints,..Self::default()};
+        let minimum_remote_started_at=self.minimum_remote_started_at;
+        *self = Self {semantic_intent,independent_asr_endpoint,conversation_endpoints,minimum_remote_started_at,..Self::default()};
     }
 }
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn new_typed_focus_retires_old_drafts_and_delayed_finals_only() {
+        let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut old=s("Earlier unfinished request");old.started_at=100;old.ended_at=200;q.transcript(&old);
+        q.supersede_remote_before(300);
+        old.ended_at=500;old.text="Earlier request with its delayed correction".into();
+        assert!(!q.transcript(&old));assert!(q.confirm(1000).is_none());
+        assert!(!q.speech_started(SpeakerSource::Remote,100));assert!(q.remote_turn_started_at.is_none());
+        q.speech_started(SpeakerSource::Remote,600);
+        let mut current=s("Why?");current.id="current".into();current.started_at=600;current.ended_at=800;q.transcript(&current);
+        assert!(!q.transcript(&old),"An obsolete revision must not change the new floor");
+        q.speech_ended(SpeakerSource::Remote,800);
+        assert_eq!(q.confirm(1000).unwrap().0,"Why?");
+    }
+    #[test]
+    fn clearing_a_draft_keeps_its_retirement_fence_until_a_new_session() {
+        let mut q=QuestionDetector{semantic_intent:true,..Default::default()};q.supersede_remote_before(300);q.clear();
+        assert!(!q.remote_source_current(100));assert!(q.remote_source_current(300));
+        q.speech_started(SpeakerSource::Self_,100);assert!(q.self_speaking);
+        let fresh=QuestionDetector::default();assert!(fresh.remote_source_current(100));
+    }
     #[test]
     fn explicit_acceptance_bypasses_quiet_wait_without_inventing_finality() {
         let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};

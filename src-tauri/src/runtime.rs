@@ -174,7 +174,7 @@ fn emit(app: &tauri::AppHandle, name: &str, payload: impl Serialize) {
     );
 }
 fn publish(app: &tauri::AppHandle, engine: &mut Engine, view: &Mutex<Snapshot>) {
-    engine.view.can_answer_now=engine.view.active&&!engine.view.paused&&engine.view.status!="error"&&engine.detector.can_accept_now();
+    engine.view.can_answer_now=conversation_input_enabled(engine)&&engine.detector.can_accept_now();
     engine.view.revision += 1;
     *view.lock().unwrap() = engine.view.clone();
     let _ = app.emit("copilot:state", &engine.view);
@@ -328,7 +328,7 @@ async fn actor(
                         }
                     }}
                 }},
-                Control::AnswerNow(expected)=>{if let Some(s)=session.as_ref(){if !engine.view.paused&&engine.view.status!="error"&&answers.candidate.as_deref()==Some(expected.as_str()) {
+                Control::AnswerNow(expected)=>{if let Some(s)=session.as_ref(){if conversation_input_enabled(&engine)&&answers.candidate.as_deref()==Some(expected.as_str()) {
                     let now=s.clock.elapsed().as_millis()as u64;
                     if let Some((question,stopped))=engine.detector.confirm_now(now) {
                         cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
@@ -344,7 +344,7 @@ async fn actor(
                     }
                 }}},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
-                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question,now,now,now,context);engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
+                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;accept_typed_question(&mut engine,&mut answers,question,now);drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
                 Control::Expand(expected)=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone().filter(|q|expected.as_ref().map_or(true,|id|q.id==*id)){let now=s.clock.elapsed().as_millis()as u64;if let Some(id)=answers.expand(&q.id,now){engine.view.expanded=true;cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}engine.context.ledger.accept(&id,&q.text,now);drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}}},
                 Control::Project(path)=>{if let Some(s)=session.as_ref(){
@@ -370,6 +370,9 @@ async fn actor(
                             "startedAt":started,"endedAt":ended,"observedAt":now}));
                     },
                     InputEvent::SpeechStarted(source,t)=>{
+                        if source==SpeakerSource::Remote&&!engine.detector.remote_source_current(t) {
+                            emit(&app,"speech.started",serde_json::json!({"source":source,"timestamp":t,"ignoredForFocus":true}));continue;
+                        }
                         intent_gate.invalidate();
                         if source==SpeakerSource::Self_ {answers.resumed();}
                         let resumed=engine.detector.speech_started(source,t);
@@ -388,10 +391,12 @@ async fn actor(
                         emit(&app,"speech.activity",serde_json::json!({"source":source,"timestamp":t,"quiet":quiet,"observedAt":now}));
                     },
                     InputEvent::Transcript(segment)=>{
-                        if segment.source==SpeakerSource::Remote && !segment.final_ {speech_metrics.first_remote_partial_at.get_or_insert(now);speech_metrics.remote_partial_updates+=1;}
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         engine.context.ledger.observe(segment.clone(),now);
-                        if segment.final_{if segment.source==SpeakerSource::Remote{transcript_at=now;}if !segment.text.trim().is_empty(){engine.context.push(segment.clone());}}
+                        if segment.final_&&!segment.text.trim().is_empty(){engine.context.push(segment.clone());}
+                        if segment.source==SpeakerSource::Remote&&!engine.detector.remote_source_current(segment.started_at){continue;}
+                        if segment.source==SpeakerSource::Remote&&segment.final_{transcript_at=now;}
+                        if segment.source==SpeakerSource::Remote && !segment.final_ {speech_metrics.first_remote_partial_at.get_or_insert(now);speech_metrics.remote_partial_updates+=1;}
                         let candidate_changed=engine.detector.transcript(&segment);
                         #[cfg(all(feature="acceptance",debug_assertions))]
                         if segment.source==SpeakerSource::Remote&&std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
@@ -474,7 +479,7 @@ async fn actor(
                 }},
             }},
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
-                if !engine.view.paused&&engine.view.status!="error" {
+                if conversation_input_enabled(&engine) {
                     if let Some(classifier)=s.intent.as_ref() {
                         while let Some(status)=classifier.status(){emit(&app,"intent.worker",serde_json::json!({"status":status,"timestamp":now}));}
                         if let (Some(floor),Some(question))=(engine.detector.remote_turn_started_at,engine.detector.classifier_text()) {
@@ -760,6 +765,21 @@ fn load_settings(db: &Database) -> Result<Settings, String> {
             settings
         })
 }
+fn accept_typed_question(engine:&mut Engine,answers:&mut meeting::scheduler::Scheduler,question:String,now:u64)->String {
+    // A typed request is a new input, not a revision of an older speech draft.
+    // Retain all recognized source in the ledger but retire its focus eligibility.
+    answers.resumed();engine.detector.supersede_remote_before(now);
+    let context=engine.context.answer_context(&question);
+    let id=answers.confirm_explicit_with_context(question,now,now,now,context);
+    engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);
+    answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;id
+}
+fn conversation_input_enabled(engine:&Engine)->bool {
+    // A terminal answer failure is display state, not a failed speech pipeline.
+    // Pipeline failures pause the session explicitly; the next recognized
+    // request must still be accepted after an independent generation fails.
+    engine.view.active&&!engine.view.paused
+}
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
     if let Some(j)=answers.visible() {
@@ -773,6 +793,77 @@ fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
 #[cfg(test)]
 mod answer_view_tests {
     use super::*;
+    #[test]
+    fn typed_request_does_not_inherit_an_old_drafts_identity_or_lose_focus_to_its_final() {
+        let mut engine=Engine::default();engine.view.active=true;
+        engine.detector.semantic_intent=true;engine.detector.conversation_endpoints=true;
+        let mut answers=meeting::scheduler::Scheduler::default();
+        answers.local_revisions=true;answers.semantic_intent=true;
+        engine.detector.speech_started(meeting::SpeakerSource::Remote,100);
+        let mut old=meeting::TranscriptSegment{id:"older-source".into(),source:meeting::SpeakerSource::Remote,
+            text:"Earlier unfinished request".into(),started_at:100,ended_at:200,final_:true};
+        engine.context.ledger.observe(old.clone(),200);engine.detector.transcript(&old);
+        let draft=answers.propose(old.text.clone(),200,200,200);answers.find_mut(&draft).unwrap().latency.remote_speech_started_at=Some(100);
+        let draft_cancel=answers.find_mut(&draft).unwrap().cancel.clone();
+        let typed=accept_typed_question(&mut engine,&mut answers,"Newer typed request".into(),300);
+        assert_ne!(draft,typed);assert!(draft_cancel.is_cancelled());
+        assert!(answers.candidate.is_none());
+        assert_eq!(answers.find_mut(&typed).unwrap().latency.remote_speech_started_at,None);
+        assert_eq!(answers.next(300),Some(typed.clone()));
+        old.text="Earlier request with a delayed correction".into();old.ended_at=400;
+        engine.context.ledger.observe(old.clone(),450);assert!(!engine.detector.transcript(&old));
+        assert!(engine.detector.confirm(1000).is_none());sync_answers(&mut engine,&answers);
+        assert_eq!(engine.view.question.as_ref().unwrap().id,typed);
+        assert_eq!(engine.context.ledger.recognized.len(),2);
+        assert_eq!(engine.context.ledger.recognized[0].segment.text,"Earlier unfinished request");
+        assert_eq!(engine.context.ledger.recognized[1].segment.text,old.text);
+        assert!(engine.context.answer_context("Follow up").contains(&old.text));
+    }
+    #[test]
+    fn failed_answer_does_not_disable_next_spoken_request_or_erase_history() {
+        let mut engine=Engine::default();engine.view.active=true;
+        engine.detector.semantic_intent=true;engine.detector.conversation_endpoints=true;
+        let mut answers=meeting::scheduler::Scheduler::default();
+        let initial="Explain the invariant";
+        let old=answers.confirm_explicit_with_context(initial.into(),0,0,0,String::new());
+        engine.context.ledger.typed(&old,initial,0);
+        engine.context.ledger.generated(&old,initial,"The partial explanation");
+        assert!(engine.context.ledger.acknowledge_display(&old,"The partial explanation",20));
+        answers.next(0);
+        let job=answers.find_mut(&old).unwrap();
+        job.error=Some("Provider did not complete the response".into());
+        job.phase=meeting::scheduler::Phase::Complete;job.running=false;
+        job.latency.completed_at=Some(100);
+        sync_answers(&mut engine,&answers);
+        assert_eq!(engine.view.status,"error");assert!(engine.view.error.is_some());
+        assert!(conversation_input_enabled(&engine));
+
+        engine.detector.speech_started(meeting::SpeakerSource::Remote,1000);
+        let segment=meeting::TranscriptSegment{id:"next-spoken-request".into(),source:meeting::SpeakerSource::Remote,
+            text:"Why?".into(),started_at:1000,ended_at:1200,final_:true};
+        engine.context.ledger.observe(segment.clone(),1250);engine.detector.transcript(&segment);
+        engine.detector.speech_ended(meeting::SpeakerSource::Remote,1200);
+        assert!(engine.detector.can_accept_now());
+        let (question,stopped)=engine.detector.confirm(4000).unwrap();
+        let context=engine.context.answer_context_for_utterance(&question,Some(1000));
+        assert!(context.contains(initial));assert!(context.contains("The partial explanation"));
+        let current=answers.confirm_with_context(question,4000,stopped,1250,Some(context));
+        assert_ne!(old,current);assert_eq!(answers.next(4000),Some(current.clone()));
+        sync_answers(&mut engine,&answers);
+        assert!(engine.view.error.is_none());assert_eq!(engine.view.question.as_ref().unwrap().id,current);
+        assert!(answers.find_mut(&old).unwrap().error.is_some());
+        assert_eq!(engine.context.ledger.recognized[0].segment.text,"Why?");
+        assert_eq!(engine.context.ledger.suggestions[0].generated,"The partial explanation");
+    }
+    #[test]
+    fn stopped_or_paused_capture_still_blocks_conversation_input() {
+        let mut engine=Engine::default();engine.view.status="listening".into();
+        assert!(!conversation_input_enabled(&engine));
+        engine.view.active=true;engine.view.paused=true;
+        assert!(!conversation_input_enabled(&engine));
+        engine.view.status="error".into();engine.view.error=Some("Speech pipeline stopped".into());
+        assert!(!conversation_input_enabled(&engine));
+    }
     #[test]
     fn delayed_paint_ack_uses_paint_time_and_rejects_other_session_clocks() {
         assert_eq!(display_session_time(1000,100_000,99_800),Some(800));

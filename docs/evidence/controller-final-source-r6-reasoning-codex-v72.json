@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "scope": "Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.",
-  "reviewScope": "Every actual typed reasoning probe manually checked against its current source, execution trace, explicit assumptions and changed constraints. Provider fault recovery, source retention, answer reasoning and deferred executable code checks are distinct. No hidden chain-of-thought or expert-certification claim.",
+  "reviewScope": "Every actual typed reasoning probe manually checked against its current source, execution trace, explicit assumptions and changed constraints. Provider fault recovery, source retention, answer reasoning and separately attached executable code checks are distinct. No hidden chain-of-thought or expert-certification claim. Source-bound unchanged-code checks completed after capture and are attached to compact evidence. Strict Python identifier/status failures remain failures; actual F numerical diagnostics and CPU CUDA harnesses are separately scoped.",
   "journalFile": "artifacts\\controller-v72\\native\\final-source-r6-reasoning-codex\\interview.json",
   "journalSha256": "141b83e169f4c4afa1c3eaaf9d5c7dc355e5f6b70ec76fcb7546fa8052e18304",
-  "reviewSha256": "43e24a8d219bd61cc3095394ab0c1b955800fe2f44a9931eff68340e442054f6",
+  "reviewSha256": "025c682c4291ed419c4e3551b885c8317a294b23a59e121a5120a75b060f06e1",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
@@ -746,7 +746,91 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-reasoning-codex-cpp\\results.json",
+      "sha256": "452cb24e2dc2cdad878de1e02882f95bef95ede022dd73317021fa0b1668a662",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/final-source-r6-reasoning-codex/interview.json",
+        "journalSha256": "141b83e169f4c4afa1c3eaaf9d5c7dc355e5f6b70ec76fcb7546fa8052e18304",
+        "compiler": "C:/TheRock/build/bin/clang++.exe",
+        "graderSha256": "dd6be5e859618ade5e98758e184891c1ef46127a39364cdc69f75dab903e7faf",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "d96a8517c00c17345ecd8039a89177dd4f58611beb961cde060e7a08744651f8",
+            "kind": "cpp-self-test",
+            "scope": "Actual unmodified complete program with assertions enabled; separate manual invariant/proof review. Actual CAS workload400000, not older workload.",
+            "codeSha256": "8a79de548f08b65bb982d0df278b9568f33c2532076d8c0924e06325769e6447",
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-reasoning-codex-cpp\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "8a79de548f08b65bb982d0df278b9568f33c2532076d8c0924e06325769e6447",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 3,
+            "answerSha256": "e71f3a723fab36f89f7c77a426fdee4b1bafc78a36035d2dc94dc3a54861faa7",
+            "kind": "cpp-self-test",
+            "scope": "Actual unmodified complete program with assertions enabled; separate manual invariant/proof review. Actual CAS workload400000, not older workload.",
+            "codeSha256": "e9d44fa7ba4d8a3875767fa3086daae74de48412609431e902892d43cec33d96",
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-reasoning-codex-cpp\\round-3-block-0.cpp",
+            "harnessedSourceSha256": "e9d44fa7ba4d8a3875767fa3086daae74de48412609431e902892d43cec33d96",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 7,
+            "answerSha256": "a92849a461da550f94be55b3020649eb2b29201c8a987979283991f2f76c3b21",
+            "kind": "cpp-self-test",
+            "scope": "Actual unmodified complete program with assertions enabled; separate manual invariant/proof review. Actual CAS workload400000, not older workload.",
+            "codeSha256": "bf68cc1e7bafc480f6d35eb92b5fdbf8d20eaf05c2bd16154a5da64431addd23",
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-reasoning-codex-cpp\\round-7-block-0.cpp",
+            "harnessedSourceSha256": "bf68cc1e7bafc480f6d35eb92b5fdbf8d20eaf05c2bd16154a5da64431addd23",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed: 400000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

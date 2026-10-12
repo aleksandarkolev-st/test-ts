@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "scope": "Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.",
-  "reviewScope": "All actual native waveform and typed outcomes manually reviewed, including expected backchannel silence, failed planned interruption, no-transcript follow-up and deferred unchanged-code execution. Source WAV, live signed-in model inference and human-interview validation are distinct.",
+  "reviewScope": "All actual native waveform and typed outcomes manually reviewed, including expected backchannel silence, failed planned interruption, no-transcript follow-up and separately attached unchanged-code execution. Source WAV, live signed-in model inference and human-interview validation are distinct. Source-bound unchanged-code checks completed after capture and are attached to compact evidence. Strict Python identifier/status failures remain failures; actual F numerical diagnostics and CPU CUDA harnesses are separately scoped.",
   "journalFile": "artifacts\\controller-v72\\native\\final-source-r6-behavior-codex\\interview.json",
   "journalSha256": "6f0481680f6864c01337c61d9abbf4d80c4541fbe04eb808368db3268167a0c3",
-  "reviewSha256": "c89fbdabe8309c0823633bbe434b330637d4c7423744e57384b11f18612db406",
+  "reviewSha256": "4df17c5d4b0733c78ad533e2bf04a8c37630af35670b77e0293788fb1a99fa08",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
@@ -745,7 +745,47 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-behavior-codex-cpp\\results.json",
+      "sha256": "1a5a135b6370a662090d56e00d77e2ac000f73397502348af9bf615dc3aa5120",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/final-source-r6-behavior-codex/interview.json",
+        "journalSha256": "6f0481680f6864c01337c61d9abbf4d80c4541fbe04eb808368db3268167a0c3",
+        "compiler": "C:/TheRock/build/bin/clang++.exe",
+        "graderSha256": "dd6be5e859618ade5e98758e184891c1ef46127a39364cdc69f75dab903e7faf",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 5,
+            "answerSha256": "bff0737655cdff631d756d94df7c4c6c1fe6ddb28bb5c314ee5566bac1aec759",
+            "kind": "cpp-self-test",
+            "scope": "Actual complete FIFO source/checks unchanged. Planned interruption failed; code execution cannot repair missing Why.",
+            "codeSha256": "d0ac5c98d039b37b797b34bd101ba11d35c0a3781851a5fcd76dcc5abacefa6e",
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-behavior-codex-cpp\\round-5-block-0.cpp",
+            "harnessedSourceSha256": "d0ac5c98d039b37b797b34bd101ba11d35c0a3781851a5fcd76dcc5abacefa6e",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

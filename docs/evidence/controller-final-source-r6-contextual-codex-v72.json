@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "scope": "Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.",
-  "reviewScope": "Manual unblinded review of all actual thirty typed native answers on the journal-bound frozen binary. Separate from native ASR and independent expert certification. Exact Foo execution remains separately required; first useful source body excludes Markdown fence delimiters.",
+  "reviewScope": "Manual unblinded review of all actual thirty typed native answers on the journal-bound frozen binary. Separate from native ASR and independent expert certification. Exact Foo execution remains separately required; first useful source body excludes Markdown fence delimiters. Source-bound unchanged-code checks completed after capture and are attached to compact evidence. Strict Python identifier/status failures remain failures; actual F numerical diagnostics and CPU CUDA harnesses are separately scoped.",
   "journalFile": "artifacts\\controller-v72\\native\\final-source-r6-contextual-codex\\interview.json",
   "journalSha256": "ad32f5fb11f577b27c581c5aa1b68f422a5b8b28386d9e9e4571d2a4d7c73c33",
-  "reviewSha256": "7ce1ff77089a63602be476d21fc370d9205c280022b41129fa520a7bd59d72e6",
+  "reviewSha256": "f776b6a99f00574c78e071361e5ce94026cc45c4009983d181f96c9a39e4a736",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
@@ -2132,7 +2132,71 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-contextual-codex-cpp\\results.json",
+      "sha256": "e6a27eff2acd1e3a7c04256746ff7ef9cb36e8c1f731b00acd779d2a0a093015",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/final-source-r6-contextual-codex/interview.json",
+        "journalSha256": "ad32f5fb11f577b27c581c5aa1b68f422a5b8b28386d9e9e4571d2a4d7c73c33",
+        "compiler": "C:/TheRock/build/bin/clang++.exe",
+        "graderSha256": "dd6be5e859618ade5e98758e184891c1ef46127a39364cdc69f75dab903e7faf",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "709a280b152e917c1d430c1e4fb3d5c51b3670c911a53ee3ed7921860e5b5516",
+            "kind": "foo-exact",
+            "scope": "Original byte-exact Foo contract plus independent integer oracle.",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactOriginal": true,
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-contextual-codex-cpp\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "d0353755fd0b9000db70a4a93cef2af60a3d5e7ce7f37e749fa9055817fda361",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 25,
+            "answerSha256": "caa642024d29f33ace8e7d876b7f75767ef61130931828218efc002348a5c77a",
+            "kind": "foo-exact",
+            "scope": "Original byte-exact Foo contract plus independent integer oracle.",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactOriginal": true,
+            "sourceFile": "artifacts\\controller-v72\\code\\stable-r2-final-source-r6-contextual-codex-cpp\\round-25-block-0.cpp",
+            "harnessedSourceSha256": "d0353755fd0b9000db70a4a93cef2af60a3d5e7ce7f37e749fa9055817fda361",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

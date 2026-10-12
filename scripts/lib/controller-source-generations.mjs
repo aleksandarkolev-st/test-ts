@@ -1,6 +1,8 @@
 // Offline evidence attribution only. Never changes an accepted request,
 // production focus, journal, model prompt or generation text.
 const finite = Number.isFinite;
+const acceptedTime=job=>finite(job.latency?.questionConfirmedAt)
+ &&(job.latency.questionConfirmedAt!==0||job.confirmed===true)?job.latency.questionConfirmedAt:null;
 
 export function playbackNativeBounds(row) {
  const p=row.audio?.playback;
@@ -23,7 +25,7 @@ export function sourceGenerationAudit(row,jobs,nextNativeStartedAt=Infinity) {
  const bounds=playbackNativeBounds(row),originalId=row.responseVersion?.split(':')[0]??null;
  const horizonStart=row.nativeStartedAt;
  const all=jobs.filter(job=>{
-  const accepted=job.latency?.questionConfirmedAt;
+  const accepted=acceptedTime(job);
   const detected=job.question?.detectedAt;
   return [accepted,detected].some(t=>finite(t)&&finite(horizonStart)&&t>=horizonStart&&t<nextNativeStartedAt)
    ||job.question?.id===originalId;
@@ -35,7 +37,7 @@ export function sourceGenerationAudit(row,jobs,nextNativeStartedAt=Infinity) {
     floor>=bounds.start.high&&floor<=bounds.end.low?'within_playback':'boundary_uncertain';
   }
   return {generationId:job.question.id,utteranceStartedAt:floor??null,
-   detectedAt:job.question.detectedAt,acceptedAt:job.latency?.questionConfirmedAt??null,
+   detectedAt:job.question.detectedAt,acceptedAt:acceptedTime(job),
    association,phase:job.phase,cancelled:job.cancelled??null,
    completedAt:job.latency?.completedAt??null,error:job.error??null};
  }).sort((a,b)=>(a.acceptedAt??a.detectedAt)-(b.acceptedAt??b.detectedAt)
@@ -43,8 +45,10 @@ export function sourceGenerationAudit(row,jobs,nextNativeStartedAt=Infinity) {
  // Select by input timing, never by success, nonempty text, confirmed flag or
  // cancellation. A newer cancelled request is still a requested outcome.
  const associated=all.filter(g=>g.association==='within_playback'&&finite(g.acceptedAt));
- const boundary=all.some(g=>g.association==='boundary_uncertain');
- const target=boundary?null:associated.at(-1)?.generationId??null;
+ const latest=associated.at(-1);
+ const boundary=all.some(g=>finite(g.acceptedAt)&&(g.association==='boundary_uncertain'
+  ||g.association==='unknown'&&(!latest||g.acceptedAt>=latest.acceptedAt)));
+ const target=boundary?null:latest?.generationId??null;
  return {originalGenerationId:originalId,playbackNativeBounds:bounds,generations:all,
   targetGenerationId:target,selectionChanged:target==null?null:target!==originalId,
   ambiguous:boundary||!target,

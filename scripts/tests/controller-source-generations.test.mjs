@@ -41,6 +41,19 @@ test('clock drift expands the envelope and next input horizon excludes later tur
  assert.equal(audit.targetGenerationId,'opening');assert.equal(audit.generations.length,1);
 });
 
+test('default zero on an unconfirmed draft is not an accepted conversational request',()=>{
+ const draft={...job('draft',40,0,'speculative'),question:{id:'draft',text:'Opaque local revision',detectedAt:40}};
+ const audit=sourceGenerationAudit(row,[draft],200);
+ assert.equal(audit.generations[0].acceptedAt,null);
+ assert.equal(audit.targetGenerationId,null);
+});
+
+test('a newer accepted generation with an unknown speech floor blocks confident attribution',()=>{
+ const audit=sourceGenerationAudit(row,[job('opening',20,25),job('unknown',null,120)],200);
+ assert.equal(audit.targetGenerationId,null);assert.equal(audit.ambiguous,true);
+ assert.equal(audit.generations.at(-1).association,'unknown');
+});
+
 test('observed multipart waveform regression preserves all three outcomes without a topic rule',async()=>{
  const fixture=JSON.parse(await readFile(new URL('../fixtures/controller-multipart-focus-v72.json',import.meta.url)));
  const audit=sourceGenerationAudit(fixture.row,fixture.jobs,fixture.nextNativeStartedAt);

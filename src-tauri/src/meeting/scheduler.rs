@@ -2,6 +2,7 @@
 use super::state::{CurrentQuestion, Latency};
 use serde::Serialize;
 use tokio_util::sync::CancellationToken;
+use std::sync::Arc;
 
 pub const BURST_MS: u64 = 200;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -10,6 +11,11 @@ pub enum Phase { Speculative, Confirmed, Superseded, Cancelled, Complete }
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct Row { pub id: String, pub text: String, pub state: Phase, pub queued: bool }
+#[derive(Clone,Default)]
+pub struct FrozenReferences {
+    pub project: Arc<String>,
+    pub screenshot: Option<Arc<String>>,
+}
 pub struct Job {
     /// Immutable per accepted frame. Never recycled for a corrected request.
     pub generation_id: String,
@@ -18,7 +24,9 @@ pub struct Job {
     pub retired_at: Option<u64>,
     pub output_observed_at: u64,
     pub detailed: bool,
+    pub explicit_request: bool,
     pub parent_generation_id: Option<String>,
+    pub references: Option<FrozenReferences>,
     pub question: CurrentQuestion, pub phase: Phase, pub running: bool,
     pub confirmed: bool, pub buffer: String, pub latency: Latency,
     pub error: Option<String>, pub cancel: CancellationToken, pub ready_at: u64,
@@ -140,12 +148,17 @@ impl Scheduler {
         let id=uuid::Uuid::new_v4().to_string();
         let ready_at=if self.active()==0 {now}else{now+BURST_MS};
         let (updates,_)=tokio::sync::watch::channel(crate::openai::codex::QuestionUpdate{acoustic_quiet:false,question:text.clone(),confirmed:false,context:None});
-        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,parent_generation_id:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
+        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,explicit_request:false,parent_generation_id:None,references:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
             latency:Latency{speech_stopped_at:stopped,transcript_final_at:transcript,request_sent_at:now,..Default::default()}});
         self.candidate=Some(id.clone());self.prune();id
     }
     pub fn confirm(&mut self,text:String,now:u64,stopped:u64,transcript:u64)->String {
         self.confirm_with_context(text,now,stopped,transcript,None)
+    }
+    pub fn confirm_explicit_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:String)->String {
+        let id=self.confirm_with_context(text,now,stopped,transcript,Some(context));
+        self.find_mut(&id).unwrap().explicit_request=true;
+        id
     }
     pub fn confirm_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
         if self.local_revisions {
@@ -187,6 +200,25 @@ impl Scheduler {
             }
         }
         id
+    }
+    /// Detailed work keeps the parent's accepted conversation snapshot. A
+    /// delayed expansion cannot take focus back from a newer accepted request.
+    pub fn expand(&mut self,parent_id:&str,now:u64)->Option<String> {
+        if self.visible()?.question.id!=parent_id{return None;}
+        let parent=self.jobs.iter().find(|job|job.question.id==parent_id)?;
+        let context=parent.updates.borrow().context.clone()?;
+        let references=parent.references.clone()?;
+        let (text,version,revision,utterance)=(parent.question.text.clone(),parent.context_version,parent.utterance_revision,parent.latency.remote_speech_started_at);
+        // An unrelated local ASR draft must not lend its identity to this
+        // explicit detailed request; its eventual accepted turn can supersede it.
+        self.candidate=None;
+        let id=self.confirm_with_context(text,now,now,now,Some(context));
+        let job=self.find_mut(&id).unwrap();
+        job.detailed=true;job.explicit_request=true;job.parent_generation_id=Some(parent_id.into());
+        job.references=Some(references);
+        job.context_version=version;job.utterance_revision=revision;
+        job.latency.remote_speech_started_at=utterance;
+        Some(id)
     }
     pub fn next(&mut self,now:u64)->Option<String>{
         if self.local_revisions {

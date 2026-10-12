@@ -26,7 +26,7 @@ export interface Snapshot {
   revision: number; active: boolean; paused: boolean;
   status: 'off' | 'loading' | 'listening' | 'question' | 'thinking' | 'answer' | 'error';
   question: CurrentQuestion | null; answer: string; error: string | null;
-  protection: boolean; expanded: boolean; manual: boolean; latency: Latency | null;
+  protection: boolean; expanded: boolean; manual: boolean; canAnswerNow?: boolean; latency: Latency | null;
   remoteLevel: number; selfLevel: number;
   project: { name: string; files: number; bytes: number; skipped: { path: string; reason: string }[] } | null;
   attachmentBusy: boolean;

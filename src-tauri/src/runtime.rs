@@ -124,9 +124,10 @@ enum Control {
     Pause,
     ManualOpen,
     Manual(String),
+    AnswerNow(String),
     Displayed(String,u64,String,usize,usize,u64),
     Dismiss,
-    Expand,
+    Expand(Option<String>),
     Project(Option<String>),
     ClearProject,
     Screenshot,
@@ -173,6 +174,7 @@ fn emit(app: &tauri::AppHandle, name: &str, payload: impl Serialize) {
     );
 }
 fn publish(app: &tauri::AppHandle, engine: &mut Engine, view: &Mutex<Snapshot>) {
+    engine.view.can_answer_now=engine.view.active&&!engine.view.paused&&engine.view.status!="error"&&engine.detector.can_accept_now();
     engine.view.revision += 1;
     *view.lock().unwrap() = engine.view.clone();
     let _ = app.emit("copilot:state", &engine.view);
@@ -326,10 +328,25 @@ async fn actor(
                         }
                     }}
                 }},
+                Control::AnswerNow(expected)=>{if let Some(s)=session.as_ref(){if !engine.view.paused&&engine.view.status!="error"&&answers.candidate.as_deref()==Some(expected.as_str()) {
+                    let now=s.clock.elapsed().as_millis()as u64;
+                    if let Some((question,stopped))=engine.detector.confirm_now(now) {
+                        cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
+                        let context=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);
+                        let id=answers.confirm_explicit_with_context(question,now,stopped,transcript_at,context);
+                        engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);
+                        let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);
+                        if let Some(job)=answers.find_mut(&id){job.explicit_request=true;job.context_version=engine.context.ledger.version;job.utterance_revision=revision;
+                            job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;
+                            job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;}
+                        emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now,"explicit":true}));
+                        drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                    }
+                }}},
                 Control::ManualOpen=>{if session.is_some(){engine.view.manual=true;hidden.store(false,Ordering::Release);window::show(&app,&hidden);window::set_manual(&app,true);publish(&app,&mut engine,&view);}},
-                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question,now,now,now,Some(context));engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
+                Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question,now,now,now,context);engine.context.ledger.typed(&id,&answers.find_mut(&id).unwrap().question.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
-                Control::Expand=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone(){engine.view.expanded=true;cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let context=engine.context.answer_context(&q.text);let id=answers.confirm_with_context(q.text.clone(),now,now,now,Some(context));if let Some(job)=answers.find_mut(&id){job.detailed=true;job.parent_generation_id=Some(q.id);}engine.context.ledger.accept(&id,&q.text,now);answers.find_mut(&id).unwrap().context_version=engine.context.ledger.version;drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
+                Control::Expand(expected)=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone().filter(|q|expected.as_ref().map_or(true,|id|q.id==*id)){let now=s.clock.elapsed().as_millis()as u64;if let Some(id)=answers.expand(&q.id,now){engine.view.expanded=true;cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}engine.context.ledger.accept(&id,&q.text,now);drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}}},
                 Control::Project(path)=>{if let Some(s)=session.as_ref(){
                     let path=path.unwrap_or_else(||s.settings.project_path.clone());
                     if path.trim().is_empty(){engine.view.error=Some("Choose a project folder in the main window first".into());publish(&app,&mut engine,&view);continue;}
@@ -447,12 +464,12 @@ async fn actor(
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
                 Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
                     project_request=None;engine.view.attachment_busy=screenshot_request.is_some();
-                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Give a concise overview of this project and explain its main architecture.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question.clone(),now,now,now,Some(context));engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Give a concise overview of this project and explain its main architecture.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     publish(&app,&mut engine,&view);
                 }},
                 Work::Screenshot(session_id,id,result)=>{if session.is_some(){window::show(&app,&hidden);}if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&screenshot_request.as_ref()==Some(&id)){
                     screenshot_request=None;engine.view.attachment_busy=project_request.is_some();
-                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Explain what is on this screen and help me with the visible task.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_with_context(question.clone(),now,now,now,Some(context));engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Explain what is on this screen and help me with the visible task.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
             }},
@@ -895,9 +912,14 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
         let selected_context=job.updates.borrow().context.clone().unwrap_or_else(||engine.context.answer_context_for_utterance(&job.question.text,job.latency.remote_speech_started_at));
         job.set_context(selected_context.clone());
         let updates=job.updates.subscribe();
-        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default());
-        let instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
-        let image=engine.screenshot_data.clone();let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
+        let references=job.references.get_or_insert_with(||meeting::scheduler::FrozenReferences {
+            project:Arc::new(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default()),
+            screenshot:engine.screenshot_data.clone().map(Arc::new),
+        }).clone();
+        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(references.project.as_ref().clone());
+        let mut instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
+        if job.explicit_request{instructions.push_str(" A user explicitly requested a response to the CURRENT QUESTION. Choose answer in the reply-intent protocol, including a clarifying answer if essential information is missing.");}
+        let image=references.screenshot;let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
         let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);trace.prompt_chars(input.render().chars().count());if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}
         trace.frame(&s.id,job.latency.remote_speech_started_at,job.utterance_revision,job.context_version,&job.generation_id,crate::openai::codex::context_key(&input.render()));
@@ -910,7 +932,7 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
             let mut prefix=meeting::provisional::Prefix::default();
             let result=async {let token=answer_token(&auth,&client,&cancel).await?;
                 tx.send(Work::Sent(id.clone(),clock.elapsed().as_millis()as u64)).await.map_err(|_|"Meeting receiver closed".to_string())?;
-                client.stream_question(&token,&model,&instructions,&input,image.as_deref(),cancel.clone(),updates,|event|{
+                client.stream_question(&token,&model,&instructions,&input,image.as_ref().map(|data|data.as_str()),cancel.clone(),updates,|event|{
                     #[cfg(all(feature="acceptance",debug_assertions))]
                     if std::env::var("COPILOT_TRACE_PROVISIONAL").as_deref()==Ok("1") {
                         match &event {
@@ -1066,6 +1088,7 @@ async fn action(
     app: tauri::AppHandle,
     rt: State<'_, Runtime>,
     action: String,
+    generation_id: Option<String>,
 ) -> Result<(), String> {
     match action.as_str() {
         "hide" => {
@@ -1083,8 +1106,9 @@ async fn action(
         }
         "pause" => send(&rt, Control::Pause).await,
         "manual" => send(&rt, Control::ManualOpen).await,
+        "answer_now" => send(&rt, Control::AnswerNow(generation_id.ok_or("Choose a current recognized request")?)).await,
         "dismiss" => send(&rt, Control::Dismiss).await,
-        "expand" => send(&rt, Control::Expand).await,
+        "expand" => send(&rt, Control::Expand(generation_id)).await,
         "project" => send(&rt, Control::Project(None)).await,
         "clear_project" => send(&rt, Control::ClearProject).await,
         "screenshot" => send(&rt, Control::Screenshot).await,
@@ -1167,7 +1191,7 @@ pub fn run() {
                 Code::Space => Control::ManualOpen,
                 Code::KeyX => Control::Dismiss,
                 Code::KeyM => Control::Pause,
-                Code::ArrowUp => Control::Expand,
+                Code::ArrowUp => Control::Expand(None),
                 Code::KeyP => Control::Project(None),
                 Code::F8 => Control::Screenshot,
                 _ => return,

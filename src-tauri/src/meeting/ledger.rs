@@ -94,12 +94,9 @@ impl Ledger {
             // code. A current/late generated tail is ineligible at the cutoff.
             if suggestion.completed_at.or(suggestion.interrupted_at).is_some_and(|at|at<cutoff){
                 let query=question.split(|c:char|!c.is_alphanumeric()&&c!='_').filter(|word|word.len()>=3).map(|word|word.to_lowercase()).collect::<Vec<_>>();
-                let parts=suggestion.generated.split("```").collect::<Vec<_>>();
-                for i in (1..parts.len().saturating_sub(1)).step_by(2){
-                    let code=parts[i];
-                    let matches=code.split(|c:char|!c.is_alphanumeric()&&c!='_').any(|identifier|query.iter().any(|word|word==&identifier.to_lowercase()));
-                    let exact=format!("```{code}```");
-                    let already_visible=suggestion.painted_ranges.iter().any(|(at,start,end)|*at<cutoff&&suggestion.generated[*start..*end].contains(&exact))||suggestion.displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,text)|text.as_str()).collect::<String>().contains(&exact);
+                for exact in closed_code_fences(&suggestion.generated){
+                    let matches=exact.split(|c:char|!c.is_alphanumeric()&&c!='_').any(|identifier|query.iter().any(|word|word==&identifier.to_lowercase()));
+                    let already_visible=suggestion.painted_ranges.iter().any(|(at,start,end)|*at<cutoff&&suggestion.generated[*start..*end].contains(exact))||suggestion.displayed.iter().filter(|(at,_)|*at<cutoff).map(|(_,text)|text.as_str()).collect::<String>().contains(exact);
                     if matches&&!already_visible {
                         items.push((suggestion.completed_at.or(suggestion.interrupted_at).unwrap(),format!("ARCHIVED EXACT GENERATED CODE [generation {}; may be incorrect; not evidence of speech or viewport visibility]\nQUESTION: {}\n{exact}",suggestion.id,suggestion.question)));
                     }
@@ -152,3 +149,29 @@ impl Ledger {
     }
 }
 fn label(source:SpeakerSource)->&'static str {match source{SpeakerSource::Remote=>"REMOTE",SpeakerSource::Self_=>"SELF"}}
+
+/// Return exact closed source slices. Literal backticks inside code do not
+/// delimit a fence; the closing marker must occupy its own line and be at
+/// least as long as the opening marker. Incomplete sources stay in the ledger.
+fn closed_code_fences(source:&str)->Vec<&str> {
+    let mut fences=Vec::new();let mut open:Option<(u8,usize,usize)>=None;let mut offset=0;
+    for line in source.split_inclusive('\n') {
+        let content=line.trim_end_matches(|c|c=='\r'||c=='\n');
+        let indent=content.bytes().take_while(|c|*c==b' ').count();
+        if indent<=3 {
+            let rest=&content[indent..];
+            if let Some(marker)=rest.as_bytes().first().copied().filter(|c|*c==b'`'||*c==b'~') {
+                let length=rest.bytes().take_while(|c|*c==marker).count();
+                if let Some((expected,minimum,start))=open {
+                    if marker==expected&&length>=minimum&&rest[length..].trim().is_empty(){
+                        fences.push(&source[start..offset+line.len()]);open=None;
+                    }
+                }else if length>=3&&(marker!=b'`'||!rest[length..].contains('`')) {
+                    open=Some((marker,length,offset));
+                }
+            }
+        }
+        offset+=line.len();
+    }
+    fences
+}

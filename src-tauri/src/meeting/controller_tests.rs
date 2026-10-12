@@ -19,6 +19,55 @@ fn why_during_output_preempts_without_waiting_for_an_obsolete_echo() {
     assert_eq!(c.next(10),Some(new));assert_eq!(c.active(),2);
 }
 #[test]
+fn explicit_request_accepts_final_text_and_supersedes_without_reclassifying_intent() {
+    let mut c=Scheduler::default();
+    let automatic=c.confirm_with_context("A statement".into(),0,0,0,Some("First snapshot".into()));
+    assert!(!c.find_mut(&automatic).unwrap().explicit_request);c.next(0);
+    let draft=c.propose("Incomplete local words".into(),1,1,1);
+    let explicit=c.confirm_explicit_with_context("A finalized statement".into(),2,1,1,"Exact earlier code".into());
+    assert_eq!(explicit,draft);assert_ne!(explicit,automatic);
+    assert!(c.find_mut(&automatic).unwrap().cancel.is_cancelled());
+    let job=c.find_mut(&explicit).unwrap();assert!(job.explicit_request);assert!(job.confirmed);
+    assert_eq!(job.updates.borrow().context.as_deref(),Some("Exact earlier code"));
+    assert_eq!(c.next(2),Some(explicit));
+}
+#[test]
+fn expansion_pins_parent_context_and_identity_while_a_new_transcript_is_local() {
+    let mut c=Scheduler::default();
+    let parent=c.confirm_with_context("Explain the exact code".into(),100,90,95,Some("Original accepted context and exact code".into()));
+    let job=c.find_mut(&parent).unwrap();job.context_version=17;job.utterance_revision=3;job.latency.remote_speech_started_at=Some(80);
+    job.references=Some(super::scheduler::FrozenReferences{project:std::sync::Arc::new("Original project snapshot".into()),screenshot:Some(std::sync::Arc::new("Original screenshot".into()))});
+    c.next(100);c.find_mut(&parent).unwrap().buffer="An unseen later generated tail".into();
+    let draft=c.propose("A later unaccepted correction".into(),110,110,110);
+    let detail=c.expand(&parent,120).unwrap();
+    assert_ne!(detail,parent);assert_ne!(detail,draft);
+    let job=c.find_mut(&detail).unwrap();assert!(job.detailed);assert!(job.explicit_request);assert_eq!(job.parent_generation_id.as_deref(),Some(parent.as_str()));
+    assert_eq!(job.context_version,17);assert_eq!(job.utterance_revision,3);assert_eq!(job.latency.remote_speech_started_at,Some(80));
+    assert_eq!(job.updates.borrow().context.as_deref(),Some("Original accepted context and exact code"));
+    assert_eq!(job.references.as_ref().unwrap().project.as_str(),"Original project snapshot");
+    assert_eq!(job.references.as_ref().unwrap().screenshot.as_ref().unwrap().as_str(),"Original screenshot");
+    assert!(c.find_mut(&parent).unwrap().cancel.is_cancelled());assert_eq!(c.next(120),Some(detail));assert_eq!(c.active(),2);
+}
+#[test]
+fn delayed_expansion_cannot_reactivate_an_old_parent_or_cancel_new_focus() {
+    let mut c=Scheduler::default();let old=c.confirm_with_context("Earlier question".into(),0,0,0,Some("Old context".into()));
+    c.next(0);let current=c.confirm_with_context("New focus".into(),10,10,10,Some("New context".into()));
+    let count=c.jobs.len();assert!(c.expand(&old,11).is_none());assert_eq!(c.jobs.len(),count);
+    assert_eq!(c.visible().unwrap().question.id,current);assert!(!c.find_mut(&current).unwrap().cancel.is_cancelled());
+}
+#[test]
+fn expansion_requires_a_frozen_parent_snapshot_and_supports_completed_parents() {
+    let mut c=Scheduler::default();let parent=c.confirm("Question".into(),0,0,0);
+    assert!(c.expand(&parent,1).is_none());
+    let job=c.find_mut(&parent).unwrap();job.set_context("Frozen source".into());
+    assert!(c.expand(&parent,1).is_none());
+    let job=c.find_mut(&parent).unwrap();job.references=Some(super::scheduler::FrozenReferences::default());job.phase=Phase::Complete;job.latency.completed_at=Some(2);
+    let detail=c.expand(&parent,3).unwrap();assert_eq!(c.visible().unwrap().question.id,detail);
+    assert_eq!(c.next(3),Some(detail.clone()));
+    let newer=c.confirm_with_context("Interrupt detail".into(),4,4,4,Some("Latest source".into()));
+    assert!(c.find_mut(&detail).unwrap().cancel.is_cancelled());assert_eq!(c.visible().unwrap().question.id,newer);
+}
+#[test]
 fn repeated_interruptions_bound_retirement_and_keep_only_latest_pending_intent() {
     let mut c=Scheduler::default();let a=c.confirm("A".into(),0,0,0);c.next(0);let b=c.confirm("B".into(),1,1,1);c.next(1);
     let mut latest=String::new();for now in 2..100{latest=c.confirm(format!("Correction {now}"),now,now,now);assert!(c.next(now).is_none());assert_eq!(c.active(),2);assert_eq!(c.rows().iter().filter(|r|r.queued).count(),1);}
@@ -105,6 +154,26 @@ fn growing_paint_history_references_source_once_instead_of_copying_prefixes() {
     assert_eq!(std::mem::size_of_val(&ledger.suggestions[0].painted_ranges[0]),24);
     assert!(ledger.context("Why?",Some(16_001)).contains(&"x".repeat(16_000)));
     assert!(!ledger.context("Why?",Some(16_001)).contains(&"x".repeat(16_001)));
+}
+#[test]
+fn archived_code_preserves_literal_fence_markers_and_crlf_without_reconstruction() {
+    let mut ledger=super::ledger::Ledger::default();
+    let exact="````cpp\r\nconst char* MarkerText() { return \"``` literal ~~~\"; }\r\n````\r\n";
+    ledger.generated("literal","Implement MarkerText",exact);ledger.terminal("literal",100,true);
+    let context=ledger.context("Recall exact MarkerText",Some(200));
+    assert!(context.contains(exact));assert_eq!(context.matches(exact).count(),1);
+    assert_eq!(ledger.suggestions[0].generated,exact);
+}
+#[test]
+fn archived_tilde_fences_are_exact_and_incomplete_fences_do_not_become_complete_code() {
+    let mut ledger=super::ledger::Ledger::default();
+    let exact="~~~rust\nfn TildeValue() -> i32 { 17 }\n~~~";
+    ledger.generated("tilde","Implement TildeValue",exact);ledger.terminal("tilde",100,false);
+    assert!(ledger.context("Recall TildeValue",Some(200)).contains(exact));
+    let incomplete="````cpp\nint PartialValue() { return 19; }\n```";
+    ledger.generated("partial","Implement PartialValue",incomplete);ledger.terminal("partial",110,false);
+    assert!(!ledger.context("Recall PartialValue",Some(200)).contains("int PartialValue"));
+    assert_eq!(ledger.suggestions[1].generated,incomplete);
 }
 #[test]
 fn only_painted_prefix_enters_followup_context_and_retired_history_survives() {

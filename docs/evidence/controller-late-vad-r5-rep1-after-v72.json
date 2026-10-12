@@ -1,0 +1,846 @@
+{
+  "schemaVersion": 1,
+  "scope": "Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.",
+  "reviewScope": "Unblinded paired native audio review; all four cells use identical waveform and selected context. Order reversed on repeat2. Endpoint correction comparison, not history or age certification. Every source clause is required, not merely a completed tail answer.",
+  "journalFile": "artifacts\\controller-v72\\native\\late-vad-r5-rep1-after\\interview.json",
+  "journalSha256": "54a82388bf62a3a709cb1f3be70d7e6d246343668eafc80410cd4e250c4bc5c3",
+  "reviewSha256": "7c1caa8d99463e2464d467abd0103f973a140e64c210e7f385c95b6d4f8f5457",
+  "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
+  "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
+  "nativeBinarySha256": "a389e083f4b2196f575e0eded6272dd32eee3b94ecdbe544b7784229b1665f72",
+  "buildEvidence": {
+    "sourceState": "Working-tree Expand correction following299b616; bind exact source hashes until reviewed commit is recorded.",
+    "nativeBinarySha256": "a389e083f4b2196f575e0eded6272dd32eee3b94ecdbe544b7784229b1665f72",
+    "sourceSha256": {
+      "src-tauri/src/runtime.rs": "986c4e5e06651a90825bf8606d700d7a561958dc851215e78e56f2fe869e71e0",
+      "src-tauri/src/meeting/scheduler.rs": "1fc146fdaa9193c324c7aefc05c89baf6410d169e19b49121909618f680a6596",
+      "src-tauri/src/meeting/controller_tests.rs": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "src/overlay/Overlay.tsx": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143"
+    },
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "verificationFile": "artifacts\\controller-v72\\expansion-verification-r2\\verification.json"
+  },
+  "renderer": {
+    "origin": "http://127.0.0.1:1420",
+    "htmlSha256": "990b5127360e4d510ccc46822a27e5c8182674c353aa4e54bb75238307c717a8",
+    "bundles": [
+      {
+        "file": "/assets/index-Bi98l94o.js",
+        "sha256": "5bc9d113aba987ef5e8889109e6887dce08842ac4eb2ff182e8ee2fb172c4b05"
+      }
+    ],
+    "scope": "Actual served renderer shared by native variant comparisons; native core binaries remain separate."
+  },
+  "backend": "codex",
+  "authMode": "isolated",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "tier": null,
+  "capabilities": {
+    "availableModel": true,
+    "catalogEntry": {
+      "slug": "gpt-6.1-sol",
+      "display_name": "GPT-6.1-Sol"
+    },
+    "effort": "low",
+    "validatedBy": "Catalog presence only at this point. Recorded provider events establish actual inference; Codex separately checks supportedReasoningEfforts before dispatch.",
+    "billedApiFallback": false
+  },
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "manifestSha256": "c67939348518901a9cd0d34bd88676d39c29d099fff8b7c9f14be8d1d61b6ec4",
+  "startedAt": "2026-10-12T01:18:08.318Z",
+  "sessionStartedAt": "2026-10-12T01:18:15.879Z",
+  "actualInterviewDurationMs": 142861,
+  "stoppedCleanly": true,
+  "pollErrors": [],
+  "archive": {
+    "accepted": 4,
+    "displayedBytes": 0,
+    "generatedBytes": 6121,
+    "paintMetadataBytes": 1536,
+    "paintedRangeBytes": 9545,
+    "paintedRanges": 39,
+    "recognizedRevisionBytes": 18130,
+    "recognizedRevisions": 467,
+    "suggestions": 2,
+    "version": 2042
+  },
+  "archiveBeforeStop": {
+    "accepted": 4,
+    "displayedBytes": 0,
+    "generatedBytes": 6121,
+    "paintMetadataBytes": 1536,
+    "paintedRangeBytes": 9545,
+    "paintedRanges": 39,
+    "recognizedRevisionBytes": 18130,
+    "recognizedRevisions": 467,
+    "suggestions": 2,
+    "version": 2042
+  },
+  "archiveBeforeStopScope": "Explicit final snapshot before Stop.",
+  "archiveAfterStop": {
+    "accepted": 0,
+    "displayedBytes": 0,
+    "generatedBytes": 0,
+    "paintMetadataBytes": 0,
+    "paintedRangeBytes": 0,
+    "paintedRanges": 0,
+    "recognizedRevisionBytes": 0,
+    "recognizedRevisions": 0,
+    "suggestions": 0,
+    "version": 0
+  },
+  "resourceSamples": [],
+  "measurements": {
+    "scope": "Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "hour-2-saved-audio-16",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": {
+          "hostMs": 1791767962035,
+          "low": 15707,
+          "high": 15712,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 14987,
+          "high": 14992
+        },
+        "acceptedToProtocolCompletionMs": 35771,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 37365,
+          "high": 37373
+        },
+        "acceptedToCorrectWorkCompletionMs": 35771,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 591,
+          "high": 599
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1594,
+          "high": 1602
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 13156,
+        "submissionAckMs": 11,
+        "submittedToInputReaderReceiptMs": 426,
+        "acceptanceAfterTranscriptFinalMs": 1003,
+        "inputTokens": 9295,
+        "cachedInputTokens": 4096,
+        "outputTokens": 1446,
+        "reasoningTokens": 252,
+        "outputTokensPerStreamingSecond": 63.93986292283883,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 9,
+          "referenceWords": 113,
+          "rate": 0.07964601769911504,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 9,
+          "referenceWords": 113,
+          "rate": 0.07964601769911504,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 2,
+        "name": "hour-2-saved-audio-17",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 3,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 10060,
+          "high": 10066
+        },
+        "acceptedToProtocolCompletionMs": 18375,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 20001,
+          "high": 20011
+        },
+        "acceptedToCorrectWorkCompletionMs": 18375,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 554,
+          "high": 564
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1626,
+          "high": 1636
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 8156,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 420,
+        "acceptanceAfterTranscriptFinalMs": 1072,
+        "inputTokens": 10479,
+        "cachedInputTokens": 8192,
+        "outputTokens": 485,
+        "reasoningTokens": 88,
+        "outputTokensPerStreamingSecond": 47.46061258440161,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 3,
+        "selectedRequestWER": {
+          "distance": 6,
+          "referenceWords": 85,
+          "rate": 0.07058823529411765,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 6,
+          "referenceWords": 85,
+          "rate": 0.07058823529411765,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      }
+    ],
+    "counts": {
+      "all": 2,
+      "expectedReplies": 2,
+      "complete": 2,
+      "missing": 0,
+      "errors": 0,
+      "intentionallyInterrupted": 0,
+      "observedPlannedInterruptions": 0,
+      "observerInterference": 0,
+      "correct": 2,
+      "incorrect": 0,
+      "requestedWorkComplete": 2,
+      "requestedWorkIncomplete": 0,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 2,
+      "reasoningFail": 0,
+      "correctnessPending": 0
+    },
+    "acceptedToWriteMs": {
+      "count": 2,
+      "min": 1,
+      "median": 2,
+      "sampleP95": 3,
+      "max": 3
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 2,
+      "min": 1,
+      "median": 2,
+      "sampleP95": 3,
+      "max": 3
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 2,
+      "min": 1,
+      "median": 2,
+      "sampleP95": 3,
+      "max": 3
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 2,
+      "min": 18375,
+      "median": 27073,
+      "sampleP95": 35771,
+      "max": 35771
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 2,
+      "min": 18375,
+      "median": 27073,
+      "sampleP95": 35771,
+      "max": 35771
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 2,
+      "min": 20011,
+      "median": 28692,
+      "sampleP95": 37373,
+      "max": 37373
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 2,
+      "min": 47.46061258440161,
+      "median": 55.700237753620215,
+      "sampleP95": 63.93986292283883,
+      "max": 63.93986292283883
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 1,
+      "min": 15712,
+      "median": 15712,
+      "sampleP95": 15712,
+      "max": 15712
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "usefulFollowupMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 0,
+      "observed": 0,
+      "missingOrUnverified": 0,
+      "p95": null,
+      "gateEvaluable": false,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [],
+      "maxPossibleCarryHighMs": 0,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\compilation.json",
+      "sha256": "9a0b224883805bfd10d42a4469568865771eafa533cc04d590667cb364fe4676",
+      "result": {
+        "recordedAt": "2026-10-12T02:37:32.231Z",
+        "journal": {
+          "file": "artifacts/controller-v72/native/late-vad-r5-rep1-after/interview.json",
+          "sha256": "54a82388bf62a3a709cb1f3be70d7e6d246343668eafc80410cd4e250c4bc5c3"
+        },
+        "toolchain": {
+          "file": "artifacts/deep-interview-v71/cuda-compiler/toolchain.json",
+          "sha256": "82c88817fb7b7f17293ace6c290842c7738d9145de411f2e26703097a30105d3",
+          "nvccSha256": "313cc032fb84bb9d53cb967843bc761f1f8959cb3aa924246659fde13afd8f14",
+          "hostCompilerSha256": "88c8344236a27a6e727e0a8edc49aaa2690bdc7a9464b9d18cc7abe70a9f1c0d"
+        },
+        "collectorSourceHashes": {
+          "scripts/compile-controller-answer-cuda.mjs": "c6cf6db75eec0ecf95bf97aa83ffece1e799f6ed54c42145dd9bf32486fff9ff",
+          "scripts/lib/fenced-sources.mjs": "bfe6af531a2ba340bfa37d9c8aa946967fcd786f29030ed585fc0fd108efa526"
+        },
+        "blocks": [
+          {
+            "round": 1,
+            "block": 0,
+            "question": "Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each thread loads its corresponding input into shared memory, calls __syncthreads, and thread zero sums the valid entries into the output. Immediate launch checks succeed; a sanitizer reports a divergent block barrier. Explain the violated invariant without claiming every device must hang. Provide compilable CUDA code and a host launch supporting valid from zero through 96, with defined output, no out-of-bounds reads, and a synchronization proof.",
+            "recognizedQuestion": "Only one GPU worker is affected the host control endpoint responds but its dedicated stream's completion event remains not ready A minimized kernel launches one block of ninety six threads with valid equal to seventy inside an if statement testing thread index less than valid Each thread loads its corresponding input into shared memory. Calls underscore underscore sync threads and thread zero sums the valid entries into the output Immediate launch checks succeed a sanitizer reports a divergent block barrier Explain the violated invariant without claiming every device must hang provide compilable CUDA code and a host launch supporting valid from zero through ninety six with defined output no out of bounds reads and a synchronization proof",
+            "responseVersion": "3871a9fb-250e-4579-bbda-d7c75ed6a43d:0",
+            "answerSha256": "5b802184068675c6915813da5ce45b6239f047c4b03a6ff6b69c1b07ce49a067",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\round-1-block-0\\recorded.cu",
+              "sha256": "f351de542d4d3313b53222454902508cfdbd7846113c14f42c51f6d8d86a4c5e",
+              "languageAnnotation": "cuda"
+            },
+            "startedAt": "2026-10-12T02:37:28.978Z",
+            "completedAt": "2026-10-12T02:37:32.231Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\round-1-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\round-1-block-0\\recorded.obj",
+              "sha256": "a6e5f5aa383fc8d76f0b0a2aefc3e9fbaa15d4451a22c5d5d5a9cafea036c4fd"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\round-1-block-0\\stdout.log",
+              "sha256": "8fcd49cf83dac979c7ed1873e8818d9983a05af3ad7db837f99e6d6d35bf0f5f"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\late-vad-r5-rep1-after-nvcc-r1\\round-1-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        ],
+        "summary": {
+          "recordedCudaOrCppBlocks": 1,
+          "compiled": 1,
+          "failed": 0,
+          "timedOut": 0
+        },
+        "hardwareExecutionPerformed": false,
+        "goalComplete": false,
+        "scope": "Unchanged CUDA/C++-annotated fenced bodies compiled as individual C++17 translation units with real pinned NVIDIA nvcc and MSVC, using relocatable device compilation for sm_70. No missing includes, launch wrappers or answer repairs are added. Compilation failures remain recorded, including snippets not intended as standalone units and dependency or requested-standard mismatches. Compiler acceptance does not prove numerical or collective correctness, hardware behavior, or full-interview accuracy."
+      }
+    }
+  ],
+  "rows": [
+    {
+      "round": 1,
+      "name": "hour-2-saved-audio-16",
+      "question": "Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each thread loads its corresponding input into shared memory, calls __syncthreads, and thread zero sums the valid entries into the output. Immediate launch checks succeed; a sanitizer reports a divergent block barrier. Explain the violated invariant without claiming every device must hang. Provide compilable CUDA code and a host launch supporting valid from zero through 96, with defined output, no out-of-bounds reads, and a synchronization proof.",
+      "recognizedQuestion": "Only one GPU worker is affected the host control endpoint responds but its dedicated stream's completion event remains not ready A minimized kernel launches one block of ninety six threads with valid equal to seventy inside an if statement testing thread index less than valid Each thread loads its corresponding input into shared memory. Calls underscore underscore sync threads and thread zero sums the valid entries into the output Immediate launch checks succeed a sanitizer reports a divergent block barrier Explain the violated invariant without claiming every device must hang provide compilable CUDA code and a host launch supporting valid from zero through ninety six with defined output no out of bounds reads and a synchronization proof",
+      "answer": "The violated invariant is block-wide barrier participation: every non-exited thread in the block must reach the same dynamic `__syncthreads()`. With 96 threads and `valid = 70`, threads 0–69 enter the conditional barrier while threads 70–95 skip it. That is invalid CUDA synchronization; it can explain the affected stream’s stalled completion, but it does not imply every device must hang, and successful immediate launch checks do not establish correct execution.\n\nMove the barrier outside the conditional and initialize every shared-memory slot. This complete program supports every `valid` from 0 through 96:\n\n```cuda\n// sum.cu\n#include <cuda_runtime.h>\n#include <cerrno>\n#include <cstdio>\n#include <cstdlib>\n\n#define CUDA_CHECK(call) do {                                      \\\n    cudaError_t err = (call);                                      \\\n    if (err != cudaSuccess) {                                     \\\n        std::fprintf(stderr, \"%s: %s\\n\", #call,                   \\\n                     cudaGetErrorString(err));                    \\\n        std::exit(EXIT_FAILURE);                                  \\\n    }                                                             \\\n} while (0)\n\n// Preconditions: exactly one block of 96 threads; 0 <= valid <= 96;\n// input has at least valid readable elements; output has one element.\n__global__ void sum_valid(const float* input, float* output, int valid) {\n    __shared__ float values[96];\n    const int t = static_cast<int>(threadIdx.x);\n\n    // The conditional operator evaluates only the selected operand.\n    values[t] = (t < valid) ? input[t] : 0.0f;\n    __syncthreads();\n\n    if (t == 0) {\n        float sum = 0.0f;\n        for (int i = 0; i < valid; ++i)\n            sum += values[i];\n        output[0] = sum;\n    }\n}\n\nint main(int argc, char** argv) {\n    int valid = 70;\n    if (argc > 2) {\n        std::fprintf(stderr, \"Usage: %s [valid: 0..96]\\n\", argv[0]);\n        return EXIT_FAILURE;\n    }\n    if (argc == 2) {\n        char* end = nullptr;\n        errno = 0;\n        const long n = std::strtol(argv[1], &end, 10);\n        if (errno != 0 || end == argv[1] || *end != '\\0' ||\n            n < 0 || n > 96) {\n            std::fprintf(stderr, \"valid must be an integer from 0 to 96\\n\");\n            return EXIT_FAILURE;\n        }\n        valid = static_cast<int>(n);\n    }\n\n    float input[96];\n    for (int i = 0; i < 96; ++i)\n        input[i] = static_cast<float>(i + 1);\n    float result = -1.0f;\n    float* d_input = nullptr;\n    float* d_output = nullptr;\n    cudaStream_t stream;\n    cudaEvent_t done;\n\n    CUDA_CHECK(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));\n    CUDA_CHECK(cudaEventCreateWithFlags(&done, cudaEventDisableTiming));\n    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_input), sizeof(input)));\n    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_output), sizeof(float)));\n    CUDA_CHECK(cudaMemcpyAsync(d_input, input, sizeof(input),\n                               cudaMemcpyHostToDevice, stream));\n\n    sum_valid<<<1, 96, 0, stream>>>(d_input, d_output, valid);\n    CUDA_CHECK(cudaGetLastError());\n    CUDA_CHECK(cudaMemcpyAsync(&result, d_output, sizeof(float),\n                               cudaMemcpyDeviceToHost, stream));\n    CUDA_CHECK(cudaEventRecord(done, stream));\n    CUDA_CHECK(cudaEventSynchronize(done));\n\n    const float expected = static_cast<float>(valid * (valid + 1) / 2);\n    std::printf(\"valid=%d sum=%g expected=%g\\n\", valid, result, expected);\n\n    CUDA_CHECK(cudaFree(d_output));\n    CUDA_CHECK(cudaFree(d_input));\n    CUDA_CHECK(cudaEventDestroy(done));\n    CUDA_CHECK(cudaStreamDestroy(stream));\n    return result == expected ? EXIT_SUCCESS : EXIT_FAILURE;\n}\n```\n\nCompile with `nvcc sum.cu -o sum` and run `./sum 70`, `./sum 0`, or `./sum 96` on a CUDA-capable system.\n\nSynchronization proof: each of the 96 threads writes a distinct, in-bounds shared-memory slot, and only threads with `t < valid` read input. Every thread then reaches the single unconditional barrier, which makes those writes visible to thread zero before it reads them. Thread zero alone writes the output; at `valid = 0` its loop performs no reads and writes zero, while at `valid = 96` it sums exactly slots 0–95. Stream ordering places the input copy before the kernel and the output copy after it; successful completion-event synchronization establishes that the host result is ready.",
+      "answerSha256": "5b802184068675c6915813da5ce45b6239f047c4b03a6ff6b69c1b07ce49a067",
+      "contextSha256": "37b3e70dbccafb9b1861c9d51e8e879ced5b82c3ea5070dbb8a4e31c3b3351fd",
+      "applicationAgeMs": 7565,
+      "responseVersion": "3871a9fb-250e-4579-bbda-d7c75ed6a43d:0",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "latency": {
+        "completedAt": 87843,
+        "firstCredibleCandidateAt": 1626,
+        "firstRemotePartialAt": 991,
+        "firstTokenAt": 65455,
+        "firstWordAt": 65455,
+        "pipeline": {
+          "acousticRefinementCount": 0,
+          "actualServiceTier": null,
+          "agedFinalWait": false,
+          "backend": null,
+          "cachedInputTokens": 4096,
+          "cancelled": false,
+          "candidateDetected": 1626,
+          "cleanupMaxQueuedEvents": 0,
+          "cleanupStartedAt": null,
+          "cleanupTerminalAt": null,
+          "codexStreamEntered": 52073,
+          "completedDraftReplacementCount": 0,
+          "confirmedQuestionRefinements": false,
+          "contextVersion": 282,
+          "deltaCallbackCount": 1182,
+          "deltaCallbackMaxUs": 274,
+          "deltaCallbackTotalUs": 84987,
+          "eagerFinalReplacement": false,
+          "finalPendingBudgetMs": null,
+          "firstAgentDelta": 65228,
+          "firstVisible": 65464,
+          "followupCount": 0,
+          "generationId": "3871a9fb-250e-4579-bbda-d7c75ed6a43d",
+          "inputHash": [
+            229,
+            66,
+            10,
+            224,
+            56,
+            190,
+            70,
+            76,
+            16,
+            165,
+            81,
+            183,
+            231,
+            152,
+            187,
+            221,
+            131,
+            0,
+            179,
+            98,
+            118,
+            154,
+            188,
+            37,
+            215,
+            218,
+            111,
+            34,
+            17,
+            145,
+            193,
+            20
+          ],
+          "inputTokens": 9295,
+          "interruptAckAt": null,
+          "latestInputAck": 52084,
+          "latestInputConsumed": 52499,
+          "latestInputReaderReceived": 52499,
+          "latestInputSent": 52073,
+          "localRetirementReleasedAt": null,
+          "localRetirementStartedAt": null,
+          "modelRequestSent": null,
+          "outputTokens": 1446,
+          "pendingAgeAtConfirmationMs": null,
+          "preparedThreadAgeMs": 57028,
+          "promptChars": 854,
+          "questionConfirmed": 52072,
+          "readerFullQueueCount": 0,
+          "readerQueuePeak": 10,
+          "readerSendCount": 1194,
+          "readerSendMaxUs": 146,
+          "readerSendTotalUs": 16266,
+          "reasoningTokens": 252,
+          "refillCompleted": 52179,
+          "refillError": false,
+          "refillStarted": 52073,
+          "refillThreadsCreated": 1,
+          "refinementChars": 0,
+          "refinementRestartCount": 0,
+          "remoteTerminationConfirmed": true,
+          "responseCount": 0,
+          "responseCreated": null,
+          "restartPromptChars": null,
+          "retainedFirstDelta": 65455,
+          "semaphoreAcquired": 52073,
+          "sessionId": "01ffa81a-700c-4315-9d50-d7b13c1642bc",
+          "steeringCount": 0,
+          "transportWrittenAt": 52073,
+          "turnCompleted": 87843,
+          "turnStartAck": 52084,
+          "turnStartSent": 52073,
+          "utteranceId": 281,
+          "utteranceRevision": 0,
+          "warmStateUsed": false,
+          "warmThreadTaken": 52073
+        },
+        "questionConfirmedAt": 52072,
+        "remotePartialUpdates": 267,
+        "remoteSpeechStartedAt": 281,
+        "requestSentAt": 52073,
+        "responseRevision": 0,
+        "speechStoppedAt": 50261,
+        "transcriptFinalAt": 51069
+      },
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 2,
+        "priorRecordedAnswerSha256": null,
+        "scope": "Same literal frozen prior-source context across old846 and corrected builds; no target answer supplied. This controls endpoint replay, not aged-session or memory recall."
+      },
+      "waveSha256": "467942c4996d8aaabfc6a7367d4da40a2eaeb424bc99b622dc7898674be2939d",
+      "runningAtSubmission": [],
+      "runningAtPlaybackLaunch": [],
+      "firstStreamedWordMeasurement": {
+        "questionId": "3871a9fb-250e-4579-bbda-d7c75ed6a43d",
+        "firstVisibleStreamedWord": {
+          "word": "The",
+          "characterRange": [
+            0,
+            3
+          ],
+          "observedHostMs": 1791767961315,
+          "latencyMs": {
+            "low": 14987,
+            "high": 14992
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstRetainedVisibleStreamedWord": {
+          "word": "The",
+          "characterRange": [
+            0,
+            3
+          ],
+          "observedHostMs": 1791767961315,
+          "latencyMs": {
+            "low": 14987,
+            "high": 14992
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstWordVisibleWhileStillStreaming": {
+          "word": "The",
+          "characterRange": [
+            0,
+            3
+          ],
+          "observedHostMs": 1791767961315,
+          "latencyMs": {
+            "low": 14987,
+            "high": 14992
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstWordHiddenUntilAfterStreaming": false,
+        "phase": "complete",
+        "error": null,
+        "missingReason": null,
+        "scope": "First complete streamed word observed in the actual overlay, measured against the synthetic playback last-nonzero PCM endpoint. Correctness is assessed separately; completion is not required. Paint and device-position observations bound timing resolution."
+      },
+      "review": {
+        "round": 1,
+        "answerSha256": "5b802184068675c6915813da5ce45b6239f047c4b03a6ff6b69c1b07ce49a067",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Complete unchanged CUDA program launches1x96, initializes every distinct shared slot, reads input only below valid, uses unconditional block barrier, thread0writeszero forvalid0 and supports0..96. Checked host synchronization precedes result use. Uniform-barrier proof and no universal device-hang claim correct; real NVCC compilation separate, no hardware execution.",
+        "ordinaryFollowup": false,
+        "usefulPrefix": "The violated invariant is block-wide barrier participation: every non-exited thread in the block must reach the same dynamic `__syncthreads()`."
+      }
+    },
+    {
+      "round": 2,
+      "name": "hour-2-saved-audio-17",
+      "question": "Continue with your compilable kernel and host launch. Explain precisely what threads 70 through 95 do in the original kernel and why successful launch checks do not establish correctness. In your replacement, prove that every shared-memory value read by thread zero was initialized, and identify which thread writes the output when valid is zero. Keep the launch at one block of 96 threads for every valid value, including zero; do not handle zero by skipping the kernel or initializing the output on the host.",
+      "recognizedQuestion": "continue with your compilable kernel and host launch explain precisely what thread seventy through ninety five do in the original kernel and why successful launch checks do not establish correctness In your replacement prove that every shared memory value read by thread zero was initialized and identify which thread writes the output when valid is zero Keep the launch at one block of ninety six threads for every valid value including zero Do not handle zero by skipping the kernel or initializing the output on the host",
+      "answer": "Keep the supplied code unchanged: `sum_valid<<<1, 96, 0, stream>>>(device_input, device_output, valid);` runs one block of 96 threads for every `valid` from 0 through 96, including zero.\n\nIn the original kernel at `valid=70`, threads 70–95 evaluate `threadIdx.x < valid` as false, skip the entire conditional—including the input load, shared-memory store, barrier, and summation—and reach the end of the kernel. Threads 0–69 enter the conditional and encounter `__syncthreads()` under a condition that is not uniform across the block. That violates the block-barrier contract and produces undefined behavior; it does not imply that every device must hang.\n\nA successful `cudaGetLastError()` checks immediate launch errors, not completion or algorithmic correctness. Execution is asynchronous, so the host endpoint can remain responsive while the stream has unfinished work. A completion event that is not ready establishes only that it has not completed; the divergent-barrier report identifies the synchronization violation.\n\nIn the replacement, every shared-memory read by thread zero has an index `i` satisfying `0 <= i < valid <= 96`. Thread `i` exists, loads `input[i]`, and initializes `values[i]` before reaching the unconditional barrier. All 96 threads execute that barrier, which makes those writes visible before thread zero reads them; uninitialized entries at indices greater than or equal to `valid` are never read.\n\nAt `valid=0`, all 96 threads skip the loads but still execute the barrier. Thread zero initializes its local sum to `0.0f`, performs zero loop iterations, and writes `0.0f` to the device output. The kernel is neither skipped nor replaced by host-side output initialization.",
+      "answerSha256": "3e024a3191f46a43e50b37c8397efe5e22cc7074f1b920cecd556db0c714c33e",
+      "contextSha256": "8eb9ffc1f937ca59f5e3815c7b98e4c8cc26ba9b85d09c2c42608c0e4562a3c2",
+      "applicationAgeMs": 95463,
+      "responseVersion": "1c0e9b0a-e1bf-4d1e-881e-8094bf620e87:0",
+      "phase": "complete",
+      "error": null,
+      "cancelled": false,
+      "latency": {
+        "completedAt": 142848,
+        "firstCredibleCandidateAt": 89479,
+        "firstRemotePartialAt": 88999,
+        "firstTokenAt": 132896,
+        "firstWordAt": 132896,
+        "pipeline": {
+          "acousticRefinementCount": 0,
+          "actualServiceTier": null,
+          "agedFinalWait": false,
+          "backend": null,
+          "cachedInputTokens": 8192,
+          "cancelled": false,
+          "candidateDetected": 109167,
+          "cleanupMaxQueuedEvents": 0,
+          "cleanupStartedAt": null,
+          "cleanupTerminalAt": null,
+          "codexStreamEntered": 124475,
+          "completedDraftReplacementCount": 0,
+          "confirmedQuestionRefinements": false,
+          "contextVersion": 1645,
+          "deltaCallbackCount": 385,
+          "deltaCallbackMaxUs": 235,
+          "deltaCallbackTotalUs": 19550,
+          "eagerFinalReplacement": false,
+          "finalPendingBudgetMs": null,
+          "firstAgentDelta": 132629,
+          "firstVisible": 132906,
+          "followupCount": 0,
+          "generationId": "1c0e9b0a-e1bf-4d1e-881e-8094bf620e87",
+          "inputHash": [
+            41,
+            165,
+            91,
+            28,
+            186,
+            204,
+            66,
+            89,
+            108,
+            105,
+            185,
+            185,
+            36,
+            152,
+            177,
+            232,
+            242,
+            74,
+            89,
+            229,
+            233,
+            153,
+            121,
+            159,
+            202,
+            123,
+            53,
+            51,
+            23,
+            248,
+            66,
+            80
+          ],
+          "inputTokens": 10479,
+          "interruptAckAt": null,
+          "latestInputAck": 124488,
+          "latestInputConsumed": 124897,
+          "latestInputReaderReceived": 124896,
+          "latestInputSent": 124475,
+          "localRetirementReleasedAt": null,
+          "localRetirementStartedAt": null,
+          "modelRequestSent": null,
+          "outputTokens": 485,
+          "pendingAgeAtConfirmationMs": null,
+          "preparedThreadAgeMs": 15746,
+          "promptChars": 5793,
+          "questionConfirmed": 124473,
+          "readerFullQueueCount": 0,
+          "readerQueuePeak": 6,
+          "readerSendCount": 397,
+          "readerSendMaxUs": 221,
+          "readerSendTotalUs": 6281,
+          "reasoningTokens": 88,
+          "refillCompleted": 124580,
+          "refillError": false,
+          "refillStarted": 124475,
+          "refillThreadsCreated": 1,
+          "refinementChars": 0,
+          "refinementRestartCount": 0,
+          "remoteTerminationConfirmed": true,
+          "responseCount": 0,
+          "responseCreated": null,
+          "restartPromptChars": null,
+          "retainedFirstDelta": 132896,
+          "semaphoreAcquired": 124475,
+          "sessionId": "01ffa81a-700c-4315-9d50-d7b13c1642bc",
+          "steeringCount": 0,
+          "transportWrittenAt": 124476,
+          "turnCompleted": 142848,
+          "turnStartAck": 124488,
+          "turnStartSent": 124475,
+          "utteranceId": 88211,
+          "utteranceRevision": 2,
+          "warmStateUsed": false,
+          "warmThreadTaken": 124475
+        },
+        "questionConfirmedAt": 124473,
+        "remotePartialUpdates": 177,
+        "remoteSpeechStartedAt": 88211,
+        "requestSentAt": 124474,
+        "responseRevision": 0,
+        "speechStoppedAt": 122651,
+        "transcriptFinalAt": 123401
+      },
+      "sourceBinding": {
+        "journal": "artifacts\\deep-interview-v71\\systems-hour-t\\interview.json",
+        "row": 3,
+        "priorRecordedAnswerSha256": "1e1110f1aad61eab4689f2627cb133dc93a5246d18db1cac7b9a799adeedb266",
+        "scope": "Same literal frozen prior-source context across old846 and corrected builds; no target answer supplied. This controls endpoint replay, not aged-session or memory recall."
+      },
+      "waveSha256": "40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad",
+      "runningAtSubmission": [],
+      "runningAtPlaybackLaunch": [],
+      "firstStreamedWordMeasurement": {
+        "questionId": "1c0e9b0a-e1bf-4d1e-881e-8094bf620e87",
+        "firstVisibleStreamedWord": {
+          "word": "Keep",
+          "characterRange": [
+            0,
+            4
+          ],
+          "observedHostMs": 1791768028757,
+          "latencyMs": {
+            "low": 10060,
+            "high": 10066
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstRetainedVisibleStreamedWord": {
+          "word": "Keep",
+          "characterRange": [
+            0,
+            4
+          ],
+          "observedHostMs": 1791768028757,
+          "latencyMs": {
+            "low": 10060,
+            "high": 10066
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstWordVisibleWhileStillStreaming": {
+          "word": "Keep",
+          "characterRange": [
+            0,
+            4
+          ],
+          "observedHostMs": 1791768028757,
+          "latencyMs": {
+            "low": 10060,
+            "high": 10066
+          },
+          "responseRevision": 0,
+          "observedDuringStreaming": true,
+          "retainedInCurrentRecordedAnswer": true
+        },
+        "firstWordHiddenUntilAfterStreaming": false,
+        "phase": "complete",
+        "error": null,
+        "missingReason": null,
+        "scope": "First complete streamed word observed in the actual overlay, measured against the synthetic playback last-nonzero PCM endpoint. Correctness is assessed separately; completion is not required. Paint and device-position observations bound timing resolution."
+      },
+      "review": {
+        "round": 2,
+        "answerSha256": "3e024a3191f46a43e50b37c8397efe5e22cc7074f1b920cecd556db0c714c33e",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Accepted request retains all substantive clauses. Correct original70..95 skip, nonuniform barrier violation without universalhang, immediate launch versus execution distinction, thread-index initialization plus unconditional visibility proof, and thread0zero with1x96 always. Supplied frozen code is prior generated code, not the target answer.",
+        "ordinaryFollowup": false,
+        "usefulPrefix": "Keep the supplied code unchanged: `sum_valid<<<1, 96, 0, stream>>>(device_input, device_output, valid);` runs one block of 96 threads for every `valid` from 0 through 96, including zero. \nIn the original kernel at `valid=70`, threads 70–95 evaluate `threadIdx.x < valid` as false, skip the entire conditional—including the input load, shared-memory store, barrier, and summation—and reach the end of the kernel."
+      }
+    }
+  ]
+}

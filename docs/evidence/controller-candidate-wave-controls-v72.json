@@ -1,0 +1,40 @@
+{
+  "fixtureSha256": "3589b3a6ab0694b3b0a5a0bfe04a6917ad4e81a327b1e3977e5d10a7917503da",
+  "failedCandidate": "c359e4d",
+  "failedCandidateJournalSha256": "ad8e9f87ea8e74960b6de04c92d28f7d28446be1da33ab59ba253faea781cccd",
+  "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+  "originalCandidateContextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+  "matchedControlsContextSha256": "285ee82880719f04dd080de758f155d75d6ed9ef5cdad357c2916d40a979ed27",
+  "contextsEqual": true,
+  "trials": [
+    {
+      "name": "case-1-rep1-baseline",
+      "journalSha256": "4204aa5c65ccaad654479ab6dcb8a6945d903e929b34a3db3a0d7f42c447ade9",
+      "nativeBinarySha256": "a9ac4e6e2ac6cadbe9b432ad28515613e751f5b99fa236a67faa2e9a4b4f739a",
+      "recognizedQuestion": "Your bounds separated observations from assumptions Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units Interviewer pause one point five seconds A later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+      "acceptedToWriteMs": null
+    },
+    {
+      "name": "case-1-rep1-controller",
+      "journalSha256": "d96aad1b9acd08dd0e5524bb66d65bc0350ffd7ccefb9787526c7111f185c858",
+      "nativeBinarySha256": "a85711c876a669bb7015c757380523a513b9c79085ad082997f8718b2dd9f6f3",
+      "recognizedQuestion": "Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units Interviewer pause one point five seconds A later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+      "acceptedToWriteMs": 4
+    },
+    {
+      "name": "case-1-rep2-baseline",
+      "journalSha256": "fb461b564099c748b8539eeb63f5d975a88a2140cbf8071bead3d99a3f82c010",
+      "nativeBinarySha256": "a9ac4e6e2ac6cadbe9b432ad28515613e751f5b99fa236a67faa2e9a4b4f739a",
+      "recognizedQuestion": "Your bounds separated observations from assumptions Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs. Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units Interviewer pause one point five seconds a later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+      "acceptedToWriteMs": null
+    },
+    {
+      "name": "case-1-rep2-controller",
+      "journalSha256": "b37ce47a66ede7e751fce3f08eee17f3b08f89b535f6544c16d69aa5db93cfd6",
+      "nativeBinarySha256": "a85711c876a669bb7015c757380523a513b9c79085ad082997f8718b2dd9f6f3",
+      "recognizedQuestion": "Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units Interviewer pause one point five seconds A later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+      "acceptedToWriteMs": 4
+    }
+  ],
+  "scope": "The actual failed candidate waveform is played through native audio/Nemotron in four primary baseline/controller controls. The separate Rust regression reproduces the failed candidate event order. Waveform and frozen control contexts are exact; context equality with the candidate capture is stated separately. No claim that ASR wordings or event order repeat exactly."
+}

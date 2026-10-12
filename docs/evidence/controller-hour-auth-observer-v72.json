@@ -1,0 +1,12 @@
+{
+  "preflightFile": "artifacts/controller-v72/plan-auth-signin-r4/preflight.json",
+  "preflightSha256": "24636aa8eafc927b63a5b54c0e1f8bfcf3455e531bcec3d778a5eb7080464275",
+  "status": "failed",
+  "failure": "Error: Sign-in did not complete: Sign-in timed out; try again",
+  "conservativeHostInterval": {
+    "start": "2026-10-12T01:52:10.000Z",
+    "end": "2026-10-12T01:57:17.324Z"
+  },
+  "hourJournalFile": "artifacts/controller-v72/native/final-source-r5-hour-codex/interview.json",
+  "scope": "Normal authorized browser OAuth was opened by a separate native app while the corrected Codex hour ran. No other inference, compilation or code grading ran. This interval includes user/browser wait and is a conservative overlap disclosure, not a claim of sustained CPU work or a causal latency effect. Final source-bound review identifies every overlapping row and keeps all outcomes/overall latency while excluding disclosed overlaps from an observer-free subset."
+}

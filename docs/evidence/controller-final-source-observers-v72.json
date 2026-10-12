@@ -1,0 +1,19 @@
+{
+  "journalFile": "artifacts/controller-v72/native/final-source-r5-contextual-codex/interview.json",
+  "journalSha256": "9d23452c852829e992b73a5000e5b109cb05632879c44c12e51f1f140700f92c",
+  "round": 30,
+  "observer": "Post-build source/Git attestation of 55 source files",
+  "observerProcessDurationSeconds": 2.4022388,
+  "conservativeHostInterval": {
+    "start": "2026-10-12T01:28:31.000Z",
+    "end": "2026-10-12T01:28:46.000Z"
+  },
+  "sourceClockAnchor": {
+    "hostBeforeMs": 1791768521963,
+    "hostAfterMs": 1791768521969,
+    "nativeMs": 184826
+  },
+  "acceptedNativeMs": 184837,
+  "transportWrittenNativeMs": 184936,
+  "scope": "Actual source hashing and Git subprocesses overlapped this request. The interval conservatively bounds tool execution rather than measuring exact subprocess start/end. No compilation or answer grading ran, and a causal latency effect is not established. Preserve the row in all outcomes and overall latency; exclude it from a disclosed observer-free dispatch subset. The independently recorded build binding remains valid."
+}

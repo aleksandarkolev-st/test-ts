@@ -895,6 +895,47 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         (Arc::new(Service{received_inputs:Mutex::new(HashMap::new()),completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()}),receiver)
     }
     #[tokio::test]
+    async fn immutable_input_can_receive_two_provider_messages_without_a_new_turn() {
+        let (service,mut requests)=transport_fixture();
+        let codex=Codex::new(PathBuf::from("must-not-launch"),PathBuf::from("."));
+        *codex.service.lock().unwrap()=Some(service.clone());
+        let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
+        codex.prepared.lock().unwrap().push(PreparedThread{key:json!(["fixture-model",Option::<String>::None,Some("low"),instructions]).to_string(),id:"prepared".into(),acknowledged:std::time::Instant::now(),turns:0,history_chars:0});
+        let reader=Arc::downgrade(&service);
+        let responder=std::thread::spawn(move||{
+            let mut starts=0;
+            while let Some(request)=requests.blocking_recv(){
+                let result=match request["method"].as_str().unwrap(){
+                    "config/read"=>json!({"config":{},"layers":[]}),
+                    "thread/start"=>json!({"thread":{"id":format!("refill-{}",request["id"]),"ephemeral":true}}),
+                    "turn/start"=>{
+                        starts+=1;assert_eq!(starts,1);assert_eq!(request["params"]["threadId"],"prepared");
+                        dispatch(&reader,json!({"id":request["id"],"result":{"turn":{"id":"one-turn"}}}));
+                        for (item,text) in [("first","Exact original source."),("second","Additional justified explanation.")] {
+                            dispatch(&reader,json!({"method":"item/started","params":{"threadId":"prepared","turnId":"one-turn","item":{"type":"agentMessage","id":item,"phase":"final"}}}));
+                            dispatch(&reader,json!({"method":"item/agentMessage/delta","params":{"threadId":"prepared","turnId":"one-turn","itemId":item,"delta":json!({"intent":"answer","text":text}).to_string()}}));
+                        }
+                        dispatch(&reader,json!({"method":"turn/completed","params":{"threadId":"prepared","turn":{"id":"one-turn","status":"completed"}}}));continue;
+                    },
+                    "thread/unsubscribe"=>break,
+                    method=>panic!("Unexpected immutable input protocol method: {method}"),
+                };
+                dispatch(&reader,json!({"id":request["id"],"result":result}));
+            }
+            starts
+        });
+        let prompt=QuestionPrompt::new("Exact earlier exchange","Follow up");
+        let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let mut observed=Vec::new();
+        codex.stream_question("fixture-model",None,Some("low"),&instructions,&prompt,None,CancellationToken::new(),RefillPolicy::Immediate,None,rx,|event|{observed.push(event);std::future::ready(Ok(()))}).await.unwrap();
+        assert_eq!(observed.len(),4);
+        assert!(matches!(&observed[0],StreamEvent::Delta(text) if text.contains("Exact original source.")));
+        assert!(matches!(&observed[1],StreamEvent::Revision(text) if text.is_empty()));
+        assert!(matches!(&observed[2],StreamEvent::Delta(text) if text.contains("Additional justified explanation.")));
+        assert!(matches!(&observed[3],StreamEvent::Completed));
+        assert_eq!(responder.join().unwrap(),1);codex.close();
+    }
+    #[tokio::test]
     async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
         let (service,_requests)=transport_fixture();let (output,mut events)=super::super::mailbox::channel(1);
         #[cfg(all(feature="acceptance",debug_assertions))]

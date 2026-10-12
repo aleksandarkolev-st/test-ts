@@ -117,6 +117,53 @@ pub enum StreamEvent {
     QuestionCompleted { question:String, context_key:[u8;32] },
     Completed,
 }
+/// Input identity is immutable; a provider may still emit multiple messages.
+/// Keep delivered text lossless across their boundaries and parse each frame.
+struct AcceptedReplyDecoder {
+    gate: super::codex::ReplyGate,
+    question: String,
+    context_key: [u8;32],
+    explicit: bool,
+    answered: bool,
+}
+impl AcceptedReplyDecoder {
+    fn new(prompt:&super::codex::QuestionPrompt)->Self {
+        Self {gate:Default::default(),question:prompt.question.clone(),context_key:super::codex::context_key(&prompt.context),explicit:prompt.explicit_request,answered:false}
+    }
+    fn delta(&self,text:String)->StreamEvent {
+        StreamEvent::QuestionDelta{question:self.question.clone(),context_key:self.context_key,text}
+    }
+    fn finish_message(&mut self)->Result<(),String> {
+        self.gate.finish()?;
+        if self.gate.ignored&&self.explicit{return Err("The backend ignored an explicitly accepted request".into());}
+        Ok(())
+    }
+    fn decode(&mut self,raw:StreamEvent)->Result<Option<StreamEvent>,String> {
+        match raw {
+            StreamEvent::Delta(text)=>{
+                let text=self.gate.feed(&text)?;
+                if let Some(text)=text {self.answered=true;Ok(Some(self.delta(text)))}else{Ok(None)}
+            },
+            StreamEvent::Revision(text) if text.is_empty()=>{
+                // Codex emits this boundary when another non-commentary
+                // agent message begins, even with no changed user input.
+                // Do not clear the renderer or concatenate raw JSON frames.
+                self.finish_message()?;
+                self.gate=Default::default();
+                Ok(self.answered.then(||self.delta("\n\n".into())))
+            },
+            StreamEvent::Completed=>{
+                self.finish_message()?;
+                Ok(Some(if self.gate.ignored&&!self.answered {
+                    StreamEvent::NoReply{question:self.question.clone(),context_key:self.context_key}
+                }else{
+                    StreamEvent::QuestionCompleted{question:self.question.clone(),context_key:self.context_key}
+                }))
+            },
+            _=>Err("Unexpected event for an immutable conversation generation".into()),
+        }
+    }
+}
 pub fn request_body(model: &str, instructions: &str, input: &str) -> serde_json::Value {
     serde_json::json!({"model":model,"store":false,"stream":true,"instructions":instructions,"input":[{"role":"user","content":input}]})
 }
@@ -332,16 +379,11 @@ impl Client {
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         let frame=updates.borrow().clone();
         if !frame.confirmed || frame.question!=prompt.question || frame.context.as_deref()!=Some(&prompt.context) {return Err("Only an immutable accepted conversation frame may be submitted".into());}
-        let question=prompt.question.clone();let key=super::codex::context_key(&prompt.context);
-        let mut gate=super::codex::ReplyGate::default();
+        let mut decoder=AcceptedReplyDecoder::new(prompt);
         let mut decode=|raw|{
-            let decoded=match raw {
-                StreamEvent::Delta(text)=>match gate.feed(&text) {Ok(Some(text))=>Some(Ok(StreamEvent::QuestionDelta{question:question.clone(),context_key:key,text})),Ok(None)=>None,Err(e)=>Some(Err(e))},
-                StreamEvent::Completed=>Some(gate.finish().and_then(|()|if gate.ignored&&prompt.explicit_request{Err("The backend ignored an explicitly accepted request".into())}else{Ok(if gate.ignored{StreamEvent::NoReply{question:question.clone(),context_key:key}}else{StreamEvent::QuestionCompleted{question:question.clone(),context_key:key}})})),
-                _=>Some(Err("Unexpected event for an immutable conversation generation".into())),
-            };
+            let decoded=decoder.decode(raw);
             // Return a single concrete future type, including no-text prefixes.
-            let (error,future)=match decoded.transpose() {Ok(Some(value))=>(None,Some(event(value))),Ok(None)=>(None,None),Err(e)=>(Some(e),None)};
+            let (error,future)=match decoded {Ok(Some(value))=>(None,Some(event(value))),Ok(None)=>(None,None),Err(e)=>(Some(e),None)};
             async move {if let Some(e)=error{Err(e)}else if let Some(future)=future{future.await}else{Ok(())}}
         };
         if self.backend == AnswerBackend::Codex {
@@ -465,6 +507,56 @@ mod tests {
         io::{AsyncReadExt, AsyncWriteExt},
         net::TcpListener,
     };
+    fn automatic_message(intent:&str,text:&str)->StreamEvent {
+        StreamEvent::Delta(serde_json::json!({"intent":intent,"text":text}).to_string())
+    }
+    #[test]
+    fn multiple_provider_messages_keep_exact_text_on_one_accepted_generation() {
+        let prompt=super::super::codex::QuestionPrompt::new("Exact source","Follow up");
+        let mut decoder=AcceptedReplyDecoder::new(&prompt);
+        let first="First source α.\n```cpp\nint X=-17;\n```";
+        let second="Second message: retain the original source.";
+        let mut text=String::new();
+        for raw in [automatic_message("answer",first),StreamEvent::Revision(String::new()),automatic_message("answer",second)] {
+            match decoder.decode(raw).unwrap().unwrap() {
+                StreamEvent::QuestionDelta{question,context_key,text:delta}=>{
+                    assert_eq!(question,prompt.question);assert_eq!(context_key,super::super::codex::context_key(&prompt.context));text.push_str(&delta);
+                },_=>panic!("Output boundary must not reset the generation or discard text"),
+            }
+        }
+        assert_eq!(text,format!("{first}\n\n{second}"));
+        assert!(matches!(decoder.decode(StreamEvent::Completed).unwrap(),Some(StreamEvent::QuestionCompleted{..})));
+    }
+    #[test]
+    fn later_automatic_ignore_cannot_erase_a_delivered_answer() {
+        let mut decoder=AcceptedReplyDecoder::new(&super::super::codex::QuestionPrompt::new("Source","Question"));
+        assert!(decoder.decode(automatic_message("answer","Keep this exact answer.")).unwrap().is_some());
+        decoder.decode(StreamEvent::Revision(String::new())).unwrap();
+        assert!(decoder.decode(automatic_message("ignore","")).unwrap().is_none());
+        assert!(matches!(decoder.decode(StreamEvent::Completed).unwrap(),Some(StreamEvent::QuestionCompleted{..})));
+    }
+    #[test]
+    fn ignored_first_message_does_not_create_displayed_text_before_an_answer() {
+        let mut decoder=AcceptedReplyDecoder::new(&super::super::codex::QuestionPrompt::new("Source","Question"));
+        assert!(decoder.decode(automatic_message("ignore","")).unwrap().is_none());
+        assert!(decoder.decode(StreamEvent::Revision(String::new())).unwrap().is_none());
+        match decoder.decode(automatic_message("answer","Actual response.")).unwrap().unwrap(){StreamEvent::QuestionDelta{text,..}=>assert_eq!(text,"Actual response."),_=>panic!()}
+        assert!(matches!(decoder.decode(StreamEvent::Completed).unwrap(),Some(StreamEvent::QuestionCompleted{..})));
+    }
+    #[test]
+    fn message_boundary_rejects_missing_framing_instead_of_discarding_it() {
+        let mut decoder=AcceptedReplyDecoder::new(&super::super::codex::QuestionPrompt::new("Source","Question"));
+        decoder.decode(StreamEvent::Delta("{\"intent\":\"answer\",\"text\":\"Partial".into())).unwrap();
+        let error=decoder.decode(StreamEvent::Revision(String::new())).unwrap_err();
+        assert!(error.contains("JSON is invalid"));
+    }
+    #[test]
+    fn explicit_ignore_and_unexpected_identity_changes_still_fail_visibly() {
+        let mut decoder=AcceptedReplyDecoder::new(&super::super::codex::QuestionPrompt::new("Source","Question").with_explicit_request(true));
+        decoder.decode(automatic_message("ignore","")).unwrap();
+        assert!(decoder.decode(StreamEvent::Revision(String::new())).unwrap_err().contains("explicitly accepted"));
+        assert!(decoder.decode(StreamEvent::Revision("changed input".into())).is_err());
+    }
     async fn server(
         body: &str,
         delay: u64,

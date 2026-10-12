@@ -1,0 +1,42 @@
+{
+  "queueFile": "artifacts/controller-v72/authenticated-dual-r1/verification.json",
+  "queueSha256": "3945cc0adfa0c7748074d48d5d3cb755a2aeae4ead827155ccf088ac85c92752",
+  "completedTasks": [
+    {
+      "name": "authenticated-dual-r1-plan-contextual-text",
+      "journalFile": "artifacts/controller-v72/native/authenticated-dual-r1-plan-contextual-text/interview.json",
+      "journalSha256": "c60ef88ba2c398aa814cf990cf4565c71d3de14054490a5473faa81ca522109b"
+    },
+    {
+      "name": "authenticated-dual-r1-plan-hour-text",
+      "journalFile": "artifacts/controller-v72/native/authenticated-dual-r1-plan-hour-text/interview.json",
+      "journalSha256": "2de452c6597b53a1e2d0b83dd7b74b6d101474170dc98cff336be54f7e031885"
+    },
+    {
+      "name": "authenticated-dual-r1-plan-hour-audio",
+      "journalFile": "artifacts/controller-v72/native/authenticated-dual-r1-plan-hour-audio/interview.json",
+      "journalSha256": "33445b21bd75723a395660331deec17fab6556d62c8e7cede3f7dc47d71ac239"
+    },
+    {
+      "name": "authenticated-dual-r1-codex-reasoning",
+      "journalFile": "artifacts/controller-v72/native/authenticated-dual-r1-codex-reasoning/interview.json",
+      "journalSha256": "b014871b29bf5057f428efb02f8df9c73221619aeff10d2e23c4242b2229f885"
+    },
+    {
+      "name": "authenticated-dual-r1-plan-reasoning",
+      "journalFile": "artifacts/controller-v72/native/authenticated-dual-r1-plan-reasoning/interview.json",
+      "journalSha256": "c996aeca13d566c8d20e1fe979e08264ec0a4414051661b0c5c294e0d0b0eddb"
+    }
+  ],
+  "stoppedTask": {
+    "name": "authenticated-dual-r1-plan-contextual",
+    "file": "artifacts/controller-v72/native/authenticated-dual-r1-plan-contextual/interview.json",
+    "sha256": "cfa05fc2e61fd70f73c6b413ff551ba94e58ff27d8afc9eb99ec22f402205cd8"
+  },
+  "operatorStop": {
+    "at": "2026-10-12T05:18:28Z",
+    "action": "Normal stop_meeting through controller-session-replay --stop",
+    "reason": "Three completed Plan reasoning rows had invalid JSON-object framing; stop measured capture before changing code/building, preserve completed and partial results."
+  },
+  "scope": "Sixth task is deliberately operator-interrupted. Its later inactive-meeting error is not an independent model or runtime failure. Hour and three-hour tasks in this queue were never started."
+}

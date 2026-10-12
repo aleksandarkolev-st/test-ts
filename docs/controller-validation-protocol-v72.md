@@ -81,6 +81,8 @@ Disclosed observer interference is attached to the source-bound row review. Meas
 
 ## Promotion gates
 
+Accepted HTTP replies use the same strict intent/text schema as Codex. Verify the actual outgoing `text.format` JSON-schema body in fixture tests, including answer-only explicit acceptance and unchanged free-form summary calls. Fixture compliance does not establish support by the signed-in Plan route: require nonempty authenticated inference without framing errors before dependent hours-long runs. Preserve failed envelopes as visible failures; do not infer uncaptured provider bytes or silently retry through a billed API. Compare the old failed reasoning trial with the same new questions, while disclosing that natural generated history differs. Run Codex first on the changed build with model/effort unchanged.
+
 The proposed targets remain acceptance criteria: healthy warm accepted-to-write p95 below 250 ms, ordinary follow-up useful feedback p50 at most 2 seconds/p95 at most 3 seconds, no silent lost final request, no obsolete active-panel text, no material correctness/completion regression, and no material age degradation under matched workload. Complex proofs have separate completion measurements. A successful fixture or one fast sample cannot establish these gates.
 
 The final findings and recommendation must be based on completed authenticated captures and their audits. This protocol is not a latency-success claim or a substitute for implementation.

@@ -1,0 +1,3343 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-12T21:35:47.937Z",
+  "evaluationKind": "completed_authenticated_plan_three_hour_capture",
+  "backend": "chatgpt",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
+  "manifestSha256": "f7231700538fb470b8e6c51eef2e558b0b431d4b0deca2fbf749ab07c347c70a",
+  "sourceJournal": {
+    "file": "artifacts/controller-v72/native/error-recovery-dual-r3-chatgpt-three-hour/interview.json",
+    "sha256": "3c55ac6f5acf59296b77578a196a7549da964c231195513bdcb5c9618d9ad9e6",
+    "status": "complete",
+    "stoppedCleanly": true,
+    "actualInterviewDurationMs": 10814758
+  },
+  "manualReview": {
+    "file": "artifacts/controller-v72/reviews/error-recovery-dual-r3-chatgpt-three-hour-final-audit-reviewed.json",
+    "sha256": "05302b0de09ec87c6a6f964d5cc097d1d6cb22f71f5ead1cbbf385a44ec3b9e9"
+  },
+  "utilitySha256": "c1e19fb00189cb5f860cd0de3297d9824448e3dba1b6c69cfe855f32fca3b10b",
+  "summary": {
+    "audioRows": 85,
+    "changedTimingTargets": [],
+    "ambiguousTimingRows": [
+      2,
+      3,
+      4,
+      6,
+      7,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      39,
+      40,
+      41,
+      42,
+      43,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      57,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      77,
+      78,
+      79,
+      80,
+      81,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106
+    ],
+    "multipleAcceptedRows": [
+      5,
+      8,
+      12,
+      15,
+      16,
+      23,
+      27,
+      30,
+      41,
+      44,
+      48,
+      51,
+      52,
+      61,
+      65,
+      68,
+      79,
+      82,
+      86,
+      89,
+      90,
+      97,
+      101,
+      104
+    ]
+  },
+  "rows": [
+    {
+      "round": 2,
+      "name": "hour-1-session-decision",
+      "waveSha256": "79fd3989cc28399bd7abaa2834e641df30590054cb8dd803a9bd136a000f65fe",
+      "originalGenerationId": "fd807ef5-9333-42c0-9121-58e00d2927b2",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 50461,
+          "high": 50465
+        },
+        "end": {
+          "low": 64716,
+          "high": 64720
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "fd807ef5-9333-42c0-9121-58e00d2927b2",
+          "utteranceStartedAt": 50323,
+          "detectedAt": 51426,
+          "acceptedAt": 65700,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 72406,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 3,
+      "name": "hour-1-saved-audio-1",
+      "waveSha256": "1ed27a1c9745acd8c66b7740a6ca059142d71ae594ab61367c42f602785cce83",
+      "originalGenerationId": "3c7ef5f8-66de-41db-9616-d75b1d963a18",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 100511,
+          "high": 100516
+        },
+        "end": {
+          "low": 102726,
+          "high": 102730
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "3c7ef5f8-66de-41db-9616-d75b1d963a18",
+          "utteranceStartedAt": 100366,
+          "detectedAt": 102143,
+          "acceptedAt": 102781,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 110740,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 4,
+      "name": "hour-1-spoken-why-warps",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "5486dbcd-b6ac-46a3-a81a-20132e56f7f0",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 130482,
+          "high": 130487
+        },
+        "end": {
+          "low": 131633,
+          "high": 131638
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5486dbcd-b6ac-46a3-a81a-20132e56f7f0",
+          "utteranceStartedAt": 130339,
+          "detectedAt": 131578,
+          "acceptedAt": 131580,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 139034,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 5,
+      "name": "hour-1-saved-audio-2",
+      "waveSha256": "863d650a99096babab5a994064ce6add6605fe84379b3e5754ca3f9f3f974537",
+      "originalGenerationId": "eb83ad34-80e2-4a62-ab74-f086c5c36dba",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 225479,
+          "high": 225483
+        },
+        "end": {
+          "low": 266621,
+          "high": 266625
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "eee1f58a-9119-4508-876a-deef5878e30c",
+          "utteranceStartedAt": 225347,
+          "detectedAt": 226940,
+          "acceptedAt": 229021,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 238581,
+          "error": null
+        },
+        {
+          "generationId": "eb83ad34-80e2-4a62-ab74-f086c5c36dba",
+          "utteranceStartedAt": 229037,
+          "detectedAt": 230464,
+          "acceptedAt": 267621,
+          "association": "within_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 291503,
+          "error": null
+        }
+      ],
+      "targetGenerationId": "eb83ad34-80e2-4a62-ab74-f086c5c36dba",
+      "selectionChanged": false,
+      "ambiguous": false,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 6,
+      "name": "hour-1-saved-audio-3",
+      "waveSha256": "e3bc3651d4a38d388fa9d809f25a61d7ca8123ffc16041c1bca9086b9884b868",
+      "originalGenerationId": "e4082fbe-d224-46a2-bdae-19e9547e1944",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 350487,
+          "high": 350492
+        },
+        "end": {
+          "low": 394760,
+          "high": 394765
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "e4082fbe-d224-46a2-bdae-19e9547e1944",
+          "utteranceStartedAt": 350353,
+          "detectedAt": 351740,
+          "acceptedAt": 395781,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 425960,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 7,
+      "name": "hour-1-saved-audio-4",
+      "waveSha256": "852dff66384402cd65e42c2bbfe57f96a60e2c124181a610de15f65d86416736",
+      "originalGenerationId": "42733900-a9c7-4ca5-a98f-cadd13ae39ac",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 475469,
+          "high": 475474
+        },
+        "end": {
+          "low": 518981,
+          "high": 518986
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "42733900-a9c7-4ca5-a98f-cadd13ae39ac",
+          "utteranceStartedAt": 475327,
+          "detectedAt": 476873,
+          "acceptedAt": 519940,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 560706,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 8,
+      "name": "hour-1-saved-audio-5",
+      "waveSha256": "5b4ae97f88abd85f9a3fb051138e8fbaa03f223e7d3ba6df64b325d2a0b18d6b",
+      "originalGenerationId": "3190c82e-7013-46af-9624-6a40c9eb27b9",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 600458,
+          "high": 600465
+        },
+        "end": {
+          "low": 652751,
+          "high": 652758
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "9d47581c-e09d-4143-a20f-56ac9b67b398",
+          "utteranceStartedAt": 600347,
+          "detectedAt": 601662,
+          "acceptedAt": 602981,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 608548,
+          "error": null
+        },
+        {
+          "generationId": "3190c82e-7013-46af-9624-6a40c9eb27b9",
+          "utteranceStartedAt": 603077,
+          "detectedAt": 604858,
+          "acceptedAt": 653740,
+          "association": "within_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 687863,
+          "error": null
+        }
+      ],
+      "targetGenerationId": "3190c82e-7013-46af-9624-6a40c9eb27b9",
+      "selectionChanged": false,
+      "ambiguous": false,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 9,
+      "name": "hour-1-saved-audio-6",
+      "waveSha256": "aef1e7d68aaa7dadaa4e374ce16db069b8728c8644462e1ebb5e58b1e0923c30",
+      "originalGenerationId": "48adea88-193c-4d1e-8b3f-75d8f5be032b",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 725478,
+          "high": 725487
+        },
+        "end": {
+          "low": 737743,
+          "high": 737752
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "48adea88-193c-4d1e-8b3f-75d8f5be032b",
+          "utteranceStartedAt": 725300,
+          "detectedAt": 726656,
+          "acceptedAt": 738740,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 749885,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 10,
+      "name": "hour-1-saved-audio-7",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "623f5ba9-b0f9-4522-b56b-25c57292a201",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 850496,
+          "high": 850502
+        },
+        "end": {
+          "low": 851647,
+          "high": 851653
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "623f5ba9-b0f9-4522-b56b-25c57292a201",
+          "utteranceStartedAt": 850334,
+          "detectedAt": 851632,
+          "acceptedAt": 851661,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 858384,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 11,
+      "name": "hour-1-saved-audio-8",
+      "waveSha256": "e97cf000b055bc4e4dda3c6b20cbad497a8e06b5eca7905578b4a664eb137e4a",
+      "originalGenerationId": "9fc7be0f-96a2-45c2-9180-44f64c8d20e5",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 975443,
+          "high": 975451
+        },
+        "end": {
+          "low": 1029327,
+          "high": 1029335
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "9fc7be0f-96a2-45c2-9180-44f64c8d20e5",
+          "utteranceStartedAt": 975331,
+          "detectedAt": 977399,
+          "acceptedAt": 1030300,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1068435,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 12,
+      "name": "hour-1-saved-audio-9",
+      "waveSha256": "a744d51f1389937c6296690687d15f17af6d40bfc029011c63c5df25fca49f2a",
+      "originalGenerationId": "09a3d89b-291a-4676-996e-8966de83ca78",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1100482,
+          "high": 1100489
+        },
+        "end": {
+          "low": 1139214,
+          "high": 1139221
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "27ae05ee-edb0-407d-bb29-cb3f4cbe2dfe",
+          "utteranceStartedAt": 1100376,
+          "detectedAt": 1101716,
+          "acceptedAt": null,
+          "association": "outside_playback",
+          "phase": "cancelled",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "ffcb84f9-259c-4747-8ca7-86920966cdb9",
+          "utteranceStartedAt": 1100376,
+          "detectedAt": 1102512,
+          "acceptedAt": 1104140,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "09a3d89b-291a-4676-996e-8966de83ca78",
+          "utteranceStartedAt": 1100376,
+          "detectedAt": 1105081,
+          "acceptedAt": 1140221,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1174350,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 13,
+      "name": "hour-1-saved-audio-10",
+      "waveSha256": "18654adecfeb6991a62a2a95354c19d3bada670d071eb959d18466d3d26296cd",
+      "originalGenerationId": "2965e224-2b4e-4c88-82b5-14dc189efa33",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1225472,
+          "high": 1225482
+        },
+        "end": {
+          "low": 1276374,
+          "high": 1276384
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "2965e224-2b4e-4c88-82b5-14dc189efa33",
+          "utteranceStartedAt": 1225326,
+          "detectedAt": 1226842,
+          "acceptedAt": 1277381,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1325850,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 14,
+      "name": "hour-1-saved-audio-11",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "d5c54584-aef7-4bab-8ce3-20e047465453",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1350481,
+          "high": 1350491
+        },
+        "end": {
+          "low": 1352526,
+          "high": 1352536
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "d5c54584-aef7-4bab-8ce3-20e047465453",
+          "utteranceStartedAt": 1350337,
+          "detectedAt": 1351486,
+          "acceptedAt": 1352301,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1358635,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 15,
+      "name": "hour-1-saved-audio-12",
+      "waveSha256": "f347d1c69f0684e958f12c93dfae253b40f8df6b245032b403884514d84caa8b",
+      "originalGenerationId": "189f8351-2ce8-47e7-be06-9d4de81de032",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1475456,
+          "high": 1475464
+        },
+        "end": {
+          "low": 1519580,
+          "high": 1519588
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "8feaab4f-1f2f-4226-9fb8-1d0e9ac46999",
+          "utteranceStartedAt": 1475326,
+          "detectedAt": 1476464,
+          "acceptedAt": 1477780,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "189f8351-2ce8-47e7-be06-9d4de81de032",
+          "utteranceStartedAt": 1475326,
+          "detectedAt": 1478389,
+          "acceptedAt": 1520541,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1554130,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 16,
+      "name": "hour-1-saved-audio-13",
+      "waveSha256": "baa7de8b56437ff5df8cff2897c2201cdce5d50bd357cd2d9daa2b2a75dff3c7",
+      "originalGenerationId": "ff5c39c7-1229-49d3-a148-acb4e10d427a",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1600474,
+          "high": 1600484
+        },
+        "end": {
+          "low": 1653278,
+          "high": 1653288
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "97e967b7-8440-4798-95d1-adaa8b38a169",
+          "utteranceStartedAt": 1600351,
+          "detectedAt": 1601600,
+          "acceptedAt": 1603701,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "ff5c39c7-1229-49d3-a148-acb4e10d427a",
+          "utteranceStartedAt": 1600351,
+          "detectedAt": 1604327,
+          "acceptedAt": 1654301,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1682037,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 17,
+      "name": "hour-1-saved-audio-14",
+      "waveSha256": "898fd684f4f7dfa03045ed5ba86a9f31f765edbc4b5693682157e9b105fcdaae",
+      "originalGenerationId": "668882c3-a6ef-4060-94be-b6dc736aae91",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1725478,
+          "high": 1725489
+        },
+        "end": {
+          "low": 1734513,
+          "high": 1734524
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "668882c3-a6ef-4060-94be-b6dc736aae91",
+          "utteranceStartedAt": 1725323,
+          "detectedAt": 1726584,
+          "acceptedAt": 1735500,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1749436,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 20,
+      "name": "hour-1-spoken-why-during-coding",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "7ce96695-2431-432a-ae1b-236fdbc01e9a",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1816542,
+          "high": 1816554
+        },
+        "end": {
+          "low": 1817698,
+          "high": 1817710
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "7ce96695-2431-432a-ae1b-236fdbc01e9a",
+          "utteranceStartedAt": 1816413,
+          "detectedAt": 1817624,
+          "acceptedAt": 1817660,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 1843136,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 21,
+      "name": "hour-1-saved-audio-15",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": null,
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1850496,
+          "high": 1850510
+        },
+        "end": {
+          "low": 1851646,
+          "high": 1851660
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 22,
+      "name": "hour-1-saved-audio-16",
+      "waveSha256": "467942c4996d8aaabfc6a7367d4da40a2eaeb424bc99b622dc7898674be2939d",
+      "originalGenerationId": "af3d457b-eb96-4372-bfab-e6d749cba95d",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 1975469,
+          "high": 1975482
+        },
+        "end": {
+          "low": 2026216,
+          "high": 2026229
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "af3d457b-eb96-4372-bfab-e6d749cba95d",
+          "utteranceStartedAt": 1975331,
+          "detectedAt": 1976680,
+          "acceptedAt": 2027141,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2073715,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 23,
+      "name": "hour-1-saved-audio-17",
+      "waveSha256": "40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad",
+      "originalGenerationId": "a8307a69-393d-4e4a-9b44-62651de9ada1",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2100480,
+          "high": 2100494
+        },
+        "end": {
+          "low": 2135675,
+          "high": 2135689
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "c9e69984-7ff9-484f-bdae-66fc4b0b9ceb",
+          "utteranceStartedAt": 2100358,
+          "detectedAt": 2101656,
+          "acceptedAt": 2104061,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "add3cc58-4af7-4b23-b219-904d49fb7b38",
+          "utteranceStartedAt": 2100358,
+          "detectedAt": 2104850,
+          "acceptedAt": 2120260,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "a8307a69-393d-4e4a-9b44-62651de9ada1",
+          "utteranceStartedAt": 2100358,
+          "detectedAt": 2121332,
+          "acceptedAt": 2136621,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2167854,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 24,
+      "name": "hour-1-saved-audio-18",
+      "waveSha256": "a0e8e84e3530a72de0d31dd6d5eccbb1388e0c7c1f69d5c9baf3f81b59605829",
+      "originalGenerationId": "544bfc98-cc27-436c-a4ab-d8a8a7fff0a7",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2225496,
+          "high": 2225510
+        },
+        "end": {
+          "low": 2272719,
+          "high": 2272733
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "544bfc98-cc27-436c-a4ab-d8a8a7fff0a7",
+          "utteranceStartedAt": 2225384,
+          "detectedAt": 2226927,
+          "acceptedAt": 2273782,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2298611,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 25,
+      "name": "hour-1-saved-audio-19",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "b73f5a6f-d8af-4613-b464-ceb2d8331a24",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2350486,
+          "high": 2350501
+        },
+        "end": {
+          "low": 2352527,
+          "high": 2352542
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "b73f5a6f-d8af-4613-b464-ceb2d8331a24",
+          "utteranceStartedAt": 2350360,
+          "detectedAt": 2351430,
+          "acceptedAt": 2352260,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2357727,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 26,
+      "name": "hour-1-saved-audio-20",
+      "waveSha256": "c0655bd8df664a0187b55353cdfd455478d196c88f6a5f0b1a1592aae838290d",
+      "originalGenerationId": "74b07aba-3d06-493d-a4c6-4b35c6444cbb",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2475487,
+          "high": 2475500
+        },
+        "end": {
+          "low": 2509884,
+          "high": 2509897
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "74b07aba-3d06-493d-a4c6-4b35c6444cbb",
+          "utteranceStartedAt": 2475357,
+          "detectedAt": 2476874,
+          "acceptedAt": 2510901,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2534019,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 27,
+      "name": "hour-1-saved-audio-21",
+      "waveSha256": "ef020444fcd5eb860a7e759f69b31fd8e76fcf9886643e1162678b9f8b5b7508",
+      "originalGenerationId": "0bac534a-2f2a-40d8-bcc9-686d56ed55b4",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2600475,
+          "high": 2600492
+        },
+        "end": {
+          "low": 2653176,
+          "high": 2653193
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "209e12b6-1839-40af-924a-5afa58c25670",
+          "utteranceStartedAt": 2600344,
+          "detectedAt": 2601686,
+          "acceptedAt": 2603141,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "a71b8b41-5b36-4ce0-bdc1-193d9db80c1e",
+          "utteranceStartedAt": 2600344,
+          "detectedAt": 2604076,
+          "acceptedAt": 2630901,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "0bac534a-2f2a-40d8-bcc9-686d56ed55b4",
+          "utteranceStartedAt": 2600344,
+          "detectedAt": 2631599,
+          "acceptedAt": 2654140,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2698382,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 28,
+      "name": "hour-1-saved-audio-22",
+      "waveSha256": "1589403e326c42fecf218caa71cb4765b7dbd773bad1b9d225592770d4518661",
+      "originalGenerationId": "03b80900-ee71-4565-bb34-f08e10473c9d",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2725515,
+          "high": 2725531
+        },
+        "end": {
+          "low": 2734679,
+          "high": 2734695
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "03b80900-ee71-4565-bb34-f08e10473c9d",
+          "utteranceStartedAt": 2725391,
+          "detectedAt": 2726963,
+          "acceptedAt": 2735620,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2745011,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 29,
+      "name": "hour-1-saved-audio-23",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "379de9fe-e6e8-49b9-b2bd-cacb8b13b500",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2850474,
+          "high": 2850491
+        },
+        "end": {
+          "low": 2851625,
+          "high": 2851641
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "379de9fe-e6e8-49b9-b2bd-cacb8b13b500",
+          "utteranceStartedAt": 2850343,
+          "detectedAt": 2851607,
+          "acceptedAt": 2851620,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 2859698,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 30,
+      "name": "hour-1-saved-audio-24",
+      "waveSha256": "880563a0d0533a43e0a73394e88640aa8e9d7d96453ac284cd617a2fbe61606a",
+      "originalGenerationId": "054ced97-45cd-46d2-b257-220037be76d0",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 2975495,
+          "high": 2975509
+        },
+        "end": {
+          "low": 3022050,
+          "high": 3022064
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "332562e9-ba81-4fb7-a3ad-d4ad85a62313",
+          "utteranceStartedAt": 2975357,
+          "detectedAt": 2976913,
+          "acceptedAt": 2979500,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "054ced97-45cd-46d2-b257-220037be76d0",
+          "utteranceStartedAt": 2975357,
+          "detectedAt": 2980420,
+          "acceptedAt": 3023021,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 3035959,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 31,
+      "name": "hour-1-saved-audio-25",
+      "waveSha256": "943fb8d3aea3b83141b3baae03b22dc4e2a696350fe20a5ebe2db12965b9fff2",
+      "originalGenerationId": "1891b412-2a84-44cc-956b-33b60a854493",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3100510,
+          "high": 3100526
+        },
+        "end": {
+          "low": 3137332,
+          "high": 3137348
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "1891b412-2a84-44cc-956b-33b60a854493",
+          "utteranceStartedAt": 3100357,
+          "detectedAt": 3101890,
+          "acceptedAt": 3138341,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 3154493,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 32,
+      "name": "hour-1-saved-audio-26",
+      "waveSha256": "e96f72914a151482951dfe10b40f92111f9389c0cd1e3b6756ba743a2ecbde43",
+      "originalGenerationId": "939e55f9-c1c3-4bd4-908d-913744175620",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3225482,
+          "high": 3225497
+        },
+        "end": {
+          "low": 3277286,
+          "high": 3277301
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "939e55f9-c1c3-4bd4-908d-913744175620",
+          "utteranceStartedAt": 3225360,
+          "detectedAt": 3226700,
+          "acceptedAt": 3278340,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 3304496,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 39,
+      "name": "hour-2-saved-audio-1",
+      "waveSha256": "1ed27a1c9745acd8c66b7740a6ca059142d71ae594ab61367c42f602785cce83",
+      "originalGenerationId": "08cc85a7-37e6-40b3-a690-fc6e64c9d922",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3700494,
+          "high": 3700512
+        },
+        "end": {
+          "low": 3702706,
+          "high": 3702724
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "08cc85a7-37e6-40b3-a690-fc6e64c9d922",
+          "utteranceStartedAt": 3700329,
+          "detectedAt": 3702078,
+          "acceptedAt": 3702901,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 3711666,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 40,
+      "name": "hour-2-spoken-why-warps",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": null,
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3730494,
+          "high": 3730510
+        },
+        "end": {
+          "low": 3731649,
+          "high": 3731665
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 41,
+      "name": "hour-2-saved-audio-2",
+      "waveSha256": "863d650a99096babab5a994064ce6add6605fe84379b3e5754ca3f9f3f974537",
+      "originalGenerationId": "8f262e93-90ea-4c9b-9ede-1e9454d6b336",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3855057,
+          "high": 3855073
+        },
+        "end": {
+          "low": 3896202,
+          "high": 3896218
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "f017036f-f919-423a-ae05-e311c7ea3e8f",
+          "utteranceStartedAt": 3854939,
+          "detectedAt": 3856354,
+          "acceptedAt": 3858620,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "8f262e93-90ea-4c9b-9ede-1e9454d6b336",
+          "utteranceStartedAt": 3854939,
+          "detectedAt": 3859554,
+          "acceptedAt": 3897180,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 3914270,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 42,
+      "name": "hour-2-saved-audio-3",
+      "waveSha256": "e3bc3651d4a38d388fa9d809f25a61d7ca8123ffc16041c1bca9086b9884b868",
+      "originalGenerationId": "6f1f7667-60d7-44e1-a0a9-b19ce4f89ef6",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 3950499,
+          "high": 3950516
+        },
+        "end": {
+          "low": 3994772,
+          "high": 3994789
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "6f1f7667-60d7-44e1-a0a9-b19ce4f89ef6",
+          "utteranceStartedAt": 3950377,
+          "detectedAt": 3951712,
+          "acceptedAt": 3995821,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4019153,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 43,
+      "name": "hour-2-saved-audio-4",
+      "waveSha256": "852dff66384402cd65e42c2bbfe57f96a60e2c124181a610de15f65d86416736",
+      "originalGenerationId": "613dce84-9e92-441f-8cc3-3c83ba626af6",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4075487,
+          "high": 4075506
+        },
+        "end": {
+          "low": 4119000,
+          "high": 4119019
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "613dce84-9e92-441f-8cc3-3c83ba626af6",
+          "utteranceStartedAt": 4075351,
+          "detectedAt": 4076854,
+          "acceptedAt": 4119980,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4160758,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 44,
+      "name": "hour-2-saved-audio-5",
+      "waveSha256": "5b4ae97f88abd85f9a3fb051138e8fbaa03f223e7d3ba6df64b325d2a0b18d6b",
+      "originalGenerationId": "b411a288-217c-4b7f-baf5-a0cf2ce99ea3",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4200495,
+          "high": 4200522
+        },
+        "end": {
+          "low": 4252790,
+          "high": 4252817
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "3d2086a4-f6de-4ade-a1e1-e4c0d13cb993",
+          "utteranceStartedAt": 4200385,
+          "detectedAt": 4201666,
+          "acceptedAt": 4203101,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4211630,
+          "error": null
+        },
+        {
+          "generationId": "b411a288-217c-4b7f-baf5-a0cf2ce99ea3",
+          "utteranceStartedAt": 4203115,
+          "detectedAt": 4204854,
+          "acceptedAt": 4253780,
+          "association": "within_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4283148,
+          "error": null
+        }
+      ],
+      "targetGenerationId": "b411a288-217c-4b7f-baf5-a0cf2ce99ea3",
+      "selectionChanged": false,
+      "ambiguous": false,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 45,
+      "name": "hour-2-saved-audio-6",
+      "waveSha256": "aef1e7d68aaa7dadaa4e374ce16db069b8728c8644462e1ebb5e58b1e0923c30",
+      "originalGenerationId": "f6301640-7d41-43d8-9a3b-222ea3a97b54",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4325504,
+          "high": 4325527
+        },
+        "end": {
+          "low": 4337765,
+          "high": 4337788
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "f6301640-7d41-43d8-9a3b-222ea3a97b54",
+          "utteranceStartedAt": 4325369,
+          "detectedAt": 4326801,
+          "acceptedAt": 4338780,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4347014,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 46,
+      "name": "hour-2-saved-audio-7",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "cae2a5c1-f834-4d3f-b0bb-50b42e605823",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4450497,
+          "high": 4450516
+        },
+        "end": {
+          "low": 4451651,
+          "high": 4451670
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "cae2a5c1-f834-4d3f-b0bb-50b42e605823",
+          "utteranceStartedAt": 4450371,
+          "detectedAt": 4451607,
+          "acceptedAt": 4451620,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4458660,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 47,
+      "name": "hour-2-saved-audio-8",
+      "waveSha256": "e97cf000b055bc4e4dda3c6b20cbad497a8e06b5eca7905578b4a664eb137e4a",
+      "originalGenerationId": "22eacd57-6a8e-474f-bc92-0a58cbf9f5bf",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4575508,
+          "high": 4575526
+        },
+        "end": {
+          "low": 4629392,
+          "high": 4629410
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "22eacd57-6a8e-474f-bc92-0a58cbf9f5bf",
+          "utteranceStartedAt": 4575384,
+          "detectedAt": 4577392,
+          "acceptedAt": 4630380,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4663530,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 48,
+      "name": "hour-2-saved-audio-9",
+      "waveSha256": "a744d51f1389937c6296690687d15f17af6d40bfc029011c63c5df25fca49f2a",
+      "originalGenerationId": "20b7438d-77e1-4d7a-becd-b8dd766eb77e",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4700500,
+          "high": 4700520
+        },
+        "end": {
+          "low": 4739234,
+          "high": 4739254
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "0d6957f0-db0d-490a-83ae-1632496209ce",
+          "utteranceStartedAt": 4700390,
+          "detectedAt": 4701716,
+          "acceptedAt": null,
+          "association": "outside_playback",
+          "phase": "cancelled",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "b83fe4be-731a-4ca6-9b6c-1200829c4cdc",
+          "utteranceStartedAt": 4700390,
+          "detectedAt": 4702513,
+          "acceptedAt": 4704140,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "20b7438d-77e1-4d7a-becd-b8dd766eb77e",
+          "utteranceStartedAt": 4700390,
+          "detectedAt": 4705073,
+          "acceptedAt": 4740220,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4774466,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 49,
+      "name": "hour-2-saved-audio-10",
+      "waveSha256": "18654adecfeb6991a62a2a95354c19d3bada670d071eb959d18466d3d26296cd",
+      "originalGenerationId": "48f71284-967a-4c37-880e-e15a445918b7",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4825497,
+          "high": 4825517
+        },
+        "end": {
+          "low": 4876403,
+          "high": 4876423
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "48f71284-967a-4c37-880e-e15a445918b7",
+          "utteranceStartedAt": 4825383,
+          "detectedAt": 4827009,
+          "acceptedAt": 4877420,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4906024,
+          "error": "Answer stream ended before response.completed"
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 50,
+      "name": "hour-2-saved-audio-11",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "5ae1cd23-3978-4358-8b8e-8c1250e8e9c6",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 4950494,
+          "high": 4950517
+        },
+        "end": {
+          "low": 4952537,
+          "high": 4952560
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5ae1cd23-3978-4358-8b8e-8c1250e8e9c6",
+          "utteranceStartedAt": 4950370,
+          "detectedAt": 4951500,
+          "acceptedAt": 4952341,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 4957530,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 51,
+      "name": "hour-2-saved-audio-12",
+      "waveSha256": "f347d1c69f0684e958f12c93dfae253b40f8df6b245032b403884514d84caa8b",
+      "originalGenerationId": "39be5c43-85a6-4028-a21d-25f52301cdb4",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5075487,
+          "high": 5075506
+        },
+        "end": {
+          "low": 5119607,
+          "high": 5119626
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "0e299e4f-066e-45af-80d8-465251d7625b",
+          "utteranceStartedAt": 5075365,
+          "detectedAt": 5076627,
+          "acceptedAt": 5077780,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "39be5c43-85a6-4028-a21d-25f52301cdb4",
+          "utteranceStartedAt": 5075365,
+          "detectedAt": 5078545,
+          "acceptedAt": 5120581,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5139013,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 52,
+      "name": "hour-2-saved-audio-13",
+      "waveSha256": "baa7de8b56437ff5df8cff2897c2201cdce5d50bd357cd2d9daa2b2a75dff3c7",
+      "originalGenerationId": "b50d92b4-d51e-4025-9760-8ce22a51f314",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5200484,
+          "high": 5200507
+        },
+        "end": {
+          "low": 5253285,
+          "high": 5253308
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5bac72ee-09b1-44ad-9114-d3a03bf77e11",
+          "utteranceStartedAt": 5200350,
+          "detectedAt": 5201608,
+          "acceptedAt": 5203700,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "b50d92b4-d51e-4025-9760-8ce22a51f314",
+          "utteranceStartedAt": 5200350,
+          "detectedAt": 5204332,
+          "acceptedAt": 5254300,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5265317,
+          "error": "Answer stream ended before response.completed"
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 53,
+      "name": "hour-2-saved-audio-14",
+      "waveSha256": "898fd684f4f7dfa03045ed5ba86a9f31f765edbc4b5693682157e9b105fcdaae",
+      "originalGenerationId": "91a33e73-41b7-40d8-ba1e-0d7092b0b1f5",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5325493,
+          "high": 5325516
+        },
+        "end": {
+          "low": 5334526,
+          "high": 5334549
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "91a33e73-41b7-40d8-ba1e-0d7092b0b1f5",
+          "utteranceStartedAt": 5325357,
+          "detectedAt": 5326605,
+          "acceptedAt": 5335500,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5344648,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 57,
+      "name": "hour-2-spoken-why-during-coding",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "faca7f18-d1ad-4772-bb28-70f683ab3a35",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5426917,
+          "high": 5426952
+        },
+        "end": {
+          "low": 5428071,
+          "high": 5428106
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "faca7f18-d1ad-4772-bb28-70f683ab3a35",
+          "utteranceStartedAt": 5426810,
+          "detectedAt": 5428045,
+          "acceptedAt": 5428060,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5454179,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 59,
+      "name": "hour-2-saved-audio-15",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": null,
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5471725,
+          "high": 5471747
+        },
+        "end": {
+          "low": 5472878,
+          "high": 5472900
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 60,
+      "name": "hour-2-saved-audio-16",
+      "waveSha256": "467942c4996d8aaabfc6a7367d4da40a2eaeb424bc99b622dc7898674be2939d",
+      "originalGenerationId": "595630d6-af9b-4fde-a2f0-6f6e6cb3d010",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5596491,
+          "high": 5596517
+        },
+        "end": {
+          "low": 5647233,
+          "high": 5647259
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "595630d6-af9b-4fde-a2f0-6f6e6cb3d010",
+          "utteranceStartedAt": 5596374,
+          "detectedAt": 5597643,
+          "acceptedAt": 5648181,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5691367,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 61,
+      "name": "hour-2-saved-audio-17",
+      "waveSha256": "40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad",
+      "originalGenerationId": "e87367d4-7e2d-4b69-993b-47b714fc7eed",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5700501,
+          "high": 5700529
+        },
+        "end": {
+          "low": 5735694,
+          "high": 5735722
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5d3cc1f4-479a-41c4-ae13-000dc7dc92e1",
+          "utteranceStartedAt": 5700381,
+          "detectedAt": 5701665,
+          "acceptedAt": 5704064,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "dd1ccec5-56e3-4583-a3cb-fc6d8c154a31",
+          "utteranceStartedAt": 5700381,
+          "detectedAt": 5705024,
+          "acceptedAt": 5720221,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "e87367d4-7e2d-4b69-993b-47b714fc7eed",
+          "utteranceStartedAt": 5700381,
+          "detectedAt": 5721341,
+          "acceptedAt": 5736661,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5780929,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 62,
+      "name": "hour-2-saved-audio-18",
+      "waveSha256": "a0e8e84e3530a72de0d31dd6d5eccbb1388e0c7c1f69d5c9baf3f81b59605829",
+      "originalGenerationId": "23a4aa1e-5126-4138-85f9-509023e26f78",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5825501,
+          "high": 5825526
+        },
+        "end": {
+          "low": 5872724,
+          "high": 5872749
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "23a4aa1e-5126-4138-85f9-509023e26f78",
+          "utteranceStartedAt": 5825404,
+          "detectedAt": 5826938,
+          "acceptedAt": 5873781,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5892444,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 63,
+      "name": "hour-2-saved-audio-19",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "7b3da848-fd22-429f-bc9d-ddf4e01358b5",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 5950508,
+          "high": 5950533
+        },
+        "end": {
+          "low": 5952553,
+          "high": 5952578
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "7b3da848-fd22-429f-bc9d-ddf4e01358b5",
+          "utteranceStartedAt": 5950378,
+          "detectedAt": 5951581,
+          "acceptedAt": 5952381,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 5959302,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 64,
+      "name": "hour-2-saved-audio-20",
+      "waveSha256": "c0655bd8df664a0187b55353cdfd455478d196c88f6a5f0b1a1592aae838290d",
+      "originalGenerationId": "0cf32985-ea9d-4a3a-98a3-d14e27758173",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6075509,
+          "high": 6075536
+        },
+        "end": {
+          "low": 6109901,
+          "high": 6109928
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "0cf32985-ea9d-4a3a-98a3-d14e27758173",
+          "utteranceStartedAt": 6075400,
+          "detectedAt": 6076878,
+          "acceptedAt": 6110940,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6129591,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 65,
+      "name": "hour-2-saved-audio-21",
+      "waveSha256": "ef020444fcd5eb860a7e759f69b31fd8e76fcf9886643e1162678b9f8b5b7508",
+      "originalGenerationId": "191b3b78-857f-43ae-bdc3-68e7129ab2b7",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6200507,
+          "high": 6200533
+        },
+        "end": {
+          "low": 6253214,
+          "high": 6253240
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "b617baee-fa2b-45fd-9f3e-79f309dbb91c",
+          "utteranceStartedAt": 6200362,
+          "detectedAt": 6201858,
+          "acceptedAt": 6203140,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "197b4110-56e7-43c6-8e1a-44c598ba5cc7",
+          "utteranceStartedAt": 6200362,
+          "detectedAt": 6204097,
+          "acceptedAt": 6230902,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "191b3b78-857f-43ae-bdc3-68e7129ab2b7",
+          "utteranceStartedAt": 6200362,
+          "detectedAt": 6231776,
+          "acceptedAt": 6254221,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6295801,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 66,
+      "name": "hour-2-saved-audio-22",
+      "waveSha256": "1589403e326c42fecf218caa71cb4765b7dbd773bad1b9d225592770d4518661",
+      "originalGenerationId": "5a1deb8f-1489-4194-bdcd-b4d796b3da42",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6325493,
+          "high": 6325519
+        },
+        "end": {
+          "low": 6334656,
+          "high": 6334682
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5a1deb8f-1489-4194-bdcd-b4d796b3da42",
+          "utteranceStartedAt": 6325362,
+          "detectedAt": 6326841,
+          "acceptedAt": 6335581,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6343158,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 67,
+      "name": "hour-2-saved-audio-23",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "8c65da84-5d62-44fe-b86f-da397875c9d9",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6450496,
+          "high": 6450521
+        },
+        "end": {
+          "low": 6451645,
+          "high": 6451670
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "8c65da84-5d62-44fe-b86f-da397875c9d9",
+          "utteranceStartedAt": 6450362,
+          "detectedAt": 6451641,
+          "acceptedAt": 6451661,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6458235,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 68,
+      "name": "hour-2-saved-audio-24",
+      "waveSha256": "880563a0d0533a43e0a73394e88640aa8e9d7d96453ac284cd617a2fbe61606a",
+      "originalGenerationId": "d73457fb-f9fd-45b3-807b-7ccd31b541df",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6575505,
+          "high": 6575533
+        },
+        "end": {
+          "low": 6622060,
+          "high": 6622088
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "5cd6b840-acd5-4f7e-a096-2d820f400afb",
+          "utteranceStartedAt": 6575361,
+          "detectedAt": 6576953,
+          "acceptedAt": 6579540,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "d73457fb-f9fd-45b3-807b-7ccd31b541df",
+          "utteranceStartedAt": 6575361,
+          "detectedAt": 6580474,
+          "acceptedAt": 6623060,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6635292,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 69,
+      "name": "hour-2-saved-audio-25",
+      "waveSha256": "943fb8d3aea3b83141b3baae03b22dc4e2a696350fe20a5ebe2db12965b9fff2",
+      "originalGenerationId": "73885091-265d-45ef-96b1-c2c7351dd86e",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6700496,
+          "high": 6700525
+        },
+        "end": {
+          "low": 6737323,
+          "high": 6737352
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "73885091-265d-45ef-96b1-c2c7351dd86e",
+          "utteranceStartedAt": 6700394,
+          "detectedAt": 6701929,
+          "acceptedAt": 6738381,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6754885,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 70,
+      "name": "hour-2-saved-audio-26",
+      "waveSha256": "e96f72914a151482951dfe10b40f92111f9389c0cd1e3b6756ba743a2ecbde43",
+      "originalGenerationId": "c910921c-da27-4e29-8288-673c76aa3bcb",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 6825504,
+          "high": 6825531
+        },
+        "end": {
+          "low": 6877311,
+          "high": 6877338
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "c910921c-da27-4e29-8288-673c76aa3bcb",
+          "utteranceStartedAt": 6825387,
+          "detectedAt": 6826748,
+          "acceptedAt": 6878340,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 6901375,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 77,
+      "name": "hour-3-saved-audio-1",
+      "waveSha256": "1ed27a1c9745acd8c66b7740a6ca059142d71ae594ab61367c42f602785cce83",
+      "originalGenerationId": "b8ce2b1d-f30c-488e-a023-f5e2ea7195ff",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7300504,
+          "high": 7300532
+        },
+        "end": {
+          "low": 7302716,
+          "high": 7302744
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "b8ce2b1d-f30c-488e-a023-f5e2ea7195ff",
+          "utteranceStartedAt": 7300387,
+          "detectedAt": 7302244,
+          "acceptedAt": 7302900,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7310759,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 78,
+      "name": "hour-3-spoken-why-warps",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": null,
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7330515,
+          "high": 7330540
+        },
+        "end": {
+          "low": 7331668,
+          "high": 7331693
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 79,
+      "name": "hour-3-saved-audio-2",
+      "waveSha256": "863d650a99096babab5a994064ce6add6605fe84379b3e5754ca3f9f3f974537",
+      "originalGenerationId": "7744b65f-9def-4403-a148-ab11450ab0ce",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7455738,
+          "high": 7455771
+        },
+        "end": {
+          "low": 7496881,
+          "high": 7496913
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "ca39cf45-c83d-4827-b3fd-2826fed88265",
+          "utteranceStartedAt": 7455586,
+          "detectedAt": 7457015,
+          "acceptedAt": 7459421,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "7744b65f-9def-4403-a148-ab11450ab0ce",
+          "utteranceStartedAt": 7455586,
+          "detectedAt": 7460219,
+          "acceptedAt": 7497862,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7516058,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 80,
+      "name": "hour-3-saved-audio-3",
+      "waveSha256": "e3bc3651d4a38d388fa9d809f25a61d7ca8123ffc16041c1bca9086b9884b868",
+      "originalGenerationId": "35aebb08-6db3-4c85-8a54-ccc059a4b828",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7550519,
+          "high": 7550550
+        },
+        "end": {
+          "low": 7594792,
+          "high": 7594823
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "35aebb08-6db3-4c85-8a54-ccc059a4b828",
+          "utteranceStartedAt": 7550386,
+          "detectedAt": 7551745,
+          "acceptedAt": 7595821,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7623659,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 81,
+      "name": "hour-3-saved-audio-4",
+      "waveSha256": "852dff66384402cd65e42c2bbfe57f96a60e2c124181a610de15f65d86416736",
+      "originalGenerationId": "945afcf9-160b-4e86-b681-75737eeae86f",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7675648,
+          "high": 7675687
+        },
+        "end": {
+          "low": 7719161,
+          "high": 7719200
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "945afcf9-160b-4e86-b681-75737eeae86f",
+          "utteranceStartedAt": 7675529,
+          "detectedAt": 7677045,
+          "acceptedAt": 7720181,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7751286,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 82,
+      "name": "hour-3-saved-audio-5",
+      "waveSha256": "5b4ae97f88abd85f9a3fb051138e8fbaa03f223e7d3ba6df64b325d2a0b18d6b",
+      "originalGenerationId": "f7f1ece8-3402-4f07-af0a-5c646dfb8c77",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7800518,
+          "high": 7800562
+        },
+        "end": {
+          "low": 7852811,
+          "high": 7852855
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "4c463dc9-7086-4dfb-ae84-41e607dfeab8",
+          "utteranceStartedAt": 7800431,
+          "detectedAt": 7801696,
+          "acceptedAt": 7803140,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7808306,
+          "error": null
+        },
+        {
+          "generationId": "f7f1ece8-3402-4f07-af0a-5c646dfb8c77",
+          "utteranceStartedAt": 7803161,
+          "detectedAt": 7805047,
+          "acceptedAt": 7853821,
+          "association": "within_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7882915,
+          "error": null
+        }
+      ],
+      "targetGenerationId": "f7f1ece8-3402-4f07-af0a-5c646dfb8c77",
+      "selectionChanged": false,
+      "ambiguous": false,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 83,
+      "name": "hour-3-saved-audio-6",
+      "waveSha256": "aef1e7d68aaa7dadaa4e374ce16db069b8728c8644462e1ebb5e58b1e0923c30",
+      "originalGenerationId": "d3eff7a9-daca-4848-8a40-6c0ebaef832d",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 7925538,
+          "high": 7925580
+        },
+        "end": {
+          "low": 7937798,
+          "high": 7937840
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "d3eff7a9-daca-4848-8a40-6c0ebaef832d",
+          "utteranceStartedAt": 7925424,
+          "detectedAt": 7926821,
+          "acceptedAt": 7938820,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 7947265,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 84,
+      "name": "hour-3-saved-audio-7",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "0af28cb4-5c25-4c8e-80f9-a6d1a0a2347d",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8050546,
+          "high": 8050576
+        },
+        "end": {
+          "low": 8051699,
+          "high": 8051729
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "0af28cb4-5c25-4c8e-80f9-a6d1a0a2347d",
+          "utteranceStartedAt": 8050410,
+          "detectedAt": 8051635,
+          "acceptedAt": 8051660,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8058550,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 85,
+      "name": "hour-3-saved-audio-8",
+      "waveSha256": "e97cf000b055bc4e4dda3c6b20cbad497a8e06b5eca7905578b4a664eb137e4a",
+      "originalGenerationId": "58baa3b6-ebb1-4e3e-91d6-e4fbd16cb1bd",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8175512,
+          "high": 8175540
+        },
+        "end": {
+          "low": 8229393,
+          "high": 8229421
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "85c39145-4544-4886-ad4f-0e164c91513f",
+          "utteranceStartedAt": 8175411,
+          "detectedAt": 8176774,
+          "acceptedAt": null,
+          "association": "outside_playback",
+          "phase": "cancelled",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "58baa3b6-ebb1-4e3e-91d6-e4fbd16cb1bd",
+          "utteranceStartedAt": 8175411,
+          "detectedAt": 8177259,
+          "acceptedAt": 8230381,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8268049,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 86,
+      "name": "hour-3-saved-audio-9",
+      "waveSha256": "a744d51f1389937c6296690687d15f17af6d40bfc029011c63c5df25fca49f2a",
+      "originalGenerationId": "dc9eb644-54db-4c72-ba26-ba7acf99168b",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8300503,
+          "high": 8300537
+        },
+        "end": {
+          "low": 8339236,
+          "high": 8339270
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "ee9ba7bb-1a07-4a57-9c0d-f51a2c920dec",
+          "utteranceStartedAt": 8300408,
+          "detectedAt": 8301735,
+          "acceptedAt": null,
+          "association": "outside_playback",
+          "phase": "cancelled",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "73076a0b-b1a7-42f4-bb68-23e8a7e483dd",
+          "utteranceStartedAt": 8300408,
+          "detectedAt": 8302538,
+          "acceptedAt": 8304144,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "dc9eb644-54db-4c72-ba26-ba7acf99168b",
+          "utteranceStartedAt": 8300408,
+          "detectedAt": 8305097,
+          "acceptedAt": 8340261,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8377144,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 87,
+      "name": "hour-3-saved-audio-10",
+      "waveSha256": "18654adecfeb6991a62a2a95354c19d3bada670d071eb959d18466d3d26296cd",
+      "originalGenerationId": "acbd124e-23a9-40e3-8e16-56f7289d87d5",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8425526,
+          "high": 8425559
+        },
+        "end": {
+          "low": 8476429,
+          "high": 8476462
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "acbd124e-23a9-40e3-8e16-56f7289d87d5",
+          "utteranceStartedAt": 8425414,
+          "detectedAt": 8426875,
+          "acceptedAt": 8477461,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8516598,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 88,
+      "name": "hour-3-saved-audio-11",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "fee74d3b-7983-4c00-8805-8bcbc94c2c80",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8550536,
+          "high": 8550571
+        },
+        "end": {
+          "low": 8552576,
+          "high": 8552611
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "fee74d3b-7983-4c00-8805-8bcbc94c2c80",
+          "utteranceStartedAt": 8550415,
+          "detectedAt": 8551534,
+          "acceptedAt": 8552341,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8559466,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 89,
+      "name": "hour-3-saved-audio-12",
+      "waveSha256": "f347d1c69f0684e958f12c93dfae253b40f8df6b245032b403884514d84caa8b",
+      "originalGenerationId": "484433e5-b251-4eec-ba10-8c97b04fbd61",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8675503,
+          "high": 8675538
+        },
+        "end": {
+          "low": 8719629,
+          "high": 8719664
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "6ba7de57-3847-457b-9509-f558098e88b4",
+          "utteranceStartedAt": 8675378,
+          "detectedAt": 8676657,
+          "acceptedAt": 8677782,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "484433e5-b251-4eec-ba10-8c97b04fbd61",
+          "utteranceStartedAt": 8675378,
+          "detectedAt": 8678580,
+          "acceptedAt": 8720621,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8735726,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 90,
+      "name": "hour-3-saved-audio-13",
+      "waveSha256": "baa7de8b56437ff5df8cff2897c2201cdce5d50bd357cd2d9daa2b2a75dff3c7",
+      "originalGenerationId": "300bc73a-1c53-4a3a-b9be-0681ae508045",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8800504,
+          "high": 8800539
+        },
+        "end": {
+          "low": 8853306,
+          "high": 8853341
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "1deb9e96-f6ac-46e3-b0e3-e12fd245e217",
+          "utteranceStartedAt": 8800399,
+          "detectedAt": 8801644,
+          "acceptedAt": 8803740,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "300bc73a-1c53-4a3a-b9be-0681ae508045",
+          "utteranceStartedAt": 8800399,
+          "detectedAt": 8804368,
+          "acceptedAt": 8854340,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8879703,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 91,
+      "name": "hour-3-saved-audio-14",
+      "waveSha256": "898fd684f4f7dfa03045ed5ba86a9f31f765edbc4b5693682157e9b105fcdaae",
+      "originalGenerationId": "f0631e19-c9bc-4857-9361-588652247ecc",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 8925516,
+          "high": 8925551
+        },
+        "end": {
+          "low": 8934547,
+          "high": 8934582
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "f0631e19-c9bc-4857-9361-588652247ecc",
+          "utteranceStartedAt": 8925375,
+          "detectedAt": 8926632,
+          "acceptedAt": 8935581,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 8943476,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 94,
+      "name": "hour-3-spoken-why-during-coding",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "009a3783-6ef2-4a1f-8681-3725ccacf6e5",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9014408,
+          "high": 9014469
+        },
+        "end": {
+          "low": 9015558,
+          "high": 9015619
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "009a3783-6ef2-4a1f-8681-3725ccacf6e5",
+          "utteranceStartedAt": 9014321,
+          "detectedAt": 9015582,
+          "acceptedAt": 9015620,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9039828,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 95,
+      "name": "hour-3-saved-audio-15",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": null,
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9050552,
+          "high": 9050605
+        },
+        "end": {
+          "low": 9051704,
+          "high": 9051757
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 96,
+      "name": "hour-3-saved-audio-16",
+      "waveSha256": "467942c4996d8aaabfc6a7367d4da40a2eaeb424bc99b622dc7898674be2939d",
+      "originalGenerationId": "0b1c64ef-8474-49dd-a925-b16ad4ee7729",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9175878,
+          "high": 9175926
+        },
+        "end": {
+          "low": 9226622,
+          "high": 9226670
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "0b1c64ef-8474-49dd-a925-b16ad4ee7729",
+          "utteranceStartedAt": 9175774,
+          "detectedAt": 9177036,
+          "acceptedAt": 9227580,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9273004,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 97,
+      "name": "hour-3-saved-audio-17",
+      "waveSha256": "40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad",
+      "originalGenerationId": "56ac36f0-3575-43c5-ba58-a81538eb7091",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9300507,
+          "high": 9300543
+        },
+        "end": {
+          "low": 9335700,
+          "high": 9335736
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "01af391c-7dbd-4f58-8eec-61b4d1de6939",
+          "utteranceStartedAt": 9300410,
+          "detectedAt": 9301705,
+          "acceptedAt": 9304141,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "8848de06-74a6-45bf-a0b8-9145dfe3a68c",
+          "utteranceStartedAt": 9300410,
+          "detectedAt": 9304907,
+          "acceptedAt": 9320221,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "56ac36f0-3575-43c5-ba58-a81538eb7091",
+          "utteranceStartedAt": 9300410,
+          "detectedAt": 9321386,
+          "acceptedAt": 9336621,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9379649,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 98,
+      "name": "hour-3-saved-audio-18",
+      "waveSha256": "a0e8e84e3530a72de0d31dd6d5eccbb1388e0c7c1f69d5c9baf3f81b59605829",
+      "originalGenerationId": "7e55b91f-3cc3-40de-8575-b67abc1e9390",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9425516,
+          "high": 9425550
+        },
+        "end": {
+          "low": 9472737,
+          "high": 9472771
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "7e55b91f-3cc3-40de-8575-b67abc1e9390",
+          "utteranceStartedAt": 9425405,
+          "detectedAt": 9426972,
+          "acceptedAt": 9473820,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9492366,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 99,
+      "name": "hour-3-saved-audio-19",
+      "waveSha256": "f5a8236d36100edb36ddd00e41df4b664fbf5a4ad9044f63289d6b88d4d42fb6",
+      "originalGenerationId": "cc7648d9-31b5-4399-9f42-cd8e920263db",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9550508,
+          "high": 9550544
+        },
+        "end": {
+          "low": 9552551,
+          "high": 9552586
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "cc7648d9-31b5-4399-9f42-cd8e920263db",
+          "utteranceStartedAt": 9550384,
+          "detectedAt": 9551475,
+          "acceptedAt": 9552301,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9558511,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 100,
+      "name": "hour-3-saved-audio-20",
+      "waveSha256": "c0655bd8df664a0187b55353cdfd455478d196c88f6a5f0b1a1592aae838290d",
+      "originalGenerationId": "b3d49a50-fe1c-43c5-940c-acf405e249be",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9675503,
+          "high": 9675537
+        },
+        "end": {
+          "low": 9709894,
+          "high": 9709928
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "b3d49a50-fe1c-43c5-940c-acf405e249be",
+          "utteranceStartedAt": 9675382,
+          "detectedAt": 9676938,
+          "acceptedAt": 9710940,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9727940,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 101,
+      "name": "hour-3-saved-audio-21",
+      "waveSha256": "ef020444fcd5eb860a7e759f69b31fd8e76fcf9886643e1162678b9f8b5b7508",
+      "originalGenerationId": "061f079e-1b52-4c8c-9e75-967cbd90fb14",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9800503,
+          "high": 9800542
+        },
+        "end": {
+          "low": 9853209,
+          "high": 9853248
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "b0340227-ca5d-4963-a9de-381e92d618b2",
+          "utteranceStartedAt": 9800381,
+          "detectedAt": 9801733,
+          "acceptedAt": 9803180,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "e916f548-dc5a-492d-abe5-3f8d80369213",
+          "utteranceStartedAt": 9800381,
+          "detectedAt": 9804139,
+          "acceptedAt": 9830941,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "061f079e-1b52-4c8c-9e75-967cbd90fb14",
+          "utteranceStartedAt": 9800381,
+          "detectedAt": 9831660,
+          "acceptedAt": 9854220,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9896981,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 102,
+      "name": "hour-3-saved-audio-22",
+      "waveSha256": "1589403e326c42fecf218caa71cb4765b7dbd773bad1b9d225592770d4518661",
+      "originalGenerationId": "80c50f93-d5e8-4b50-93a5-d3ff166aad29",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 9925519,
+          "high": 9925557
+        },
+        "end": {
+          "low": 9934683,
+          "high": 9934721
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "80c50f93-d5e8-4b50-93a5-d3ff166aad29",
+          "utteranceStartedAt": 9925427,
+          "detectedAt": 9926852,
+          "acceptedAt": 9935660,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 9942963,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 103,
+      "name": "hour-3-saved-audio-23",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "originalGenerationId": "4014d00b-ea9a-432c-8864-a40ecc2fa0a0",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 10050500,
+          "high": 10050533
+        },
+        "end": {
+          "low": 10051656,
+          "high": 10051689
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "4014d00b-ea9a-432c-8864-a40ecc2fa0a0",
+          "utteranceStartedAt": 10050405,
+          "detectedAt": 10051655,
+          "acceptedAt": 10051663,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 10060449,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 104,
+      "name": "hour-3-saved-audio-24",
+      "waveSha256": "880563a0d0533a43e0a73394e88640aa8e9d7d96453ac284cd617a2fbe61606a",
+      "originalGenerationId": "067a813e-b086-49a1-975e-b29dd127dc32",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 10175494,
+          "high": 10175528
+        },
+        "end": {
+          "low": 10222049,
+          "high": 10222083
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "75465be1-45ee-4414-855c-902c9f1df790",
+          "utteranceStartedAt": 10175383,
+          "detectedAt": 10176949,
+          "acceptedAt": 10179540,
+          "association": "outside_playback",
+          "phase": "superseded",
+          "cancelled": true,
+          "completedAt": null,
+          "error": null
+        },
+        {
+          "generationId": "067a813e-b086-49a1-975e-b29dd127dc32",
+          "utteranceStartedAt": 10175383,
+          "detectedAt": 10180471,
+          "acceptedAt": 10223060,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 10235049,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 105,
+      "name": "hour-3-saved-audio-25",
+      "waveSha256": "943fb8d3aea3b83141b3baae03b22dc4e2a696350fe20a5ebe2db12965b9fff2",
+      "originalGenerationId": "7c5c1d45-61bf-4936-a7a2-3acbd4b03036",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 10300503,
+          "high": 10300542
+        },
+        "end": {
+          "low": 10337325,
+          "high": 10337364
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "7c5c1d45-61bf-4936-a7a2-3acbd4b03036",
+          "utteranceStartedAt": 10300402,
+          "detectedAt": 10301908,
+          "acceptedAt": 10338421,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 10355475,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    },
+    {
+      "round": 106,
+      "name": "hour-3-saved-audio-26",
+      "waveSha256": "e96f72914a151482951dfe10b40f92111f9389c0cd1e3b6756ba743a2ecbde43",
+      "originalGenerationId": "c08126c8-3cf3-4e32-9321-32b5e8cc57fb",
+      "playbackNativeBounds": {
+        "start": {
+          "low": 10425529,
+          "high": 10425564
+        },
+        "end": {
+          "low": 10477331,
+          "high": 10477366
+        },
+        "scope": "Observed playback/clock envelope; not provider word-time alignment or proof of acoustic provenance."
+      },
+      "generations": [
+        {
+          "generationId": "c08126c8-3cf3-4e32-9321-32b5e8cc57fb",
+          "utteranceStartedAt": 10425411,
+          "detectedAt": 10426737,
+          "acceptedAt": 10478382,
+          "association": "outside_playback",
+          "phase": "complete",
+          "cancelled": false,
+          "completedAt": 10509148,
+          "error": null
+        }
+      ],
+      "targetGenerationId": null,
+      "selectionChanged": null,
+      "ambiguous": true,
+      "scope": "Separate source-timing audit. Keep every generation and the unchanged original row. Timing association does not establish transcription origin, correctness, completed work or semantic acceptance."
+    }
+  ],
+  "scope": "All audio-window generations retained independent of success, including ignored/cancelled/error outcomes. Timing association uses client sent-audio frontier, not verified lexical acoustic timing. Ambiguity remains unknown and no original-row timing/success selection changes automatically."
+}

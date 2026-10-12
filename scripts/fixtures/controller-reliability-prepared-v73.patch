@@ -858,7 +858,7 @@ index c1e5d6a..f3c84f1 100644
 +    }
 +}
 diff --git a/scripts/lib/deep-observations.mjs b/scripts/lib/deep-observations.mjs
-index c28d5e5..b186a33 100644
+index c28d5e5..097b524 100644
 --- a/scripts/lib/deep-observations.mjs
 +++ b/scripts/lib/deep-observations.mjs
 @@ -10,7 +10,7 @@ export function changedJobObservation(state,fingerprints,timing){
@@ -870,11 +870,35 @@ index c28d5e5..b186a33 100644
  }
  
  export function deepDeliveryRound(round){return (round-1)%12+1;}
+@@ -31,3 +31,15 @@ export function jobsAtObservation(observations,index){
+  }
+  return [...latest.values()];
+ }
++
++// Keep diagnostic evidence for missing requests even when no job changes.
++// Legacy captures keep their existing changed-job behavior; numeric transport
++// snapshots use a bounded heartbeat rather than recording every poll.
++export function shouldRetainDeepObservation(record,previous,intervalMs=1000){
++ if(record.jobs.length)return true;
++ if(!Object.hasOwn(record,'speechTransport'))return false;
++ if(!previous)return true;
++ const elapsed=Number.isFinite(record.nativeNow)&&Number.isFinite(previous.nativeNow)
++  ?record.nativeNow-previous.nativeNow:record.hostAfterMs-previous.hostAfterMs;
++ return elapsed>=intervalMs;
++}
 diff --git a/scripts/tests/deep-observations.test.mjs b/scripts/tests/deep-observations.test.mjs
-index 3efef0a..db7588f 100644
+index 3efef0a..aed7c31 100644
 --- a/scripts/tests/deep-observations.test.mjs
 +++ b/scripts/tests/deep-observations.test.mjs
-@@ -31,3 +31,20 @@ test('hour-long delivery repeats follow-ups and pauses beyond the first twelve t
+@@ -1,6 +1,6 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import {changedJobObservation,jobsAtObservation,deepDeliveryRound,immediateContextProbe} from '../lib/deep-observations.mjs';
++import {changedJobObservation,jobsAtObservation,deepDeliveryRound,immediateContextProbe,shouldRetainDeepObservation} from '../lib/deep-observations.mjs';
+ import {replayContextCheckpoint} from '../lib/deep-replay-context.mjs';
+ import {streamedWordLatency} from '../lib/streamed-word-latency.mjs';
+ 
+@@ -31,3 +31,38 @@ test('hour-long delivery repeats follow-ups and pauses beyond the first twelve t
   assert.equal(immediateContextProbe(14),'Why?');
   assert.equal(immediateContextProbe(4),null);
  });
@@ -895,3 +919,56 @@ index 3efef0a..db7588f 100644
 +  assert.equal(Object.hasOwn(changedJobObservation(state,new Map(),{}),'speechTransport'),false);
 + }
 +});
++
++test('missing-request transport evidence gets a heartbeat without changed jobs',()=>{
++ const previous={nativeNow:0,hostAfterMs:100000,jobs:[],speechTransport:{remote:{socketFlushedBytes:0}}};
++ const middle={nativeNow:999,hostAfterMs:100999,jobs:[],speechTransport:{remote:{socketFlushedBytes:32000}}};
++ const after={nativeNow:1000,hostAfterMs:101000,jobs:[],speechTransport:{remote:{socketFlushedBytes:32000}}};
++ assert(shouldRetainDeepObservation(previous,null));assert(!shouldRetainDeepObservation(middle,previous));assert(shouldRetainDeepObservation(after,previous));
++ assert.equal(after.jobs.length,0);assert.equal(after.speechTransport.remote.socketFlushedBytes,32000);
++});
++test('job updates are immediate while legacy no-job observations stay unchanged',()=>{
++ assert(shouldRetainDeepObservation({jobs:[{question:{id:'a'}}],nativeNow:0},{nativeNow:0}));
++ assert(!shouldRetainDeepObservation({jobs:[],nativeNow:100000},null));
++});
++test('native monotonic heartbeat is valid at zero and independent of host clock jumps',()=>{
++ const record={jobs:[],speechTransport:{},nativeNow:1000,hostAfterMs:0},previous={nativeNow:0,hostAfterMs:100000};
++ assert(shouldRetainDeepObservation(record,previous));
++ assert(!shouldRetainDeepObservation({...record,nativeNow:100},previous));
++ assert(shouldRetainDeepObservation({...record,nativeNow:null,hostAfterMs:101000},{...previous,nativeNow:null}));
++});
+diff --git a/scripts/controller-session-replay.mjs b/scripts/controller-session-replay.mjs
+index 4f3707a..9073903 100644
+--- a/scripts/controller-session-replay.mjs
++++ b/scripts/controller-session-replay.mjs
+@@ -7,7 +7,7 @@ import path from 'node:path';
+ import {createHash} from 'node:crypto';
+ import {connectNativePages} from './lib/native-cdp.mjs';
+ import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
+-import {changedJobObservation} from './lib/deep-observations.mjs';
++import {changedJobObservation,shouldRetainDeepObservation} from './lib/deep-observations.mjs';
+ import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
+ import {servedRenderer} from './lib/served-renderer.mjs';
+ import {recordedCodeReference} from './lib/recorded-code-reference.mjs';
+@@ -57,7 +57,7 @@ try {
+  const pollOnce=async()=>{
+   const hostBeforeMs=Date.now(),state=await invoke('acceptance_jobs'),hostAfterMs=Date.now();journal.archive=state.archive;
+   for(const job of state.jobs)latest.set(job.question.id,job);
+-  const observation=changedJobObservation(state,fingerprints,{hostBeforeMs,hostAfterMs});if(observation.jobs.length)journal.deepObservations.push(observation);
++  const observation=changedJobObservation(state,fingerprints,{hostBeforeMs,hostAfterMs});if(shouldRetainDeepObservation(observation,journal.deepObservations.at(-1)))journal.deepObservations.push(observation);
+   const paint=await connection.overlay.evaluate(offset=>window.deepPaintSamples.slice(offset),paintOffset);paintOffset+=paint.length;journal.overlayPaintSamples.push(...paint);
+  };
+  let pendingPoll=null;
+@@ -93,6 +93,12 @@ try {
+    row.focusBeforeExpansion=(await invoke('get_snapshot')).question?.id??null;
+    await invoke('action',{action:'expand',generationId:row.boundParentGenerationId});
+    row.measurement='Explicit generation-bound native expansion: no audio, ASR or automatic endpoint delay.';
++  } else if(item.automaticRecognized){
++   await invoke('acceptance_event',{kind:'started',source:'remote'});
++   await invoke('acceptance_event',{kind:'transcript',source:'remote',text:item.question,isFinal:true});
++   await invoke('acceptance_event',{kind:'ended',source:'remote'});
++   row.replayAction='automatic_recognized_fixture';
++   row.measurement='Exact injected finalized remote transcript with automatic controller acceptance and authenticated model inference; no source waveform, native ASR, or acoustic latency measurement. Expected source question is grader metadata, not answering input.';
+   } else if(item.acceptRecognizedNow){
+    await invoke('acceptance_event',{kind:'started',source:'remote'});
+    await invoke('acceptance_event',{kind:'transcript',source:'remote',text:item.question,isFinal:true});

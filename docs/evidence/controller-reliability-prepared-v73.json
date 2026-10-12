@@ -1,11 +1,11 @@
 {
   "status": "prepared_uncompiled_unapplied",
-  "recordedAt": "2026-10-12T19:08:46.513Z",
+  "recordedAt": "2026-10-12T21:24:25.050Z",
   "frozenBuildCommit": "f0c7e8c71d428246a25c19fb0cadb9348419f330",
   "preparationSourceSha256": "66615f12497a33af1f8bd0c228440c84636c55b6708e290295675e7d80334a2e",
-  "preparationManifestSha256": "e9ec936e7e30d651051593c3fd43c9f234c8db81a2948b0f4741c5bf32994279",
+  "preparationManifestSha256": "08acbe1838e1f50c9b6b478634bd5b2d4d3365ea4b0de66007b6b99be689878a",
   "patchFile": "scripts/fixtures/controller-reliability-prepared-v73.patch",
-  "patchSha256": "e486a9dd75b0cc225c340c53be00b8066999bbecea1d7aa250c7440243925d6b",
+  "patchSha256": "00afbddd68e048e2d9bbdfd8de3f59c869b18ea5d27fad8fd8a2a588c267faed",
   "files": [
     {
       "file": "src-tauri/src/meeting/scheduler.rs",
@@ -50,32 +50,39 @@
     {
       "file": "scripts/lib/deep-observations.mjs",
       "originalSha256": "0320da96afb121effe6ee8e6d1b0abcb1c8ab8a01e246c618eb21febbeb5587a",
-      "preparedSha256": "3e5c6afd9d6feb81f1c0d4f10ee366f89738f33b1e293c8678916ccb5113da7a"
+      "preparedSha256": "b6264515531921d34d16d9446c293518da76521ae0a5becf2c2699e953ab98eb"
     },
     {
       "file": "scripts/tests/deep-observations.test.mjs",
       "originalSha256": "09d9fdd57f5d95ebb2ad28d292485e1fb5cf898afcd7fce373ab109ebbcd382c",
-      "preparedSha256": "93337a91219f5aae40e8f912757ded823f597ba9fc33660f94db7e3521ae6257"
+      "preparedSha256": "dfcb10aba852456a78eb33d3f416681dd51806698727f6f56c46e4c68029f7ae"
+    },
+    {
+      "file": "scripts/controller-session-replay.mjs",
+      "originalSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
+      "preparedSha256": "5c3e7095b996379b33319d4396b1d21cfdfb4916403e738b2808460b83f17755"
     }
   ],
   "semanticFocusRegressions": 8,
   "sourceGroupRegressions": 9,
   "speechTransportCounterRegressions": 3,
   "speechCounterObservationRegressions": 2,
+  "diagnosticCollectorRegressions": 3,
   "speechCounterPreparation": {
     "file": ".local/prepare-speech-transport-counters-v73.mjs",
     "sha256": "a2e89cd9f028d394630ad0ac51f339e4180de7972483fe81b7b993209d567621"
   },
   "speechCounterObservationChecks": {
-    "file": ".local/conversation-reliability-v73/speech-counter-observation-checks.json",
-    "sha256": "ef70bc7ec4931dff691007065615576a2451cb432328df9054ccf7b91141eab6",
+    "file": ".local/conversation-reliability-v73/speech-counter-collector-checks.json",
+    "sha256": "44ad27ab4cff31fa891c8096eb87f82db7ef9d0598de33fc6af0ed89ee91e407",
     "result": {
-      "recordedAt": "2026-10-12T19:08:44.965Z",
+      "recordedAt": "2026-10-12T19:49:55.310Z",
       "command": "node --test .local/conversation-reliability-v73/source/scripts/tests/deep-observations.test.mjs .local/conversation-reliability-v73/source/scripts/tests/controller-measurements.test.mjs",
-      "passed": 19,
+      "passed": 22,
       "failed": 0,
       "newFocusRegressions": 4,
       "newSpeechObservationRegressions": 2,
+      "newHeartbeatRegressions": 3,
       "sourceBindings": [
         {
           "file": "scripts/lib/controller-measurements.mjs",
@@ -87,11 +94,15 @@
         },
         {
           "file": "scripts/lib/deep-observations.mjs",
-          "preparedSha256": "3e5c6afd9d6feb81f1c0d4f10ee366f89738f33b1e293c8678916ccb5113da7a"
+          "preparedSha256": "b6264515531921d34d16d9446c293518da76521ae0a5becf2c2699e953ab98eb"
         },
         {
           "file": "scripts/tests/deep-observations.test.mjs",
-          "preparedSha256": "93337a91219f5aae40e8f912757ded823f597ba9fc33660f94db7e3521ae6257"
+          "preparedSha256": "dfcb10aba852456a78eb33d3f416681dd51806698727f6f56c46e4c68029f7ae"
+        },
+        {
+          "file": "scripts/controller-session-replay.mjs",
+          "preparedSha256": "5c3e7095b996379b33319d4396b1d21cfdfb4916403e738b2808460b83f17755"
         }
       ],
       "productionHashesVerified": 55,
@@ -109,9 +120,9 @@
   "focusMeasurementRegressions": 4,
   "measurementChecks": {
     "file": ".local/conversation-reliability-v73/measurement-checks.json",
-    "sha256": "96bfd4a7d62a84fffd0883b53130f4c5d91f8631970427fb9262331da0d48b4e",
+    "sha256": "8af67ba8bd3924e1b2955a9f8de5ed7a729068e08dfb0b831d0c81be6957a76b",
     "result": {
-      "recordedAt": "2026-10-12T19:07:32.524Z",
+      "recordedAt": "2026-10-12T19:49:15.672Z",
       "journal": {
         "file": "artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json",
         "sha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"

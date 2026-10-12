@@ -281,10 +281,10 @@ index 0a152ee..519a9cb 100644
      match work {
          Work::QuestionDelta(id,question,key,text)=>job.accepts_stream(&question,&key).then_some(Work::Delta(id,text)),
 diff --git a/src-tauri/src/meeting/controller_tests.rs b/src-tauri/src/meeting/controller_tests.rs
-index 27014be..5f87c8d 100644
+index 27014be..9b56765 100644
 --- a/src-tauri/src/meeting/controller_tests.rs
 +++ b/src-tauri/src/meeting/controller_tests.rs
-@@ -263,3 +263,166 @@ fn candidate_failed_waveform_final_frame_remains_eligible() {
+@@ -263,3 +263,202 @@ fn candidate_failed_waveform_final_frame_remains_eligible() {
      assert!(frame.to_lowercase().contains("what experiment distinguishes them"));
      assert!(frame.to_lowercase().contains("conductance"));assert!(last.error.is_none());
  }
@@ -450,6 +450,42 @@ index 27014be..5f87c8d 100644
 +    assert!(detector.recognized_segment_ids().next().is_none());
 +    let mut partial=speech("partial","Unfinished",500);partial.final_=false;detector.transcript(&partial);
 +    assert!(detector.recognized_segment_ids().next().is_none());
++}
++
++#[test]
++fn recorded_recognized_floor_keeps_the_omitted_source_clause_retrievable() {
++    let fixture:serde_json::Value=serde_json::from_str(include_str!("../../../tests/fixtures/controller-recognized-source-group-v73.json")).unwrap();
++    let mut detector=QuestionDetector::default();
++    detector.semantic_intent=true;detector.independent_asr_endpoint=true;detector.conversation_endpoints=true;
++    let mut ledger=super::ledger::Ledger::default();
++    let base=fixture["hostToNativeOffset"].as_u64().unwrap();
++    for event in fixture["events"].as_array().unwrap() {
++        let p=&event["payload"];
++        match event["name"].as_str().unwrap() {
++            "speech.started"=>{detector.speech_started(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap());},
++            "speech.ended"=>detector.speech_ended(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap()),
++            "speech.activity"=>detector.speech_activity(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap(),p["quiet"].as_bool().unwrap()),
++            "transcript"=>{let segment:TranscriptSegment=serde_json::from_value(p.clone()).unwrap();
++                ledger.observe(segment.clone(),event["receivedHostMs"].as_u64().unwrap()-base);detector.transcript(&segment);},
++            _=>panic!("Unexpected recorded fixture event")
++        }
++    }
++    let now=fixture["confirmedAt"].as_u64().unwrap();
++    let (question,_)=detector.confirm(now).expect("Recorded complete recognized utterance remains acceptable");
++    assert_eq!(question,fixture["expectedRecognizedRequest"].as_str().unwrap());
++    assert_eq!(detector.remote_turn_started_at,fixture["expectedFloor"].as_u64());
++    let expected=fixture["expectedSegmentIds"].as_array().unwrap().iter().map(|v|v.as_str().unwrap()).collect::<Vec<_>>();
++    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),expected);
++    grow_recognized_retrieval_budget(&mut ledger);
++    let query=fixture["recallQuestion"].as_str().unwrap();
++    let omitted_id=fixture["omittedSourceId"].as_str().unwrap();
++    assert!(!ledger.context(query,None).contains(omitted_id));
++    ledger.associate_remote_utterance(detector.remote_turn_started_at.unwrap(),detector.recognized_segment_ids());
++    let view=ledger.context(query,None);
++    assert!(view.contains("Derived context view"));
++    assert!(view.contains(omitted_id));assert!(view.contains(fixture["omittedSourceText"].as_str().unwrap()));
++    for id in expected {assert!(view.contains(id));}
++    assert_eq!(ledger.recognized.len(),fixture["expectedSegmentIds"].as_array().unwrap().len());
 +}
 diff --git a/src-tauri/src/meeting/ledger.rs b/src-tauri/src/meeting/ledger.rs
 index 6ceb59c..ae99655 100644

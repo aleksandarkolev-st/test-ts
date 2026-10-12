@@ -1,11 +1,11 @@
 {
   "status": "prepared_uncompiled_unapplied",
-  "recordedAt": "2026-10-12T17:57:56.407Z",
+  "recordedAt": "2026-10-12T18:25:06.406Z",
   "frozenBuildCommit": "f0c7e8c71d428246a25c19fb0cadb9348419f330",
   "preparationSourceSha256": "66615f12497a33af1f8bd0c228440c84636c55b6708e290295675e7d80334a2e",
-  "preparationManifestSha256": "d149bcb6ce6253c8cffb1ed2029e3243e491562921a18a0bbf5b36900506dcce",
+  "preparationManifestSha256": "e66cba66c2d5c4582a825fd39d60405cebd3236e372c986666f57cd8aa865dd2",
   "patchFile": "scripts/fixtures/controller-reliability-prepared-v73.patch",
-  "patchSha256": "dc3e1634b86442a7fc6d3dbe6af9b8ac6b0ada30a666b7285ee1c5afd69098ee",
+  "patchSha256": "e031a27662922d4655a7587f19b43a1560786245c553d2861e92d612c4bcac14",
   "files": [
     {
       "file": "src-tauri/src/meeting/scheduler.rs",
@@ -20,7 +20,7 @@
     {
       "file": "src-tauri/src/meeting/controller_tests.rs",
       "originalSha256": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
-      "preparedSha256": "92cec1add0716805873279dda28bcc665eb083cbd640e9dbb1cfc3233405ec1f"
+      "preparedSha256": "3f2fab2f7175c261fe4f6d587c2f01018b6bce0ab6cbd05703eaae41984a0f8e"
     },
     {
       "file": "src-tauri/src/meeting/ledger.rs",
@@ -44,7 +44,13 @@
     }
   ],
   "semanticFocusRegressions": 8,
-  "sourceGroupRegressions": 8,
+  "sourceGroupRegressions": 9,
+  "recordedSourceGroupFixture": {
+    "file": "tests/fixtures/controller-recognized-source-group-v73.json",
+    "sha256": "43596e59b4c1b871fd7149ca1caff723abb3876f50bc6ac52adbf79383796865",
+    "rustTestExecution": "not_run",
+    "sourceJournalSha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"
+  },
   "focusMeasurementRegressions": 4,
   "measurementChecks": {
     "file": ".local/conversation-reliability-v73/measurement-checks.json",

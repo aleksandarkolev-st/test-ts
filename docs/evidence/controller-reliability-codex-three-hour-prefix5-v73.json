@@ -1,0 +1,620 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_new_reliability_build_independent_manual_reasoning_prefix",
+  "recordedAt": "2026-10-12T23:41:28.026Z",
+  "completedCapture": false,
+  "reviewedRows": 5,
+  "expectedFullRows": 113,
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix5/journal.json",
+    "sha256": "b9930bdefe15f2112fa26f13fbfc15b5e8c20e4e7016fa6410e84c21c0f88c64",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 5
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "rows": [
+    {
+      "round": 1,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Entire supplied int Foo fence byte-identical, strict x<-1 evaluates -2 true17 and -1 false19. Actual code execution queued; exact recall in later turns not yet tested.",
+      "name": "hour-1-first-code",
+      "question": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "recognizedQuestion": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "questionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "recognizedQuestionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "answer": "```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nFor -2, the condition is true, so Foo returns 17. For -1, the condition is false, so Foo returns 19.",
+      "answerSha256": "13d26ee11a09a4aec8017eec00b88586206d4cc38906f192f0f5f693d17e4064",
+      "generationId": "6f57850a-2eea-430d-8877-2a3086e049dc",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 2,
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Recognized original Mira as Myra; actual answer faithfully preserves Myra/Delta37days/Foo_17 and declares interpretation of underscore. Strict original speech accuracy fails name, no lexical repair allowed. Immediate acknowledgement is not evidence that long-term recall succeeds.",
+      "name": "hour-1-session-decision",
+      "question": "We have agreed that release Delta uses a retention period of exactly thirty seven days. Mira owns it, and the checkpoint identifier is Foo underscore seventeen. Keep this decision for the rest of this meeting.",
+      "recognizedQuestion": "We have agreed that release delta uses a retention period of exactly thirty seven days Myra owns it and the checkpoint identifier is Foo underscore seventeen Keep this decision for the rest of this meeting",
+      "questionSha256": "89d4da7e582a237334e8b03d3b6292fad73809dcf06d829a40d014245499c850",
+      "recognizedQuestionSha256": "16337cc0b0d9aa24f1f2b740ce76f18797a53f381196cd0291efd1795dd3ecaa",
+      "answer": "I’ll keep this decision for the rest of the meeting: release delta’s retention period is exactly 37 days, and Myra owns it. I’m interpreting “Foo underscore seventeen” as the checkpoint identifier Foo_17.",
+      "answerSha256": "7cf96a90110e320d37d04f2a9fc0c7d872ad86cbf49ef79693fd1e41367cb427",
+      "generationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 3,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "A CUDA warp is a group of 32 GPU threads that execute instructions together.",
+      "note": "Correct introductory32-thread warp/SIMT common instruction issue and masked divergentpaths potentialefficiencycost, adjacentmemory/coalescing recommendation. Simplified intro does not claim lockstep source-level synchronization or universal guaranteed branch penalty.",
+      "name": "hour-1-saved-audio-1",
+      "question": "Explain CUDA warps.",
+      "recognizedQuestion": "explain CUDA warps.",
+      "questionSha256": "23bd9da1a2a7fd2f6c2b12c406f0dd829914f55b2d8fc5bd2704987604674447",
+      "recognizedQuestionSha256": "23f8b3600e1d8df6fc1640bbbb8e314033b2dbb9fb892aefee1fc2e41c3e9e7d",
+      "answer": "A CUDA warp is a group of 32 GPU threads that execute instructions together. Threads in a warp can work on different data, but if they take different branches, the GPU executes the different paths with only the relevant threads active, which can reduce efficiency. For good performance, minimize branch divergence and have neighboring threads access neighboring memory locations.",
+      "answerSha256": "7aa7a8524632e45c27f9592d2fb5e032aeb34dc34c2f32995187db27313dadbf",
+      "generationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 4,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "Warps let the GPU execute one instruction across 32 threads efficiently.",
+      "note": "Actual native Why recognized Why and answers causal shared issue/branchmasked useful work and potential coalescing transactions. Unlike previous lost originalWhy, this actual request is accepted and complete; do not generalize one successful trial.",
+      "name": "hour-1-spoken-why-warps",
+      "question": "Why?",
+      "recognizedQuestion": "Why",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "d3ae14a50bfe463f804c73c9fd16e88c36bf5a0bf4a56f98ae696a91eb2de149",
+      "answer": "Warps let the GPU execute one instruction across 32 threads efficiently. When threads take different branches, the warp must execute the different paths with only the relevant threads active, reducing useful work per instruction. Neighboring threads accessing neighboring memory locations also lets the GPU combine accesses into fewer memory transactions.",
+      "answerSha256": "1164ee2a66309e751f94f7464e5047db23bdf3e1f0779f838ade9ad1aa858114",
+      "generationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 5,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "No. Even though the warp starts converged, `__activemask()` inside the branch is only a snapshot of currently active lanes, not a guarantee that all 19 branch participants are present.",
+      "note": "Correct Volta+ independent execution/activemask snapshot cannot certify branch membership or source18 active; caller own bit/all named non-exited lanes matching mask/corresponding intrinsic/source active/widthphysical18/no memory-order guarantee explained. Complete actual device function calculates block-linear thread rank (3D included, bounded by CUDAblock1024) and rankmod32, converged full32 ballot yields0x7ffff; only0..18 shuffle,19..31returnown. Explicit fullwarp/all32ballot precondition matches original assumptions and avoids older unsigned-global-index wrapper failure. No shared memory/atomics, no separate syncwarp needed. Actual native compilation and finite participation oracle queued; no NVIDIAhardware execution credit.",
+      "name": "hour-1-saved-audio-2",
+      "question": "You mentioned shuffles and explicit synchronization. On Volta or newer, a full physical warp starts converged. Only physical lanes zero through eighteen enter a branch. Inside it, each calls __activemask(), then passes that mask to __shfl_sync to read physical lane eighteen's float, using width thirty-two. Is every caller guaranteed to receive that float? Explain the precise participation and source-validity contracts, then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics. The other thirteen lanes must not call the shuffle.",
+      "recognizedQuestion": "you mentioned shuffles and explicit synchronization on Volta or newer a full physical warp starts converged only physical lanes zero through eighteen enter a branch inside it each calls underscore underscore active a mask then passes that mask to underscore underscore shfl underscore sync to read physical lane eighteen's float using width thirty two is every caller guaranteed to receive that float explain the precise participation and source validity contracts then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics the other thirteen lanes must not call the shuffle",
+      "questionSha256": "34dc75345412a4d3cd886572f28a462234c85da55127ad0845886cca34f08a44",
+      "recognizedQuestionSha256": "9190e797bfc0edd9c7739fffc4e0054d4a77736aef0c4a559161d5f017b2c9fa",
+      "answer": "No. Even though the warp starts converged, `__activemask()` inside the branch is only a snapshot of currently active lanes, not a guarantee that all 19 branch participants are present. On Volta or newer, a caller’s mask can exclude lane 18, making the requested source value undefined.\n\nFor `__shfl_sync`, each caller must have its own bit set in the mask, and every non-exited thread named in that mask must execute the corresponding intrinsic with the same mask. The source lane must actively participate in that shuffle; `width = 32` makes source index 18 refer to physical lane 18, but does not make that lane participate. The intrinsic synchronizes the named participants for register exchange, not memory ordering.\n\nCompute the participation mask before diverging, then use that fixed mask. This device function requires every lane of a full physical warp to call it at the converged point; each lane supplies its own float. Lanes 0–18 receive lane 18’s float, while lanes 19–31 retain their own value and never call the shuffle.\n\n```cpp\n__device__ float read_lane18(float value)\n{\n    const unsigned int thread_rank =\n        threadIdx.x + blockDim.x *\n        (threadIdx.y + blockDim.y * threadIdx.z);\n    const unsigned int lane = thread_rank % 32u;\n    const bool participates = lane <= 18u;\n    const unsigned int mask =\n        __ballot_sync(0xffffffffu, participates);\n\n    if (participates) {\n        value = __shfl_sync(mask, value, 18, 32);\n    }\n    return value;\n}\n```\n\nCompile as CUDA device code and call only from complete warps, with all 32 lanes reaching the ballot. The ballot produces `0x0007ffff`; all 19 named lanes execute the same shuffle, including source lane 18. No separate `__syncwarp()`, shared memory, or atomics are needed.",
+      "answerSha256": "0505ff71a7abb59b244980a14166d801f213d8242e6dd1c451bd4dfb935b9191",
+      "generationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+      "phase": "complete",
+      "error": null
+    }
+  ],
+  "measurements": {
+    "scope": "Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "hour-1-first-code",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 3262,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 3262,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2288,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 524,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 9301,
+        "cachedInputTokens": 0,
+        "outputTokens": 74,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 75.97535934291581,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 2,
+        "name": "hour-1-session-decision",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 8542,
+          "high": 8548
+        },
+        "acceptedToProtocolCompletionMs": 7565,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 9218,
+          "high": 9226
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 510,
+          "high": 518
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1653,
+          "high": 1661
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 6674,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 460,
+        "acceptanceAfterTranscriptFinalMs": 1143,
+        "inputTokens": 9532,
+        "cachedInputTokens": 8320,
+        "outputTokens": 203,
+        "reasoningTokens": 138,
+        "outputTokensPerStreamingSecond": 227.83389450056117,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 3,
+        "name": "hour-1-saved-audio-1",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848228736,
+          "low": 3453,
+          "high": 3458,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3132,
+          "high": 3137
+        },
+        "acceptedToProtocolCompletionMs": 4009,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 4804,
+          "high": 4812
+        },
+        "acceptedToCorrectWorkCompletionMs": 4009,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 772,
+          "high": 780
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 795,
+          "high": 803
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2115,
+        "submissionAckMs": 16,
+        "submittedToInputReaderReceiptMs": 439,
+        "acceptanceAfterTranscriptFinalMs": 23,
+        "inputTokens": 9823,
+        "cachedInputTokens": 8320,
+        "outputTokens": 85,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 44.87856388595565,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 4,
+        "name": "hour-1-spoken-why-warps",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848260016,
+          "low": 5803,
+          "high": 5808,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 5423,
+          "high": 5428
+        },
+        "acceptedToProtocolCompletionMs": 5778,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 6443,
+          "high": 6451
+        },
+        "acceptedToCorrectWorkCompletionMs": 5778,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 659,
+          "high": 667
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 665,
+          "high": 673
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 4458,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 474,
+        "acceptanceAfterTranscriptFinalMs": 6,
+        "inputTokens": 10010,
+        "cachedInputTokens": 0,
+        "outputTokens": 101,
+        "reasoningTokens": 23,
+        "outputTokensPerStreamingSecond": 76.51515151515152,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 5,
+        "name": "hour-1-saved-audio-2",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848403493,
+          "low": 14288,
+          "high": 14293,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 13352,
+          "high": 13357
+        },
+        "acceptedToProtocolCompletionMs": 20238,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 21911,
+          "high": 21921
+        },
+        "acceptedToCorrectWorkCompletionMs": 20238,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 698,
+          "high": 708
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1673,
+          "high": 1683
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 11470,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 641,
+        "acceptanceAfterTranscriptFinalMs": 975,
+        "inputTokens": 10289,
+        "cachedInputTokens": 0,
+        "outputTokens": 711,
+        "reasoningTokens": 259,
+        "outputTokensPerStreamingSecond": 81.09032846715328,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      }
+    ],
+    "counts": {
+      "all": 5,
+      "expectedReplies": 5,
+      "complete": 5,
+      "missing": 0,
+      "errors": 0,
+      "intentionallyInterrupted": 0,
+      "observedPlannedInterruptions": 0,
+      "observerInterference": 0,
+      "correct": 4,
+      "incorrect": 1,
+      "requestedWorkComplete": 5,
+      "requestedWorkIncomplete": 0,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 5,
+      "reasoningFail": 0,
+      "correctnessPending": 0,
+      "reasoningIncomplete": 0,
+      "correctnessIncomplete": 0
+    },
+    "acceptedToWriteMs": {
+      "count": 5,
+      "min": 1,
+      "median": 1,
+      "sampleP95": 2,
+      "max": 2
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 5,
+      "min": 1,
+      "median": 1,
+      "sampleP95": 2,
+      "max": 2
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 5,
+      "min": 1,
+      "median": 1,
+      "sampleP95": 2,
+      "max": 2
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 5,
+      "min": 3262,
+      "median": 5778,
+      "sampleP95": 20238,
+      "max": 20238
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 4,
+      "min": 3262,
+      "median": 4893.5,
+      "sampleP95": 20238,
+      "max": 20238
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 4,
+      "min": 4812,
+      "median": 7838.5,
+      "sampleP95": 21921,
+      "max": 21921
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 5,
+      "min": 44.87856388595565,
+      "median": 76.51515151515152,
+      "sampleP95": 227.83389450056117,
+      "max": 227.83389450056117
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 3,
+      "min": 3458,
+      "median": 5808,
+      "sampleP95": 14293,
+      "max": 14293
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "usefulFollowupMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 0,
+      "observed": 0,
+      "missingOrUnverified": 0,
+      "p95": null,
+      "gateEvaluable": false,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [
+        {
+          "generationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "previousGenerationId": "6f57850a-2eea-430d-8877-2a3086e049dc",
+          "acceptedHostMs": {
+            "low": 1791848195839,
+            "high": 1791848195845
+          },
+          "foregroundAuthorizedAt": 72541,
+          "inferenceAcceptedAt": 65659,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848195848,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "previousGenerationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "acceptedHostMs": {
+            "low": 1791848228403,
+            "high": 1791848228414
+          },
+          "foregroundAuthorizedAt": 105109,
+          "inferenceAcceptedAt": 102778,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848228415,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 12
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "previousGenerationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "acceptedHostMs": {
+            "low": 1791848259517,
+            "high": 1791848259523
+          },
+          "foregroundAuthorizedAt": 136218,
+          "inferenceAcceptedAt": 131578,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848259524,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+          "previousGenerationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "acceptedHostMs": {
+            "low": 1791848402549,
+            "high": 1791848402562
+          },
+          "foregroundAuthorizedAt": 279250,
+          "inferenceAcceptedAt": 267579,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848402557,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 8
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        }
+      ],
+      "maxPossibleCarryHighMs": 12,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "scope": "Immutable snapshot of individually read actual sources. Prefix-only, no completed3h/long-memory/whole-run latency credit. Original speech/interface correctness, core reasoning and requested completion separated. Source execution waits both new queues and fresh owned-app exit. No model-source repair, canned expected-answer substitution or production topic rules."
+}

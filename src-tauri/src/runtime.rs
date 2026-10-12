@@ -916,9 +916,8 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
             project:Arc::new(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default()),
             screenshot:engine.screenshot_data.clone().map(Arc::new),
         }).clone();
-        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(references.project.as_ref().clone());
-        let mut instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
-        if job.explicit_request{instructions.push_str(" A user explicitly requested a response to the CURRENT QUESTION. Choose answer in the reply-intent protocol, including a clarifying answer if essential information is missing.");}
+        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(references.project.as_ref().clone()).with_explicit_request(job.explicit_request);
+        let instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
         let image=references.screenshot;let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
         let trace=crate::openai::timing::Trace::new(clock,job.question.detected_at);trace.prompt_chars(input.render().chars().count());if job.confirmed{trace.confirmed_at(job.latency.question_confirmed_at);}

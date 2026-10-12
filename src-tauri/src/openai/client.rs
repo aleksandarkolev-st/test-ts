@@ -337,7 +337,7 @@ impl Client {
         let mut decode=|raw|{
             let decoded=match raw {
                 StreamEvent::Delta(text)=>match gate.feed(&text) {Ok(Some(text))=>Some(Ok(StreamEvent::QuestionDelta{question:question.clone(),context_key:key,text})),Ok(None)=>None,Err(e)=>Some(Err(e))},
-                StreamEvent::Completed=>Some(gate.finish().map(|()|if gate.ignored{StreamEvent::NoReply{question:question.clone(),context_key:key}}else{StreamEvent::QuestionCompleted{question:question.clone(),context_key:key}})),
+                StreamEvent::Completed=>Some(gate.finish().and_then(|()|if gate.ignored&&prompt.explicit_request{Err("The backend ignored an explicitly accepted request".into())}else{Ok(if gate.ignored{StreamEvent::NoReply{question:question.clone(),context_key:key}}else{StreamEvent::QuestionCompleted{question:question.clone(),context_key:key}})})),
                 _=>Some(Err("Unexpected event for an immutable conversation generation".into())),
             };
             // Return a single concrete future type, including no-text prefixes.
@@ -542,6 +542,21 @@ mod tests {
         assert!(completed&&text.contains("return x < -1;"));let sent=server.await.unwrap();
         assert_eq!(sent["store"],false);assert_eq!(sent["stream"],true);assert_eq!(sent["input"].as_array().unwrap().len(),1);
         for unsupported in ["previous_response_id","conversation","background","max_output_tokens","prompt_cache_retention"]{assert!(sent.get(unsupported).is_none());}
+    }
+    #[tokio::test]
+    async fn plan_adapter_rejects_silent_ignore_for_an_explicit_request() {
+        let raw=serde_json::json!({"intent":"ignore","text":""}).to_string();
+        let body=format!("data: {}\n\ndata: {{\"type\":\"response.completed\"}}\n\n",serde_json::json!({"type":"response.output_text.delta","delta":raw}));
+        let (client,server)=server(&body,0).await;
+        let prompt=super::super::codex::QuestionPrompt::new("Exact preceding source","Please answer").with_explicit_request(true);
+        let (_,rx)=tokio::sync::watch::channel(super::super::codex::QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
+        let mut delivered=false;
+        let error=client.stream_question("fixture-token","gpt-6.1-sol",&instructions,&prompt,None,CancellationToken::new(),rx,|_|{delivered=true;std::future::ready(Ok(()))}).await.unwrap_err();
+        assert!(error.contains("explicitly accepted"));assert!(!delivered);
+        assert_eq!(client.http_slots.available_permits(),2);
+        let sent=server.await.unwrap();assert_eq!(sent["instructions"],instructions);
+        assert!(sent["input"][0]["content"].as_str().unwrap().starts_with("AUTOMATIC REMOTE TURN\nAPPLICATION ACCEPTANCE: EXPLICIT\n"));
     }
     #[tokio::test]
     async fn real_http_stream_contract() {

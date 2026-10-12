@@ -1,11 +1,11 @@
 {
   "status": "prepared_uncompiled_unapplied",
-  "recordedAt": "2026-10-12T17:45:06.329Z",
+  "recordedAt": "2026-10-12T17:57:56.407Z",
   "frozenBuildCommit": "f0c7e8c71d428246a25c19fb0cadb9348419f330",
   "preparationSourceSha256": "66615f12497a33af1f8bd0c228440c84636c55b6708e290295675e7d80334a2e",
-  "preparationManifestSha256": "afa5b56c06633f0aefb7ff3e2a1dbaed25a4698c2604f73dcf686adb9a37182d",
+  "preparationManifestSha256": "d149bcb6ce6253c8cffb1ed2029e3243e491562921a18a0bbf5b36900506dcce",
   "patchFile": "scripts/fixtures/controller-reliability-prepared-v73.patch",
-  "patchSha256": "a1569f6ac9f2caa1cf544a95c0dd9d9ce7e52938613cb29167beecff1e749293",
+  "patchSha256": "dc3e1634b86442a7fc6d3dbe6af9b8ac6b0ada30a666b7285ee1c5afd69098ee",
   "files": [
     {
       "file": "src-tauri/src/meeting/scheduler.rs",
@@ -31,10 +31,47 @@
       "file": "src-tauri/src/meeting/questions.rs",
       "originalSha256": "f6aef086aa462a47df3f8651bc666f4ffa9265d614a2412a2c501b8e1210ada5",
       "preparedSha256": "9426d8c9f5ead15b76d7774999f1c4b5c79ec29c0277c2f75887ae07fe1d4d6f"
+    },
+    {
+      "file": "scripts/lib/controller-measurements.mjs",
+      "originalSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
+      "preparedSha256": "0b1f4bd32bb8d463b61b9ab8d298b5ef1c2e16f244e319db171ad28f117c7de0"
+    },
+    {
+      "file": "scripts/tests/controller-measurements.test.mjs",
+      "originalSha256": "0bf8e840298f9b50a461c9644c5cfebbfe9c1dcd9db6395eba4a0c44e4779478",
+      "preparedSha256": "3c6157de66ea71fdf095174d591d6c70fd2f5bbb01ffb14d902d0bef8f6f970d"
     }
   ],
   "semanticFocusRegressions": 8,
   "sourceGroupRegressions": 8,
+  "focusMeasurementRegressions": 4,
+  "measurementChecks": {
+    "file": ".local/conversation-reliability-v73/measurement-checks.json",
+    "sha256": "5ea78baf94d9470c9aae59ea452147fbf4a4540fcd0a4677013b47c6b6e4a5af",
+    "result": {
+      "recordedAt": "2026-10-12T17:57:54.096Z",
+      "journal": {
+        "file": "artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json",
+        "sha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"
+      },
+      "review": {
+        "file": "artifacts/controller-v72/reviews/error-recovery-dual-r3-codex-three-hour-final-audit-reviewed.json",
+        "sha256": "64299910ac7ec27729962214ee6998bbe8667c4d46e086673611db2a5c6579fe"
+      },
+      "originalMeasurementSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
+      "proposedMeasurementSha256": "0b1f4bd32bb8d463b61b9ab8d298b5ef1c2e16f244e319db171ad28f117c7de0",
+      "proposedTestSha256": "3c6157de66ea71fdf095174d591d6c70fd2f5bbb01ffb14d902d0bef8f6f970d",
+      "fixtureTests": {
+        "command": "node --test .local/conversation-reliability-v73/source/scripts/tests/controller-measurements.test.mjs",
+        "passed": 15,
+        "failed": 0,
+        "newRegressions": 4
+      },
+      "original113RowMeasurementsDeepEqual": true,
+      "scope": "Actual lightweight isolated Node fixture tests passed separately; all original completed Codex capture measurements deep-equal the unchanged root measurement implementation. This verifies diagnostic separation and backward compatibility, not the uncompiled Rust controller or live semantic-focus behavior."
+    }
+  },
   "patchApplyCheck": "passed_without_application",
   "rustTests": "not_run",
   "releaseBuild": "not_run",

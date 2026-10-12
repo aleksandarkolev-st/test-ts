@@ -531,3 +531,86 @@ index 4f572b5..d77096b 100644
      pub fn remote_source_current(&self,started_at:u64)->bool {started_at>=self.minimum_remote_started_at}
      pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
          if source==SpeakerSource::Remote&&!self.remote_source_current(now){return false;}
+diff --git a/scripts/lib/controller-measurements.mjs b/scripts/lib/controller-measurements.mjs
+index b31c974..6370a62 100644
+--- a/scripts/lib/controller-measurements.mjs
++++ b/scripts/lib/controller-measurements.mjs
+@@ -62,11 +62,14 @@ function finalizedSourceText(row){
+ 
+ export function auditPanelTransitions(journal){
+  const observations=journal.deepObservations??[],paints=journal.overlayPaintSamples??[];
+- const jobs=jobsAtObservation(observations,observations.length-1).filter(j=>j.confirmed&&Number.isFinite(j.latency?.questionConfirmedAt))
+-  .sort((a,b)=>a.latency.questionConfirmedAt-b.latency.questionConfirmedAt);
++ const foregroundTime=job=>Object.hasOwn(job,'focusAuthorizedAt')?job.focusAuthorizedAt:job.latency?.questionConfirmedAt;
++ const jobs=jobsAtObservation(observations,observations.length-1).filter(j=>j.confirmed&&Number.isFinite(j.latency?.questionConfirmedAt)&&Number.isFinite(foregroundTime(j)))
++  .sort((a,b)=>foregroundTime(a)-foregroundTime(b));
+  const transitions=[];
+  for(const job of jobs){
+-  const time=job.latency.questionConfirmedAt;
++  // Finalized automatic candidate inference is not foreground authorization.
++  // Keep its earlier submission clock in measureJournal unchanged.
++  const time=foregroundTime(job);
+   const anchor=observations.reduce((best,o)=>Number.isFinite(o.nativeNow)&&(!best||Math.abs(o.nativeNow-time)<Math.abs(best.nativeNow-time))?o:best,null);
+   if(!anchor)continue;
+   const accepted={low:time+anchor.hostBeforeMs-anchor.nativeNow-1,high:time+anchor.hostAfterMs-anchor.nativeNow+1};
+@@ -75,6 +78,8 @@ export function auditPanelTransitions(journal){
+   const clearing=paints.find(p=>p.hostMs>=accepted.low&&(p.questionId===job.question.id||!p.visible));
+   const oldPaintAfter=paints.filter(p=>p.hostMs>accepted.high&&(!clearing||p.hostMs<clearing.hostMs)&&p.questionId===prior.questionId&&p.visible);
+   transitions.push({generationId:job.question.id,previousGenerationId:prior.questionId,acceptedHostMs:accepted,
++   ...(Object.hasOwn(job,'focusAuthorizedAt')?{foregroundAuthorizedAt:time,
++    inferenceAcceptedAt:job.latency.questionConfirmedAt,foregroundAuthorizationSource:'focusAuthorizedAt'}:{}),
+    priorPanelClearedHostMs:clearing?.hostMs??null,
+    possibleOldPanelDurationMs:clearing?{low:Math.max(0,(oldPaintAfter.at(-1)?.hostMs??accepted.low)-accepted.high),high:Math.max(0,clearing.hostMs-accepted.low)}:null,
+    oldPaintChangesAfterAcceptance:oldPaintAfter.length,unclearedInObservation:!clearing});
+diff --git a/scripts/tests/controller-measurements.test.mjs b/scripts/tests/controller-measurements.test.mjs
+index f4a75fe..449abba 100644
+--- a/scripts/tests/controller-measurements.test.mjs
++++ b/scripts/tests/controller-measurements.test.mjs
+@@ -72,3 +72,47 @@ test('missing useful answers can make all-row p95 unverified',()=>{
+  assert.equal(allRowP95([1,2,3,null]).p95,null);
+  assert.equal(allRowP95(Array.from({length:20},(_,i)=>i===19?null:i)).p95,18);
+ });
++
++
++test('undecided automatic candidates do not impose a foreground clearing deadline',()=>{
++ const journal={deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
++  jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:null,latency:{questionConfirmedAt:200}}]}],
++  overlayPaintSamples:[{hostMs:1180,questionId:'parent',visible:true,text:'Prior valid output'},
++   {hostMs:1210,questionId:'parent',visible:true,text:'Prior valid output still streaming'}]};
++ const audit=auditPanelTransitions(journal);
++ assert.equal(audit.transitions.length,0);assert.equal(audit.uncleared,0);assert.equal(audit.oldPaintChangesAfterAcceptance,0);
++});
++test('only paint after semantic foreground authorization is counted as old output',()=>{
++ const journal={deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
++  jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:230,latency:{questionConfirmedAt:200}}]}],
++  overlayPaintSamples:[{hostMs:1180,questionId:'parent',visible:true,text:'Prior output'},
++   {hostMs:1210,questionId:'parent',visible:true,text:'Still authorized prior output'},
++   {hostMs:1215,questionId:'parent',visible:true,text:'Still authorized prior output continued'},
++   {hostMs:1235,questionId:'parent',visible:true,text:'Late prior paint'},
++   {hostMs:1240,questionId:'candidate',visible:true,text:'New decoded answer'}]};
++ const audit=auditPanelTransitions(journal);
++ assert.equal(audit.transitions.length,1);assert.equal(audit.oldPaintChangesAfterAcceptance,1);
++ const transition=audit.transitions[0];assert.equal(transition.inferenceAcceptedAt,200);
++ assert.equal(transition.foregroundAuthorizedAt,230);assert.equal(transition.foregroundAuthorizationSource,'focusAuthorizedAt');
++ assert.deepEqual(transition.acceptedHostMs,{low:1228,high:1232});
++ assert.equal(transition.priorPanelClearedHostMs,1240);
++});
++test('later model intent cannot manufacture a shorter or negative accepted-to-write time',()=>{
++ const latency={questionConfirmedAt:200,pipeline:{generationId:'candidate',transportWrittenAt:202}};
++ const journal={rows:[{round:1,responseVersion:'candidate:0',phase:'complete',answer:'Actual reply',latency}],
++  deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
++   jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:230,latency}]}],overlayPaintSamples:[]};
++ const measured=measureJournal(journal,{rows:[{round:1,correctness:'correct',completed:true}]});
++ assert.equal(measured.rows[0].acceptedToActualWriteMs,2);
++ assert.equal(measured.acceptedToWriteMs.sampleP95,2);
++});
++test('absent focus diagnostics retain legacy semantics and zero is a valid authorization time',()=>{
++ const make=job=>({deepObservations:[{format:'changed_jobs',nativeNow:0,hostBeforeMs:99,hostAfterMs:101,jobs:[job]}],
++  overlayPaintSamples:[{hostMs:90,questionId:'parent',visible:true,text:'Old output'},{hostMs:110,questionId:'next',visible:false,text:''}]});
++ const base={confirmed:true,question:{id:'next'},latency:{questionConfirmedAt:0}};
++ const legacy=auditPanelTransitions(make(base)),zero=auditPanelTransitions(make({...base,focusAuthorizedAt:0}));
++ assert.equal(legacy.transitions.length,1);assert.equal(zero.transitions.length,1);
++ assert.deepEqual(legacy.transitions[0].acceptedHostMs,zero.transitions[0].acceptedHostMs);
++ assert.equal(zero.transitions[0].foregroundAuthorizedAt,0);
++ assert.equal(auditPanelTransitions(make({...base,focusAuthorizedAt:null})).transitions.length,0);
++});

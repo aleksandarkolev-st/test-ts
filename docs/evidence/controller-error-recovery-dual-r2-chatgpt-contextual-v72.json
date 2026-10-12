@@ -4,7 +4,7 @@
   "reviewScope": "All30actual corrected-build Plancontextualanswers individuallyread/manuallyreviewed, concreteproofs/changedpremises/codebytes andoneobservedinterruption.29currentresponses correct; thatdoesnotclaimallparentworkfinished. TypedWhy explainsplannedFIFOcorrectly butomitsoutstandingfullprogram/testmain, explicitlyreportedcompletionfailure. ExactFooafter23interveningturnspassesbytecomparison; sourceexecutionpendingafterserializedcaptures. No hiddenreasoning/topicrules/answerrepair orreuseofpriorvariantcode.",
   "journalFile": "artifacts\\controller-v72\\native\\error-recovery-dual-r2-chatgpt-contextual\\interview.json",
   "journalSha256": "7650e0b1dd0922aa0a9feb9a6e6eecc0d135e87dd3eb5f3d5b346bb1026ecd06",
-  "reviewSha256": "963d552796e84f1cf6db0984c2432902f440c976f184f7fb9a0a1c0fd254fbcc",
+  "reviewSha256": "8759f0f949f93f4028625be5828391d7c7495b24b324882167f4d9f3543d05d3",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
@@ -2200,6 +2200,99 @@
           }
         ],
         "scope": "Exactoriginalquestion/initialanswer/recallsourcebytes, no operator/case/whitespacerepair. Sourceexecutionpending."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-contextual\\results.json",
+      "sha256": "348f736696f6efe839b1071cb673a4568661af024fdb572adb0f00e21bd48189",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-chatgpt-contextual/interview.json",
+        "journalSha256": "7650e0b1dd0922aa0a9feb9a6e6eecc0d135e87dd3eb5f3d5b346bb1026ecd06",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "84cc73c4d0e4d1a9acd8a4749bc2e0b6e2d8b9208aa85862d62c9916ddfec464",
+            "kind": "integer-branch",
+            "scope": "Exact actual supplied original version and2,003 integer inputs including extremes. No operator, identifier or whitespace repair.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-contextual\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 25,
+            "answerSha256": "caa642024d29f33ace8e7d876b7f75767ef61130931828218efc002348a5c77a",
+            "kind": "integer-branch",
+            "scope": "Exact actual supplied original version and2,003 integer inputs including extremes. No operator, identifier or whitespace repair.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-contextual\\round-25-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 27,
+            "answerSha256": "907ad84c3553959fef79fe3e5a3773c228d5ea110433294fbe6b2e557d0fca51",
+            "kind": "cpp-self-test",
+            "scope": "Parent requested full FIFO implementation and test main remain absent after Why. Missing code is recorded as failure; do not use a previous cohort program.",
+            "failure": "No complete code fence"
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
       }
     }
   ],

@@ -4,7 +4,7 @@
   "reviewScope": "All8actual corrected-build Plananswers individuallyread/manuallyreviewed. Concreteproofs/counterexamples andactualchangedpremises, completeactualsourcecode inspectedwithoutrepair. Sevenstrictreasoningpasses/oneambiguousreconnectioncompletionfailure. HTTPforceddisconnect unsupported/actualwireunknown. Codeexecutionpendingafterallserializedcaptures. No hiddenreasoning claims orproductionexpectedanswer/topicrules.",
   "journalFile": "artifacts\\controller-v72\\native\\error-recovery-dual-r2-chatgpt-reasoning\\interview.json",
   "journalSha256": "7c599a5e12d8abd65bbac2ad34a5614bfe0766822aa7f06eecbe0bc32a52b92d",
-  "reviewSha256": "677ba8758ac3d0cd8930a5d3aea116e3cf9b9fb147744e863979bc3ef65519f1",
+  "reviewSha256": "db3efa108b99961db5903533e0349a690cc4c679ee25f11fda180c66e0a6af90",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
@@ -795,7 +795,95 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reasoning\\results.json",
+      "sha256": "452dde0a5f9bcdd68ccc5cb9cb1e39899de6ac83af47963f8e127bda2038a446",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-chatgpt-reasoning/interview.json",
+        "journalSha256": "7c599a5e12d8abd65bbac2ad34a5614bfe0766822aa7f06eecbe0bc32a52b92d",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "8a325c89653fc5784a81f1e97d327164fb9588bb4f248f9de9c97a3abf463b2c",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "057eb29dcca1b1991986dfb3f73d2e64671981de83fa7ebd2d2d57e195413fb5",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reasoning\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "057eb29dcca1b1991986dfb3f73d2e64671981de83fa7ebd2d2d57e195413fb5",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 3,
+            "answerSha256": "bd2d704b6fe92f2009dd77cd1416bb71224c5af328d4026b0ccd9a65b680e59a",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "f77079115d966a157d99ce49865b95f7b3adbce63e4619bb237e358deee16742",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reasoning\\round-3-block-0.cpp",
+            "harnessedSourceSha256": "f77079115d966a157d99ce49865b95f7b3adbce63e4619bb237e358deee16742",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 7,
+            "answerSha256": "d900f3acb54c7f83287819785f673f77316b94945cefbdafd79c891a1c780fae",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "369840001fb90e3cf0687ec98c94fa780b1b7dbf0778ec6cadba8b1ec77a9213",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reasoning\\round-7-block-0.cpp",
+            "harnessedSourceSha256": "369840001fb90e3cf0687ec98c94fa780b1b7dbf0778ec6cadba8b1ec77a9213",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed: 800000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

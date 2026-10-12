@@ -4,7 +4,7 @@
   "reviewScope": "All4actual corrected-build Codexreconnectionanswers individuallymanuallyread/reviewed. Explicittransportquestion, actualownedconnectionfault, correctconcreteCASreasoning, no inventedpersistenceguarantee, exactcodebytesbefore/afterchecked. Codeexecutionpendingafterallcaptures; fixedwordingclearerthanearlierambiguousquestion, no productionrules/hiddenreasoningclaims.",
   "journalFile": "artifacts\\controller-v72\\native\\error-recovery-dual-r2-codex-reconnection\\interview.json",
   "journalSha256": "c668c114a431cfb95eb640c140c10bf521159f7339b20347d672bfeac0638abe",
-  "reviewSha256": "cc0810da5d5361ec5c34199e7144096937875caa7af814b8be6bf901e718c4d9",
+  "reviewSha256": "1eb822ad4279b149f6278a3c52dcd761811feb93e3acb3ec5bad0ab0018de0e6",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
@@ -559,6 +559,70 @@
           }
         ],
         "scope": "Exact originalgeneratedC++fencebeforeactualCodexconnectionclosure andafterreconnection. No sourcerepair orcompilerexecution; nativeauthfixturefault distinctfromnaturalproviderfailure."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-codex-reconnection\\results.json",
+      "sha256": "adfdf0b6f9f770e1329a78504525ebfb018d5be780e4fe50e639acb6ff9a2c39",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-codex-reconnection/interview.json",
+        "journalSha256": "c668c114a431cfb95eb640c140c10bf521159f7339b20347d672bfeac0638abe",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "a2d20db842dc965be5dbaf912f12ecd80ead73e4abb61d638972f08720f60321",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "828d9bc3f8a176321e16a71d2a64a1bfe813e5fe8f2ba736d593aa467a3760b6",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-codex-reconnection\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "828d9bc3f8a176321e16a71d2a64a1bfe813e5fe8f2ba736d593aa467a3760b6",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "PASS: 800000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 3,
+            "answerSha256": "b4230b4ca25785b70f9d91319c174aaeb111e09c095d0d62a7a926b297c1ba11",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "828d9bc3f8a176321e16a71d2a64a1bfe813e5fe8f2ba736d593aa467a3760b6",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-codex-reconnection\\round-3-block-0.cpp",
+            "harnessedSourceSha256": "828d9bc3f8a176321e16a71d2a64a1bfe813e5fe8f2ba736d593aa467a3760b6",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "PASS: 800000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
       }
     }
   ],

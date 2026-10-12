@@ -4,7 +4,7 @@
   "reviewScope": "All7actual corrected-build Codexbehaviorrows individuallyread/reviewed. Fivecorrectrequestedanswers, one missingspokenWhy andcorrectseparatebackchannelsilence. Multipart1.5s/late2.5scorrection pass, firstspokenWhycausalpass, Why duringcode hasnoASR/job soplannedinterruptionnotobserved. FullactualFIFO/invariant/testtrace inspected; executionpending. No source/answerrepair, no hiddenreasoningclaim orproductiontopicrule.",
   "journalFile": "artifacts\\controller-v72\\native\\error-recovery-dual-r2-codex-behavior\\interview.json",
   "journalSha256": "eb46d53b304f5f1fc3f17f37c65721cf0c12a38adf50b0fd2e8c8124a0918c05",
-  "reviewSha256": "102c735bf0427208d104189adfa244c0430f0196c4e9af50710b4911b86b75ae",
+  "reviewSha256": "8155615cea55e7c7f8cda835778275098cfa85e4912ebd2ec2915ad6b3a9a490",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
@@ -809,7 +809,49 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-codex-behavior\\results.json",
+      "sha256": "b3064a943a76d2151eca1ff6a97d77d6fe3a977f9859e76cdca2f83036c764b6",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-codex-behavior/interview.json",
+        "journalSha256": "eb46d53b304f5f1fc3f17f37c65721cf0c12a38adf50b0fd2e8c8124a0918c05",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 5,
+            "answerSha256": "837c407475f9a6b262e7c65f35d7d27638f2ae922a4a9c3647a4cdd85949303d",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "a5c8cbf38cd26bf00b9c5190f462e63cb278517ff619fffa231df586875d1e13",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-codex-behavior\\round-5-block-0.cpp",
+            "harnessedSourceSha256": "a5c8cbf38cd26bf00b9c5190f462e63cb278517ff619fffa231df586875d1e13",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

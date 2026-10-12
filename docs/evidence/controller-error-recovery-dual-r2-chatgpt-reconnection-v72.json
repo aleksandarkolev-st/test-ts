@@ -4,7 +4,7 @@
   "reviewScope": "All4actual corrected-build Plananswers individuallyread/reviewed. Clearwording fixes earlierambiguousquestion in evaluation only; no productiontopic/benchmarkrule. CorrectconcreteCASproofs/counterexamples andentireoriginalcodebytesretained. PlanHTTPtransportfault unsupported/disclosed; actualreconnection/wire notcertified. Codeexecutionpendingafterallserializedcaptures.",
   "journalFile": "artifacts\\controller-v72\\native\\error-recovery-dual-r2-chatgpt-reconnection\\interview.json",
   "journalSha256": "dad93c15a5430b66b06896697c29be1cf3ec4e1e1adf0af00a25100518a98256",
-  "reviewSha256": "b8b4e29a712c8337b7d205f7b431de44cb0b3ad56c749c26311e563bf7a0e6b9",
+  "reviewSha256": "b1e65e112f6384b5d2cecfaccea1db506b319000bb3cac80efba7af0e91f56b3",
   "measurementSourceSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
   "collectorSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
   "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
@@ -559,6 +559,70 @@
           }
         ],
         "scope": "ExactwholeactualfirstC++program andrequestedlatercopy. AvailablefaultdoesnotdisconnectHTTP; thisisPlancontextretention, NOTverifiedPlanreconnection. No sourcerepair/compilerexecution."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reconnection\\results.json",
+      "sha256": "91e56721d004af1120407d47d183d4ac8c957804b341a95ca18c78472ace18bc",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-chatgpt-reconnection/interview.json",
+        "journalSha256": "dad93c15a5430b66b06896697c29be1cf3ec4e1e1adf0af00a25100518a98256",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "1c25ca9f1467b83c278ca16e8e22bedf7723d70feee9003ca240f7333b15af55",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "0407a9d74f62454d57d9f258632762793e18e3c435d0f760dbfdfb10e0d00359",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reconnection\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "0407a9d74f62454d57d9f258632762793e18e3c435d0f760dbfdfb10e0d00359",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "PASS: final count = 800000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 3,
+            "answerSha256": "5219333db1a9633f1d6cbce8a4c48bf7875ebfab7c5786273707f62bef0c4b2e",
+            "kind": "cpp-self-test",
+            "scope": "Actual unchanged complete C++17 program and its requested tests, individually manually reviewed. Execution supports finite cases, not a universal proof.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "0407a9d74f62454d57d9f258632762793e18e3c435d0f760dbfdfb10e0d00359",
+            "sourceFile": "artifacts\\controller-v72\\code\\error-recovery-dual-r2-chatgpt-reconnection\\round-3-block-0.cpp",
+            "harnessedSourceSha256": "0407a9d74f62454d57d9f258632762793e18e3c435d0f760dbfdfb10e0d00359",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "PASS: final count = 800000\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
       }
     }
   ],

@@ -1,0 +1,43 @@
+{
+  "status": "prepared_uncompiled_unapplied",
+  "recordedAt": "2026-10-12T17:45:06.329Z",
+  "frozenBuildCommit": "f0c7e8c71d428246a25c19fb0cadb9348419f330",
+  "preparationSourceSha256": "66615f12497a33af1f8bd0c228440c84636c55b6708e290295675e7d80334a2e",
+  "preparationManifestSha256": "afa5b56c06633f0aefb7ff3e2a1dbaed25a4698c2604f73dcf686adb9a37182d",
+  "patchFile": "scripts/fixtures/controller-reliability-prepared-v73.patch",
+  "patchSha256": "a1569f6ac9f2caa1cf544a95c0dd9d9ce7e52938613cb29167beecff1e749293",
+  "files": [
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "originalSha256": "1fc146fdaa9193c324c7aefc05c89baf6410d169e19b49121909618f680a6596",
+      "preparedSha256": "2d0a1ae0317af82908fc3f08e32b00e9bb70b14322c50a791b5710e53ccd4f09"
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "originalSha256": "fec10689ea2a97a0491acd62980c1c931bc6e557119b6c8bb665f5a059e6e85b",
+      "preparedSha256": "0993a3a5896a951cf5ebe651cfeb7b4309ed69625d6ca49d7c3e2af55c344910"
+    },
+    {
+      "file": "src-tauri/src/meeting/controller_tests.rs",
+      "originalSha256": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "preparedSha256": "92cec1add0716805873279dda28bcc665eb083cbd640e9dbb1cfc3233405ec1f"
+    },
+    {
+      "file": "src-tauri/src/meeting/ledger.rs",
+      "originalSha256": "21e7fa726e533c4f517d23a638df61d5012c9f8dcea5d3bbf680b499de9ab93e",
+      "preparedSha256": "82c717fd932b0339f336244794cdeff0edb73320c74a05d3c3ee2c3db867f219"
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "originalSha256": "f6aef086aa462a47df3f8651bc666f4ffa9265d614a2412a2c501b8e1210ada5",
+      "preparedSha256": "9426d8c9f5ead15b76d7774999f1c4b5c79ec29c0277c2f75887ae07fe1d4d6f"
+    }
+  ],
+  "semanticFocusRegressions": 8,
+  "sourceGroupRegressions": 8,
+  "patchApplyCheck": "passed_without_application",
+  "rustTests": "not_run",
+  "releaseBuild": "not_run",
+  "nativeLiveValidation": "not_run",
+  "scope": "Reviewable proposed production change while frozen paired captures remain active. Foreground intent and recognized utterance grouping derive from generation/frame/segment metadata, without topic or word substitutions. Originals stay RAM-only. Git apply --check validates patch applicability only, not compilation or behavior. Apply after all measured capture queues stop and owned processes exit, then compile/test/build and run Codex first followed by Plan with unchanged model/effort."
+}

@@ -1,0 +1,533 @@
+diff --git a/src-tauri/src/meeting/scheduler.rs b/src-tauri/src/meeting/scheduler.rs
+index 41f27fd..4e99c08 100644
+--- a/src-tauri/src/meeting/scheduler.rs
++++ b/src-tauri/src/meeting/scheduler.rs
+@@ -25,6 +25,8 @@ pub struct Job {
+     pub output_observed_at: u64,
+     pub detailed: bool,
+     pub explicit_request: bool,
++    /// Inference eligibility is distinct from permission to take foreground.
++    pub focus_authorized_at: Option<u64>,
+     pub parent_generation_id: Option<String>,
+     pub references: Option<FrozenReferences>,
+     pub question: CurrentQuestion, pub phase: Phase, pub running: bool,
+@@ -144,11 +146,11 @@ impl Scheduler {
+             combined
+         } else {text}} else {text};
+         // One pending burst only; newer speech supersedes an unstarted burst.
+-        for j in &mut self.jobs {if !j.running && matches!(j.phase,Phase::Speculative|Phase::Confirmed){j.phase=Phase::Superseded;j.cancel.cancel();}}
++        for j in &mut self.jobs {if !j.running && (j.phase==Phase::Speculative || (j.phase==Phase::Confirmed && (!self.local_revisions || j.focus_authorized_at.is_none()))){j.phase=Phase::Superseded;j.cancel.cancel();}}
+         let id=uuid::Uuid::new_v4().to_string();
+         let ready_at=if self.active()==0 {now}else{now+BURST_MS};
+         let (updates,_)=tokio::sync::watch::channel(crate::openai::codex::QuestionUpdate{acoustic_quiet:false,question:text.clone(),confirmed:false,context:None});
+-        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,explicit_request:false,parent_generation_id:None,references:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
++        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,explicit_request:false,focus_authorized_at:None,parent_generation_id:None,references:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
+             latency:Latency{speech_stopped_at:stopped,transcript_final_at:transcript,request_sent_at:now,..Default::default()}});
+         self.candidate=Some(id.clone());self.prune();id
+     }
+@@ -161,17 +163,26 @@ impl Scheduler {
+         id
+     }
+     pub fn confirm_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
++        self.confirm_frame_with_context(text,now,stopped,transcript,context,true)
++    }
++    /// Finalized speech can authorize the answering call without cancelling
++    /// existing work before that call decides whether a reply is requested.
++    pub fn confirm_automatic_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
++        self.confirm_frame_with_context(text,now,stopped,transcript,context,false)
++    }
++    fn confirm_frame_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>,focus:bool)->String {
+         if self.local_revisions {
+-            // ASR revisions never leave the controller. Accepting a request is
+-            // the only transition that authorizes inference or display.
++            // ASR revisions stay local. Finalized candidates authorize the
++            // answering call; explicit acceptance or decoded answer intent
++            // separately authorizes foreground output.
+             let id=self.propose(text,now,stopped,transcript);
+             for old in &mut self.jobs {
+-                if old.question.id!=id && matches!(old.phase,Phase::Confirmed|Phase::Speculative) {
++                if old.question.id!=id && matches!(old.phase,Phase::Confirmed|Phase::Speculative) && (focus || old.focus_authorized_at.is_none()) {
+                     old.phase=Phase::Superseded;old.retired_at=Some(now);old.cancel.cancel();
+                 }
+             }
+             let job=self.find_mut(&id).unwrap();
+-            job.confirmed=true;job.phase=Phase::Confirmed;job.ready_at=now;
++            job.confirmed=true;job.phase=Phase::Confirmed;job.ready_at=now;job.focus_authorized_at=focus.then_some(now);
+             job.latency.question_confirmed_at=now;job.latency.speech_stopped_at=stopped;job.latency.transcript_final_at=transcript;
+             if let Some(context)=context {job.set_context(context);}
+             job.updates.send_modify(|update|{update.question=job.question.text.clone();update.confirmed=true;});
+@@ -220,6 +231,25 @@ impl Scheduler {
+         job.latency.remote_speech_started_at=utterance;
+         Some(id)
+     }
++    /// Called only after the decoder verifies answer intent and the runtime
++    /// verifies the exact current question/context/generation frame.
++    pub fn authorize_answer(&mut self,id:&str,now:u64)->bool {
++        let Some(index)=self.jobs.iter().position(|j|j.question.id==id) else{return false};
++        let job=&self.jobs[index];
++        if !job.confirmed || job.cancel.is_cancelled() || job.phase!=Phase::Confirmed || job.latency.completed_at.is_some()
++            || job.focus_authorized_at.is_some(){return false;}
++        self.jobs[index].focus_authorized_at=Some(now);
++        for old in &mut self.jobs[..index] {
++            if matches!(old.phase,Phase::Confirmed|Phase::Speculative) {
++                old.phase=Phase::Superseded;old.retired_at=Some(now);old.cancel.cancel();
++            }
++        }
++        true
++    }
++    pub fn latest_request_error(&self)->Option<&str> {
++        self.jobs.iter().rev().find(|j|j.confirmed && !matches!(j.phase,Phase::Cancelled|Phase::Superseded))
++            .and_then(|j|j.error.as_deref())
++    }
+     pub fn next(&mut self,now:u64)->Option<String>{
+         if self.local_revisions {
+             // One foreground plus one retiring attempt. Do not release remote
+@@ -233,7 +263,10 @@ impl Scheduler {
+                 }
+                 return None;
+             }
+-            let job=self.jobs.iter_mut().rev().find(|j|j.confirmed && !j.running && !j.cancel.is_cancelled() && j.phase==Phase::Confirmed && j.latency.completed_at.is_none())?;
++            let eligible=|j:&Job|j.confirmed && !j.running && !j.cancel.is_cancelled() && j.phase==Phase::Confirmed && j.latency.completed_at.is_none();
++            let index=self.jobs.iter().rposition(|j|eligible(j)&&j.focus_authorized_at.is_some())
++                .or_else(||self.jobs.iter().rposition(eligible))?;
++            let job=&mut self.jobs[index];
+             job.running=true;return Some(job.question.id.clone());
+         }
+         if self.active()>=2{return None;}
+@@ -243,7 +276,7 @@ impl Scheduler {
+     pub fn rows(&self)->Vec<Row>{self.jobs.iter().filter(|j|!matches!(j.phase,Phase::Cancelled|Phase::Superseded)).map(|j|Row{id:j.question.id.clone(),text:j.question.text.clone(),state:j.phase,queued:!j.running && j.latency.completed_at.is_none()}).collect()}
+     pub fn visible(&self)->Option<&Job>{
+         if self.local_revisions {
+-            return self.jobs.iter().rev().find(|j|j.confirmed && matches!(j.phase,Phase::Confirmed|Phase::Complete));
++            return self.jobs.iter().rev().find(|j|j.confirmed && j.focus_authorized_at.is_some() && matches!(j.phase,Phase::Confirmed|Phase::Complete));
+         }
+         let ready=|j:&&Job|!j.steer_supported || !j.buffer.is_empty() || j.error.is_some();
+         // Once semantic inference has produced a real answer for the latest
+@@ -268,7 +301,12 @@ impl Scheduler {
+         let mut update=j.updates.borrow().clone();update.confirmed=false;j.updates.send_replace(update);
+         let id=j.question.id.clone();self.candidate=Some(id.clone());Some(id)
+     }
+-    fn prune(&mut self){let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed) || latest.as_ref()==Some(&j.question.id));}
++    fn prune(&mut self){
++        let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());
++        let foreground=self.jobs.iter().rev().find(|j|j.focus_authorized_at.is_some() && j.confirmed && j.phase==Phase::Complete).map(|j|j.question.id.clone());
++        self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed)
++            || latest.as_ref()==Some(&j.question.id) || foreground.as_ref()==Some(&j.question.id));
++    }
+ }
+ #[cfg(test)] mod baseline_tests {
+     #[test]
+diff --git a/src-tauri/src/runtime.rs b/src-tauri/src/runtime.rs
+index 0a152ee..519a9cb 100644
+--- a/src-tauri/src/runtime.rs
++++ b/src-tauri/src/runtime.rs
+@@ -271,7 +271,7 @@ async fn actor(
+                         let mut latency=job.latency.clone();
+                         if let Some(trace)=traces.get(&job.question.id){latency.pipeline=trace.snapshot();}
+                         serde_json::json!({"question":job.question,"phase":job.phase,"confirmed":job.confirmed,
+-                            "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
++                            "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,"focusAuthorizedAt":job.focus_authorized_at,
+                             "error":job.error,"latency":latency,"selectedContext":job.updates.borrow().context.clone()})
+                     }).collect::<Vec<_>>();
+                     let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version,
+@@ -331,6 +331,9 @@ async fn actor(
+                 Control::AnswerNow(expected)=>{if let Some(s)=session.as_ref(){if conversation_input_enabled(&engine)&&answers.candidate.as_deref()==Some(expected.as_str()) {
+                     let now=s.clock.elapsed().as_millis()as u64;
+                     if let Some((question,stopped))=engine.detector.confirm_now(now) {
++                        if let Some(floor)=engine.detector.remote_turn_started_at {
++                            engine.context.ledger.associate_remote_utterance(floor,engine.detector.recognized_segment_ids());
++                        }
+                         cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
+                         let context=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);
+                         let id=answers.confirm_explicit_with_context(question,now,stopped,transcript_at,context);
+@@ -437,7 +440,10 @@ async fn actor(
+                             }
+                         }
+                     }
+-                    let Some(w)=gate_question_work(job,w)else{continue};
++                    let Some((w,focus_changed))=prepare_answer_work(&mut answers,&id,w,now)else{continue};
++                    let job=answers.find_mut(&id).unwrap();
++                    let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
++                    if focus_changed {emit(&app,"question.focus_accepted",serde_json::json!({"id":id,"timestamp":now,"inferenceAcceptedAt":job.latency.question_confirmed_at,"decision":"model_answer_intent"}));}
+                     match w {
+                         Work::NoReply(_,_,_) if valid=>{job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.buffer.clear();job.latency.completed_at=Some(now);emit(&app,"question.ignored",serde_json::json!({"id":id,"timestamp":now}));},
+                         Work::Sent(_,t) if valid=>job.latency.request_sent_at=t,
+@@ -535,6 +541,9 @@ async fn actor(
+                         } else {intent_gate.invalidate();}
+                     }
+                     if let Some((question,stopped))=engine.detector.confirm(now) {
++                        if let Some(floor)=engine.detector.remote_turn_started_at {
++                            engine.context.ledger.associate_remote_utterance(floor,engine.detector.recognized_segment_ids());
++                        }
+                         emit(&app,"asr.finalization_ready",serde_json::json!({"floor":engine.detector.remote_turn_started_at,
+                             "speechStoppedAt":stopped,"lastRemoteActivity":engine.detector.last_remote_activity(),"timestamp":now}));
+                         let background=intent_mode==meeting::intent::Mode::Learned&&meeting::intent::background_enabled()&&engine.detector.remote_turn_started_at.is_some_and(|floor|intent_gate.background(floor,&question,&engine.context.classifier_context(floor),0.95));
+@@ -542,7 +551,7 @@ async fn actor(
+                             answers.resumed();emit(&app,"intent.background_ignored",serde_json::json!({"timestamp":now,"floor":engine.detector.remote_turn_started_at}));
+                             sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                         } else {
+-                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);if let Some(job)=answers.find_mut(&id){job.context_version=engine.context.ledger.version;job.utterance_revision=revision;}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
++                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_automatic_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);if let Some(job)=answers.find_mut(&id){job.context_version=engine.context.ledger.version;job.utterance_revision=revision;}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                         }
+                     }
+                     if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
+@@ -782,9 +791,11 @@ fn conversation_input_enabled(engine:&Engine)->bool {
+ }
+ fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
+     engine.view.questions=answers.rows();
++    let request_error=answers.latest_request_error().map(str::to_owned);
++    if let Some(error)=request_error.as_ref(){engine.view.error=Some(error.clone());}
+     if let Some(j)=answers.visible() {
+-        engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=j.error.clone();
+-        engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
++        engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=request_error.or_else(||j.error.clone());
++        engine.view.status=if engine.view.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
+     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}
+     else if engine.view.active && engine.view.question.is_none() && !engine.view.manual && engine.view.status=="question" {
+         engine.view.status="listening".into();engine.view.latency=None;
+@@ -940,6 +951,77 @@ mod answer_view_tests {
+         job.running=false;assert_eq!(answers.next(20),Some(id));
+     }
+     #[test]
++    fn automatic_ignore_cannot_cancel_an_authorized_stream_and_keeps_exact_memory() {
++        let mut engine=Engine::default();engine.view.active=true;
++        let mut answers=meeting::scheduler::Scheduler::default();
++        let parent=answers.confirm_with_context("Earlier arbitrary request".into(),100,90,95,Some("Original exact context".into()));
++        answers.next(100);answers.find_mut(&parent).unwrap().buffer="Exact displayed partial code".into();
++        engine.context.ledger.generated(&parent,"Earlier arbitrary request","Exact displayed partial code");
++        engine.context.ledger.displayed(&parent,"Earlier arbitrary request","Exact displayed partial code",110);
++        let ignored=answers.confirm_automatic_with_context("Opaque later recognized content".into(),200,180,190,Some("Frozen next context".into()));
++        answers.next(200);sync_answers(&mut engine,&answers);
++        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
++        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
++        let key=crate::openai::codex::context_key("Frozen next context");
++        assert!(matches!(prepare_answer_work(&mut answers,&ignored,Work::NoReply(ignored.clone(),"Opaque later recognized content".into(),key),250),Some((Work::NoReply(_,_,_),false))));
++        let job=answers.find_mut(&ignored).unwrap();job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.latency.completed_at=Some(250);job.running=false;
++        sync_answers(&mut engine,&answers);
++        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
++        assert_eq!(engine.view.answer,"Exact displayed partial code");
++        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
++        assert_eq!(engine.context.ledger.suggestions[0].generated,"Exact displayed partial code");
++    }
++    #[test]
++    fn exact_frame_answer_intent_takes_focus_but_stale_or_empty_frames_do_not() {
++        let mut answers=meeting::scheduler::Scheduler::default();
++        let parent=answers.confirm("Earlier request".into(),100,90,95);answers.next(100);
++        let newer=answers.confirm_automatic_with_context("Arbitrary next request".into(),200,180,190,Some("Exact next context".into()));answers.next(200);
++        let key=crate::openai::codex::context_key("Exact next context");
++        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Wrong frame".into(),key,"Answer".into()),210).is_none());
++        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),crate::openai::codex::context_key("Obsolete context"),"Answer".into()),211).is_none());
++        assert!(matches!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),key,String::new()),212),Some((Work::Delta(_,_),false))));
++        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
++        assert!(matches!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),key,"Current answer".into()),220),Some((Work::Delta(_,_),true))));
++        assert!(answers.find_mut(&parent).unwrap().cancel.is_cancelled());
++        assert_eq!(answers.visible().unwrap().question.id,newer);
++        assert_eq!(answers.find_mut(&newer).unwrap().latency.question_confirmed_at,200);
++        assert_eq!(answers.find_mut(&newer).unwrap().focus_authorized_at,Some(220));
++        assert_eq!(answers.active(),2);
++    }
++    #[test]
++    fn terminal_provisional_error_cannot_be_reactivated_by_a_late_answer_frame() {
++        let mut answers=meeting::scheduler::Scheduler::default();
++        let parent=answers.confirm("Foreground".into(),100,90,95);answers.next(100);
++        let newer=answers.confirm_automatic_with_context("Arbitrary candidate".into(),200,180,190,Some("Frozen context".into()));answers.next(200);
++        let job=answers.find_mut(&newer).unwrap();job.error=Some("Transport error".into());job.phase=meeting::scheduler::Phase::Complete;job.latency.completed_at=Some(250);
++        let key=crate::openai::codex::context_key("Frozen context");
++        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary candidate".into(),key,"Late answer".into()),300).is_none());
++        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
++        assert_eq!(answers.visible().unwrap().question.id,parent);
++        assert_eq!(answers.find_mut(&newer).unwrap().focus_authorized_at,None);
++    }
++    #[test]
++    fn empty_scheduler_does_not_hide_a_paused_capture_failure() {
++        let mut engine=Engine::default();engine.view.active=true;engine.view.paused=true;
++        engine.view.status="error".into();engine.view.error=Some("Capture disconnected".into());
++        sync_answers(&mut engine,&meeting::scheduler::Scheduler::default());
++        assert_eq!(engine.view.error.as_deref(),Some("Capture disconnected"));
++    }
++    #[test]
++    fn provisional_failure_is_displayed_without_replacing_the_foreground_answer() {
++        let mut engine=Engine::default();engine.view.active=true;
++        let mut answers=meeting::scheduler::Scheduler::default();
++        let parent=answers.confirm("Foreground".into(),100,90,95);answers.next(100);
++        answers.find_mut(&parent).unwrap().buffer="Exact existing partial".into();
++        let failed=answers.confirm_automatic_with_context("Arbitrary candidate".into(),200,180,190,None);
++        let job=answers.find_mut(&failed).unwrap();job.error=Some("Capacity unavailable".into());job.phase=meeting::scheduler::Phase::Complete;job.latency.completed_at=Some(250);
++        sync_answers(&mut engine,&answers);
++        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
++        assert_eq!(engine.view.answer,"Exact existing partial");
++        assert_eq!(engine.view.error.as_deref(),Some("Capacity unavailable"));
++        assert!(conversation_input_enabled(&engine));
++    }
++    #[test]
+     fn ignored_automatic_turn_returns_to_listening_without_overwriting_manual_input() {
+         let mut engine=Engine::default();engine.view.active=true;engine.view.status="question".into();
+         let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:false,..Default::default()};
+@@ -965,6 +1047,16 @@ mod answer_view_tests {
+         assert!(engine.view.latency.as_ref().unwrap().completed_at.is_none());
+     }
+ }
++fn prepare_answer_work(answers:&mut meeting::scheduler::Scheduler,id:&str,work:Work,now:u64)->Option<(Work,bool)> {
++    let job=answers.find_mut(id)?;
++    let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
++    if matches!(&work,Work::QuestionDelta(_,_,_,_)) && (!valid || job.latency.completed_at.is_some()){return None;}
++    let accepts=matches!(&work,Work::QuestionDelta(_,question,key,text)
++        if valid && job.confirmed && !text.is_empty() && job.accepts_stream(question,key));
++    let work=gate_question_work(job,work)?;
++    let changed=accepts && answers.authorize_answer(id,now);
++    Some((work,changed))
++}
+ fn gate_question_work(job:&meeting::scheduler::Job,work:Work)->Option<Work> {
+     match work {
+         Work::QuestionDelta(id,question,key,text)=>job.accepts_stream(&question,&key).then_some(Work::Delta(id,text)),
+diff --git a/src-tauri/src/meeting/controller_tests.rs b/src-tauri/src/meeting/controller_tests.rs
+index 27014be..5f87c8d 100644
+--- a/src-tauri/src/meeting/controller_tests.rs
++++ b/src-tauri/src/meeting/controller_tests.rs
+@@ -263,3 +263,166 @@ fn candidate_failed_waveform_final_frame_remains_eligible() {
+     assert!(frame.to_lowercase().contains("what experiment distinguishes them"));
+     assert!(frame.to_lowercase().contains("conductance"));assert!(last.error.is_none());
+ }
++
++#[test]
++fn undecided_automatic_bursts_bound_capacity_without_cancelling_foreground() {
++    let mut c=Scheduler::default();let parent=c.confirm("Foreground opaque text".into(),100,90,95);c.next(100);
++    let first=c.confirm_automatic_with_context("First candidate".into(),200,180,190,None);c.next(200);
++    let first_cancel=c.find_mut(&first).unwrap().cancel.clone();
++    let mut last=String::new();
++    for now in 201..240 {
++        last=c.confirm_automatic_with_context(format!("Arbitrary candidate {now}"),now,now,now,None);
++        assert!(c.next(now).is_none());assert_eq!(c.active(),2);
++        assert!(!c.find_mut(&parent).unwrap().cancel.is_cancelled());
++        assert_eq!(c.rows().iter().filter(|r|r.queued).count(),1);
++    }
++    assert!(first_cancel.is_cancelled());c.find_mut(&first).unwrap().running=false;
++    assert_eq!(c.next(240),Some(last.clone()));assert_eq!(c.active(),2);
++    assert!(c.authorize_answer(&last,250));assert!(c.find_mut(&parent).unwrap().cancel.is_cancelled());
++}
++#[test]
++fn undecided_capacity_failure_is_visible_without_destroying_foreground_work() {
++    let mut c=Scheduler::default();let parent=c.confirm("Existing work".into(),100,90,95);c.next(100);
++    c.confirm_automatic_with_context("First opaque input".into(),200,180,190,None);c.next(200);
++    let last=c.confirm_automatic_with_context("Latest opaque input".into(),300,280,290,None);
++    assert!(c.next(300+RECOVERY_MS).is_none());assert!(c.latest_request_error().is_some());
++    assert!(!c.find_mut(&parent).unwrap().cancel.is_cancelled());assert_eq!(c.visible().unwrap().question.id,parent);
++    assert_eq!(c.find_mut(&last).unwrap().latency.question_confirmed_at,300);
++    assert_eq!(c.active(),2);
++}
++#[test]
++fn undecided_failure_pruning_and_explicit_preemption_preserve_completed_foreground() {
++    let mut c=Scheduler::default();let parent=c.confirm("Completed foreground".into(),100,90,95);
++    let old=c.find_mut(&parent).unwrap();old.phase=Phase::Complete;old.latency.completed_at=Some(150);old.buffer="Exact old answer".into();
++    let bad=c.confirm_automatic_with_context("Failed candidate".into(),200,180,190,None);
++    let j=c.find_mut(&bad).unwrap();j.phase=Phase::Complete;j.latency.completed_at=Some(250);j.error=Some("Transport error".into());
++    c.propose("New local revision".into(),300,280,290);
++    assert_eq!(c.visible().unwrap().question.id,parent);assert_eq!(c.visible().unwrap().buffer,"Exact old answer");
++    let explicit=c.confirm_explicit_with_context("Explicit next task".into(),310,300,305,"Frozen explicit context".into());
++    assert_eq!(c.visible().unwrap().question.id,explicit);assert_eq!(c.visible().unwrap().focus_authorized_at,Some(310));
++    assert_eq!(c.next(310),Some(explicit));
++}
++
++
++fn grow_recognized_retrieval_budget(ledger:&mut super::ledger::Ledger) {
++    for turn in 1..=32 {
++        ledger.displayed(&format!("budget-{turn}"),"Independent subsequent discussion",
++            &"independent unrelated discussion. ".repeat(400),turn*1000);
++    }
++}
++#[test]
++fn recognized_utterance_retrieval_keeps_pronoun_clauses_atomic_beyond_budget() {
++    // Opaque subjects vary; retrieval policy has no knowledge of their names.
++    for seed in [3u32,29,107,65537] {
++        let mut ledger=super::ledger::Ledger::default();
++        let subject=format!("subject_{seed:08x}");
++        let decision=format!("{subject} retains records for {} days.",seed+1);
++        ledger.observe(speech("subject-clause",&decision,10),110);
++        ledger.observe(speech("owner-clause","The owner of it is the second attendee.",120),220);
++        ledger.observe(speech("unrelated-clause","A separate decision belongs to someone else.",230),330);
++        grow_recognized_retrieval_budget(&mut ledger);
++        let before=ledger.context(&subject,None);
++        assert!(before.contains(&decision));assert!(!before.contains("owner-clause"));
++        ledger.associate_remote_utterance(10,["subject-clause","owner-clause"]);
++        let after=ledger.context(&subject,None);
++        assert!(after.contains("Derived context view"));assert!(after.contains(&decision));
++        assert!(after.contains("REMOTE [utterance owner-clause, revision 1, 120..220 ms]: The owner of it is the second attendee."));
++        assert!(!after.contains("unrelated-clause"));
++        assert_eq!(ledger.recognized.len(),3);
++    }
++}
++#[test]
++fn recognized_groups_preserve_latest_revision_and_every_original() {
++    let mut ledger=super::ledger::Ledger::default();
++    let original="const char* identifier = \"exact_α\";\r\n";
++    let corrected="const char* identifier = \"exact_β\";\r\n";
++    ledger.observe(speech("code",original,10),110);
++    ledger.observe(speech("owner","It belongs to the earlier speaker.",120),220);
++    ledger.associate_remote_utterance(10,["code","owner"]);
++    ledger.observe(speech("code",corrected,10),230);
++    grow_recognized_retrieval_budget(&mut ledger);
++    let view=ledger.context("identifier",None);
++    assert!(view.contains(corrected));assert!(!view.contains(original));
++    assert!(view.contains("REMOTE [utterance code, revision 2"));assert!(view.contains("utterance owner"));
++    assert_eq!(ledger.recognized[0].segment.text,original);
++    assert_eq!(ledger.recognized[2].segment.text,corrected);
++    assert_eq!(ledger.recognized.len(),3);
++}
++#[test]
++fn unrelated_adjacent_speech_and_other_speaker_are_not_inferred_into_groups() {
++    let mut ledger=super::ledger::Ledger::default();
++    ledger.observe(speech("same-id","Earlier project declaration.",10),110);
++    let mut own=speech("same-id","Separate microphone fact.",11);own.source=SpeakerSource::Self_;
++    ledger.observe(own,111);ledger.observe(speech("next-id","Unrelated adjacent speech.",12),112);
++    ledger.associate_remote_utterance(10,["same-id","unknown-id"]);
++    let view=ledger.context("Recall",None);
++    let group=view.split("RECOGNIZED UTTERANCE").nth(1).unwrap().split("\n\n").next().unwrap();
++    assert!(group.contains("REMOTE [utterance same-id"));
++    assert!(!group.contains("microphone fact"));assert!(!group.contains("next-id"));
++    assert!(!view.contains("unknown-id"));assert!(view.contains("SELF [utterance same-id"));
++}
++#[test]
++fn existing_source_membership_cannot_be_moved_by_a_late_association() {
++    let mut ledger=super::ledger::Ledger::default();
++    ledger.observe(speech("original","The original subject.",10),110);
++    ledger.observe(speech("later","Different later subject.",1000),1100);
++    ledger.associate_remote_utterance(10,["original"]);let version=ledger.version;
++    ledger.associate_remote_utterance(1000,["original"]);assert_eq!(ledger.version,version);
++    ledger.associate_remote_utterance(1000,["later"]);
++    let view=ledger.context("Recall",None);
++    let old=view.split("controller floor 10 ms").nth(1).unwrap().split("\n\n").next().unwrap();
++    assert!(old.contains("utterance original"));assert!(!old.contains("utterance later"));
++}
++#[test]
++fn grouped_context_cutoff_excludes_future_source_clauses() {
++    let mut ledger=super::ledger::Ledger::default();
++    ledger.observe(speech("early","Eligible earlier statement.",10),110);
++    ledger.observe(speech("late","Future statement must stay absent.",200),300);
++    ledger.associate_remote_utterance(10,["early","late"]);
++    let view=ledger.context("Recall",Some(200));
++    assert!(view.contains("Eligible earlier statement."));assert!(!view.contains("Future statement"));
++    assert!(ledger.context("Recall",Some(301)).contains("Future statement"));
++    assert_eq!(ledger.recognized.len(),2);
++}
++#[test]
++fn oversized_recognized_group_is_omitted_whole_without_losing_originals() {
++    let mut ledger=super::ledger::Ledger::default();
++    ledger.observe(speech("oversized",&format!("opaque_subject {}","z".repeat(240_001)),10),110);
++    ledger.observe(speech("linked","It has this associated condition.",120),220);
++    ledger.associate_remote_utterance(10,["oversized","linked"]);
++    let view=ledger.context("opaque_subject",None);
++    assert!(view.contains("Derived context view"));assert!(!view.contains("utterance oversized"));
++    assert!(!view.contains("utterance linked"));assert_eq!(ledger.recognized.len(),2);
++    assert!(ledger.recognized[0].segment.text.len()>240_000);
++}
++#[test]
++fn computation_cancellation_keeps_recognized_groups_until_session_clear() {
++    let mut memory=MeetingContext::default();let mut c=Scheduler::default();
++    memory.ledger.observe(speech("first","A retained subject.",10),110);
++    memory.ledger.observe(speech("second","It has an exact condition.",120),220);
++    memory.ledger.associate_remote_utterance(10,["first","second"]);
++    let old=c.confirm("Earlier request".into(),300,290,295);c.next(300);
++    c.confirm("Interrupt request".into(),400,390,395);assert!(c.find_mut(&old).unwrap().cancel.is_cancelled());
++    let view=memory.ledger.context("Recall",None);
++    assert!(view.contains("utterance first"));assert!(view.contains("utterance second"));
++    memory.clear();assert!(memory.ledger.recognized.is_empty());
++    assert!(!memory.ledger.context("Recall",None).contains("controller floor"));
++}
++#[test]
++fn detector_exposes_exact_final_ids_across_pause_and_confirmation_but_not_new_floor() {
++    let mut detector=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
++    detector.speech_started(SpeakerSource::Remote,100);
++    detector.transcript(&speech("clause-one","An earlier recognized clause.",100));
++    detector.speech_ended(SpeakerSource::Remote,200);
++    assert!(detector.speech_started(SpeakerSource::Remote,300));
++    detector.transcript(&speech("clause-two","Its subsequent condition.",300));
++    detector.speech_ended(SpeakerSource::Remote,400);assert!(detector.confirm_now(400).is_some());
++    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),vec!["clause-one","clause-two"]);
++    detector.transcript(&speech("clause-two","Its corrected condition.",300));
++    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),vec!["clause-one","clause-two"]);
++    assert!(detector.confirm_now(450).is_some());
++    assert!(!detector.speech_started(SpeakerSource::Remote,500));
++    assert!(detector.recognized_segment_ids().next().is_none());
++    let mut partial=speech("partial","Unfinished",500);partial.final_=false;detector.transcript(&partial);
++    assert!(detector.recognized_segment_ids().next().is_none());
++}
+diff --git a/src-tauri/src/meeting/ledger.rs b/src-tauri/src/meeting/ledger.rs
+index 6ceb59c..ae99655 100644
+--- a/src-tauri/src/meeting/ledger.rs
++++ b/src-tauri/src/meeting/ledger.rs
+@@ -19,8 +19,22 @@ pub struct Ledger {
+     pub typed_requests:Vec<(String,String,u64)>,
+     revisions:HashMap<(String,String),u64>,
+     request_revisions:HashMap<u64,u64>,
++    // Derived membership from the detector's exact recognized segment IDs.
++    // Revisions and originals remain independent of these retrieval units.
++    remote_utterances:HashMap<(String,String),u64>,
+ }
+ impl Ledger {
++    /// Bind only known IDs, without inferring subjects, names or proximity.
++    /// A delayed association cannot silently move an existing source into a
++    /// different utterance. Cancelling computation does not remove membership.
++    pub fn associate_remote_utterance<'a>(&mut self,floor:u64,ids:impl IntoIterator<Item=&'a str>) {
++        for id in ids {
++            let key=(label(SpeakerSource::Remote).to_owned(),id.to_owned());
++            if self.revisions.contains_key(&key) && !self.remote_utterances.contains_key(&key) {
++                self.remote_utterances.insert(key,floor);self.version+=1;
++            }
++        }
++    }
+     pub fn accepted_revision(&mut self,utterance:u64)->u64 {
+         let next=self.request_revisions.entry(utterance).or_default();
+         let revision=*next;*next+=1;revision
+@@ -84,8 +98,24 @@ impl Ledger {
+                 latest.insert((label(record.segment.source),record.segment.id.as_str()),record);
+             }
+         }
++        // Retrieve recognized clauses as one source unit when the controller
++        // observed them on the same logical utterance. Independent ASR segment
++        // boundaries must not separate a subject from its pronoun/owner clause.
++        // Every original label, ID, revision, time and exact text stays visible.
++        let mut groups:HashMap<u64,Vec<&Recognition>>=HashMap::new();
+         for record in latest.values() {
+-            items.push((record.segment.started_at,format!("{} [utterance {}, revision {}, {}..{} ms]: {}",label(record.segment.source),record.segment.id,record.revision,record.segment.started_at,record.segment.ended_at,record.segment.text)));
++            let key=(label(record.segment.source).to_owned(),record.segment.id.clone());
++            if let Some(floor)=self.remote_utterances.get(&key) {
++                groups.entry(*floor).or_default().push(*record);
++            } else {items.push((record.segment.started_at,recognized_source(record)));}
++        }
++        for (floor,mut records) in groups {
++            records.sort_by(|a,b|a.segment.started_at.cmp(&b.segment.started_at)
++                .then_with(||a.segment.ended_at.cmp(&b.segment.ended_at))
++                .then_with(||a.segment.id.cmp(&b.segment.id)));
++            let at=records[0].segment.started_at;
++            let sources=records.into_iter().map(recognized_source).collect::<Vec<_>>().join("\n");
++            items.push((at,format!("RECOGNIZED UTTERANCE [controller floor {floor} ms; eligible prior source clauses]\n{sources}")));
+         }
+         for suggestion in &self.suggestions {
+             // Exact code is a stable archived source, even if the viewport
+@@ -148,6 +178,10 @@ impl Ledger {
+         format!("ORDERED SESSION SOURCES (recognized speech and displayed suggestions are distinct)\n{}",items.into_iter().map(|(_,text)|text).collect::<Vec<_>>().join("\n\n"))
+     }
+ }
++fn recognized_source(record:&Recognition)->String {
++    format!("{} [utterance {}, revision {}, {}..{} ms]: {}",label(record.segment.source),record.segment.id,
++        record.revision,record.segment.started_at,record.segment.ended_at,record.segment.text)
++}
+ fn label(source:SpeakerSource)->&'static str {match source{SpeakerSource::Remote=>"REMOTE",SpeakerSource::Self_=>"SELF"}}
+ 
+ /// Return exact closed source slices. Literal backticks inside code do not
+diff --git a/src-tauri/src/meeting/questions.rs b/src-tauri/src/meeting/questions.rs
+index 4f572b5..d77096b 100644
+--- a/src-tauri/src/meeting/questions.rs
++++ b/src-tauri/src/meeting/questions.rs
+@@ -102,6 +102,11 @@ pub struct QuestionDetector {
+     minimum_remote_started_at:u64,
+ }
+ impl QuestionDetector {
++    /// IDs of finalized clauses on the detector's current logical floor.
++    /// Acceptance keeps them for late revisions; a new floor clears them.
++    pub fn recognized_segment_ids(&self)->impl Iterator<Item=&str> {
++        self.final_segments.iter().map(|(id,_)|id.as_str())
++    }
+     pub fn remote_source_current(&self,started_at:u64)->bool {started_at>=self.minimum_remote_started_at}
+     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
+         if source==SpeakerSource::Remote&&!self.remote_source_current(now){return false;}

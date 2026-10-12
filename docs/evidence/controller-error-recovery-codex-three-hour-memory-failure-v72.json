@@ -1,0 +1,112 @@
+{
+  "evaluationKind": "authenticated_live_source_retrieval_failure",
+  "sourceJournal": {
+    "file": "artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json",
+    "sha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"
+  },
+  "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "actualInterviewDurationMs": 10816743,
+  "stoppedCleanly": true,
+  "archiveBeforeStop": {
+    "accepted": 141,
+    "displayedBytes": 0,
+    "generatedBytes": 150100,
+    "paintMetadataBytes": 75072,
+    "paintedRangeBytes": 440518,
+    "paintedRanges": 2186,
+    "recognizedRevisionBytes": 453790,
+    "recognizedRevisions": 13099,
+    "suggestions": 103,
+    "version": 51719
+  },
+  "archiveAfterStop": {
+    "accepted": 0,
+    "displayedBytes": 0,
+    "generatedBytes": 0,
+    "paintMetadataBytes": 0,
+    "paintedRangeBytes": 0,
+    "paintedRanges": 0,
+    "recognizedRevisionBytes": 0,
+    "recognizedRevisions": 0,
+    "suggestions": 0,
+    "version": 0
+  },
+  "sourceRound": 2,
+  "sourceQuestion": "We have agreed that release Delta uses a retention period of exactly thirty seven days. Mira owns it, and the checkpoint identifier is Foo underscore seventeen. Keep this decision for the rest of this meeting.",
+  "recognizedQuestion": "We have agreed that release Delta uses a retention period of exactly thirty seven days Myra owns it and the checkpoint identifier is Foo underscore seventeen Keep this decision for the rest of this meeting",
+  "originalFinalSegments": [
+    {
+      "id": "Remote-84a154c4-f7f8-421a-9b81-e56f5eb652cc",
+      "source": "remote",
+      "text": "We have agreed that",
+      "startedAt": 50389,
+      "endedAt": 52171,
+      "final": true
+    },
+    {
+      "id": "Remote-38b46833-7172-4314-a9cb-fc9fa30e72ef",
+      "source": "remote",
+      "text": "release Delta uses a retention period of exactly thirty seven days",
+      "startedAt": 50389,
+      "endedAt": 56011,
+      "final": true
+    },
+    {
+      "id": "Remote-578d0594-6138-4db9-a1ab-20c486d9d5b6",
+      "source": "remote",
+      "text": "Myra owns it",
+      "startedAt": 56149,
+      "endedAt": 58091,
+      "final": true
+    },
+    {
+      "id": "Remote-d06685a9-a7ec-4934-a36a-4b9dc4795dbe",
+      "source": "remote",
+      "text": "and the checkpoint identifier is Foo underscore seventeen",
+      "startedAt": 56149,
+      "endedAt": 61611,
+      "final": true
+    },
+    {
+      "id": "Remote-07671cb2-a964-4185-a692-afcda37cc7bc",
+      "source": "remote",
+      "text": "Keep this decision for the rest of this meeting",
+      "startedAt": 61549,
+      "endedAt": 64651,
+      "final": true
+    }
+  ],
+  "targetRound": 113,
+  "targetQuestion": "After three hours, repeat the original first-hour Foo function exactly, then its corrected version separately. Recall the original Delta decision, Sigma's initial decision and its correction. Distinguish exact recognized source facts from any uncertainty or suggestion. Explain the branch result at -1 in each code version.",
+  "selectedGenerationId": "1f15a37d-ab71-4388-8e0e-6c550c0727b7",
+  "selectedContextSha256": "7e7b6f88928675e01eae87a74df64f16889b833669b0e357085a426237188a28",
+  "selectedContextBytes": 221637,
+  "derivedView": true,
+  "selectedRecognizedDecisionBlocks": [
+    "REMOTE [utterance Remote-38b46833-7172-4314-a9cb-fc9fa30e72ef, revision 24, 50389..56011 ms]: release Delta uses a retention period of exactly thirty seven days"
+  ],
+  "distinctRecognizedSourceOwnerClausePresent": false,
+  "sourceDecisionClausePresent": true,
+  "ownerMentionsInCopilotAndQuestionMetadata": [
+    "COPILOT SUGGESTION [generation 57f86256-0629-4803-8f9c-0bafff8e1f52; may be unfinished or incorrect]\nQUESTION: We have agreed that release Delta uses a retention period of exactly thirty seven days Myra owns it and the checkpoint identifier is Foo underscore seventeen Keep this decision for the rest of this meeting\nEXACT DISPLAYED TEXT:\n[visible source bytes 0..174]\nI’ll keep this decision for the rest of this meeting: release Delta has a retention period of exactly 37 days, Myra owns it, and the checkpoint identifier is Foo_seventeen.",
+    "COPILOT SUGGESTION [generation 3891ef98-fc35-462b-ba7a-59186bcba889; may be unfinished or incorrect]\nQUESTION: What exact retention period, owner and checkpoint identifier did we agree on near the beginning of this meeting? Use the recognized decision.\nEXACT DISPLAYED TEXT:\n[visible source bytes 0..116]\nRelease Delta’s retention period is exactly 37 days, Myra owns it, and the checkpoint identifier is Foo_seventeen.",
+    "COPILOT SUGGESTION [generation cb4bde31-b30e-4ffa-9e88-2e40efb2557a; may be unfinished or incorrect]\nQUESTION: What exact retention, owner and checkpoint identifier did we decide near the beginning of this session? Use our actual recorded decision, not generic policy.\nEXACT DISPLAYED TEXT:\n[visible source bytes 0..116]\nRelease Delta’s retention period is exactly 37 days, Myra owns it, and the checkpoint identifier is Foo_seventeen."
+  ],
+  "actualAnswer": "Original first-hour function:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nAt `x = -1`, `-1 < -1` is false, so it returns `19`.\n\nLater corrected version:\n```cpp\nint Foo(int x) { return x <= -1 ? 17 : 19; }\n```\nAt `x = -1`, `-1 <= -1` is true, so it returns `17`. The later typed correction changed the guard; it does not replace the preserved original source.\n\nRelease Delta: the supplied recognized speech establishes exactly 37 days’ retention and the checkpoint spoken as “Foo underscore seventeen,” rendered in suggestions as `Foo_seventeen`. Myra appears as owner in copilot suggestions, but the supplied recognized source does not establish that owner; I cannot verify it without the missing original statement. Delta was explicitly left unchanged by the later Sigma decisions.\n\nProject Sigma’s initial typed decision: exactly 29 days, owner Nils, checkpoint `Sigma_29`. The later typed statement “Correction for Sigma only” changed retention to 31 days and owner to Ada. It did not change the checkpoint, so the current decision is 31 days, Ada, `Sigma_29`; the initial decision is preserved as superseded. Sigma’s independent introduction and subsequent correction do not change Delta.",
+  "answerSha256": "f5d81a3b7495b6541861e6477413b5a2b1e28dad4e67a40cc8af4b19c42da99f",
+  "exactCodeRecall": {
+    "originalCodeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+    "correctedCodeSha256": "6e4db6410481d3b6cfe8dde98205260263e52dff8dd933f3558615f6f5ee40a9",
+    "originalByteExact": true,
+    "correctedByteExact": true,
+    "suppliedInTarget": false,
+    "interveningTurns": 111,
+    "acceptedToAcceptedGapMs": 10780063
+  },
+  "recognizedMemoryCorrect": false,
+  "requestedWorkComplete": false,
+  "scope": "Initial source Mira was recognized Myra; that independent source-accuracy error remains a failure. The final derived request view retains the Delta retention clause but omits the separately segmented owner clause as a REMOTE recognized-source item. Owner text survives inside COPILOT suggestions and their QUESTION metadata; it is not wholly absent from model input. The model qualifies the lack of a distinct recognized owner source. Unchanged code recall succeeds, but requested complete original decision recall fails. This associates recorded source omission and answer uncertainty, without proving that omission is the sole cause. Aggregate archive counters do not dump/verify each retained item. No production word/name substitution, source repair or new persistence."
+}

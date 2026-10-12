@@ -10,6 +10,14 @@ Native audio tests play unchanged, hashed mono PCM waveforms through **T24E390**
 
 These are simulated meetings and technical interviews with an authenticated assistant, not human interview certification. Saved questions include CUDA collective proofs, numerical reasoning, directed graphs with negative cycles, transactional invariants, changed constraints, and underspecified challenges. No expected answer or fixture identity selects production routing, acceptance, model, context retrieval or response policy.
 
+The additional input-fidelity generator accepts any selected audio rounds from a completed recorded journal. It creates canonical text, actual recognized text and untouched waveform conditions, all with the same public snapshot taken before the source question. Repetition two reverses target/condition order. For example:
+
+```powershell
+node scripts/prepare-controller-input-fidelity.mjs artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json artifacts/controller-v73/prepared/reusable-input-fidelity.json 4,11,13
+```
+
+This command prepares eighteen conditions; it does not run inference. Text conditions require the new collector's `automaticRecognized` branch, currently part of the prepared v73 implementation: finalized remote text goes through normal automatic conversational acceptance rather than explicit Ask. Reviewer metadata includes the original target but is never additional answering input. This separates speech-fidelity failures from reasoning and interface failures; voice alone may also leave identifier capitalization ambiguous. Text conditions receive no audio/ASR latency credit. A fresh recognizer does not reproduce the original hours-old acoustic state. The application has no question-content rule or canned answer associated with these rounds.
+
 All measured assistant runs use **`gpt-6.1-sol`, `low`**. The final contextual/backend/history/objective cells use standard tier (`null`); the original baseline/controller cells retain their source manifest's identical tier. The model catalog establishes availability, while recorded provider events establish actual inference; a failed startup does not prove inference capability or answer latency. Codex also validates the catalog's supported effort values. Unsupported direct-plan capabilities fail visibly; there is no billed API fallback.
 
 ## Reproduction

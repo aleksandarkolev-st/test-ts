@@ -120,6 +120,64 @@ def check_float(function):
             "maxObservedRelativeError": str(max_relative), "scope": "760-digit Decimal oracle, four-ULP finite probe tolerance, gradual underflow on this host. It does not certify a supplied analytical error bound or flush-to-zero behavior."}
 
 
+def check_scaled_float(function):
+    """Check a recorded mantissa/exponent result without materializing a float."""
+    rng = random.Random(18913)
+    inputs = [0.0, math.ulp(0.0), sys.float_info.min, 1.0, 1e100, 1e308,
+              sys.float_info.max, math.ldexp(1.0, 1021)]
+    inputs += [math.ldexp(rng.uniform(1, 2), rng.randrange(-1074, 1023))
+               for _ in range(3000)]
+    failures, max_relative = [], Decimal(0)
+    with localcontext() as context:
+        context.prec = 760
+        tolerance = Decimal(4) * Decimal(2) ** -53
+        for x in inputs:
+            value = Decimal.from_float(x)
+            expected = Decimal(1) / ((value * value + 1).sqrt() + value)
+            try:
+                mantissa, exponent = function(x)
+                assert type(mantissa) is float and math.isfinite(mantissa)
+                assert 0.5 <= mantissa < 1.0 and type(exponent) is int
+                # Guard hostile/unbounded encoded exponents before Decimal work.
+                assert -1100 <= exponent <= 1
+                represented = Decimal.from_float(mantissa) * Decimal(2) ** exponent
+                error = abs(represented / expected - 1)
+                max_relative = max(max_relative, error)
+                if error > tolerance:
+                    failures.append({"x": x, "mantissa": mantissa,
+                                     "exponent": exponent, "relativeError": str(error)})
+            except Exception as error:
+                failures.append({"x": x, "exception": repr(error)})
+    return {"comparisons": len(inputs), "mismatchCount": len(failures),
+            "firstFailures": failures[:12], "maxObservedRelativeError": str(max_relative),
+            "scope": "Actual unchanged scaled-result function on the host, 760-digit Decimal reconstruction and four-u relative tolerance. Finite nonnegative probes, normalized positive mantissa/integer exponent. No final binary64 product is evaluated; this does not simulate FTZ operations, certify every intermediate or prove the universal analytical bound."}
+
+
+def check_float_normal_boundary(function):
+    """Diagnostic for the independently reviewed subnormal/normal boundary."""
+    x, normal_min = math.ldexp(1.0, 1021), sys.float_info.min
+    with localcontext() as context:
+        context.prec = 760
+        value = Decimal.from_float(x)
+        expected = Decimal(1) / ((value * value + 1).sqrt() + value)
+        actual = function(x)
+        actual_decimal = Decimal.from_float(actual)
+        # This checks a false intermediate classification, not a false final
+        # numerical error bound: the boundary result satisfies eta/2.
+        exact_subnormal = Decimal(0) < expected < Decimal.from_float(normal_min)
+        actual_normal = actual == normal_min
+        half_eta = Decimal.from_float(math.ulp(0.0)) / 2
+        within_half_eta = abs(actual_decimal - expected) <= half_eta
+        passes = exact_subnormal and actual_normal and within_half_eta
+        return {"comparisons": 1, "mismatchCount": 0 if passes else 1,
+                "firstFailures": [] if passes else [{"actual": repr(actual)}],
+                "xHex": x.hex(), "actualHex": actual.hex(),
+                "exactTargetSubnormal": exact_subnormal,
+                "actualRecordedFunctionReturnsMinimumNormal": actual_normal,
+                "absoluteErrorWithinHalfEta": within_half_eta,
+                "scope": "Actual unchanged recorded function at x=2^1021, plus independent 760-digit exact-target classification. A normal rounded result can occur when the exact target is subnormal; the final half-eta bound still holds here. This diagnostic is not a strict original function-name pass or a disproof of the whole numerical implementation; the source-bound proof statement is adjudicated separately."}
+
+
 def exact_walk_oracle(n, edges, source, target, length):
     """Independent forward DP; no exponentiation or generated witness code."""
     distances = [None] * n
@@ -314,7 +372,7 @@ def main():
             try:
                 module_spec.loader.exec_module(module)
                 function = getattr(module, item["function"])
-                result.update({"route": check_route, "float-rationalization": check_float, "exact-length-walk": check_exact_walk, "predictable-monitor": check_monitor, "two-slot-pipeline": check_pipeline}[item["kind"]](function))
+                result.update({"route": check_route, "float-rationalization": check_float, "float-scaled": check_scaled_float, "float-normal-boundary": check_float_normal_boundary, "exact-length-walk": check_exact_walk, "predictable-monitor": check_monitor, "two-slot-pipeline": check_pipeline}[item["kind"]](function))
             finally:
                 sys.modules.pop(module_name, None)
             result["pass"] = result["mismatchCount"] == 0

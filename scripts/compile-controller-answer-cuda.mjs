@@ -4,18 +4,27 @@ import {createHash} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import path from 'node:path';
 import {fencedSources} from './lib/fenced-sources.mjs';
-const [journalFile,toolchainFile,directory]=process.argv.slice(2);
+const [journalFile,toolchainFile,directory,selectionFile]=process.argv.slice(2);
 assert(journalFile&&toolchainFile&&directory,'JOURNAL TOOLCHAIN_MANIFEST OUTPUT_DIRECTORY');
 const root=process.cwd(),out=path.resolve(directory);assert(out.startsWith(root+path.sep));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const journalBytes=await readFile(journalFile),journal=JSON.parse(journalBytes),toolchainBytes=await readFile(toolchainFile),toolchain=JSON.parse(toolchainBytes);
 assert.equal(journal.status,'complete');assert(journal.stoppedCleanly);
+let sourceSelection=null,selectedRows=journal.rows;
+if(selectionFile){
+ const bytes=await readFile(selectionFile),selection=JSON.parse(bytes);
+ assert.equal(selection.journalSha256,hash(journalBytes));assert(Array.isArray(selection.rows)&&selection.rows.length);
+ assert.equal(new Set(selection.rows.map(r=>r.round)).size,selection.rows.length);
+ selectedRows=selection.rows.map(selected=>{const row=journal.rows.find(r=>r.round===selected.round);assert(row);assert.equal(hash(row.answer),selected.answerSha256);return row;});
+ sourceSelection={file:selectionFile,sha256:hash(bytes),rows:selection.rows,scope:selection.scope};
+}
 const nvccSha256=hash(await readFile(toolchain.nvcc));
 assert.equal(nvccSha256,toolchain.files.find(file=>path.resolve(file.file)===path.resolve(toolchain.nvcc)).sha256);
 assert.equal(hash(await readFile(toolchain.hostCompiler)),toolchain.hostCompilerSha256);
 try{
  const previous=JSON.parse(await readFile(path.join(out,'compilation.json')));
  assert.equal(previous.journal.sha256,hash(journalBytes));assert.equal(previous.toolchain.sha256,hash(toolchainBytes));
+ assert.equal(previous.sourceSelection?.sha256??null,sourceSelection?.sha256??null);
  for(const block of previous.blocks){assert.equal(hash(await readFile(block.code.file)),block.code.sha256);for(const log of [block.stdout,block.stderr])assert.equal(hash(await readFile(log.file)),log.sha256);}
  console.log(JSON.stringify({cached:true,file:path.join(out,'compilation.json'),summary:previous.summary}));process.exit(0);
 }catch(error){if(error.code!=='ENOENT')throw error;}
@@ -27,7 +36,7 @@ const blocks=[],run=(args,cwd)=>new Promise((resolve,reject)=>{
  child.stdout.on('data',chunk=>{stdoutBytes+=chunk.length;stdout=(stdout+chunk).slice(-64000);});child.stderr.on('data',chunk=>{stderrBytes+=chunk.length;stderr=(stderr+chunk).slice(-64000);});
  child.once('error',error=>{clearTimeout(timer);reject(error);});child.once('exit',exitCode=>{clearTimeout(timer);resolve({exitCode,timedOut,stdout,stderr,stdoutBytes,stderrBytes});});
 });
-for(const row of journal.rows)for(const [index,block] of fencedSources(row.answer??'').entries()){
+for(const row of selectedRows)for(const [index,block] of fencedSources(row.answer??'').entries()){
  if(!/^(?:cuda|cpp|c\+\+)$/iu.test(block.languageAnnotation))continue;
  const caseDirectory=path.join(out,`round-${row.round}-block-${index}`);await mkdir(caseDirectory);
  const source=path.join(caseDirectory,'recorded.cu'),object=path.join(caseDirectory,'recorded.obj');await writeFile(source,block.text,{flag:'wx'});
@@ -45,6 +54,7 @@ for(const row of journal.rows)for(const [index,block] of fencedSources(row.answe
   stdout:{file:path.relative(root,stdoutFile),sha256:hash(result.stdout)},stderr:{file:path.relative(root,stderrFile),sha256:hash(result.stderr)}});
 }
 const report={recordedAt:new Date().toISOString(),journal:{file:journalFile,sha256:hash(journalBytes)},
+ sourceSelection,
  toolchain:{file:toolchainFile,sha256:hash(toolchainBytes),nvccSha256,hostCompilerSha256:toolchain.hostCompilerSha256},
  collectorSourceHashes:{'scripts/compile-controller-answer-cuda.mjs':hash(await readFile(new URL(import.meta.url))),'scripts/lib/fenced-sources.mjs':hash(await readFile('scripts/lib/fenced-sources.mjs'))},
  blocks,summary:{recordedCudaOrCppBlocks:blocks.length,compiled:blocks.filter(block=>block.exitCode===0).length,

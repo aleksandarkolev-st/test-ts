@@ -8,6 +8,7 @@ import path from 'node:path';
 import {integerBranchHarness} from './lib/integer-branch-harness.mjs';
 import {logRecoveryFixtures,suppliedCrc32cSource} from './lib/log-recovery-fixtures.mjs';
 import {recordedCppSource} from './lib/recorded-cpp-source.mjs';
+import {adaptRecordedPhysicalLaneRead} from './lib/recorded-cuda-lane-adaptation.mjs';
 const [journalFile,specFile,outDir]=process.argv.slice(2);assert(journalFile&&specFile&&outDir,'JOURNAL SPECS OUTPUT');
 const root=process.cwd(),output=path.resolve(outDir);assert(output.startsWith(root+path.sep));await mkdir(output,{recursive:true});
 const bytes=await readFile(journalFile),journal=JSON.parse(bytes),spec=JSON.parse(await readFile(specFile));
@@ -43,10 +44,9 @@ for(const item of spec.checks){
   assert(/^[A-Za-z_][A-Za-z_0-9]*$/.test(item.function),'Specify the recorded entry point without editing it');
   // Substitute only the PTX lane-id read with the harness's physical lane.
   // This is an environment adaptation, not a repair of the recorded algorithm.
-  const laneRead=/asm\s+volatile\s*\(\s*"mov\.u32 %0, %%laneid;"\s*:\s*"=r"\s*\(\s*([A-Za-z_][A-Za-z_0-9]*)\s*\)\s*\)\s*;/g;
-  const adapted=code.replace(laneRead,(_,variable)=>`${variable} = threadIdx.x;`);
-  result.environmentAdaptations={cudaHeader:'test-only CPU intrinsic shim',ptxLaneReadsReplaced:[...code.matchAll(laneRead)].length,
-   algorithmRepaired:false,adaptedCodeSha256:sha(adapted)};
+  const adaptation=adaptRecordedPhysicalLaneRead(code),adapted=adaptation.source;
+  result.environmentAdaptations={cudaHeader:'test-only CPU intrinsic shim',ptxLaneReadsReplaced:adaptation.ptxLaneReadsReplaced,
+   algorithmRepaired:false,adaptedCodeSha256:sha(adapted),scope:adaptation.scope};
   source=`#include <iostream>\n#include ${JSON.stringify(path.resolve('tests/fixtures/cuda-collective-harness.hpp').replaceAll('\\','/'))}\n${adapted}\nint main(){try{check_sum19(${item.function});}catch(const std::exception& error){std::cerr<<error.what();return 2;}}\n`;
  }else if(item.kind==='cpp-log-recovery'){
   source=code+'\n'+suppliedCrc32cSource;
@@ -67,6 +67,6 @@ for(const item of spec.checks){
  }else if(result.compile.code===0)result.execution=await run(exe,[],10000);
  result.pass=result.compile.code===0&&result.execution?.code===0&&!result.execution.timedOut&&(item.kind!=='foo-exact'||result.exactOriginal)&&(item.kind!=='integer-branch'||result.exactRequestedSource);
 }
-await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',graderSha256:sha(await readFile(new URL(import.meta.url))),recordedCppSourceSha256:sha(await readFile(new URL('./lib/recorded-cpp-source.mjs',import.meta.url))),integerBranchHarnessSha256:sha(await readFile(new URL('./lib/integer-branch-harness.mjs',import.meta.url))),logRecoveryFixturesSha256:sha(await readFile(new URL('./lib/log-recovery-fixtures.mjs',import.meta.url))),harnessSha256,harnessHeaderSha256,results,
+await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',graderSha256:sha(await readFile(new URL(import.meta.url))),physicalLaneAdaptationSha256:sha(await readFile(new URL('./lib/recorded-cuda-lane-adaptation.mjs',import.meta.url))),recordedCppSourceSha256:sha(await readFile(new URL('./lib/recorded-cpp-source.mjs',import.meta.url))),integerBranchHarnessSha256:sha(await readFile(new URL('./lib/integer-branch-harness.mjs',import.meta.url))),logRecoveryFixturesSha256:sha(await readFile(new URL('./lib/log-recovery-fixtures.mjs',import.meta.url))),harnessSha256,harnessHeaderSha256,results,
  scope:'CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs.'},null,2));
 console.log(JSON.stringify(results.map(r=>({round:r.round,pass:r.pass??false,failure:r.pass?null:r.failure??r.compile?.error??r.compile?.stderr??null}))));

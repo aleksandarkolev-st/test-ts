@@ -53,7 +53,10 @@ try{
   if(parts.some(p=>!p)){result.failure='Harness requires separate BEGIN/body/COMMIT transaction fences; unsupported layout is not a model correctness verdict';continue;}
   assert(/^[A-Za-z_]\w*$/.test(check.table)&&/^[A-Za-z_]\w*$/.test(check.onCallColumn));
   for(const mode of ['recorded_serializable','repeatable_read_control'])for(const order of [[0,1],[1,0]]){
-   const reset=await sql(`DROP TABLE IF EXISTS ${check.table};\n`+setup);assert.equal(reset.code,0,JSON.stringify(reset));
+   // Each trial owns this freshly initialized database. Reset its schema so
+   // unchanged answers containing functions/types can be replayed too; merely
+   // dropping the table would leave those objects behind on the next trial.
+   const reset=await sql('DROP SCHEMA public CASCADE;\nCREATE SCHEMA public;\n'+setup);assert.equal(reset.code,0,JSON.stringify(reset));
    const actors=[session(),session()],events=[];let failed=null;
    try{
     for(const index of order){const begin=mode==='recorded_serializable'?parts[index].begin:repeatableReadControlBegin(parts[index].begin);assert(begin,'Control requires an explicit SERIALIZABLE isolation clause');const r=await actors[index].send(begin);events.push({actor:index,stage:'begin',...r});assert.equal(r.code,0);}

@@ -780,7 +780,95 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-codex-reasoning\\results.json",
+      "sha256": "50b8315b832e3e50eb410194bc9e3e069052f8ee60ed35001051f7c2505a657e",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-codex-reasoning/interview.json",
+        "journalSha256": "7bd58324253faa9dbb9a9c8405724bc205f8efb0b8005c3b801c8ba4d4b686da",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "9ccbc36b09b932d80cac3332a381cbdeb760306bd586b089780cb44ef4694c1d",
+            "kind": "cpp-self-test",
+            "scope": "Unchanged complete C++17 source and requested test main, previously manually reviewed. No repair; compilation/execution results separate from proof verdict.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "db6d65fd45a3a86c4cfedcdc2844969804cc8cc5062419a670fd614709bf79de",
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-codex-reasoning\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "db6d65fd45a3a86c4cfedcdc2844969804cc8cc5062419a670fd614709bf79de",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 3,
+            "answerSha256": "f26b57c005792d0e19203f9e1f0c719953e6598e1bbdb2a182f2ce68e45ffafc",
+            "kind": "cpp-self-test",
+            "scope": "Unchanged complete C++17 source and requested test main, previously manually reviewed. No repair; compilation/execution results separate from proof verdict.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "7654652c550579801b3756f5a9c64500c74a321606c05211956e9f133269ace3",
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-codex-reasoning\\round-3-block-0.cpp",
+            "harnessedSourceSha256": "7654652c550579801b3756f5a9c64500c74a321606c05211956e9f133269ace3",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 7,
+            "answerSha256": "deef2a1a744705dd101cd1ca7ada0ebc56924a73d5ce0ec83856874caa028819",
+            "kind": "cpp-self-test",
+            "scope": "Unchanged complete C++17 source and requested test main, previously manually reviewed. No repair; compilation/execution results separate from proof verdict.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "39eb6b22a7af235933c193180ba51b960d8e1126df5875c8d3434ba0651c7b6e",
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-codex-reasoning\\round-7-block-0.cpp",
+            "harnessedSourceSha256": "39eb6b22a7af235933c193180ba51b960d8e1126df5875c8d3434ba0651c7b6e",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "Final count: 800000\r\nAll tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

@@ -2206,6 +2206,115 @@
         ],
         "scope": "Exact UTF-8 source extracted from the initial question and both actual answers. No whitespace/operator/name normalization or prewritten answer. Byte comparison is not compilation or execution."
       }
+    },
+    {
+      "file": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-contextual\\results.json",
+      "sha256": "7a501467259b15a36344143d58adbe30804f7456e59a5c99624c40e8f77e95f5",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-plan-contextual/interview.json",
+        "journalSha256": "89e417b6a6ead0d920166292b769a476ece4cf5714f3d220f6abc4b3f6387db6",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 1,
+            "answerSha256": "34d8793273c3346ee6e6a0bb88dbf1cedb49b4a869483b0f5fd971ad5590bf5d",
+            "kind": "integer-branch",
+            "scope": "Actual initial-question exact source,2,003 independent integer inputs including INT_MIN/INT_MAX. Requested code fences preserved; no unfenced allowance for these rows.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-contextual\\round-1-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 25,
+            "answerSha256": "caa642024d29f33ace8e7d876b7f75767ef61130931828218efc002348a5c77a",
+            "kind": "integer-branch",
+            "scope": "Actual initial-question exact source,2,003 independent integer inputs including INT_MIN/INT_MAX. Requested code fences preserved; no unfenced allowance for these rows.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-contextual\\round-25-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 27,
+            "answerSha256": "053b68d1b75bd1d13847845b57f8a2fd466b8500c0f83195f731f4a6d6c4d9ad",
+            "kind": "cpp-self-test",
+            "scope": "Actual complete FIFO supplied by contextualWhy after interruption, unchanged requested assertions and program.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "b84db3def7e852bd23107c27cd2b6ddc376cd4e0ce3eba8bae7cb777a0f69591",
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-contextual\\round-27-block-0.cpp",
+            "harnessedSourceSha256": "b84db3def7e852bd23107c27cd2b6ddc376cd4e0ce3eba8bae7cb777a0f69591",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
     }
   ],
   "rows": [

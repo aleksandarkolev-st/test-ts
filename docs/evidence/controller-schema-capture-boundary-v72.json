@@ -1,0 +1,73 @@
+{
+  "status": "complete_old_hours_preserved_marathons_pending_corrected_build",
+  "startedAt": "2026-10-12T07:54:57.200Z",
+  "scope": "Deliberate queue boundary after both original hour captures. Preserve the old binary/failed hour; unstarted three-hour runs are deferred until the generic recovery and typed-focus fixes are verified. The task remains active. The generated marathon manifest is temporarily relocated byte-for-byte, then restored automatically after the old queue terminates before launching it. No live capture, waveform, completed journal or model answer is modified. Deliberate ENOENT queueboundary is operator-induced, not backendfailure. All13oldcompletedcaptures retained; unstarted3h tasks pending correctedbuild.",
+  "originalManifest": "artifacts/controller-v72/prepared/marathon-session.json",
+  "deferredManifest": "artifacts/controller-v72/prepared/marathon-session-deferred-before-recovery.json",
+  "manifestSha256": "f7231700538fb470b8e6c51eef2e558b0b431d4b0deca2fbf749ab07c347c70a",
+  "queueProcessId": 40292,
+  "originalQueueSnapshotSha256": "b0dbb84be223f64f42a8ac120957331e06ee6c2a811133257b348c70128959b7",
+  "manifestRelocatedAt": "2026-10-12T07:54:57.204Z",
+  "originalQueueTerminalStatus": "failed",
+  "originalQueueTerminalSha256": "e61dc0861118b471699d5dac72d1aec3015e6486c1cc6728ada259fe9a80026c",
+  "originalQueueFailure": "Error: ENOENT: no such file or directory, open 'C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\prepared\\marathon-session.json'",
+  "completedCaptures": [
+    {
+      "name": "authenticated-schema-dual-r1-codex-reasoning",
+      "journalSha256": "7bd58324253faa9dbb9a9c8405724bc205f8efb0b8005c3b801c8ba4d4b686da"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-reasoning",
+      "journalSha256": "43439cf9a9c66878aab6243162b79b5eed01a78bb1d661b53cc0a9dcf0a98dc2"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-contextual-text",
+      "journalSha256": "29e1a2f7614ee0cd35d2f2e0382e415e0a30603c85ccb2a07e6029e3b4c60b78"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-codex-contextual-text",
+      "journalSha256": "b47f1bc41fdd54042d0a5b0978128a89121273bf6889b6871d8933026b4a3314"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-hour-text",
+      "journalSha256": "0c72779a327d3d77648e6e27fe63cae0c041a46c367ef2c5e0194105083de386"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-codex-hour-text",
+      "journalSha256": "3e74299e3a514bd62cd5832f500ef9548e4e88e7d51831de299ac9c10d03a346"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-hour-audio",
+      "journalSha256": "3dc99985aa3d0013c58dc9d37c2c25cd9370748bb5578cbcd54abfa89120d3d6"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-codex-hour-audio",
+      "journalSha256": "bfdd6d9bb8c7b501154966aa3d20eea37aea4826a7eadae32cfd2c1b9d92f12c"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-codex-behavior",
+      "journalSha256": "c03d29478d0a0a2f141cf15c0d25a1b46912b1b6a5dad5236e0e702206fc97af"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-behavior",
+      "journalSha256": "817fc353d4aed45ad75eff42c071ff6b3e33d56d9b4833c459391c5ed67354b1"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-contextual",
+      "journalSha256": "89e417b6a6ead0d920166292b769a476ece4cf5714f3d220f6abc4b3f6387db6"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-codex-hour",
+      "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51"
+    },
+    {
+      "name": "authenticated-schema-dual-r1-plan-hour",
+      "journalSha256": "8c817b06bf200136c55bb030fd36161449fb4abaeea756ace705d3463480dc1f"
+    }
+  ],
+  "manifestRestoredAt": "2026-10-12T08:00:51.507Z",
+  "source": {
+    "file": "artifacts/controller-v72/schema-marathon-deferral-r1/operator-stop.json",
+    "sha256": "03488d32595827a3a7c1f4911439b68b969da7077bb50f7d323cdaa7f7036a4e"
+  }
+}

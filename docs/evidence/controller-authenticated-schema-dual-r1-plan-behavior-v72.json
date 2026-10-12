@@ -809,7 +809,49 @@
       "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "file": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-behavior\\results.json",
+      "sha256": "b4fa2e058675e480a26839fce6fcdf27eeb75fd8b0ba1b4067436867134cc963",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-plan-behavior/interview.json",
+        "journalSha256": "817fc353d4aed45ad75eff42c071ff6b3e33d56d9b4833c459391c5ed67354b1",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 5,
+            "answerSha256": "6158061eaff632ab2ba5d1c38336f59f6516dff22bfeddcf1fd1179b50dbd08a",
+            "kind": "cpp-self-test",
+            "scope": "Unchanged complete C++17 source and requested test main, previously manually reviewed. No repair; compilation/execution results separate from proof verdict.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "d07ab5533fc6f41e9a67918d07e5577049b1e8b18fc3a2aca9d74da05719288d",
+            "sourceFile": "artifacts\\controller-v72\\code\\authenticated-schema-dual-r1-plan-behavior\\round-5-block-0.cpp",
+            "harnessedSourceSha256": "d07ab5533fc6f41e9a67918d07e5577049b1e8b18fc3a2aca9d74da05719288d",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "All FIFO tests passed\r\n",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    }
+  ],
   "rows": [
     {
       "round": 1,

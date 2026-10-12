@@ -1,0 +1,49 @@
+{
+  "source": {
+    "file": "artifacts/controller-v72/native/authenticated-schema-dual-r1-plan-hour/interview.json",
+    "sha256": "8c817b06bf200136c55bb030fd36161449fb4abaeea756ace705d3463480dc1f"
+  },
+  "review": {
+    "file": "artifacts/controller-v72/reviews/authenticated-schema-dual-r1-plan-hour-reviewed.json",
+    "sha256": "df739a3d8c1b802dbf0decafc618294c7ed07a4c1d0d44dc8c83778a7ef6f7e8"
+  },
+  "scope": "Two actual older-source focus hijacks on old19ab36e controller; wrong currentanswers distinct from unauthorized staleoutput deltas. Exact typed andshown identities reconstructed from final immutable deepobservations. Generic source retirement fix is fixtureverified; liveverification separate.",
+  "focusFailures": [
+    {
+      "round": 19,
+      "applicationAgeMs": 2412522,
+      "requested": {
+        "id": "72315bb2-c7bb-4e35-ac4c-9007aec2fce0",
+        "text": "What exact retention period, owner and checkpoint identifier did we agree on near the beginning of this meeting? Use the recognized decision.",
+        "phase": "superseded",
+        "acceptedAt": 2395893,
+        "inheritedSpeechStart": 2264108
+      },
+      "shown": {
+        "id": "0c5510db-f342-4d03-8a0e-6d76d3018e56",
+        "text": "a batch processing service occasionally stops completing work but the process is still alive How would you start investigating",
+        "phase": "complete",
+        "acceptedAt": 2395907,
+        "answerSha256": "7fb6f439cc107446189f156850e2b1d05f4f893f72cce64cec39a75d3cfe8d7f"
+      }
+    },
+    {
+      "round": 34,
+      "applicationAgeMs": 4006329,
+      "requested": {
+        "id": "5d151232-7b46-4bf6-ac23-8ee144860447",
+        "text": "Repeat the exact original Foo code from the first exchange in one code fence, byte-for-byte. Preserve capitalization, guard, signs and constants. Do not use the later guard variant.",
+        "phase": "superseded",
+        "acceptedAt": 3989704,
+        "inheritedSpeechStart": 3814779
+      },
+      "shown": {
+        "id": "b243aeed-75c1-4ab1-abfe-cd33195d9d91",
+        "text": "switch to database concurrency your overlap constructions preserved all counts now test whether transactions preserve an invariant PostgreSQL has two doctor rows Alice and Bob both marked on call at repeatable read isolation each transaction counts on call doctors and if the count exceeds one marks its own doctor off call Alice and Bob run concurrently show an exact interleaving where both commit and nobody remains on call why does updating different rows matter interviewer pause one point five seconds provide executable SQL using serializable isolation that preserves at least one on call doctor specify exactly what must be retried after a serialization failure and justify correctness",
+        "phase": "complete",
+        "acceptedAt": 3989709,
+        "answerSha256": "5ed6394d32154c13688dd2a8ef1937e0ef7282c9b38334ef8badd84ca79cb464"
+      }
+    }
+  ]
+}

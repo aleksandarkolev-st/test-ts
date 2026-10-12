@@ -3351,6 +3351,710 @@
         ],
         "scope": "Byte equality of actual original question, exact standalone seed source and requested fenced recall. No source repair and no compiler/hardware execution."
       }
+    },
+    {
+      "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\results.json",
+      "sha256": "fbcf53db4d38ae44fb155e12f30205f249fef41cac998a0d6ce5fb1bb4e3ae70",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-codex-hour/interview.json",
+        "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 2,
+            "answerSha256": "5f86a4feb50a60f83d7229ecea0311b24d7b93c660d756a64efeca63d3ee8551",
+            "kind": "integer-branch",
+            "scope": "Original question did not require a code fence. Exact standalone original bytes and 2,003 independent integer cases; no normalization.",
+            "sourceSelection": "contract_bound_unfenced_exact_source",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-2-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 7,
+            "answerSha256": "3aa04ca6b34a02cf076a897ab9b5e8febe9b270b482bee12b9c3cc76a4aa2b27",
+            "kind": "cuda-sum19",
+            "scope": "Actual manually inspected six-collective CUDA implementation, distinct changed constraints at each row. CPU intrinsic/collective oracle is not NVIDIA hardware certification.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "9199432f7722a6259c9ad7d87908e8db83fa29704fccce80ccad4b88bfb5f26f",
+            "environmentAdaptations": {
+              "cudaHeader": "test-only CPU intrinsic shim",
+              "ptxLaneReadsReplaced": 0,
+              "algorithmRepaired": false,
+              "adaptedCodeSha256": "9199432f7722a6259c9ad7d87908e8db83fa29704fccce80ccad4b88bfb5f26f"
+            },
+            "sourceFile": "artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-7-block-0.cpp",
+            "harnessedSourceSha256": "1b35ecdbbec37a26c4aff975da9629e9f34855457604681b7a75f435207ef1cf",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "In file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-7-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:12:9: warning: '__device__' macro redefined [-Wmacro-redefined]\r\n   12 | #define __device__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:22:9: note: previous definition is here\r\n   22 | #define __device__ __attribute__((device))\r\n      |         ^\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-7-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:13:9: warning: '__host__' macro redefined [-Wmacro-redefined]\r\n   13 | #define __host__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:21:9: note: previous definition is here\r\n   21 | #define __host__ __attribute__((host))\r\n      |         ^\r\n2 warnings generated when compiling for gfx906.\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-7-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:12:9: warning: '__device__' macro redefined [-Wmacro-redefined]\r\n   12 | #define __device__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:22:9: note: previous definition is here\r\n   22 | #define __device__ __attribute__((device))\r\n      |         ^\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-7-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:13:9: warning: '__host__' macro redefined [-Wmacro-redefined]\r\n   13 | #define __host__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:21:9: note: previous definition is here\r\n   21 | #define __host__ __attribute__((host))\r\n      |         ^\r\n2 warnings generated when compiling for host.\r\n",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          },
+          {
+            "round": 8,
+            "answerSha256": "2728b3aaf32c2516e31af875b66dffcb91146816b437234cc3bc5e659bd0a183",
+            "kind": "cuda-sum19",
+            "scope": "Actual manually inspected six-collective CUDA implementation, distinct changed constraints at each row. CPU intrinsic/collective oracle is not NVIDIA hardware certification.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "7d479127a37874b23dfdcce1af6a84f5e9b76a87daa50fdc28f14541312f541a",
+            "environmentAdaptations": {
+              "cudaHeader": "test-only CPU intrinsic shim",
+              "ptxLaneReadsReplaced": 0,
+              "algorithmRepaired": false,
+              "adaptedCodeSha256": "7d479127a37874b23dfdcce1af6a84f5e9b76a87daa50fdc28f14541312f541a"
+            },
+            "sourceFile": "artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-8-block-0.cpp",
+            "harnessedSourceSha256": "e65373dd0601c53e45d0e0ab7bd81f95e427673f1d8b9a2fef29a374951e4ece",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "In file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-8-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:12:9: warning: '__device__' macro redefined [-Wmacro-redefined]\r\n   12 | #define __device__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:22:9: note: previous definition is here\r\n   22 | #define __device__ __attribute__((device))\r\n      |         ^\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-8-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:13:9: warning: '__host__' macro redefined [-Wmacro-redefined]\r\n   13 | #define __host__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:21:9: note: previous definition is here\r\n   21 | #define __host__ __attribute__((host))\r\n      |         ^\r\n2 warnings generated when compiling for gfx906.\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-8-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:12:9: warning: '__device__' macro redefined [-Wmacro-redefined]\r\n   12 | #define __device__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:22:9: note: previous definition is here\r\n   22 | #define __device__ __attribute__((device))\r\n      |         ^\r\nIn file included from C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\round-8-block-0.cpp:2:\r\nC:/Users/polek/Downloads/test-ts/tests/fixtures/cuda-collective-harness.hpp:13:9: warning: '__host__' macro redefined [-Wmacro-redefined]\r\n   13 | #define __host__\r\n      |         ^\r\nC:\\TheRock\\build\\lib\\llvm\\lib\\clang\\23\\include\\__clang_hip_runtime_wrapper.h:21:9: note: previous definition is here\r\n   21 | #define __host__ __attribute__((host))\r\n      |         ^\r\n2 warnings generated when compiling for host.\r\n",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\python-strict\\results.json",
+      "sha256": "f9601cc5920e00760441d2b30490c7310d437e26ca748bb72e5f4142b033c423",
+      "result": {
+        "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+        "graderSha256": "972121d72063e7e462db4de51b9fc5dd7128f002063f003e8e83baf1131b0e70",
+        "results": [
+          {
+            "round": 12,
+            "kind": "route",
+            "entryPoint": "classify_route",
+            "contractScope": "Strict original spoken question requires classify_route and uppercase status strings. No renaming or status normalization.",
+            "answerSha256": "d7b32455f3bae85c203c37dfeeeab7953bcaf239ba3232a5a4b05833efac0ed9",
+            "codeSha256": "ac5de37bcf1d0d23b9bf2651403508ea5065f2b1c08151df7dbd256060bdfcfe",
+            "pass": false,
+            "failure": "AttributeError(\"module 'recorded_12_0' has no attribute 'classify_route'\")"
+          },
+          {
+            "round": 13,
+            "kind": "route",
+            "entryPoint": "classify_route",
+            "contractScope": "Strict original spoken question requires classify_route and uppercase status strings. No renaming or status normalization.",
+            "answerSha256": "42a5ab7b5ff21bc98edab75bce4e380e4cae5710bc8c69dfc1860359ab0a8afc",
+            "codeSha256": "ba8112a5d0a7b49bf1ccdd6a75b545ed906e9a7d47ad0aa100782cc1be5d68bb",
+            "pass": false,
+            "failure": "AttributeError(\"module 'recorded_13_0' has no attribute 'classify_route'\")"
+          },
+          {
+            "round": 14,
+            "kind": "float-rationalization",
+            "entryPoint": "f",
+            "contractScope": "Strict original question requires f. Recognized F is separately diagnostic, never substituted for strict success.",
+            "answerSha256": "6e83ecd71580487f9becedbbd53372b04c5e1c3122db5193a57b9d7c7b5d6d10",
+            "codeSha256": "cec15323fef465bf5f92d6c9efbe22a06cc38e55bb54a7a38a23d90bf3115744",
+            "pass": false,
+            "failure": "AttributeError(\"module 'recorded_14_0' has no attribute 'f'\")"
+          }
+        ],
+        "scope": "Exact source fences and required entry points, without return contract normalization. Finite oracles complement, and do not replace, proof review."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\python-recognized-diagnostic\\results.json",
+      "sha256": "3fbe7ab148f8303485b6f36084946ad7c0d57c81bef364bd1a596d24e3257968",
+      "result": {
+        "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+        "graderSha256": "972121d72063e7e462db4de51b9fc5dd7128f002063f003e8e83baf1131b0e70",
+        "results": [
+          {
+            "round": 14,
+            "kind": "float-rationalization",
+            "entryPoint": "F",
+            "contractScope": "Recognized F entrypoint diagnostic only. Actual source unchanged; four-ULP finite Decimal probes do not certify analytical eight-u/seven-eta bounds or turn the original f contract into a pass.",
+            "answerSha256": "6e83ecd71580487f9becedbbd53372b04c5e1c3122db5193a57b9d7c7b5d6d10",
+            "codeSha256": "cec15323fef465bf5f92d6c9efbe22a06cc38e55bb54a7a38a23d90bf3115744",
+            "comparisons": 3007,
+            "mismatchCount": 0,
+            "firstFailures": [],
+            "maxObservedRelativeError": "5.270152383943376254952413257635774887801779261392587372370144294109195470809936523437499999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999545425928474710058061040080551444332012433006184090293985235365303965387283505679804214821327655258277615592447147130749974279694843141562342463E-16",
+            "scope": "760-digit Decimal oracle, four-ULP finite probe tolerance, gradual underflow on this host. It does not certify a supplied analytical error bound or flush-to-zero behavior.",
+            "pass": true
+          }
+        ],
+        "scope": "Exact source fences and required entry points, without return contract normalization. Finite oracles complement, and do not replace, proof review."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\codex-cpp\\results.json",
+      "sha256": "7a207264faf7c1a20311a9d39cdf0eace53e10af5e9f0f6c38a9ae7c8b30895a",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-codex-hour/interview.json",
+        "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+        "compiler": "clang++",
+        "graderSha256": "dbbe937c91b9df41875a433848ce478782e0cd9b752ba93f5cba850b66d9ad6a",
+        "recordedCppSourceSha256": "8a55955462eef3e96d19cfa126abfa3379a3a4c9d91912075ba8a843e04ac915",
+        "integerBranchHarnessSha256": "ac0782195d3d7fc31b7002de39bff06d1da32308ea443554f77510979b1df2a4",
+        "logRecoveryFixturesSha256": "8bf8e975b4c30b7055060dfa502bb418859f5ee69027c44c7bba262a4c9db627",
+        "harnessSha256": "562d3812c127b817878055a78b4a600a9fb913c81c18dc8e7d505aecfb947d5e",
+        "harnessHeaderSha256": "d2f11e03b17b63b969629479ae7c45d7f79ec09efabcdf46610adea21929ff52",
+        "results": [
+          {
+            "round": 34,
+            "answerSha256": "caa642024d29f33ace8e7d876b7f75767ef61130931828218efc002348a5c77a",
+            "kind": "integer-branch",
+            "scope": "StrictoriginalFoo bytesand2,003 independentintegerinputs. Planrecall displacedbySQLmustremainmissingCpp, no source reconstruction.",
+            "sourceSelection": "code_fence",
+            "codeSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+            "exactRequestedSource": true,
+            "contract": {
+              "function": "Foo",
+              "operator": "<",
+              "threshold": -1,
+              "whenTrue": 17,
+              "whenFalse": 19,
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "inputChecks": 2003,
+            "sourceFile": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\codex-cpp\\round-34-block-0.cpp",
+            "harnessedSourceSha256": "07545183fcef3ceaba148ceafe5277349239ce3d7a3e6896a33a82edae489db9",
+            "compile": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "execution": {
+              "code": 0,
+              "stdout": "",
+              "stderr": "",
+              "timedOut": false
+            },
+            "pass": true
+          }
+        ],
+        "scope": "CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\codex-sql\\results.json",
+      "sha256": "482b4f6a7d3f41e17cd61910443255d9470f8ef74f6736503957f47a07f52231",
+      "result": {
+        "journalFile": "artifacts/controller-v72/native/authenticated-schema-dual-r1-codex-hour/interview.json",
+        "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+        "graderSha256": "5800a08bdf3981f6fc7857ec985bde38f7c8ef677299930c3892a23d26cca18a",
+        "transactionParserSha256": "19c08eae31ec46350f262ad637860b471ca8a74c92087a6158379b728ab28d51",
+        "startedAt": "2026-10-12T08:18:49.396Z",
+        "completedAt": "2026-10-12T08:18:54.246Z",
+        "postgresVersion": "PostgreSQL 17.4 on x86_64-windows, compiled by msvc-19.42.34436, 64-bit",
+        "results": [
+          {
+            "round": 33,
+            "answerSha256": "1f41b114075e3bb2027dbdbca12ec11d4117271055f287a5a2bd886e286652d4",
+            "scope": "Actual unchanged SQL in PostgreSQL, with BEGIN/body/COMMIT sent separately to force overlap. Isolated synthetic database; no source repairs.",
+            "trials": [],
+            "sourceSelection": "separate_fences",
+            "failure": "Required complete SQL fences absent"
+          }
+        ],
+        "scope": "Finite controlled overlap tests of recorded serializable transactions and full retries; manual reasoning and the universal invariant are assessed separately."
+      }
+    },
+    {
+      "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\compilation.json",
+      "sha256": "6099dd39af4f2b517bd40650e51e99c03fc0ee68e2d8d3d2f51228d30af1f78f",
+      "result": {
+        "recordedAt": "2026-10-12T08:16:30.344Z",
+        "journal": {
+          "file": "artifacts/controller-v72/native/authenticated-schema-dual-r1-codex-hour/interview.json",
+          "sha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51"
+        },
+        "toolchain": {
+          "file": "artifacts/deep-interview-v71/cuda-compiler/toolchain.json",
+          "sha256": "82c88817fb7b7f17293ace6c290842c7738d9145de411f2e26703097a30105d3",
+          "nvccSha256": "313cc032fb84bb9d53cb967843bc761f1f8959cb3aa924246659fde13afd8f14",
+          "hostCompilerSha256": "88c8344236a27a6e727e0a8edc49aaa2690bdc7a9464b9d18cc7abe70a9f1c0d"
+        },
+        "collectorSourceHashes": {
+          "scripts/compile-controller-answer-cuda.mjs": "c6cf6db75eec0ecf95bf97aa83ffece1e799f6ed54c42145dd9bf32486fff9ff",
+          "scripts/lib/fenced-sources.mjs": "bfe6af531a2ba340bfa37d9c8aa946967fcd786f29030ed585fc0fd108efa526"
+        },
+        "blocks": [
+          {
+            "round": 6,
+            "block": 0,
+            "question": "You mentioned shuffles and explicit synchronization. On Volta or newer, a full physical warp starts converged. Only physical lanes zero through eighteen enter a branch. Inside it, each calls __activemask(), then passes that mask to __shfl_sync to read physical lane eighteen's float, using width thirty-two. Is every caller guaranteed to receive that float? Explain the precise participation and source-validity contracts, then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics. The other thirteen lanes must not call the shuffle.",
+            "recognizedQuestion": "you mentioned shuffles and explicit synchronization on Volta or newer a full physical warp starts converged only physical lanes zero through eighteen enter a branch inside it each calls underscore underscore active a mask then passes that mask to underscore underscore shfl underscore sync to read physical lane eighteen's float using width thirty two is every caller guaranteed to receive that float explain the precise participation and source validity contracts then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics the other thirteen lanes must not call the shuffle",
+            "responseVersion": "e7649551-a980-4e33-b4a9-f17678495e8e:0",
+            "answerSha256": "b6d07e63091048d4060aeb9da2cd622e3801f72bc3cbe9c2b704143023aa6c64",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-6-block-0\\recorded.cu",
+              "sha256": "4e1192cf758a3a4c3d3815f7403f4c5920b9816377d6b0ffc5d61bfa8fe588aa",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:06.594Z",
+            "completedAt": "2026-10-12T08:16:10.314Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-6-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-6-block-0\\recorded.obj",
+              "sha256": "497fd4fa8e29553cfbf61b0a47224f7e1d119f0af5c799be0252b31c62aece52"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-6-block-0\\stdout.log",
+              "sha256": "c508a77b2d6dc807b3b7d611da9fc0bfa433fb553956c970351d9f225ebd0e42"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-6-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 7,
+            "block": 0,
+            "question": "On Volta or newer, a full physical warp has exactly physical lanes zero through eighteen participating, each supplying one finite float. All nineteen named lanes call your device function once; no other lanes call it. Write compilable CUDA code returning their sum to every caller, without shared memory or atomics, using at most six float shuffle calls per caller. Floating-point rounding is allowed; specify your addition order. Do not assume implicit lockstep execution. Prove that each input contributes exactly once to each returned sum, every shuffle source participates, and every named lane executes matching collectives even when a lane has no partner.",
+            "recognizedQuestion": "on Volta or newer a full physical warp has exactly physical lanes zero through eighteen participating each supplying one finite float all nineteen named lanes call your device function once no other lanes call it write compilable CUDA code returning there some to every caller without shared memory or atomics using at most six float shuffle calls per caller floating point rounding is allowed specify your addition order do not assume implicit lockstep execution prove that each input contributes exactly once to each returned sum every shuffle source participates and every named lane executes matching collectives even when a lane has no partner",
+            "responseVersion": "330af769-5536-47ba-95e4-5df0b733a50b:0",
+            "answerSha256": "3aa04ca6b34a02cf076a897ab9b5e8febe9b270b482bee12b9c3cc76a4aa2b27",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-7-block-0\\recorded.cu",
+              "sha256": "9199432f7722a6259c9ad7d87908e8db83fa29704fccce80ccad4b88bfb5f26f",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:10.315Z",
+            "completedAt": "2026-10-12T08:16:13.638Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-7-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-7-block-0\\recorded.obj",
+              "sha256": "612eef394b65ae9e5378f56a1ff87495ecb92d1826f02cbd99b613f68c9c7b93"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-7-block-0\\stdout.log",
+              "sha256": "6c7ae32fb2b829881600abac21d99a6da93d4a595bd8f9160c7bc929d9132818"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-7-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 8,
+            "block": 0,
+            "question": "You proposed five reduction shuffles followed by a broadcast. Change the design: on Volta or newer, a full physical warp has exactly lanes zero through eighteen participating, each supplying one finite float. Those nineteen lanes each call once; no other lanes call. Supply compilable CUDA returning the sum to every caller with at most six float shuffle calls per caller, without shared memory, atomics, or implicit lockstep. Specify the addition order and prove exact-once input coverage, participating sources, and matching collectives. However, you may not finish by broadcasting one lane’s completed sum.",
+            "recognizedQuestion": "you proposed five reduction shuffles followed by a broadcast change the design on Volta or newer a full physical warp has exactly lanes zero through eighteen participating each supplying one finite float those nineteen lanes each call once no other lanes call supply compilable CUDA returning the sum to every caller with at most six float shuffle calls per caller without shared memory atomics or implicit lockstep specify the addition order and prove exact once input coverage participating sources and matching collectives however you may not finish by broadcasting one lane's completed sum",
+            "responseVersion": "7d7f6ebf-7e87-4ec3-b48f-06da0a79bd45:0",
+            "answerSha256": "2728b3aaf32c2516e31af875b66dffcb91146816b437234cc3bc5e659bd0a183",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-8-block-0\\recorded.cu",
+              "sha256": "7d479127a37874b23dfdcce1af6a84f5e9b76a87daa50fdc28f14541312f541a",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:13.640Z",
+            "completedAt": "2026-10-12T08:16:16.958Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-8-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-8-block-0\\recorded.obj",
+              "sha256": "be77a42a4856be62fa89d88f2cfd175c2524cb3ecb887dca8727d65f15edf450"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-8-block-0\\stdout.log",
+              "sha256": "cee4370a71f2052d46a47b501a5db7804c11cfd9d0f24cf8b32c7982d622e2e4"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-8-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 23,
+            "block": 0,
+            "question": "Only one GPU worker is affected: the host control endpoint responds, but its dedicated stream’s completion event remains not ready. A minimized kernel launches one block of 96 threads with valid equal to 70. Inside an if statement testing thread index less than valid, each thread loads its corresponding input into shared memory, calls __syncthreads, and thread zero sums the valid entries into the output. Immediate launch checks succeed; a sanitizer reports a divergent block barrier. Explain the violated invariant without claiming every device must hang. Provide compilable CUDA code and a host launch supporting valid from zero through 96, with defined output, no out-of-bounds reads, and a synchronization proof.",
+            "recognizedQuestion": "only one GPU worker is affected the host control endpoint responds but its dedicated stream's completion event remains not ready a minimized kernel launches one block of ninety six threads with valid equal to seventy inside an if statement testing thread index less than valid each thread loads its corresponding input into shared memory calls underscore underscore sync threads and thread zero sums the valid entries into the output immediately launch checks succeed a sanitizer reports a divergent block barrier explain the violated invariant without claiming every device must hang provide compilable CUDA code and a host launch supporting valid from zero through ninety six with defined output no out of bounds reads and a synchronization proof",
+            "responseVersion": "4866770e-8ddf-4e60-91b0-4d47067387c6:0",
+            "answerSha256": "4e3ca3764346e240d1897df3df8d5a610b925b518fc493c49615dc7adda2a995",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-23-block-0\\recorded.cu",
+              "sha256": "14d9dcdf03f49cabe43fc1242cc3ed763d0cf0c047b347fb21b882e6b48f29c8",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:16.959Z",
+            "completedAt": "2026-10-12T08:16:20.319Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-23-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-23-block-0\\recorded.obj",
+              "sha256": "c699f899d3873f417966f6dda0907759f028f7106fbe2a5244270c9f1f9a1adb"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-23-block-0\\stdout.log",
+              "sha256": "b6abbb0f6b97a4dce4ee5df4c1d70050e0f1fcd56b3e8f6bec695d021cd0eebb"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-23-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 24,
+            "block": 0,
+            "question": "Continue with your compilable kernel and host launch. Explain precisely what threads 70 through 95 do in the original kernel and why successful launch checks do not establish correctness. In your replacement, prove that every shared-memory value read by thread zero was initialized, and identify which thread writes the output when valid is zero. Keep the launch at one block of 96 threads for every valid value, including zero; do not handle zero by skipping the kernel or initializing the output on the host.",
+            "recognizedQuestion": "continue with your compilable kernel and host launch explain precisely what Thread Seventy through Ninety Five do in the original kernel and why successful launch checks do not establish correctness in your replacement prove that every shared memory value read by thread zero was initialized and identify which thread writes the output when valid is zero keep the launch at one block of ninety six threads for every valid value including zero do not handle zero by skipping the kernel or initializing the output on the host",
+            "responseVersion": "84392051-20f8-45cf-91a0-a7c0a0443731:0",
+            "answerSha256": "41fa26a826356ed6f5c0779f85cf13b4d56f0b69cfc2b3204d4f24493d4715bc",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-24-block-0\\recorded.cu",
+              "sha256": "0907e05bc591d967f82318d0a27f9e99b088bd95ab5192ee23413f5291a46267",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:20.320Z",
+            "completedAt": "2026-10-12T08:16:23.615Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-24-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-24-block-0\\recorded.obj",
+              "sha256": "033a48dacf1911683d4fb10f4a7f6fd1f0bcdb9627a597c1418a62cc727cc1fe"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-24-block-0\\stdout.log",
+              "sha256": "473af708ad8d9be75d836df5dc5a2be9aced9c86a440e384774a0b0da64de064"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-24-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 28,
+            "block": 0,
+            "question": "Now test an ownership invariant. CUDA calls succeed; explicit streams A and B have no implicit dependencies. A submits producer P1 and records event E. B submits a wait on E, then consumer C1. A submits P2 and records E again. Both producers overwrite the same allocation; C1 reads it. A query after the second record returns not ready. Which record does B's wait reference, and can P2 race with C1? Give a permitted execution trace. Then supply compilable CUDA host code for a two-slot loop using per-slot ready and consumed events, checked calls, and safe first use. Final condition: neither device-wide synchronization nor host synchronization between iterations is allowed.",
+            "recognizedQuestion": "now test an ownership invariant CUDA call succeed explicit streams A and B have no implicit dependencies A submits producer P one and records event EB submits a wait on A then consumer C one A submits P two and records E again both producers overwrite the same allocation C one reads it a query after the second record returns not ready which record does B's weight reference and can P two race with C one give a permitted execution trace then supply compilable CUDA host code for a two slot loop using per slot ready and consumed events checked calls and save first use final condition Neither device wide synchronization nor host synchronization between iterations is allowed",
+            "responseVersion": "45069e13-3e0a-40ab-94c6-4dbf3ee27b82:0",
+            "answerSha256": "72ef183fa3d103586ff40748f66ab1be8db99c1389d6aa90af53b4766c6ec8ae",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-28-block-0\\recorded.cu",
+              "sha256": "3c47f3e1e1d9debdee00de9290d3d73bee724ad057f22e74a644f0d0ed95cc3b",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:23.616Z",
+            "completedAt": "2026-10-12T08:16:27.072Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-28-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-28-block-0\\recorded.obj",
+              "sha256": "3a24682d10aef324e3bbcad0dce5c46d5ddedd085b622d22a4f29cd5777b48a4"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-28-block-0\\stdout.log",
+              "sha256": "279fe94db329d90b120c0399941ed5627f9ff98793f7e9cd0606d1e5093c1586"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-28-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          {
+            "round": 34,
+            "block": 0,
+            "question": "Repeat the exact original Foo code from the first exchange in one code fence, byte-for-byte. Preserve capitalization, guard, signs and constants. Do not use the later guard variant.",
+            "recognizedQuestion": "Repeat the exact original Foo code from the first exchange in one code fence, byte-for-byte. Preserve capitalization, guard, signs and constants. Do not use the later guard variant.",
+            "responseVersion": "74ce0ed8-0a23-4271-a1fd-46e3aade481c:0",
+            "answerSha256": "caa642024d29f33ace8e7d876b7f75767ef61130931828218efc002348a5c77a",
+            "phase": "complete",
+            "error": null,
+            "cancelled": false,
+            "code": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-34-block-0\\recorded.cu",
+              "sha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+              "languageAnnotation": "cpp"
+            },
+            "startedAt": "2026-10-12T08:16:27.072Z",
+            "completedAt": "2026-10-12T08:16:30.344Z",
+            "command": [
+              "--device-c",
+              "--std=c++17",
+              "-arch=sm_70",
+              "--cudart=none",
+              "-ccbin",
+              "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_nvcc\\cuda_nvcc-windows-x86_64-12.9.86-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cudart\\cuda_cudart-windows-x86_64-12.9.79-archive\\include",
+              "-I",
+              "C:\\Users\\polek\\Downloads\\test-ts\\artifacts\\deep-interview-v71\\cuda-compiler\\cuda_cccl\\cuda_cccl-windows-x86_64-12.9.27-archive\\include",
+              "-Xcompiler",
+              "/utf-8",
+              "recorded.cu",
+              "-o",
+              "recorded.obj"
+            ],
+            "workingDirectory": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-34-block-0",
+            "exitCode": 0,
+            "timedOut": false,
+            "object": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-34-block-0\\recorded.obj",
+              "sha256": "4af1f5b7b99bf32be82ddb4c087a0e4f5948f469a51b7dcd5552d8664775ab5b"
+            },
+            "diagnosticOutputBytes": {
+              "stdout": 251,
+              "stderr": 0
+            },
+            "diagnosticOutputTruncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "stdout": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-34-block-0\\stdout.log",
+              "sha256": "c4d973572f808b05f9c6bf37eae85b0638b9e85a883de50cfbd5176c7ba475bd"
+            },
+            "stderr": {
+              "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\round-34-block-0\\stderr.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        ],
+        "summary": {
+          "recordedCudaOrCppBlocks": 7,
+          "compiled": 7,
+          "failed": 0,
+          "timedOut": 0
+        },
+        "hardwareExecutionPerformed": false,
+        "goalComplete": false,
+        "scope": "Unchanged CUDA/C++-annotated fenced bodies compiled as individual C++17 translation units with real pinned NVIDIA nvcc and MSVC, using relocatable device compilation for sm_70. No missing includes, launch wrappers or answer repairs are added. Compilation failures remain recorded, including snippets not intended as standalone units and dependency or requested-standard mismatches. Compiler acceptance does not prove numerical or collective correctness, hardware behavior, or full-interview accuracy."
+      }
     }
   ],
   "rows": [

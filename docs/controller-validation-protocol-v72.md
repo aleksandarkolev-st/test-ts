@@ -50,6 +50,8 @@ HTTP local closure cannot prove remote cancellation. An unknown retirement holds
 
 History controls use finalized recognized speech from the v71 general hour up to native timestamps 0, 10, 30 and 60 minutes. Every cell appends exactly the same immediate exchange and target question. The resulting context bytes and waveform hashes are held constant across adapters. Fresh versus aged fixed-context cells isolate history length from application age; provider drift and observer overhead remain possible confounders. Interleaving reduces time confounding but does not remove it.
 
+The corrected-build idle-age supplement keeps one application, session and ASR service alive for at least an actual hour. It submits the same frozen question/context three times initially and three times after at least 3,600,000 ms, comparing the third warm request at each age while preserving all warmups and faults. It adds no technical meeting history to the supplied context and is explicitly an idle application-age control, separate from the loaded three-hour interviews. Both backends use the same new binary. The old `19ab36e` hour and a new `f0c7e8c` fresh control must not be presented as an age-only comparison. Provider drift and connection aging remain qualifications. These two additional hour cells are queued after the primary serialized captures; queued duration does not establish completion.
+
 Production conversations remain RAM-only until Stop. The collectors explicitly write user-authorized validation artifacts; their persistence is not a production privacy-policy change. Never commit credentials, copied account databases, WebView profiles or raw secrets.
 
 ## Measurements and reasoning checks

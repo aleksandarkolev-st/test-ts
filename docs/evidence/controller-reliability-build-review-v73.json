@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-10-12T22:47:53.443Z",
+  "build": {
+    "file": "docs/evidence/controller-reliability-build-v73.json",
+    "sha256": "d7fbf4e265f40ff1eeda10ab51bc0ef4cce18068cafe70da783392bb47cf2dec",
+    "commit": "c16b9a6683b794e442157387f55ab3db1a472e15",
+    "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd"
+  },
+  "actualBuildReport": {
+    "file": "artifacts/controller-v73/reliability-build-r4/verification.json",
+    "sha256": "a4359e5ef137d99f564e06aab89b64f1a5b72bc7e5f2f41d565b3e5d4ef842c3"
+  },
+  "actualChecks": {
+    "rustPassed": 208,
+    "rustFailed": 0,
+    "rustIgnored": 14,
+    "nodePassed": 29,
+    "frontendPassed": 2,
+    "releaseDefault": true,
+    "releaseAcceptance": true,
+    "typescript": true,
+    "rendererBuild": true,
+    "nativeBuild": true,
+    "sourceFiles": 55,
+    "packagedDependencies": 12
+  },
+  "previousAttempts": [
+    {
+      "file": "artifacts/controller-v73/reliability-build-r1/verification.json",
+      "sha256": "4f1a51c9856f07f3032ed66c1247bed889336cc00dffb35f4fed781cbcf3a31b",
+      "failure": "AssertionError [ERR_ASSERTION]: Implementation check failed: rust-regressions\n\n101 !== 0\n",
+      "note": "Two existing acceptance test calls omitted the newly cfg-gated counters argument.",
+      "rustLogSha256": "7bc701c86e02ff5c445190778363b69079e18d799f4e4f6c49b16be7890bb21a"
+    },
+    {
+      "file": "artifacts/controller-v73/reliability-build-r2/verification.json",
+      "sha256": "cfd379fe2dfe0c49e3ab50d5c3eab7fc66bba8affe66db44f5bcdc13ee0f9330",
+      "failure": "AssertionError [ERR_ASSERTION]: Implementation check failed: rust-regressions\n\n101 !== 0\n",
+      "note": "New detector fixture attempted struct update across private fields.",
+      "rustLogSha256": "3473dd25c0e8d651dcb554a58a4b0121cc6e48dd18e7236b2e95c10d5ee9ba30"
+    },
+    {
+      "file": "artifacts/controller-v73/reliability-build-r3/verification.json",
+      "sha256": "526b0ff1caede9a38d5eb30c21b15603d52460b24deb2d20e2ea098c5fef406b",
+      "failure": "AssertionError [ERR_ASSERTION]: Implementation check failed: rust-regressions\n\n101 !== 0\n",
+      "note": "Recorded source retrieval fixture placed its synthetic subsequent history before the source timestamps; production retrieval was unchanged by the correction.",
+      "rustLogSha256": "8a8bf94e0f2f91076a00286d9196669810e2e981d679c826d9f5a7b0b0a11ff5"
+    }
+  ],
+  "sourceExecution": {
+    "file": "docs/evidence/controller-recovery-source-execution-v73.json",
+    "sha256": "237ed56c46f8d809dbf8f94c9d8932dbf1b8ee51e3525215223fcb9773853534",
+    "sections": 24
+  },
+  "releaseWarnings": [
+    "Unused acceptance-only provisional-output validity variable in release runtime.",
+    "Existing mailbox diagnostic field and methods unused in release."
+  ],
+  "scope": "Operator inspected actual logs and source-bound results. Ready to conduct authenticated validation only; this does not establish new-binary latency, speech reliability or high-stakes readiness. All baseline model/source failures remain visible; no merge/push. Model and effort unchanged."
+}

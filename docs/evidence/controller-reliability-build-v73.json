@@ -1,0 +1,618 @@
+{
+  "commit": "c16b9a6683b794e442157387f55ab3db1a472e15",
+  "app": ".local/controller-reliability-app-v73-r4",
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "sourceSha256": {
+    "src-tauri/src/attachments/folder.rs": "15696edbf8ae624e16da52361c88b4d2fb47644ea19a95f0c0f683e4ac783740",
+    "src-tauri/src/attachments/mod.rs": "c95602fc46ba4dd8850fbdc2f10797799e13d777e69092ba0fe470d33a1260d0",
+    "src-tauri/src/attachments/project.rs": "56e72ef66c21be9025a86fa3bb974340b812d63d7ae08a204c87ef22959ff4fb",
+    "src-tauri/src/attachments/screenshot.rs": "d033ddccc9e5fb5a5ac2ac0548a8c74f01ce940dd3e04db5812f2263531da632",
+    "src-tauri/src/audio/mod.rs": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c",
+    "src-tauri/src/audio/resampler.rs": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+    "src-tauri/src/audio/windows_capture.rs": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+    "src-tauri/src/gaze.rs": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+    "src-tauri/src/lib.rs": "0afa7079d881ec5df9f06a7343bce974ecbbec5201d3656068f5e547b5761e45",
+    "src-tauri/src/main.rs": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+    "src-tauri/src/meeting/context.rs": "948f93ed945642ef90c1c6c3419b3ffaae8260e0b2bede31589100ee4e25fb37",
+    "src-tauri/src/meeting/controller_tests.rs": "fd2cefc156f65293afdd7bfe5653a57185b1ede330966327af500bcae6a49056",
+    "src-tauri/src/meeting/intent.rs": "a7b8f77ba7330cb9197faea155910dc7eb26e188f4dfc18513a083a1e5011c49",
+    "src-tauri/src/meeting/ledger.rs": "82c717fd932b0339f336244794cdeff0edb73320c74a05d3c3ee2c3db867f219",
+    "src-tauri/src/meeting/mod.rs": "2338f7db0ddad1cbe0ba949370044bc7e16ae5ecb118caf94948fc5e115cf42b",
+    "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+    "src-tauri/src/meeting/questions.rs": "9426d8c9f5ead15b76d7774999f1c4b5c79ec29c0277c2f75887ae07fe1d4d6f",
+    "src-tauri/src/meeting/scheduler.rs": "2d0a1ae0317af82908fc3f08e32b00e9bb70b14322c50a791b5710e53ccd4f09",
+    "src-tauri/src/meeting/state.rs": "e6c607c6a37273992ed322f02b950f849f1ff93600c45c4cb8561345eeb36fbe",
+    "src-tauri/src/openai/auth.rs": "f15eaae8f242afa3106e5b870a190cb45e6c05699d2168cfb7ad2aeaf84e1007",
+    "src-tauri/src/openai/client.rs": "1212dc19c9dac4c6f1f26e37fc27490c08ea0039c2aba9f86c1d65ee435dbfdb",
+    "src-tauri/src/openai/codex.rs": "600b610ef21532916e92e3d095227f4210e5bd1058385233a26044ad33769463",
+    "src-tauri/src/openai/mailbox.rs": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+    "src-tauri/src/openai/mod.rs": "acd572fb118b3f9c07c3244d09d638948dad9c7e14683f16aea3bac46a5bdf68",
+    "src-tauri/src/openai/prompts.rs": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+    "src-tauri/src/openai/realtime.rs": "876f19ee02581bc13b11a16feb2573af7d956ee053ae4fc9c94c73bbf2579b9e",
+    "src-tauri/src/openai/responses_ws.rs": "9eb9fd56572cc7b2d50ff3b54585b813ee9ce9636802fcdba8c4d7b0251d7a22",
+    "src-tauri/src/openai/timing.rs": "5cd6f3cb3d75a7c8d9c5e0b42b87652efa28c04cfbe4c4ebfab9338afa0e6ac0",
+    "src-tauri/src/overlay/capture_protection.rs": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+    "src-tauri/src/overlay/mod.rs": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+    "src-tauri/src/overlay/window.rs": "7db24ada7ba832f1d0cbdcf5a9a4b2a68617a3727dcaabd14e2ab404415c3e2e",
+    "src-tauri/src/process.rs": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+    "src-tauri/src/runtime.rs": "24672b26d300cd9702d14ddaeb81d0f5029fc128382e066b0a91074274b34d14",
+    "src-tauri/src/storage/credentials.rs": "a162f8eba91242ec00bbc395594dfd202ec600c9f8ddd7397793205e6b210ee4",
+    "src-tauri/src/storage/db.rs": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+    "src-tauri/src/storage/instance.rs": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+    "src-tauri/src/storage/mod.rs": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+    "src-tauri/src/transcription/mod.rs": "5622a74f39b2382dd711c38df8624c1bef5bfc4ca082a943196164bfad6c1725",
+    "src-tauri/src/transcription/nemotron.rs": "312476cb17415d0a95a1126b9bb50f376d254b91b09c0a5a8c306a63d6a17f84",
+    "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+    "src-tauri/src/transcription/whisper.rs": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d",
+    "src/App.tsx": "e8767925760f0f4bd612c00b99aa7ac9b2426785b885ec33110f187109a939e1",
+    "src/bridge.ts": "8efaa6db96923cb4dce161b0c586d0b186893497a1cf5e85f3445a2b6b0cd0b3",
+    "src/Camera.tsx": "9fd02930c7233600ed6f2a8821a30ad40a3d883016a3f751a00c3947a636f7f0",
+    "src/ContextAttachments.tsx": "11a07b7bd658ad8037a07821d41b4b1fd707c416d17e1576a7bdcbcd9edec2c7",
+    "src/Debug.tsx": "339b567dd70ec42657ee0d502152e2f5945eb6e19237099f72f53d90cc615032",
+    "src/main.tsx": "742991c6c080b258e37a2765a31ec40c4d60217f5e9455caf0809fdc900e84c3",
+    "src/overlay/Answer.tsx": "dacdf884e65b53abd6f541fa501741b6422135ab2df285eedaa5be72a8e599c9",
+    "src/overlay/Overlay.tsx": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143",
+    "src/overlay/paintedText.ts": "30b4130b413f7817e5130b3b2d0dbc0d0dc7fdb7cc29a732fbd4653128a5e5da",
+    "src/overlay/Status.tsx": "2473c696459ff50dd81d591535aa3e7e6686fae256d8a132a65ef969b192e6ab",
+    "src/state/model.ts": "4d0ef71d22c9453a12c0692c4b816212deb75fc38e68089862f86d126f08995e",
+    "src/state/store.test.ts": "9d001fb4aad74c78a0f543791b1a74af91f8f6bb2bb5400fab2e2d0e5b27fca4",
+    "src/state/store.ts": "db7f7ee5b90d87abfed8c9785d018727ae4650d7fa8df7862bb701a1ddd7177d",
+    "src/style.css": "158dc9c07adfd65855b5936b56e6ad735beaf62f30d7cb16db7ef0e88a2b7b7b"
+  },
+  "packagedDependencies": [
+    {
+      "file": "ggml-base.dll",
+      "sha256": "54fa02041978f7a20ae08ef1873560735fb8adcc83c981d6cff8e5e72c574d1e"
+    },
+    {
+      "file": "ggml-cpu-alderlake.dll",
+      "sha256": "4982052229535fe00dfab29cdefd3b4377ee53c42852254256fcf1560a73f597"
+    },
+    {
+      "file": "ggml-cpu-haswell.dll",
+      "sha256": "2cf50318f7161fe6d7a683d7c2c3f862200ed3f9f791f6e0d3ec17bd8e6a0e0b"
+    },
+    {
+      "file": "ggml-cpu-icelake.dll",
+      "sha256": "82a8b2ed843a9f86ce0789091a1239a3c8c05620cce57bf938a6bfc7bd8bde3b"
+    },
+    {
+      "file": "ggml-cpu-sandybridge.dll",
+      "sha256": "6c0e8c8af825350110af3be8d6f5f0d73f6076fa15f639bb7822513bbf81abbb"
+    },
+    {
+      "file": "ggml-cpu-skylakex.dll",
+      "sha256": "3fc67ff52ff9468228c572b6237cc62a3225e2d93abd9c2536e8d6292612a081"
+    },
+    {
+      "file": "ggml-cpu-sse42.dll",
+      "sha256": "ab65391dd86c812144df80889157b6a45c461558a30512134854909e60047599"
+    },
+    {
+      "file": "ggml-cpu-x64.dll",
+      "sha256": "c730bedea313d9b38ae236589e4f956d3aa24fde8143e3df43f6e0c4f54aa6e6"
+    },
+    {
+      "file": "ggml.dll",
+      "sha256": "ce5ec9a6fa4c6cd671d6157ec0a0f65cbd379fab6997a1e7b8b21dc100e0d109"
+    },
+    {
+      "file": "meeting_copilot.dll",
+      "sha256": "362257206eba081ebfe12e69bd437f8f8701eee6e469828450fef8fcc6d43674"
+    },
+    {
+      "file": "meeting_copilot_core.dll",
+      "sha256": "f959e34be3f03f88d9bf032406e8d7d5da3a1c96225c3d34c007e426e4430df1"
+    },
+    {
+      "file": "whisper.dll",
+      "sha256": "302a33c2e96fa162b22e144dc04718d65438ba600c5c28562dc493db13c132cd"
+    }
+  ],
+  "sources": [
+    {
+      "file": "src-tauri/src/attachments/folder.rs",
+      "compiledWorkingTreeSha256": "15696edbf8ae624e16da52361c88b4d2fb47644ea19a95f0c0f683e4ac783740",
+      "gitBlobSha256": "8d0bf4c16bdc93105c3648e7119049cdb281290503714537e8447790295c27f3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/mod.rs",
+      "compiledWorkingTreeSha256": "c95602fc46ba4dd8850fbdc2f10797799e13d777e69092ba0fe470d33a1260d0",
+      "gitBlobSha256": "b1af9b3547669f7fe3b7350b8e5db9cb637b77df2b107ec76111e226822a49fb",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/project.rs",
+      "compiledWorkingTreeSha256": "56e72ef66c21be9025a86fa3bb974340b812d63d7ae08a204c87ef22959ff4fb",
+      "gitBlobSha256": "dd43798243552a464880d633a67678a042ad1f9fa250a2be55afc3e2c5a80ce2",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/screenshot.rs",
+      "compiledWorkingTreeSha256": "d033ddccc9e5fb5a5ac2ac0548a8c74f01ce940dd3e04db5812f2263531da632",
+      "gitBlobSha256": "dd0c750fbdfb6bfe0f9c9b003c7a48a6e192a7996c144bd47834a9bb542cb15f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/mod.rs",
+      "compiledWorkingTreeSha256": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c",
+      "gitBlobSha256": "b4fc160e7ba82773b1eaf1c97d43721f460f588985849c8babfc202231912e73",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/resampler.rs",
+      "compiledWorkingTreeSha256": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+      "gitBlobSha256": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/windows_capture.rs",
+      "compiledWorkingTreeSha256": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+      "gitBlobSha256": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/gaze.rs",
+      "compiledWorkingTreeSha256": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+      "gitBlobSha256": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/lib.rs",
+      "compiledWorkingTreeSha256": "0afa7079d881ec5df9f06a7343bce974ecbbec5201d3656068f5e547b5761e45",
+      "gitBlobSha256": "5abbaa8602f906afcaf80253ba0925ec82d311ae5aa0f2e35ac81e118ce52a7a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/main.rs",
+      "compiledWorkingTreeSha256": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+      "gitBlobSha256": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/context.rs",
+      "compiledWorkingTreeSha256": "948f93ed945642ef90c1c6c3419b3ffaae8260e0b2bede31589100ee4e25fb37",
+      "gitBlobSha256": "731e182b7c46f5926bad5a0c25fc71230e95fb4c90640c94a450d0c076ef8615",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/controller_tests.rs",
+      "compiledWorkingTreeSha256": "fd2cefc156f65293afdd7bfe5653a57185b1ede330966327af500bcae6a49056",
+      "gitBlobSha256": "cd0c0bb9d2e1387db037bec5a1a4a5233c31d6279844dc3e206f3628bacc0cbc",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/intent.rs",
+      "compiledWorkingTreeSha256": "a7b8f77ba7330cb9197faea155910dc7eb26e188f4dfc18513a083a1e5011c49",
+      "gitBlobSha256": "4096fb717d9f174a95fac6f78d55dd852c0777e41a7b13b4f4ebcc7e1e2f730d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/ledger.rs",
+      "compiledWorkingTreeSha256": "82c717fd932b0339f336244794cdeff0edb73320c74a05d3c3ee2c3db867f219",
+      "gitBlobSha256": "d8e6071dd3e392e396dbbbcee144becc2f36fafdd2fedd22883d18addccaa75d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/mod.rs",
+      "compiledWorkingTreeSha256": "2338f7db0ddad1cbe0ba949370044bc7e16ae5ecb118caf94948fc5e115cf42b",
+      "gitBlobSha256": "96c4d66106e0d164b6efe21aa4f4d652bc5bb9b46d175fbfaebc5458a9325088",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/provisional.rs",
+      "compiledWorkingTreeSha256": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "gitBlobSha256": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "compiledWorkingTreeSha256": "9426d8c9f5ead15b76d7774999f1c4b5c79ec29c0277c2f75887ae07fe1d4d6f",
+      "gitBlobSha256": "6f33f80342926fe0af86ec19d788965229cfdd234da742cd9e7685fbcb230bae",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "compiledWorkingTreeSha256": "2d0a1ae0317af82908fc3f08e32b00e9bb70b14322c50a791b5710e53ccd4f09",
+      "gitBlobSha256": "beb3a078c621175b029fdbeef3654a5cc1c1f2908810634ca579978404f49512",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/state.rs",
+      "compiledWorkingTreeSha256": "e6c607c6a37273992ed322f02b950f849f1ff93600c45c4cb8561345eeb36fbe",
+      "gitBlobSha256": "27862188db190751da538a993c91188bdd3d5c2895528b7cc6ad3bbd831a889a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/auth.rs",
+      "compiledWorkingTreeSha256": "f15eaae8f242afa3106e5b870a190cb45e6c05699d2168cfb7ad2aeaf84e1007",
+      "gitBlobSha256": "6730813b3f96f2e5ce9170c64c4761ebbfa84e55788b4e5578df850fcc64e7b0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "compiledWorkingTreeSha256": "1212dc19c9dac4c6f1f26e37fc27490c08ea0039c2aba9f86c1d65ee435dbfdb",
+      "gitBlobSha256": "1212dc19c9dac4c6f1f26e37fc27490c08ea0039c2aba9f86c1d65ee435dbfdb",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "compiledWorkingTreeSha256": "600b610ef21532916e92e3d095227f4210e5bd1058385233a26044ad33769463",
+      "gitBlobSha256": "600b610ef21532916e92e3d095227f4210e5bd1058385233a26044ad33769463",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/mailbox.rs",
+      "compiledWorkingTreeSha256": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+      "gitBlobSha256": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/mod.rs",
+      "compiledWorkingTreeSha256": "acd572fb118b3f9c07c3244d09d638948dad9c7e14683f16aea3bac46a5bdf68",
+      "gitBlobSha256": "84569ab707528a8ea88c9efc78244ca07e32f1e35642005020f627099adca7e0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/prompts.rs",
+      "compiledWorkingTreeSha256": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+      "gitBlobSha256": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/realtime.rs",
+      "compiledWorkingTreeSha256": "876f19ee02581bc13b11a16feb2573af7d956ee053ae4fc9c94c73bbf2579b9e",
+      "gitBlobSha256": "29677847f21b599c6618db1fb4101fe319e72a95a59753c752f74fd5fa67707c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/responses_ws.rs",
+      "compiledWorkingTreeSha256": "9eb9fd56572cc7b2d50ff3b54585b813ee9ce9636802fcdba8c4d7b0251d7a22",
+      "gitBlobSha256": "608d9dfec04349655349169c15f383f2e76cd078252527a5f04e9deb1f72eac9",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/timing.rs",
+      "compiledWorkingTreeSha256": "5cd6f3cb3d75a7c8d9c5e0b42b87652efa28c04cfbe4c4ebfab9338afa0e6ac0",
+      "gitBlobSha256": "4c3f8a994f2a3309990a91e9c3018404765a76d795e5eae75afd68ae9d2e095a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/capture_protection.rs",
+      "compiledWorkingTreeSha256": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+      "gitBlobSha256": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/mod.rs",
+      "compiledWorkingTreeSha256": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+      "gitBlobSha256": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/window.rs",
+      "compiledWorkingTreeSha256": "7db24ada7ba832f1d0cbdcf5a9a4b2a68617a3727dcaabd14e2ab404415c3e2e",
+      "gitBlobSha256": "68a1e192d3ac61fbc20e1cabffb1efa032ea325c510a888bd100105e0fc5eee7",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/process.rs",
+      "compiledWorkingTreeSha256": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+      "gitBlobSha256": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "compiledWorkingTreeSha256": "24672b26d300cd9702d14ddaeb81d0f5029fc128382e066b0a91074274b34d14",
+      "gitBlobSha256": "5aa8f281ffa4a38dca27a547eae77c02e2f793a33a2191e91469e561e4b3dae0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/credentials.rs",
+      "compiledWorkingTreeSha256": "a162f8eba91242ec00bbc395594dfd202ec600c9f8ddd7397793205e6b210ee4",
+      "gitBlobSha256": "e467f986dac0850f08179b320c525d52f72ccd484761e5a804d412b139b980f9",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/db.rs",
+      "compiledWorkingTreeSha256": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+      "gitBlobSha256": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/instance.rs",
+      "compiledWorkingTreeSha256": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+      "gitBlobSha256": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/mod.rs",
+      "compiledWorkingTreeSha256": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+      "gitBlobSha256": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/mod.rs",
+      "compiledWorkingTreeSha256": "5622a74f39b2382dd711c38df8624c1bef5bfc4ca082a943196164bfad6c1725",
+      "gitBlobSha256": "c588b9db23f85b56085422c3a7090c0f47180d9fa6f48d443066114325a7bfda",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/nemotron.rs",
+      "compiledWorkingTreeSha256": "312476cb17415d0a95a1126b9bb50f376d254b91b09c0a5a8c306a63d6a17f84",
+      "gitBlobSha256": "1fdd3372d4c6a7f7fa80526fa5eaa3142105ad4cf4c9ab6ec8981f051778892b",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/vad.rs",
+      "compiledWorkingTreeSha256": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "gitBlobSha256": "f65b0202c9a1c279210ad13793dc0463cbebeb39b32b209dd8d843735cf40fd0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/whisper.rs",
+      "compiledWorkingTreeSha256": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d",
+      "gitBlobSha256": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/App.tsx",
+      "compiledWorkingTreeSha256": "e8767925760f0f4bd612c00b99aa7ac9b2426785b885ec33110f187109a939e1",
+      "gitBlobSha256": "3d24eb509c58b14347215cf1d1306cdc531c6a54b1e997558cdb1a430e9a5b0f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/bridge.ts",
+      "compiledWorkingTreeSha256": "8efaa6db96923cb4dce161b0c586d0b186893497a1cf5e85f3445a2b6b0cd0b3",
+      "gitBlobSha256": "8efaa6db96923cb4dce161b0c586d0b186893497a1cf5e85f3445a2b6b0cd0b3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/Camera.tsx",
+      "compiledWorkingTreeSha256": "9fd02930c7233600ed6f2a8821a30ad40a3d883016a3f751a00c3947a636f7f0",
+      "gitBlobSha256": "9fd02930c7233600ed6f2a8821a30ad40a3d883016a3f751a00c3947a636f7f0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/ContextAttachments.tsx",
+      "compiledWorkingTreeSha256": "11a07b7bd658ad8037a07821d41b4b1fd707c416d17e1576a7bdcbcd9edec2c7",
+      "gitBlobSha256": "11a07b7bd658ad8037a07821d41b4b1fd707c416d17e1576a7bdcbcd9edec2c7",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/Debug.tsx",
+      "compiledWorkingTreeSha256": "339b567dd70ec42657ee0d502152e2f5945eb6e19237099f72f53d90cc615032",
+      "gitBlobSha256": "339b567dd70ec42657ee0d502152e2f5945eb6e19237099f72f53d90cc615032",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/main.tsx",
+      "compiledWorkingTreeSha256": "742991c6c080b258e37a2765a31ec40c4d60217f5e9455caf0809fdc900e84c3",
+      "gitBlobSha256": "742991c6c080b258e37a2765a31ec40c4d60217f5e9455caf0809fdc900e84c3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Answer.tsx",
+      "compiledWorkingTreeSha256": "dacdf884e65b53abd6f541fa501741b6422135ab2df285eedaa5be72a8e599c9",
+      "gitBlobSha256": "3f09df5dd715b3421a5c0e43d5c18d128336754b0d1f057ab0ab8ab770c1b35c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Overlay.tsx",
+      "compiledWorkingTreeSha256": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143",
+      "gitBlobSha256": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/paintedText.ts",
+      "compiledWorkingTreeSha256": "30b4130b413f7817e5130b3b2d0dbc0d0dc7fdb7cc29a732fbd4653128a5e5da",
+      "gitBlobSha256": "30b4130b413f7817e5130b3b2d0dbc0d0dc7fdb7cc29a732fbd4653128a5e5da",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Status.tsx",
+      "compiledWorkingTreeSha256": "2473c696459ff50dd81d591535aa3e7e6686fae256d8a132a65ef969b192e6ab",
+      "gitBlobSha256": "2473c696459ff50dd81d591535aa3e7e6686fae256d8a132a65ef969b192e6ab",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/model.ts",
+      "compiledWorkingTreeSha256": "4d0ef71d22c9453a12c0692c4b816212deb75fc38e68089862f86d126f08995e",
+      "gitBlobSha256": "da3520d99918efaaf251ede86dfcac3ada4f8d86a30754962ffaeecf480ec11f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/store.test.ts",
+      "compiledWorkingTreeSha256": "9d001fb4aad74c78a0f543791b1a74af91f8f6bb2bb5400fab2e2d0e5b27fca4",
+      "gitBlobSha256": "9d001fb4aad74c78a0f543791b1a74af91f8f6bb2bb5400fab2e2d0e5b27fca4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/store.ts",
+      "compiledWorkingTreeSha256": "db7f7ee5b90d87abfed8c9785d018727ae4650d7fa8df7862bb701a1ddd7177d",
+      "gitBlobSha256": "db7f7ee5b90d87abfed8c9785d018727ae4650d7fa8df7862bb701a1ddd7177d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/style.css",
+      "compiledWorkingTreeSha256": "158dc9c07adfd65855b5936b56e6ad735beaf62f30d7cb16db7ef0e88a2b7b7b",
+      "gitBlobSha256": "eec2f8c11f7fb01b80f92bc14d2e1b9ea7835fec8de1ab9f5beb6e5363d092ae",
+      "canonicalLfMatches": true
+    }
+  ],
+  "preparation": {
+    "file": ".local/conversation-reliability-v73/preparation.json",
+    "sha256": "08acbe1838e1f50c9b6b478634bd5b2d4d3365ea4b0de66007b6b99be689878a"
+  },
+  "patch": {
+    "file": "scripts/fixtures/controller-reliability-prepared-v73.patch",
+    "sha256": "00afbddd68e048e2d9bbdfd8de3f59c869b18ea5d27fad8fd8a2a588c267faed"
+  },
+  "verification": {
+    "file": "artifacts/controller-v73/reliability-build-r4/verification.json",
+    "sha256": "a4359e5ef137d99f564e06aab89b64f1a5b72bc7e5f2f41d565b3e5d4ef842c3",
+    "steps": [
+      {
+        "name": "node-regressions",
+        "file": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "--test",
+          "scripts/tests/controller-measurements.test.mjs",
+          "scripts/tests/deep-observations.test.mjs",
+          "scripts/tests/controller-source-generations.test.mjs"
+        ],
+        "startedAt": "2026-10-12T22:44:45.503Z",
+        "processId": 4724,
+        "code": 0,
+        "completedAt": "2026-10-12T22:44:45.626Z"
+      },
+      {
+        "name": "collector-syntax",
+        "file": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "--check",
+          "scripts/controller-session-replay.mjs"
+        ],
+        "startedAt": "2026-10-12T22:44:45.626Z",
+        "processId": 16696,
+        "code": 0,
+        "completedAt": "2026-10-12T22:44:45.669Z"
+      },
+      {
+        "name": "rust-regressions",
+        "file": "cargo",
+        "args": [
+          "test",
+          "--offline",
+          "--features",
+          "acceptance",
+          "--lib"
+        ],
+        "startedAt": "2026-10-12T22:44:45.669Z",
+        "processId": 22720,
+        "code": 0,
+        "completedAt": "2026-10-12T22:44:55.132Z"
+      },
+      {
+        "name": "release-default",
+        "file": "cargo",
+        "args": [
+          "check",
+          "--offline",
+          "--release",
+          "--lib"
+        ],
+        "startedAt": "2026-10-12T22:44:55.133Z",
+        "processId": 30752,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:20.852Z"
+      },
+      {
+        "name": "release-acceptance",
+        "file": "cargo",
+        "args": [
+          "check",
+          "--offline",
+          "--release",
+          "--features",
+          "acceptance",
+          "--lib"
+        ],
+        "startedAt": "2026-10-12T22:45:20.853Z",
+        "processId": 36840,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:29.006Z"
+      },
+      {
+        "name": "frontend-tests",
+        "file": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "node_modules/vitest/vitest.mjs",
+          "run"
+        ],
+        "startedAt": "2026-10-12T22:45:29.006Z",
+        "processId": 35780,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:30.405Z"
+      },
+      {
+        "name": "typescript",
+        "file": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "node_modules/typescript/bin/tsc",
+          "--noEmit"
+        ],
+        "startedAt": "2026-10-12T22:45:30.405Z",
+        "processId": 13536,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:31.800Z"
+      },
+      {
+        "name": "renderer-build",
+        "file": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "node_modules/vite/bin/vite.js",
+          "build"
+        ],
+        "startedAt": "2026-10-12T22:45:31.801Z",
+        "processId": 16668,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:33.402Z"
+      },
+      {
+        "name": "stage-implementation",
+        "file": "git",
+        "args": [
+          "add",
+          "src-tauri/src/meeting/scheduler.rs",
+          "src-tauri/src/runtime.rs",
+          "src-tauri/src/meeting/controller_tests.rs",
+          "src-tauri/src/meeting/ledger.rs",
+          "src-tauri/src/meeting/questions.rs",
+          "scripts/lib/controller-measurements.mjs",
+          "scripts/tests/controller-measurements.test.mjs",
+          "src-tauri/src/transcription/nemotron.rs",
+          "scripts/lib/deep-observations.mjs",
+          "scripts/tests/deep-observations.test.mjs",
+          "scripts/controller-session-replay.mjs"
+        ],
+        "startedAt": "2026-10-12T22:45:33.417Z",
+        "processId": 41464,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:33.517Z"
+      },
+      {
+        "name": "commit-implementation",
+        "file": "git",
+        "args": [
+          "commit",
+          "-m",
+          "Preserve foreground until answer intent and retain whole recognized source groups"
+        ],
+        "startedAt": "2026-10-12T22:45:33.518Z",
+        "processId": 5348,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:33.663Z"
+      },
+      {
+        "name": "native-build",
+        "file": "cargo",
+        "args": [
+          "build",
+          "--offline",
+          "--features",
+          "acceptance"
+        ],
+        "startedAt": "2026-10-12T22:45:33.697Z",
+        "processId": 3108,
+        "code": 0,
+        "completedAt": "2026-10-12T22:45:55.631Z"
+      }
+    ],
+    "rustSummary": [
+      "test result: ok. 208 passed; 0 failed; 14 ignored; 0 measured; 0 filtered out; finished in 1.54s"
+    ]
+  },
+  "scope": "Actual isolated tests/build and source binding. Authenticated live validation of this new binary remains required; old frozen captures belong to the previous binary."
+}

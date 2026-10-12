@@ -56,6 +56,8 @@ pub struct Client {
     service_tier: Option<String>,
     pub codex: Option<std::sync::Arc<super::codex::Codex>>,
 }
+struct AbortHttpReader(tokio::task::AbortHandle);
+impl Drop for AbortHttpReader {fn drop(&mut self){self.0.abort();}}
 #[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum AnswerBackend { #[default] Chatgpt, Codex, Api, Websocket, Realtime }
@@ -247,10 +249,13 @@ impl Client {
         let response = tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=request=>r.map_err(|_|"Answer request connection failed".to_string())?};
         let response = tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=check_http(response)=>r?};
         let mut chunks = response.bytes_stream();
-        let mut parser = SseParser::default();
-        let mut complete = false;
-        loop {
-            let next = tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),c=chunks.next()=>c};
+        let (delivery,mut queued)=super::mailbox::channel(256);
+        let remote_terminal=std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let observed_terminal=remote_terminal.clone();let reader_cancel=cancel.clone();let trace=self.trace.clone();
+        let mut reading=tokio::spawn(async move {
+         let mut parser = SseParser::default();
+         loop {
+            let next = tokio::select! {_=reader_cancel.cancelled()=>return Err("cancelled".into()),c=chunks.next()=>c};
             let Some(chunk) = next else { break };
             let chunk = chunk.map_err(|_| "Answer stream was interrupted".to_string())?;
             for data in parser.push(&chunk)? {
@@ -260,32 +265,56 @@ impl Client {
                 let value: serde_json::Value = serde_json::from_str(&data)
                     .map_err(|_| "Invalid answer stream event".to_string())?;
                 match value["type"].as_str().unwrap_or("") {
-                    "response.created" => { if let Some(trace)=&self.trace { trace.created(); } }
+                    "response.created" => { if let Some(trace)=&trace { trace.created(); } }
                     "response.output_text.delta" => {
-                        if let Some(trace)=&self.trace { trace.mark(super::timing::Stage::FirstAgentDelta); }
-                        if let Some(d) = value["delta"].as_str() {
-                            tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Delta(d.into()))=>r?};
-                        }
+                        if let Some(trace)=&trace { trace.mark(super::timing::Stage::FirstAgentDelta); }
+                        if value["delta"].is_string(){delivery.try_send(value)?;}
                     }
                     "response.completed" => {
-                        *terminal=true;
-                        if let Some(trace)=&self.trace { trace.response_metadata(&value["response"]);trace.usage(&value["response"]["usage"]); trace.mark(super::timing::Stage::TurnCompleted); }
-                        complete = true;
-                        tokio::select! {_=cancel.cancelled()=>return Err("cancelled".into()),r=event(StreamEvent::Completed)=>r?};
+                        observed_terminal.store(true,std::sync::atomic::Ordering::Release);
+                        if let Some(trace)=&trace { trace.response_metadata(&value["response"]);trace.usage(&value["response"]["usage"]); trace.mark(super::timing::Stage::TurnCompleted); }
+                        delivery.try_send(value)?;
+                        return Ok::<(),String>(());
                     }
                     "error" | "response.failed" | "response.incomplete" => {
-                        *terminal=true;
-                        if let Some(trace)=&self.trace{trace.remote_terminal();}
+                        observed_terminal.store(true,std::sync::atomic::Ordering::Release);
+                        if let Some(trace)=&trace{trace.remote_terminal();}
                         return Err(stream_error(&value))
                     }
                     _ => {}
                 }
             }
-            if complete {
-                return Ok(());
-            }
-        }
-        Err("Answer stream ended before response.completed".into())
+         }
+         Err("Answer stream ended before response.completed".into())
+        });
+        let _reader_guard=AbortHttpReader(reading.abort_handle());
+        let consuming=async {
+         loop {
+            let value=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),value=queued.recv()=>value.ok_or("Answer delivery closed before completion")?};
+            let output=match value["type"].as_str(){
+                Some("response.output_text.delta")=>StreamEvent::Delta(value["delta"].as_str().ok_or("Missing answer text delta")?.into()),
+                Some("response.completed")=>StreamEvent::Completed,
+                _=>return Err("Answer accumulation exceeds 4 MiB; current generation failed explicitly".into()),
+            };
+            let completed=matches!(&output,StreamEvent::Completed);
+            tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),result=event(output)=>result?};
+            if completed{return Ok::<(),String>(());}
+         }
+        };
+        // A separately scheduled owned reader keeps protocol progress apart
+        // from callback delivery. Dropping the request aborts that reader.
+        // Successful completion still drains every current delta in order.
+        tokio::pin!(consuming);
+        let result=tokio::select!{
+            result=&mut reading=>match result {
+                Ok(Ok(()))=>consuming.await,
+                Ok(Err(error))=>Err(error),
+                Err(_)=>Err("Answer protocol reader failed".into()),
+            },
+            result=&mut consuming=>result,
+        };
+        *terminal=remote_terminal.load(std::sync::atomic::Ordering::Acquire);
+        result
     }
     #[allow(clippy::too_many_arguments)]
     pub async fn stream_updates<F,Fut>(&self, token:&str, model:&str, instructions:&str, input:&str, image:Option<&str>, cancel:CancellationToken, updates:tokio::sync::watch::Receiver<super::responses_ws::Update>, event:F) -> Result<(),String>
@@ -440,6 +469,9 @@ mod tests {
         body: &str,
         delay: u64,
     ) -> (Client, tokio::task::JoinHandle<serde_json::Value>) {
+        server_phased(body,delay,None).await
+    }
+    async fn server_phased(body:&str,delay:u64,mut gate:Option<(usize,std::sync::Arc<tokio::sync::Notify>)>) -> (Client,tokio::task::JoinHandle<serde_json::Value>) {
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let base = format!("http://{}/v1", listener.local_addr().unwrap());
         let body = body.to_string();
@@ -470,7 +502,9 @@ mod tests {
                 }
             };
             socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",body.len()).as_bytes()).await.unwrap();
-            for chunk in body.as_bytes().chunks(7) {
+            let chunk_size=if body.len()>512*1024{64*1024}else{7};
+            for (index,chunk) in body.as_bytes().chunks(chunk_size).enumerate() {
+                if gate.as_ref().is_some_and(|(offset,_)|index*chunk_size>=*offset){gate.take().unwrap().1.notified().await;}
                 if socket.write_all(chunk).await.is_err() {
                     break;
                 }
@@ -600,6 +634,73 @@ mod tests {
         assert!(start.elapsed().as_millis() < 500);
         assert_eq!(c.http_slots.available_permits(),1,"Closed local stream must still count its unknown retirement");
         s.await.unwrap();
+    }
+    #[tokio::test]
+    async fn http_terminal_is_observed_while_output_is_stalled_and_every_delta_is_drained() {
+        let expected=(0..24).map(|i|format!("piece-{i}| ")).collect::<Vec<_>>();
+        let mut body=expected.iter().map(|text|format!("data: {}\n\n",serde_json::json!({"type":"response.output_text.delta","delta":text}))).collect::<String>();
+        body.push_str("data: {\"type\":\"response.completed\"}\n\n");
+        let (client,server)=server(&body,0).await;
+        let trace=super::super::timing::Trace::new(std::time::Instant::now(),0);
+        let client=client.with_trace(trace.clone());let observer=client.clone();
+        let entered=std::sync::Arc::new(tokio::sync::Notify::new());let release=std::sync::Arc::new(tokio::sync::Notify::new());
+        let output=std::sync::Arc::new(std::sync::Mutex::new(Vec::new()));
+        let (seen,gate,result)=(entered.clone(),release.clone(),output.clone());
+        let job=tokio::spawn(async move{client.stream("fixture-token","m","i","q",CancellationToken::new(),move |event|{
+            let (seen,gate,result)=(seen.clone(),gate.clone(),result.clone());
+            async move {
+                if let StreamEvent::Delta(text)=event {
+                    let first={let mut result=result.lock().unwrap();let first=result.is_empty();result.push(text);first};
+                    if first{seen.notify_one();gate.notified().await;}
+                }
+                Ok(())
+            }
+        }).await});
+        tokio::time::timeout(std::time::Duration::from_secs(3),entered.notified()).await.unwrap();
+        tokio::time::timeout(std::time::Duration::from_secs(3),async{while trace.snapshot().turn_completed.is_none(){tokio::time::sleep(std::time::Duration::from_millis(5)).await;}}).await.unwrap();
+        assert!(!job.is_finished(),"Protocol completion cannot silently discard pending output");
+        assert_eq!(trace.snapshot().remote_termination_confirmed,Some(true));
+        release.notify_one();assert!(tokio::time::timeout(std::time::Duration::from_secs(3),job).await.unwrap().unwrap().is_ok());
+        assert_eq!(*output.lock().unwrap(),expected);assert_eq!(observer.http_slots.available_permits(),2);server.await.unwrap();
+    }
+    #[tokio::test]
+    async fn http_cancellation_bypasses_stalled_output_after_known_remote_completion() {
+        let (client,server)=server("data: {\"type\":\"response.output_text.delta\",\"delta\":\"opening\"}\n\ndata: {\"type\":\"response.completed\"}\n\n",0).await;
+        let trace=super::super::timing::Trace::new(std::time::Instant::now(),0);
+        let client=client.with_trace(trace.clone());let observer=client.clone();let cancel=CancellationToken::new();let stop=cancel.clone();
+        let entered=std::sync::Arc::new(tokio::sync::Notify::new());let seen=entered.clone();
+        let job=tokio::spawn(async move{client.stream("fixture-token","m","i","q",cancel,move |event|{
+            let seen=seen.clone();async move{if matches!(event,StreamEvent::Delta(_)){seen.notify_one();std::future::pending::<()>().await;}Ok(())}
+        }).await});
+        tokio::time::timeout(std::time::Duration::from_secs(3),entered.notified()).await.unwrap();
+        tokio::time::timeout(std::time::Duration::from_secs(3),async{while trace.snapshot().turn_completed.is_none(){tokio::time::sleep(std::time::Duration::from_millis(5)).await;}}).await.unwrap();
+        stop.cancel();assert_eq!(tokio::time::timeout(std::time::Duration::from_millis(250),job).await.unwrap().unwrap().unwrap_err(),"cancelled");
+        assert_eq!(observer.http_slots.available_permits(),2,"Known terminal does not need an unknown-retirement hold");
+        assert_eq!(trace.snapshot().remote_termination_confirmed,Some(true));server.await.unwrap();
+    }
+    #[tokio::test]
+    async fn http_failure_bypasses_an_already_stalled_output_consumer() {
+        let prefix="data: {\"type\":\"response.output_text.delta\",\"delta\":\"opening\"}\n\n";
+        let body=format!("{prefix}data: {{\"type\":\"response.failed\",\"response\":{{\"error\":{{\"code\":\"fixture_failure\"}}}}}}\n\n");
+        let release=std::sync::Arc::new(tokio::sync::Notify::new());
+        let (client,server)=server_phased(&body,0,Some((prefix.len(),release.clone()))).await;
+        let trace=super::super::timing::Trace::new(std::time::Instant::now(),0);let client=client.with_trace(trace.clone());let observer=client.clone();
+        let entered=std::sync::Arc::new(tokio::sync::Notify::new());let seen=entered.clone();
+        let job=tokio::spawn(async move{client.stream("fixture-token","m","i","q",CancellationToken::new(),move |event|{
+            let seen=seen.clone();async move{if matches!(event,StreamEvent::Delta(_)){seen.notify_one();std::future::pending::<()>().await;}Ok(())}
+        }).await});
+        tokio::time::timeout(std::time::Duration::from_secs(3),entered.notified()).await.unwrap();release.notify_one();
+        assert!(tokio::time::timeout(std::time::Duration::from_secs(3),job).await.unwrap().unwrap().is_err());
+        assert_eq!(trace.snapshot().remote_termination_confirmed,Some(true));assert_eq!(observer.http_slots.available_permits(),2);server.await.unwrap();
+    }
+    #[tokio::test]
+    async fn http_accumulation_overflow_fails_explicitly_instead_of_dropping_current_text() {
+        let piece=format!("data: {}\n\n",serde_json::json!({"type":"response.output_text.delta","delta":"x".repeat(900_000)}));
+        let body=piece.repeat(6)+"data: {\"type\":\"response.completed\"}\n\n";
+        let (client,server)=server(&body,0).await;
+        let result=tokio::time::timeout(std::time::Duration::from_secs(3),client.stream("fixture-token","m","i","q",CancellationToken::new(),|_|std::future::pending::<Result<(),String>>())).await.unwrap();
+        assert!(result.unwrap_err().contains("4 MiB"));
+        assert_eq!(client.http_slots.available_permits(),1,"Overflow before a provider terminal remains an unknown retirement");server.await.unwrap();
     }
     #[tokio::test(start_paused=true)]
     async fn unknown_http_retirement_holds_capacity_without_claiming_remote_termination(){

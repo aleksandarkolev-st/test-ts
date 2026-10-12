@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {integerBranchHarness} from './lib/integer-branch-harness.mjs';
 import {logRecoveryFixtures,suppliedCrc32cSource} from './lib/log-recovery-fixtures.mjs';
+import {recordedCppSource} from './lib/recorded-cpp-source.mjs';
 const [journalFile,specFile,outDir]=process.argv.slice(2);assert(journalFile&&specFile&&outDir,'JOURNAL SPECS OUTPUT');
 const root=process.cwd(),output=path.resolve(outDir);assert(output.startsWith(root+path.sep));await mkdir(output,{recursive:true});
 const bytes=await readFile(journalFile),journal=JSON.parse(bytes),spec=JSON.parse(await readFile(specFile));
@@ -24,9 +25,9 @@ const run=(file,args,budget=20000)=>new Promise(resolve=>{
 const results=[];
 for(const item of spec.checks){
  const row=journal.rows.find(r=>r.round===item.round);assert(row);
- const blocks=[...row.answer.matchAll(/```(?:cpp|c\+\+|cuda|c)?\s*\n([\s\S]*?)```/g)].map(m=>m[1]);
- const code=blocks[item.block??0];const result={round:item.round,answerSha256:sha(row.answer),kind:item.kind,scope:item.scope};results.push(result);
- if(code==null){result.failure='No complete code fence';continue;}
+ const selected=recordedCppSource(row.answer,item),code=selected?.code;const result={round:item.round,answerSha256:sha(row.answer),kind:item.kind,scope:item.scope};results.push(result);
+ if(code==null){result.failure=item.allowUnfencedExactSource?'No unique standalone exact source or complete code fence':'No complete code fence';continue;}
+ result.sourceSelection=selected.format;
  result.codeSha256=sha(code);
  let source=code;
  if(item.kind==='foo-exact'){
@@ -66,6 +67,6 @@ for(const item of spec.checks){
  }else if(result.compile.code===0)result.execution=await run(exe,[],10000);
  result.pass=result.compile.code===0&&result.execution?.code===0&&!result.execution.timedOut&&(item.kind!=='foo-exact'||result.exactOriginal)&&(item.kind!=='integer-branch'||result.exactRequestedSource);
 }
-await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',graderSha256:sha(await readFile(new URL(import.meta.url))),integerBranchHarnessSha256:sha(await readFile(new URL('./lib/integer-branch-harness.mjs',import.meta.url))),logRecoveryFixturesSha256:sha(await readFile(new URL('./lib/log-recovery-fixtures.mjs',import.meta.url))),harnessSha256,harnessHeaderSha256,results,
+await writeFile(path.join(output,'results.json'),JSON.stringify({journalFile,journalSha256:sha(bytes),compiler:spec.compiler??'clang++',graderSha256:sha(await readFile(new URL(import.meta.url))),recordedCppSourceSha256:sha(await readFile(new URL('./lib/recorded-cpp-source.mjs',import.meta.url))),integerBranchHarnessSha256:sha(await readFile(new URL('./lib/integer-branch-harness.mjs',import.meta.url))),logRecoveryFixturesSha256:sha(await readFile(new URL('./lib/log-recovery-fixtures.mjs',import.meta.url))),harnessSha256,harnessHeaderSha256,results,
  scope:'CPU compilation/execution of recorded code with explicit dependencies and test harnesses. CUDA checks adapt header/intrinsics and the PTX lane-id read to the documented CPU environment; recovery checks link the requested supplied CRC-32C and run original CLIs against independent byte fixtures. Algorithms are not repaired. These finite checks do not certify NVIDIA hardware, nvcc, CRC collision freedom or a proof for arbitrary inputs.'},null,2));
 console.log(JSON.stringify(results.map(r=>({round:r.round,pass:r.pass??false,failure:r.pass?null:r.failure??r.compile?.error??r.compile?.stderr??null}))));

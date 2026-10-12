@@ -50,7 +50,7 @@ try {
  const settings={...boot.settings,answerBackend:backend,answerObjective:plan.objective??'detailed',model:plan.model,reasoningEffort:plan.effort,serviceTier:plan.serviceTier??null,output:outputs[0].id,microphone:'',projectPath:'',speechChunkMs:160};
  await invoke('save_settings',{settings});
  if(backend==='chatgpt'){boot=await invoke('bootstrap');const account=boot.accounts.find(a=>a.planEnabled);assert(account,'No saved authorized direct-plan account');await invoke('select_account',{clientId:account.clientId});}
- const models=await invoke('list_models');const selectedModel=models.find(m=>m.slug===plan.model);assert(selectedModel);journal.capabilities={availableModel:true,catalogEntry:selectedModel,effort:plan.effort,validatedBy:'Startup completes a real stream using these settings. Codex additionally checks supportedReasoningEfforts.',billedApiFallback:false};
+ const models=await invoke('list_models');const selectedModel=models.find(m=>m.slug===plan.model);assert(selectedModel);journal.capabilities={availableModel:true,catalogEntry:selectedModel,effort:plan.effort,validatedBy:'Catalog presence only at this point. Recorded provider events establish actual inference; Codex separately checks supportedReasoningEfforts before dispatch.',billedApiFallback:false};
  await invoke('start_meeting',{settings});active=true;
  const start=Date.now();journal.sessionStartedAt=new Date(start).toISOString();
  const fingerprints=new Map(),latest=new Map();let paintOffset=0;
@@ -86,8 +86,32 @@ try {
   }
   if(item.waveFile){const wave=await readFile(item.waveFile);assert.equal(hash(wave),item.waveSha256);const playing=(await invoke('acceptance_jobs')).jobs.filter(j=>j.running).map(j=>j.question.id);const playbackFile=path.join(out,`round-${String(index+1).padStart(2,'0')}.playback.json`);
    await child('powershell.exe',['-NoProfile','-File',path.resolve('scripts/play-fixture-device.ps1'),'-InputPath',path.resolve(item.waveFile),'-OutputName',journal.outputDevice,'-TimingPath',playbackFile]);row.audio={waveFile:item.waveFile,sha256:item.waveSha256,playback:JSON.parse(await readFile(playbackFile)),runningAtPlaybackLaunch:playing};
+  } else if(item.expandOf){
+   const parent=journal.rows.findLast(previous=>previous.name===item.expandOf);
+   assert(parent?.responseVersion,'Expansion requires an observed parent generation');
+   row.question=parent.question;row.boundParentGenerationId=parent.responseVersion.split(':')[0];row.replayAction='expand';
+   row.focusBeforeExpansion=(await invoke('get_snapshot')).question?.id??null;
+   await invoke('action',{action:'expand',generationId:row.boundParentGenerationId});
+   row.measurement='Explicit generation-bound native expansion: no audio, ASR or automatic endpoint delay.';
+  } else if(item.acceptRecognizedNow){
+   await invoke('acceptance_event',{kind:'started',source:'remote'});
+   await invoke('acceptance_event',{kind:'transcript',source:'remote',text:item.question,isFinal:true});
+   const deadline=Date.now()+10000;let draft;
+   while(Date.now()<deadline){const state=await invoke('acceptance_jobs');draft=state.jobs.filter(j=>!j.confirmed&&j.phase==='speculative'&&j.question.text===item.question).at(-1);if(draft&&(await invoke('get_snapshot')).canAnswerNow)break;await sleep(25);}
+   assert(draft&&(await invoke('get_snapshot')).canAnswerNow,'Finalized recognized draft must be explicitly acceptable');
+   row.replayAction='answer_now';row.boundDraftGenerationId=draft.question.id;row.focusBeforeExplicitAcceptance=(await invoke('get_snapshot')).question?.id??null;
+   await invoke('action',{action:'answer_now',generationId:row.boundDraftGenerationId});
+   await invoke('acceptance_event',{kind:'ended',source:'remote'});
+   row.measurement='Injected finalized speech fixture followed by explicit native acceptance. Signed-in answer backend; no waveform, native ASR or automatic endpoint measurement.';
+  } else if(item.staleAnswerNowOf){
+   const previous=journal.rows.findLast(r=>r.name===item.staleAnswerNowOf);assert(previous?.responseVersion);
+   row.replayAction='stale_answer_now';row.boundDraftGenerationId=previous.responseVersion.split(':')[0];row.focusBeforeExplicitAcceptance=(await invoke('get_snapshot')).question?.id??null;
+   await invoke('action',{action:'answer_now',generationId:row.boundDraftGenerationId});
+   row.measurement='Stale explicit native acceptance control; expected to preserve current focus and launch no job.';
   } else {await invoke('ask',{question:item.question});row.measurement='Typed native request: no audio, ASR or automatic endpoint delay.';}
   const after=await anchor();row.clockAnchors=[before,after];await collect(row,before,after,eventOffset,item.settle!==false);
+  if(item.expandOf){row.focusAfterExpansion=(await invoke('get_snapshot')).question?.id??null;await persist();}
+  if(item.acceptRecognizedNow||item.staleAnswerNowOf){row.focusAfterExplicitAcceptance=(await invoke('get_snapshot')).question?.id??null;await persist();}
   if(item.sampleResources){try{journal.resourceSamples.push(JSON.parse(await child('powershell.exe',['-NoProfile','-File',path.resolve('scripts/sample-interview-process.ps1'),'-ProcessId',String(app.pid)])));}catch(e){journal.pollErrors.push(String(e));}}
  }
  if(plan.minimumDurationMs){while(Date.now()-start<plan.minimumDurationMs)await sleep(Math.min(1000,plan.minimumDurationMs-(Date.now()-start)));}
@@ -99,6 +123,15 @@ try {
   if(job){Object.assign(row,{recognizedQuestion:job.question.text,answer:job.answer,phase:job.phase,error:job.error,cancelled:job.cancelled,selectedContext:job.selectedContext,responseVersion:`${job.question.id}:${job.latency.responseRevision??0}`,latency:job.latency});if(row.audio)row.firstStreamedWordMeasurement=streamedWordLatency(journal,row);}
  }
 journal.timings=await invoke('get_answer_timings');
- await invoke('stop_meeting');active=false;journal.stoppedCleanly=!(await invoke('get_snapshot')).active;journal.status='complete';
+ // Stop sampling before Stop clears the private in-memory ledger. Preserve
+ // retention evidence separately from the intentional post-session clear.
+ sampling=false;if(sampler)await sampler;await poll();
+ journal.archiveBeforeStop=journal.archive;
+ await invoke('stop_meeting');active=false;
+ journal.archiveAfterStop=(await invoke('acceptance_jobs')).archive;
+ journal.stoppedCleanly=!(await invoke('get_snapshot')).active;
+ assert(journal.stoppedCleanly,'Meeting must stop cleanly');
+ assert(Object.values(journal.archiveAfterStop).every(value=>value===0),'Stop must clear the RAM ledger');
+ journal.status='complete';
 }catch(e){journal.status='failed';journal.failure=String(e);console.error(String(e));process.exitCode=1;}
 finally{sampling=false;if(sampler)await sampler;if(active&&invoke)await invoke('stop_meeting').catch(()=>{});connection?.close();if(app?.exitCode===null){app.kill();await new Promise(r=>app.once('exit',r));}vite?.kill();journal.completedAt=new Date().toISOString();await persist();}

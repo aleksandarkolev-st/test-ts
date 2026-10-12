@@ -54,6 +54,9 @@ pub struct Client {
     reasoning_effort: Option<String>,
     backend: AnswerBackend,
     service_tier: Option<String>,
+    // Per-request framing; clones retain the warm pool and concurrency limit.
+    // Ordinary text/summary requests must remain free-form.
+    reply_schema: Option<serde_json::Value>,
     pub codex: Option<std::sync::Arc<super::codex::Codex>>,
 }
 struct AbortHttpReader(tokio::task::AbortHandle);
@@ -96,6 +99,7 @@ impl Default for Client {
                         reasoning_effort: None,
                         backend: AnswerBackend::Chatgpt,
                         service_tier: None,
+                        reply_schema: None,
                         codex: None,
                     };
                 }
@@ -104,6 +108,7 @@ impl Default for Client {
             reasoning_effort: None,
             backend: AnswerBackend::Chatgpt,
             service_tier: None,
+            reply_schema: None,
             codex: None,
         }
     }
@@ -198,6 +203,9 @@ impl Client {
         }
         if let Some(tier) = &self.service_tier {
             body["service_tier"] = serde_json::json!(tier);
+        }
+        if let Some(schema) = &self.reply_schema {
+            body["text"] = serde_json::json!({"format":{"type":"json_schema","name":"meeting_reply","strict":true,"schema":schema}});
         }
         body
     }
@@ -389,7 +397,13 @@ impl Client {
         if self.backend == AnswerBackend::Codex {
             self.codex.as_ref().ok_or("Codex runtime is unavailable")?.stream_question(model,self.service_tier.as_deref(),self.reasoning_effort.as_deref(),instructions,prompt,image,cancel,self.refill_policy,self.trace.clone(),updates,&mut decode).await
         } else {
-            let result=self.stream_with_image(token,model,instructions,&format!("AUTOMATIC REMOTE TURN\n{}",prompt.render()),image,cancel.clone(),&mut decode).await;
+            let mut request=self.clone();
+            if matches!(self.backend,AnswerBackend::Chatgpt|AnswerBackend::Api) {
+                let mut schema=super::codex::automatic_reply_schema();
+                if prompt.explicit_request {schema["properties"]["intent"]["enum"]=serde_json::json!(["answer"]);}
+                request.reply_schema=Some(schema);
+            }
+            let result=request.stream_with_image(token,model,instructions,&format!("AUTOMATIC REMOTE TURN\n{}",prompt.render()),image,cancel.clone(),&mut decode).await;
             if cancel.is_cancelled(){if let Some(trace)=&self.trace{trace.cancelled();}}
             result
         }
@@ -615,6 +629,7 @@ mod tests {
                 reasoning_effort: None,
                 backend: AnswerBackend::Chatgpt,
                 service_tier: None,
+                reply_schema: None,
                 codex: None,
             },
             task,
@@ -632,6 +647,8 @@ mod tests {
             match event {StreamEvent::QuestionDelta{question,context_key,text:delta}=>{assert_eq!(question,"Why?");assert_eq!(context_key,super::super::codex::context_key("Exact preceding code"));text.push_str(&delta);},StreamEvent::QuestionCompleted{..}=>completed=true,_=>panic!("Unexpected event")};std::future::ready(Ok(()))
         }).await.unwrap();
         assert!(completed&&text.contains("return x < -1;"));let sent=server.await.unwrap();
+        assert_eq!(sent["text"]["format"],serde_json::json!({"type":"json_schema","name":"meeting_reply","strict":true,"schema":super::super::codex::automatic_reply_schema()}));
+        assert!(client.body("m","i","q",None).get("text").is_none(),"The request clone must not contaminate summaries");
         assert_eq!(sent["store"],false);assert_eq!(sent["stream"],true);assert_eq!(sent["input"].as_array().unwrap().len(),1);
         for unsupported in ["previous_response_id","conversation","background","max_output_tokens","prompt_cache_retention"]{assert!(sent.get(unsupported).is_none());}
     }
@@ -648,7 +665,23 @@ mod tests {
         assert!(error.contains("explicitly accepted"));assert!(!delivered);
         assert_eq!(client.http_slots.available_permits(),2);
         let sent=server.await.unwrap();assert_eq!(sent["instructions"],instructions);
+        assert_eq!(sent["text"]["format"]["schema"]["properties"]["intent"]["enum"],serde_json::json!(["answer"]));
         assert!(sent["input"][0]["content"].as_str().unwrap().starts_with("AUTOMATIC REMOTE TURN\nAPPLICATION ACCEPTANCE: EXPLICIT\n"));
+    }
+    #[tokio::test]
+    async fn plan_reasoning_trial_framing_failure_remains_visible() {
+        // The authenticated trial exposed an invalid envelope, not captured raw
+        // provider bytes. These variants exercise the generic decoder contract.
+        for raw in ["An unframed explanation.","```json\n{\"intent\":\"answer\",\"text\":\"Explanation\"}\n```",""] {
+            let body=format!("data: {}\n\ndata: {{\"type\":\"response.completed\"}}\n\n",serde_json::json!({"type":"response.output_text.delta","delta":raw}));
+            let (client,server)=server(&body,0).await;
+            let prompt=super::super::codex::QuestionPrompt::new("Retained conversation","Explain the invariant");
+            let (_,rx)=tokio::sync::watch::channel(super::super::codex::QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+            let mut completed=false;
+            assert!(client.stream_question("fixture-token","gpt-6.1-sol","instructions",&prompt,None,CancellationToken::new(),rx,|event|{completed|=matches!(event,StreamEvent::QuestionCompleted{..});std::future::ready(Ok(()))}).await.is_err());
+            assert!(!completed);
+            assert_eq!(server.await.unwrap()["text"]["format"]["strict"],true);
+        }
     }
     #[tokio::test]
     async fn real_http_stream_contract() {

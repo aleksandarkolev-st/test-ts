@@ -7,7 +7,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {connectNativePages} from './lib/native-cdp.mjs';
 import {installPaintedAnswerRecorder} from './lib/painted-answer-recorder.mjs';
-import {changedJobObservation} from './lib/deep-observations.mjs';
+import {changedJobObservation,shouldRetainDeepObservation} from './lib/deep-observations.mjs';
 import {streamedWordLatency} from './lib/streamed-word-latency.mjs';
 import {servedRenderer} from './lib/served-renderer.mjs';
 import {recordedCodeReference} from './lib/recorded-code-reference.mjs';
@@ -57,7 +57,7 @@ try {
  const pollOnce=async()=>{
   const hostBeforeMs=Date.now(),state=await invoke('acceptance_jobs'),hostAfterMs=Date.now();journal.archive=state.archive;
   for(const job of state.jobs)latest.set(job.question.id,job);
-  const observation=changedJobObservation(state,fingerprints,{hostBeforeMs,hostAfterMs});if(observation.jobs.length)journal.deepObservations.push(observation);
+  const observation=changedJobObservation(state,fingerprints,{hostBeforeMs,hostAfterMs});if(shouldRetainDeepObservation(observation,journal.deepObservations.at(-1)))journal.deepObservations.push(observation);
   const paint=await connection.overlay.evaluate(offset=>window.deepPaintSamples.slice(offset),paintOffset);paintOffset+=paint.length;journal.overlayPaintSamples.push(...paint);
  };
  let pendingPoll=null;
@@ -93,6 +93,12 @@ try {
    row.focusBeforeExpansion=(await invoke('get_snapshot')).question?.id??null;
    await invoke('action',{action:'expand',generationId:row.boundParentGenerationId});
    row.measurement='Explicit generation-bound native expansion: no audio, ASR or automatic endpoint delay.';
+  } else if(item.automaticRecognized){
+   await invoke('acceptance_event',{kind:'started',source:'remote'});
+   await invoke('acceptance_event',{kind:'transcript',source:'remote',text:item.question,isFinal:true});
+   await invoke('acceptance_event',{kind:'ended',source:'remote'});
+   row.replayAction='automatic_recognized_fixture';
+   row.measurement='Exact injected finalized remote transcript with automatic controller acceptance and authenticated model inference; no source waveform, native ASR, or acoustic latency measurement. Expected source question is grader metadata, not answering input.';
   } else if(item.acceptRecognizedNow){
    await invoke('acceptance_event',{kind:'started',source:'remote'});
    await invoke('acceptance_event',{kind:'transcript',source:'remote',text:item.question,isFinal:true});

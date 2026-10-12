@@ -102,6 +102,11 @@ pub struct QuestionDetector {
     minimum_remote_started_at:u64,
 }
 impl QuestionDetector {
+    /// IDs of finalized clauses on the detector's current logical floor.
+    /// Acceptance keeps them for late revisions; a new floor clears them.
+    pub fn recognized_segment_ids(&self)->impl Iterator<Item=&str> {
+        self.final_segments.iter().map(|(id,_)|id.as_str())
+    }
     pub fn remote_source_current(&self,started_at:u64)->bool {started_at>=self.minimum_remote_started_at}
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
         if source==SpeakerSource::Remote&&!self.remote_source_current(now){return false;}

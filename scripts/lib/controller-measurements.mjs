@@ -62,11 +62,14 @@ function finalizedSourceText(row){
 
 export function auditPanelTransitions(journal){
  const observations=journal.deepObservations??[],paints=journal.overlayPaintSamples??[];
- const jobs=jobsAtObservation(observations,observations.length-1).filter(j=>j.confirmed&&Number.isFinite(j.latency?.questionConfirmedAt))
-  .sort((a,b)=>a.latency.questionConfirmedAt-b.latency.questionConfirmedAt);
+ const foregroundTime=job=>Object.hasOwn(job,'focusAuthorizedAt')?job.focusAuthorizedAt:job.latency?.questionConfirmedAt;
+ const jobs=jobsAtObservation(observations,observations.length-1).filter(j=>j.confirmed&&Number.isFinite(j.latency?.questionConfirmedAt)&&Number.isFinite(foregroundTime(j)))
+  .sort((a,b)=>foregroundTime(a)-foregroundTime(b));
  const transitions=[];
  for(const job of jobs){
-  const time=job.latency.questionConfirmedAt;
+  // Finalized automatic candidate inference is not foreground authorization.
+  // Keep its earlier submission clock in measureJournal unchanged.
+  const time=foregroundTime(job);
   const anchor=observations.reduce((best,o)=>Number.isFinite(o.nativeNow)&&(!best||Math.abs(o.nativeNow-time)<Math.abs(best.nativeNow-time))?o:best,null);
   if(!anchor)continue;
   const accepted={low:time+anchor.hostBeforeMs-anchor.nativeNow-1,high:time+anchor.hostAfterMs-anchor.nativeNow+1};
@@ -75,6 +78,8 @@ export function auditPanelTransitions(journal){
   const clearing=paints.find(p=>p.hostMs>=accepted.low&&(p.questionId===job.question.id||!p.visible));
   const oldPaintAfter=paints.filter(p=>p.hostMs>accepted.high&&(!clearing||p.hostMs<clearing.hostMs)&&p.questionId===prior.questionId&&p.visible);
   transitions.push({generationId:job.question.id,previousGenerationId:prior.questionId,acceptedHostMs:accepted,
+   ...(Object.hasOwn(job,'focusAuthorizedAt')?{foregroundAuthorizedAt:time,
+    inferenceAcceptedAt:job.latency.questionConfirmedAt,foregroundAuthorizationSource:'focusAuthorizedAt'}:{}),
    priorPanelClearedHostMs:clearing?.hostMs??null,
    possibleOldPanelDurationMs:clearing?{low:Math.max(0,(oldPaintAfter.at(-1)?.hostMs??accepted.low)-accepted.high),high:Math.max(0,clearing.hostMs-accepted.low)}:null,
    oldPaintChangesAfterAcceptance:oldPaintAfter.length,unclearedInObservation:!clearing});

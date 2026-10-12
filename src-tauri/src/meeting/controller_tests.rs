@@ -263,3 +263,203 @@ fn candidate_failed_waveform_final_frame_remains_eligible() {
     assert!(frame.to_lowercase().contains("what experiment distinguishes them"));
     assert!(frame.to_lowercase().contains("conductance"));assert!(last.error.is_none());
 }
+
+#[test]
+fn undecided_automatic_bursts_bound_capacity_without_cancelling_foreground() {
+    let mut c=Scheduler::default();let parent=c.confirm("Foreground opaque text".into(),100,90,95);c.next(100);
+    let first=c.confirm_automatic_with_context("First candidate".into(),200,180,190,None);c.next(200);
+    let first_cancel=c.find_mut(&first).unwrap().cancel.clone();
+    let mut last=String::new();
+    for now in 201..240 {
+        last=c.confirm_automatic_with_context(format!("Arbitrary candidate {now}"),now,now,now,None);
+        assert!(c.next(now).is_none());assert_eq!(c.active(),2);
+        assert!(!c.find_mut(&parent).unwrap().cancel.is_cancelled());
+        assert_eq!(c.rows().iter().filter(|r|r.queued).count(),1);
+    }
+    assert!(first_cancel.is_cancelled());c.find_mut(&first).unwrap().running=false;
+    assert_eq!(c.next(240),Some(last.clone()));assert_eq!(c.active(),2);
+    assert!(c.authorize_answer(&last,250));assert!(c.find_mut(&parent).unwrap().cancel.is_cancelled());
+}
+#[test]
+fn undecided_capacity_failure_is_visible_without_destroying_foreground_work() {
+    let mut c=Scheduler::default();let parent=c.confirm("Existing work".into(),100,90,95);c.next(100);
+    c.confirm_automatic_with_context("First opaque input".into(),200,180,190,None);c.next(200);
+    let last=c.confirm_automatic_with_context("Latest opaque input".into(),300,280,290,None);
+    assert!(c.next(300+RECOVERY_MS).is_none());assert!(c.latest_request_error().is_some());
+    assert!(!c.find_mut(&parent).unwrap().cancel.is_cancelled());assert_eq!(c.visible().unwrap().question.id,parent);
+    assert_eq!(c.find_mut(&last).unwrap().latency.question_confirmed_at,300);
+    assert_eq!(c.active(),2);
+}
+#[test]
+fn undecided_failure_pruning_and_explicit_preemption_preserve_completed_foreground() {
+    let mut c=Scheduler::default();let parent=c.confirm("Completed foreground".into(),100,90,95);
+    let old=c.find_mut(&parent).unwrap();old.phase=Phase::Complete;old.latency.completed_at=Some(150);old.buffer="Exact old answer".into();
+    let bad=c.confirm_automatic_with_context("Failed candidate".into(),200,180,190,None);
+    let j=c.find_mut(&bad).unwrap();j.phase=Phase::Complete;j.latency.completed_at=Some(250);j.error=Some("Transport error".into());
+    c.propose("New local revision".into(),300,280,290);
+    assert_eq!(c.visible().unwrap().question.id,parent);assert_eq!(c.visible().unwrap().buffer,"Exact old answer");
+    let explicit=c.confirm_explicit_with_context("Explicit next task".into(),310,300,305,"Frozen explicit context".into());
+    assert_eq!(c.visible().unwrap().question.id,explicit);assert_eq!(c.visible().unwrap().focus_authorized_at,Some(310));
+    assert_eq!(c.next(310),Some(explicit));
+}
+
+
+fn grow_recognized_retrieval_budget(ledger:&mut super::ledger::Ledger) {
+    let after=ledger.recognized.iter().map(|r|r.segment.ended_at).max().unwrap_or(0);
+    for turn in 1..=32 {
+        ledger.displayed(&format!("budget-{turn}"),"Independent subsequent discussion",
+            &"independent unrelated discussion. ".repeat(400),after+turn*1000);
+    }
+}
+#[test]
+fn recognized_utterance_retrieval_keeps_pronoun_clauses_atomic_beyond_budget() {
+    // Opaque subjects vary; retrieval policy has no knowledge of their names.
+    for seed in [3u32,29,107,65537] {
+        let mut ledger=super::ledger::Ledger::default();
+        let subject=format!("subject_{seed:08x}");
+        let decision=format!("{subject} retains records for {} days.",seed+1);
+        ledger.observe(speech("subject-clause",&decision,10),110);
+        ledger.observe(speech("owner-clause","The owner of it is the second attendee.",120),220);
+        ledger.observe(speech("unrelated-clause","A separate decision belongs to someone else.",230),330);
+        grow_recognized_retrieval_budget(&mut ledger);
+        let before=ledger.context(&subject,None);
+        assert!(before.contains(&decision));assert!(!before.contains("owner-clause"));
+        ledger.associate_remote_utterance(10,["subject-clause","owner-clause"]);
+        let after=ledger.context(&subject,None);
+        assert!(after.contains("Derived context view"));assert!(after.contains(&decision));
+        assert!(after.contains("REMOTE [utterance owner-clause, revision 1, 120..220 ms]: The owner of it is the second attendee."));
+        assert!(!after.contains("unrelated-clause"));
+        assert_eq!(ledger.recognized.len(),3);
+    }
+}
+#[test]
+fn recognized_groups_preserve_latest_revision_and_every_original() {
+    let mut ledger=super::ledger::Ledger::default();
+    let original="const char* identifier = \"exact_α\";\r\n";
+    let corrected="const char* identifier = \"exact_β\";\r\n";
+    ledger.observe(speech("code",original,10),110);
+    ledger.observe(speech("owner","It belongs to the earlier speaker.",120),220);
+    ledger.associate_remote_utterance(10,["code","owner"]);
+    ledger.observe(speech("code",corrected,10),230);
+    grow_recognized_retrieval_budget(&mut ledger);
+    let view=ledger.context("identifier",None);
+    assert!(view.contains(corrected));assert!(!view.contains(original));
+    assert!(view.contains("REMOTE [utterance code, revision 2"));assert!(view.contains("utterance owner"));
+    assert_eq!(ledger.recognized[0].segment.text,original);
+    assert_eq!(ledger.recognized[2].segment.text,corrected);
+    assert_eq!(ledger.recognized.len(),3);
+}
+#[test]
+fn unrelated_adjacent_speech_and_other_speaker_are_not_inferred_into_groups() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.observe(speech("same-id","Earlier project declaration.",10),110);
+    let mut own=speech("same-id","Separate microphone fact.",11);own.source=SpeakerSource::Self_;
+    ledger.observe(own,111);ledger.observe(speech("next-id","Unrelated adjacent speech.",12),112);
+    ledger.associate_remote_utterance(10,["same-id","unknown-id"]);
+    let view=ledger.context("Recall",None);
+    let group=view.split("RECOGNIZED UTTERANCE").nth(1).unwrap().split("\n\n").next().unwrap();
+    assert!(group.contains("REMOTE [utterance same-id"));
+    assert!(!group.contains("microphone fact"));assert!(!group.contains("next-id"));
+    assert!(!view.contains("unknown-id"));assert!(view.contains("SELF [utterance same-id"));
+}
+#[test]
+fn existing_source_membership_cannot_be_moved_by_a_late_association() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.observe(speech("original","The original subject.",10),110);
+    ledger.observe(speech("later","Different later subject.",1000),1100);
+    ledger.associate_remote_utterance(10,["original"]);let version=ledger.version;
+    ledger.associate_remote_utterance(1000,["original"]);assert_eq!(ledger.version,version);
+    ledger.associate_remote_utterance(1000,["later"]);
+    let view=ledger.context("Recall",None);
+    let old=view.split("controller floor 10 ms").nth(1).unwrap().split("\n\n").next().unwrap();
+    assert!(old.contains("utterance original"));assert!(!old.contains("utterance later"));
+}
+#[test]
+fn grouped_context_cutoff_excludes_future_source_clauses() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.observe(speech("early","Eligible earlier statement.",10),110);
+    ledger.observe(speech("late","Future statement must stay absent.",200),300);
+    ledger.associate_remote_utterance(10,["early","late"]);
+    let view=ledger.context("Recall",Some(200));
+    assert!(view.contains("Eligible earlier statement."));assert!(!view.contains("Future statement"));
+    assert!(ledger.context("Recall",Some(301)).contains("Future statement"));
+    assert_eq!(ledger.recognized.len(),2);
+}
+#[test]
+fn oversized_recognized_group_is_omitted_whole_without_losing_originals() {
+    let mut ledger=super::ledger::Ledger::default();
+    ledger.observe(speech("oversized",&format!("opaque_subject {}","z".repeat(240_001)),10),110);
+    ledger.observe(speech("linked","It has this associated condition.",120),220);
+    ledger.associate_remote_utterance(10,["oversized","linked"]);
+    let view=ledger.context("opaque_subject",None);
+    assert!(view.contains("Derived context view"));assert!(!view.contains("utterance oversized"));
+    assert!(!view.contains("utterance linked"));assert_eq!(ledger.recognized.len(),2);
+    assert!(ledger.recognized[0].segment.text.len()>240_000);
+}
+#[test]
+fn computation_cancellation_keeps_recognized_groups_until_session_clear() {
+    let mut memory=MeetingContext::default();let mut c=Scheduler::default();
+    memory.ledger.observe(speech("first","A retained subject.",10),110);
+    memory.ledger.observe(speech("second","It has an exact condition.",120),220);
+    memory.ledger.associate_remote_utterance(10,["first","second"]);
+    let old=c.confirm("Earlier request".into(),300,290,295);c.next(300);
+    c.confirm("Interrupt request".into(),400,390,395);assert!(c.find_mut(&old).unwrap().cancel.is_cancelled());
+    let view=memory.ledger.context("Recall",None);
+    assert!(view.contains("utterance first"));assert!(view.contains("utterance second"));
+    memory.clear();assert!(memory.ledger.recognized.is_empty());
+    assert!(!memory.ledger.context("Recall",None).contains("controller floor"));
+}
+#[test]
+fn detector_exposes_exact_final_ids_across_pause_and_confirmation_but_not_new_floor() {
+    let mut detector=QuestionDetector::default();detector.semantic_intent=true;detector.conversation_endpoints=true;
+    detector.speech_started(SpeakerSource::Remote,100);
+    detector.transcript(&speech("clause-one","An earlier recognized clause.",100));
+    detector.speech_ended(SpeakerSource::Remote,200);
+    assert!(detector.speech_started(SpeakerSource::Remote,300));
+    detector.transcript(&speech("clause-two","Its subsequent condition.",300));
+    detector.speech_ended(SpeakerSource::Remote,400);assert!(detector.confirm_now(400).is_some());
+    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),vec!["clause-one","clause-two"]);
+    detector.transcript(&speech("clause-two","Its corrected condition.",300));
+    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),vec!["clause-one","clause-two"]);
+    assert!(detector.confirm_now(450).is_some());
+    assert!(!detector.speech_started(SpeakerSource::Remote,500));
+    assert!(detector.recognized_segment_ids().next().is_none());
+    let mut partial=speech("partial","Unfinished",500);partial.final_=false;detector.transcript(&partial);
+    assert!(detector.recognized_segment_ids().next().is_none());
+}
+
+#[test]
+fn recorded_recognized_floor_keeps_the_omitted_source_clause_retrievable() {
+    let fixture:serde_json::Value=serde_json::from_str(include_str!("../../../tests/fixtures/controller-recognized-source-group-v73.json")).unwrap();
+    let mut detector=QuestionDetector::default();
+    detector.semantic_intent=true;detector.independent_asr_endpoint=true;detector.conversation_endpoints=true;
+    let mut ledger=super::ledger::Ledger::default();
+    let base=fixture["hostToNativeOffset"].as_u64().unwrap();
+    for event in fixture["events"].as_array().unwrap() {
+        let p=&event["payload"];
+        match event["name"].as_str().unwrap() {
+            "speech.started"=>{detector.speech_started(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap());},
+            "speech.ended"=>detector.speech_ended(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap()),
+            "speech.activity"=>detector.speech_activity(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap(),p["quiet"].as_bool().unwrap()),
+            "transcript"=>{let segment:TranscriptSegment=serde_json::from_value(p.clone()).unwrap();
+                ledger.observe(segment.clone(),event["receivedHostMs"].as_u64().unwrap()-base);detector.transcript(&segment);},
+            _=>panic!("Unexpected recorded fixture event")
+        }
+    }
+    let now=fixture["confirmedAt"].as_u64().unwrap();
+    let (question,_)=detector.confirm(now).expect("Recorded complete recognized utterance remains acceptable");
+    assert_eq!(question,fixture["expectedRecognizedRequest"].as_str().unwrap());
+    assert_eq!(detector.remote_turn_started_at,fixture["expectedFloor"].as_u64());
+    let expected=fixture["expectedSegmentIds"].as_array().unwrap().iter().map(|v|v.as_str().unwrap()).collect::<Vec<_>>();
+    assert_eq!(detector.recognized_segment_ids().collect::<Vec<_>>(),expected);
+    grow_recognized_retrieval_budget(&mut ledger);
+    let query=fixture["recallQuestion"].as_str().unwrap();
+    let omitted_id=fixture["omittedSourceId"].as_str().unwrap();
+    assert!(!ledger.context(query,None).contains(omitted_id));
+    ledger.associate_remote_utterance(detector.remote_turn_started_at.unwrap(),detector.recognized_segment_ids());
+    let view=ledger.context(query,None);
+    assert!(view.contains("Derived context view"));
+    assert!(view.contains(omitted_id));assert!(view.contains(fixture["omittedSourceText"].as_str().unwrap()));
+    for id in expected {assert!(view.contains(id));}
+    assert_eq!(ledger.recognized.len(),fixture["expectedSegmentIds"].as_array().unwrap().len());
+}

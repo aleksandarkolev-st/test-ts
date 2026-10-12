@@ -19,8 +19,22 @@ pub struct Ledger {
     pub typed_requests:Vec<(String,String,u64)>,
     revisions:HashMap<(String,String),u64>,
     request_revisions:HashMap<u64,u64>,
+    // Derived membership from the detector's exact recognized segment IDs.
+    // Revisions and originals remain independent of these retrieval units.
+    remote_utterances:HashMap<(String,String),u64>,
 }
 impl Ledger {
+    /// Bind only known IDs, without inferring subjects, names or proximity.
+    /// A delayed association cannot silently move an existing source into a
+    /// different utterance. Cancelling computation does not remove membership.
+    pub fn associate_remote_utterance<'a>(&mut self,floor:u64,ids:impl IntoIterator<Item=&'a str>) {
+        for id in ids {
+            let key=(label(SpeakerSource::Remote).to_owned(),id.to_owned());
+            if self.revisions.contains_key(&key) && !self.remote_utterances.contains_key(&key) {
+                self.remote_utterances.insert(key,floor);self.version+=1;
+            }
+        }
+    }
     pub fn accepted_revision(&mut self,utterance:u64)->u64 {
         let next=self.request_revisions.entry(utterance).or_default();
         let revision=*next;*next+=1;revision
@@ -84,8 +98,24 @@ impl Ledger {
                 latest.insert((label(record.segment.source),record.segment.id.as_str()),record);
             }
         }
+        // Retrieve recognized clauses as one source unit when the controller
+        // observed them on the same logical utterance. Independent ASR segment
+        // boundaries must not separate a subject from its pronoun/owner clause.
+        // Every original label, ID, revision, time and exact text stays visible.
+        let mut groups:HashMap<u64,Vec<&Recognition>>=HashMap::new();
         for record in latest.values() {
-            items.push((record.segment.started_at,format!("{} [utterance {}, revision {}, {}..{} ms]: {}",label(record.segment.source),record.segment.id,record.revision,record.segment.started_at,record.segment.ended_at,record.segment.text)));
+            let key=(label(record.segment.source).to_owned(),record.segment.id.clone());
+            if let Some(floor)=self.remote_utterances.get(&key) {
+                groups.entry(*floor).or_default().push(*record);
+            } else {items.push((record.segment.started_at,recognized_source(record)));}
+        }
+        for (floor,mut records) in groups {
+            records.sort_by(|a,b|a.segment.started_at.cmp(&b.segment.started_at)
+                .then_with(||a.segment.ended_at.cmp(&b.segment.ended_at))
+                .then_with(||a.segment.id.cmp(&b.segment.id)));
+            let at=records[0].segment.started_at;
+            let sources=records.into_iter().map(recognized_source).collect::<Vec<_>>().join("\n");
+            items.push((at,format!("RECOGNIZED UTTERANCE [controller floor {floor} ms; eligible prior source clauses]\n{sources}")));
         }
         for suggestion in &self.suggestions {
             // Exact code is a stable archived source, even if the viewport
@@ -147,6 +177,10 @@ impl Ledger {
         }
         format!("ORDERED SESSION SOURCES (recognized speech and displayed suggestions are distinct)\n{}",items.into_iter().map(|(_,text)|text).collect::<Vec<_>>().join("\n\n"))
     }
+}
+fn recognized_source(record:&Recognition)->String {
+    format!("{} [utterance {}, revision {}, {}..{} ms]: {}",label(record.segment.source),record.segment.id,
+        record.revision,record.segment.started_at,record.segment.ended_at,record.segment.text)
 }
 fn label(source:SpeakerSource)->&'static str {match source{SpeakerSource::Remote=>"REMOTE",SpeakerSource::Self_=>"SELF"}}
 

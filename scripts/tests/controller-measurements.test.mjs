@@ -72,3 +72,47 @@ test('missing useful answers can make all-row p95 unverified',()=>{
  assert.equal(allRowP95([1,2,3,null]).p95,null);
  assert.equal(allRowP95(Array.from({length:20},(_,i)=>i===19?null:i)).p95,18);
 });
+
+
+test('undecided automatic candidates do not impose a foreground clearing deadline',()=>{
+ const journal={deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
+  jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:null,latency:{questionConfirmedAt:200}}]}],
+  overlayPaintSamples:[{hostMs:1180,questionId:'parent',visible:true,text:'Prior valid output'},
+   {hostMs:1210,questionId:'parent',visible:true,text:'Prior valid output still streaming'}]};
+ const audit=auditPanelTransitions(journal);
+ assert.equal(audit.transitions.length,0);assert.equal(audit.uncleared,0);assert.equal(audit.oldPaintChangesAfterAcceptance,0);
+});
+test('only paint after semantic foreground authorization is counted as old output',()=>{
+ const journal={deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
+  jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:230,latency:{questionConfirmedAt:200}}]}],
+  overlayPaintSamples:[{hostMs:1180,questionId:'parent',visible:true,text:'Prior output'},
+   {hostMs:1210,questionId:'parent',visible:true,text:'Still authorized prior output'},
+   {hostMs:1215,questionId:'parent',visible:true,text:'Still authorized prior output continued'},
+   {hostMs:1235,questionId:'parent',visible:true,text:'Late prior paint'},
+   {hostMs:1240,questionId:'candidate',visible:true,text:'New decoded answer'}]};
+ const audit=auditPanelTransitions(journal);
+ assert.equal(audit.transitions.length,1);assert.equal(audit.oldPaintChangesAfterAcceptance,1);
+ const transition=audit.transitions[0];assert.equal(transition.inferenceAcceptedAt,200);
+ assert.equal(transition.foregroundAuthorizedAt,230);assert.equal(transition.foregroundAuthorizationSource,'focusAuthorizedAt');
+ assert.deepEqual(transition.acceptedHostMs,{low:1228,high:1232});
+ assert.equal(transition.priorPanelClearedHostMs,1240);
+});
+test('later model intent cannot manufacture a shorter or negative accepted-to-write time',()=>{
+ const latency={questionConfirmedAt:200,pipeline:{generationId:'candidate',transportWrittenAt:202}};
+ const journal={rows:[{round:1,responseVersion:'candidate:0',phase:'complete',answer:'Actual reply',latency}],
+  deepObservations:[{format:'changed_jobs',nativeNow:200,hostBeforeMs:1199,hostAfterMs:1201,
+   jobs:[{confirmed:true,question:{id:'candidate'},focusAuthorizedAt:230,latency}]}],overlayPaintSamples:[]};
+ const measured=measureJournal(journal,{rows:[{round:1,correctness:'correct',completed:true}]});
+ assert.equal(measured.rows[0].acceptedToActualWriteMs,2);
+ assert.equal(measured.acceptedToWriteMs.sampleP95,2);
+});
+test('absent focus diagnostics retain legacy semantics and zero is a valid authorization time',()=>{
+ const make=job=>({deepObservations:[{format:'changed_jobs',nativeNow:0,hostBeforeMs:99,hostAfterMs:101,jobs:[job]}],
+  overlayPaintSamples:[{hostMs:90,questionId:'parent',visible:true,text:'Old output'},{hostMs:110,questionId:'next',visible:false,text:''}]});
+ const base={confirmed:true,question:{id:'next'},latency:{questionConfirmedAt:0}};
+ const legacy=auditPanelTransitions(make(base)),zero=auditPanelTransitions(make({...base,focusAuthorizedAt:0}));
+ assert.equal(legacy.transitions.length,1);assert.equal(zero.transitions.length,1);
+ assert.deepEqual(legacy.transitions[0].acceptedHostMs,zero.transitions[0].acceptedHostMs);
+ assert.equal(zero.transitions[0].foregroundAuthorizedAt,0);
+ assert.equal(auditPanelTransitions(make({...base,focusAuthorizedAt:null})).transitions.length,0);
+});

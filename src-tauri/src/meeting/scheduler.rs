@@ -25,6 +25,8 @@ pub struct Job {
     pub output_observed_at: u64,
     pub detailed: bool,
     pub explicit_request: bool,
+    /// Inference eligibility is distinct from permission to take foreground.
+    pub focus_authorized_at: Option<u64>,
     pub parent_generation_id: Option<String>,
     pub references: Option<FrozenReferences>,
     pub question: CurrentQuestion, pub phase: Phase, pub running: bool,
@@ -144,11 +146,11 @@ impl Scheduler {
             combined
         } else {text}} else {text};
         // One pending burst only; newer speech supersedes an unstarted burst.
-        for j in &mut self.jobs {if !j.running && matches!(j.phase,Phase::Speculative|Phase::Confirmed){j.phase=Phase::Superseded;j.cancel.cancel();}}
+        for j in &mut self.jobs {if !j.running && (j.phase==Phase::Speculative || (j.phase==Phase::Confirmed && (!self.local_revisions || j.focus_authorized_at.is_none()))){j.phase=Phase::Superseded;j.cancel.cancel();}}
         let id=uuid::Uuid::new_v4().to_string();
         let ready_at=if self.active()==0 {now}else{now+BURST_MS};
         let (updates,_)=tokio::sync::watch::channel(crate::openai::codex::QuestionUpdate{acoustic_quiet:false,question:text.clone(),confirmed:false,context:None});
-        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,explicit_request:false,parent_generation_id:None,references:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
+        self.jobs.push(Job {generation_id:id.clone(),context_version:0,utterance_revision:0,retired_at:None,output_observed_at:0,detailed:false,explicit_request:false,focus_authorized_at:None,parent_generation_id:None,references:None,source_text,updates,steer_supported:false,context_key:None,question:CurrentQuestion{id:id.clone(),text,detected_at:now},phase:Phase::Speculative,running:false,confirmed:false,buffer:String::new(),error:None,cancel:CancellationToken::new(),ready_at,
             latency:Latency{speech_stopped_at:stopped,transcript_final_at:transcript,request_sent_at:now,..Default::default()}});
         self.candidate=Some(id.clone());self.prune();id
     }
@@ -161,17 +163,26 @@ impl Scheduler {
         id
     }
     pub fn confirm_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
+        self.confirm_frame_with_context(text,now,stopped,transcript,context,true)
+    }
+    /// Finalized speech can authorize the answering call without cancelling
+    /// existing work before that call decides whether a reply is requested.
+    pub fn confirm_automatic_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>)->String {
+        self.confirm_frame_with_context(text,now,stopped,transcript,context,false)
+    }
+    fn confirm_frame_with_context(&mut self,text:String,now:u64,stopped:u64,transcript:u64,context:Option<String>,focus:bool)->String {
         if self.local_revisions {
-            // ASR revisions never leave the controller. Accepting a request is
-            // the only transition that authorizes inference or display.
+            // ASR revisions stay local. Finalized candidates authorize the
+            // answering call; explicit acceptance or decoded answer intent
+            // separately authorizes foreground output.
             let id=self.propose(text,now,stopped,transcript);
             for old in &mut self.jobs {
-                if old.question.id!=id && matches!(old.phase,Phase::Confirmed|Phase::Speculative) {
+                if old.question.id!=id && matches!(old.phase,Phase::Confirmed|Phase::Speculative) && (focus || old.focus_authorized_at.is_none()) {
                     old.phase=Phase::Superseded;old.retired_at=Some(now);old.cancel.cancel();
                 }
             }
             let job=self.find_mut(&id).unwrap();
-            job.confirmed=true;job.phase=Phase::Confirmed;job.ready_at=now;
+            job.confirmed=true;job.phase=Phase::Confirmed;job.ready_at=now;job.focus_authorized_at=focus.then_some(now);
             job.latency.question_confirmed_at=now;job.latency.speech_stopped_at=stopped;job.latency.transcript_final_at=transcript;
             if let Some(context)=context {job.set_context(context);}
             job.updates.send_modify(|update|{update.question=job.question.text.clone();update.confirmed=true;});
@@ -220,6 +231,25 @@ impl Scheduler {
         job.latency.remote_speech_started_at=utterance;
         Some(id)
     }
+    /// Called only after the decoder verifies answer intent and the runtime
+    /// verifies the exact current question/context/generation frame.
+    pub fn authorize_answer(&mut self,id:&str,now:u64)->bool {
+        let Some(index)=self.jobs.iter().position(|j|j.question.id==id) else{return false};
+        let job=&self.jobs[index];
+        if !job.confirmed || job.cancel.is_cancelled() || job.phase!=Phase::Confirmed || job.latency.completed_at.is_some()
+            || job.focus_authorized_at.is_some(){return false;}
+        self.jobs[index].focus_authorized_at=Some(now);
+        for old in &mut self.jobs[..index] {
+            if matches!(old.phase,Phase::Confirmed|Phase::Speculative) {
+                old.phase=Phase::Superseded;old.retired_at=Some(now);old.cancel.cancel();
+            }
+        }
+        true
+    }
+    pub fn latest_request_error(&self)->Option<&str> {
+        self.jobs.iter().rev().find(|j|j.confirmed && !matches!(j.phase,Phase::Cancelled|Phase::Superseded))
+            .and_then(|j|j.error.as_deref())
+    }
     pub fn next(&mut self,now:u64)->Option<String>{
         if self.local_revisions {
             // One foreground plus one retiring attempt. Do not release remote
@@ -233,7 +263,10 @@ impl Scheduler {
                 }
                 return None;
             }
-            let job=self.jobs.iter_mut().rev().find(|j|j.confirmed && !j.running && !j.cancel.is_cancelled() && j.phase==Phase::Confirmed && j.latency.completed_at.is_none())?;
+            let eligible=|j:&Job|j.confirmed && !j.running && !j.cancel.is_cancelled() && j.phase==Phase::Confirmed && j.latency.completed_at.is_none();
+            let index=self.jobs.iter().rposition(|j|eligible(j)&&j.focus_authorized_at.is_some())
+                .or_else(||self.jobs.iter().rposition(eligible))?;
+            let job=&mut self.jobs[index];
             job.running=true;return Some(job.question.id.clone());
         }
         if self.active()>=2{return None;}
@@ -243,7 +276,7 @@ impl Scheduler {
     pub fn rows(&self)->Vec<Row>{self.jobs.iter().filter(|j|!matches!(j.phase,Phase::Cancelled|Phase::Superseded)).map(|j|Row{id:j.question.id.clone(),text:j.question.text.clone(),state:j.phase,queued:!j.running && j.latency.completed_at.is_none()}).collect()}
     pub fn visible(&self)->Option<&Job>{
         if self.local_revisions {
-            return self.jobs.iter().rev().find(|j|j.confirmed && matches!(j.phase,Phase::Confirmed|Phase::Complete));
+            return self.jobs.iter().rev().find(|j|j.confirmed && j.focus_authorized_at.is_some() && matches!(j.phase,Phase::Confirmed|Phase::Complete));
         }
         let ready=|j:&&Job|!j.steer_supported || !j.buffer.is_empty() || j.error.is_some();
         // Once semantic inference has produced a real answer for the latest
@@ -268,7 +301,12 @@ impl Scheduler {
         let mut update=j.updates.borrow().clone();update.confirmed=false;j.updates.send_replace(update);
         let id=j.question.id.clone();self.candidate=Some(id.clone());Some(id)
     }
-    fn prune(&mut self){let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed) || latest.as_ref()==Some(&j.question.id));}
+    fn prune(&mut self){
+        let latest=self.jobs.iter().rev().find(|j|j.phase==Phase::Complete).map(|j|j.question.id.clone());
+        let foreground=self.jobs.iter().rev().find(|j|j.focus_authorized_at.is_some() && j.confirmed && j.phase==Phase::Complete).map(|j|j.question.id.clone());
+        self.jobs.retain(|j|j.running || matches!(j.phase,Phase::Speculative|Phase::Confirmed)
+            || latest.as_ref()==Some(&j.question.id) || foreground.as_ref()==Some(&j.question.id));
+    }
 }
 #[cfg(test)] mod baseline_tests {
     #[test]

@@ -239,11 +239,62 @@ async fn next_json(socket: &mut Socket) -> Result<Value, String> {
     .map_err(|_| "Local speech handshake timed out".to_string())?
 }
 
+
+// Numeric acceptance diagnostics only: no speech text or audio is retained.
+// Socket writes attest local sink flushing, never peer receipt or decoding.
+#[cfg(all(feature="acceptance",debug_assertions))]
+#[derive(Default)]
+struct TransportCounters {
+    captured_frames: std::sync::atomic::AtomicU64,
+    captured_samples: std::sync::atomic::AtomicU64,
+    queued_chunks: std::sync::atomic::AtomicU64,
+    queued_bytes: std::sync::atomic::AtomicU64,
+    queue_failures: std::sync::atomic::AtomicU64,
+    socket_flushed_chunks: std::sync::atomic::AtomicU64,
+    socket_flushed_bytes: std::sync::atomic::AtomicU64,
+    socket_write_failures: std::sync::atomic::AtomicU64,
+    transcript_events: std::sync::atomic::AtomicU64,
+    final_events: std::sync::atomic::AtomicU64,
+    empty_final_events: std::sync::atomic::AtomicU64,
+    nonempty_transcript_events: std::sync::atomic::AtomicU64,
+    provider_audio_frontier_micros: std::sync::atomic::AtomicU64,
+    provider_frontier_observed: std::sync::atomic::AtomicBool,
+}
+#[cfg(all(feature="acceptance",debug_assertions))]
+impl TransportCounters {
+    fn add(counter:&std::sync::atomic::AtomicU64,value:u64){counter.fetch_add(value,std::sync::atomic::Ordering::Relaxed);}
+    fn captured(&self,samples:usize){Self::add(&self.captured_frames,1);Self::add(&self.captured_samples,samples as u64);}
+    fn queued(&self,bytes:usize){Self::add(&self.queued_chunks,1);Self::add(&self.queued_bytes,bytes as u64);}
+    fn flushed(&self,bytes:usize){Self::add(&self.socket_flushed_chunks,1);Self::add(&self.socket_flushed_bytes,bytes as u64);}
+    fn received(&self,event:&Value,final_:bool,text:&str){
+        Self::add(&self.transcript_events,1);
+        if !text.trim().is_empty(){Self::add(&self.nonempty_transcript_events,1);}
+        if final_ {Self::add(&self.final_events,1);if text.trim().is_empty(){Self::add(&self.empty_final_events,1);}}
+        if let Some(seconds)=event["audio_processed"].as_f64().filter(|v|v.is_finite()&&*v>=0.&&*v<(u64::MAX as f64)/1_000_000.) {
+            self.provider_audio_frontier_micros.fetch_max((seconds*1_000_000.).round()as u64,std::sync::atomic::Ordering::Relaxed);
+            self.provider_frontier_observed.store(true,std::sync::atomic::Ordering::Relaxed);
+        }
+    }
+    fn snapshot(&self)->Value {
+        let load=|c:&std::sync::atomic::AtomicU64|c.load(std::sync::atomic::Ordering::Relaxed);
+        json!({"capturedFrames":load(&self.captured_frames),"capturedSamples":load(&self.captured_samples),
+            "queuedChunks":load(&self.queued_chunks),"queuedBytes":load(&self.queued_bytes),"queueFailures":load(&self.queue_failures),
+            "socketFlushedChunks":load(&self.socket_flushed_chunks),"socketFlushedBytes":load(&self.socket_flushed_bytes),"socketWriteFailures":load(&self.socket_write_failures),
+            "transcriptEvents":load(&self.transcript_events),"nonemptyTranscriptEvents":load(&self.nonempty_transcript_events),
+            "finalEvents":load(&self.final_events),"emptyFinalEvents":load(&self.empty_final_events),
+            "providerAudioFrontierMicros":self.provider_frontier_observed.load(std::sync::atomic::Ordering::Relaxed).then(||load(&self.provider_audio_frontier_micros))})
+    }
+}
+
 pub struct Streaming {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    transport: [Arc<TransportCounters>;2],
     cancel: CancellationToken,
     tasks: Vec<tauri::async_runtime::JoinHandle<()>>,
 }
 impl Streaming {
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    pub fn acceptance_transport(&self)->Value { json!({"remote":self.transport[0].snapshot(),"self":self.transport[1].snapshot(),"scope":"Per-pipeline numeric diagnostic snapshots are not atomic across stages. Socket flushed means local sink success, not server receipt. Provider audio frontier is raw input frontier, not lexical or source-word time."}) }
     pub fn stop(&mut self) {
         self.cancel.cancel();
         for task in self.tasks.drain(..) {
@@ -266,6 +317,8 @@ pub async fn start(
     let remote = service.connect().await?;
     let mic = service.connect().await?;
     let cancel = CancellationToken::new();
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    let transport=[Arc::new(TransportCounters::default()),Arc::new(TransportCounters::default())];
     let capacity = (2000 / service.chunk_ms).max(2) as usize;
     let mut senders = vec![];
     let mut tasks = vec![];
@@ -274,8 +327,11 @@ pub async fn start(
         senders.push(tx);
         let token = cancel.clone();
         let ev = events.clone();
+        #[cfg(all(feature="acceptance",debug_assertions))]
+        let counters=transport[if source==SpeakerSource::Remote {0}else{1}].clone();
         tasks.push(tauri::async_runtime::spawn(async move {
-            let result = stream(source, socket, rx, ev.clone(), token.clone()).await;
+            let result = stream(source, socket, rx, ev.clone(), token.clone(),
+                #[cfg(all(feature="acceptance",debug_assertions))] counters).await;
             if !token.is_cancelled() {
                 if let Err(error) = result {
                     let _ = ev.send(InputEvent::Failure(error)).await;
@@ -284,6 +340,8 @@ pub async fn start(
         }));
     }
     let token = cancel.clone();
+    #[cfg(all(feature="acceptance",debug_assertions))]
+    let capture_transport=transport.clone();
     tasks.push(tauri::async_runtime::spawn(async move {
         let mut pending = [Vec::new(), Vec::new()];
         let mut vads = [super::vad::Vad::default(), super::vad::Vad::default()];
@@ -292,6 +350,8 @@ pub async fn start(
         loop {
             let frame = tokio::select! { _ = token.cancelled() => break, f = frames.recv() => match f { Some(f)=>f, None=>break } };
             let i = if frame.source == SpeakerSource::Remote {0} else {1};
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            capture_transport[i].captured(frame.samples.len());
             let rms = if frame.samples.is_empty(){0.} else {(frame.samples.iter().map(|v|v*v).sum::<f32>()/frame.samples.len() as f32).sqrt()};
             { let mut l = levels.lock().unwrap(); if i==0 {l.0=rms} else {l.1=rms} }
             for event in vads[i].process(&frame.samples, frame.timestamp_ms) {
@@ -306,15 +366,21 @@ pub async fn start(
             pending[i].extend(frame.samples.into_iter().map(pcm16));
             while pending[i].len()>=count {
                 let samples:Vec<_> = pending[i].drain(..count).collect();
-                let bytes = samples.into_iter().flat_map(i16::to_le_bytes).collect();
+                let bytes:Vec<u8> = samples.into_iter().flat_map(i16::to_le_bytes).collect();
+                #[cfg(all(feature="acceptance",debug_assertions))]
+                let byte_count=bytes.len();
                 if senders[i].try_send(Chunk{bytes,started:timing[i].0,ended:timing[i].1.max(frame.timestamp_ms)}).is_err() {
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    TransportCounters::add(&capture_transport[i].queue_failures,1);
                     let _=events.send(InputEvent::Failure("Nemotron cannot keep up with live audio; listening paused".into())).await;
                     return;
                 }
+                #[cfg(all(feature="acceptance",debug_assertions))]
+                capture_transport[i].queued(byte_count);
             }
         }
     }));
-    Ok(Streaming { cancel, tasks })
+    Ok(Streaming { cancel, tasks, #[cfg(all(feature="acceptance",debug_assertions))] transport })
 }
 
 fn pcm16(sample: f32) -> i16 {
@@ -336,6 +402,7 @@ async fn stream(
     mut chunks: mpsc::Receiver<Chunk>,
     events: mpsc::Sender<InputEvent>,
     cancel: CancellationToken,
+    #[cfg(all(feature="acceptance",debug_assertions))] counters:Arc<TransportCounters>,
 ) -> Result<(), String> {
     let (mut write, mut read) = socket.split();
     // Poll both directions independently. Waiting for a write inside the read
@@ -345,10 +412,15 @@ async fn stream(
         loop {
             let chunk=tokio::select!{_=cancel.cancelled()=>return Ok::<(),String>(()),chunk=chunks.recv()=>match chunk{Some(chunk)=>chunk,None=>return Ok(())}};
             {let mut clock=timing.lock().unwrap();if !clock.2{clock.0=chunk.started;}clock.1=chunk.ended;}
-            tokio::select!{
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            let byte_count=chunk.bytes.len();
+            let sent=tokio::select!{
                 _=cancel.cancelled()=>return Ok(()),
-                sent=tokio::time::timeout(Duration::from_secs(2),write.send(Message::Binary(chunk.bytes.into())))=>sent.map_err(|_|"Local speech stream stalled")?.map_err(|_|"Local speech stream disconnected")?
-            }
+                sent=tokio::time::timeout(Duration::from_secs(2),write.send(Message::Binary(chunk.bytes.into())))=>sent.map_err(|_|"Local speech stream stalled").and_then(|result|result.map_err(|_|"Local speech stream disconnected"))
+            };
+            #[cfg(all(feature="acceptance",debug_assertions))]
+            if sent.is_ok(){counters.flushed(byte_count);}else{TransportCounters::add(&counters.socket_write_failures,1);}
+            sent?;
         }
     };
     let receiving=async {
@@ -365,6 +437,8 @@ async fn stream(
                         Some("conversation.item.input_audio_transcription.completed")=>{text=event["transcript"].as_str().ok_or("Missing final transcript")?.into();true},
                         Some("error")=>return Err("Nemotron rejected the live audio stream".into()),_=>continue,
                     };
+                    #[cfg(all(feature="acceptance",debug_assertions))]
+                    counters.received(&event,final_,&text);
                     if text.len()>32000{return Err("Local transcript exceeds the utterance limit".into());}
                     let (started,ended)={let mut clock=timing.lock().unwrap();clock.2=!final_;(clock.0,clock.1)};
                     #[cfg(all(feature="acceptance",debug_assertions))]
@@ -428,7 +502,8 @@ mod tests {
             std::future::pending::<()>().await;
         });
         let (socket,_)=connect_async(format!("ws://{address}")).await.unwrap();let (tx,rx)=mpsc::channel(2);let (events,mut received)=mpsc::channel(4);
-        let cancel=CancellationToken::new();let job=tokio::spawn(stream(SpeakerSource::Remote,socket,rx,events,cancel.clone()));
+        let cancel=CancellationToken::new();let job=tokio::spawn(stream(SpeakerSource::Remote,socket,rx,events,cancel.clone(),
+            #[cfg(all(feature="acceptance",debug_assertions))] Arc::new(TransportCounters::default())));
         tx.send(Chunk{bytes:vec![0;16*1024*1024],started:100,ended:600}).await.unwrap();
         let event=tokio::time::timeout(Duration::from_secs(4),received.recv()).await.unwrap().unwrap();
         assert!(matches!(event,InputEvent::Transcript(segment) if segment.final_ && segment.text=="What is our launch target?"));
@@ -474,6 +549,7 @@ mod tests {
                 rx,
                 events.clone(),
                 cancel.clone(),
+                #[cfg(all(feature="acceptance",debug_assertions))] Arc::new(TransportCounters::default()),
             )));
             tx.send(Chunk {
                 bytes: value.to_le_bytes().to_vec(),
@@ -513,5 +589,36 @@ mod tests {
                 .is_ok());
         }
         server.abort();
+    }
+}
+
+#[cfg(all(test,feature="acceptance",debug_assertions))]
+mod transport_counter_tests {
+    use super::*;
+    #[test]
+    fn stages_do_not_infer_receipt_or_nonempty_recognition(){
+        let c=TransportCounters::default();c.captured(2560);c.queued(5120);
+        assert_eq!(c.snapshot()["socketFlushedChunks"],0);assert_eq!(c.snapshot()["transcriptEvents"],0);
+        c.flushed(5120);assert_eq!(c.snapshot()["transcriptEvents"],0);
+        c.received(&json!({"audio_processed":0.16}),true,"");let s=c.snapshot();
+        assert_eq!(s["capturedSamples"],2560);assert_eq!(s["queuedBytes"],5120);assert_eq!(s["socketFlushedBytes"],5120);
+        assert_eq!(s["finalEvents"],1);assert_eq!(s["emptyFinalEvents"],1);assert_eq!(s["nonemptyTranscriptEvents"],0);assert_eq!(s["providerAudioFrontierMicros"],160000);
+    }
+    #[test]
+    fn frontiers_are_optional_monotonic_and_not_lexical_time(){
+        let c=TransportCounters::default();assert!(c.snapshot()["providerAudioFrontierMicros"].is_null());
+        for event in [json!({}),json!({"audio_processed":-1}),json!({"audio_processed":"bad"})]{c.received(&event,false,"");}
+        assert!(c.snapshot()["providerAudioFrontierMicros"].is_null());
+        c.received(&json!({"audio_processed":0}),false,"");assert_eq!(c.snapshot()["providerAudioFrontierMicros"],0);
+        c.received(&json!({"audio_processed":7.5}),false,"test");c.received(&json!({"audio_processed":2}),true,"test");
+        assert_eq!(c.snapshot()["providerAudioFrontierMicros"],7500000);assert_eq!(c.snapshot()["nonemptyTranscriptEvents"],2);
+    }
+    #[test]
+    fn channels_and_new_pipeline_counters_are_independent(){
+        let sources=[TransportCounters::default(),TransportCounters::default()];sources[0].captured(17);sources[1].captured(31);
+        TransportCounters::add(&sources[0].queue_failures,1);TransportCounters::add(&sources[1].socket_write_failures,1);
+        assert_eq!(sources[0].snapshot()["capturedSamples"],17);assert_eq!(sources[1].snapshot()["capturedSamples"],31);
+        assert_eq!(sources[0].snapshot()["socketWriteFailures"],0);assert_eq!(sources[1].snapshot()["queueFailures"],0);
+        assert_eq!(TransportCounters::default().snapshot()["capturedSamples"],0);
     }
 }

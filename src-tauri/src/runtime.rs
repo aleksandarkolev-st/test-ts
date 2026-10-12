@@ -271,10 +271,11 @@ async fn actor(
                         let mut latency=job.latency.clone();
                         if let Some(trace)=traces.get(&job.question.id){latency.pipeline=trace.snapshot();}
                         serde_json::json!({"question":job.question,"phase":job.phase,"confirmed":job.confirmed,
-                            "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,
+                            "running":job.running,"cancelled":job.cancel.is_cancelled(),"answer":job.buffer,"focusAuthorizedAt":job.focus_authorized_at,
                             "error":job.error,"latency":latency,"selectedContext":job.updates.borrow().context.clone()})
                     }).collect::<Vec<_>>();
-                    let _=reply.send(serde_json::json!({"nativeNow":now,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version,
+                    let speech_transport=session.as_ref().and_then(|s|s.pipeline.as_ref()).and_then(|p|match &p.transcription{SpeechPipeline::Nemotron(n)=>Some(n.acceptance_transport()),SpeechPipeline::Whisper(_)=>None});
+                    let _=reply.send(serde_json::json!({"nativeNow":now,"speechTransport":speech_transport,"view":engine.view,"jobs":jobs,"archive":{"recognizedRevisions":engine.context.ledger.recognized.len(),"suggestions":engine.context.ledger.suggestions.len(),"accepted":engine.context.ledger.accepted.len(),"version":engine.context.ledger.version,
                         "recognizedRevisionBytes":engine.context.ledger.recognized.iter().map(|r|r.segment.text.len()).sum::<usize>(),
                         "generatedBytes":engine.context.ledger.suggestions.iter().map(|s|s.generated.len()).sum::<usize>(),
                         "paintedRanges":engine.context.ledger.suggestions.iter().map(|s|s.painted_ranges.len()).sum::<usize>(),
@@ -331,6 +332,9 @@ async fn actor(
                 Control::AnswerNow(expected)=>{if let Some(s)=session.as_ref(){if conversation_input_enabled(&engine)&&answers.candidate.as_deref()==Some(expected.as_str()) {
                     let now=s.clock.elapsed().as_millis()as u64;
                     if let Some((question,stopped))=engine.detector.confirm_now(now) {
+                        if let Some(floor)=engine.detector.remote_turn_started_at {
+                            engine.context.ledger.associate_remote_utterance(floor,engine.detector.recognized_segment_ids());
+                        }
                         cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
                         let context=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);
                         let id=answers.confirm_explicit_with_context(question,now,stopped,transcript_at,context);
@@ -437,7 +441,10 @@ async fn actor(
                             }
                         }
                     }
-                    let Some(w)=gate_question_work(job,w)else{continue};
+                    let Some((w,focus_changed))=prepare_answer_work(&mut answers,&id,w,now)else{continue};
+                    let job=answers.find_mut(&id).unwrap();
+                    let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
+                    if focus_changed {emit(&app,"question.focus_accepted",serde_json::json!({"id":id,"timestamp":now,"inferenceAcceptedAt":job.latency.question_confirmed_at,"decision":"model_answer_intent"}));}
                     match w {
                         Work::NoReply(_,_,_) if valid=>{job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.buffer.clear();job.latency.completed_at=Some(now);emit(&app,"question.ignored",serde_json::json!({"id":id,"timestamp":now}));},
                         Work::Sent(_,t) if valid=>job.latency.request_sent_at=t,
@@ -535,6 +542,9 @@ async fn actor(
                         } else {intent_gate.invalidate();}
                     }
                     if let Some((question,stopped))=engine.detector.confirm(now) {
+                        if let Some(floor)=engine.detector.remote_turn_started_at {
+                            engine.context.ledger.associate_remote_utterance(floor,engine.detector.recognized_segment_ids());
+                        }
                         emit(&app,"asr.finalization_ready",serde_json::json!({"floor":engine.detector.remote_turn_started_at,
                             "speechStoppedAt":stopped,"lastRemoteActivity":engine.detector.last_remote_activity(),"timestamp":now}));
                         let background=intent_mode==meeting::intent::Mode::Learned&&meeting::intent::background_enabled()&&engine.detector.remote_turn_started_at.is_some_and(|floor|intent_gate.background(floor,&question,&engine.context.classifier_context(floor),0.95));
@@ -542,7 +552,7 @@ async fn actor(
                             answers.resumed();emit(&app,"intent.background_ignored",serde_json::json!({"timestamp":now,"floor":engine.detector.remote_turn_started_at}));
                             sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
                         } else {
-                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);if let Some(job)=answers.find_mut(&id){job.context_version=engine.context.ledger.version;job.utterance_revision=revision;}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                            let excerpts=engine.context.answer_context_for_utterance(&question,speech_metrics.remote_speech_started_at);let id=answers.confirm_automatic_with_context(question,now,stopped,transcript_at,Some(excerpts));if let Some(job)=answers.find_mut(&id){job.latency.remote_speech_started_at=speech_metrics.remote_speech_started_at;job.latency.first_remote_partial_at=speech_metrics.first_remote_partial_at;job.latency.first_credible_candidate_at=speech_metrics.first_credible_candidate_at;job.latency.remote_partial_updates=speech_metrics.remote_partial_updates;if job.latency.completed_at.is_some()&&job.error.is_none(){engine.context.remember_answer_at(&id,&job.question.text,&job.buffer,job.question.detected_at);}}if let Some(trace)=timings.lock().unwrap().get(&id){trace.confirmed_at(now);if answers.jobs.iter().any(|job|job.question.id==id&&job.latency.first_token_at.is_none()){trace.reset_answer();}}engine.context.ledger.accept(&id,&answers.find_mut(&id).unwrap().question.text,now);let revision=speech_metrics.remote_speech_started_at.map(|floor|engine.context.ledger.accepted_revision(floor)).unwrap_or(0);if let Some(job)=answers.find_mut(&id){job.context_version=engine.context.ledger.version;job.utterance_revision=revision;}emit(&app,"question.confirmed",serde_json::json!({"id":id,"timestamp":now}));sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
                         }
                     }
                     if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
@@ -782,9 +792,11 @@ fn conversation_input_enabled(engine:&Engine)->bool {
 }
 fn sync_answers(engine: &mut Engine, answers: &meeting::scheduler::Scheduler) {
     engine.view.questions=answers.rows();
+    let request_error=answers.latest_request_error().map(str::to_owned);
+    if let Some(error)=request_error.as_ref(){engine.view.error=Some(error.clone());}
     if let Some(j)=answers.visible() {
-        engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=j.error.clone();
-        engine.view.status=if j.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
+        engine.view.question=Some(j.question.clone());engine.view.answer=j.buffer.clone();engine.view.latency=Some(j.latency.clone());engine.view.error=request_error.or_else(||j.error.clone());
+        engine.view.status=if engine.view.error.is_some(){"error"}else if !j.buffer.is_empty(){"answer"}else{"thinking"}.into();
     } else if answers.busy() {engine.view.question=None;engine.view.answer.clear();engine.view.latency=None;engine.view.status="question".into();}
     else if engine.view.active && engine.view.question.is_none() && !engine.view.manual && engine.view.status=="question" {
         engine.view.status="listening".into();engine.view.latency=None;
@@ -940,6 +952,77 @@ mod answer_view_tests {
         job.running=false;assert_eq!(answers.next(20),Some(id));
     }
     #[test]
+    fn automatic_ignore_cannot_cancel_an_authorized_stream_and_keeps_exact_memory() {
+        let mut engine=Engine::default();engine.view.active=true;
+        let mut answers=meeting::scheduler::Scheduler::default();
+        let parent=answers.confirm_with_context("Earlier arbitrary request".into(),100,90,95,Some("Original exact context".into()));
+        answers.next(100);answers.find_mut(&parent).unwrap().buffer="Exact displayed partial code".into();
+        engine.context.ledger.generated(&parent,"Earlier arbitrary request","Exact displayed partial code");
+        engine.context.ledger.displayed(&parent,"Earlier arbitrary request","Exact displayed partial code",110);
+        let ignored=answers.confirm_automatic_with_context("Opaque later recognized content".into(),200,180,190,Some("Frozen next context".into()));
+        answers.next(200);sync_answers(&mut engine,&answers);
+        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
+        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
+        let key=crate::openai::codex::context_key("Frozen next context");
+        assert!(matches!(prepare_answer_work(&mut answers,&ignored,Work::NoReply(ignored.clone(),"Opaque later recognized content".into(),key),250),Some((Work::NoReply(_,_,_),false))));
+        let job=answers.find_mut(&ignored).unwrap();job.phase=meeting::scheduler::Phase::Cancelled;job.confirmed=false;job.latency.completed_at=Some(250);job.running=false;
+        sync_answers(&mut engine,&answers);
+        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
+        assert_eq!(engine.view.answer,"Exact displayed partial code");
+        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
+        assert_eq!(engine.context.ledger.suggestions[0].generated,"Exact displayed partial code");
+    }
+    #[test]
+    fn exact_frame_answer_intent_takes_focus_but_stale_or_empty_frames_do_not() {
+        let mut answers=meeting::scheduler::Scheduler::default();
+        let parent=answers.confirm("Earlier request".into(),100,90,95);answers.next(100);
+        let newer=answers.confirm_automatic_with_context("Arbitrary next request".into(),200,180,190,Some("Exact next context".into()));answers.next(200);
+        let key=crate::openai::codex::context_key("Exact next context");
+        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Wrong frame".into(),key,"Answer".into()),210).is_none());
+        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),crate::openai::codex::context_key("Obsolete context"),"Answer".into()),211).is_none());
+        assert!(matches!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),key,String::new()),212),Some((Work::Delta(_,_),false))));
+        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
+        assert!(matches!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary next request".into(),key,"Current answer".into()),220),Some((Work::Delta(_,_),true))));
+        assert!(answers.find_mut(&parent).unwrap().cancel.is_cancelled());
+        assert_eq!(answers.visible().unwrap().question.id,newer);
+        assert_eq!(answers.find_mut(&newer).unwrap().latency.question_confirmed_at,200);
+        assert_eq!(answers.find_mut(&newer).unwrap().focus_authorized_at,Some(220));
+        assert_eq!(answers.active(),2);
+    }
+    #[test]
+    fn terminal_provisional_error_cannot_be_reactivated_by_a_late_answer_frame() {
+        let mut answers=meeting::scheduler::Scheduler::default();
+        let parent=answers.confirm("Foreground".into(),100,90,95);answers.next(100);
+        let newer=answers.confirm_automatic_with_context("Arbitrary candidate".into(),200,180,190,Some("Frozen context".into()));answers.next(200);
+        let job=answers.find_mut(&newer).unwrap();job.error=Some("Transport error".into());job.phase=meeting::scheduler::Phase::Complete;job.latency.completed_at=Some(250);
+        let key=crate::openai::codex::context_key("Frozen context");
+        assert!(prepare_answer_work(&mut answers,&newer,Work::QuestionDelta(newer.clone(),"Arbitrary candidate".into(),key,"Late answer".into()),300).is_none());
+        assert!(!answers.find_mut(&parent).unwrap().cancel.is_cancelled());
+        assert_eq!(answers.visible().unwrap().question.id,parent);
+        assert_eq!(answers.find_mut(&newer).unwrap().focus_authorized_at,None);
+    }
+    #[test]
+    fn empty_scheduler_does_not_hide_a_paused_capture_failure() {
+        let mut engine=Engine::default();engine.view.active=true;engine.view.paused=true;
+        engine.view.status="error".into();engine.view.error=Some("Capture disconnected".into());
+        sync_answers(&mut engine,&meeting::scheduler::Scheduler::default());
+        assert_eq!(engine.view.error.as_deref(),Some("Capture disconnected"));
+    }
+    #[test]
+    fn provisional_failure_is_displayed_without_replacing_the_foreground_answer() {
+        let mut engine=Engine::default();engine.view.active=true;
+        let mut answers=meeting::scheduler::Scheduler::default();
+        let parent=answers.confirm("Foreground".into(),100,90,95);answers.next(100);
+        answers.find_mut(&parent).unwrap().buffer="Exact existing partial".into();
+        let failed=answers.confirm_automatic_with_context("Arbitrary candidate".into(),200,180,190,None);
+        let job=answers.find_mut(&failed).unwrap();job.error=Some("Capacity unavailable".into());job.phase=meeting::scheduler::Phase::Complete;job.latency.completed_at=Some(250);
+        sync_answers(&mut engine,&answers);
+        assert_eq!(engine.view.question.as_ref().unwrap().id,parent);
+        assert_eq!(engine.view.answer,"Exact existing partial");
+        assert_eq!(engine.view.error.as_deref(),Some("Capacity unavailable"));
+        assert!(conversation_input_enabled(&engine));
+    }
+    #[test]
     fn ignored_automatic_turn_returns_to_listening_without_overwriting_manual_input() {
         let mut engine=Engine::default();engine.view.active=true;engine.view.status="question".into();
         let mut answers=meeting::scheduler::Scheduler{local_revisions:false,semantic_intent:false,..Default::default()};
@@ -964,6 +1047,16 @@ mod answer_view_tests {
         assert!(engine.context.prompt("Why 7?").contains("may be unfinished"));
         assert!(engine.view.latency.as_ref().unwrap().completed_at.is_none());
     }
+}
+fn prepare_answer_work(answers:&mut meeting::scheduler::Scheduler,id:&str,work:Work,now:u64)->Option<(Work,bool)> {
+    let job=answers.find_mut(id)?;
+    let valid=!job.cancel.is_cancelled() && !matches!(job.phase,meeting::scheduler::Phase::Cancelled|meeting::scheduler::Phase::Superseded);
+    if matches!(&work,Work::QuestionDelta(_,_,_,_)) && (!valid || job.latency.completed_at.is_some()){return None;}
+    let accepts=matches!(&work,Work::QuestionDelta(_,question,key,text)
+        if valid && job.confirmed && !text.is_empty() && job.accepts_stream(question,key));
+    let work=gate_question_work(job,work)?;
+    let changed=accepts && answers.authorize_answer(id,now);
+    Some((work,changed))
 }
 fn gate_question_work(job:&meeting::scheduler::Job,work:Work)->Option<Work> {
     match work {

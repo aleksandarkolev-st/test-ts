@@ -1,0 +1,151 @@
+{
+  "recordedAt": "2026-10-13T07:48:17.221Z",
+  "transformations": [
+    {
+      "source": ".local/observed-generation-projection-v73.mjs",
+      "sourceSha256": "671df676ee2b8a8fc9361ebe1cbf0f394ca0cb1f0ebf51ac75264e61b47073f9",
+      "target": "scripts/lib/observed-generation-projection.mjs",
+      "targetSha256": "fbfa33c89eff8dcf40b1f6aea16469faa1a694fe454177fafc2438d85bfa8e5d",
+      "replacements": [
+        [
+          "'../scripts/lib/deep-observations.mjs'",
+          "'./deep-observations.mjs'"
+        ]
+      ],
+      "scope": "Only module/tool/harness paths transformed; algorithm and acceptance contracts unchanged."
+    },
+    {
+      "source": ".local/cuda-warp-contract-harness-v73.hpp",
+      "sourceSha256": "1806df167945c98a13833eadf85e01d6328ad4cad8baa13b890d58a9e539c757",
+      "target": "scripts/fixtures/cuda-warp-contract-harness-v73.hpp",
+      "targetSha256": "1806df167945c98a13833eadf85e01d6328ad4cad8baa13b890d58a9e539c757",
+      "replacements": [],
+      "scope": "Byte-identical prepared evaluator."
+    },
+    {
+      "source": ".local/cuda-warp-contract-harness-sanity-v73.cpp",
+      "sourceSha256": "6de55ecc081c7b771b37b9d7e6d53d757697273a0fe80a98e2cb7c638b858c76",
+      "target": "scripts/fixtures/cuda-warp-contract-harness-sanity-v73.cpp",
+      "targetSha256": "6de55ecc081c7b771b37b9d7e6d53d757697273a0fe80a98e2cb7c638b858c76",
+      "replacements": [],
+      "scope": "Byte-identical prepared evaluator."
+    },
+    {
+      "source": ".local/check-reviewed-warp-sources-v73.mjs",
+      "sourceSha256": "29c5ac742470ef4a54a6dce3cb97d67a951b45e06d4d821352fead4e5b79a225",
+      "target": "scripts/check-reviewed-warp-sources.mjs",
+      "targetSha256": "bdc22c38990d3e772dd3f2b045e8baf5433eae0cd0aa8060c176d2b102d1351f",
+      "replacements": [
+        [
+          ".local/cuda-warp-contract-harness-v73.hpp",
+          "scripts/fixtures/cuda-warp-contract-harness-v73.hpp"
+        ]
+      ],
+      "scope": "Only module/tool/harness paths transformed; algorithm and acceptance contracts unchanged."
+    },
+    {
+      "source": ".local/check-sql-declared-actor-v73.mjs",
+      "sourceSha256": "362fb239994433ea6c146c44c989242f5ad4cca6740c9a21ec6be8df1b9f29b7",
+      "target": "scripts/check-sql-declared-actor.mjs",
+      "targetSha256": "362fb239994433ea6c146c44c989242f5ad4cca6740c9a21ec6be8df1b9f29b7",
+      "replacements": [],
+      "scope": "Byte-identical prepared evaluator."
+    },
+    {
+      "source": ".local/check-reviewed-extra-cuda-v73.mjs",
+      "sourceSha256": "f901116b77db222d458a84fffb19f0cf76a2aa677435756b88e632d8ef3b573e",
+      "target": "scripts/check-reviewed-extra-cuda.mjs",
+      "targetSha256": "f901116b77db222d458a84fffb19f0cf76a2aa677435756b88e632d8ef3b573e",
+      "replacements": [],
+      "scope": "Byte-identical prepared evaluator."
+    },
+    {
+      "source": ".local/run-warp-harness-sanity-v73.mjs",
+      "sourceSha256": "78aa0b3dc47f8e925d6bddea485b84d71bd4fc68321840f53c85996b85c164c0",
+      "target": "scripts/check-warp-harness-sanity.mjs",
+      "targetSha256": "2baf218e28fd40c1ab25fb41920b1e7a2bae68b440b1d37b9a19426cb011d538",
+      "replacements": [
+        [
+          ".local/cuda-warp-contract-harness-v73.hpp",
+          "scripts/fixtures/cuda-warp-contract-harness-v73.hpp"
+        ],
+        [
+          ".local/cuda-warp-contract-harness-sanity-v73.cpp",
+          "scripts/fixtures/cuda-warp-contract-harness-sanity-v73.cpp"
+        ]
+      ],
+      "scope": "Only module/tool/harness paths transformed; algorithm and acceptance contracts unchanged."
+    },
+    {
+      "source": ".local/run-reviewed-long-sources-v73.mjs",
+      "sourceSha256": "948f9b02c39aed96e0a7018072d87595e4f1ef96592d65e27256260fc18ceeb7",
+      "target": "scripts/check-reviewed-long-sources.mjs",
+      "targetSha256": "d62e4a17a8b206e20f25bde386975d107e083c687ef658beb55b7ea0cf3e1593",
+      "replacements": [
+        [
+          "'./observed-generation-projection-v73.mjs'",
+          "'./lib/observed-generation-projection.mjs'"
+        ],
+        [
+          ".local/observed-generation-projection-v73.mjs",
+          "scripts/lib/observed-generation-projection.mjs"
+        ],
+        [
+          ".local/check-reviewed-warp-sources-v73.mjs",
+          "scripts/check-reviewed-warp-sources.mjs"
+        ],
+        [
+          ".local/check-sql-declared-actor-v73.mjs",
+          "scripts/check-sql-declared-actor.mjs"
+        ],
+        [
+          ".local/check-reviewed-extra-cuda-v73.mjs",
+          "scripts/check-reviewed-extra-cuda.mjs"
+        ]
+      ],
+      "scope": "Only module/tool/harness paths transformed; algorithm and acceptance contracts unchanged."
+    },
+    {
+      "source": ".local/run-reliability-short-source-checks-v73.mjs",
+      "sourceSha256": "64e06d74edf1af1008ae031246f4cc054ae8b26c854d8dba99eb29f028cd2e3e",
+      "target": "scripts/check-reliability-short-sources.mjs",
+      "targetSha256": "64e06d74edf1af1008ae031246f4cc054ae8b26c854d8dba99eb29f028cd2e3e",
+      "replacements": [],
+      "scope": "Byte-identical prepared evaluator."
+    },
+    {
+      "source": ".local/export-reliability-final-age-v73.mjs",
+      "sourceSha256": "25031072677c45976636e299ebb7f74bc582acdbc8318c6dae9e9e15cf9283a6",
+      "target": "scripts/export-controller-age-review.mjs",
+      "targetSha256": "316028654ca82f4db27e8d9786ead590f20a8276bedbd2e96be90de3fea68705",
+      "replacements": [
+        [
+          "'../scripts/lib/deep-observations.mjs'",
+          "'./lib/deep-observations.mjs'"
+        ],
+        [
+          "'../scripts/lib/controller-measurements.mjs'",
+          "'./lib/controller-measurements.mjs'"
+        ]
+      ],
+      "scope": "Only module/tool/harness paths transformed; algorithm and acceptance contracts unchanged."
+    }
+  ],
+  "plans": [
+    {
+      "source": ".local/reliability-codex-final-source-plan-with-extra-v73.json",
+      "sourceSha256": "e66197ecface63123b2d419d262fdeb70e66fb0b5ed2aad34977175aecdb1cfa",
+      "target": "artifacts/controller-v73/reliability-codex-reviewable-source-plan.json",
+      "targetSha256": "278247bf1109c3a3a73f8cde192a57b529588d4716360907972715aba23969b8",
+      "scope": "Only evaluator entry-point paths changed; original review binding and every external source contract preserved."
+    },
+    {
+      "source": ".local/reliability-plan-final-source-plan-with-extra-v73.json",
+      "sourceSha256": "1d4a4a53ab24a04199f77a3b59f198abbe82711fe1956485d0fd4b389d12d979",
+      "target": "artifacts/controller-v73/reliability-plan-reviewable-source-plan.json",
+      "targetSha256": "dc3e9f06ad996b0fd3d9ea1c94d1827f3706252b1ccc5e3b4f69582b9a24843b",
+      "scope": "Only evaluator entry-point paths changed; original review binding and every external source contract preserved."
+    }
+  ],
+  "scope": "Reviewable independent validation tools promoted after both capture queues finish. Prepared source files preserved. This log establishes path transformations only, not successful compilation/execution or model correctness. No test oracle enters production."
+}

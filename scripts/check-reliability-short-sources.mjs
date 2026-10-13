@@ -1,0 +1,34 @@
+// Invoke only after both actual new-build capture queues complete.
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {spawn,execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const sha=x=>createHash('sha256').update(x).digest('hex');
+const captures=[];for(const file of ['artifacts/controller-v73/reliability-live-r1/verification.json','artifacts/controller-v73/reliability-controls-r1/verification.json']){const b=await readFile(file),q=JSON.parse(b);assert.equal(q.status,'complete_pending_manual_review','Do not execute sources while either live queue is capturing/waiting');captures.push({file,sha256:sha(b)});}
+const probe="$ErrorActionPreference='Stop'; $ownedMatches=@(Get-CimInstance Win32_Process -Filter \"Name = 'meeting-copilot.exe' OR Name = 'nemo-speech.exe'\" | Where-Object { $_.ExecutablePath -and ($_.ExecutablePath.StartsWith('C:\\Users\\polek\\Downloads\\test-ts\\.local\\controller-',[System.StringComparison]::OrdinalIgnoreCase) -or $_.ExecutablePath.StartsWith('C:\\Users\\polek\\Downloads\\test-ts\\.local\\nemotron\\',[System.StringComparison]::OrdinalIgnoreCase)) } | Select-Object ProcessId,Name); ConvertTo-Json -InputObject $ownedMatches -Compress; exit 0";
+assert.equal(execFileSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',probe],{windowsHide:true,encoding:'utf8'}).trim(),'[]','Owned native/ASR still alive');
+const attempt=process.argv[2]??'r1';assert(/^r\d+$/.test(attempt));
+const out='artifacts/controller-v73/reliability-short-source-checks-'+attempt;await mkdir(out);const report={status:'verifying',startedAt:new Date().toISOString(),captures,steps:[],scope:'Actual new-binary short sources only; exact original contracts and alternate emitted-interface diagnostics separate. Source-specific manual reviews pinned. No repairs or expected answers enter production. Does not cover new113-turn sources; they require independently reviewed subsequent checks. Finite tests do not replace proof review or NVIDIAhardware execution.'};
+const persist=()=>writeFile(out+'/verification.json',JSON.stringify(report,null,2));await persist();
+async function run(name,file,args){const s={name,file,args,startedAt:new Date().toISOString()};report.steps.push(s);await persist();let log='';const code=await new Promise(resolve=>{const p=spawn(file,args,{windowsHide:true,stdio:['ignore','pipe','pipe']});s.processId=p.pid;p.stdout.on('data',d=>{log+=d;process.stdout.write(d);});p.stderr.on('data',d=>log+=d);p.once('error',e=>{log+=String(e);resolve(-1);});p.once('exit',resolve);});await writeFile(out+'/'+name+'.log',log);Object.assign(s,{code,completedAt:new Date().toISOString()});await persist();assert.equal(code,0,'Infrastructure failed; preserve failure, not a model verdict');}
+try{for(const backend of ['codex','chatgpt'])for(const label of ['reasoning','behavior','inflight-fault','input-fidelity']){
+ const reviewFile=backend==='codex'&&label==='behavior'?'docs/evidence/controller-reliability-codex-behavior-candidate-v73.json':`docs/evidence/controller-reliability-${backend==='chatgpt'?'plan':backend}-${label}-v73.json`,rb=await readFile(reviewFile),rootReview=JSON.parse(rb);
+ const review=rootReview.cells?.find(c=>c.label===label)??rootReview;
+ const file=`artifacts/controller-v73/native/reliability-v73-r1-${backend}-${label}/interview.json`,b=await readFile(file),j=JSON.parse(b);assert(j.status==='complete'&&j.stoppedCleanly);assert.equal(sha(b),review.journal?.sha256??review.sourceJournal?.sha256);
+ for(const r of review.rows)assert.equal(sha(j.rows.find(s=>s.round===r.round).answer),r.answerSha256,'Do not execute a different source from the manually reviewed answer');
+ const base={journalSha256:sha(b)},specs=[];
+ if(label==='reasoning'||label==='behavior'||label==='inflight-fault'){
+  const rounds=label==='reasoning'?[1,3,7]:label==='behavior'?[5]:[2,3,4,5];
+  specs.push(['cpp','scripts/check-controller-answer-code.mjs',rounds.map(round=>({round,kind:'cpp-self-test',scope:'Actual complete self-contained recorded program and original model test main, unchanged. Finite threaded contention does not force spurious failure or prove all schedules.'}))]);
+ }else{
+  specs.push(['strict-python','scripts/check-controller-answer-python.py',[...[4,5,6,13,14,15].map(round=>({round,kind:'route',function:'classify_route',scope:'Original classify_route and uppercase statuses, no name or output normalization.'})),...[7,8,9,10,11,12].map(round=>({round,kind:'float-rationalization',function:'f',scope:'Original lowercase f, actual unchanged source.'}))]]);
+  specs.push(['float-diagnostic','scripts/check-controller-answer-python.py',[8,9,10,11].map(round=>({round,kind:'float-rationalization',function:'F',scope:'Actual uppercase F diagnostic only; strict original interface failure and independently reviewed proof gaps/failures remain.'})).concat(backend==='chatgpt'?[{round:8,kind:'float-normal-boundary',function:'F',scope:'New actual source atx2^1021: normal returned quotient despite strict subnormal exact target. Refutes actual printed universal premise, final bound may still hold.'}]:[])]);
+  specs.push(['route-diagnostic','scripts/check-controller-route-diagnostic.py',[5,6,13,14].map(round=>({round,function:backend==='codex'&&[5,14].includes(round)||backend==='chatgpt'&&round===5?'classify_route':'classify_root',answerSha256:review.rows.find(r=>r.round===round).answerSha256,expectedStatuses:{UNREACHABLE:'unreachable',FINITE:'finite',UNBOUNDED:'unbounded'},scope:'Explicit actual emitted name/lowercase-status diagnostic, no source change; original interface failures remain.'}))]);
+ }
+ for(const [kind,script,checks]of specs){const name=backend+'-'+label+'-'+kind,sf=out+'/'+name+'-spec.json';await writeFile(sf,JSON.stringify({...base,checks},null,2));const stepReview={file:reviewFile,sha256:sha(rb)};await run(name,script.endsWith('.py')?'python':process.execPath,[script,file,sf,out+'/'+name]);report.steps.at(-1).manualReview=stepReview;report.steps.at(-1).journal={file,sha256:sha(b)};
+  const resultBytes=await readFile(out+'/'+name+'/results.json'),result=JSON.parse(resultBytes),infra=result.results?.find(r=>r.compile?.error||r.execution?.error);
+  report.steps.at(-1).resultsSha256=sha(resultBytes);
+  if(infra){report.steps.at(-1).infrastructureFailure=infra.compile?.error??infra.execution.error;await persist();throw Error('Recorded compiler/executable spawn failure; no model verdict: '+report.steps.at(-1).infrastructureFailure);}
+  await persist();}
+}report.status='complete_pending_manual_review';}catch(e){report.status='failed';report.failure=String(e);process.exitCode=1;}
+report.completedAt=new Date().toISOString();await persist();console.log(JSON.stringify({status:report.status,steps:report.steps.length,failure:report.failure??null}));

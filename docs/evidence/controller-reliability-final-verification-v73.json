@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-13T08:06:21.368Z",
+  "sourceCommit": "c16b9a6683b794e442157387f55ab3db1a472e15",
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "verifiedFrozenSources": 55,
+  "verifiedPromotedTools": 10,
+  "completedSessions": 30,
+  "canonicalRequests": 350,
+  "sourceSections": 28,
+  "hashBoundRawResultFiles": 31,
+  "verifiedRelativeDocumentationLinks": 144,
+  "scope": "Final file/hash/count/link checks; no fresh inference, additional accuracy claim, production change or rewrite of any measured journal."
+}

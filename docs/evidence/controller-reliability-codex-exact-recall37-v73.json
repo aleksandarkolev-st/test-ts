@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "immutable_actual_source_exact_fence_comparison",
+  "recordedAt": "2026-10-13T00:37:17.821Z",
+  "completedCapture": false,
+  "review": {
+    "file": "docs/evidence/controller-reliability-codex-three-hour-prefix38-v73.json",
+    "sha256": "1f70e87c8aed94cf921418f7eccc5588acd06765e37dfa48033b935de54248ea"
+  },
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix38/journal.json",
+    "sha256": "5a1add0efc1b0a2d1679d58090727ecb471105a20393555e83d3eee128b07003",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 39
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "origin": {
+    "round": 1,
+    "field": "question",
+    "fieldSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+    "fenceIndex": 0,
+    "fenceBytes": 44,
+    "fenceSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+    "acceptedAt": 20032
+  },
+  "recall": {
+    "round": 37,
+    "answerSha256": "6c2e839259fa10ac851b981cfc0b99884da0793fa830cfee6a92308bb84b18f8",
+    "fenceIndex": 0,
+    "fenceCount": 2,
+    "fenceBytes": 44,
+    "fenceSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+    "acceptedAt": 3620061
+  },
+  "sourceRowsIntervening": 35,
+  "acceptedSourceAgeMs": 3600029,
+  "byteExact": true,
+  "scope": "Actual reviewed source fences compared as UTF8 bytes without trimming, whitespace/operator/name/sign normalization or source substitution. Uses original selected acceptance timestamps for source age, not model submission or paint. Canonical source-row separation is not a count of every intermediate accepted generation. No code execution or complete-long-capture certification."
+}

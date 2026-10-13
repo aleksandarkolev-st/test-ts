@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_recorded_missing_speech_counter_window",
+  "recordedAt": "2026-10-13T04:22:40.440Z",
+  "review": {
+    "file": "docs/evidence/controller-reliability-codex-three-hour-prefix113-v73.json",
+    "sha256": "c0b0de78259244814f4c331d0379ae550d5e39db7442cf67690eabce6ce36f27"
+  },
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix113/journal.json",
+    "sha256": "8900202000a0fc4e909e6e4d55cbd5a22a4d0d9046cd53c03e1d0d611980c5de",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 113
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "round": 95,
+  "question": "Why?",
+  "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+  "nativeStartedAt": 9050027,
+  "audio": {
+    "waveFile": "artifacts/deep-interview-v71/systems-hour-t/round-02.wav",
+    "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+    "playback": {
+      "sampleRate": 16000,
+      "lastNonzeroFrame": 7199,
+      "sourceFrames": 18320,
+      "submitBeforeHostMs": 1791857173872,
+      "submitAfterHostMs": 1791857173872,
+      "lastVoicedDevicePositionLowerHostMs": 1791857174328,
+      "lastVoicedDevicePositionUpperHostMs": 1791857174334,
+      "positionAtEnd": 7222,
+      "completedHostMs": 1791857175025
+    },
+    "runningAtPlaybackLaunch": [],
+    "clockAnchors": [
+      {
+        "hostBeforeMs": 1791857173327,
+        "hostAfterMs": 1791857173374,
+        "nativeMs": 9050027
+      },
+      {
+        "hostBeforeMs": 1791857175048,
+        "hostAfterMs": 1791857175092,
+        "nativeMs": 9051748
+      }
+    ]
+  },
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": false,
+        "source": "remote",
+        "timestamp": 9050438,
+        "turnStartedAt": 9050438
+      }
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 9050918
+      }
+    }
+  ],
+  "counterSnapshots": [
+    {
+      "nativeNow": 9049089,
+      "remote": {
+        "capturedFrames": 421086,
+        "capturedSamples": 144771856,
+        "emptyFinalEvents": 0,
+        "finalEvents": 659,
+        "nonemptyTranscriptEvents": 11136,
+        "providerAudioFrontierMicros": 9015200195,
+        "queueFailures": 0,
+        "queuedBytes": 289541120,
+        "queuedChunks": 56551,
+        "socketFlushedBytes": 289541120,
+        "socketFlushedChunks": 56551,
+        "socketWriteFailures": 0,
+        "transcriptEvents": 11136
+      }
+    },
+    {
+      "nativeNow": 9049089,
+      "remote": {
+        "capturedFrames": 421086,
+        "capturedSamples": 144771856,
+        "emptyFinalEvents": 0,
+        "finalEvents": 659,
+        "nonemptyTranscriptEvents": 11136,
+        "providerAudioFrontierMicros": 9015200195,
+        "queueFailures": 0,
+        "queuedBytes": 289541120,
+        "queuedChunks": 56551,
+        "socketFlushedBytes": 289541120,
+        "socketFlushedChunks": 56551,
+        "socketWriteFailures": 0,
+        "transcriptEvents": 11136
+      }
+    },
+    {
+      "nativeNow": 9052289,
+      "remote": {
+        "capturedFrames": 421291,
+        "capturedSamples": 144823264,
+        "emptyFinalEvents": 0,
+        "finalEvents": 659,
+        "nonemptyTranscriptEvents": 11136,
+        "providerAudioFrontierMicros": 9015200195,
+        "queueFailures": 0,
+        "queuedBytes": 289643520,
+        "queuedChunks": 56571,
+        "socketFlushedBytes": 289643520,
+        "socketFlushedChunks": 56571,
+        "socketWriteFailures": 0,
+        "transcriptEvents": 11136
+      }
+    },
+    {
+      "nativeNow": 9057582,
+      "remote": {
+        "capturedFrames": 421450,
+        "capturedSamples": 144907824,
+        "emptyFinalEvents": 0,
+        "finalEvents": 659,
+        "nonemptyTranscriptEvents": 11136,
+        "providerAudioFrontierMicros": 9015200195,
+        "queueFailures": 0,
+        "queuedBytes": 289812480,
+        "queuedChunks": 56604,
+        "socketFlushedBytes": 289812480,
+        "socketFlushedChunks": 56604,
+        "socketWriteFailures": 0,
+        "transcriptEvents": 11136
+      }
+    }
+  ],
+  "allWindowSnapshots": 9,
+  "maximumQueueFailures": 0,
+  "maximumSocketWriteFailures": 0,
+  "providerTranscriptCounts": [
+    11136
+  ],
+  "providerFinalCounts": [
+    659
+  ],
+  "providerFrontiers": [
+    9015200195
+  ],
+  "scope": "Actual no-job source row and numeric native snapshots from an immutable captured journal. Counters are not atomic across stages. Local sink flush is not provider receipt. Raw provider frontier is not lexical speech time. No word replacement, replay, reset or inferred server-side root cause."
+}

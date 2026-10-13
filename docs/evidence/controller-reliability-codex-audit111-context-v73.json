@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-10-13T04:20:37.019Z",
+  "journal": {
+    "file": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "sha256": "8900202000a0fc4e909e6e4d55cbd5a22a4d0d9046cd53c03e1d0d611980c5de"
+  },
+  "targetRound": 111,
+  "selectedContext": {
+    "sha256": "e781e5a6870770c836421b4ce3736e17cd12fd5abe5c2c555e5a52811480e264",
+    "bytes": 240475
+  },
+  "sources": [
+    {
+      "round": 87,
+      "answerSha256": "c072a25c2e739d6108617a689b4b6d250a9f04d5e291291cabed68fcc3fb7e1e",
+      "fullAnswerIncluded": false,
+      "generationId": "28bf5cc6-d255-464e-b0c5-3713c9eb7d5d",
+      "fences": [
+        {
+          "index": 0,
+          "language": "python",
+          "bytes": 392,
+          "sha256": "863ae0d20d8bf90ced17f89730c57925d26b38d135209436bcd62dd005c23978",
+          "exactSourceIncluded": true
+        }
+      ]
+    },
+    {
+      "round": 96,
+      "answerSha256": "cc0183bff59a98f56d6455b4b734bc390c00bc02d4fa39884495f269545fd480",
+      "fullAnswerIncluded": false,
+      "generationId": "7e91a83a-920b-426e-b7ce-4070e8b64ef0",
+      "fences": [
+        {
+          "index": 0,
+          "language": "cpp",
+          "bytes": 2919,
+          "sha256": "1af01f5c9a277e0f3ada6f0fe8e30e0a9280ead360fcae69716eefc78d554899",
+          "exactSourceIncluded": true
+        }
+      ]
+    },
+    {
+      "round": 97,
+      "answerSha256": "c7c756b86fe3a74b6d4cc7714efb925a0d5ea9cc2227585e3369bf4e19692e31",
+      "fullAnswerIncluded": false,
+      "generationId": "e3fc9216-4ff8-4e7f-aad5-587b3f35607e",
+      "fences": [
+        {
+          "index": 0,
+          "language": "cpp",
+          "bytes": 2919,
+          "sha256": "1af01f5c9a277e0f3ada6f0fe8e30e0a9280ead360fcae69716eefc78d554899",
+          "exactSourceIncluded": true
+        }
+      ]
+    }
+  ],
+  "scope": "Exact unchanged source-fence and full-answer inclusion in actual target request selected context, not a claim of backend cache content or model attention. No whitespace/name normalization. A missing exact fence alone is not proof that all equivalent details were absent."
+}

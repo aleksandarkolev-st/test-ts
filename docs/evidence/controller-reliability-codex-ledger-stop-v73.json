@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_ram_ledger_and_stop_observation",
+  "recordedAt": "2026-10-13T04:28:11.691Z",
+  "review": {
+    "file": "docs/evidence/controller-reliability-codex-three-hour-prefix113-v73.json",
+    "sha256": "c0b0de78259244814f4c331d0379ae550d5e39db7442cf67690eabce6ce36f27"
+  },
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix113/journal.json",
+    "sha256": "8900202000a0fc4e909e6e4d55cbd5a22a4d0d9046cd53c03e1d0d611980c5de",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 113
+  },
+  "backend": "codex",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "actualInterviewDurationMs": 10813795,
+  "archiveBeforeStop": {
+    "accepted": 138,
+    "displayedBytes": 0,
+    "generatedBytes": 167777,
+    "paintMetadataBytes": 72576,
+    "paintedRangeBytes": 419527,
+    "paintedRanges": 2192,
+    "recognizedRevisionBytes": 459398,
+    "recognizedRevisions": 13083,
+    "suggestions": 112,
+    "version": 58694
+  },
+  "archiveAfterStop": {
+    "accepted": 0,
+    "displayedBytes": 0,
+    "generatedBytes": 0,
+    "paintMetadataBytes": 0,
+    "paintedRangeBytes": 0,
+    "paintedRanges": 0,
+    "recognizedRevisionBytes": 0,
+    "recognizedRevisions": 0,
+    "suggestions": 0,
+    "version": 0
+  },
+  "stopClearedRam": true,
+  "interruptedSnapshots": [
+    {
+      "round": 19,
+      "responseVersion": "dfd39097-c774-4b37-80d2-86609e1fe599:0",
+      "phase": "superseded",
+      "archive": {
+        "accepted": 24,
+        "displayedBytes": 0,
+        "generatedBytes": 26728,
+        "paintMetadataBytes": 7584,
+        "paintedRangeBytes": 37937,
+        "paintedRanges": 228,
+        "recognizedRevisionBytes": 84739,
+        "recognizedRevisions": 2465,
+        "suggestions": 18,
+        "version": 9442
+      }
+    },
+    {
+      "round": 56,
+      "responseVersion": "a5cabc32-34e8-471c-b059-a487bbeabcc4:0",
+      "phase": "superseded",
+      "archive": {
+        "accepted": 69,
+        "displayedBytes": 0,
+        "generatedBytes": 84024,
+        "paintMetadataBytes": 28608,
+        "paintedRangeBytes": 161086,
+        "paintedRanges": 892,
+        "recognizedRevisionBytes": 237973,
+        "recognizedRevisions": 6795,
+        "suggestions": 57,
+        "version": 29385
+      }
+    },
+    {
+      "round": 93,
+      "responseVersion": "f1054609-246c-4a67-9f4b-843bb47655cb:0",
+      "phase": "superseded",
+      "archive": {
+        "accepted": 114,
+        "displayedBytes": 0,
+        "generatedBytes": 139299,
+        "paintMetadataBytes": 57600,
+        "paintedRangeBytes": 334188,
+        "paintedRanges": 1750,
+        "recognizedRevisionBytes": 388222,
+        "recognizedRevisions": 11132,
+        "suggestions": 92,
+        "version": 48878
+      }
+    }
+  ],
+  "scope": "Actual numeric archive snapshots and checked clean Stop in the complete real elapsed session. Counts alone do not prove every byte of memory or universal retrieval; exact code and decision probes are separate source-bound evidence. Test evidence recording was explicitly requested; this does not add production disk persistence. Playback remote source only with microphone disabled, not a per-person diarization certification."
+}

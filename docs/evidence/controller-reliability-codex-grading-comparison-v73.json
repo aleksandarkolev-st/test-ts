@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "explicit_uniform_requested_task_comparison_with_original_speech_errors_preserved",
+  "recordedAt": "2026-10-13T05:01:32.764Z",
+  "oldReview": {
+    "file": "docs/evidence/controller-error-recovery-codex-three-hour-selected-rows-v72.json",
+    "sha256": "92253e74bc7d0d1a472fadc7a64619a0ffd85471412f008c9a59adc4ca097432"
+  },
+  "currentReview": {
+    "file": "docs/evidence/controller-reliability-codex-three-hour-prefix113-v73.json",
+    "sha256": "c0b0de78259244814f4c331d0379ae550d5e39db7442cf67690eabce6ce36f27"
+  },
+  "comparisons": [
+    {
+      "round": 18,
+      "questionSha256": "7d4d3f3fbfea82838acb7a72bad093a7cafacadb5d2498e9f4994f4261138e27",
+      "oldAnswerSha256": "b2fe9f9e225c60fde8b2372f0c52083848b6953b9deff6f72dc32d25c82f8835",
+      "currentAnswerSha256": "db6b5ae5233a250d42fed0be7fc023a8a27df1a35b9df3ac2a22bf3a5fd48417",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 34,
+      "questionSha256": "df6f8d51c41ea3458fbfe8cd24c2b11451ae17d08885893dc51026dbedc3b8da",
+      "oldAnswerSha256": "b2fe9f9e225c60fde8b2372f0c52083848b6953b9deff6f72dc32d25c82f8835",
+      "currentAnswerSha256": "4cc0fc7d20cece4023fb4498b5221df6396c82c6cd9bec1c192b645222de6124",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 38,
+      "questionSha256": "f3277dd825f42941313f11722dcb364d01b453aaab8f879bf40305bfe3059670",
+      "oldAnswerSha256": "8cca953b2fb55d8a0a6becd128b603945e78eb887abd674fca1bf91f833b28f2",
+      "currentAnswerSha256": "60d2b0f3a743b3b90c1bffc004cb9fd6189cfb883d9ada77205e8365381ba7e3",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 54,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "5957eaf084d5572c5df2a3eb3bc6c3a2d0caa5e91092652e043e66cfbdfa4e4a",
+      "currentAnswerSha256": "d90921f9916d992c4378a0c9d4edd39a418a97613d108dbe681826186b736496",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 72,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "37b7906ae8908642314dff238772000c1aeabe5c3554a683850d6ffd2472d596",
+      "currentAnswerSha256": "a00b43573b6b55464b999d99677b864f4d80451f006daeca5c3fd17a88d05e6c",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 76,
+      "questionSha256": "a5d75bf51be7b4cff049630e6d856e38f729124a18c47ddfd7c24a7a44b567b4",
+      "oldAnswerSha256": "bf25aab46498eb77924d83147fea30aff8c12f180a6f5c6f92d1fbe36a4da4ed",
+      "currentAnswerSha256": "22a7223881985f6eaa01b07f9f8d85494612842897eb690bff694ae787a9d3b7",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 92,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "103719e85ab25cd80b56380458d8ec1ec44e383f2b0f0bafa74544027ecea10d",
+      "currentAnswerSha256": "edf36b266f58dab2a550ffcce712e8e41ca571ad14c7b3b8fee8139a97b7fe9d",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    },
+    {
+      "round": 110,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "c524225f55e5d2f14719e5fcac50b3c6aed484e4900a75ef7dd04fcdd50c1fac",
+      "currentAnswerSha256": "66f1261a85fbd8cd6d5dbabe9902b977cc76e108e199ab12242108858ae54bb1",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformCurrentRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual replies correctly retain the recognized decision and scoped changes. Earlier strict agreement scoring carried original Mira/identifier recognition failure into this later typed request; current scoring credits the actual recognized-task request. That scoring difference is not an implementation accuracy gain."
+    }
+  ],
+  "reportedCorrectCounts": {
+    "oldPublished": 73,
+    "currentPublished": 87
+  },
+  "uniformRequestedTaskCorrectCounts": {
+    "old": 81,
+    "current": 87
+  },
+  "initialOriginalOwnerFailure": {
+    "oldRound": 2,
+    "currentRound": 2,
+    "spoken": "Mira",
+    "recognizedAndReturned": "Myra",
+    "strictFailureInBoth": true,
+    "scope": "One original source error can propagate through many recall probes; those probes are not independent ASR failures. No name is replaced in production or recorded sources."
+  },
+  "scope": "Finite sequential simulated interviews using the same model/effort, but natural answer histories and some source-derived typed recall prompts differ. This is an explicit grading-policy comparison, not a frozen-context causal latency or population accuracy comparison. Published old/new reviews and all missing, incorrect, incomplete and stale outcomes remain intact; memory success never repairs original speech recognition."
+}

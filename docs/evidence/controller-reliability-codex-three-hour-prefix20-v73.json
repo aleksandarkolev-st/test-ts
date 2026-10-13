@@ -1,0 +1,3918 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_new_reliability_build_independent_manual_reasoning_prefix",
+  "recordedAt": "2026-10-13T00:07:32.555Z",
+  "completedCapture": false,
+  "reviewedRows": 20,
+  "expectedFullRows": 113,
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix20/journal.json",
+    "sha256": "55966592ddd2ce6ccd27805881acf41af70bc39aabf2eb7a86b7ff7ae72cbc75",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 20
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "rows": [
+    {
+      "round": 1,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Entire supplied int Foo fence byte-identical, strict x<-1 evaluates -2 true17 and -1 false19. Actual code execution queued; exact recall in later turns not yet tested.",
+      "answerSha256": "13d26ee11a09a4aec8017eec00b88586206d4cc38906f192f0f5f693d17e4064",
+      "generationId": "6f57850a-2eea-430d-8877-2a3086e049dc",
+      "name": "hour-1-first-code",
+      "question": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "recognizedQuestion": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "questionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "recognizedQuestionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "answer": "```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nFor -2, the condition is true, so Foo returns 17. For -1, the condition is false, so Foo returns 19.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 2,
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Recognized original Mira as Myra; actual answer faithfully preserves Myra/Delta37days/Foo_17 and declares interpretation of underscore. Strict original speech accuracy fails name, no lexical repair allowed. Immediate acknowledgement is not evidence that long-term recall succeeds.",
+      "answerSha256": "7cf96a90110e320d37d04f2a9fc0c7d872ad86cbf49ef79693fd1e41367cb427",
+      "generationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+      "name": "hour-1-session-decision",
+      "question": "We have agreed that release Delta uses a retention period of exactly thirty seven days. Mira owns it, and the checkpoint identifier is Foo underscore seventeen. Keep this decision for the rest of this meeting.",
+      "recognizedQuestion": "We have agreed that release delta uses a retention period of exactly thirty seven days Myra owns it and the checkpoint identifier is Foo underscore seventeen Keep this decision for the rest of this meeting",
+      "questionSha256": "89d4da7e582a237334e8b03d3b6292fad73809dcf06d829a40d014245499c850",
+      "recognizedQuestionSha256": "16337cc0b0d9aa24f1f2b740ce76f18797a53f381196cd0291efd1795dd3ecaa",
+      "answer": "I’ll keep this decision for the rest of the meeting: release delta’s retention period is exactly 37 days, and Myra owns it. I’m interpreting “Foo underscore seventeen” as the checkpoint identifier Foo_17.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 3,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "A CUDA warp is a group of 32 GPU threads that execute instructions together.",
+      "note": "Correct introductory32-thread warp/SIMT common instruction issue and masked divergentpaths potentialefficiencycost, adjacentmemory/coalescing recommendation. Simplified intro does not claim lockstep source-level synchronization or universal guaranteed branch penalty.",
+      "answerSha256": "7aa7a8524632e45c27f9592d2fb5e032aeb34dc34c2f32995187db27313dadbf",
+      "generationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+      "name": "hour-1-saved-audio-1",
+      "question": "Explain CUDA warps.",
+      "recognizedQuestion": "explain CUDA warps.",
+      "questionSha256": "23bd9da1a2a7fd2f6c2b12c406f0dd829914f55b2d8fc5bd2704987604674447",
+      "recognizedQuestionSha256": "23f8b3600e1d8df6fc1640bbbb8e314033b2dbb9fb892aefee1fc2e41c3e9e7d",
+      "answer": "A CUDA warp is a group of 32 GPU threads that execute instructions together. Threads in a warp can work on different data, but if they take different branches, the GPU executes the different paths with only the relevant threads active, which can reduce efficiency. For good performance, minimize branch divergence and have neighboring threads access neighboring memory locations.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 4,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "Warps let the GPU execute one instruction across 32 threads efficiently.",
+      "note": "Actual native Why recognized Why and answers causal shared issue/branchmasked useful work and potential coalescing transactions. Unlike previous lost originalWhy, this actual request is accepted and complete; do not generalize one successful trial.",
+      "answerSha256": "1164ee2a66309e751f94f7464e5047db23bdf3e1f0779f838ade9ad1aa858114",
+      "generationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+      "name": "hour-1-spoken-why-warps",
+      "question": "Why?",
+      "recognizedQuestion": "Why",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "d3ae14a50bfe463f804c73c9fd16e88c36bf5a0bf4a56f98ae696a91eb2de149",
+      "answer": "Warps let the GPU execute one instruction across 32 threads efficiently. When threads take different branches, the warp must execute the different paths with only the relevant threads active, reducing useful work per instruction. Neighboring threads accessing neighboring memory locations also lets the GPU combine accesses into fewer memory transactions.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 5,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "No. Even though the warp starts converged, `__activemask()` inside the branch is only a snapshot of currently active lanes, not a guarantee that all 19 branch participants are present.",
+      "note": "Correct Volta+ independent execution/activemask snapshot cannot certify branch membership or source18 active; caller own bit/all named non-exited lanes matching mask/corresponding intrinsic/source active/widthphysical18/no memory-order guarantee explained. Complete actual device function calculates block-linear thread rank (3D included, bounded by CUDAblock1024) and rankmod32, converged full32 ballot yields0x7ffff; only0..18 shuffle,19..31returnown. Explicit fullwarp/all32ballot precondition matches original assumptions and avoids older unsigned-global-index wrapper failure. No shared memory/atomics, no separate syncwarp needed. Actual native compilation and finite participation oracle queued; no NVIDIAhardware execution credit.",
+      "answerSha256": "0505ff71a7abb59b244980a14166d801f213d8242e6dd1c451bd4dfb935b9191",
+      "generationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+      "name": "hour-1-saved-audio-2",
+      "question": "You mentioned shuffles and explicit synchronization. On Volta or newer, a full physical warp starts converged. Only physical lanes zero through eighteen enter a branch. Inside it, each calls __activemask(), then passes that mask to __shfl_sync to read physical lane eighteen's float, using width thirty-two. Is every caller guaranteed to receive that float? Explain the precise participation and source-validity contracts, then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics. The other thirteen lanes must not call the shuffle.",
+      "recognizedQuestion": "you mentioned shuffles and explicit synchronization on Volta or newer a full physical warp starts converged only physical lanes zero through eighteen enter a branch inside it each calls underscore underscore active a mask then passes that mask to underscore underscore shfl underscore sync to read physical lane eighteen's float using width thirty two is every caller guaranteed to receive that float explain the precise participation and source validity contracts then give a corrected CUDA sequence guaranteeing that result without shared memory or atomics the other thirteen lanes must not call the shuffle",
+      "questionSha256": "34dc75345412a4d3cd886572f28a462234c85da55127ad0845886cca34f08a44",
+      "recognizedQuestionSha256": "9190e797bfc0edd9c7739fffc4e0054d4a77736aef0c4a559161d5f017b2c9fa",
+      "answer": "No. Even though the warp starts converged, `__activemask()` inside the branch is only a snapshot of currently active lanes, not a guarantee that all 19 branch participants are present. On Volta or newer, a caller’s mask can exclude lane 18, making the requested source value undefined.\n\nFor `__shfl_sync`, each caller must have its own bit set in the mask, and every non-exited thread named in that mask must execute the corresponding intrinsic with the same mask. The source lane must actively participate in that shuffle; `width = 32` makes source index 18 refer to physical lane 18, but does not make that lane participate. The intrinsic synchronizes the named participants for register exchange, not memory ordering.\n\nCompute the participation mask before diverging, then use that fixed mask. This device function requires every lane of a full physical warp to call it at the converged point; each lane supplies its own float. Lanes 0–18 receive lane 18’s float, while lanes 19–31 retain their own value and never call the shuffle.\n\n```cpp\n__device__ float read_lane18(float value)\n{\n    const unsigned int thread_rank =\n        threadIdx.x + blockDim.x *\n        (threadIdx.y + blockDim.y * threadIdx.z);\n    const unsigned int lane = thread_rank % 32u;\n    const bool participates = lane <= 18u;\n    const unsigned int mask =\n        __ballot_sync(0xffffffffu, participates);\n\n    if (participates) {\n        value = __shfl_sync(mask, value, 18, 32);\n    }\n    return value;\n}\n```\n\nCompile as CUDA device code and call only from complete warps, with all 32 lanes reaching the ballot. The ballot produces `0x0007ffff`; all 19 named lanes execute the same shuffle, including source lane 18. No separate `__syncwarp()`, shared memory, or atomics are needed.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 6,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "Use five reduction shuffles and one broadcast, with a fixed mask naming exactly lanes 0–18.",
+      "note": "Actual sum19 descending16/8/4/2/1 reduction plus0broadcast uses six float shuffles each. Exact invariant afterd: lanei owns indicesi+k*d<19, pre-stageeven multiples andpartnerodd multiples disjoint; absentpartner hasemptyoddset andselfread isnotadded. Lane0after1containsall19exactonce, broadcastreturnsidenticalresult toall. All19 namedlanes executeeverycorrespondingsame-mask/widthcollective, sourcespartner<19/self/0alwaysparticipate, no conditional collective or implicitlockstep. Blocklinear3Dthreadrankbounded1024 correctphysicalmod32. Floatingtreeorder explicit andfiniteinputspossibleoverflowqualified. Source-specific proofPASS; unchanged actual source compilation/87mixedvectors/CPUintrinsicshim checks queued, noNVIDIAexecution credit.",
+      "answerSha256": "3979e29ab91759f3a112550d3fd68837e810581f60e4406757405da4a47278db",
+      "generationId": "4fe76aee-65cc-49ca-90b2-4eb4d01f9722",
+      "name": "hour-1-saved-audio-3",
+      "question": "On Volta or newer, a full physical warp has exactly physical lanes zero through eighteen participating, each supplying one finite float. All nineteen named lanes call your device function once; no other lanes call it. Write compilable CUDA code returning their sum to every caller, without shared memory or atomics, using at most six float shuffle calls per caller. Floating-point rounding is allowed; specify your addition order. Do not assume implicit lockstep execution. Prove that each input contributes exactly once to each returned sum, every shuffle source participates, and every named lane executes matching collectives even when a lane has no partner.",
+      "recognizedQuestion": "on Volta or newer a full physical warp has exactly physical lanes zero through eighteen participating each supplying one finite float all nineteen named lanes call your device function once no other lanes call it write compilable CUDA code returning there some to every caller without shared memory or atomics using at most six float shuffle calls per caller floating point rounding is allowed specify your addition order do not assume implicit lockstep execution prove that each input contributes exactly once to each return sum every shuffle source participates and every named lane executes matching collectives even when a lane has no partner",
+      "questionSha256": "d647b059bc2d56c843fcb1cbc23aeaf2642adb837549d24d1b0c51affdcf3a0e",
+      "recognizedQuestionSha256": "7f6fda04d2ad196508082888b8366b4a89b4c1e30ffd2769e13595d377141dc9",
+      "answer": "Use five reduction shuffles and one broadcast, with a fixed mask naming exactly lanes 0–18. Every caller executes all six shuffles; a lane without a partner reads itself but skips the addition.\n\n```cpp\n#include <cuda_runtime.h>\n\n__device__ __forceinline__ float sum19(float value)\n{\n    const unsigned int rank =\n        threadIdx.x + blockDim.x *\n        (threadIdx.y + blockDim.y * threadIdx.z);\n    const unsigned int lane = rank % 32u;\n    constexpr unsigned int mask = 0x0007ffffu;\n\n    float sum = value;\n    for (int offset = 16; offset >= 1; offset >>= 1) {\n        const unsigned int partner = lane + offset;\n        const bool has_partner = partner < 19u;\n        const int source = has_partner\n            ? static_cast<int>(partner)\n            : static_cast<int>(lane);\n\n        const float other = __shfl_sync(mask, sum, source, 32);\n        if (has_partner) {\n            sum = sum + other;\n        }\n    }\n    return __shfl_sync(mask, sum, 0, 32);\n}\n```\n\nUsage contract: exactly physical lanes 0–18 of the same warp call `sum19` once for this collective operation, each supplying its float. Lanes 19–31 must not call it. No full-warp ballot or implicit lockstep is required.\n\n**Addition order and proof:** Write the original inputs as `a[i]`. Initially lane `i` holds only `a[i]`. Process offsets 16, 8, 4, 2, 1 in that order, always adding the partner’s pre-stage sum to the caller’s pre-stage sum. After the stage with offset `d`, lane `i` contains exactly the inputs at indices `i + k*d < 19`, with the nesting determined by these successive additions. Before that stage, its own sum contains the even multiples of `d`, while the partner’s sum contains the odd multiples. These sets are disjoint and together give the claimed set; if the partner is absent, the odd set is empty. Thus after offset 1, lane 0 contains every input exactly once. The sixth shuffle broadcasts that result to every caller.\n\n**Collective validity:** Every caller’s bit is in `mask`, and all 19 named lanes execute each corresponding shuffle with the same mask and width. Every source is either a partner below 19, the caller itself, or lane 0, so every source participates in that same collective. Partnerless lanes still execute the shuffle. The `_sync` collectives provide the required rendezvous despite independent thread scheduling; this reasoning does not rely on implicit lockstep. Floating-point rounding follows the stated tree order; finite inputs can still overflow during addition.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 7,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "Use a fold, a 16-lane butterfly all-reduction, and a three-source redistribution.",
+      "note": "Changed no-single-completed-lane-broadcast constraint met by actual6-shuffle fold16/17/18into0/1/2, fourXOR1/2/4/8rounds among0..15 and final extra16/17/18reads0/1/2 whilelowselfreads. Fold partitions19inputs; alignedpair/group4/8/16 invariant proves disjointunion/exactonce. Every19caller executesall6matchingmaskwidthcollectives, extracallersselfreadthroughbutterfly/skipadd, eachsourceparticipates. Explicit __fadd_rn/treeorder anddifferentlane roundedresults qualified, finiteinputsmayoverflow (no finiteoutputguarantee requested). Blockrank3D boundedhardwareblock correct. Source-specific manualPASS, actualCPUshim/nvccchecks queued; noGPUhardware certification.",
+      "answerSha256": "f40135b1d0a2c608cdd9e77f9dd344648f3a6b363efb2dac46548089eca24f80",
+      "generationId": "66a5cb47-45d3-46ba-8c7c-8095b6855b26",
+      "name": "hour-1-saved-audio-4",
+      "question": "You proposed five reduction shuffles followed by a broadcast. Change the design: on Volta or newer, a full physical warp has exactly lanes zero through eighteen participating, each supplying one finite float. Those nineteen lanes each call once; no other lanes call. Supply compilable CUDA returning the sum to every caller with at most six float shuffle calls per caller, without shared memory, atomics, or implicit lockstep. Specify the addition order and prove exact-once input coverage, participating sources, and matching collectives. However, you may not finish by broadcasting one lane’s completed sum.",
+      "recognizedQuestion": "you proposed five reduction shuffles followed by a broadcast change the design on Volta or newer a full physical warp has exactly lanes zero through eighteen participating each supplying one finite float those nineteen lanes each call once no other lanes call supply compilable CUDA returning the sum to every caller with at most six float shuffle calls per caller without shared memory atomics or implicit lockstep specify the addition order and prove exact once input coverage participating sources and matching collectives however you may not finish by broadcasting one lane's completed some",
+      "questionSha256": "911a0c8bb6469b88738637077fe83f61a6f564ce937e4ab6903587b7f82666e1",
+      "recognizedQuestionSha256": "cbf9605a77e61f5ed8b27d4b00a77842f02607b5a7c094bb117210e4c3e3044b",
+      "answer": "Use a fold, a 16-lane butterfly all-reduction, and a three-source redistribution. Every caller executes six float shuffles; the last shuffle does not broadcast one lane’s completed sum.\n\n```cpp\n#include <cuda_runtime.h>\n\n__device__ __forceinline__ float sum19(float value)\n{\n    const unsigned int rank =\n        threadIdx.x + blockDim.x *\n        (threadIdx.y + blockDim.y * threadIdx.z);\n    const unsigned int lane = rank % 32u;\n    constexpr unsigned int mask = 0x0007ffffu;\n\n    // Fold inputs 16, 17, 18 into lanes 0, 1, 2.\n    const int fold_source = static_cast<int>(\n        lane < 3u ? lane + 16u : lane);\n    const float extra = __shfl_sync(mask, value, fold_source, 32);\n    float sum = value;\n    if (lane < 3u) {\n        sum = __fadd_rn(sum, extra);\n    }\n\n    // All-reduce the 16 folded values.\n    for (unsigned int distance = 1u; distance <= 8u;\n         distance <<= 1u) {\n        const int source = static_cast<int>(\n            lane < 16u ? (lane ^ distance) : lane);\n        const float other = __shfl_sync(mask, sum, source, 32);\n        if (lane < 16u) {\n            sum = __fadd_rn(sum, other);\n        }\n    }\n\n    // Three distinct sources deliver results to the extra lanes.\n    const int result_source = static_cast<int>(\n        lane >= 16u ? lane - 16u : lane);\n    return __shfl_sync(mask, sum, result_source, 32);\n}\n```\n\nCompile in a `.cu` file with `nvcc -arch=sm_70` or a newer target. The calling contract is exactly your assumption: physical lanes 0–18 of each participating full warp call this function once, and lanes 19–31 do not call it.\n\nAddition order: first form `a0 = x0 + x16`, `a1 = x1 + x17`, and `a2 = x2 + x18`; the other folded values are `ai = xi`. Then, at distances 1, 2, 4, and 8, each low lane adds its previous-stage sum to its XOR partner’s previous-stage sum, using round-to-nearest float addition. Different lanes can obtain different rounded results because operand ordering differs; every result nevertheless includes every input exactly once. Finite inputs can still overflow during addition.\n\nExact-once proof: the 16 folded values partition the 19 inputs. Initially each low lane holds one folded value. After distance 1 it holds the two folded values in its aligned pair; after distances 2, 4, and 8 it holds its aligned group of 4, 8, and 16 respectively. At each stage, the XOR partner holds the complementary, disjoint half of that group, so no input is duplicated or omitted. Finally, lanes 16–18 receive the complete results of lanes 0–2 respectively, while lanes 0–15 retain their own complete results.\n\nSource validity and synchronization: the fold reads lanes 16–18 or the caller itself; butterfly partners are always in 0–15, while extra lanes read themselves; the final shuffle reads lanes 0–15. Thus every source participates. All 19 callers execute the same six shuffle instances with the identical mask and width, including lanes that skip an addition. Each caller’s bit is set, and every named lane executes the matching collective, so `__shfl_sync` supplies the required synchronization without implicit lockstep.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 8,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "No—the register without reader write-back is not linearizable.",
+      "note": "Actual counterexample W1tag1/value10onlyAunfinished, R1ABCreturns10 then R2CDEreturns0 proves pendingWmustincludedbeforeR1 andR1<R2 contradiction. WB3ackafterreplicamaxupdate leaves3tags>=read/write, laterquery3intersects and monotonicstorage givesnondecreasingRTtags. Fulltag-order construction assigns readimmediatelyafteroriginwrite/beforenext; equalreadstagsRTorder, includependingoriginwrites/discardotherpendingops, no inventedvalues. All four RT operationpairs justified, overlappingreadcompletionorder irrelevant. Explicit usualSWsequential-write assumption retained; no multiwriter or arbitrary non-RTtag proof claimed. Complete requested causal/concurrentreader/unfinishedwrite reasoning sound.",
+      "answerSha256": "a0f5105119124acd3c5fc91761c2cd111509b7550ab3e8fde393c8ff6a94a7ec",
+      "generationId": "2430ca1d-4a21-42ee-8f3e-39ff309c4662",
+      "name": "hour-1-saved-audio-5",
+      "question": "Switch to distributed systems. Five replicas initially store tag zero and value zero. One writer assigns increasing integer tags, sends each tagged value to all replicas, and completes after three acknowledgments. Replicas retain only the highest tag received. A reader queries any three replicas and returns the highest-tagged value, without writing back. Messages may be delayed arbitrarily; replicas do not fail. Is this register linearizable? Give an explicit execution proving your answer, naming replicas and operation ordering. Then determine whether making each reader write its selected tagged value to three replicas before returning restores linearizability, including with concurrent readers and an unfinished write. Prove your conclusion.",
+      "recognizedQuestion": "switch to distributed systems five replicas initially store tag zero and value zero one writer assigns increasing integer tags sends each tagged value to all replicas and completes after three acknowledgements replicas retain only the highest tag received a reader queries any three replicas and returns the highest tagged value without writing back messages may be delayed arbitrarily replicas do not fail is this register linearizable give an explicit execution proving your answer naming replicas and operation ordering then determine whether making each reader write its selected tagged value to three replicas before returning restores linearizability including with concurrent readers and an unfinished write prove your conclusion",
+      "questionSha256": "b7a5a4fe885bb064c5d773ed8ef3aa65d78f1dfea8ec051b821d8855b1de5ef0",
+      "recognizedQuestionSha256": "a2c8a797c378905c2f5846be8f065f2562fd343dc9724c0f7b56b8ffac01254f",
+      "answer": "No—the register without reader write-back is not linearizable. Writing each reader’s selected tagged value back to three replicas, and waiting for their acknowledgements, restores linearizability under the usual single-writer assumption that its writes are sequential.\n\nExplicit counterexample: name the replicas A, B, C, D, E, initially storing (0, 0).\n1. The writer invokes W1 with (1, 10), sending it to all five replicas. Deliver it only to A; delay the other messages. W1 remains unfinished because it has fewer than three acknowledgements.\n2. Reader R1 queries A, B, C. Their replies are (1, 10), (0, 0), (0, 0), so R1 returns 10.\n3. After R1 returns, reader R2 queries C, D, E. All reply (0, 0), so R2 returns 0.\n\nFor R1 to return 10, a linearization must include the pending W1 before R1. Real-time ordering requires R1 before R2, so R2 cannot return the older value 0. Leaving W1 out cannot explain R1 either. Thus no linearization exists.\n\nWith write-back, each reader first queries three replicas, selects the maximum tagged pair, then sends that pair to replicas and waits for acknowledgements from three before returning. Replicas must apply their highest-tag rule before acknowledging; if they already hold a higher tag, they retain it.\n\nThe key invariant is that every completed write or read leaves at least three replicas holding tags at least as large as that operation’s tag. Any later reader’s three-replica query intersects those three replicas. Because stored tags never decrease, that reader selects a tag at least as large. In particular, once a read returns a value from an unfinished write, later reads cannot revert to an older value.\n\nHere is a linearization proof, including concurrent readers and unfinished writes. Give each read its selected tag. Order writes by their increasing tags, and place each read after the write that produced its tag and before the next write; order reads with equal tags consistently with real time. Include an unfinished write if a completed read returned its tag, and discard other unfinished operations as needed. Every returned noninitial pair originated from an invoked write, so this construction invents no values.\n\nThis order respects every real-time constraint:\n• If a write completes before a read starts, quorum intersection makes the read’s tag at least that write’s tag.\n• If a read completes before another read starts, its write-back quorum makes the later read’s tag at least its own.\n• If a read completes before a write starts, its selected tag belongs to an already-invoked write, so the newly starting sequential writer’s tag is strictly greater.\n• The single writer’s write order agrees with tag order.\n\nConcurrent readers need not have increasing tags by completion time: overlapping operations can be ordered by their selected tags. Each read then returns exactly the latest preceding write’s value. That establishes linearizability, even when a read exposes an unfinished write.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 9,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "I’d start by capturing one concrete failing case and tracing the current code against the expected result, rather than replacing the algorithm because small tests pass.",
+      "note": "Actual ambiguous route prompt has no defined objective/input/algorithm contract. Model correctly asks currentcode/minimalfailinginput/actualexpectedoutput/correctnesscriteria/productiondifferences and suggests tracingdata/scoring/tiebreaks/filter/cache into a regression. No invented shortestpath assumption or algorithm/code offered before needed facts. Sound diagnostic reasoning and complete requested investigative response, not an executable mathematicalproof trial.",
+      "answerSha256": "92407b31577992af0e374dd251a95049e6841f8bb2279105ee0061662610b513",
+      "generationId": "18ee3a2c-ca7b-4e23-8921-cf3c8c55fd1c",
+      "name": "hour-1-saved-audio-6",
+      "question": "Our route-selection code sometimes returns a result that looks wrong, but the small tests pass. How would you start investigating, and what would you need to know before changing the algorithm?",
+      "recognizedQuestion": "our route selection codes sometimes returns a result that looks wrong but the small tests pass how would you start investigating and what would you need to know before changing the algorithm",
+      "questionSha256": "1f9aed85a5acbf95e29050c23c2b57198c0e00930b706065a184a461873df3ce",
+      "recognizedQuestionSha256": "8666bb823573177df78aa29c8a62a0e3ec98c5f4db4cc267c416788de7589e87",
+      "answer": "I’d start by capturing one concrete failing case and tracing the current code against the expected result, rather than replacing the algorithm because small tests pass. I’d check the input data, candidate routes, scoring and tie-breaking, filtering, and any cached or stale state, then turn the failure into a regression test. Before changing anything, I’d need the relevant code, a failing input with actual and expected outputs, what makes a route correct—such as cost, latency, or policy constraints—and the production conditions that differ from the tests.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 10,
+      "correctness": "incomplete",
+      "reasoningVerdict": "not_scored",
+      "completed": false,
+      "note": "Original native Why recognized Y. Actual answer asks whether user means why start with a concrete failing case or is continuing the question; original causal request remains unanswered. Sensible ambiguity handling for received text, but not requested reasoning completion or useful causal-feedback credit. Nonempty clarification is INCOMPLETE, not missing text, not protocol failure and not core proofPASS. No acoustic word replacement or input substitution.",
+      "answerSha256": "6f8eae0a2b2f81e69b652909adb739bea589a6f46ddc68d8373c9e427cd96f0f",
+      "generationId": "c57690ee-c1ad-4e98-8ef4-ef1803395dec",
+      "name": "hour-1-saved-audio-7",
+      "question": "Why?",
+      "recognizedQuestion": "Y",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "18f5384d58bcb1bba0bcd9e6a6781d1a6ac2cc280c330ecbab6cb7931b721552",
+      "answer": "Did you mean “why”—why start with a concrete failing case—or were you continuing your question?",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 11,
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual classify_root and lowercase statuses fail original classify_route/uppercase contract. Different valid algorithm retains only can-reachT vertices, then non-None dist filters source reachability; negativecyclesnotreachablefroms neverparticipate, bothconditionsenforced. SyncN-1old-array rounds yield exactminwalk<=kedges; finalN-edgeimprovement witnessesnegativecycle via removingnonnegativecycles, cycle-edgeinequalitiesproveconverse. Earlyfixedpoint safe, s=tnegativecycle/emptywalk handled, Noneguard avoidsundefineddistancearithmetic. O(N(N+M)) explicitlycopycost, O(N+M)memory, atmostNweightmagnitudeN*1e12 valid. Source-specific actualcode/proofPASS; strictinterfaceFAIL remains, actual unchangedexecution/declaredalternateinterface diagnostic queued.",
+      "name": "hour-1-saved-audio-8",
+      "question": "Here, “route” means a minimum-cost walk from vertex s to vertex t in a directed graph. Integer weights may be negative; walks may repeat edges and vertices. Parallel edges and self-loops are allowed. [pause] Write executable Python 3 classify_route(n, edges, s, t), returning a pair: status and cost. Status is UNREACHABLE, FINITE, or UNBOUNDED; cost is an integer only for FINITE, otherwise None. UNBOUNDED means arbitrarily negative costs are possible. Vertices are zero-based; n is between one and two thousand, edges number at most ten thousand, and absolute weights are at most one trillion. Give an invariant and justified worst-case time and memory bounds. Which negative cycles affect this query?",
+      "recognizedQuestion": "ear Root means a minimum cost walk from vertex S to vertex T in a directed graph integer weights may be negative walks may repeat edges and vertices parallel edges and self loops are allowed pause right executable Python three classify underscore root N edges s T returning a pair status and cost status is unreachable finite or unbounded cost is an integer only for finite otherwise none unbounded means are arbitrarily negative costs are possible vertices are zero based N is between one and two thousand edge is number at most ten thousand and absolute weights are at most one trillion given invariant and justified worst case time and memory bounds which negative cycles affect this query",
+      "questionSha256": "c58a8384662ffb9b58a3d36d2ef067b3fea2764d7a85143889cb1370e4b251f8",
+      "recognizedQuestionSha256": "b09a1ee42c664c7cd96bd958d658c4bd64dca78667992db7f1761e909c14fc0b",
+      "answer": "I’m interpreting “Root” as “route” and the requested function as `classify_root(N, edges, s, T)`. Only negative cycles reachable from `s` that can also reach `T` make this query unbounded; a negative cycle elsewhere does not.\n\n```python\nfrom collections import deque\n\n\ndef classify_root(N, edges, s, T):\n    edges = list(edges)\n    reverse = [[] for _ in range(N)]\n    for u, v, w in edges:\n        reverse[v].append(u)\n\n    # Identify vertices from which T is reachable.\n    reaches_T = [False] * N\n    reaches_T[T] = True\n    queue = deque([T])\n    while queue:\n        v = queue.popleft()\n        for u in reverse[v]:\n            if not reaches_T[u]:\n                reaches_T[u] = True\n                queue.append(u)\n\n    if not reaches_T[s]:\n        return (\"unreachable\", None)\n\n    relevant_edges = [\n        (u, v, w) for u, v, w in edges\n        if reaches_T[u] and reaches_T[v]\n    ]\n\n    dist = [None] * N\n    dist[s] = 0\n\n    # Synchronous Bellman-Ford: each round uses only the previous round.\n    for _ in range(N - 1):\n        next_dist = dist.copy()\n        changed = False\n        for u, v, w in relevant_edges:\n            if dist[u] is None:\n                continue\n            candidate = dist[u] + w\n            if next_dist[v] is None or candidate < next_dist[v]:\n                next_dist[v] = candidate\n                changed = True\n        dist = next_dist\n        if not changed:\n            return (\"finite\", dist[T])\n\n    # An improvement on round N implies a relevant negative cycle.\n    for u, v, w in relevant_edges:\n        if dist[u] is not None:\n            candidate = dist[u] + w\n            if dist[v] is None or candidate < dist[v]:\n                return (\"unbounded\", None)\n\n    return (\"finite\", dist[T])\n```\n\nRun this in Python 3. Supply `edges` as `(u, v, weight)` triples, with valid zero-based vertices and the stated bounds. For example, `classify_root(2, [(0, 1, 7)], 0, 1)` returns `('finite', 7)`.\n\n**Invariant and correctness.** After round `k`, `dist[v]` is the minimum cost of an `s`-to-`v` walk using at most `k` edges in the retained graph, or `None` if no such walk exists. Copying the previous distances preserves shorter walks; relaxing using only previous-round distances considers exactly their one-edge extensions.\n\nRemoving vertices that cannot reach `T` removes no `s`-to-`T` walk. If no reachable negative cycle remains, cycles on any reachable walk have nonnegative cost and can be removed without increasing cost. Thus a minimum-cost route can be chosen with at most `N - 1` edges, and the final distances give its cost.\n\nIf the extra scan finds an improvement, an improving walk with `N` edges repeats a vertex. If all its cycles were nonnegative, removing them would produce a walk with at most `N - 1` edges and no greater cost, contradicting the improvement. Hence there is a reachable negative cycle, and every retained vertex can reach `T`: repeating that cycle before continuing to `T` makes costs arbitrarily negative. Conversely, a reachable negative cycle cannot satisfy all inequalities `dist[v] <= dist[u] + w` around the cycle, because summing them would imply its total weight is nonnegative. Its vertices are reachable within `N - 1` edges, so the extra scan detects an improvement. Early exit is safe because an unchanged round is a fixed point.\n\n**Worst-case bounds.** With `M` edges, time is `O(N(M + N))` and auxiliary memory is `O(N + M)`. The `N²` term accounts for copying the distance array each round. Every computed cost uses at most `N` weights, so its absolute value is at most `N × 10¹²`; integer sizes are bounded under the supplied limits. Parallel edges, self-loops, and `s == T` require no special handling: the empty walk costs zero, unless a reachable negative cycle can return to `T`.",
+      "answerSha256": "75026f19a10eea972c31c9f2e625a94a434c00c91f702cd44f17d1986e88fb56",
+      "generationId": "067d08b8-6b2d-4a63-8a1b-af9fe6eb0ca5",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 12,
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual classify_root/lowercase statuses again fail original interface. Valid deterministic synchronousBellmanFord withreversecanTfilter+non-Nonedistsourcecheck, exactlyN-1rounds/oneN-edgefinalscan, noheuristicqueuebound. Invariantatmostkedges/copies correctlyjustified, unreachableguardexplicitinbothloopsskipNonebeforeaddition. Nthimprovementnegativecycle/simplepathnecessity andsuminequalitiesconversevalid; bothreachabilityconditions explained. WorstO(N(N+M))everyallowedinput includesNcopies, O(N+M)memory andatmostN-edgeintegerbound. Complete s=texamples0/-selfloop returnfinite/unboundedcorrect. Actualnewsource differsfrom11 finalguard/comments, no borrowedsource; executionpendingbothqueues.",
+      "name": "hour-1-saved-audio-9",
+      "question": "Correct: both reachability conditions matter. Complete classify_route in executable Python 3, including unreachable targets and the case where s equals t. Explain exactly which relaxation establishes unboundedness, state your invariant, and justify worst-case time and memory. [pause] How does your code prevent an unreachable distance from participating in arithmetic? One final constraint: your runtime bound must hold for every allowed input, not merely in expectation; do not rely on a heuristic queue algorithm having linear runtime.",
+      "recognizedQuestion": "correct both reachability conditions matter complete classify underscore root in executable Python three including unreachable targets and the case where S equals T explain exactly which relaxation establishes unboundedness state your invariant and justify worst case time and memory pause how does your code prevent an unreachable distance from participating in arithmetic one final constraint your runtime bound must hold for every allowed input not merely in expectation do not rely on a heuristic queue algorithm having linear runtime",
+      "questionSha256": "8df68d3062007fa887e7132909ab0ad3790c998696da1058f52f001d5c794251",
+      "recognizedQuestionSha256": "7d730841142d7e92b0d9b9c09375d4c1b823b891f9c902d062f1d42e1764d72f",
+      "answer": "Both conditions matter: a negative cycle makes the result unbounded exactly when it is reachable from `s` and can reach `T`. Use deterministic, synchronous Bellman–Ford, not a heuristic queue-based relaxation algorithm.\n\n```python\nfrom collections import deque\n\n\ndef classify_root(N, edges, s, T):\n    edges = list(edges)\n    reverse = [[] for _ in range(N)]\n    for u, v, w in edges:\n        reverse[v].append(u)\n\n    reaches_T = [False] * N\n    reaches_T[T] = True\n    queue = deque([T])\n    while queue:\n        v = queue.popleft()\n        for u in reverse[v]:\n            if not reaches_T[u]:\n                reaches_T[u] = True\n                queue.append(u)\n\n    if not reaches_T[s]:\n        return (\"unreachable\", None)\n\n    relevant_edges = [\n        (u, v, w) for u, v, w in edges\n        if reaches_T[u] and reaches_T[v]\n    ]\n\n    dist = [None] * N\n    dist[s] = 0\n\n    for _ in range(N - 1):\n        next_dist = dist.copy()\n        changed = False\n        for u, v, w in relevant_edges:\n            if dist[u] is None:\n                continue\n            candidate = dist[u] + w\n            if next_dist[v] is None or candidate < next_dist[v]:\n                next_dist[v] = candidate\n                changed = True\n        dist = next_dist\n        if not changed:\n            return (\"finite\", dist[T])\n\n    # Test round N using only distances from round N - 1.\n    for u, v, w in relevant_edges:\n        if dist[u] is None:\n            continue\n        candidate = dist[u] + w\n        if dist[v] is None or candidate < dist[v]:\n            return (\"unbounded\", None)\n\n    return (\"finite\", dist[T])\n```\n\nRun with Python 3; `edges` contains `(u, v, weight)` triples with the stated bounds and zero-based endpoints. For example, `classify_root(1, [], 0, 0)` returns `(\"finite\", 0)`, while `classify_root(1, [(0, 0, -1)], 0, 0)` returns `(\"unbounded\", None)`.\n\n**Invariant:** after round `k`, `dist[v]` is the minimum cost of a walk from `s` to `v` using at most `k` edges in the filtered graph, or `None` if no such walk exists. Copying the previous distances preserves shorter walks; relaxing exclusively from the previous round adds exactly one edge. The explicit `None` check prevents unreachable distances from participating in arithmetic.\n\n**Unboundedness test:** after `N - 1` rounds, any retained edge with reachable `u` satisfying `dist[u] + w < dist[v]`—or reaching a previously unreachable `v`—is an improvement in round `N`. Without a reachable negative cycle, removing nonnegative cycles gives an equally good or better simple path with at most `N - 1` edges, so such an improvement is impossible. Conversely, if a reachable negative cycle exists, assuming no edge improves would give `dist[v] <= dist[u] + w` around the cycle; summing contradicts its negative total weight. Filtering guarantees that this cycle can reach `T`, and reachable distances guarantee that `s` can reach it. Repeating it therefore gives arbitrarily negative costs to `T`.\n\nAn unchanged round is a fixed point, so early termination is safe. When `s == T`, the empty walk has cost zero, but a reachable negative cycle that can return to `s` still makes the result unbounded.\n\nFor `M` edges, worst-case time is `O(N(N + M))`, including the distance-array copies each round; auxiliary memory is `O(N + M)`. These bounds hold for every allowed input: reverse traversal visits each vertex and edge at most once, and Bellman–Ford performs at most `N - 1` rounds plus one final edge scan. Python integers avoid overflow; synchronous rounds only construct walks of at most `N` edges, so arithmetic involves magnitudes at most `N × 10^12` under the supplied bounds.",
+      "answerSha256": "32b433a3a760cb2b6075136a7c633718c56c36782078212d9deeb21a15753bb7",
+      "generationId": "7f8f6649-c520-4bf7-a75b-b88aba4ece21",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 13,
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual uppercaseF fails original lowercasef interface. Distinct algorithm halves denominator then computes0.5*(1/d), so reciprocal rounding and finalhalving both accounted; no source borrowedfromshortdirect. hnormalfiniteinclM, halfh exact, halfxabs<=eta/2, d[.5,M], reciprocalpositive>=~5.56e-309 andfinalhalfpositive. Denom e2u+u^2+eta(1+u) includesfullcross term correctly. Exactnormalf implies reciprocalq=2f/(1+theta)>N, so reciprocalu error valid; finalhalvingexactorabs<=eta/2 normalfrelative<=u. Thusnormalbound(u+e)/(1-e)+u<5u sound. Generalreciprocalroundu*q+eta/2 thenhalf andpossiblehalvingeta/2 yieldsubnormalabsolute(u+e)*f/(1-e)+3eta/4<3eta, validacrossminnormalboundary withoutclaimqsubnormal. Wording no longer appropriate uniformsmallrelativebound read as normalboundnotpromised, not formalimpossibility theorem; domainrmin permits looser uniformbound ifderived, but requested explicitremainingabsoluteguarantee is valid. No correctroundingclaim. Actual unchangedexecutionpending.",
+      "name": "hour-1-saved-audio-10",
+      "question": "Your exact-integer argument avoids overflow; abruptly switch to numerical analysis. Python 3 floats here use IEEE 754 binary64, round-to-nearest ties-to-even, with gradual underflow. Implement f(x) for every finite nonnegative float x, approximating square root of x squared plus one, minus x. Direct evaluation suffers cancellation and overflow. [pause] Your result must remain positive even at x equal to ten to the power 308. You may use math.hypot, assumed correctly rounded. Give executable code, justify every intermediate's range, and derive a relative-error bound where the exact result is normal. What guarantee remains when it is subnormal?",
+      "recognizedQuestion": "your exact integer argument avoids overflow abruptly switch to numerical analysis Python three floats here use IEEE seven hundred and fifty four binary sixty four round to nearest ties to even with gradual underflow implement F for every finite nonnegative float X approximating square root of X squared plus one minus X direct evaluation suffers cancellation and overflow pause your result must remain positive even at X equal to ten to the power three hundred and eight you may use math hypot assumed correctly rounded give executable code justify every intermediates range and derive a relative error bound where the exact result is normal What guarantee remains when it is subnormal",
+      "questionSha256": "b4172cffa2c428d49ad99ea96f4439202c0df59b28e46a2f781608b6b1acf0e8",
+      "recognizedQuestionSha256": "2a83f9123ed33de646a9e1c513b659fe3a9e5265db98089a579371e21584ab5f",
+      "answer": "Rationalize the expression, then halve the denominator’s terms before adding them. This avoids both cancellation and overflow, and stays positive even at x = 1e308.\n\n```python\nimport math\n\n\ndef F(x):\n    \"\"\"Accept a finite, nonnegative Python float.\"\"\"\n    if not math.isfinite(x) or x < 0.0:\n        raise ValueError(\"x must be finite and nonnegative\")\n    h = math.hypot(x, 1.0)\n    d = 0.5 * h + 0.5 * x\n    return 0.5 * (1.0 / d)\n\n\nif __name__ == \"__main__\":\n    print(F(0.0))\n    print(F(1e308))\n```\n\nRun with Python 3 using the specified binary64 arithmetic and correctly rounded `math.hypot`.\n\nThe exact identity is\nf(x) = sqrt(x² + 1) − x = 1 / (sqrt(x² + 1) + x).\nThe code evaluates this as half the reciprocal of D = (sqrt(x² + 1) + x)/2.\n\nIntermediate ranges:\n• `h` is finite and at least 1. Even for the largest finite x, the exact hypot rounds to a finite number: its increase over x is far smaller than the overflow threshold.\n• `0.5*h` is exact and normal. `0.5*x` is finite; only this scaling can initially round through underflow.\n• `d` is at least 0.5. Both summands are at most half the largest finite float, so their sum cannot overflow.\n• `1.0/d` is positive and at most 2. Its smallest possible magnitude is approximately 5.56e−309, vastly above the smallest subnormal. Halving it therefore remains positive. At x = 1e308, the result is approximately 5e−309.\n\nFor an explicit error bound, let u = 2⁻⁵³ and η = 2⁻¹⁰⁷⁴. Correct rounding of hypot contributes at most u relative error to D; rounding `x/2` contributes at most η relative error because D ≥ 0.5. The denominator addition therefore gives\n|d/D − 1| ≤ e = 2u + u² + η(1 + u).\n\nIf the exact f is normal, the reciprocal intermediate is normal, so its relative rounding error is at most u. The final halving is exact unless it crosses into the subnormal range; even then its absolute rounding error is at most η/2, hence at most u relative to the exact normal f. Consequently,\n|F(x) − f(x)| / f(x) ≤ (u + e)/(1 − e) + u < 5u.\n\nFor subnormal f, a uniform small relative-error guarantee is no longer appropriate. Gradual underflow instead gives the absolute bound\n|F(x) − f(x)| ≤ ((u + e)/(1 − e)) f(x) + 3η/4 < 3η.\nThe η/4 term accounts for reciprocal rounding after halving, and η/2 for final rounding. Positivity is still guaranteed for every allowed input; correct rounding of the final answer is not claimed.",
+      "answerSha256": "702021fe9a165b9af4f49588bb70be3fb03e1064992ed76f7437db8bd2ba4079",
+      "generationId": "f8eb49fc-0199-43d4-9c5a-943dc4b32523",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 14,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "Which part changes—the floating-point format, rounding mode, gradual underflow, or the assumption that math.hypot is correctly rounded?",
+      "note": "Original What if that changes does not identify changedassumption. Actual answer correctly names four currentlygiven numericalassumptions and askswhichchanges; bounds/positivity dependonspecifiedformat/RNE/gradualunderflow/correcthypot. Appropriate contextualclarification fulfills ambiguousoriginalrequest, unlike recognizedYoriginalWhy row10. No newassumptioninvented or topic switch, requestedresponsecomplete.",
+      "name": "hour-1-saved-audio-11",
+      "question": "What if that changes?",
+      "recognizedQuestion": "What if that changes",
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0",
+      "recognizedQuestionSha256": "7506af4d5a91377df813c411289f3ff94fb0f7529477a6b10749d66c10700513",
+      "answer": "Which part changes—the floating-point format, rounding mode, gradual underflow, or the assumption that math.hypot is correctly rounded? The error bound and positivity guarantee depend on those assumptions.",
+      "answerSha256": "44472cc40ae742a49b1a03041096f3e75fbcb705bba1619d99f4e98d96c467b2",
+      "generationId": "423727c0-b383-4271-81b8-1fd493efdb3e",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 15,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "No—rationalization removes cancellation, but it cannot prevent flush-to-zero from destroying a small result.",
+      "note": "Actual priorF reciprocal1/d atx1e308subnormal nowflushes0 beforefinalhalf; falseinterviewerpositivitypremise rejected. Exactr<5e-309, minnormalN2^-1022; stipulatedoperation-producedfloat either0(relativeerror100%) orpositive>=N, relativeerror>N/(5e-309)-1>3.450147717 (>345%), contradicts1%allfinite guarantee. Correctlyqualifies operation-produced output, not forbidding returning/constructingpreservedsubnormals outsideflushingoperations. Scalednormalmantissa/integerexponent withoutformingproduct orexplicitnonflushingoutputcontractallowsrepresentation; retaininginputs alone notenough. Complete requestedproof/contractstatement, noF_scaledcodewasrequested orsupplied inthisactualanswer, no hardwareFTZexecution claim.",
+      "name": "hour-1-saved-audio-12",
+      "question": "I mean gradual underflow. Keep round-to-nearest, ties-to-even, but now every operation flushes a subnormal result to zero; inputs still retain all finite binary64 values. Since rationalization removes cancellation, it should still guarantee a positive result at x equal to ten to the power 308, correct? [pause] Reject or defend that premise. Can any function returning a float through those operations guarantee both positivity and relative error below one percent for every finite nonnegative input? Prove your answer using the smallest positive normal value, and state what output-contract change would permit an accurate representation.",
+      "recognizedQuestion": "I mean gradual underflow keep round to nearest ties to even but now every operation flushes a subnormal result to zero input still retain all finite binary sixty four values since rationalization removes cancellation it should still guarantee a positive result at x equal to ten to the power three hundred and eight correct pause reject or defend that premise can any function returning a flow through those operations guarantee both positivity and relative error below one percent for every finite nonnegative input prove your answer using the smallest positive normal value and state what output contract change would permit an accurate representation",
+      "questionSha256": "ec97763b238b2134484f8d09cc81446f2780ebf1ccf5fab4e30de770d3c38344",
+      "recognizedQuestionSha256": "65b350ed1d243d026e7a405be7fc08de8e22ee65994bb0a046f15a5da3f71618",
+      "answer": "No—rationalization removes cancellation, but it cannot prevent flush-to-zero from destroying a small result. I’m interpreting “flow” as “float.” In the previous code, at x = 1e308, the reciprocal 1.0 / d is subnormal and therefore becomes zero; F returns zero.\n\nLet m = 2**-1022 ≈ 2.2250738585072014e-308, the smallest positive normal binary64 value. The exact target is\n\nf(x) = 1 / (sqrt(x*x + 1) + x).\n\nAt x = 1e308, 0 < f(x) < 5e-309. Under the stipulated flush-to-zero output contract, an operation-produced float is either zero or, if positive, at least m. Zero has relative error 100%. Any positive output y satisfies\n\n|y - f(x)| / f(x) ≥ m / f(x) - 1 > 3.450147717,\n\nso its relative error exceeds 345%. Thus no such float-output function can guarantee both positivity and relative error below 1% for every allowed input. One input already proves impossibility.\n\nAn accurate representation requires changing the output contract: return a scaled pair (mantissa, exponent), representing mantissa × 2**exponent without evaluating that product under flush-to-zero. Alternatively, permit subnormal outputs to be constructed and preserved outside the flushing operations. Retaining subnormal inputs alone does not preserve subnormal arithmetic results.",
+      "answerSha256": "951fb299a19fb06ff298be1a9cabaf8d1eba244c222025bac14b21226fef1413",
+      "generationId": "a4861381-b7c0-438c-8ca9-9a5e0564558d",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 16,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "The stream orders the copy before the consuming kernel, but it does not order an immediate host rewrite after the copy finishes.",
+      "note": "Actual host-source lifetime/immutability contract violation distinguished from same-streamcopy-beforekernelordering. Twohost/twodevice/twostream protocol waits intendedpreviouscopyevent beforehostrewrite andpreviouskernel/ownstreamordering beforedeviceoverwrite, recordsC thenKevents andkeepsHimmutable untilitsCdone/DreservedthroughKdone. Eventgenerationwaitbeforererecord/initialfree/finalKwait explicit. Copy64MiB/(16GiB/s)=3.90625ms,8serial47.25ms; ideal singlecopyresourceplusindependentcompute pipeline8C+K=33.25ms, twobuffersfeasiblebecauseK2<=C3.90625 soeachslotfreedbeforenextreuse. Assumes aggregatecopythroughputunchanged, independentengines/streams/inputs/negligiblehostlaunch/fill/eventoverhead. Noimplicit host reuse orGPUhardwaretest claim, complete requested protocol/math proof.",
+      "answerSha256": "e7be900bf8a25c1f0d101fef407045f566f334e68d2c95d5e714cbb3880e391c",
+      "generationId": "001478ba-bff5-4723-87de-1fed37d87943",
+      "name": "hour-1-saved-audio-13",
+      "question": "Switch to GPU correctness guarantees. A hypothetical discrete GPU supports asynchronous copies from pinned host memory. A host enqueues a copy, immediately rewrites its source buffer, then enqueues a consuming kernel in the same explicit stream. What ordering holds, and what contract is violated? [pause] Specify a two-buffer protocol with events and exact ownership transitions. Each input is 64 MiB; measured copy throughput is 16 GiB per second, and its kernel takes 2 milliseconds. Derive serial time and an ideal overlap lower bound for eight inputs, stating required hardware assumptions. Final condition: host buffers may be reused only after their copies finish, and device buffers only after their kernels finish.",
+      "recognizedQuestion": "switch to GPU correctness guarantees a hypothetical discrete GPU supports asynchronous copies from pinned host memory a host in queues a copy immediately rewrites its source buffer then enqueues a consuming kernel in the same explicit stream what ordering holds and what contract is violated pause specify a two buffer protocol with events and exact ownership transitions each input is sixty four MIB measured copy throughput is sixteen Gib per second and its kernel takes two milliseconds derive serial time and an ideal overlap lower bound for eight inputs stating required hardware assumptions final condition host buffers may be reused only after their copies finish and device buffers only after their kernels finish",
+      "questionSha256": "a417454247bb865e75cfc83b8e2c1744a53449a6897384a01e802571db1c689c",
+      "recognizedQuestionSha256": "8bdc9ec02bf468760775f18d5685720c49e3a777529774b59a68b3f44c38738e",
+      "answer": "The stream orders the copy before the consuming kernel, but it does not order an immediate host rewrite after the copy finishes. Rewriting the pinned source while the asynchronous copy may still read it violates the source-buffer lifetime and immutability contract; the kernel can receive corrupted or mixed input.\n\nUse two pinned host buffers H0/H1, two device buffers D0/D1, and two explicit streams S0/S1, with copy-completion and kernel-completion events per slot:\n\n1. Initially, the host owns both host buffers, and both device buffers are free. For input i, select slot j = i % 2.\n2. Before filling Hj again, wait for that slot’s previous copy-completion event. Ownership transitions from copy engine back to host; the host may now rewrite Hj, even if the previous kernel is still running.\n3. Before starting a new copy into Dj, its previous kernel must finish. Queue the new copy after that kernel in Sj, or use an explicit wait on its kernel-completion event. Dj transitions from kernel-owned to available for the copy.\n4. After filling Hj, enqueue the host-to-device copy in Sj and record copy_done[j] immediately afterward. Hj becomes immutable and copy-owned until this event completes.\n5. Enqueue the consuming kernel next in Sj, then record kernel_done[j]. Stream ordering makes Dj’s contents ready before the kernel reads them. Dj remains reserved through the copy and kernel and cannot be overwritten until kernel_done[j] completes.\n\nTrack event generations: wait for the intended previous recording before re-recording an event. At shutdown, wait for both final kernel-completion events before releasing the buffers. No stream ordering alone authorizes early host reuse.\n\nEach copy takes 64 MiB / (16 GiB/s) = 1/256 second = 3.90625 milliseconds. Serial execution of eight inputs takes 8 × (3.90625 + 2) = 47.25 milliseconds.\n\nThe ideal overlapped lower bound is C + K + 7 × max(C, K) = 33.25 milliseconds: eight copies occupy 31.25 milliseconds, followed by the final 2-millisecond kernel. Two buffers suffice because each kernel finishes before the next overlapping copy finishes.\n\nThat bound assumes independent copy and compute engines, concurrent execution across the two streams, sustained 16 GiB/s copy throughput during kernels, unchanged 2-millisecond kernel time, independent inputs, and negligible host filling, launch, event, and scheduling overhead. A single stream containing every copy and kernel would remain serial.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 17,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "I’d capture evidence while it’s stuck, before restarting: check queue depth, in-flight jobs, worker heartbeats, and when the last job completed.",
+      "note": "Actual ambiguous alive-but-stalledbatchservice receives proper evidence-firstdiagnostic: queues/inflight/heartbeats/lastcompletion, stacks/resources/locks/pools/downstreamtimeouts, distinguishdeadlock/block/exhaustion/lostworkers. Requestsarchitecture/stalllogs/recentchanges/scope before changingcode. No invented rootcause or assumedqueueimplementation, complete investigativeanswer not executableprooftrial.",
+      "answerSha256": "3b35fbcecc8188d9ebdd3e7e2f400f81ed5d266d48a3edf5a956ddc40fe3774d",
+      "generationId": "727c329f-118e-44bb-8fe6-46344b717288",
+      "name": "hour-1-saved-audio-14",
+      "question": "A batch-processing service occasionally stops completing work, but the process is still alive. How would you start investigating?",
+      "recognizedQuestion": "a batch processing service occasionally stops completing work but the process is still alive how would you start investigating",
+      "questionSha256": "79335d8966f34cc3364483493ee025728c2fa5c52d942892f4f06df6584035ac",
+      "recognizedQuestionSha256": "cc8001a9de2ace037dd911984044d2ba619386efec6824dc340ed786375d5f27",
+      "answer": "I’d capture evidence while it’s stuck, before restarting: check queue depth, in-flight jobs, worker heartbeats, and when the last job completed. Then collect thread or task stack traces and inspect CPU, memory, I/O, locks, connection pools, and downstream timeouts to distinguish deadlock, blocked dependencies, resource exhaustion, or workers that have stopped running. Before changing code, I’d want the worker and queue architecture, logs around the stall, recent changes, and whether it affects particular jobs or the entire service.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 18,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "usefulPrefix": "We agreed that release delta’s retention period is exactly 37 days, Myra owns it, and the checkpoint identifier is Foo_17",
+      "note": "Question explicitly asks RECOGNIZED decision. Actual original source2Myra/Delta37/Foo underscoreseventeen retained; allthreefields reproduced withdeclaredFoo_17interpretation. Correctrecognizedmemoryrecall atsessionnative1800046; originalspokenMira misrecognitionremainsrow2strictFAIL, noMira-name repair. Actualaccepteddecisionage1800046-65659=1734387ms (about28.9minutes), near30minutes ofsession not exact30minutesfromdecisionacceptance. Final60+minute memory/retrievalbeyondbudget stillpending.",
+      "answerSha256": "db6b5ae5233a250d42fed0be7fc023a8a27df1a35b9df3ac2a22bf3a5fd48417",
+      "generationId": "64c1e837-2bac-42cd-85b0-7810444bbb6b",
+      "name": "hour-1-decision-after-30-minutes",
+      "question": "What exact retention period, owner and checkpoint identifier did we agree on near the beginning of this meeting? Use the recognized decision.",
+      "recognizedQuestion": "What exact retention period, owner and checkpoint identifier did we agree on near the beginning of this meeting? Use the recognized decision.",
+      "questionSha256": "7d4d3f3fbfea82838acb7a72bad093a7cafacadb5d2498e9f4994f4261138e27",
+      "recognizedQuestionSha256": "7d4d3f3fbfea82838acb7a72bad093a7cafacadb5d2498e9f4994f4261138e27",
+      "answer": "We agreed that release delta’s retention period is exactly 37 days, Myra owns it, and the checkpoint identifier is Foo_17—interpreting “Foo underscore seventeen” as that identifier.",
+      "phase": "complete",
+      "error": null
+    },
+    {
+      "round": 19,
+      "correctness": "planned_interruption",
+      "reasoningVerdict": "partial_sound",
+      "completed": false,
+      "note": "Actual initialcompleteFIFOclass usesfull17sizecounter/head/tailmod17, overflowandemptypop preservestate/output, constanttime/singlethreadqualified. Mainbeginsassertedempty/fill butstreamendsinsidefirstfillloop, no completecodefence/drain/wrap test. Genuinelysupersededby20authorizedclarification aftervisibleparentoutput, intentionalplannedinterruptionobserved. Sound visibleclass isnot complete requestedtestprogram orfullreasoning-pass credit; no borrowing sourcefromlatergeneration.",
+      "answerSha256": "93eef832744ebd7eee775930baa837a749174f52555947a814e84a3d8ef8f5c0",
+      "generationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+      "name": "hour-1-interrupted-coding-task",
+      "question": "Implement a complete C++17 bounded FIFO class with push, pop, capacity 17 and overflow rejection. Include a test main that asserts empty-pop failure, fills all 17 slots, rejects overflow, drains in FIFO order, and exercises wraparound. Give a useful opening before the code.",
+      "recognizedQuestion": "Implement a complete C++17 bounded FIFO class with push, pop, capacity 17 and overflow rejection. Include a test main that asserts empty-pop failure, fills all 17 slots, rejects overflow, drains in FIFO order, and exercises wraparound. Give a useful opening before the code.",
+      "questionSha256": "b7fe8d99b71d8ba9176f30017f8029aeffda9351de49aec32d62fc5587e3080e",
+      "recognizedQuestionSha256": "b7fe8d99b71d8ba9176f30017f8029aeffda9351de49aec32d62fc5587e3080e",
+      "answer": "Use a fixed-size ring buffer: all 17 slots are usable, push rejects overflow without changing the queue, and pop returns false when empty. Both operations take constant time; this class is not thread-safe.\n\n```cpp\n#include <array>\n#include <cassert>\n#include <cstddef>\n\nclass BoundedFIFO {\npublic:\n    static constexpr std::size_t capacity = 17;\n\n    bool push(int value) {\n        if (size_ == capacity) {\n            return false;\n        }\n        data_[tail_] = value;\n        tail_ = (tail_ + 1) % capacity;\n        ++size_;\n        return true;\n    }\n\n    // On failure, leaves output unchanged.\n    bool pop(int& output) {\n        if (size_ == 0) {\n            return false;\n        }\n        output = data_[head_];\n        head_ = (head_ + 1) % capacity;\n        --size_;\n        return true;\n    }\n\n    std::size_t size() const { return size_; }\n    bool empty() const { return size_ == 0; }\n\nprivate:\n    std::array<int, capacity> data_{};\n    std::size_t head_ = 0;\n    std::size_t tail_ = 0;\n    std::size_t size_ = 0;\n};\n\nint main() {\n    BoundedFIFO queue;\n    int value = -1;\n\n    assert(!queue.pop(value));\n    assert(value == -1);\n\n    // Use every slot, reject overflow, then drain in FIFO order.\n    for (int i = 0; i < 17; ++i) {\n        assert(queue.push(i));",
+      "phase": "superseded",
+      "error": null
+    },
+    {
+      "round": 20,
+      "correctness": "incomplete",
+      "reasoningVerdict": "not_scored",
+      "completed": false,
+      "note": "OriginalspokenWhywhileFIFOoutput recognizedY. Actualresponseaskswhetherwhyusearingbuffer oryesgoaheadwithcompleteimplementation, so originalcausalquestion unanswered. Nonemptyclarification reachesprotocolcompletion andforegroundauthorization, causingactualparent19supersession; itdoesnotfulfilloriginalWhy orcompleteparentcode. Receivedtextuncertaintyhandlingappropriate, butstrictrequestedworkINCOMPLETE/usefulcausalfeedbackno credit, notmissingtext. No substitution orhardcodedY->Why rule.",
+      "answerSha256": "f422b40d0985e15a92bd23e3ba4fd8ac2f706bc44b0e09caa3aea8a74e1380ea",
+      "generationId": "3c27bbdd-5642-456a-a4ad-d63044b5325d",
+      "name": "hour-1-spoken-why-during-coding",
+      "question": "Why?",
+      "recognizedQuestion": "Y",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "18f5384d58bcb1bba0bcd9e6a6781d1a6ac2cc280c330ecbab6cb7931b721552",
+      "answer": "Did you mean “why use a ring buffer,” or “yes, go ahead with the complete C++17 implementation?”",
+      "phase": "complete",
+      "error": null
+    }
+  ],
+  "measurements": {
+    "scope": "Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "hour-1-first-code",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 3262,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 3262,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2288,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 524,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 9301,
+        "cachedInputTokens": 0,
+        "outputTokens": 74,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 75.97535934291581,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 2,
+        "name": "hour-1-session-decision",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 8542,
+          "high": 8548
+        },
+        "acceptedToProtocolCompletionMs": 7565,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 9218,
+          "high": 9226
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 510,
+          "high": 518
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1653,
+          "high": 1661
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 6674,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 460,
+        "acceptanceAfterTranscriptFinalMs": 1143,
+        "inputTokens": 9532,
+        "cachedInputTokens": 8320,
+        "outputTokens": 203,
+        "reasoningTokens": 138,
+        "outputTokensPerStreamingSecond": 227.83389450056117,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 3,
+        "name": "hour-1-saved-audio-1",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848228736,
+          "low": 3453,
+          "high": 3458,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3132,
+          "high": 3137
+        },
+        "acceptedToProtocolCompletionMs": 4009,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 4804,
+          "high": 4812
+        },
+        "acceptedToCorrectWorkCompletionMs": 4009,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 772,
+          "high": 780
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 795,
+          "high": 803
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2115,
+        "submissionAckMs": 16,
+        "submittedToInputReaderReceiptMs": 439,
+        "acceptanceAfterTranscriptFinalMs": 23,
+        "inputTokens": 9823,
+        "cachedInputTokens": 8320,
+        "outputTokens": 85,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 44.87856388595565,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 4,
+        "name": "hour-1-spoken-why-warps",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848260016,
+          "low": 5803,
+          "high": 5808,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 5423,
+          "high": 5428
+        },
+        "acceptedToProtocolCompletionMs": 5778,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 6443,
+          "high": 6451
+        },
+        "acceptedToCorrectWorkCompletionMs": 5778,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 659,
+          "high": 667
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 665,
+          "high": 673
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 4458,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 474,
+        "acceptanceAfterTranscriptFinalMs": 6,
+        "inputTokens": 10010,
+        "cachedInputTokens": 0,
+        "outputTokens": 101,
+        "reasoningTokens": 23,
+        "outputTokensPerStreamingSecond": 76.51515151515152,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 5,
+        "name": "hour-1-saved-audio-2",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848403493,
+          "low": 14288,
+          "high": 14293,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 13352,
+          "high": 13357
+        },
+        "acceptedToProtocolCompletionMs": 20238,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 21911,
+          "high": 21921
+        },
+        "acceptedToCorrectWorkCompletionMs": 20238,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 698,
+          "high": 708
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1673,
+          "high": 1683
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 11470,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 641,
+        "acceptanceAfterTranscriptFinalMs": 975,
+        "inputTokens": 10289,
+        "cachedInputTokens": 0,
+        "outputTokens": 711,
+        "reasoningTokens": 259,
+        "outputTokensPerStreamingSecond": 81.09032846715328,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 6,
+        "name": "hour-1-saved-audio-3",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 3,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848532708,
+          "low": 15398,
+          "high": 15403,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 14894,
+          "high": 14899
+        },
+        "acceptedToProtocolCompletionMs": 30266,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 31994,
+          "high": 32003
+        },
+        "acceptedToCorrectWorkCompletionMs": 30266,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 594,
+          "high": 603
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1728,
+          "high": 1737
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 12826,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 529,
+        "acceptanceAfterTranscriptFinalMs": 1134,
+        "inputTokens": 11300,
+        "cachedInputTokens": 0,
+        "outputTokens": 923,
+        "reasoningTokens": 286,
+        "outputTokensPerStreamingSecond": 52.9243119266055,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 3,
+          "referenceWords": 103,
+          "rate": 0.02912621359223301,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 3,
+          "referenceWords": 103,
+          "rate": 0.02912621359223301,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 7,
+        "name": "hour-1-saved-audio-4",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 5,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848658694,
+          "low": 17097,
+          "high": 17103,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 16185,
+          "high": 16191
+        },
+        "acceptedToProtocolCompletionMs": 37537,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 39218,
+          "high": 39229
+        },
+        "acceptedToCorrectWorkCompletionMs": 37537,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 1124,
+          "high": 1135
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1681,
+          "high": 1692
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 14383,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 440,
+        "acceptanceAfterTranscriptFinalMs": 557,
+        "inputTokens": 12583,
+        "cachedInputTokens": 0,
+        "outputTokens": 1188,
+        "reasoningTokens": 337,
+        "outputTokensPerStreamingSecond": 51.30862917854366,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 94,
+          "rate": 0.010638297872340425,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 94,
+          "rate": 0.010638297872340425,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 8,
+        "name": "hour-1-saved-audio-5",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 6,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848784772,
+          "low": 9400,
+          "high": 9406,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 9191,
+          "high": 9197
+        },
+        "acceptedToProtocolCompletionMs": 22669,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 24335,
+          "high": 24346
+        },
+        "acceptedToCorrectWorkCompletionMs": 22669,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 613,
+          "high": 624
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1677
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 7206,
+        "submissionAckMs": 10,
+        "submittedToInputReaderReceiptMs": 464,
+        "acceptanceAfterTranscriptFinalMs": 1053,
+        "inputTokens": 14126,
+        "cachedInputTokens": 0,
+        "outputTokens": 793,
+        "reasoningTokens": 123,
+        "outputTokensPerStreamingSecond": 51.28370950009701,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 107,
+          "rate": 0.009345794392523364,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 107,
+          "rate": 0.009345794392523364,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 9,
+        "name": "hour-1-saved-audio-6",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 7,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848865669,
+          "low": 5337,
+          "high": 5342,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 4204,
+          "high": 4209
+        },
+        "acceptedToProtocolCompletionMs": 5724,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7391,
+          "high": 7401
+        },
+        "acceptedToCorrectWorkCompletionMs": 5724,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 636,
+          "high": 646
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1667,
+          "high": 1677
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2344,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 461,
+        "acceptanceAfterTranscriptFinalMs": 1031,
+        "inputTokens": 14515,
+        "cachedInputTokens": 8320,
+        "outputTokens": 125,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 36.98224852071006,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 32,
+          "rate": 0.03125,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 32,
+          "rate": 0.03125,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 10,
+        "name": "hour-1-saved-audio-7",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": false,
+        "correctness": "incomplete",
+        "reasoningVerdict": "not_scored",
+        "acceptedToActualWriteMs": 5,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 7361,
+          "high": 7366
+        },
+        "acceptedToProtocolCompletionMs": 6915,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7648,
+          "high": 7658
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 722,
+          "high": 732
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 733,
+          "high": 743
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 6396,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 487,
+        "acceptanceAfterTranscriptFinalMs": 11,
+        "inputTokens": 14408,
+        "cachedInputTokens": 8320,
+        "outputTokens": 133,
+        "reasoningTokens": 93,
+        "outputTokensPerStreamingSecond": 256.26204238921,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 11,
+        "name": "hour-1-saved-audio-8",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 8,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 11586,
+          "high": 11593
+        },
+        "acceptedToProtocolCompletionMs": 26706,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 28371,
+          "high": 28384
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 591,
+          "high": 604
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1665,
+          "high": 1678
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 9711,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 420,
+        "acceptanceAfterTranscriptFinalMs": 1074,
+        "inputTokens": 15513,
+        "cachedInputTokens": 0,
+        "outputTokens": 1166,
+        "reasoningTokens": 149,
+        "outputTokensPerStreamingSecond": 68.6084142394822,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 12,
+          "referenceWords": 115,
+          "rate": 0.10434782608695652,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 12,
+          "referenceWords": 115,
+          "rate": 0.10434782608695652,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 12,
+        "name": "hour-1-saved-audio-9",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 10,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 3982,
+          "high": 3988
+        },
+        "acceptedToProtocolCompletionMs": 19233,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 20900,
+          "high": 20913
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 635,
+          "high": 648
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1667,
+          "high": 1680
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2106,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 442,
+        "acceptanceAfterTranscriptFinalMs": 1032,
+        "inputTokens": 17290,
+        "cachedInputTokens": 0,
+        "outputTokens": 981,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 57.277982133473465,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 4,
+          "referenceWords": 77,
+          "rate": 0.05194805194805195,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 4,
+          "referenceWords": 77,
+          "rate": 0.05194805194805195,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 13,
+        "name": "hour-1-saved-audio-10",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 9,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 27770,
+          "high": 27775
+        },
+        "acceptedToProtocolCompletionMs": 39802,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 41468,
+          "high": 41480
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 607,
+          "high": 619
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1678
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 25662,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 442,
+        "acceptanceAfterTranscriptFinalMs": 1059,
+        "inputTokens": 18900,
+        "cachedInputTokens": 8320,
+        "outputTokens": 1531,
+        "reasoningTokens": 776,
+        "outputTokensPerStreamingSecond": 108.27439886845826,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 16,
+          "referenceWords": 104,
+          "rate": 0.15384615384615385,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 16,
+          "referenceWords": 104,
+          "rate": 0.15384615384615385,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 14,
+        "name": "hour-1-saved-audio-11",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 7,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849479281,
+          "low": 4174,
+          "high": 4179,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3769,
+          "high": 3774
+        },
+        "acceptedToProtocolCompletionMs": 3924,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 4456,
+          "high": 4468
+        },
+        "acceptedToCorrectWorkCompletionMs": 3924,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 495,
+          "high": 507
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 532,
+          "high": 544
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 3016,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 534,
+        "acceptanceAfterTranscriptFinalMs": 37,
+        "inputTokens": 17742,
+        "cachedInputTokens": 0,
+        "outputTokens": 83,
+        "reasoningTokens": 25,
+        "outputTokensPerStreamingSecond": 91.40969162995594,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 4,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 4,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 15,
+        "name": "hour-1-saved-audio-12",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 12,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849654230,
+          "low": 12034,
+          "high": 12040,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 11559,
+          "high": 11565
+        },
+        "acceptedToProtocolCompletionMs": 17288,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 18931,
+          "high": 18944
+        },
+        "acceptedToCorrectWorkCompletionMs": 17288,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 306,
+          "high": 319
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1643,
+          "high": 1656
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 9636,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 484,
+        "acceptanceAfterTranscriptFinalMs": 1337,
+        "inputTokens": 20445,
+        "cachedInputTokens": 9600,
+        "outputTokens": 490,
+        "reasoningTokens": 151,
+        "outputTokensPerStreamingSecond": 64.03554626241505,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 9,
+          "referenceWords": 98,
+          "rate": 0.09183673469387756,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 9,
+          "referenceWords": 98,
+          "rate": 0.09183673469387756,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 16,
+        "name": "hour-1-saved-audio-13",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 11,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849786395,
+          "low": 10506,
+          "high": 10512,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 9924,
+          "high": 9930
+        },
+        "acceptedToProtocolCompletionMs": 21962,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 23672,
+          "high": 23686
+        },
+        "acceptedToCorrectWorkCompletionMs": 21962,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 687,
+          "high": 701
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1710,
+          "high": 1724
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 7998,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 471,
+        "acceptanceAfterTranscriptFinalMs": 1023,
+        "inputTokens": 21110,
+        "cachedInputTokens": 8320,
+        "outputTokens": 694,
+        "reasoningTokens": 138,
+        "outputTokensPerStreamingSecond": 49.699226582641074,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 6,
+          "referenceWords": 111,
+          "rate": 0.05405405405405406,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 6,
+          "referenceWords": 111,
+          "rate": 0.05405405405405406,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 17,
+        "name": "hour-1-saved-audio-14",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 12,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849862079,
+          "low": 4947,
+          "high": 4954,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 4018,
+          "high": 4025
+        },
+        "acceptedToProtocolCompletionMs": 5522,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7188,
+          "high": 7204
+        },
+        "acceptedToCorrectWorkCompletionMs": 5522,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 425,
+          "high": 441
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1682
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2146,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 460,
+        "acceptanceAfterTranscriptFinalMs": 1241,
+        "inputTokens": 20975,
+        "cachedInputTokens": 0,
+        "outputTokens": 124,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 36.72985781990521,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 19,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 19,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 18,
+        "name": "hour-1-decision-after-30-minutes",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 13,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849926664,
+          "low": 3309,
+          "high": 3318,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 3571,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 3571,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2694,
+        "submissionAckMs": 16,
+        "submittedToInputReaderReceiptMs": 502,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 22096,
+        "cachedInputTokens": 8320,
+        "outputTokens": 57,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 64.99429874572407,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 19,
+        "name": "hour-1-interrupted-coding-task",
+        "kind": "typed",
+        "phase": "superseded",
+        "error": null,
+        "intentionalInterruption": true,
+        "ordinaryFollowup": false,
+        "completed": false,
+        "observedPlannedInterruption": true,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": false,
+        "correctness": "planned_interruption",
+        "reasoningVerdict": "partial_sound",
+        "acceptedToActualWriteMs": 12,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": null,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 8109,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 448,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": null,
+        "cachedInputTokens": null,
+        "outputTokens": null,
+        "reasoningTokens": null,
+        "outputTokensPerStreamingSecond": null,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 20,
+        "name": "hour-1-spoken-why-during-coding",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": false,
+        "correctness": "incomplete",
+        "reasoningVerdict": "not_scored",
+        "acceptedToActualWriteMs": 8,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 5669,
+          "high": 5675
+        },
+        "acceptedToProtocolCompletionMs": 4747,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 6317,
+          "high": 6333
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 1532,
+          "high": 1548
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1570,
+          "high": 1586
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 3949,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 521,
+        "acceptanceAfterTranscriptFinalMs": 38,
+        "inputTokens": 20657,
+        "cachedInputTokens": 8320,
+        "outputTokens": 73,
+        "reasoningTokens": 29,
+        "outputTokensPerStreamingSecond": 91.47869674185463,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      }
+    ],
+    "counts": {
+      "all": 20,
+      "expectedReplies": 20,
+      "complete": 19,
+      "missing": 0,
+      "errors": 0,
+      "intentionallyInterrupted": 1,
+      "observedPlannedInterruptions": 1,
+      "observerInterference": 0,
+      "correct": 13,
+      "incorrect": 4,
+      "requestedWorkComplete": 17,
+      "requestedWorkIncomplete": 3,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 17,
+      "reasoningFail": 0,
+      "correctnessPending": 0,
+      "reasoningIncomplete": 0,
+      "correctnessIncomplete": 2
+    },
+    "acceptedToWriteMs": {
+      "count": 20,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 12,
+      "max": 13
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 20,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 12,
+      "max": 13
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 20,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 12,
+      "max": 13
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 19,
+      "min": 3262,
+      "median": 7565,
+      "sampleP95": 39802,
+      "max": 39802
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 13,
+      "min": 3262,
+      "median": 5778,
+      "sampleP95": 37537,
+      "max": 37537
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 17,
+      "min": 4468,
+      "median": 18944,
+      "sampleP95": 41480,
+      "max": 41480
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 19,
+      "min": 36.72985781990521,
+      "median": 64.99429874572407,
+      "sampleP95": 256.26204238921,
+      "max": 256.26204238921
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 11,
+      "min": 3458,
+      "median": 9406,
+      "sampleP95": 17103,
+      "max": 17103
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 1,
+      "min": 3318,
+      "median": 3318,
+      "sampleP95": 3318,
+      "max": 3318
+    },
+    "usefulFollowupMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 0,
+      "observed": 0,
+      "missingOrUnverified": 0,
+      "p95": null,
+      "gateEvaluable": false,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [
+        {
+          "generationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "previousGenerationId": "6f57850a-2eea-430d-8877-2a3086e049dc",
+          "acceptedHostMs": {
+            "low": 1791848195839,
+            "high": 1791848195845
+          },
+          "foregroundAuthorizedAt": 72541,
+          "inferenceAcceptedAt": 65659,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848195848,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "previousGenerationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "acceptedHostMs": {
+            "low": 1791848228403,
+            "high": 1791848228414
+          },
+          "foregroundAuthorizedAt": 105109,
+          "inferenceAcceptedAt": 102778,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848228415,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 12
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "previousGenerationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "acceptedHostMs": {
+            "low": 1791848259517,
+            "high": 1791848259523
+          },
+          "foregroundAuthorizedAt": 136218,
+          "inferenceAcceptedAt": 131578,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848259524,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+          "previousGenerationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "acceptedHostMs": {
+            "low": 1791848402549,
+            "high": 1791848402562
+          },
+          "foregroundAuthorizedAt": 279250,
+          "inferenceAcceptedAt": 267579,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848402557,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 8
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "4fe76aee-65cc-49ca-90b2-4eb4d01f9722",
+          "previousGenerationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+          "acceptedHostMs": {
+            "low": 1791848532198,
+            "high": 1791848532204
+          },
+          "foregroundAuthorizedAt": 408899,
+          "inferenceAcceptedAt": 395738,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848532204,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 6
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "66a5cb47-45d3-46ba-8c7c-8095b6855b26",
+          "previousGenerationId": "4fe76aee-65cc-49ca-90b2-4eb4d01f9722",
+          "acceptedHostMs": {
+            "low": 1791848657776,
+            "high": 1791848657783
+          },
+          "foregroundAuthorizedAt": 534477,
+          "inferenceAcceptedAt": 519978,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848657782,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 6
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "2430ca1d-4a21-42ee-8f3e-39ff309c4662",
+          "previousGenerationId": "66a5cb47-45d3-46ba-8c7c-8095b6855b26",
+          "acceptedHostMs": {
+            "low": 1791848784448,
+            "high": 1791848784456
+          },
+          "foregroundAuthorizedAt": 661149,
+          "inferenceAcceptedAt": 653738,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848784455,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "18ee3a2c-ca7b-4e23-8921-cf3c8c55fd1c",
+          "previousGenerationId": "2430ca1d-4a21-42ee-8f3e-39ff309c4662",
+          "acceptedHostMs": {
+            "low": 1791848864529,
+            "high": 1791848864538
+          },
+          "foregroundAuthorizedAt": 741230,
+          "inferenceAcceptedAt": 738698,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848864536,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "c57690ee-c1ad-4e98-8ef4-ef1803395dec",
+          "previousGenerationId": "18ee3a2c-ca7b-4e23-8921-cf3c8c55fd1c",
+          "acceptedHostMs": {
+            "low": 1791848981539,
+            "high": 1791848981548
+          },
+          "foregroundAuthorizedAt": 858241,
+          "inferenceAcceptedAt": 851618,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848981546,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "067d08b8-6b2d-4a63-8a1b-af9fe6eb0ca5",
+          "previousGenerationId": "c57690ee-c1ad-4e98-8ef4-ef1803395dec",
+          "acceptedHostMs": {
+            "low": 1791849163505,
+            "high": 1791849163522
+          },
+          "foregroundAuthorizedAt": 1040213,
+          "inferenceAcceptedAt": 1030299,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849163520,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 15
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "7f8f6649-c520-4bf7-a75b-b88aba4ece21",
+          "previousGenerationId": "067d08b8-6b2d-4a63-8a1b-af9fe6eb0ca5",
+          "acceptedHostMs": {
+            "low": 1791849265786,
+            "high": 1791849265796
+          },
+          "foregroundAuthorizedAt": 1142487,
+          "inferenceAcceptedAt": 1140178,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849265793,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "f8eb49fc-0199-43d4-9c5a-943dc4b32523",
+          "previousGenerationId": "7f8f6649-c520-4bf7-a75b-b88aba4ece21",
+          "acceptedHostMs": {
+            "low": 1791849426611,
+            "high": 1791849426621
+          },
+          "foregroundAuthorizedAt": 1303312,
+          "inferenceAcceptedAt": 1277338,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849426618,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "423727c0-b383-4271-81b8-1fd493efdb3e",
+          "previousGenerationId": "f8eb49fc-0199-43d4-9c5a-943dc4b32523",
+          "acceptedHostMs": {
+            "low": 1791849478869,
+            "high": 1791849478879
+          },
+          "foregroundAuthorizedAt": 1355569,
+          "inferenceAcceptedAt": 1352339,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849478876,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "a4861381-b7c0-438c-8ca9-9a5e0564558d",
+          "previousGenerationId": "423727c0-b383-4271-81b8-1fd493efdb3e",
+          "acceptedHostMs": {
+            "low": 1791849653746,
+            "high": 1791849653757
+          },
+          "foregroundAuthorizedAt": 1530447,
+          "inferenceAcceptedAt": 1520539,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849653755,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "001478ba-bff5-4723-87de-1fed37d87943",
+          "previousGenerationId": "a4861381-b7c0-438c-8ca9-9a5e0564558d",
+          "acceptedHostMs": {
+            "low": 1791849785801,
+            "high": 1791849785815
+          },
+          "foregroundAuthorizedAt": 1662503,
+          "inferenceAcceptedAt": 1654299,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849785813,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 12
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "727c329f-118e-44bb-8fe6-46344b717288",
+          "previousGenerationId": "001478ba-bff5-4723-87de-1fed37d87943",
+          "acceptedHostMs": {
+            "low": 1791849861140,
+            "high": 1791849861156
+          },
+          "foregroundAuthorizedAt": 1737845,
+          "inferenceAcceptedAt": 1735498,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849861150,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "64c1e837-2bac-42cd-85b0-7810444bbb6b",
+          "previousGenerationId": "727c329f-118e-44bb-8fe6-46344b717288",
+          "acceptedHostMs": {
+            "low": 1791849923345,
+            "high": 1791849923358
+          },
+          "foregroundAuthorizedAt": 1800046,
+          "inferenceAcceptedAt": 1800046,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849923355,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+          "previousGenerationId": "64c1e837-2bac-42cd-85b0-7810444bbb6b",
+          "acceptedHostMs": {
+            "low": 1791849933342,
+            "high": 1791849933360
+          },
+          "foregroundAuthorizedAt": 1810045,
+          "inferenceAcceptedAt": 1810045,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849933355,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 13
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "3c27bbdd-5642-456a-a4ad-d63044b5325d",
+          "previousGenerationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+          "acceptedHostMs": {
+            "low": 1791849948408,
+            "high": 1791849948423
+          },
+          "foregroundAuthorizedAt": 1825109,
+          "inferenceAcceptedAt": 1821019,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849948418,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        }
+      ],
+      "maxPossibleCarryHighMs": 15,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "scope": "Immutable snapshot of individually read actual sources. Prefix-only, no completed3h/long-memory/whole-run latency credit. Original speech/interface correctness, core reasoning and requested completion separated. Source execution waits both new queues and fresh owned-app exit. No model-source repair, canned expected-answer substitution or production topic rules. Measurements resolve the actual later lifecycle only for the identical original generation/context/input/revision/acceptance; original recorder-return measurements are retained separately. Planned parent19 has visible partial output and actual supersession, not a missing answer.",
+  "capturedRowMeasurements": {
+    "scope": "Original recorder-return row projection. Intentionally unfinished rows can precede provider output and cancellation; these counts do not establish final generation outcomes.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "hour-1-first-code",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 3262,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 3262,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2288,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 524,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 9301,
+        "cachedInputTokens": 0,
+        "outputTokens": 74,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 75.97535934291581,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 2,
+        "name": "hour-1-session-decision",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 8542,
+          "high": 8548
+        },
+        "acceptedToProtocolCompletionMs": 7565,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 9218,
+          "high": 9226
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 510,
+          "high": 518
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1653,
+          "high": 1661
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 6674,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 460,
+        "acceptanceAfterTranscriptFinalMs": 1143,
+        "inputTokens": 9532,
+        "cachedInputTokens": 8320,
+        "outputTokens": 203,
+        "reasoningTokens": 138,
+        "outputTokensPerStreamingSecond": 227.83389450056117,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 35,
+          "rate": 0.02857142857142857,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 3,
+        "name": "hour-1-saved-audio-1",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 1,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848228736,
+          "low": 3453,
+          "high": 3458,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3132,
+          "high": 3137
+        },
+        "acceptedToProtocolCompletionMs": 4009,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 4804,
+          "high": 4812
+        },
+        "acceptedToCorrectWorkCompletionMs": 4009,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 772,
+          "high": 780
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 795,
+          "high": 803
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2115,
+        "submissionAckMs": 16,
+        "submittedToInputReaderReceiptMs": 439,
+        "acceptanceAfterTranscriptFinalMs": 23,
+        "inputTokens": 9823,
+        "cachedInputTokens": 8320,
+        "outputTokens": 85,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 44.87856388595565,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 4,
+        "name": "hour-1-spoken-why-warps",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848260016,
+          "low": 5803,
+          "high": 5808,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 5423,
+          "high": 5428
+        },
+        "acceptedToProtocolCompletionMs": 5778,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 6443,
+          "high": 6451
+        },
+        "acceptedToCorrectWorkCompletionMs": 5778,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 659,
+          "high": 667
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 665,
+          "high": 673
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 4458,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 474,
+        "acceptanceAfterTranscriptFinalMs": 6,
+        "inputTokens": 10010,
+        "cachedInputTokens": 0,
+        "outputTokens": 101,
+        "reasoningTokens": 23,
+        "outputTokensPerStreamingSecond": 76.51515151515152,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 5,
+        "name": "hour-1-saved-audio-2",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 2,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848403493,
+          "low": 14288,
+          "high": 14293,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 13352,
+          "high": 13357
+        },
+        "acceptedToProtocolCompletionMs": 20238,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 21911,
+          "high": 21921
+        },
+        "acceptedToCorrectWorkCompletionMs": 20238,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 698,
+          "high": 708
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1673,
+          "high": 1683
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 11470,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 641,
+        "acceptanceAfterTranscriptFinalMs": 975,
+        "inputTokens": 10289,
+        "cachedInputTokens": 0,
+        "outputTokens": 711,
+        "reasoningTokens": 259,
+        "outputTokensPerStreamingSecond": 81.09032846715328,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 10,
+          "referenceWords": 86,
+          "rate": 0.11627906976744186,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 6,
+        "name": "hour-1-saved-audio-3",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 3,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848532708,
+          "low": 15398,
+          "high": 15403,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 14894,
+          "high": 14899
+        },
+        "acceptedToProtocolCompletionMs": 30266,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 31994,
+          "high": 32003
+        },
+        "acceptedToCorrectWorkCompletionMs": 30266,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 594,
+          "high": 603
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1728,
+          "high": 1737
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 12826,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 529,
+        "acceptanceAfterTranscriptFinalMs": 1134,
+        "inputTokens": 11300,
+        "cachedInputTokens": 0,
+        "outputTokens": 923,
+        "reasoningTokens": 286,
+        "outputTokensPerStreamingSecond": 52.9243119266055,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 3,
+          "referenceWords": 103,
+          "rate": 0.02912621359223301,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 3,
+          "referenceWords": 103,
+          "rate": 0.02912621359223301,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 7,
+        "name": "hour-1-saved-audio-4",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 5,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848658694,
+          "low": 17097,
+          "high": 17103,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 16185,
+          "high": 16191
+        },
+        "acceptedToProtocolCompletionMs": 37537,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 39218,
+          "high": 39229
+        },
+        "acceptedToCorrectWorkCompletionMs": 37537,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 1124,
+          "high": 1135
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1681,
+          "high": 1692
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 14383,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 440,
+        "acceptanceAfterTranscriptFinalMs": 557,
+        "inputTokens": 12583,
+        "cachedInputTokens": 0,
+        "outputTokens": 1188,
+        "reasoningTokens": 337,
+        "outputTokensPerStreamingSecond": 51.30862917854366,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 94,
+          "rate": 0.010638297872340425,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 94,
+          "rate": 0.010638297872340425,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 8,
+        "name": "hour-1-saved-audio-5",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 6,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848784772,
+          "low": 9400,
+          "high": 9406,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 9191,
+          "high": 9197
+        },
+        "acceptedToProtocolCompletionMs": 22669,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 24335,
+          "high": 24346
+        },
+        "acceptedToCorrectWorkCompletionMs": 22669,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 613,
+          "high": 624
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1677
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 7206,
+        "submissionAckMs": 10,
+        "submittedToInputReaderReceiptMs": 464,
+        "acceptanceAfterTranscriptFinalMs": 1053,
+        "inputTokens": 14126,
+        "cachedInputTokens": 0,
+        "outputTokens": 793,
+        "reasoningTokens": 123,
+        "outputTokensPerStreamingSecond": 51.28370950009701,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 107,
+          "rate": 0.009345794392523364,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 107,
+          "rate": 0.009345794392523364,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 9,
+        "name": "hour-1-saved-audio-6",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 7,
+        "usefulFeedbackMs": {
+          "hostMs": 1791848865669,
+          "low": 5337,
+          "high": 5342,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 4204,
+          "high": 4209
+        },
+        "acceptedToProtocolCompletionMs": 5724,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7391,
+          "high": 7401
+        },
+        "acceptedToCorrectWorkCompletionMs": 5724,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 636,
+          "high": 646
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1667,
+          "high": 1677
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2344,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 461,
+        "acceptanceAfterTranscriptFinalMs": 1031,
+        "inputTokens": 14515,
+        "cachedInputTokens": 8320,
+        "outputTokens": 125,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 36.98224852071006,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 32,
+          "rate": 0.03125,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 32,
+          "rate": 0.03125,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 10,
+        "name": "hour-1-saved-audio-7",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": false,
+        "correctness": "incomplete",
+        "reasoningVerdict": "not_scored",
+        "acceptedToActualWriteMs": 5,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 7361,
+          "high": 7366
+        },
+        "acceptedToProtocolCompletionMs": 6915,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7648,
+          "high": 7658
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 722,
+          "high": 732
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 733,
+          "high": 743
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 6396,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 487,
+        "acceptanceAfterTranscriptFinalMs": 11,
+        "inputTokens": 14408,
+        "cachedInputTokens": 8320,
+        "outputTokens": 133,
+        "reasoningTokens": 93,
+        "outputTokensPerStreamingSecond": 256.26204238921,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 11,
+        "name": "hour-1-saved-audio-8",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 8,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 11586,
+          "high": 11593
+        },
+        "acceptedToProtocolCompletionMs": 26706,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 28371,
+          "high": 28384
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 591,
+          "high": 604
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1665,
+          "high": 1678
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 9711,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 420,
+        "acceptanceAfterTranscriptFinalMs": 1074,
+        "inputTokens": 15513,
+        "cachedInputTokens": 0,
+        "outputTokens": 1166,
+        "reasoningTokens": 149,
+        "outputTokensPerStreamingSecond": 68.6084142394822,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 12,
+          "referenceWords": 115,
+          "rate": 0.10434782608695652,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 12,
+          "referenceWords": 115,
+          "rate": 0.10434782608695652,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 12,
+        "name": "hour-1-saved-audio-9",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 10,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 3982,
+          "high": 3988
+        },
+        "acceptedToProtocolCompletionMs": 19233,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 20900,
+          "high": 20913
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 635,
+          "high": 648
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1667,
+          "high": 1680
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2106,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 442,
+        "acceptanceAfterTranscriptFinalMs": 1032,
+        "inputTokens": 17290,
+        "cachedInputTokens": 0,
+        "outputTokens": 981,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 57.277982133473465,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 4,
+          "referenceWords": 77,
+          "rate": 0.05194805194805195,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 4,
+          "referenceWords": 77,
+          "rate": 0.05194805194805195,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 13,
+        "name": "hour-1-saved-audio-10",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 9,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 27770,
+          "high": 27775
+        },
+        "acceptedToProtocolCompletionMs": 39802,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 41468,
+          "high": 41480
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 607,
+          "high": 619
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1678
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 25662,
+        "submissionAckMs": 12,
+        "submittedToInputReaderReceiptMs": 442,
+        "acceptanceAfterTranscriptFinalMs": 1059,
+        "inputTokens": 18900,
+        "cachedInputTokens": 8320,
+        "outputTokens": 1531,
+        "reasoningTokens": 776,
+        "outputTokensPerStreamingSecond": 108.27439886845826,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 16,
+          "referenceWords": 104,
+          "rate": 0.15384615384615385,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 16,
+          "referenceWords": 104,
+          "rate": 0.15384615384615385,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 14,
+        "name": "hour-1-saved-audio-11",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 7,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849479281,
+          "low": 4174,
+          "high": 4179,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3769,
+          "high": 3774
+        },
+        "acceptedToProtocolCompletionMs": 3924,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 4456,
+          "high": 4468
+        },
+        "acceptedToCorrectWorkCompletionMs": 3924,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 495,
+          "high": 507
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 532,
+          "high": 544
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 3016,
+        "submissionAckMs": 14,
+        "submittedToInputReaderReceiptMs": 534,
+        "acceptanceAfterTranscriptFinalMs": 37,
+        "inputTokens": 17742,
+        "cachedInputTokens": 0,
+        "outputTokens": 83,
+        "reasoningTokens": 25,
+        "outputTokensPerStreamingSecond": 91.40969162995594,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 4,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 4,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 15,
+        "name": "hour-1-saved-audio-12",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 12,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849654230,
+          "low": 12034,
+          "high": 12040,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 11559,
+          "high": 11565
+        },
+        "acceptedToProtocolCompletionMs": 17288,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 18931,
+          "high": 18944
+        },
+        "acceptedToCorrectWorkCompletionMs": 17288,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 306,
+          "high": 319
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1643,
+          "high": 1656
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 9636,
+        "submissionAckMs": 15,
+        "submittedToInputReaderReceiptMs": 484,
+        "acceptanceAfterTranscriptFinalMs": 1337,
+        "inputTokens": 20445,
+        "cachedInputTokens": 9600,
+        "outputTokens": 490,
+        "reasoningTokens": 151,
+        "outputTokensPerStreamingSecond": 64.03554626241505,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 9,
+          "referenceWords": 98,
+          "rate": 0.09183673469387756,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 9,
+          "referenceWords": 98,
+          "rate": 0.09183673469387756,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 16,
+        "name": "hour-1-saved-audio-13",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 11,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849786395,
+          "low": 10506,
+          "high": 10512,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 9924,
+          "high": 9930
+        },
+        "acceptedToProtocolCompletionMs": 21962,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 23672,
+          "high": 23686
+        },
+        "acceptedToCorrectWorkCompletionMs": 21962,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 687,
+          "high": 701
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1710,
+          "high": 1724
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 7998,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 471,
+        "acceptanceAfterTranscriptFinalMs": 1023,
+        "inputTokens": 21110,
+        "cachedInputTokens": 8320,
+        "outputTokens": 694,
+        "reasoningTokens": 138,
+        "outputTokensPerStreamingSecond": 49.699226582641074,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 6,
+          "referenceWords": 111,
+          "rate": 0.05405405405405406,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 6,
+          "referenceWords": 111,
+          "rate": 0.05405405405405406,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 17,
+        "name": "hour-1-saved-audio-14",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 12,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849862079,
+          "low": 4947,
+          "high": 4954,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 4018,
+          "high": 4025
+        },
+        "acceptedToProtocolCompletionMs": 5522,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 7188,
+          "high": 7204
+        },
+        "acceptedToCorrectWorkCompletionMs": 5522,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 425,
+          "high": 441
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1666,
+          "high": 1682
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2146,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 460,
+        "acceptanceAfterTranscriptFinalMs": 1241,
+        "inputTokens": 20975,
+        "cachedInputTokens": 0,
+        "outputTokens": 124,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 36.72985781990521,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 19,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 19,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 18,
+        "name": "hour-1-decision-after-30-minutes",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": 13,
+        "usefulFeedbackMs": {
+          "hostMs": 1791849926664,
+          "low": 3309,
+          "high": 3318,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 3571,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 3571,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 2694,
+        "submissionAckMs": 16,
+        "submittedToInputReaderReceiptMs": 502,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 22096,
+        "cachedInputTokens": 8320,
+        "outputTokens": 57,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 64.99429874572407,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 19,
+        "name": "hour-1-interrupted-coding-task",
+        "kind": "typed",
+        "phase": "confirmed",
+        "error": null,
+        "intentionalInterruption": true,
+        "ordinaryFollowup": false,
+        "completed": false,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": true,
+        "correctness": "planned_interruption",
+        "reasoningVerdict": "partial_sound",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": null,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": null,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": null,
+        "cachedInputTokens": null,
+        "outputTokens": null,
+        "reasoningTokens": null,
+        "outputTokensPerStreamingSecond": null,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": null,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 20,
+        "name": "hour-1-spoken-why-during-coding",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": false,
+        "correctness": "incomplete",
+        "reasoningVerdict": "not_scored",
+        "acceptedToActualWriteMs": 8,
+        "usefulFeedbackMs": null,
+        "firstWordMs": {
+          "low": 5669,
+          "high": 5675
+        },
+        "acceptedToProtocolCompletionMs": 4747,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 6317,
+          "high": 6333
+        },
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 1532,
+          "high": 1548
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1570,
+          "high": 1586
+        },
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": 3949,
+        "submissionAckMs": 13,
+        "submittedToInputReaderReceiptMs": 521,
+        "acceptanceAfterTranscriptFinalMs": 38,
+        "inputTokens": 20657,
+        "cachedInputTokens": 8320,
+        "outputTokens": 73,
+        "reasoningTokens": 29,
+        "outputTokensPerStreamingSecond": 91.47869674185463,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 1,
+          "referenceWords": 1,
+          "rate": 1,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      }
+    ],
+    "counts": {
+      "all": 20,
+      "expectedReplies": 20,
+      "complete": 19,
+      "missing": 1,
+      "errors": 0,
+      "intentionallyInterrupted": 1,
+      "observedPlannedInterruptions": 0,
+      "observerInterference": 0,
+      "correct": 13,
+      "incorrect": 4,
+      "requestedWorkComplete": 17,
+      "requestedWorkIncomplete": 3,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 17,
+      "reasoningFail": 0,
+      "correctnessPending": 0,
+      "reasoningIncomplete": 0,
+      "correctnessIncomplete": 2
+    },
+    "acceptedToWriteMs": {
+      "count": 19,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 13,
+      "max": 13
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 19,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 13,
+      "max": 13
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 19,
+      "min": 1,
+      "median": 7,
+      "sampleP95": 13,
+      "max": 13
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 19,
+      "min": 3262,
+      "median": 7565,
+      "sampleP95": 39802,
+      "max": 39802
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 13,
+      "min": 3262,
+      "median": 5778,
+      "sampleP95": 37537,
+      "max": 37537
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 17,
+      "min": 4468,
+      "median": 18944,
+      "sampleP95": 41480,
+      "max": 41480
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 19,
+      "min": 36.72985781990521,
+      "median": 64.99429874572407,
+      "sampleP95": 256.26204238921,
+      "max": 256.26204238921
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 11,
+      "min": 3458,
+      "median": 9406,
+      "sampleP95": 17103,
+      "max": 17103
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 1,
+      "min": 3318,
+      "median": 3318,
+      "sampleP95": 3318,
+      "max": 3318
+    },
+    "usefulFollowupMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 0,
+      "observed": 0,
+      "missingOrUnverified": 0,
+      "p95": null,
+      "gateEvaluable": false,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [
+        {
+          "generationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "previousGenerationId": "6f57850a-2eea-430d-8877-2a3086e049dc",
+          "acceptedHostMs": {
+            "low": 1791848195839,
+            "high": 1791848195845
+          },
+          "foregroundAuthorizedAt": 72541,
+          "inferenceAcceptedAt": 65659,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848195848,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "previousGenerationId": "0e30251d-cfa2-4987-a6ef-e5c4f078f1ba",
+          "acceptedHostMs": {
+            "low": 1791848228403,
+            "high": 1791848228414
+          },
+          "foregroundAuthorizedAt": 105109,
+          "inferenceAcceptedAt": 102778,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848228415,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 12
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "previousGenerationId": "03ea0299-eb63-4455-a97d-adca8fe86227",
+          "acceptedHostMs": {
+            "low": 1791848259517,
+            "high": 1791848259523
+          },
+          "foregroundAuthorizedAt": 136218,
+          "inferenceAcceptedAt": 131578,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848259524,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+          "previousGenerationId": "fec5e4f5-2b18-4bea-87c7-62f48428badc",
+          "acceptedHostMs": {
+            "low": 1791848402549,
+            "high": 1791848402562
+          },
+          "foregroundAuthorizedAt": 279250,
+          "inferenceAcceptedAt": 267579,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848402557,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 8
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "4fe76aee-65cc-49ca-90b2-4eb4d01f9722",
+          "previousGenerationId": "3842a6e4-f769-457d-bd00-6453558d3bde",
+          "acceptedHostMs": {
+            "low": 1791848532198,
+            "high": 1791848532204
+          },
+          "foregroundAuthorizedAt": 408899,
+          "inferenceAcceptedAt": 395738,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848532204,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 6
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "66a5cb47-45d3-46ba-8c7c-8095b6855b26",
+          "previousGenerationId": "4fe76aee-65cc-49ca-90b2-4eb4d01f9722",
+          "acceptedHostMs": {
+            "low": 1791848657776,
+            "high": 1791848657783
+          },
+          "foregroundAuthorizedAt": 534477,
+          "inferenceAcceptedAt": 519978,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848657782,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 6
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "2430ca1d-4a21-42ee-8f3e-39ff309c4662",
+          "previousGenerationId": "66a5cb47-45d3-46ba-8c7c-8095b6855b26",
+          "acceptedHostMs": {
+            "low": 1791848784448,
+            "high": 1791848784456
+          },
+          "foregroundAuthorizedAt": 661149,
+          "inferenceAcceptedAt": 653738,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848784455,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "18ee3a2c-ca7b-4e23-8921-cf3c8c55fd1c",
+          "previousGenerationId": "2430ca1d-4a21-42ee-8f3e-39ff309c4662",
+          "acceptedHostMs": {
+            "low": 1791848864529,
+            "high": 1791848864538
+          },
+          "foregroundAuthorizedAt": 741230,
+          "inferenceAcceptedAt": 738698,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848864536,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "c57690ee-c1ad-4e98-8ef4-ef1803395dec",
+          "previousGenerationId": "18ee3a2c-ca7b-4e23-8921-cf3c8c55fd1c",
+          "acceptedHostMs": {
+            "low": 1791848981539,
+            "high": 1791848981548
+          },
+          "foregroundAuthorizedAt": 858241,
+          "inferenceAcceptedAt": 851618,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791848981546,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "067d08b8-6b2d-4a63-8a1b-af9fe6eb0ca5",
+          "previousGenerationId": "c57690ee-c1ad-4e98-8ef4-ef1803395dec",
+          "acceptedHostMs": {
+            "low": 1791849163505,
+            "high": 1791849163522
+          },
+          "foregroundAuthorizedAt": 1040213,
+          "inferenceAcceptedAt": 1030299,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849163520,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 15
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "7f8f6649-c520-4bf7-a75b-b88aba4ece21",
+          "previousGenerationId": "067d08b8-6b2d-4a63-8a1b-af9fe6eb0ca5",
+          "acceptedHostMs": {
+            "low": 1791849265786,
+            "high": 1791849265796
+          },
+          "foregroundAuthorizedAt": 1142487,
+          "inferenceAcceptedAt": 1140178,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849265793,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "f8eb49fc-0199-43d4-9c5a-943dc4b32523",
+          "previousGenerationId": "7f8f6649-c520-4bf7-a75b-b88aba4ece21",
+          "acceptedHostMs": {
+            "low": 1791849426611,
+            "high": 1791849426621
+          },
+          "foregroundAuthorizedAt": 1303312,
+          "inferenceAcceptedAt": 1277338,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849426618,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "423727c0-b383-4271-81b8-1fd493efdb3e",
+          "previousGenerationId": "f8eb49fc-0199-43d4-9c5a-943dc4b32523",
+          "acceptedHostMs": {
+            "low": 1791849478869,
+            "high": 1791849478879
+          },
+          "foregroundAuthorizedAt": 1355569,
+          "inferenceAcceptedAt": 1352339,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849478876,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 7
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "a4861381-b7c0-438c-8ca9-9a5e0564558d",
+          "previousGenerationId": "423727c0-b383-4271-81b8-1fd493efdb3e",
+          "acceptedHostMs": {
+            "low": 1791849653746,
+            "high": 1791849653757
+          },
+          "foregroundAuthorizedAt": 1530447,
+          "inferenceAcceptedAt": 1520539,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849653755,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "001478ba-bff5-4723-87de-1fed37d87943",
+          "previousGenerationId": "a4861381-b7c0-438c-8ca9-9a5e0564558d",
+          "acceptedHostMs": {
+            "low": 1791849785801,
+            "high": 1791849785815
+          },
+          "foregroundAuthorizedAt": 1662503,
+          "inferenceAcceptedAt": 1654299,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849785813,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 12
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "727c329f-118e-44bb-8fe6-46344b717288",
+          "previousGenerationId": "001478ba-bff5-4723-87de-1fed37d87943",
+          "acceptedHostMs": {
+            "low": 1791849861140,
+            "high": 1791849861156
+          },
+          "foregroundAuthorizedAt": 1737845,
+          "inferenceAcceptedAt": 1735498,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849861150,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "64c1e837-2bac-42cd-85b0-7810444bbb6b",
+          "previousGenerationId": "727c329f-118e-44bb-8fe6-46344b717288",
+          "acceptedHostMs": {
+            "low": 1791849923345,
+            "high": 1791849923358
+          },
+          "foregroundAuthorizedAt": 1800046,
+          "inferenceAcceptedAt": 1800046,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849923355,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+          "previousGenerationId": "64c1e837-2bac-42cd-85b0-7810444bbb6b",
+          "acceptedHostMs": {
+            "low": 1791849933342,
+            "high": 1791849933360
+          },
+          "foregroundAuthorizedAt": 1810045,
+          "inferenceAcceptedAt": 1810045,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849933355,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 13
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "3c27bbdd-5642-456a-a4ad-d63044b5325d",
+          "previousGenerationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+          "acceptedHostMs": {
+            "low": 1791849948408,
+            "high": 1791849948423
+          },
+          "foregroundAuthorizedAt": 1825109,
+          "inferenceAcceptedAt": 1821019,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791849948418,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 10
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        }
+      ],
+      "maxPossibleCarryHighMs": 15,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "generationProjection": {
+    "changes": [
+      {
+        "round": 19,
+        "generationId": "dfd39097-c774-4b37-80d2-86609e1fe599",
+        "identityFields": [
+          "generationId",
+          "contextVersion",
+          "inputHash"
+        ],
+        "original": {
+          "phase": "confirmed",
+          "answerChars": 0,
+          "cancelled": false,
+          "firstWordAt": null,
+          "actualWrite": null
+        },
+        "observed": {
+          "phase": "superseded",
+          "answerChars": 1280,
+          "cancelled": true,
+          "firstWordAt": 1818385,
+          "actualWrite": 1810057
+        },
+        "scope": "Same immutable selected generation observed later; original source row and timing/audio origin preserved"
+      }
+    ],
+    "unverified": [],
+    "scope": "Same-generation final observed lifecycle projection, guarded by generation/context/input hash, response revision and original acceptance time. Uses native events already recorded in the immutable journal. Original canonical question, audio source endpoint, viewport samples and recorder-return rows remain preserved. No different generation chosen, no clock reset, unverified identity remains unchanged.",
+    "utilitySha256": "671df676ee2b8a8fc9361ebe1cbf0f394ca0cb1f0ebf51ac75264e61b47073f9"
+  }
+}

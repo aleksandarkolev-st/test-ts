@@ -1,0 +1,345 @@
+{
+  "status": "interrupted_capture_processes_absent_reboot_observed",
+  "observedAt": "2026-10-12T14:09:41.284Z",
+  "processObservation": {
+    "bootUtc": "2026-10-12T14:03:26.5000000Z",
+    "checkedIds": [
+      9388,
+      33788,
+      19928,
+      36704
+    ],
+    "aliveIds": []
+  },
+  "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r2-codex-three-hour/interview.json",
+  "journalSha256": "5a07ae10cfe88aa0782d8e4569c10baa6006d42adbad5a53ab98d64b22c16298",
+  "recordedJournalStatus": "in_progress",
+  "rows": [
+    {
+      "round": 1,
+      "name": "hour-1-first-code",
+      "questionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "recognizedQuestionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+      "answerSha256": "116f325d4ce5b6b0e8325344b79eb40bb1db29f555207f312771c1b0f540ccdb",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual supplied Foo source byte-exact; -2 maps17 and equality-1 maps19. Execution pending."
+    },
+    {
+      "round": 2,
+      "name": "hour-1-session-decision",
+      "questionSha256": "89d4da7e582a237334e8b03d3b6292fad73809dcf06d829a40d014245499c850",
+      "recognizedQuestionSha256": "62e1f3558be66cd02e86fd2a19540a2cd0d6d103c39350d1baf8d400ebc7d0ac",
+      "answerSha256": "a94641c5444a34f11900d4c20f4588a7920a9b413b3cc4bfb834f1fe7a7d1d53",
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Original owner Mira recognized Myra; actual answer retains37days/Delta and explicitly interpretsFoo underscoreseventeen asFoo_17. Original-source owner failure remains separate from faithful recognized-memory retention."
+    },
+    {
+      "round": 3,
+      "name": "hour-1-saved-audio-1",
+      "questionSha256": "23bd9da1a2a7fd2f6c2b12c406f0dd829914f55b2d8fc5bd2704987604674447",
+      "recognizedQuestionSha256": "23f8b3600e1d8df6fc1640bbbb8e314033b2dbb9fb892aefee1fc2e41c3e9e7d",
+      "answerSha256": "eb9616f2134d4b80bfae3117fc40dff8d7e9a553fcb57522786bc01836c555f4",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual32-thread warp, divergent paths active subsets and neighboring-memory coalescing explanation correct under SIMT wording."
+    },
+    {
+      "round": 4,
+      "name": "hour-1-spoken-why-warps",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "d3ae14a50bfe463f804c73c9fd16e88c36bf5a0bf4a56f98ae696a91eb2de149",
+      "answerSha256": "e142863e8b2851ee014c1ecdf6d26f3ab54f4b0714f72270e9e5ce079ae22810",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual recognizedWhy gives causal shared instructionissue resources and fewer neighboring-memory transactions. No clarification or missing request."
+    },
+    {
+      "round": 5,
+      "name": "hour-1-saved-audio-2",
+      "questionSha256": "34dc75345412a4d3cd886572f28a462234c85da55127ad0845886cca34f08a44",
+      "recognizedQuestionSha256": "9190e797bfc0edd9c7739fffc4e0054d4a77736aef0c4a559161d5f017b2c9fa",
+      "answerSha256": "de8784b0a3b38ed6fe421cc46e4b7385e7833e6254dab2a778be27b70399970c",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual read_lane18 computes physical lane using linear3D thread rank. Full32 ballot beforebranch generates7ffff, branch19callers matchingmaskedshuffle fromparticipating18; other13 never shuffle. activemask-insidebranch lackofguarantee/selfbits/namednonexitedmatching/sourcevalidity explained. NVCC pending."
+    },
+    {
+      "round": 6,
+      "name": "hour-1-saved-audio-3",
+      "questionSha256": "d647b059bc2d56c843fcb1cbc23aeaf2642adb837549d24d1b0c51affdcf3a0e",
+      "recognizedQuestionSha256": "7f6fda04d2ad196508082888b8366b4a89b4c1e30ffd2769e13595d377141dc9",
+      "answerSha256": "5f01ec1203009b7da0567389b40734e4334e71a45c1ef5157b9d091bf8595731",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual sum19 uses offsets1/2/4/8/16, safe selfsource for absentpartner, unconditionallymatching19mask stages, then lane0broadcast: sixfloatcollectives. Contiguoussuffix interval induction befored covers[i,min(i+d,19)), merges disjointadjacentintervals. Explicit treeorder and overflowqualification. CPU/NVCC pending."
+    },
+    {
+      "round": 7,
+      "name": "hour-1-saved-audio-4",
+      "questionSha256": "911a0c8bb6469b88738637077fe83f61a6f564ce937e4ab6903587b7f82666e1",
+      "recognizedQuestionSha256": "6025ebee5202f0e75894da20dc5d5c87fc65892d3e32714804256e6c6da7f065",
+      "answerSha256": "8a937fba1c32e75d8d95232bc649f1ff2c00bd3947beb643542957343913719f",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Changed no-completed-sum-broadcast actualsum19 cyclic doublingoffset1/2/4/8=>16partial, retainedpair lane(i+16)%19 plus originalsingleton(i+18)%19, sixmatchingcollectives. Exactoncecyclicoffset0..18 proof valid; every source modulo19 participates, finalshufflesnevercompletedtotal. __fadd_rn and differingcyclicrounding/possibleoverflow explicitlyqualified. CPU/NVCC pending."
+    },
+    {
+      "round": 8,
+      "name": "hour-1-saved-audio-5",
+      "questionSha256": "b7a5a4fe885bb064c5d773ed8ef3aa65d78f1dfea8ec051b821d8855b1de5ef0",
+      "recognizedQuestionSha256": "f83f5b35b0e845dd048cda733c9a9b65f912a19617382229b6fc80479f907a0e",
+      "answerSha256": "f5f4b076a119bf5ec29b0bd573e86d2ee532268786c9766f079062fd2fbf629a",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual W1deliveredA/B onlytwoacks, R1ABC returns1 thennonoverlap R2CDE returns0, WlatercompletesC; real-time contradiction valid. Readwriteback processedthreeacks establishes monotonequorum lowerbound evenwhenackreplicaalreadyhigher. Tag-orderlinearization handlesconcurrentreaders/pendingwrite includedwhenobserved. Sequential singlewriter standardpremise; no invented code/execution."
+    },
+    {
+      "round": 9,
+      "name": "hour-1-saved-audio-6",
+      "questionSha256": "1f9aed85a5acbf95e29050c23c2b57198c0e00930b706065a184a461873df3ce",
+      "recognizedQuestionSha256": "684efefd56dd764c3b26f9b5d92aeeaedd4abf21c93cfa5710cbb87c439c67a6",
+      "answerSha256": "54ed46ce73a453640bcc166ba3566a21d44abddbf39d001b55fb7afcec555b6c",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual failed-route investigation requests failingcase/currentcode/specification, allowedweights/direction/ties/unreachable, tracesdifference thenregressionbeforealgorithmchange. No unsupported rootcause."
+    },
+    {
+      "round": 10,
+      "name": "hour-1-saved-audio-7",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "2be23c585f15e5fd3279d0663036dd9f6e634f4225ef326fc83fb874dbb81a0f",
+      "answerSha256": "61db43c1e14f11016a2672c3108b5eadc18abe56f77cc0fbc0f35461de8fe2e0",
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual recognizedWhy explains implementation/specification/expectedvalue alternatives and why small passingtests cannot distinguish; directlycausal followup to precedinginvestigation."
+    },
+    {
+      "round": 11,
+      "name": "hour-1-saved-audio-8",
+      "questionSha256": "c58a8384662ffb9b58a3d36d2ef067b3fea2764d7a85143889cb1370e4b251f8",
+      "recognizedQuestionSha256": "91b3cdb3b790376c5de6dc3482551110bbd54bcef96bfbac32a3349c3d9e228f",
+      "answerSha256": "f6a887f2312aebd8e0c7dfeef352607d0fe0db5501448ee37f5c1e4054547ce8",
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual classify_route identifier is restored using context, but output statuses are lowercase rather than original uppercase contract. SynchronousBellmanFord retainedcanreachT graph, None-beforearithmetic and kth-improvement negativecycle proof correct. ClaimedO(nm+n+m) bound is valid here because retainedk<=m+1, so kn copies areO(nm+n); no expectedqueue bound. Strictinterface execution pending."
+    },
+    {
+      "round": 12,
+      "name": "hour-1-saved-audio-9",
+      "questionSha256": "8df68d3062007fa887e7132909ab0ad3790c998696da1058f52f001d5c794251",
+      "recognizedQuestionSha256": "d1425bf29f861d8e22457d328831574d2ed71f3627a78c86b18ed1a326848c2b",
+      "answerSha256": "5c3f60208c3cf925476e76db5308814881eaf4109af976f211408153a8785610",
+      "correctness": "incorrect",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "note": "Actual classify_route spelling retained but uppercase statuses again violated. Correct forward/reverse relevanceintersection, compressedkvertices, Noneguards, s=t emptywalk, reachable-and-returning negcycle, kth-improvement contradiction and cycle-edge inequality converse. O(n+m+k(k+mprime)) includes copies anddeterministic scan, O(n+m)memory. No interface repair or priorvariant code substitution; execution pending."
+    }
+  ],
+  "startedAt": "2026-10-12T08:43:55.216Z",
+  "lastRecordedAt": "2026-10-12T09:04:05.414Z",
+  "lastRecordedNativeMs": 1197546,
+  "queues": [
+    {
+      "file": "artifacts/controller-v72/error-recovery-dual-r2/verification.json",
+      "sha256": "7aff11d81345824922268708597e46a89f4b1de0042eecac281e00e4f9fc4b76",
+      "recordedStatus": "running",
+      "completedTasks": 7,
+      "executedSteps": 0
+    },
+    {
+      "file": "artifacts/controller-v72/recovery-fixed-age-controls-r1/verification.json",
+      "sha256": "b8f6ddcab0a450286b8931ebb3ffd5c6772f56c77d05565447f8b89c956f2496",
+      "recordedStatus": "waiting_for_corrected_capture_queue",
+      "completedTasks": 0,
+      "executedSteps": 0
+    },
+    {
+      "file": "artifacts/controller-v72/recovery-short-code-r2/verification.json",
+      "sha256": "d742f3cddf723d15a68b8ecf929d2632993ec0c2a217def6f5385b11db205c64",
+      "recordedStatus": "waiting_for_all_corrected_capture_controls",
+      "completedTasks": 0,
+      "executedSteps": 0
+    }
+  ],
+  "scope": "Known collector, native and waiting-checker process identities are absent. OS reports a later reboot. Original journal and queue states are preserved byte-for-byte. Only about20minutes were recorded; this is neither a completed3h trial nor an authenticated backend failure. Stop-memory clearing and provider remote termination are not observed. New full sessions must start in new directories; no concatenation of elapsed times or invented missing113-row results. All12recordedresponses have manually source-bound reasoning review:9original-source correct, originalMira recognitionfailure and2lowercase-status contract failures. Sound proofs do not repair original interfaces. Remaining interviews/agecontrols are pending in newdirectories.",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "nativeBinarySha256": "a58f6a1729379da7083e2371a106eda389dca0cf512781619a47dd4a520b5385",
+  "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+  "rowCount": 12,
+  "source": {
+    "file": "artifacts/controller-v72/recovery-reboot-boundary-r1/boundary.json",
+    "sha256": "5a397fe4726036489535289a42e4fbde20467dc4a6d15600c3bc19d7448595c3"
+  },
+  "partialManualReview": {
+    "source": {
+      "file": "artifacts/controller-v72/reviews/error-recovery-dual-r2-codex-three-hour-prefix12-reviewed.json",
+      "sha256": "5733d8c417c9b45bf7ef81cd2ea281a8e9493b22a97e86a7231bffa674dbe0e6"
+    },
+    "strictCorrect": 9,
+    "strictIncorrect": 3,
+    "reasoningPass": 12,
+    "rows": [
+      {
+        "round": 1,
+        "name": "hour-1-first-code",
+        "questionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+        "recognizedQuestionSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+        "answerSha256": "116f325d4ce5b6b0e8325344b79eb40bb1db29f555207f312771c1b0f540ccdb",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual supplied Foo source byte-exact; -2 maps17 and equality-1 maps19. Execution pending."
+      },
+      {
+        "round": 2,
+        "name": "hour-1-session-decision",
+        "questionSha256": "89d4da7e582a237334e8b03d3b6292fad73809dcf06d829a40d014245499c850",
+        "recognizedQuestionSha256": "62e1f3558be66cd02e86fd2a19540a2cd0d6d103c39350d1baf8d400ebc7d0ac",
+        "answerSha256": "a94641c5444a34f11900d4c20f4588a7920a9b413b3cc4bfb834f1fe7a7d1d53",
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Original owner Mira recognized Myra; actual answer retains37days/Delta and explicitly interpretsFoo underscoreseventeen asFoo_17. Original-source owner failure remains separate from faithful recognized-memory retention."
+      },
+      {
+        "round": 3,
+        "name": "hour-1-saved-audio-1",
+        "questionSha256": "23bd9da1a2a7fd2f6c2b12c406f0dd829914f55b2d8fc5bd2704987604674447",
+        "recognizedQuestionSha256": "23f8b3600e1d8df6fc1640bbbb8e314033b2dbb9fb892aefee1fc2e41c3e9e7d",
+        "answerSha256": "eb9616f2134d4b80bfae3117fc40dff8d7e9a553fcb57522786bc01836c555f4",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual32-thread warp, divergent paths active subsets and neighboring-memory coalescing explanation correct under SIMT wording."
+      },
+      {
+        "round": 4,
+        "name": "hour-1-spoken-why-warps",
+        "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+        "recognizedQuestionSha256": "d3ae14a50bfe463f804c73c9fd16e88c36bf5a0bf4a56f98ae696a91eb2de149",
+        "answerSha256": "e142863e8b2851ee014c1ecdf6d26f3ab54f4b0714f72270e9e5ce079ae22810",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual recognizedWhy gives causal shared instructionissue resources and fewer neighboring-memory transactions. No clarification or missing request."
+      },
+      {
+        "round": 5,
+        "name": "hour-1-saved-audio-2",
+        "questionSha256": "34dc75345412a4d3cd886572f28a462234c85da55127ad0845886cca34f08a44",
+        "recognizedQuestionSha256": "9190e797bfc0edd9c7739fffc4e0054d4a77736aef0c4a559161d5f017b2c9fa",
+        "answerSha256": "de8784b0a3b38ed6fe421cc46e4b7385e7833e6254dab2a778be27b70399970c",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual read_lane18 computes physical lane using linear3D thread rank. Full32 ballot beforebranch generates7ffff, branch19callers matchingmaskedshuffle fromparticipating18; other13 never shuffle. activemask-insidebranch lackofguarantee/selfbits/namednonexitedmatching/sourcevalidity explained. NVCC pending."
+      },
+      {
+        "round": 6,
+        "name": "hour-1-saved-audio-3",
+        "questionSha256": "d647b059bc2d56c843fcb1cbc23aeaf2642adb837549d24d1b0c51affdcf3a0e",
+        "recognizedQuestionSha256": "7f6fda04d2ad196508082888b8366b4a89b4c1e30ffd2769e13595d377141dc9",
+        "answerSha256": "5f01ec1203009b7da0567389b40734e4334e71a45c1ef5157b9d091bf8595731",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual sum19 uses offsets1/2/4/8/16, safe selfsource for absentpartner, unconditionallymatching19mask stages, then lane0broadcast: sixfloatcollectives. Contiguoussuffix interval induction befored covers[i,min(i+d,19)), merges disjointadjacentintervals. Explicit treeorder and overflowqualification. CPU/NVCC pending."
+      },
+      {
+        "round": 7,
+        "name": "hour-1-saved-audio-4",
+        "questionSha256": "911a0c8bb6469b88738637077fe83f61a6f564ce937e4ab6903587b7f82666e1",
+        "recognizedQuestionSha256": "6025ebee5202f0e75894da20dc5d5c87fc65892d3e32714804256e6c6da7f065",
+        "answerSha256": "8a937fba1c32e75d8d95232bc649f1ff2c00bd3947beb643542957343913719f",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Changed no-completed-sum-broadcast actualsum19 cyclic doublingoffset1/2/4/8=>16partial, retainedpair lane(i+16)%19 plus originalsingleton(i+18)%19, sixmatchingcollectives. Exactoncecyclicoffset0..18 proof valid; every source modulo19 participates, finalshufflesnevercompletedtotal. __fadd_rn and differingcyclicrounding/possibleoverflow explicitlyqualified. CPU/NVCC pending."
+      },
+      {
+        "round": 8,
+        "name": "hour-1-saved-audio-5",
+        "questionSha256": "b7a5a4fe885bb064c5d773ed8ef3aa65d78f1dfea8ec051b821d8855b1de5ef0",
+        "recognizedQuestionSha256": "f83f5b35b0e845dd048cda733c9a9b65f912a19617382229b6fc80479f907a0e",
+        "answerSha256": "f5f4b076a119bf5ec29b0bd573e86d2ee532268786c9766f079062fd2fbf629a",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual W1deliveredA/B onlytwoacks, R1ABC returns1 thennonoverlap R2CDE returns0, WlatercompletesC; real-time contradiction valid. Readwriteback processedthreeacks establishes monotonequorum lowerbound evenwhenackreplicaalreadyhigher. Tag-orderlinearization handlesconcurrentreaders/pendingwrite includedwhenobserved. Sequential singlewriter standardpremise; no invented code/execution."
+      },
+      {
+        "round": 9,
+        "name": "hour-1-saved-audio-6",
+        "questionSha256": "1f9aed85a5acbf95e29050c23c2b57198c0e00930b706065a184a461873df3ce",
+        "recognizedQuestionSha256": "684efefd56dd764c3b26f9b5d92aeeaedd4abf21c93cfa5710cbb87c439c67a6",
+        "answerSha256": "54ed46ce73a453640bcc166ba3566a21d44abddbf39d001b55fb7afcec555b6c",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual failed-route investigation requests failingcase/currentcode/specification, allowedweights/direction/ties/unreachable, tracesdifference thenregressionbeforealgorithmchange. No unsupported rootcause."
+      },
+      {
+        "round": 10,
+        "name": "hour-1-saved-audio-7",
+        "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+        "recognizedQuestionSha256": "2be23c585f15e5fd3279d0663036dd9f6e634f4225ef326fc83fb874dbb81a0f",
+        "answerSha256": "61db43c1e14f11016a2672c3108b5eadc18abe56f77cc0fbc0f35461de8fe2e0",
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual recognizedWhy explains implementation/specification/expectedvalue alternatives and why small passingtests cannot distinguish; directlycausal followup to precedinginvestigation."
+      },
+      {
+        "round": 11,
+        "name": "hour-1-saved-audio-8",
+        "questionSha256": "c58a8384662ffb9b58a3d36d2ef067b3fea2764d7a85143889cb1370e4b251f8",
+        "recognizedQuestionSha256": "91b3cdb3b790376c5de6dc3482551110bbd54bcef96bfbac32a3349c3d9e228f",
+        "answerSha256": "f6a887f2312aebd8e0c7dfeef352607d0fe0db5501448ee37f5c1e4054547ce8",
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual classify_route identifier is restored using context, but output statuses are lowercase rather than original uppercase contract. SynchronousBellmanFord retainedcanreachT graph, None-beforearithmetic and kth-improvement negativecycle proof correct. ClaimedO(nm+n+m) bound is valid here because retainedk<=m+1, so kn copies areO(nm+n); no expectedqueue bound. Strictinterface execution pending."
+      },
+      {
+        "round": 12,
+        "name": "hour-1-saved-audio-9",
+        "questionSha256": "8df68d3062007fa887e7132909ab0ad3790c998696da1058f52f001d5c794251",
+        "recognizedQuestionSha256": "d1425bf29f861d8e22457d328831574d2ed71f3627a78c86b18ed1a326848c2b",
+        "answerSha256": "5c3f60208c3cf925476e76db5308814881eaf4109af976f211408153a8785610",
+        "correctness": "incorrect",
+        "reasoningVerdict": "pass",
+        "completed": true,
+        "note": "Actual classify_route spelling retained but uppercase statuses again violated. Correct forward/reverse relevanceintersection, compressedkvertices, Noneguards, s=t emptywalk, reachable-and-returning negcycle, kth-improvement contradiction and cycle-edge inequality converse. O(n+m+k(k+mprime)) includes copies anddeterministic scan, O(n+m)memory. No interface repair or priorvariant code substitution; execution pending."
+      }
+    ]
+  },
+  "codeVerification": {
+    "source": {
+      "file": "artifacts/controller-v72/recovery-short-code-r4/verification.json",
+      "sha256": "49cf397bb8d82470c4725b10125aa0c6826ab42774eb599947a23a41b948697a"
+    },
+    "checks": 15,
+    "passed": 14,
+    "failed": 1,
+    "scope": "Fourteen executable program checks pass; they include repeated exact-source recall copies and are not14distinctimplementations. One missingparentFIFOprogram fails. Checks finish14:11:46UTC before corrected newcapture starts14:12:36UTC. No live inference overlap."
+  },
+  "preservedProcessProbeFailure": {
+    "file": "artifacts/controller-v72/recovery-short-code-r3/verification.json",
+    "sha256": "8521f6484a0fc9b9f20c72a54c532d59d7a4604b8e36b74b0857018163043be9"
+  }
+}

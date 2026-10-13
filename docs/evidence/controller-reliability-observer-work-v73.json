@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "disclosed_read_only_observer_work",
+  "observedDateUTC": "2026-10-13",
+  "operation": "PowerShell Get-Content -Raw and ConvertFrom-Json of the completed Codex three-hour journal, selecting status, duration and Stop archive counters",
+  "sourceFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+  "sourceSha256": "8900202000a0fc4e909e6e4d55cbd5a22a4d0d9046cd53c03e1d0d611980c5de",
+  "execSession": 24717,
+  "initialToolWaitSeconds": 10.0016319,
+  "initialResult": "Still running at initial tool return; later poll returned exit code zero",
+  "nearbyKnownRecordUTC": "2026-10-13T04:28:11.691Z",
+  "nearbyRecord": "docs/evidence/controller-reliability-codex-ledger-stop-v73.json",
+  "exactProcessStartUTC": null,
+  "exactProcessEndUTC": null,
+  "activeMeasuredQueue": "reliability-v73-r1-chatgpt-three-hour",
+  "nearbyLastPersistedRow": 68,
+  "affectedSourceRowsEstablished": false,
+  "latencyEffectEstablished": false,
+  "repeatedLargePowerShellParse": false,
+  "scope": "Disclosed read-only host work, not a compiler, model grader, GPU or source-execution workload. Exact overlap with subsequent audio, inference and paint has not been instrumented, so its latency effect is unknown. All recorded outcomes remain; no unproven row exclusion or healthy-path certificate. Subsequent source reading uses the lightweight Node helpers. This cannot contaminate the already completed Codex capture and is separate from later matched history/age controls."
+}

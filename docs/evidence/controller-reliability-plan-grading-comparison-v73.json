@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "explicit_uniform_requested_task_comparison_with_original_speech_errors_preserved",
+  "recordedAt": "2026-10-13T05:38:05.186Z",
+  "oldPublishedReview": {
+    "file": "docs/evidence/controller-plan-three-hour-reasoning-final-v73.json",
+    "sha256": "5e1d2eebe6e1dc5ed9e0457b350370af196d199a66c310106b1f52fa37d1b901"
+  },
+  "oldManualReview": {
+    "file": "artifacts/controller-v72/reviews/error-recovery-dual-r3-chatgpt-three-hour-final-audit-reviewed.json",
+    "sha256": "05302b0de09ec87c6a6f964d5cc097d1d6cb22f71f5ead1cbbf385a44ec3b9e9"
+  },
+  "oldJournal": {
+    "file": "artifacts/controller-v72/native/error-recovery-dual-r3-chatgpt-three-hour/interview.json",
+    "sha256": "3c55ac6f5acf59296b77578a196a7549da964c231195513bdcb5c9618d9ad9e6"
+  },
+  "currentReview": {
+    "file": "docs/evidence/controller-reliability-plan-three-hour-prefix113-v73.json",
+    "sha256": "74a849c6866bce97686d67949af74afb399f50ff793962f6d1d956733f1e9b5e"
+  },
+  "comparisons": [
+    {
+      "round": 18,
+      "questionSha256": "7d4d3f3fbfea82838acb7a72bad093a7cafacadb5d2498e9f4994f4261138e27",
+      "oldAnswerSha256": "458cde105597ff7044ae2443e711962be4402ee1adaa80b2357844c31323cc34",
+      "currentAnswerSha256": "5ea322f505e08bb8ad67c785d8edb2ac677cb20fba6a1aa00f198b99064b9df3",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 34,
+      "questionSha256": "df6f8d51c41ea3458fbfe8cd24c2b11451ae17d08885893dc51026dbedc3b8da",
+      "oldAnswerSha256": "7634fc95955971cfab67f1efd0b924f84f322b7ae13b558bb8b0a5af1692db5e",
+      "currentAnswerSha256": "f6952ee8fc61cec7765b4d669cf3b1d0a38a6ed58365c13be8f318b568d59d5a",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 38,
+      "questionSha256": "f3277dd825f42941313f11722dcb364d01b453aaab8f879bf40305bfe3059670",
+      "oldAnswerSha256": "f58084f6686571b442d3eb077194bb0b3ac682afe464f86818e2b8710f3e9e04",
+      "currentAnswerSha256": "aaef7762d61d158da1df4599f055fef27c73b6ce450666c12127b5692a5d1f4a",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 54,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "629dfb1b71bc7c0213f3d178d7cab745c533674457545f652277278d6fc96f6e",
+      "currentAnswerSha256": "0dde77d70902b0480dc2bebbe61aad245bc7ec4d9327c104b627351e4ba663a0",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 72,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "96a1b0602d9a417b45643b7b6b84ebd95b67aa0428ee46c0ccbc30a1bb273266",
+      "currentAnswerSha256": "03d114db71f67a773821f97e6b7a7225d3310ced4c61a5902ef749f4b2bbd000",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 76,
+      "questionSha256": "a5d75bf51be7b4cff049630e6d856e38f729124a18c47ddfd7c24a7a44b567b4",
+      "oldAnswerSha256": "d6acd65b7f875082052549c93c1f74da18c2184181dcec9de3b06561963adc4a",
+      "currentAnswerSha256": "c6c1a865219793976c0ad77a3e2244431283f2b277e8ba1f3c964ddf1715ae28",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 92,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "c3998de903faa7bdbd3d215dcb11b0ac0be79e8cf14a954c9e184de4114c9b0f",
+      "currentAnswerSha256": "eee3e3b9bc3b05156b77c14d1be9f4f0a2ad5c54d303e061f622222e0414a6cf",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 110,
+      "questionSha256": "403df8ae2360ae405ee6e7082afc5be9f068613b2bff66e7f7a722edefc9a9d7",
+      "oldAnswerSha256": "9739c26b8addfa1d29ac43fbb6afc7d38cedad893fb51b45bbe36de6f4f0d0d0",
+      "currentAnswerSha256": "fdff63dfc2f3d391a56a50094577e8962e0e8c7f355d26dcdedc9dee572af680",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    },
+    {
+      "round": 113,
+      "questionSha256": "635b40224a1101eba2e3cbd464ced33a0608668a9579480f65b2c90375a6f61e",
+      "oldAnswerSha256": "eb93402cfc88a5e4b920bfd4db8a87dd84de847adbfda9103548eb21f118b9db",
+      "currentAnswerSha256": "39db87f3379259d6ab3ee15e32a1a99e3671b36e17c635d720b2774c70582ba0",
+      "oldPublishedGrade": "incorrect",
+      "currentPublishedGrade": "correct",
+      "uniformRequestedRecognizedTaskOldGrade": "correct",
+      "originalSpeechFailureStillPresent": true,
+      "scope": "Both actual independently read replies retain the recognized decision and correctly scope later typed corrections. Repeated inherited source-agreement scoring is distinct from this requested-task score; no speech repair or production substitution."
+    }
+  ],
+  "reportedCorrectCounts": {
+    "oldPublished": 83,
+    "currentPublished": 92
+  },
+  "uniformRequestedTaskCorrectCounts": {
+    "old": 92,
+    "current": 92
+  },
+  "initialOriginalOwnerFailure": {
+    "oldRound": 2,
+    "currentRound": 2,
+    "spoken": "Mira",
+    "recognizedAndReturned": "Myra",
+    "strictFailureInBoth": true,
+    "scope": "The original speech error remains in both source-accuracy scores. Recalling the recognized name correctly does not repair it; subsequent typed probes are not independent new ASR failures."
+  },
+  "scope": "Finite sequential same-model/effort interviews with naturally differing generated histories and source-derived typed recall prompts. Explicit uniform grading view, not a frozen-context causal accuracy/latency estimate or a population certificate. Published reviews and all failed/missing/incomplete outcomes remain intact."
+}

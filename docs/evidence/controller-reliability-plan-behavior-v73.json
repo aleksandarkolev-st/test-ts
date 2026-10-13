@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_new_binary_plan_native_behavior",
+  "recordedAt": "2026-10-12T23:18:08.595Z",
+  "journal": {
+    "file": "artifacts/controller-v73/native/reliability-v73-r1-chatgpt-behavior/interview.json",
+    "sha256": "a6edb1f4005ec846eeaf1523d35655bd3b6cbf1e15bc0a558091900f7a9bbfbe",
+    "actualInterviewDurationMs": 204518
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "chatgpt",
+  "rows": [
+    {
+      "round": 1,
+      "name": "multipart-pause-1500",
+      "question": "For exactly ten thousand elements and one hundred ninety two threads per block, compute the minimum number of blocks needed to cover every element. Also report the active threads in the final block and the number of launched threads that need a bounds check. Explain the arithmetic.",
+      "recognizedQuestion": "For example, ten thousand elements and one hundred ninety two threads per block compute the minimum number of blocks needed to cover every element Also report the active threads in the final block and the number of launched threads that need a bounce check Explain the arithmetic",
+      "questionSha256": "f8320e0f45d8a6852cd4e3db380e37ad9681c9dd7588eb9c4882a3a02cb5e28b",
+      "recognizedQuestionSha256": "36d1873989d99480891de31781e6ef2882852cc77ad75a2d01b647c3fa729803",
+      "answer": "You need 53 blocks, with 16 active threads in the final block and 176 excess threads that must be excluded by a bounds check—I’m interpreting “bounce check” as “bounds check.” The arithmetic is 10,000 = 52 × 192 + 16, so 52 blocks are insufficient and we round up to 53. Those blocks launch 53 × 192 = 10,176 threads; all threads typically evaluate `if (idx < 10000)`, and the 176 threads with indices 10,000 through 10,175 skip the work.",
+      "answerSha256": "df9fbd9e51a0c5bbe830f80f3df0dcfb959f62327b91c87c058c596cc883e315",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": false,
+      "usefulPrefix": "You need 53 blocks, with 16 active threads in the final block and 176 excess threads that must be excluded by a bounds check",
+      "note": "All multipart obligations complete: 10000=52*192+16, minimum53blocks,16activefinal,176excess of10176launched; alltypicallyevaluateidx<10000, indices10000..10175skip. Declares bounce->bounds interpretation rather than production word repair. Requested arithmetic correct."
+    },
+    {
+      "round": 2,
+      "name": "late-correction-2500",
+      "question": "The guard is x less than negative one. What does the function return at negative one? Correction, I said less than or equal to negative one. Return seventeen on the true branch and nineteen otherwise. Evaluate negative one using the corrected operator.",
+      "recognizedQuestion": "Correction I said less than or equal to negative one return seventeen on the true branch and nineteen otherwise evaluate negative one using the corrected operator",
+      "questionSha256": "d90842997614068ff8381b82b34d9bf2fa596e66269eac8d58d626bb017890a1",
+      "recognizedQuestionSha256": "5ffc495b1f1a50bd13cb0b423ea61f590c3d9cf0d275dbe5ba1105db3948379c",
+      "answer": "The function returns seventeen. With the corrected guard, `X <= -1`, substituting `X = -1` gives `-1 <= -1`, which is true. That selects the branch returning seventeen, not the otherwise branch returning nineteen.",
+      "answerSha256": "bdaa0169edb95a7a3cbae09e4fe90581036c42d0d33a8fe6d477692bb8d1a803",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": false,
+      "usefulPrefix": "The function returns seventeen.",
+      "note": "Actual final correction x<=-1 atx-1 true returns17 not19; earlier accepted clauses remain separate generation evidence. No override of original speech/model input."
+    },
+    {
+      "round": 3,
+      "name": "backchannel",
+      "question": "Okay, I see.",
+      "recognizedQuestion": "Okay, I see",
+      "questionSha256": "72b6776606190ff1cee7608ddd1cdde601bab2c9186a4a852444ec6c7fccb0a6",
+      "recognizedQuestionSha256": "af2aee9ab2bc42b408371573c03197681592508713de480a33733de41416423c",
+      "answer": "",
+      "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": "cancelled",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "not_scored",
+      "completed": true,
+      "ordinaryFollowup": false,
+      "note": "Expected backchannel recognized Okay, I see receives ignore and emptytext, preserving priorauthorizedanswer/history. Silence does not receive mathematical reasoning score."
+    },
+    {
+      "round": 4,
+      "name": "spoken-why",
+      "question": "Why?",
+      "recognizedQuestion": "why",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "2be23c585f15e5fd3279d0663036dd9f6e634f4225ef326fc83fb874dbb81a0f",
+      "answer": "Because the corrected operator `<=` includes equality. At `X = -1`, the condition `-1 <= -1` is true, so the function takes the true branch and returns seventeen. Nineteen is returned only when `X > -1`.",
+      "answerSha256": "23d9b54463a98b63c94a9c650f70a306caee7dce7614f789a5428364d81d0078",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": true,
+      "usefulPrefix": "Because the corrected operator `<=` includes equality.",
+      "note": "Actual why recognized why; includes equality, x-1 satisfies<=-1 true17, onlyx>-1 returns19. Correct causal explanation."
+    },
+    {
+      "round": 5,
+      "name": "interrupt-code",
+      "question": "Implement a complete C++17 bounded FIFO of capacity 17 with overflow rejection, push, pop, and a test main that fills, overflows, drains, and wraps around. Explain the invariant before writing the code.",
+      "recognizedQuestion": "Implement a complete C++17 bounded FIFO of capacity 17 with overflow rejection, push, pop, and a test main that fills, overflows, drains, and wraps around. Explain the invariant before writing the code.",
+      "questionSha256": "d1df24f1dc75be3afdada5df56d1d6dd88ecf1f4d1f824fffccb8d8ccac24218",
+      "recognizedQuestionSha256": "d1df24f1dc75be3afdada5df56d1d6dd88ecf1f4d1f824fffccb8d8ccac24218",
+      "answer": "Use a circular buffer with capacity 17; reject a push when it is full without changing the queue. The invariant is `0 <= size <= 17`, with `head` pointing to the next element to pop and logical element `i` stored at `(head + i) % 17`; the next push goes to `(head + size) % 17`. A successful push increments `size`, while a successful pop advances `head` modulo 17 and decrements `size`, preserving FIFO order.\n\nHere is a complete C++17 implementation for integer values. `push` returns false on overflow, and `pop` returns an empty optional on underflow.\n\n```cpp\n#include <array>\n#include <cstddef>\n#include <iostream>\n#include <optional>\n#include <stdexcept>\n\nclass BoundedFIFO {\npublic:\n    static constexpr std::size_t capacity = 17;\n\n    bool push(int value) {\n        if (size_ == capacity) {\n            return false;\n        }\n        data_[(head_ + size_) % capacity] = value;\n        ++size_;\n        return true;\n    }\n\n    std::optional<int> pop() {\n        if (size_ == 0) {\n            return std::nullopt;\n        }\n        int value = data_[head_];\n        head_ = (head_ + 1) % capacity;\n        --size_;\n        return value;\n    }\n\n    std::size_t size() const { return size_; }\n    bool empty() const { return size_ == 0; }\n    bool full() const { return size_ == capacity; }\n\nprivate:\n    std::array<int, capacity> data_{};\n    std::size_t head_ = 0;\n    std::size_t size_ = 0;\n};\n\nvoid check(bool condition, const char* message) {\n    if (!condition) {\n        throw std::runtime_error(message);\n    }\n}\n\nint main() {\n    BoundedFIFO q;\n    check(!q.pop().has_value(), \"Initial underflow failed\");\n\n    // Fill all 17 slots, then reject overflow.\n    for (int i = 0; i < 17; ++i) {\n        check(q.push(i), \"Fill failed\");\n    }\n    check(q.full(), \"Queue should be full\");\n    check(!q.push(999), \"Overflow should be rejected\");\n    check(q.size() == 17, \"Overflow changed size\");\n\n    // Drain and verify that overflow did not alter FIFO contents.\n    for (int i = 0; i < 17; ++i) {\n        auto value = q.pop();\n        check(value.has_value() && *value == i, \"Drain order failed\");\n    }\n    check(q.empty(), \"Queue should be empty\");\n    check(!q.pop().has_value(), \"Underflow should be rejected\");\n\n    // Move head to slot 5, leaving values 5 through 9 queued.\n    for (int i = 0; i < 10; ++i) {\n        check(q.push(i), \"Wrap setup push failed\");\n    }\n    for (int i = 0; i < 5; ++i) {\n        auto value = q.pop();\n        check(value.has_value() && *value == i, \"Wrap setup pop failed\");\n    }\n\n    // Add 12 values: writes cross slot 16 and wrap to slot 0.\n    for (int i = 10; i < 22; ++i) {\n        check(q.push(i), \"Wrapped push failed\");\n    }\n    check(q.full(), \"Wrapped queue should be full\");\n    check(!q.push(999), \"Wrapped overflow should be rejected\");\n\n    // The 17 remaining values must still be 5 through 21.\n    for (int i = 5; i < 22; ++i) {\n        auto value = q.pop();\n        check(value.has_value() && *value == i, \"Wrapped FIFO order failed\");\n    }\n    check(q.empty(), \"Final queue should be empty\");\n    check(!q.pop().has_value(), \"Final underflow failed\");\n    std::cout << \"All tests passed\\n\";\n}\n```\n\nSave this as `fifo.cpp`, then compile and run with `g++ -std=c++17 -Wall -Wextra -pedantic fifo.cpp -o fifo && ./fifo`. Push and pop are constant-time; this implementation assumes single-threaded use or external synchronization.",
+      "answerSha256": "3ecbcaf16f12a5978a3f4df00964055f697c7268fe0b8f9b3ed849f16a35b628",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": false,
+      "usefulPrefix": "Use a circular buffer with capacity 17; reject a push when it is full without changing the queue.",
+      "note": "Actual complete optional-return integer FIFO; size0..17/head oldest/logicali=(head+i)%17, overflowcheckbeforemutation. Complete throw-onfailure main fills17/rejects18/drains0..16;10push/5pop leaves5items,12push restoresfull17, drain5..21 verifieswrap. O(1), singlethread/external synchronization assumption. FollowingWhy neveraccepted, so this generation completes and no successful interruption claim. Execution queued after both new capture queues."
+    },
+    {
+      "round": 6,
+      "name": "spoken-why-during-output",
+      "question": "Why?",
+      "recognizedQuestion": null,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "answer": "",
+      "answerSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": "no_job",
+      "error": null,
+      "correctness": "missing",
+      "reasoningVerdict": "not_available",
+      "completed": false,
+      "ordinaryFollowup": true,
+      "note": "Original Why waveform plays while precedingFIFO running and visiblydisplayed, but no recognized text, acceptedjob or answer. Capture/queue/localflush counters advance withoutqueue/writefailure, providertranscriptcounter/rawfrontier unchanged inwindow; no providerreceipt/rootcause inference. PreviousFIFO finishes, plannedinterruptionnotobserved."
+    },
+    {
+      "round": 7,
+      "name": "switch-topic",
+      "question": "Switch topics. Why does snapshot isolation permit write skew even if both read-check-write sequences run in atomic transactions?",
+      "recognizedQuestion": "Switch topics. Why does snapshot isolation permit write skew even if both read-check-write sequences run in atomic transactions?",
+      "questionSha256": "6efb0ab112ff647693d3f25fa2b69439be72bba8ce2ecaa6f5b9bbaf8e1724e0",
+      "recognizedQuestionSha256": "6efb0ab112ff647693d3f25fa2b69439be72bba8ce2ecaa6f5b9bbaf8e1724e0",
+      "answer": "Snapshot isolation makes each transaction atomic, but it does not make concurrent transactions behave as if they ran one at a time. Each transaction checks its own consistent snapshot, and ordinary snapshot isolation detects conflicting writes to the same row—not every conflict between what one transaction reads and another writes.\n\nFor example, suppose Alice and Bob are both on call, and the rule is that at least one must remain on call. Two concurrent transactions each read that both are on call; one then marks Alice off call, while the other marks Bob off call. Because they update different rows, both can commit, leaving nobody on call even though each check passed.\n\nAtomicity guarantees that each transaction’s changes happen entirely or not at all; it does not guarantee that its check remains valid against concurrent changes. Preventing this write skew requires serializable isolation or an explicit locking or shared-write scheme that forces these transactions to conflict.",
+      "answerSha256": "e9a03e951885cfebc1ea8bc33d227a4810c73204616255f903fee36e821ece7f",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": true,
+      "usefulPrefix": "Snapshot isolation makes each transaction atomic, but it does not make concurrent transactions behave as if they ran one at a time.",
+      "note": "Snapshotisolation atomictransactions caneachseebothdoctors/disjointrowupdatescommit andviolateatleastoneoncall invariant. Same-rowwriteconflict detection doesnotcovercrossreadwritecycle, atomicitynotserialequivalence. SERIALIZABLE orconflictinglocking/sharedwrite appropriate; explanation correct."
+    }
+  ],
+  "missingSpeechDiagnostic": {
+    "round": 6,
+    "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+    "nativeStartedAt": 71394,
+    "audio": {
+      "waveFile": "artifacts/controller-v72/prepared/why.wav",
+      "sha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "playback": {
+        "sampleRate": 16000,
+        "lastNonzeroFrame": 7199,
+        "sourceFrames": 18320,
+        "submitBeforeHostMs": 1791846883185,
+        "submitAfterHostMs": 1791846883185,
+        "lastVoicedDevicePositionLowerHostMs": 1791846883644,
+        "lastVoicedDevicePositionUpperHostMs": 1791846883650,
+        "positionAtEnd": 7262,
+        "completedHostMs": 1791846884340
+      },
+      "runningAtPlaybackLaunch": [
+        "893578be-4dfe-48c0-b989-a61006ed9c75"
+      ],
+      "clockAnchors": [
+        {
+          "hostBeforeMs": 1791846882770,
+          "hostAfterMs": 1791846882773,
+          "nativeMs": 71394
+        },
+        {
+          "hostBeforeMs": 1791846884360,
+          "hostAfterMs": 1791846884364,
+          "nativeMs": 72985
+        }
+      ]
+    },
+    "displayedConditionMet": true,
+    "runningAtPlaybackLaunch": [
+      "893578be-4dfe-48c0-b989-a61006ed9c75"
+    ],
+    "events": [
+      {
+        "name": "speech.started",
+        "payload": {
+          "continued": false,
+          "source": "remote",
+          "timestamp": 71649,
+          "turnStartedAt": 71649
+        },
+        "receivedHostMs": 1791846883368
+      },
+      {
+        "name": "speech.ended",
+        "payload": {
+          "source": "remote",
+          "timestamp": 72159
+        },
+        "receivedHostMs": 1791846884063
+      }
+    ],
+    "windowSnapshots": 134,
+    "snapshots": [
+      {
+        "nativeNow": 70344,
+        "remote": {
+          "capturedFrames": 5114,
+          "capturedSamples": 1124112,
+          "emptyFinalEvents": 0,
+          "finalEvents": 13,
+          "nonemptyTranscriptEvents": 195,
+          "providerAudioFrontierMicros": 60639999,
+          "queueFailures": 0,
+          "queuedBytes": 2247680,
+          "queuedChunks": 439,
+          "socketFlushedBytes": 2247680,
+          "socketFlushedChunks": 439,
+          "socketWriteFailures": 0,
+          "transcriptEvents": 195
+        }
+      },
+      {
+        "nativeNow": 71389,
+        "remote": {
+          "capturedFrames": 5145,
+          "capturedSamples": 1140640,
+          "emptyFinalEvents": 0,
+          "finalEvents": 13,
+          "nonemptyTranscriptEvents": 195,
+          "providerAudioFrontierMicros": 60639999,
+          "queueFailures": 0,
+          "queuedBytes": 2278400,
+          "queuedChunks": 445,
+          "socketFlushedBytes": 2278400,
+          "socketFlushedChunks": 445,
+          "socketWriteFailures": 0,
+          "transcriptEvents": 195
+        }
+      },
+      {
+        "nativeNow": 73421,
+        "remote": {
+          "capturedFrames": 5315,
+          "capturedSamples": 1173472,
+          "emptyFinalEvents": 0,
+          "finalEvents": 13,
+          "nonemptyTranscriptEvents": 195,
+          "providerAudioFrontierMicros": 60639999,
+          "queueFailures": 0,
+          "queuedBytes": 2344960,
+          "queuedChunks": 458,
+          "socketFlushedBytes": 2344960,
+          "socketFlushedChunks": 458,
+          "socketWriteFailures": 0,
+          "transcriptEvents": 195
+        }
+      },
+      {
+        "nativeNow": 79337,
+        "remote": {
+          "capturedFrames": 5492,
+          "capturedSamples": 1267776,
+          "emptyFinalEvents": 0,
+          "finalEvents": 13,
+          "nonemptyTranscriptEvents": 195,
+          "providerAudioFrontierMicros": 60639999,
+          "queueFailures": 0,
+          "queuedBytes": 2534400,
+          "queuedChunks": 495,
+          "socketFlushedBytes": 2534400,
+          "socketFlushedChunks": 495,
+          "socketWriteFailures": 0,
+          "transcriptEvents": 195
+        }
+      }
+    ],
+    "scope": "Observed native heartbeat counters, not atomic. Local socket success does not establish server receipt/recognition. Raw frontier emitted with a transcript is not word time or continuous receipt progress. Cause unknown; no retained PCM added to production."
+  },
+  "measurements": {
+    "scope": "Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "multipart-pause-1500",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791846836201,
+          "low": 6915,
+          "high": 6921,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 6174,
+          "high": 6180
+        },
+        "acceptedToProtocolCompletionMs": 8343,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 9920,
+          "high": 9929
+        },
+        "acceptedToCorrectWorkCompletionMs": 8343,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 692,
+          "high": 701
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1577,
+          "high": 1586
+        },
+        "acceptedToRequestAttemptMs": 1,
+        "acceptedToFirstProviderDeltaMs": 4296,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 885,
+        "inputTokens": 834,
+        "cachedInputTokens": 0,
+        "outputTokens": 193,
+        "reasoningTokens": 55,
+        "outputTokensPerStreamingSecond": 47.689646651840874,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 2,
+          "referenceWords": 47,
+          "rate": 0.0425531914893617,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 2,
+          "referenceWords": 47,
+          "rate": 0.0425531914893617,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 2,
+        "name": "late-correction-2500",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791846862948,
+          "low": 4128,
+          "high": 4134,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 4028,
+          "high": 4034
+        },
+        "acceptedToProtocolCompletionMs": 3997,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 5680,
+          "high": 5689
+        },
+        "acceptedToCorrectWorkCompletionMs": 3997,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 628,
+          "high": 637
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1683,
+          "high": 1692
+        },
+        "acceptedToRequestAttemptMs": 1,
+        "acceptedToFirstProviderDeltaMs": 2168,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 1055,
+        "inputTokens": 1443,
+        "cachedInputTokens": 0,
+        "outputTokens": 66,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 36.08529250956807,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 3,
+        "selectedRequestWER": {
+          "distance": 16,
+          "referenceWords": 42,
+          "rate": 0.38095238095238093,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 42,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 3,
+        "name": "backchannel",
+        "kind": "native_audio",
+        "phase": "cancelled",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": false,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": true,
+        "correctness": "correct",
+        "reasoningVerdict": "not_scored",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": null,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 708,
+          "high": 717
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 723,
+          "high": 732
+        },
+        "acceptedToRequestAttemptMs": 1,
+        "acceptedToFirstProviderDeltaMs": 3092,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 15,
+        "inputTokens": 1887,
+        "cachedInputTokens": 0,
+        "outputTokens": 17,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 53.62776025236593,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 3,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 4,
+        "name": "spoken-why",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": true,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791846875352,
+          "low": 3865,
+          "high": 3871,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 3598,
+          "high": 3604
+        },
+        "acceptedToProtocolCompletionMs": 5072,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 5727,
+          "high": 5737
+        },
+        "acceptedToCorrectWorkCompletionMs": 5072,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 619,
+          "high": 629
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 655,
+          "high": 665
+        },
+        "acceptedToRequestAttemptMs": 2,
+        "acceptedToFirstProviderDeltaMs": 2791,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 36,
+        "inputTokens": 1949,
+        "cachedInputTokens": 0,
+        "outputTokens": 70,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 30.688294607628233,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 5,
+        "name": "interrupt-code",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": true,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791846883248,
+          "low": 5978,
+          "high": 5982,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 36899,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 36899,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": 1,
+        "acceptedToFirstProviderDeltaMs": 5235,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 2166,
+        "cachedInputTokens": 0,
+        "outputTokens": 1155,
+        "reasoningTokens": 90,
+        "outputTokensPerStreamingSecond": 36.47675593734209,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 6,
+        "name": "spoken-why-during-output",
+        "kind": "native_audio",
+        "phase": "no_job",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": true,
+        "completed": false,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": false,
+        "missing": true,
+        "correctness": "missing",
+        "reasoningVerdict": "not_available",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": null,
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": null,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": null,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": null,
+        "acceptedToFirstProviderDeltaMs": null,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": null,
+        "inputTokens": null,
+        "cachedInputTokens": null,
+        "outputTokens": null,
+        "reasoningTokens": null,
+        "outputTokensPerStreamingSecond": null,
+        "refinementChars": null,
+        "steeringCount": null,
+        "remoteTerminationConfirmed": null,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      },
+      {
+        "round": 7,
+        "name": "switch-topic",
+        "kind": "typed",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": true,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791847010780,
+          "low": 3824,
+          "high": 3829,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "firstWordMs": null,
+        "acceptedToProtocolCompletionMs": 8857,
+        "sourceSpeechEndToProtocolCompletionMs": null,
+        "acceptedToCorrectWorkCompletionMs": 8857,
+        "sourceSpeechEndToTranscriptFinalMs": null,
+        "sourceSpeechEndToAcceptedMs": null,
+        "acceptedToRequestAttemptMs": 3,
+        "acceptedToFirstProviderDeltaMs": 3110,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 0,
+        "inputTokens": 3224,
+        "cachedInputTokens": 0,
+        "outputTokens": 198,
+        "reasoningTokens": 0,
+        "outputTokensPerStreamingSecond": 34.452757960675136,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 0,
+        "selectedRequestWER": null,
+        "finalizedSourceWER": null
+      }
+    ],
+    "counts": {
+      "all": 7,
+      "expectedReplies": 6,
+      "complete": 5,
+      "missing": 1,
+      "errors": 0,
+      "intentionallyInterrupted": 1,
+      "observedPlannedInterruptions": 0,
+      "observerInterference": 0,
+      "correct": 5,
+      "incorrect": 0,
+      "requestedWorkComplete": 5,
+      "requestedWorkIncomplete": 1,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 5,
+      "reasoningFail": 0,
+      "correctnessPending": 0
+    },
+    "acceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 5,
+      "min": 3997,
+      "median": 8343,
+      "sampleP95": 36899,
+      "max": 36899
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 5,
+      "min": 3997,
+      "median": 8343,
+      "sampleP95": 36899,
+      "max": 36899
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 3,
+      "min": 5689,
+      "median": 5737,
+      "sampleP95": 9929,
+      "max": 9929
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 5,
+      "min": 30.688294607628233,
+      "median": 36.08529250956807,
+      "sampleP95": 47.689646651840874,
+      "max": 47.689646651840874
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 3,
+      "min": 3871,
+      "median": 4134,
+      "sampleP95": 6921,
+      "max": 6921
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 2,
+      "min": 3829,
+      "median": 4905.5,
+      "sampleP95": 5982,
+      "max": 5982
+    },
+    "usefulFollowupMs": {
+      "count": 2,
+      "min": 3829,
+      "median": 3850,
+      "sampleP95": 3871,
+      "max": 3871
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 3,
+      "observed": 2,
+      "missingOrUnverified": 1,
+      "p95": null,
+      "gateEvaluable": false,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [
+        {
+          "generationId": "29ebfb1d-141f-4063-b678-a592643fdb3a",
+          "previousGenerationId": "650b024b-60a2-4380-a07b-80b63dcac10c",
+          "acceptedHostMs": {
+            "low": 1791846849797,
+            "high": 1791846849804
+          },
+          "foregroundAuthorizedAt": 38423,
+          "inferenceAcceptedAt": 35368,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791846849802,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 5
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "42cc7896-7ec4-4e44-a913-ad662eb20336",
+          "previousGenerationId": "29ebfb1d-141f-4063-b678-a592643fdb3a",
+          "acceptedHostMs": {
+            "low": 1791846862788,
+            "high": 1791846862794
+          },
+          "foregroundAuthorizedAt": 51414,
+          "inferenceAcceptedAt": 49128,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791846862794,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 6
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "2187d028-4225-4abf-a89d-f5d78cefb30f",
+          "previousGenerationId": "42cc7896-7ec4-4e44-a913-ad662eb20336",
+          "acceptedHostMs": {
+            "low": 1791846875051,
+            "high": 1791846875057
+          },
+          "foregroundAuthorizedAt": 63677,
+          "inferenceAcceptedAt": 60767,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791846875062,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 11
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "893578be-4dfe-48c0-b989-a61006ed9c75",
+          "previousGenerationId": "2187d028-4225-4abf-a89d-f5d78cefb30f",
+          "acceptedHostMs": {
+            "low": 1791846877265,
+            "high": 1791846877270
+          },
+          "foregroundAuthorizedAt": 65891,
+          "inferenceAcceptedAt": 65891,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791846877273,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 8
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        },
+        {
+          "generationId": "276e7662-45b9-4177-a727-afbb60b57eda",
+          "previousGenerationId": "893578be-4dfe-48c0-b989-a61006ed9c75",
+          "acceptedHostMs": {
+            "low": 1791847006950,
+            "high": 1791847006957
+          },
+          "foregroundAuthorizedAt": 195576,
+          "inferenceAcceptedAt": 195576,
+          "foregroundAuthorizationSource": "focusAuthorizedAt",
+          "priorPanelClearedHostMs": 1791847006959,
+          "possibleOldPanelDurationMs": {
+            "low": 0,
+            "high": 9
+          },
+          "oldPaintChangesAfterAcceptance": 0,
+          "unclearedInObservation": false
+        }
+      ],
+      "maxPossibleCarryHighMs": 11,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "scope": "All seven selected actual outputs separately reviewed; actual source differs from Codex. Five correct complete replies, appropriate separate backchannelignore and missingnativeWhy. Planned interruption notobserved because noacceptedfollowup; priorfullimplementation completes. HTTP actualwire timingunknown. Sourceexecution/allgenerationaudit still separate. No production question rules, lexical substitution, canned response or billed API."
+}

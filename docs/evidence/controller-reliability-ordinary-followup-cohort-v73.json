@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "definedAt": "2026-10-13T01:33:59.041Z",
+  "manifest": {
+    "file": "artifacts/controller-v72/prepared/marathon-session.json",
+    "sha256": "f7231700538fb470b8e6c51eef2e558b0b431d4b0deca2fbf749ab07c347c70a"
+  },
+  "definition": "Original fixture short causal follow-ups and requests to identify an unspecified changed assumption, plus its predeclared ordinary requests. Selection uses original source questions only, before recognition/outcome/latency review; all selected missing/incorrect/incomplete results remain. This is evaluation cohort metadata, never an inference routing, prediction or word-replacement rule.",
+  "rows": [
+    {
+      "round": 4,
+      "question": "Why?",
+      "name": "hour-1-spoken-why-warps",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 10,
+      "question": "Why?",
+      "name": "hour-1-saved-audio-7",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 14,
+      "question": "What if that changes?",
+      "name": "hour-1-saved-audio-11",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 20,
+      "question": "Why?",
+      "name": "hour-1-spoken-why-during-coding",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 21,
+      "question": "Why?",
+      "name": "hour-1-saved-audio-15",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 25,
+      "question": "What if that changes?",
+      "name": "hour-1-saved-audio-19",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 29,
+      "question": "Why?",
+      "name": "hour-1-saved-audio-23",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 36,
+      "question": "Why?",
+      "name": "hour-1-why",
+      "predeclaredOrdinary": true,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 40,
+      "question": "Why?",
+      "name": "hour-2-spoken-why-warps",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 46,
+      "question": "Why?",
+      "name": "hour-2-saved-audio-7",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 50,
+      "question": "What if that changes?",
+      "name": "hour-2-saved-audio-11",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 57,
+      "question": "Why?",
+      "name": "hour-2-spoken-why-during-coding",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 59,
+      "question": "Why?",
+      "name": "hour-2-saved-audio-15",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 63,
+      "question": "What if that changes?",
+      "name": "hour-2-saved-audio-19",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 67,
+      "question": "Why?",
+      "name": "hour-2-saved-audio-23",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 74,
+      "question": "Why?",
+      "name": "hour-2-why",
+      "predeclaredOrdinary": true,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 78,
+      "question": "Why?",
+      "name": "hour-3-spoken-why-warps",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 84,
+      "question": "Why?",
+      "name": "hour-3-saved-audio-7",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 88,
+      "question": "What if that changes?",
+      "name": "hour-3-saved-audio-11",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 94,
+      "question": "Why?",
+      "name": "hour-3-spoken-why-during-coding",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 95,
+      "question": "Why?",
+      "name": "hour-3-saved-audio-15",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 99,
+      "question": "What if that changes?",
+      "name": "hour-3-saved-audio-19",
+      "predeclaredOrdinary": false,
+      "questionSha256": "fe7c3515eca2f6a71d1ff58f2afa2a1636fb6385e95c823849dc859c50b5eba0"
+    },
+    {
+      "round": 103,
+      "question": "Why?",
+      "name": "hour-3-saved-audio-23",
+      "predeclaredOrdinary": false,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    },
+    {
+      "round": 112,
+      "question": "Why?",
+      "name": "hour-3-why",
+      "predeclaredOrdinary": true,
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276"
+    }
+  ]
+}

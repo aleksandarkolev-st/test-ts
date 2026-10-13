@@ -1,0 +1,916 @@
+{
+  "cells": [
+    {
+      "name": "final-source-r6-contextual-codex",
+      "journalSha256": "ad32f5fb11f577b27c581c5aa1b68f422a5b8b28386d9e9e4571d2a4d7c73c33",
+      "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+      "allRows": 30,
+      "healthyPreparedWrites": 30,
+      "healthyPreparedAcceptedToWriteMs": {
+        "count": 30,
+        "min": 1,
+        "median": 3,
+        "sampleP95": 5,
+        "max": 6
+      },
+      "rows": [
+        {
+          "round": 1,
+          "generation": "4327db29-548a-4e6a-88b3-68b6341b5e14:0",
+          "acceptedAt": 33,
+          "writeAt": 34,
+          "warmThreadTaken": 34,
+          "preparedThreadAgeMs": 5084,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 2,
+          "generation": "365e623f-57a6-4b4c-9932-0d8269992e22:0",
+          "acceptedAt": 4458,
+          "writeAt": 4459,
+          "warmThreadTaken": 4459,
+          "preparedThreadAgeMs": 4331,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 3,
+          "generation": "f6f1e139-314a-4a20-b2ee-9b9b8a8aca42:0",
+          "acceptedAt": 10509,
+          "writeAt": 10511,
+          "warmThreadTaken": 10510,
+          "preparedThreadAgeMs": 5942,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 4,
+          "generation": "64de9483-7fae-498b-957c-c2789d8b8bf0:0",
+          "acceptedAt": 14115,
+          "writeAt": 14117,
+          "warmThreadTaken": 14116,
+          "preparedThreadAgeMs": 3509,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 5,
+          "generation": "c535a967-b11d-45e3-980b-efdb4137be64:0",
+          "acceptedAt": 18832,
+          "writeAt": 18833,
+          "warmThreadTaken": 18832,
+          "preparedThreadAgeMs": 4616,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 6,
+          "generation": "1965bb28-dd51-4cec-a6ff-112fd937fa8d:0",
+          "acceptedAt": 23491,
+          "writeAt": 23493,
+          "warmThreadTaken": 23492,
+          "preparedThreadAgeMs": 4552,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 7,
+          "generation": "989d6297-47f7-4eab-bbaa-51908679aba2:0",
+          "acceptedAt": 27864,
+          "writeAt": 27866,
+          "warmThreadTaken": 27865,
+          "preparedThreadAgeMs": 4267,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 8,
+          "generation": "f178deac-3e89-46e8-b8ce-b1852483deb5:0",
+          "acceptedAt": 33580,
+          "writeAt": 33581,
+          "warmThreadTaken": 33580,
+          "preparedThreadAgeMs": 5603,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 9,
+          "generation": "7a6618b8-05af-463f-a297-cde07a1a35d3:0",
+          "acceptedAt": 39765,
+          "writeAt": 39766,
+          "warmThreadTaken": 39766,
+          "preparedThreadAgeMs": 6077,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 10,
+          "generation": "93726787-56a3-4424-a450-fef6baa3c8a1:0",
+          "acceptedAt": 45500,
+          "writeAt": 45502,
+          "warmThreadTaken": 45501,
+          "preparedThreadAgeMs": 5639,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 11,
+          "generation": "8e49f538-93af-4f98-8453-efac094f42e1:0",
+          "acceptedAt": 50707,
+          "writeAt": 50709,
+          "warmThreadTaken": 50708,
+          "preparedThreadAgeMs": 4566,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 12,
+          "generation": "0b1ee144-eeff-4102-a785-8db880031218:0",
+          "acceptedAt": 56524,
+          "writeAt": 56526,
+          "warmThreadTaken": 56525,
+          "preparedThreadAgeMs": 5710,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 13,
+          "generation": "9e51bf58-3782-4359-a8dc-25f5d89ed634:0",
+          "acceptedAt": 61457,
+          "writeAt": 61460,
+          "warmThreadTaken": 61458,
+          "preparedThreadAgeMs": 4835,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 14,
+          "generation": "367c0411-15d5-477a-bd3a-1a031d9748fc:0",
+          "acceptedAt": 68944,
+          "writeAt": 68947,
+          "warmThreadTaken": 68945,
+          "preparedThreadAgeMs": 7380,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 15,
+          "generation": "e7f48b4b-6ec6-43ef-a882-280304af99ca:0",
+          "acceptedAt": 73739,
+          "writeAt": 73742,
+          "warmThreadTaken": 73741,
+          "preparedThreadAgeMs": 4688,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 16,
+          "generation": "ff6df9ac-8e22-4cb1-8c3f-8e961ace1cbe:0",
+          "acceptedAt": 82571,
+          "writeAt": 82574,
+          "warmThreadTaken": 82572,
+          "preparedThreadAgeMs": 8725,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 17,
+          "generation": "618b3efd-ab45-4666-8f27-6c93808395b0:0",
+          "acceptedAt": 88874,
+          "writeAt": 88878,
+          "warmThreadTaken": 88876,
+          "preparedThreadAgeMs": 6198,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 18,
+          "generation": "86bc7913-add9-453e-a6ea-4dbc0950c532:0",
+          "acceptedAt": 93451,
+          "writeAt": 93455,
+          "warmThreadTaken": 93453,
+          "preparedThreadAgeMs": 4470,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 19,
+          "generation": "300f513d-b6c4-4afd-a1da-3aa3b8897ff1:0",
+          "acceptedAt": 101813,
+          "writeAt": 101817,
+          "warmThreadTaken": 101815,
+          "preparedThreadAgeMs": 8257,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 20,
+          "generation": "1c51c1fd-6dd0-4744-9212-5460ca394ea7:0",
+          "acceptedAt": 106479,
+          "writeAt": 106483,
+          "warmThreadTaken": 106481,
+          "preparedThreadAgeMs": 4550,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 21,
+          "generation": "6d0b6341-a045-46fd-9adf-2c89e3c29588:0",
+          "acceptedAt": 114649,
+          "writeAt": 114654,
+          "warmThreadTaken": 114652,
+          "preparedThreadAgeMs": 8070,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 22,
+          "generation": "49e05389-7b52-4eba-bd62-b2354c72a5c6:0",
+          "acceptedAt": 121933,
+          "writeAt": 121938,
+          "warmThreadTaken": 121936,
+          "preparedThreadAgeMs": 7177,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 23,
+          "generation": "6d58f2d0-8019-47f2-bcea-1114bb79a28b:0",
+          "acceptedAt": 127168,
+          "writeAt": 127172,
+          "warmThreadTaken": 127170,
+          "preparedThreadAgeMs": 5125,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 24,
+          "generation": "4bdd4382-c314-43e0-9222-675afdc667f1:0",
+          "acceptedAt": 132156,
+          "writeAt": 132160,
+          "warmThreadTaken": 132158,
+          "preparedThreadAgeMs": 4195,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 25,
+          "generation": "e209e50e-fd0f-4b06-80c6-40d332399ae1:0",
+          "acceptedAt": 138842,
+          "writeAt": 138846,
+          "warmThreadTaken": 138844,
+          "preparedThreadAgeMs": 6578,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 26,
+          "generation": "59188051-c489-42ea-bf11-f76ab0a709fd:0",
+          "acceptedAt": 142553,
+          "writeAt": 142558,
+          "warmThreadTaken": 142556,
+          "preparedThreadAgeMs": 3599,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 27,
+          "generation": "864de7d9-0b02-4f2b-a8c4-497e055595e0:0",
+          "acceptedAt": 149409,
+          "writeAt": 149414,
+          "warmThreadTaken": 149412,
+          "preparedThreadAgeMs": 6746,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 28,
+          "generation": "41b11173-c1c3-4ddf-b55d-e4fdb91a228e:0",
+          "acceptedAt": 157151,
+          "writeAt": 157157,
+          "warmThreadTaken": 157154,
+          "preparedThreadAgeMs": 7639,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 29,
+          "generation": "f687810e-1337-4f71-be9e-a3b64030e62b:0",
+          "acceptedAt": 168460,
+          "writeAt": 168465,
+          "warmThreadTaken": 168463,
+          "preparedThreadAgeMs": 11204,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 30,
+          "generation": "fb8bc88e-e2c3-4522-8814-a90a6d58a736:0",
+          "acceptedAt": 175194,
+          "writeAt": 175199,
+          "warmThreadTaken": 175196,
+          "preparedThreadAgeMs": 6627,
+          "faultInjected": false,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "final-source-r6-reasoning-codex",
+      "journalSha256": "141b83e169f4c4afa1c3eaaf9d5c7dc355e5f6b70ec76fcb7546fa8052e18304",
+      "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+      "allRows": 8,
+      "healthyPreparedWrites": 7,
+      "healthyPreparedAcceptedToWriteMs": {
+        "count": 7,
+        "min": 1,
+        "median": 4,
+        "sampleP95": 4,
+        "max": 4
+      },
+      "rows": [
+        {
+          "round": 1,
+          "generation": "8f5be6d4-130c-4bd0-8131-6e4864deeb52:0",
+          "acceptedAt": 35,
+          "writeAt": 36,
+          "warmThreadTaken": 35,
+          "preparedThreadAgeMs": 5101,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 2,
+          "generation": "a37de956-fc70-4426-bf83-7d587166d61b:0",
+          "acceptedAt": 23114,
+          "writeAt": 23117,
+          "warmThreadTaken": 23115,
+          "preparedThreadAgeMs": 22973,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 3,
+          "generation": "2d915669-c8f3-4457-9d70-59202ebb8978:0",
+          "acceptedAt": 33326,
+          "writeAt": 33329,
+          "warmThreadTaken": 33327,
+          "preparedThreadAgeMs": 10098,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 4,
+          "generation": "5eb29118-185c-4d26-9445-bf15fa89cdf9:0",
+          "acceptedAt": 52475,
+          "writeAt": 52479,
+          "warmThreadTaken": 52477,
+          "preparedThreadAgeMs": 19045,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 5,
+          "generation": "6b3f4949-c9d8-40d2-8bfe-bbe0c552ff0f:0",
+          "acceptedAt": 68867,
+          "writeAt": 68871,
+          "warmThreadTaken": 68869,
+          "preparedThreadAgeMs": 16293,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 6,
+          "generation": "b54e4fe8-8bf8-47e0-95f4-58bcee0160b0:0",
+          "acceptedAt": 94154,
+          "writeAt": 94158,
+          "warmThreadTaken": 94156,
+          "preparedThreadAgeMs": 25188,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 7,
+          "generation": "26cd4da0-404a-4145-bdc0-11aec2c164c5:0",
+          "acceptedAt": 102686,
+          "writeAt": 102690,
+          "warmThreadTaken": 102689,
+          "preparedThreadAgeMs": 8425,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 8,
+          "generation": "6cd3aa34-dd11-408c-89f0-5f54b63fce41:0",
+          "acceptedAt": 127385,
+          "writeAt": 128869,
+          "warmThreadTaken": 128867,
+          "preparedThreadAgeMs": 3,
+          "faultInjected": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "final-source-r6-behavior-codex",
+      "journalSha256": "6f0481680f6864c01337c61d9abbf4d80c4541fbe04eb808368db3268167a0c3",
+      "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+      "allRows": 7,
+      "healthyPreparedWrites": 6,
+      "healthyPreparedAcceptedToWriteMs": {
+        "count": 6,
+        "min": 2,
+        "median": 2,
+        "sampleP95": 4,
+        "max": 4
+      },
+      "rows": [
+        {
+          "round": 1,
+          "generation": "3fd36c5f-4122-4df2-99ab-b1a605698643:0",
+          "acceptedAt": 19607,
+          "writeAt": 19609,
+          "warmThreadTaken": 19608,
+          "preparedThreadAgeMs": 25303,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 2,
+          "generation": "ceddd87c-81e2-45cb-8c94-e10719eea76d:0",
+          "acceptedAt": 49488,
+          "writeAt": 49490,
+          "warmThreadTaken": 49489,
+          "preparedThreadAgeMs": 14785,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 3,
+          "generation": "496e0249-9545-487c-9342-b7531406ae08:0",
+          "acceptedAt": 56088,
+          "writeAt": 56090,
+          "warmThreadTaken": 56089,
+          "preparedThreadAgeMs": 5980,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 4,
+          "generation": "b53dac91-182e-4d62-b116-4b128c3666fb:0",
+          "acceptedAt": 61047,
+          "writeAt": 61049,
+          "warmThreadTaken": 61048,
+          "preparedThreadAgeMs": 4858,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 5,
+          "generation": "5cf0000e-a30b-42b1-8f32-95c8ee5e5389:0",
+          "acceptedAt": 65363,
+          "writeAt": 65365,
+          "warmThreadTaken": 65364,
+          "preparedThreadAgeMs": 4212,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 6,
+          "generation": null,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 7,
+          "generation": "13ce2d05-76b7-40ed-b3e7-8fd358509a2a:0",
+          "acceptedAt": 202365,
+          "writeAt": 202369,
+          "warmThreadTaken": 202367,
+          "preparedThreadAgeMs": 136906,
+          "faultInjected": false,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "final-source-r6-hour-codex",
+      "journalSha256": "10344721639e27473caac2e2eb0dcca2381ecd29f032e4383846725e6ca40f26",
+      "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+      "allRows": 36,
+      "healthyPreparedWrites": 35,
+      "healthyPreparedAcceptedToWriteMs": {
+        "count": 35,
+        "min": 1,
+        "median": 10,
+        "sampleP95": 23,
+        "max": 24
+      },
+      "rows": [
+        {
+          "round": 1,
+          "generation": "e4b7fe92-6bee-4603-80c9-963aac3c0a2d:0",
+          "acceptedAt": 44,
+          "writeAt": 45,
+          "warmThreadTaken": 45,
+          "preparedThreadAgeMs": 5480,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 2,
+          "generation": "3e718b2f-fdc1-4e63-822e-35e86d16319c:0",
+          "acceptedAt": 20044,
+          "writeAt": 20046,
+          "warmThreadTaken": 20045,
+          "preparedThreadAgeMs": 19895,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 3,
+          "generation": "f0bb8bdd-3991-4e96-b67f-937d93424fa7:0",
+          "acceptedAt": 65676,
+          "writeAt": 65678,
+          "warmThreadTaken": 65678,
+          "preparedThreadAgeMs": 44996,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 4,
+          "generation": "c865a519-8407-4b3a-bb4c-37b03f65633e:0",
+          "acceptedAt": 102796,
+          "writeAt": 102797,
+          "warmThreadTaken": 102797,
+          "preparedThreadAgeMs": 37016,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 5,
+          "generation": "5a907b8c-66c5-4e9b-9cac-1bc628ac18d0:0",
+          "acceptedAt": 155156,
+          "writeAt": 155158,
+          "warmThreadTaken": 155157,
+          "preparedThreadAgeMs": 22458,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 6,
+          "generation": "826e639e-bbcd-43f4-bf8e-be12b47fde1c:0",
+          "acceptedAt": 267596,
+          "writeAt": 267598,
+          "warmThreadTaken": 267597,
+          "preparedThreadAgeMs": 38412,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 7,
+          "generation": "427bb2e8-62e9-4894-836c-6be1ef4f564e:0",
+          "acceptedAt": 395716,
+          "writeAt": 395719,
+          "warmThreadTaken": 395718,
+          "preparedThreadAgeMs": 128011,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 8,
+          "generation": "8b48acfd-5a4a-42bf-a51f-fcde198862d0:0",
+          "acceptedAt": 519957,
+          "writeAt": 519961,
+          "warmThreadTaken": 519959,
+          "preparedThreadAgeMs": 123370,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 9,
+          "generation": "bf40e825-f054-43f1-b0f3-080e78d79ca2:0",
+          "acceptedAt": 653716,
+          "writeAt": 653721,
+          "warmThreadTaken": 653719,
+          "preparedThreadAgeMs": 49706,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 10,
+          "generation": "48a77107-9e61-4c2a-89cf-a27e6c93b77c:0",
+          "acceptedAt": 738717,
+          "writeAt": 738723,
+          "warmThreadTaken": 738721,
+          "preparedThreadAgeMs": 84187,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 11,
+          "generation": "f7b3f4d5-90da-4c4e-833b-4256058eb19b:0",
+          "acceptedAt": 851516,
+          "writeAt": 851521,
+          "warmThreadTaken": 851519,
+          "preparedThreadAgeMs": 112699,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 12,
+          "generation": "f72a3a42-e578-4537-96b8-2f5830066011:0",
+          "acceptedAt": 1030317,
+          "writeAt": 1030325,
+          "warmThreadTaken": 1030322,
+          "preparedThreadAgeMs": 178130,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 13,
+          "generation": "bd85191e-19e7-4971-9f80-b2de0f6e8f85:0",
+          "acceptedAt": 1140196,
+          "writeAt": 1140204,
+          "warmThreadTaken": 1140201,
+          "preparedThreadAgeMs": 35944,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 14,
+          "generation": "6a64f25d-0f61-4eaf-930c-08297fcc1a12:0",
+          "acceptedAt": 1277396,
+          "writeAt": 1277405,
+          "warmThreadTaken": 1277400,
+          "preparedThreadAgeMs": 137088,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 15,
+          "generation": "a2bd6ce9-6a92-4b22-8373-6343777e182c:0",
+          "acceptedAt": 1352356,
+          "writeAt": 1352363,
+          "warmThreadTaken": 1352360,
+          "preparedThreadAgeMs": 74143,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 16,
+          "generation": "7761b731-eb91-46ee-9f24-2c5b8c877c58:0",
+          "acceptedAt": 1520556,
+          "writeAt": 1520566,
+          "warmThreadTaken": 1520562,
+          "preparedThreadAgeMs": 42017,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 17,
+          "generation": "a8f7f010-97ef-4e94-b4ae-9b1756ad8bd6:0",
+          "acceptedAt": 1654316,
+          "writeAt": 1654328,
+          "warmThreadTaken": 1654323,
+          "preparedThreadAgeMs": 50666,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 18,
+          "generation": "ea99e9f3-631d-4f51-bec9-a708bf41c3b5:0",
+          "acceptedAt": 1735516,
+          "writeAt": 1735528,
+          "warmThreadTaken": 1735522,
+          "preparedThreadAgeMs": 80528,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 19,
+          "generation": "ff39bac2-7a37-4013-acc7-d03214ca89b5:0",
+          "acceptedAt": 1800050,
+          "writeAt": 1800061,
+          "warmThreadTaken": 1800055,
+          "preparedThreadAgeMs": 63868,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 20,
+          "generation": "50fd3457-1a27-4dd2-a6a0-ff29f42c28d2:0",
+          "acceptedAt": 1810050,
+          "writeAt": 1810062,
+          "warmThreadTaken": 1810056,
+          "preparedThreadAgeMs": 9878,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 21,
+          "generation": "b1fbcd34-f4fe-42f6-8af8-d7a5ad1081fd:0",
+          "acceptedAt": 1818636,
+          "writeAt": 1818646,
+          "warmThreadTaken": 1818641,
+          "preparedThreadAgeMs": 8465,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 22,
+          "generation": null,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 23,
+          "generation": "bcecd384-4167-40aa-ab71-e2eb75c17812:0",
+          "acceptedAt": 2027156,
+          "writeAt": 2027170,
+          "warmThreadTaken": 2027164,
+          "preparedThreadAgeMs": 208421,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 24,
+          "generation": "eef508dd-d264-48e1-a57e-ec4798c7132a:0",
+          "acceptedAt": 2136596,
+          "writeAt": 2136610,
+          "warmThreadTaken": 2136603,
+          "preparedThreadAgeMs": 16320,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 25,
+          "generation": "8d75e2c8-b6fb-4e6e-a35b-f08a13056b08:0",
+          "acceptedAt": 2273756,
+          "writeAt": 2273773,
+          "warmThreadTaken": 2273766,
+          "preparedThreadAgeMs": 137051,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 26,
+          "generation": "742abe2e-b39c-4d95-b2d4-6aad816926e4:0",
+          "acceptedAt": 2352236,
+          "writeAt": 2352248,
+          "warmThreadTaken": 2352242,
+          "preparedThreadAgeMs": 77619,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 27,
+          "generation": "d5c27c4f-24a7-4dea-8e73-74733cf33edb:0",
+          "acceptedAt": 2510837,
+          "writeAt": 2510854,
+          "warmThreadTaken": 2510846,
+          "preparedThreadAgeMs": 158497,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 28,
+          "generation": "c9879b29-f3e5-4d82-9ddf-0082ce119627:0",
+          "acceptedAt": 2654156,
+          "writeAt": 2654174,
+          "warmThreadTaken": 2654166,
+          "preparedThreadAgeMs": 23159,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 29,
+          "generation": "80c3a5ad-8d50-45a0-8450-3e9b98af919f:0",
+          "acceptedAt": 2735556,
+          "writeAt": 2735573,
+          "warmThreadTaken": 2735565,
+          "preparedThreadAgeMs": 81286,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 30,
+          "generation": "f409cc15-e55a-417d-860c-4f7d3342a735:0",
+          "acceptedAt": 2851636,
+          "writeAt": 2851651,
+          "warmThreadTaken": 2851643,
+          "preparedThreadAgeMs": 115392,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 31,
+          "generation": "941a176a-1eab-4034-ad89-c3aa08601233:0",
+          "acceptedAt": 3022996,
+          "writeAt": 3023018,
+          "warmThreadTaken": 3023009,
+          "preparedThreadAgeMs": 43367,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 32,
+          "generation": "f2e49674-5dd0-4457-868f-b5a1c21e8d57:0",
+          "acceptedAt": 3138357,
+          "writeAt": 3138381,
+          "warmThreadTaken": 3138373,
+          "preparedThreadAgeMs": 114685,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 33,
+          "generation": "0d454915-2ae1-4b12-b4f0-2b180bde2919:0",
+          "acceptedAt": 3278316,
+          "writeAt": 3278339,
+          "warmThreadTaken": 3278329,
+          "preparedThreadAgeMs": 139058,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 34,
+          "generation": "89e2c603-de6a-4ab8-a757-52df394b7e88:0",
+          "acceptedAt": 3380059,
+          "writeAt": 3380081,
+          "warmThreadTaken": 3380070,
+          "preparedThreadAgeMs": 100975,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 35,
+          "generation": "30095414-5997-456b-8dac-9bb9b904249c:0",
+          "acceptedAt": 3460063,
+          "writeAt": 3460084,
+          "warmThreadTaken": 3460073,
+          "preparedThreadAgeMs": 79272,
+          "faultInjected": false,
+          "error": null
+        },
+        {
+          "round": 36,
+          "generation": "44de29e3-2970-4135-9aba-c8362e1161d0:0",
+          "acceptedAt": 3600067,
+          "writeAt": 3600068,
+          "warmThreadTaken": 3600068,
+          "preparedThreadAgeMs": 139888,
+          "faultInjected": false,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "pair": {
+    "freshJournalSha256": "53f4d44e6765e634de5931d10d62ff1e326cfd57d061df0d980954bf55de673a",
+    "agedJournalSha256": "10344721639e27473caac2e2eb0dcca2381ecd29f032e4383846725e6ca40f26",
+    "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+    "contextSha256": "8ba05c234426c3e893e26c9614dd34da29c2b9f37242bd2668cc45dc779e9985",
+    "questionSha256": "7d073f4535098d50e32f72d902e5c18bd916b0021aaab5c1f1248b7d15534f3b",
+    "objective": "detailed",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "tier": null,
+    "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+    "cells": [
+      {
+        "kind": "fresh",
+        "round": 1,
+        "applicationAgeMs": 10353,
+        "answerSha256": "331d980bc3ec1753cd539281df1f24b20745b6433c1240b3aca83f98d5161afc",
+        "correctness": "correct",
+        "usefulPrefix": "The launch date is February 19, 2027. The replay must preserve it because it was an explicit team decision tied to a signed customer deadline, not an inferred or flexible date.",
+        "usefulDelivery": {
+          "hostMs": 1791773268425,
+          "low": 4009,
+          "high": 4013,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "acceptedToWriteMs": 1
+      },
+      {
+        "kind": "hour-old",
+        "round": 36,
+        "applicationAgeMs": 3607809,
+        "answerSha256": "ec2242222e4a5b241c758a879ead47d7dcd56378bc2e7df81020badc50eab60c",
+        "correctness": "correct",
+        "usefulPrefix": "The launch date is February 19, 2027, because of the signed customer deadline. The replay must preserve that date because it was an explicit team decision tied to a contractual commitment, not an estimate.",
+        "usefulDelivery": {
+          "hostMs": 1791777537915,
+          "low": 4558,
+          "high": 4560,
+          "origin": "typed request acceptance; excludes ASR"
+        },
+        "acceptedToWriteMs": 1
+      }
+    ],
+    "scope": "One sequential source-identical fixed-context fresh/hour-old pair. Both date and rationale must be visible. No preceding transcript is supplied to the aged probe, isolating history length from elapsed app age; provider drift and observer costs remain uncontrolled. No population or no-aging certification."
+  },
+  "scope": "Healthy-path sample classification requires an observed prepared-thread take, actual Codex stdin flush and no injected fault or recorded error. Cohorts remain separate; absent jobs and fault recovery are retained in the full evidence. Local transport-write latency is not provider first-content latency."
+}

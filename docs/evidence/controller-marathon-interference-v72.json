@@ -1,0 +1,9 @@
+{
+  "capture": "artifacts/controller-v72/native/marathon-three-hours-codex/interview.json",
+  "status": "observed_validation_interference",
+  "hostIntervalUtcConservative": {"start": "2026-10-11T21:14:33Z", "end": "2026-10-11T21:15:53Z"},
+  "affectedTurns": ["hour-1-saved-audio-7"],
+  "cause": "Compilation and execution of the already-completed one-hour answers overran the next marathon quiet interval. This was an observer mistake, not an intentionally injected fault.",
+  "treatment": "Keep the row in correctness, completion and missing-answer counts. Label its observed latency as contaminated and do not use it to certify a controlled healthy warm path. A later matched replay is an additional observation, not a replacement.",
+  "unaffectedCapture": "artifacts/controller-v72/native/hour-display-codex/interview.json"
+}

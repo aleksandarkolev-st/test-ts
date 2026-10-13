@@ -1,0 +1,152 @@
+{
+  "status": "prepared_uncompiled_unapplied",
+  "recordedAt": "2026-10-12T21:24:25.050Z",
+  "frozenBuildCommit": "f0c7e8c71d428246a25c19fb0cadb9348419f330",
+  "preparationSourceSha256": "66615f12497a33af1f8bd0c228440c84636c55b6708e290295675e7d80334a2e",
+  "preparationManifestSha256": "08acbe1838e1f50c9b6b478634bd5b2d4d3365ea4b0de66007b6b99be689878a",
+  "patchFile": "scripts/fixtures/controller-reliability-prepared-v73.patch",
+  "patchSha256": "00afbddd68e048e2d9bbdfd8de3f59c869b18ea5d27fad8fd8a2a588c267faed",
+  "files": [
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "originalSha256": "1fc146fdaa9193c324c7aefc05c89baf6410d169e19b49121909618f680a6596",
+      "preparedSha256": "2d0a1ae0317af82908fc3f08e32b00e9bb70b14322c50a791b5710e53ccd4f09"
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "originalSha256": "fec10689ea2a97a0491acd62980c1c931bc6e557119b6c8bb665f5a059e6e85b",
+      "preparedSha256": "5aa8f281ffa4a38dca27a547eae77c02e2f793a33a2191e91469e561e4b3dae0"
+    },
+    {
+      "file": "src-tauri/src/meeting/controller_tests.rs",
+      "originalSha256": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "preparedSha256": "3f2fab2f7175c261fe4f6d587c2f01018b6bce0ab6cbd05703eaae41984a0f8e"
+    },
+    {
+      "file": "src-tauri/src/meeting/ledger.rs",
+      "originalSha256": "21e7fa726e533c4f517d23a638df61d5012c9f8dcea5d3bbf680b499de9ab93e",
+      "preparedSha256": "82c717fd932b0339f336244794cdeff0edb73320c74a05d3c3ee2c3db867f219"
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "originalSha256": "f6aef086aa462a47df3f8651bc666f4ffa9265d614a2412a2c501b8e1210ada5",
+      "preparedSha256": "9426d8c9f5ead15b76d7774999f1c4b5c79ec29c0277c2f75887ae07fe1d4d6f"
+    },
+    {
+      "file": "scripts/lib/controller-measurements.mjs",
+      "originalSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
+      "preparedSha256": "0b1f4bd32bb8d463b61b9ab8d298b5ef1c2e16f244e319db171ad28f117c7de0"
+    },
+    {
+      "file": "scripts/tests/controller-measurements.test.mjs",
+      "originalSha256": "0bf8e840298f9b50a461c9644c5cfebbfe9c1dcd9db6395eba4a0c44e4779478",
+      "preparedSha256": "3c6157de66ea71fdf095174d591d6c70fd2f5bbb01ffb14d902d0bef8f6f970d"
+    },
+    {
+      "file": "src-tauri/src/transcription/nemotron.rs",
+      "originalSha256": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "preparedSha256": "e8ca26d1f80f3e5a6c0bcc239b03e136087b9bc926c4836a1cdeb90e6f713de1"
+    },
+    {
+      "file": "scripts/lib/deep-observations.mjs",
+      "originalSha256": "0320da96afb121effe6ee8e6d1b0abcb1c8ab8a01e246c618eb21febbeb5587a",
+      "preparedSha256": "b6264515531921d34d16d9446c293518da76521ae0a5becf2c2699e953ab98eb"
+    },
+    {
+      "file": "scripts/tests/deep-observations.test.mjs",
+      "originalSha256": "09d9fdd57f5d95ebb2ad28d292485e1fb5cf898afcd7fce373ab109ebbcd382c",
+      "preparedSha256": "dfcb10aba852456a78eb33d3f416681dd51806698727f6f56c46e4c68029f7ae"
+    },
+    {
+      "file": "scripts/controller-session-replay.mjs",
+      "originalSha256": "8189448364e74433ebaf5a8e36d565243491bf90043186c839fbd8663380110b",
+      "preparedSha256": "5c3e7095b996379b33319d4396b1d21cfdfb4916403e738b2808460b83f17755"
+    }
+  ],
+  "semanticFocusRegressions": 8,
+  "sourceGroupRegressions": 9,
+  "speechTransportCounterRegressions": 3,
+  "speechCounterObservationRegressions": 2,
+  "diagnosticCollectorRegressions": 3,
+  "speechCounterPreparation": {
+    "file": ".local/prepare-speech-transport-counters-v73.mjs",
+    "sha256": "a2e89cd9f028d394630ad0ac51f339e4180de7972483fe81b7b993209d567621"
+  },
+  "speechCounterObservationChecks": {
+    "file": ".local/conversation-reliability-v73/speech-counter-collector-checks.json",
+    "sha256": "44ad27ab4cff31fa891c8096eb87f82db7ef9d0598de33fc6af0ed89ee91e407",
+    "result": {
+      "recordedAt": "2026-10-12T19:49:55.310Z",
+      "command": "node --test .local/conversation-reliability-v73/source/scripts/tests/deep-observations.test.mjs .local/conversation-reliability-v73/source/scripts/tests/controller-measurements.test.mjs",
+      "passed": 22,
+      "failed": 0,
+      "newFocusRegressions": 4,
+      "newSpeechObservationRegressions": 2,
+      "newHeartbeatRegressions": 3,
+      "sourceBindings": [
+        {
+          "file": "scripts/lib/controller-measurements.mjs",
+          "preparedSha256": "0b1f4bd32bb8d463b61b9ab8d298b5ef1c2e16f244e319db171ad28f117c7de0"
+        },
+        {
+          "file": "scripts/tests/controller-measurements.test.mjs",
+          "preparedSha256": "3c6157de66ea71fdf095174d591d6c70fd2f5bbb01ffb14d902d0bef8f6f970d"
+        },
+        {
+          "file": "scripts/lib/deep-observations.mjs",
+          "preparedSha256": "b6264515531921d34d16d9446c293518da76521ae0a5becf2c2699e953ab98eb"
+        },
+        {
+          "file": "scripts/tests/deep-observations.test.mjs",
+          "preparedSha256": "dfcb10aba852456a78eb33d3f416681dd51806698727f6f56c46e4c68029f7ae"
+        },
+        {
+          "file": "scripts/controller-session-replay.mjs",
+          "preparedSha256": "5c3e7095b996379b33319d4396b1d21cfdfb4916403e738b2808460b83f17755"
+        }
+      ],
+      "productionHashesVerified": 55,
+      "rustCounterTests": "not_run",
+      "nativeCounterEvidence": "not_run",
+      "scope": "Actual tool-run Node tests passed before this hash-binding checkpoint. No Rust compilation, native instrumentation run, model inference or ASR behavior intervention. The 113-row legacy measurement compatibility is a separately recorded check."
+    }
+  },
+  "recordedSourceGroupFixture": {
+    "file": "tests/fixtures/controller-recognized-source-group-v73.json",
+    "sha256": "43596e59b4c1b871fd7149ca1caff723abb3876f50bc6ac52adbf79383796865",
+    "rustTestExecution": "not_run",
+    "sourceJournalSha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"
+  },
+  "focusMeasurementRegressions": 4,
+  "measurementChecks": {
+    "file": ".local/conversation-reliability-v73/measurement-checks.json",
+    "sha256": "8af67ba8bd3924e1b2955a9f8de5ed7a729068e08dfb0b831d0c81be6957a76b",
+    "result": {
+      "recordedAt": "2026-10-12T19:49:15.672Z",
+      "journal": {
+        "file": "artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json",
+        "sha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca"
+      },
+      "review": {
+        "file": "artifacts/controller-v72/reviews/error-recovery-dual-r3-codex-three-hour-final-audit-reviewed.json",
+        "sha256": "64299910ac7ec27729962214ee6998bbe8667c4d46e086673611db2a5c6579fe"
+      },
+      "originalMeasurementSha256": "d3116b90f8d05c8dccfeaeb7d6bfa45c0f6dff4a2b5d1eb55416f6d048a28261",
+      "proposedMeasurementSha256": "0b1f4bd32bb8d463b61b9ab8d298b5ef1c2e16f244e319db171ad28f117c7de0",
+      "proposedTestSha256": "3c6157de66ea71fdf095174d591d6c70fd2f5bbb01ffb14d902d0bef8f6f970d",
+      "fixtureTests": {
+        "command": "node --test .local/conversation-reliability-v73/source/scripts/tests/controller-measurements.test.mjs",
+        "passed": 15,
+        "failed": 0,
+        "newRegressions": 4
+      },
+      "original113RowMeasurementsDeepEqual": true,
+      "scope": "Actual lightweight isolated Node fixture tests passed separately; all original completed Codex capture measurements deep-equal the unchanged root measurement implementation. This verifies diagnostic separation and backward compatibility, not the uncompiled Rust controller or live semantic-focus behavior."
+    }
+  },
+  "patchApplyCheck": "passed_without_application",
+  "rustTests": "not_run",
+  "releaseBuild": "not_run",
+  "nativeLiveValidation": "not_run",
+  "scope": "Reviewable proposed production change while frozen paired captures remain active. Foreground intent and recognized utterance grouping derive from generation/frame/segment metadata, without topic or word substitutions. Originals stay RAM-only. Acceptance-only numeric PCM and provider-event stage counters add no speech or audio storage, endpoint/reset/commit intervention or per-frame awaited logging. Socket flush is not server receipt; raw provider frontier is not lexical time; snapshots are not atomic across counters. Git apply --check validates patch applicability only, not compilation or behavior. Apply after all measured capture queues stop and owned processes exit, then compile/test/build and run Codex first followed by Plan with unchanged model/effort."
+}

@@ -78,6 +78,9 @@ pub struct QuestionDetector {
     /// Cache-aware ASR endpoints independently of our acoustic VAD. Whisper's
     /// audio-chunk finalization instead requires the full VAD endpoint fence.
     pub independent_asr_endpoint: bool,
+    /// Acoustic endpoint plus conservative, topic-independent completeness
+    /// wait. ASR final alone never authorizes an answer.
+    pub conversation_endpoints: bool,
     pub remote_speaking: bool,
     pub remote_quiet: bool,
     pub self_speaking: bool,
@@ -88,21 +91,41 @@ pub struct QuestionDetector {
     pub continued: bool,
     pub last_question: String,
     last_question_turn_started_at: Option<u64>,
+    last_question_confirmed_at: Option<u64>,
+    last_question_endpoint_wait_ms: u64,
     awaiting_final: bool,
     final_through: Option<u64>,
     last_remote_activity: Option<u64>,
     asr_pending: bool,
     partial: String,
+    final_segments:Vec<(String,String)>,
+    minimum_remote_started_at:u64,
 }
 impl QuestionDetector {
+    /// IDs of finalized clauses on the detector's current logical floor.
+    /// Acceptance keeps them for late revisions; a new floor clears them.
+    pub fn recognized_segment_ids(&self)->impl Iterator<Item=&str> {
+        self.final_segments.iter().map(|(id,_)|id.as_str())
+    }
+    pub fn remote_source_current(&self,started_at:u64)->bool {started_at>=self.minimum_remote_started_at}
     pub fn speech_started(&mut self, source: SpeakerSource, now: u64) -> bool {
+        if source==SpeakerSource::Remote&&!self.remote_source_current(now){return false;}
         let mut resumed=false;
         match source {
             SpeakerSource::Remote => {
                 self.remote_quiet=false;
+                let accepted_floor=self.last_question_turn_started_at==self.remote_turn_started_at
+                    && self.last_question_confirmed_at.is_some();
+                // VAD delivery can trail its acoustic clock. Speech that had
+                // already resumed before acceptance must revise that floor,
+                // even if the actor saw the acceptance timer first.
+                let resumed_before_acceptance=accepted_floor
+                    &&self.last_question_confirmed_at.is_some_and(|confirmed|now<=confirmed);
+                let endpoint_wait=if accepted_floor&&self.text.is_empty(){self.last_question_endpoint_wait_ms}else{self.endpoint_wait_ms()};
                 resumed=self.semantic_intent&&!self.remote_turn_interrupted
+                    && (!self.conversation_endpoints || !self.text.is_empty() || self.last_question_turn_started_at!=self.remote_turn_started_at || resumed_before_acceptance)
                     &&self.remote_turn_started_at.is_some()
-                    &&self.stopped_at.is_some_and(|t|now.saturating_sub(t)<=REMOTE_CLAUSE_GAP_MS);
+                    &&self.stopped_at.is_some_and(|t|now.saturating_sub(t)<=if self.conversation_endpoints{endpoint_wait.max(REMOTE_CLAUSE_GAP_MS)}else{REMOTE_CLAUSE_GAP_MS});
                 if resumed {
                     // A VAD pause is not a semantic turn boundary. Final ASR
                     // segments may arrive on either side of the next Started.
@@ -118,7 +141,7 @@ impl QuestionDetector {
                     self.text.clear();
                     self.continued=false;
                 }
-                if !resumed {self.remote_turn_started_at=Some(now);}
+                if !resumed {self.remote_turn_started_at=Some(now);self.final_segments.clear();}
                 self.remote_turn_interrupted=false;
                 self.remote_speaking = true;
                 self.partial.clear();
@@ -132,6 +155,7 @@ impl QuestionDetector {
         resumed
     }
     pub fn speech_ended(&mut self, source: SpeakerSource, now: u64) {
+        if source==SpeakerSource::Remote&&!self.remote_source_current(now){return;}
         match source {
             SpeakerSource::Remote => {
                 self.remote_speaking = false;
@@ -148,6 +172,16 @@ impl QuestionDetector {
     pub fn transcript(&mut self, segment: &TranscriptSegment) -> bool {
         if segment.source != SpeakerSource::Remote {
             return false;
+        }
+        if !self.remote_source_current(segment.started_at){return false;}
+        if self.conversation_endpoints && segment.final_ {
+            if let Some(index)=self.final_segments.iter().position(|(id,_)|id==&segment.id) {
+                if self.final_segments[index].1==segment.text.trim(){return false;}
+                self.final_segments[index].1=segment.text.trim().into();
+                self.text=self.final_segments.iter().map(|(_,text)|text.as_str()).collect::<Vec<_>>().join(" ");
+                self.partial.clear();self.asr_pending=false;self.final_through=Some(segment.ended_at);
+                self.awaiting_final=!self.finalization_ready();return self.candidate().is_some();
+            }
         }
         // ASR can finalize the next words before VAD delivers their Started.
         // Confirmation moved the earlier clauses out of text; restore only
@@ -170,6 +204,7 @@ impl QuestionDetector {
         }
         let text = segment.text.trim();
         if !text.is_empty() {
+            if self.conversation_endpoints {self.final_segments.push((segment.id.clone(),text.into()));}
             if !self.text.is_empty() {
                 self.text.push(' ');
             }
@@ -228,19 +263,39 @@ impl QuestionDetector {
             || !self.partial.is_empty()
             || !self
                 .stopped_at
-                .is_some_and(|t| now.saturating_sub(t) >= END_WAIT_MS)
+                .is_some_and(|t| now.saturating_sub(t) >= self.endpoint_wait_ms())
         {
             return None;
         }
         if self.text.is_empty() || (!self.semantic_intent && !self.continued && score(&self.text, false) < 4 && !( !self.last_question.is_empty() && super::scheduler::related(&self.text))) {
             return None;
         }
+        self.accept_text(now)
+    }
+    /// An explicit user boundary can bypass acoustic waiting, but cannot
+    /// manufacture a final transcript or promote a replaceable ASR partial.
+    pub fn can_accept_now(&self)->bool { !self.text.trim().is_empty()&&self.partial.is_empty() }
+    pub fn confirm_now(&mut self,now:u64)->Option<(String,u64)> {
+        if !self.can_accept_now(){return None;}
+        self.accept_text(now)
+    }
+    fn accept_text(&mut self,now:u64)->Option<(String,u64)> {
+        self.last_question_endpoint_wait_ms=self.endpoint_wait_ms();
+        self.last_question_confirmed_at=Some(now);
         let text = std::mem::take(&mut self.text);
         self.partial.clear();
         self.last_question = text.clone();
         self.last_question_turn_started_at=self.remote_turn_started_at;
         self.continued = false;
-        Some((text, self.stopped_at.unwrap()))
+        Some((text, self.stopped_at.unwrap_or(now)))
+    }
+    pub fn endpoint_wait_ms(&self)->u64 {
+        if !self.conversation_endpoints{return END_WAIT_MS;}
+        // A general acoustic policy, not a catalogue of question phrases.
+        // Semantic reply intent is decided by the answering call itself.
+        // Completion remains uncertain: any later speech or ASR correction
+        // supersedes computation without discarding the recognized source.
+        if self.text.split_whitespace().count()>8 {1800}else{END_WAIT_MS}
     }
     pub fn continue_question(&mut self) {
         self.text = self.last_question.clone();
@@ -252,15 +307,114 @@ impl QuestionDetector {
                 .stopped_at
                 .is_some_and(|t| now.saturating_sub(t) <= 3000)
     }
+    /// A new typed request supersedes older remote drafts, not their ledger.
+    /// Delayed ASR/VAD for those floors must not take the newer request's focus.
+    /// Answer-now on the current spoken floor deliberately does not use this.
+    pub fn supersede_remote_before(&mut self,now:u64) {
+        self.minimum_remote_started_at=self.minimum_remote_started_at.max(now);
+        self.clear();
+    }
     pub fn clear(&mut self) {
         let semantic_intent=self.semantic_intent;
         let independent_asr_endpoint=self.independent_asr_endpoint;
-        *self = Self {semantic_intent,independent_asr_endpoint,..Self::default()};
+        let conversation_endpoints=self.conversation_endpoints;
+        let minimum_remote_started_at=self.minimum_remote_started_at;
+        *self = Self {semantic_intent,independent_asr_endpoint,conversation_endpoints,minimum_remote_started_at,..Self::default()};
     }
 }
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn new_typed_focus_retires_old_drafts_and_delayed_finals_only() {
+        let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut old=s("Earlier unfinished request");old.started_at=100;old.ended_at=200;q.transcript(&old);
+        q.supersede_remote_before(300);
+        old.ended_at=500;old.text="Earlier request with its delayed correction".into();
+        assert!(!q.transcript(&old));assert!(q.confirm(1000).is_none());
+        assert!(!q.speech_started(SpeakerSource::Remote,100));assert!(q.remote_turn_started_at.is_none());
+        q.speech_started(SpeakerSource::Remote,600);
+        let mut current=s("Why?");current.id="current".into();current.started_at=600;current.ended_at=800;q.transcript(&current);
+        assert!(!q.transcript(&old),"An obsolete revision must not change the new floor");
+        q.speech_ended(SpeakerSource::Remote,800);
+        assert_eq!(q.confirm(1000).unwrap().0,"Why?");
+    }
+    #[test]
+    fn clearing_a_draft_keeps_its_retirement_fence_until_a_new_session() {
+        let mut q=QuestionDetector{semantic_intent:true,..Default::default()};q.supersede_remote_before(300);q.clear();
+        assert!(!q.remote_source_current(100));assert!(q.remote_source_current(300));
+        q.speech_started(SpeakerSource::Self_,100);assert!(q.self_speaking);
+        let fresh=QuestionDetector::default();assert!(fresh.remote_source_current(100));
+    }
+    #[test]
+    fn explicit_acceptance_bypasses_quiet_wait_without_inventing_finality() {
+        let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);let mut segment=s("Explain every constraint of this multipart request");segment.started_at=100;segment.ended_at=600;
+        q.transcript(&segment);q.speech_ended(SpeakerSource::Remote,600);
+        assert!(q.confirm(610).is_none());assert!(q.can_accept_now());
+        assert_eq!(q.confirm_now(610).unwrap().0,segment.text);assert_eq!(q.remote_turn_started_at,Some(100));
+        assert!(!q.can_accept_now());assert!(q.confirm_now(620).is_none());
+    }
+    #[test]
+    fn explicit_acceptance_does_not_submit_a_partial_or_duplicate_a_final() {
+        let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);let mut partial=s("Explain the current constraints");partial.final_=false;q.transcript(&partial);
+        assert!(!q.can_accept_now());assert!(q.confirm_now(200).is_none());
+        partial.final_=true;q.transcript(&partial);assert!(q.confirm_now(300).is_some());
+        assert!(!q.transcript(&partial));assert!(q.confirm_now(310).is_none());
+    }
+    #[test]
+    fn correction_after_explicit_acceptance_preserves_the_same_source_floor() {
+        let mut q=QuestionDetector{semantic_intent:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);let mut segment=s("Use x < -1");segment.started_at=100;segment.ended_at=300;q.transcript(&segment);
+        assert_eq!(q.confirm_now(350).unwrap().0,"Use x < -1");
+        segment.text="Use x <= -1".into();segment.ended_at=400;assert!(q.transcript(&segment));
+        assert_eq!(q.confirm_now(450).unwrap().0,"Use x <= -1");assert_eq!(q.remote_turn_started_at,Some(100));
+    }
+    #[test]
+    fn recorded_late_vad_arrival_keeps_the_preceding_constraints_in_the_final_frame() {
+        let fixture:serde_json::Value=serde_json::from_str(include_str!("../../../tests/fixtures/controller-late-vad-arrival.json")).unwrap();
+        assert_eq!(fixture["waveSha256"],"40bcf6a860476301d889a23c3e5f95b66c1004a283b669c820a9fd86c57c25ad");
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,conversation_endpoints:true,..Default::default()};
+        let mut accepted=0;
+        for event in fixture["events"].as_array().unwrap(){let p=&event["payload"];
+            match event["name"].as_str().unwrap(){
+                "speech.started"=>{q.speech_started(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap());},
+                "speech.ended"=>q.speech_ended(SpeakerSource::Remote,p["timestamp"].as_u64().unwrap()),
+                "transcript"=>{q.transcript(&serde_json::from_value(p.clone()).unwrap());},
+                "question.confirmed"=>{assert!(q.confirm(p["timestamp"].as_u64().unwrap()).is_some());accepted+=1;},
+                _=>unreachable!(),
+            }
+        }
+        assert_eq!(accepted,3);assert_eq!(q.remote_turn_started_at,Some(5704056));
+        assert_eq!(q.last_question,fixture["expectedLastQuestion"].as_str().unwrap());
+    }
+    #[test]
+    fn acoustic_continuation_before_acceptance_survives_late_vad_delivery() {
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,conversation_endpoints:true,..Default::default()};
+        let prefix="Explain every original constraint and prove the invariant for all inputs";
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut initial=s(prefix);initial.started_at=100;initial.ended_at=1100;q.transcript(&initial);
+        q.speech_ended(SpeakerSource::Remote,1000);
+        assert_eq!(q.confirm(2800).unwrap().0,prefix);
+        // Observed after confirm(2800), but voice actually resumed at2790.
+        assert!(q.speech_started(SpeakerSource::Remote,2790));
+        assert_eq!(q.remote_turn_started_at,Some(100));
+        let mut tail=s("Include the final boundary condition");tail.id="later-clause".into();tail.started_at=2790;tail.ended_at=3100;q.transcript(&tail);
+        q.speech_ended(SpeakerSource::Remote,3000);
+        assert_eq!(q.confirm(4800).unwrap().0,format!("{prefix} {}",tail.text));
+    }
+    #[test]
+    fn speech_beginning_after_acceptance_is_still_a_distinct_followup() {
+        let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,conversation_endpoints:true,..Default::default()};
+        q.speech_started(SpeakerSource::Remote,100);
+        let mut initial=s("Explain every original constraint and prove the invariant for all inputs");initial.started_at=100;initial.ended_at=1100;q.transcript(&initial);
+        q.speech_ended(SpeakerSource::Remote,1000);q.confirm(2800).unwrap();
+        assert!(!q.speech_started(SpeakerSource::Remote,2810));
+        let mut next=s("Why");next.started_at=2810;next.ended_at=3000;q.transcript(&next);q.speech_ended(SpeakerSource::Remote,3000);
+        assert_eq!(q.confirm(3200).unwrap().0,"Why");assert_eq!(q.remote_turn_started_at,Some(2810));
+    }
     #[test]
     fn independent_asr_final_does_not_wait_for_a_second_final_after_vad_tail() {
         let mut q=QuestionDetector{semantic_intent:true,independent_asr_endpoint:true,..Default::default()};

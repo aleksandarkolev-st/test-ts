@@ -1,0 +1,1238 @@
+{
+  "scope": "Two real elapsed-hour synthetic technical interviews, authenticated old19ab36e application, same frozen source audio/context/model/effort/T output. Natural answer histories and ASR differ; not adapter-only randomized causal evidence. Missing/incorrect answers never become successful latency; HTTP actualwire remains unknown. Providercompute not isolated. Pending corrected-build sessions are separate.",
+  "cells": [
+    {
+      "backend": "codex",
+      "source": {
+        "file": "docs/evidence/controller-authenticated-schema-dual-r1-codex-hour-v72.json",
+        "sha256": "177fa0495f5cfb669a6456272d5875c186f516e35a562bd543abc7284f0125b6"
+      },
+      "journalSha256": "25f50308e41e7187bbaa38a48cd969aef803a0db4a6fb296495d7988ed261e51",
+      "nativeBinarySha256": "903c76004026301591b9f2c2f13e50d9b81e85079e536bae1c9e9b8f612f072c",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "manifestSha256": "2ebe51abb055ef73061f03fdc2834426f6bacfb043dd36101150d57d3e4890d4",
+      "actualInterviewDurationMs": 3608591,
+      "correctness": {
+        "correct": 28,
+        "incorrect": 6,
+        "incomplete": 0,
+        "missing": 1,
+        "interrupted": 1
+      },
+      "strictAccuracy": {
+        "correct": 28,
+        "allRecordedRows": 36,
+        "uninterruptedRequests": 35,
+        "correctFractionOfUninterrupted": 0.8,
+        "scope": "Includes missing, wrong and incomplete requests in denominator; one planned observed interruption reported separately. Conditional-on-recognition retention and mathematical proof success do not replace original-source correctness."
+      },
+      "counts": {
+        "all": 36,
+        "expectedReplies": 36,
+        "complete": 34,
+        "missing": 1,
+        "errors": 0,
+        "intentionallyInterrupted": 1,
+        "observedPlannedInterruptions": 1,
+        "observerInterference": 0,
+        "correct": 28,
+        "incorrect": 6,
+        "requestedWorkComplete": 34,
+        "requestedWorkIncomplete": 2,
+        "requestedCompletionPending": 0,
+        "reasoningPass": 34,
+        "reasoningFail": 1,
+        "correctnessPending": 0
+      },
+      "acceptedToActualWriteMs": {
+        "count": 35,
+        "min": 1,
+        "median": 10,
+        "sampleP95": 22,
+        "max": 22
+      },
+      "acceptedToProtocolCompletionMs": {
+        "count": 34,
+        "min": 4626,
+        "median": 13627.5,
+        "sampleP95": 50048,
+        "max": 75403
+      },
+      "acceptedToCorrectWorkCompletionMs": {
+        "count": 28,
+        "min": 4626,
+        "median": 13627.5,
+        "sampleP95": 43327,
+        "max": 44834
+      },
+      "usefulNativeFeedbackMs": {
+        "count": 24,
+        "min": 4891,
+        "median": 12066.5,
+        "sampleP95": 21656,
+        "max": 28150
+      },
+      "usefulTypedFeedbackMs": {
+        "count": 4,
+        "min": 3402,
+        "median": 5743.5,
+        "sampleP95": 7542,
+        "max": 7542
+      },
+      "usefulFollowupMs": {
+        "count": 6,
+        "min": 7561,
+        "median": 9437,
+        "sampleP95": 11968,
+        "max": 11968
+      },
+      "allFollowupUsefulP95Ms": {
+        "all": 7,
+        "observed": 6,
+        "missingOrUnverified": 1,
+        "p95": null,
+        "gateEvaluable": false,
+        "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+      },
+      "outputTokensPerStreamingSecond": {
+        "count": 34,
+        "min": 21.8794270423422,
+        "median": 46.60340584547481,
+        "sampleP95": 77.34902232220108,
+        "max": 83.9506172839506
+      },
+      "panelTransitions": {
+        "transitions": [
+          {
+            "generationId": "0522b566-e2d4-44da-aa0c-eb001a5f5812",
+            "previousGenerationId": "89cbbcda-c97a-481a-ad0f-9f145d0b4d89",
+            "acceptedHostMs": {
+              "low": 1791784395889,
+              "high": 1791784395894
+            },
+            "priorPanelClearedHostMs": 1791784395893,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 4
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "7342a23e-2112-4b91-b497-e40eaa8e277b",
+            "previousGenerationId": "0522b566-e2d4-44da-aa0c-eb001a5f5812",
+            "acceptedHostMs": {
+              "low": 1791784441538,
+              "high": 1791784441547
+            },
+            "priorPanelClearedHostMs": 1791784441546,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 8
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "91157ef0-3754-4982-88a2-42aa1a59dc2a",
+            "previousGenerationId": "7342a23e-2112-4b91-b497-e40eaa8e277b",
+            "acceptedHostMs": {
+              "low": 1791784478621,
+              "high": 1791784478627
+            },
+            "priorPanelClearedHostMs": 1791784478626,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 5
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "e23355fb-1624-4059-94cc-91b99eb2416a",
+            "previousGenerationId": "91157ef0-3754-4982-88a2-42aa1a59dc2a",
+            "acceptedHostMs": {
+              "low": 1791784507461,
+              "high": 1791784507467
+            },
+            "priorPanelClearedHostMs": 1791784507468,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 7
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "31a00948-35d8-485e-ade2-50772de62c7f",
+            "previousGenerationId": "e23355fb-1624-4059-94cc-91b99eb2416a",
+            "acceptedHostMs": {
+              "low": 1791784604901,
+              "high": 1791784604907
+            },
+            "priorPanelClearedHostMs": 1791784604906,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 5
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "e7649551-a980-4e33-b4a9-f17678495e8e",
+            "previousGenerationId": "e23355fb-1624-4059-94cc-91b99eb2416a",
+            "acceptedHostMs": {
+              "low": 1791784643414,
+              "high": 1791784643429
+            },
+            "priorPanelClearedHostMs": 1791784643428,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 14
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "330af769-5536-47ba-95e4-5df0b733a50b",
+            "previousGenerationId": "e7649551-a980-4e33-b4a9-f17678495e8e",
+            "acceptedHostMs": {
+              "low": 1791784771539,
+              "high": 1791784771548
+            },
+            "priorPanelClearedHostMs": 1791784771551,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "7d7f6ebf-7e87-4ec3-b48f-06da0a79bd45",
+            "previousGenerationId": "330af769-5536-47ba-95e4-5df0b733a50b",
+            "acceptedHostMs": {
+              "low": 1791784895820,
+              "high": 1791784895828
+            },
+            "priorPanelClearedHostMs": 1791784895827,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 7
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "9c3a72fe-1caa-46cd-b860-7d4b98d274ee",
+            "previousGenerationId": "7d7f6ebf-7e87-4ec3-b48f-06da0a79bd45",
+            "acceptedHostMs": {
+              "low": 1791784978861,
+              "high": 1791784978870
+            },
+            "priorPanelClearedHostMs": 1791784978871,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "1b2eb290-d4eb-435e-a443-b10cc987c6cc",
+            "previousGenerationId": "9c3a72fe-1caa-46cd-b860-7d4b98d274ee",
+            "acceptedHostMs": {
+              "low": 1791785029580,
+              "high": 1791785029591
+            },
+            "priorPanelClearedHostMs": 1791785029587,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 7
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "355b52f9-9312-45ff-bb3c-4cacc478361a",
+            "previousGenerationId": "1b2eb290-d4eb-435e-a443-b10cc987c6cc",
+            "acceptedHostMs": {
+              "low": 1791785114621,
+              "high": 1791785114631
+            },
+            "priorPanelClearedHostMs": 1791785114629,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 8
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "45bfa17d-abfb-423c-a2cb-20399f1851e2",
+            "previousGenerationId": "355b52f9-9312-45ff-bb3c-4cacc478361a",
+            "acceptedHostMs": {
+              "low": 1791785227500,
+              "high": 1791785227510
+            },
+            "priorPanelClearedHostMs": 1791785227512,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "55aeae60-032f-47b8-acd3-8b1b48567962",
+            "previousGenerationId": "45bfa17d-abfb-423c-a2cb-20399f1851e2",
+            "acceptedHostMs": {
+              "low": 1791785406140,
+              "high": 1791785406149
+            },
+            "priorPanelClearedHostMs": 1791785406150,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "e1113a50-9827-40f6-a04f-35c48a5f2fca",
+            "previousGenerationId": "55aeae60-032f-47b8-acd3-8b1b48567962",
+            "acceptedHostMs": {
+              "low": 1791785480020,
+              "high": 1791785480040
+            },
+            "priorPanelClearedHostMs": 1791785480031,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "fe98d814-00e8-46f5-b011-74c08d53e793",
+            "previousGenerationId": "55aeae60-032f-47b8-acd3-8b1b48567962",
+            "acceptedHostMs": {
+              "low": 1791785516021,
+              "high": 1791785516031
+            },
+            "priorPanelClearedHostMs": 1791785516030,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "64914778-d8ee-4cdd-8691-02d89b833b4e",
+            "previousGenerationId": "fe98d814-00e8-46f5-b011-74c08d53e793",
+            "acceptedHostMs": {
+              "low": 1791785653222,
+              "high": 1791785653242
+            },
+            "priorPanelClearedHostMs": 1791785653233,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "9d962306-5dc0-4510-8130-49ebc1a43905",
+            "previousGenerationId": "64914778-d8ee-4cdd-8691-02d89b833b4e",
+            "acceptedHostMs": {
+              "low": 1791785731061,
+              "high": 1791785731072
+            },
+            "priorPanelClearedHostMs": 1791785731072,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "916943d5-9309-4f73-8247-d458c8453598",
+            "previousGenerationId": "9d962306-5dc0-4510-8130-49ebc1a43905",
+            "acceptedHostMs": {
+              "low": 1791785853621,
+              "high": 1791785853630
+            },
+            "priorPanelClearedHostMs": 1791785853631,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "0c7c9858-d524-465a-ae95-d3bfb9576db7",
+            "previousGenerationId": "9d962306-5dc0-4510-8130-49ebc1a43905",
+            "acceptedHostMs": {
+              "low": 1791785896420,
+              "high": 1791785896434
+            },
+            "priorPanelClearedHostMs": 1791785896431,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "99f61534-a14b-4f96-b827-1950556b5aee",
+            "previousGenerationId": "0c7c9858-d524-465a-ae95-d3bfb9576db7",
+            "acceptedHostMs": {
+              "low": 1791785979542,
+              "high": 1791785979553
+            },
+            "priorPanelClearedHostMs": 1791785979548,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 6
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "41f03285-51ab-4b57-b5a6-53c48d793bb5",
+            "previousGenerationId": "0c7c9858-d524-465a-ae95-d3bfb9576db7",
+            "acceptedHostMs": {
+              "low": 1791786030141,
+              "high": 1791786030154
+            },
+            "priorPanelClearedHostMs": 1791786030149,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 8
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "ae1f7747-4313-41c2-883e-5fab187acab0",
+            "previousGenerationId": "41f03285-51ab-4b57-b5a6-53c48d793bb5",
+            "acceptedHostMs": {
+              "low": 1791786111341,
+              "high": 1791786111354
+            },
+            "priorPanelClearedHostMs": 1791786111350,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "68f6e4cc-0af5-4a98-937c-c7dd27f5cc11",
+            "previousGenerationId": "ae1f7747-4313-41c2-883e-5fab187acab0",
+            "acceptedHostMs": {
+              "low": 1791786175899,
+              "high": 1791786175911
+            },
+            "priorPanelClearedHostMs": 1791786175909,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "7289cc26-4e5e-49b6-b94a-a0e3458fa344",
+            "previousGenerationId": "68f6e4cc-0af5-4a98-937c-c7dd27f5cc11",
+            "acceptedHostMs": {
+              "low": 1791786185898,
+              "high": 1791786185910
+            },
+            "priorPanelClearedHostMs": 1791786185909,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "8899e559-e3de-4eff-87e7-99050c8f0c02",
+            "previousGenerationId": "7289cc26-4e5e-49b6-b94a-a0e3458fa344",
+            "acceptedHostMs": {
+              "low": 1791786201780,
+              "high": 1791786201799
+            },
+            "priorPanelClearedHostMs": 1791786201793,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 13
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "4866770e-8ddf-4e60-91b0-4d47067387c6",
+            "previousGenerationId": "8899e559-e3de-4eff-87e7-99050c8f0c02",
+            "acceptedHostMs": {
+              "low": 1791786402979,
+              "high": 1791786402994
+            },
+            "priorPanelClearedHostMs": 1791786402995,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 16
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "e18182ee-2c81-4de8-a650-845c56dd69ce",
+            "previousGenerationId": "4866770e-8ddf-4e60-91b0-4d47067387c6",
+            "acceptedHostMs": {
+              "low": 1791786479901,
+              "high": 1791786479917
+            },
+            "priorPanelClearedHostMs": 1791786479913,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "c4237e4e-1709-48d6-a35a-7336eece2b24",
+            "previousGenerationId": "4866770e-8ddf-4e60-91b0-4d47067387c6",
+            "acceptedHostMs": {
+              "low": 1791786496020,
+              "high": 1791786496036
+            },
+            "priorPanelClearedHostMs": 1791786496030,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "84392051-20f8-45cf-91a0-a7c0a0443731",
+            "previousGenerationId": "4866770e-8ddf-4e60-91b0-4d47067387c6",
+            "acceptedHostMs": {
+              "low": 1791786512420,
+              "high": 1791786512439
+            },
+            "priorPanelClearedHostMs": 1791786512430,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "fdbfea15-f41f-46a0-9fc8-008d82852203",
+            "previousGenerationId": "84392051-20f8-45cf-91a0-a7c0a0443731",
+            "acceptedHostMs": {
+              "low": 1791786649575,
+              "high": 1791786649599
+            },
+            "priorPanelClearedHostMs": 1791786649590,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 15
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "507b87e3-2531-44d1-b040-fb7c55c5d6bf",
+            "previousGenerationId": "fdbfea15-f41f-46a0-9fc8-008d82852203",
+            "acceptedHostMs": {
+              "low": 1791786728099,
+              "high": 1791786728115
+            },
+            "priorPanelClearedHostMs": 1791786728113,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 14
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "af128a5a-d529-425b-8e0b-64a9469c81d8",
+            "previousGenerationId": "507b87e3-2531-44d1-b040-fb7c55c5d6bf",
+            "acceptedHostMs": {
+              "low": 1791786886701,
+              "high": 1791786886717
+            },
+            "priorPanelClearedHostMs": 1791786886713,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "222addd6-7ff3-4065-a747-8a442a174b41",
+            "previousGenerationId": "af128a5a-d529-425b-8e0b-64a9469c81d8",
+            "acceptedHostMs": {
+              "low": 1791786978981,
+              "high": 1791786978996
+            },
+            "priorPanelClearedHostMs": 1791786978990,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "2270ef19-ee32-4faa-86c3-448d09b40aba",
+            "previousGenerationId": "af128a5a-d529-425b-8e0b-64a9469c81d8",
+            "acceptedHostMs": {
+              "low": 1791787006741,
+              "high": 1791787006760
+            },
+            "priorPanelClearedHostMs": 1791787006753,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "45069e13-3e0a-40ab-94c6-4dbf3ee27b82",
+            "previousGenerationId": "af128a5a-d529-425b-8e0b-64a9469c81d8",
+            "acceptedHostMs": {
+              "low": 1791787030020,
+              "high": 1791787030039
+            },
+            "priorPanelClearedHostMs": 1791787030032,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "20a142a0-de77-4903-a8df-2b333a6633e0",
+            "previousGenerationId": "45069e13-3e0a-40ab-94c6-4dbf3ee27b82",
+            "acceptedHostMs": {
+              "low": 1791787111461,
+              "high": 1791787111481
+            },
+            "priorPanelClearedHostMs": 1791787111470,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "9ba33299-3298-4b5e-b3ff-8327155e4244",
+            "previousGenerationId": "20a142a0-de77-4903-a8df-2b333a6633e0",
+            "acceptedHostMs": {
+              "low": 1791787227461,
+              "high": 1791787227476
+            },
+            "priorPanelClearedHostMs": 1791787227468,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 7
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "eb78d099-21c4-4d71-80e1-caaad80489b5",
+            "previousGenerationId": "9ba33299-3298-4b5e-b3ff-8327155e4244",
+            "acceptedHostMs": {
+              "low": 1791787355300,
+              "high": 1791787355320
+            },
+            "priorPanelClearedHostMs": 1791787355311,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 11
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "80ded11d-0606-41a4-8491-b972a4a42f04",
+            "previousGenerationId": "9ba33299-3298-4b5e-b3ff-8327155e4244",
+            "acceptedHostMs": {
+              "low": 1791787398859,
+              "high": 1791787398881
+            },
+            "priorPanelClearedHostMs": 1791787398874,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 15
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "8ad8daf1-c052-4a84-af34-d2cac19a856a",
+            "previousGenerationId": "80ded11d-0606-41a4-8491-b972a4a42f04",
+            "acceptedHostMs": {
+              "low": 1791787514180,
+              "high": 1791787514199
+            },
+            "priorPanelClearedHostMs": 1791787514192,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "4eabe88d-3bf8-436f-be2a-0c7b9d7323e7",
+            "previousGenerationId": "8ad8daf1-c052-4a84-af34-d2cac19a856a",
+            "acceptedHostMs": {
+              "low": 1791787654172,
+              "high": 1791787654202
+            },
+            "priorPanelClearedHostMs": 1791787654194,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 22
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "74ce0ed8-0a23-4271-a1fd-46e3aade481c",
+            "previousGenerationId": "4eabe88d-3bf8-436f-be2a-0c7b9d7323e7",
+            "acceptedHostMs": {
+              "low": 1791787755909,
+              "high": 1791787755929
+            },
+            "priorPanelClearedHostMs": 1791787755924,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 15
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "1d01b543-db27-45a9-807f-6105e39ff5c9",
+            "previousGenerationId": "74ce0ed8-0a23-4271-a1fd-46e3aade481c",
+            "acceptedHostMs": {
+              "low": 1791787835907,
+              "high": 1791787835927
+            },
+            "priorPanelClearedHostMs": 1791787835922,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 15
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          }
+        ],
+        "maxPossibleCarryHighMs": 22,
+        "oldPaintChangesAfterAcceptance": 0,
+        "uncleared": 0,
+        "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+      },
+      "wrongFocusRequests": 0,
+      "archiveAfterStop": {
+        "accepted": 0,
+        "displayedBytes": 0,
+        "generatedBytes": 0,
+        "paintMetadataBytes": 0,
+        "paintedRangeBytes": 0,
+        "paintedRanges": 0,
+        "recognizedRevisionBytes": 0,
+        "recognizedRevisions": 0,
+        "suggestions": 0,
+        "version": 0
+      },
+      "checks": [
+        {
+          "file": "artifacts\\controller-v72\\code\\schema-codex-hour-bytes\\results.json",
+          "sha256": "20250926c84edf32c9ac53e3ade8323622a5e142dd29ef65589ddb726a119718",
+          "summary": null,
+          "results": [
+            {
+              "pass": true
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\cpp-cpu\\results.json",
+          "sha256": "fbcf53db4d38ae44fb155e12f30205f249fef41cac998a0d6ce5fb1bb4e3ae70",
+          "summary": null,
+          "results": [
+            {
+              "round": 2,
+              "kind": "integer-branch",
+              "pass": true,
+              "scope": "Original question did not require a code fence. Exact standalone original bytes and 2,003 independent integer cases; no normalization."
+            },
+            {
+              "round": 7,
+              "kind": "cuda-sum19",
+              "pass": true,
+              "scope": "Actual manually inspected six-collective CUDA implementation, distinct changed constraints at each row. CPU intrinsic/collective oracle is not NVIDIA hardware certification."
+            },
+            {
+              "round": 8,
+              "kind": "cuda-sum19",
+              "pass": true,
+              "scope": "Actual manually inspected six-collective CUDA implementation, distinct changed constraints at each row. CPU intrinsic/collective oracle is not NVIDIA hardware certification."
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\python-strict\\results.json",
+          "sha256": "f9601cc5920e00760441d2b30490c7310d437e26ca748bb72e5f4142b033c423",
+          "summary": null,
+          "results": [
+            {
+              "round": 12,
+              "kind": "route",
+              "pass": false,
+              "failure": "AttributeError(\"module 'recorded_12_0' has no attribute 'classify_route'\")"
+            },
+            {
+              "round": 13,
+              "kind": "route",
+              "pass": false,
+              "failure": "AttributeError(\"module 'recorded_13_0' has no attribute 'classify_route'\")"
+            },
+            {
+              "round": 14,
+              "kind": "float-rationalization",
+              "pass": false,
+              "failure": "AttributeError(\"module 'recorded_14_0' has no attribute 'f'\")"
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-known-hour-code-r2\\python-recognized-diagnostic\\results.json",
+          "sha256": "3fbe7ab148f8303485b6f36084946ad7c0d57c81bef364bd1a596d24e3257968",
+          "summary": null,
+          "results": [
+            {
+              "round": 14,
+              "kind": "float-rationalization",
+              "pass": true,
+              "scope": "760-digit Decimal oracle, four-ULP finite probe tolerance, gradual underflow on this host. It does not certify a supplied analytical error bound or flush-to-zero behavior."
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\codex-cpp\\results.json",
+          "sha256": "7a207264faf7c1a20311a9d39cdf0eace53e10af5e9f0f6c38a9ae7c8b30895a",
+          "summary": null,
+          "results": [
+            {
+              "round": 34,
+              "kind": "integer-branch",
+              "pass": true,
+              "scope": "StrictoriginalFoo bytesand2,003 independentintegerinputs. Planrecall displacedbySQLmustremainmissingCpp, no source reconstruction."
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\codex-sql\\results.json",
+          "sha256": "482b4f6a7d3f41e17cd61910443255d9470f8ef74f6736503957f47a07f52231",
+          "summary": null,
+          "results": [
+            {
+              "round": 33,
+              "failure": "Required complete SQL fences absent",
+              "scope": "Actual unchanged SQL in PostgreSQL, with BEGIN/body/COMMIT sent separately to force overlap. Isolated synthetic database; no source repairs.",
+              "trials": []
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\code\\schema-codex-hour-nvcc-r1\\compilation.json",
+          "sha256": "6099dd39af4f2b517bd40650e51e99c03fc0ee68e2d8d3d2f51228d30af1f78f",
+          "summary": {
+            "recordedCudaOrCppBlocks": 7,
+            "compiled": 7,
+            "failed": 0,
+            "timedOut": 0
+          },
+          "results": []
+        }
+      ]
+    },
+    {
+      "backend": "chatgpt",
+      "source": {
+        "file": "docs/evidence/controller-authenticated-schema-dual-r1-plan-hour-v72.json",
+        "sha256": "aba4fe7975f99b404f94aea2a85d72d169ea2d779c0f92e4d039394e42a51478"
+      },
+      "journalSha256": "8c817b06bf200136c55bb030fd36161449fb4abaeea756ace705d3463480dc1f",
+      "nativeBinarySha256": "903c76004026301591b9f2c2f13e50d9b81e85079e536bae1c9e9b8f612f072c",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "outputDevice": "1 - T24E390 (2- AMD High Definition Audio Device)",
+      "manifestSha256": "2ebe51abb055ef73061f03fdc2834426f6bacfb043dd36101150d57d3e4890d4",
+      "actualInterviewDurationMs": 4048056,
+      "correctness": {
+        "correct": 4,
+        "incorrect": 3,
+        "incomplete": 2,
+        "missing": 26,
+        "interrupted": 1
+      },
+      "strictAccuracy": {
+        "correct": 4,
+        "allRecordedRows": 36,
+        "uninterruptedRequests": 35,
+        "correctFractionOfUninterrupted": 0.11428571428571428,
+        "scope": "Includes missing, wrong and incomplete requests in denominator; one planned observed interruption reported separately. Conditional-on-recognition retention and mathematical proof success do not replace original-source correctness."
+      },
+      "counts": {
+        "all": 36,
+        "expectedReplies": 36,
+        "complete": 9,
+        "missing": 26,
+        "errors": 2,
+        "intentionallyInterrupted": 1,
+        "observedPlannedInterruptions": 1,
+        "observerInterference": 0,
+        "correct": 4,
+        "incorrect": 3,
+        "requestedWorkComplete": 9,
+        "requestedWorkIncomplete": 27,
+        "requestedCompletionPending": 0,
+        "reasoningPass": 5,
+        "reasoningFail": 30,
+        "correctnessPending": 0
+      },
+      "acceptedToActualWriteMs": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "acceptedToProtocolCompletionMs": {
+        "count": 9,
+        "min": 6520,
+        "median": 11118,
+        "sampleP95": 57812,
+        "max": 57812
+      },
+      "acceptedToCorrectWorkCompletionMs": {
+        "count": 4,
+        "min": 10170,
+        "median": 10958.5,
+        "sampleP95": 57812,
+        "max": 57812
+      },
+      "usefulNativeFeedbackMs": {
+        "count": 1,
+        "min": 15481,
+        "median": 15481,
+        "sampleP95": 15481,
+        "max": 15481
+      },
+      "usefulTypedFeedbackMs": {
+        "count": 3,
+        "min": 8422,
+        "median": 9568,
+        "sampleP95": 9700,
+        "max": 9700
+      },
+      "usefulFollowupMs": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "sampleP95": null,
+        "max": null
+      },
+      "allFollowupUsefulP95Ms": {
+        "all": 7,
+        "observed": 0,
+        "missingOrUnverified": 7,
+        "p95": null,
+        "gateEvaluable": false,
+        "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+      },
+      "outputTokensPerStreamingSecond": {
+        "count": 9,
+        "min": 20.15355086372361,
+        "median": 31.05263157894737,
+        "sampleP95": 66.90140845070424,
+        "max": 66.90140845070424
+      },
+      "panelTransitions": {
+        "transitions": [
+          {
+            "generationId": "bdb213f3-b5da-46d2-b597-f21d06e66190",
+            "previousGenerationId": "1c2d3552-7dd6-45a8-8313-fbb3aca5c82b",
+            "acceptedHostMs": {
+              "low": 1791788021997,
+              "high": 1791788022003
+            },
+            "priorPanelClearedHostMs": 1791788021998,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 1
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "9ec2c208-834f-4663-a820-3bced2cb680e",
+            "previousGenerationId": "bdb213f3-b5da-46d2-b597-f21d06e66190",
+            "acceptedHostMs": {
+              "low": 1791788067633,
+              "high": 1791788067640
+            },
+            "priorPanelClearedHostMs": 1791788067645,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 12
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "69d5a161-169c-412d-bd38-e81e85e1f8b1",
+            "previousGenerationId": "0c5510db-f342-4d03-8a0e-6d76d3018e56",
+            "acceptedHostMs": {
+              "low": 1791790418939,
+              "high": 1791790418947
+            },
+            "priorPanelClearedHostMs": 1791790418948,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "ef4fc91f-6f36-4c20-a7c0-2035b35ede80",
+            "previousGenerationId": "69d5a161-169c-412d-bd38-e81e85e1f8b1",
+            "acceptedHostMs": {
+              "low": 1791790429152,
+              "high": 1791790429162
+            },
+            "priorPanelClearedHostMs": 1791790429157,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 5
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "1d04ba30-382d-439a-a9c5-00ffe2a313c0",
+            "previousGenerationId": "ef4fc91f-6f36-4c20-a7c0-2035b35ede80",
+            "acceptedHostMs": {
+              "low": 1791790439073,
+              "high": 1791790439084
+            },
+            "priorPanelClearedHostMs": 1791790439082,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "87eb0d09-6fe6-47b8-9db3-1329506a622f",
+            "previousGenerationId": "1d04ba30-382d-439a-a9c5-00ffe2a313c0",
+            "acceptedHostMs": {
+              "low": 1791790503512,
+              "high": 1791790503520
+            },
+            "priorPanelClearedHostMs": 1791790503520,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 8
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "06c9b242-6b4f-4638-ae9c-0aa4409d8ea1",
+            "previousGenerationId": "87eb0d09-6fe6-47b8-9db3-1329506a622f",
+            "acceptedHostMs": {
+              "low": 1791790565832,
+              "high": 1791790565844
+            },
+            "priorPanelClearedHostMs": 1791790565839,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 7
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "4c145172-3fce-4022-8b4f-e7c49fa8922b",
+            "previousGenerationId": "87eb0d09-6fe6-47b8-9db3-1329506a622f",
+            "acceptedHostMs": {
+              "low": 1791790581912,
+              "high": 1791790581924
+            },
+            "priorPanelClearedHostMs": 1791790581921,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 9
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "a25fdda0-869c-44dd-a92b-c25b638b22eb",
+            "previousGenerationId": "87eb0d09-6fe6-47b8-9db3-1329506a622f",
+            "acceptedHostMs": {
+              "low": 1791790598312,
+              "high": 1791790598322
+            },
+            "priorPanelClearedHostMs": 1791790598322,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          },
+          {
+            "generationId": "4b724802-c814-41ce-91bf-3340d3056d63",
+            "previousGenerationId": "b243aeed-75c1-4ab1-abfe-cd33195d9d91",
+            "acceptedHostMs": {
+              "low": 1791792031737,
+              "high": 1791792031749
+            },
+            "priorPanelClearedHostMs": 1791792031747,
+            "possibleOldPanelDurationMs": {
+              "low": 0,
+              "high": 10
+            },
+            "oldPaintChangesAfterAcceptance": 0,
+            "unclearedInObservation": false
+          }
+        ],
+        "maxPossibleCarryHighMs": 12,
+        "oldPaintChangesAfterAcceptance": 0,
+        "uncleared": 0,
+        "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+      },
+      "wrongFocusRequests": 2,
+      "archiveAfterStop": {
+        "accepted": 0,
+        "displayedBytes": 0,
+        "generatedBytes": 0,
+        "paintMetadataBytes": 0,
+        "paintedRangeBytes": 0,
+        "paintedRanges": 0,
+        "recognizedRevisionBytes": 0,
+        "recognizedRevisions": 0,
+        "suggestions": 0,
+        "version": 0
+      },
+      "checks": [
+        {
+          "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\plan-cpp\\results.json",
+          "sha256": "df305dd134f4737b911c6f9317de22f09ba56ef286451d29ca84d1c9358458cc",
+          "summary": null,
+          "results": [
+            {
+              "round": 2,
+              "kind": "integer-branch",
+              "pass": true,
+              "scope": "StrictoriginalFoo bytesand2,003 independentintegerinputs. Planrecall displacedbySQLmustremainmissingCpp, no source reconstruction."
+            },
+            {
+              "round": 34,
+              "kind": "integer-branch",
+              "failure": "No complete code fence",
+              "scope": "StrictoriginalFoo bytesand2,003 independentintegerinputs. Planrecall displacedbySQLmustremainmissingCpp, no source reconstruction."
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\schema-hour-tail-code-r1\\plan-sql\\results.json",
+          "sha256": "057b14df3da0107bf20c5791fca9b684ecab14a549b38ad304b04c7a8b4d731a",
+          "summary": null,
+          "results": [
+            {
+              "round": 34,
+              "pass": true,
+              "scope": "Actual unchanged SQL in PostgreSQL, with BEGIN/body/COMMIT sent separately to force overlap. Isolated synthetic database; no source repairs.",
+              "trials": [
+                {
+                  "mode": "recorded_serializable",
+                  "order": [
+                    0,
+                    1
+                  ],
+                  "pass": true
+                },
+                {
+                  "mode": "recorded_serializable",
+                  "order": [
+                    1,
+                    0
+                  ],
+                  "pass": true
+                },
+                {
+                  "mode": "repeatable_read_control",
+                  "order": [
+                    0,
+                    1
+                  ],
+                  "pass": true
+                },
+                {
+                  "mode": "repeatable_read_control",
+                  "order": [
+                    1,
+                    0
+                  ],
+                  "pass": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "file": "artifacts\\controller-v72\\code\\schema-plan-hour-nvcc-r1\\compilation.json",
+          "sha256": "5c6467099cd03c31ca6c14db5028b893121fa3375ba39e98f652ee8cf67c1208",
+          "summary": {
+            "recordedCudaOrCppBlocks": 2,
+            "compiled": 2,
+            "failed": 0,
+            "timedOut": 0
+          },
+          "results": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "status": "authentication_required",
+  "capturedPlanInferenceRows": 0,
+  "actualPlanInferenceCapability": "unverified",
+  "modelPerformance": null,
+  "mergeRecommendation": "hold",
+  "attempts": [
+    {
+      "source": {
+        "file": "artifacts/controller-v72/plan-auth-signin-r3/preflight.json",
+        "sha256": "054c76301106fbcb1fb4681157c2f475bd504fcd2dab5fb2cefec77cedb1acc1"
+      },
+      "status": "failed",
+      "startedAt": "2026-10-12T00:59:44.393Z",
+      "completedAt": "2026-10-12T01:04:47.582Z",
+      "failure": "Error: Sign-in did not complete: Sign-in timed out; try again",
+      "scope": "Account-scope/model-catalog preflight only. No audio or assistant inference; no credential values or account identities recorded.",
+      "model": null,
+      "effort": null,
+      "backend": null,
+      "authMode": null,
+      "nativeBinarySha256": null,
+      "capturedRows": null,
+      "savedAccounts": 1,
+      "directPlanAccounts": 1
+    },
+    {
+      "source": {
+        "file": "artifacts/controller-v72/plan-auth-signin-r4/preflight.json",
+        "sha256": "24636aa8eafc927b63a5b54c0e1f8bfcf3455e531bcec3d778a5eb7080464275"
+      },
+      "status": "failed",
+      "startedAt": "2026-10-12T01:52:14.104Z",
+      "completedAt": "2026-10-12T01:57:17.324Z",
+      "failure": "Error: Sign-in did not complete: Sign-in timed out; try again",
+      "scope": "Account-scope/model-catalog preflight only. No audio or assistant inference; no credential values or account identities recorded.",
+      "model": null,
+      "effort": null,
+      "backend": null,
+      "authMode": null,
+      "nativeBinarySha256": null,
+      "capturedRows": null,
+      "savedAccounts": 1,
+      "directPlanAccounts": 1
+    },
+    {
+      "source": {
+        "file": "artifacts/controller-v72/native/final-source-r6-contextual-chatgpt/interview.json",
+        "sha256": "a030dc6f751cf7f70807a59e304dc8321652e27fb4df558db6de757587a38ed8"
+      },
+      "status": "failed",
+      "startedAt": "2026-10-12T03:58:59.221Z",
+      "completedAt": "2026-10-12T03:59:02.683Z",
+      "failure": "Error: list_models: ChatGPT access expired or revoked; sign in again",
+      "scope": "Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "backend": "chatgpt",
+      "authMode": "saved-plan",
+      "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+      "capturedRows": 0,
+      "savedAccounts": null,
+      "directPlanAccounts": null
+    },
+    {
+      "source": {
+        "file": "artifacts/controller-v72/plan-message-boundary-signin-r1/preflight/preflight.json",
+        "sha256": "a4e080d249194316aa040c624bc0e41830e53ad0af1d7ca09aa5477ed69bc504"
+      },
+      "status": "failed",
+      "startedAt": "2026-10-12T04:44:51.705Z",
+      "completedAt": "2026-10-12T04:49:55.644Z",
+      "failure": "Error: Sign-in did not complete: Sign-in timed out; try again",
+      "scope": "Account-scope/model-catalog preflight only. No audio or assistant inference; no credential values or account identities recorded.",
+      "model": null,
+      "effort": null,
+      "backend": null,
+      "authMode": null,
+      "nativeBinarySha256": null,
+      "capturedRows": null,
+      "savedAccounts": 1,
+      "directPlanAccounts": 1
+    }
+  ],
+  "currentComparison": {
+    "source": {
+      "file": "artifacts/controller-v72/message-plan-comparison-r1/verification.json",
+      "sha256": "f803ac510b57354f3a9f42cbb5a3c10b0afe722cd160fe621234220b7859622d"
+    },
+    "status": "authentication_required",
+    "tasks": [],
+    "buildCommit": "001b2e9693c4bdacc3f0f148e644d128d0f2d3b5",
+    "nativeBinarySha256": "ff8421358b470f71ff4510258273230ee2e60c5cee0d919c8381dfc4eb2246c7"
+  },
+  "frozenComparison": {
+    "source": {
+      "file": "artifacts/controller-v72/frozen-backend-controls-r1/verification.json",
+      "sha256": "e9e33037e9fda4b70fbc16ca185767e83f29973a3e0e76eca24f7e672e09e76f"
+    },
+    "status": "codex_complete_plan_authentication_required",
+    "skipped": [
+      {
+        "backend": "chatgpt",
+        "name": "contextual-text",
+        "manifestSha256": "ad81c8137677c12560f9552c2c64972dbef8c37eced6dde377227527abd1980b",
+        "reason": "The immediately preceding native saved-plan setup failed with expired/revoked access. No authenticated inference, missing-answer latency or backend performance imputed. Resume these exact manifests after sign-in."
+      },
+      {
+        "backend": "chatgpt",
+        "name": "hour-text",
+        "manifestSha256": "8309c029d5074d8b1c251afb1690d242da868b86a23f7eb6126283cce991443a",
+        "reason": "The immediately preceding native saved-plan setup failed with expired/revoked access. No authenticated inference, missing-answer latency or backend performance imputed. Resume these exact manifests after sign-in."
+      },
+      {
+        "backend": "chatgpt",
+        "name": "hour-audio",
+        "manifestSha256": "80360a4b378c913225b03a07239fe6abe51b012145a126709a38f8be12044142",
+        "reason": "The immediately preceding native saved-plan setup failed with expired/revoked access. No authenticated inference, missing-answer latency or backend performance imputed. Resume these exact manifests after sign-in."
+      }
+    ]
+  },
+  "scope": "Source-bound setup/sign-in failures only. Catalog failures and OAuth callback timeouts are not model latency, correctness, cancellation or inference-capability tests. No account identity, credential, browser profile or private route is published. Resume the unchanged current-build frozen manifests after normal sign-in. Natural hour/marathon sessions remain separately scoped because displayed suggestions can diverge across backends."
+}

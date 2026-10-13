@@ -111,7 +111,7 @@ async fn complete_token_request(
 }
 impl Auth {
     pub fn new(db: Arc<Database>) -> Result<Self, String> {
-        let saved = if super::acceptance_mode() {
+        let saved = if super::acceptance_mode() && !super::authenticated_acceptance_mode() {
             None
         } else {
             credentials::load()?

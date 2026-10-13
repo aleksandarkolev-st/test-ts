@@ -55,13 +55,17 @@ fn partial_refinement_deadline(stable_since:tokio::time::Instant,context_dirty_s
 #[derive(Clone, Debug)]
 pub struct QuestionUpdate { pub question: String, pub confirmed: bool, pub context:Option<String>, pub acoustic_quiet:bool }
 #[derive(Clone,Debug)]
-pub struct QuestionPrompt { pub context:String, pub question:String, pub reference:String }
+pub struct QuestionPrompt { pub context:String, pub question:String, pub reference:String, pub explicit_request:bool }
 impl QuestionPrompt {
-    pub fn new(context:impl Into<String>,question:impl Into<String>)->Self {Self{context:context.into(),question:question.into(),reference:String::new()}}
+    pub fn new(context:impl Into<String>,question:impl Into<String>)->Self {Self{context:context.into(),question:question.into(),reference:String::new(),explicit_request:false}}
     pub fn with_reference(mut self,reference:impl Into<String>)->Self {self.reference=reference.into();self}
-    pub fn render(&self)->String {format!("{}\n\nCURRENT QUESTION\n{}{}",self.context,self.question,self.reference)}
+    pub fn with_explicit_request(mut self,explicit:bool)->Self {self.explicit_request=explicit;self}
+    pub fn render(&self)->String {
+        let kind=if self.explicit_request{"EXPLICIT"}else{"AUTOMATIC"};
+        format!("APPLICATION ACCEPTANCE: {kind}\n{}\n\nCURRENT QUESTION\n{}{}",self.context,self.question,self.reference)
+    }
     fn revised(&self,question:&str,context:Option<&str>)->Self {
-        Self{context:context.unwrap_or(&self.context).to_owned(),question:question.to_owned(),reference:self.reference.clone()}
+        Self{context:context.unwrap_or(&self.context).to_owned(),question:question.to_owned(),reference:self.reference.clone(),explicit_request:self.explicit_request}
     }
 }
 #[derive(Clone, Copy, Default, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -79,15 +83,15 @@ enum ReplyIntent { Answer, Ignore }
 #[serde(deny_unknown_fields)]
 struct AutomaticReply { intent:ReplyIntent, text:String }
 #[derive(Default)]
-struct ReplyGate { raw:String, emitted:String, ignored:bool }
+pub(crate) struct ReplyGate { raw:String, emitted:String, pub(crate) ignored:bool }
 impl ReplyGate {
-    fn finish(&mut self)->Result<(),String> {
+    pub(crate) fn finish(&mut self)->Result<(),String> {
         let reply:AutomaticReply=serde_json::from_str(&self.raw).map_err(|e|format!("Codex automatic reply JSON is invalid: {e}"))?;
         self.ignored=matches!(reply.intent,ReplyIntent::Ignore);
         if !self.ignored && reply.text!=self.emitted{return Err("Codex automatic reply ended before its text was delivered".into());}
         Ok(())
     }
-    fn feed(&mut self,delta:&str)->Result<Option<String>,String> {
+    pub(crate) fn feed(&mut self,delta:&str)->Result<Option<String>,String> {
         self.raw.push_str(delta);
         if self.raw.len()>256_000{return Err("Automatic reply exceeds framing size limit".into());}
         let (intent,text)=reply_prefix(&self.raw)?;
@@ -153,7 +157,8 @@ impl Codex {
     pub fn new(binary: PathBuf, cwd: PathBuf) -> Arc<Self> {
         Arc::new(Self { binary, cwd, service: Mutex::new(None), starting: tokio::sync::Mutex::new(()), epoch: AtomicU64::new(0), warming: tokio::sync::Mutex::new(()), prepared: Mutex::new(Vec::new()), slots:tokio::sync::Semaphore::new(2), continuity:AtomicBool::new(true) })
     }
-    /// Benchmark switch; production retains only successful bounded threads.
+    /// Legacy benchmark switch; accepted frames use fresh prepared threads,
+    /// with a persistent process/connection and no duplicated backend history.
     pub fn set_continuity(&self, enabled:bool) {self.continuity.store(enabled,Ordering::Release);}
     pub fn close(&self) {
         self.epoch.fetch_add(1, Ordering::AcqRel);
@@ -218,6 +223,14 @@ impl Codex {
         let cancel = CancellationToken::new();
         let service = self.ready(&cancel).await?;
         service.rpc("model/list", json!({"includeHidden":false}), &cancel).await
+    }
+    pub async fn validate_reasoning(&self,model:&str,effort:Option<&str>)->Result<(),String> {
+        let Some(effort)=effort else{return Ok(());};
+        let catalog=self.model_catalog().await?;
+        let row=catalog["data"].as_array().and_then(|rows|rows.iter().find(|row|row["model"]==model)).ok_or("Requested model is absent from the Codex catalog")?;
+        let supported=row["supportedReasoningEfforts"].as_array().ok_or("Codex did not expose supported reasoning efforts; cannot verify requested effort")?;
+        if !supported.iter().any(|entry|entry["reasoningEffort"]==effort){return Err(format!("{model} does not advertise reasoning effort {effort}; choose a supported effort"));}
+        Ok(())
     }
     pub async fn rate_limits(&self)->Result<Value,String> {
         let cancel=CancellationToken::new();
@@ -297,10 +310,27 @@ impl Codex {
     pub async fn stream_traced<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
         input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
-        self.stream_inner(model,tier,effort,instructions,input,image,cancel,policy,trace,None,String::new(),None,None,true,event).await
+        self.stream_inner(model,tier,effort,instructions,input,image,cancel,policy,trace,None,String::new(),None,None,false,event).await
     }
     #[allow(clippy::too_many_arguments)]
     pub async fn stream_question<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
+        prompt: &QuestionPrompt, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, updates:tokio::sync::watch::Receiver<QuestionUpdate>, event: F) -> Result<(), String>
+    where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
+        let frame=updates.borrow().clone();
+        if !frame.confirmed || frame.question!=prompt.question || frame.context.as_deref()!=Some(&prompt.context) {
+            return Err("Only an immutable accepted conversation frame may be submitted".into());
+        }
+        let mut schema=automatic_reply_schema();
+        if prompt.explicit_request {schema["properties"]["intent"]["enum"]=json!(["answer"]);}
+        let input=format!("AUTOMATIC REMOTE TURN\n{}",prompt.render());
+        // Warm process and empty prepared threads, independent frozen history.
+        // No turn/steer, obsolete input echo, or retained snapshot duplication.
+        let _=policy; // Accepted frames refill on submission, not first output.
+        self.stream_inner(model,tier,effort,instructions,&input,image,cancel,RefillPolicy::Immediate,trace,None,String::new(),Some(&schema),None,false,event).await
+    }
+    #[cfg(test)]
+    #[allow(clippy::too_many_arguments)]
+    pub async fn stream_revising_question<F, Fut>(self: &Arc<Self>, model: &str, tier: Option<&str>, effort: Option<&str>, instructions: &str,
         prompt: &QuestionPrompt, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, updates:tokio::sync::watch::Receiver<QuestionUpdate>, event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         let schema=automatic_reply_schema();
@@ -339,16 +369,23 @@ impl Codex {
         input: &str, image: Option<&str>, cancel: CancellationToken, policy:RefillPolicy, trace:Option<Trace>, mut updates:Option<tokio::sync::watch::Receiver<QuestionUpdate>>, mut active_question:String, output_schema:Option<&Value>, reuse:bool, restart_stalled:bool, initial_context:Option<String>, retry_context:&mut Option<String>, mut event: F) -> Result<(), String>
     where F: FnMut(StreamEvent) -> Fut + Send, Fut: std::future::Future<Output=Result<(), String>> + Send {
         if let Some(trace)=&trace {trace.mark(Stage::StreamEntered);}
-        let _slot=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),slot=self.slots.acquire()=>slot.map_err(|_|"Codex scheduler closed")?};
+        let recovery_deadline=tokio::time::Instant::now()+Duration::from_millis(crate::meeting::scheduler::RECOVERY_MS);
+        let _slot=tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),slot=tokio::time::timeout_at(recovery_deadline,self.slots.acquire())=>slot.map_err(|_|"Codex answer capacity did not recover before the submission deadline")?.map_err(|_|"Codex scheduler closed")?};
         if let Some(trace)=&trace {trace.mark(Stage::SemaphoreAcquired);}
-        let service = self.ready(&cancel).await?;
+        let service = tokio::time::timeout_at(recovery_deadline,self.ready(&cancel)).await.map_err(|_|"Codex connection recovery exceeded the submission deadline")??;
         let epoch=self.epoch.load(Ordering::Acquire);
         let key = json!([model,tier,effort,instructions]).to_string();
-        let answer = instructions == super::prompts::answer_instructions(super::prompts::ANSWER);
-        let wait_deadline=tokio::time::Instant::now()+RPC_TIMEOUT;
+        let answer = instructions == super::prompts::answer_instructions(super::prompts::ANSWER)
+            || instructions == super::prompts::answer_instructions(super::prompts::BRIEF);
+        let wait_deadline=if updates.is_none()&&output_schema.is_some(){recovery_deadline}else{tokio::time::Instant::now()+RPC_TIMEOUT};
+        let mut recovery_refill=false;
         let warm = loop {
             let warm={ let mut pool=self.prepared.lock().unwrap(); let index=pool.iter().enumerate().filter(|(_,t)|t.key==key).max_by_key(|(_,t)|t.turns).map(|(i,_)|i); index.map(|i|pool.remove(i)) };
             if warm.is_some() || !answer {break warm;}
+            // A dead service discards its prepared threads. Rehydrate the
+            // pool once on the replacement connection; never wait forever
+            // for a refill that only the missing prior turn could initiate.
+            if !recovery_refill {self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());recovery_refill=true;}
             if tokio::time::Instant::now()>=wait_deadline{return Err("No prepared Codex answer thread is available".into());}
             tokio::select!{_=cancel.cancelled()=>return Err("cancelled".into()),_=service.dead.cancelled()=>return Err("Codex connection closed".into()),_=tokio::time::sleep(Duration::from_millis(10))=>{}}
         };
@@ -358,7 +395,7 @@ impl Codex {
             self.spawn_refill(&service,model,tier,effort,instructions,trace.as_ref());refill_requested=true;
         }
         if let Some(trace)=&trace { service.traces.lock().unwrap().insert(id.clone(),trace.clone()); }
-        let (tx, mut events) = mpsc::channel(256);
+        let (tx, mut events) = super::mailbox::channel(256);
         service.events.lock().unwrap().insert(id.clone(), tx);
         let automatic=updates.is_some();
         let initial_input=if automatic{format!("AUTOMATIC REMOTE TURN\n{input}")}else{input.to_string()};
@@ -397,7 +434,21 @@ impl Codex {
             #[cfg(all(feature="acceptance",debug_assertions))]
             if let Some(trace)=&trace{trace.diagnostic_input_expected(context_key(&initial_input));}
             if let Some(trace)=&trace{trace.input_sent();}
-            let turn=service.rpc("turn/start", json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":turn_input,"outputSchema":output_schema}), &service.dead).await?;
+            let submission=service.rpc("turn/start", json!({"threadId":id,"model":model,"serviceTier":tier,"effort":effort,"input":turn_input,"outputSchema":output_schema}), &service.dead);tokio::pin!(submission);
+            let turn=tokio::select! {
+                result=&mut submission=>result?,
+                _=tokio::time::sleep(Duration::from_millis(crate::meeting::scheduler::RECOVERY_MS))=>{
+                    service.shutdown();return Err("Submission acknowledgement deadline exceeded; connection retired, remote termination unknown".into());
+                },
+                _=cancel.cancelled()=>{
+                    // A lost start acknowledgement must not keep a obsolete
+                    // request holding capacity for the 30-second RPC timeout.
+                    match tokio::time::timeout(Duration::from_millis(500),&mut submission).await {
+                        Ok(result)=>result?,
+                        Err(_)=>{service.shutdown();return Err("Cancelled before submission acknowledgement; connection retired, remote termination unknown".into());}
+                    }
+                }
+            };
             if let Some(trace)=&trace {trace.mark(Stage::TurnStartAck);trace.input_ack();}
             turn_id=turn["turn"]["id"].as_str().map(String::from);
             let deadline = tokio::time::sleep(Duration::from_secs(120));tokio::pin!(deadline);
@@ -527,6 +578,7 @@ impl Codex {
                     msg=events.recv(),if !turn_finished=>msg.ok_or("Codex stream ended")?
                 };
                 match message["method"].as_str() {
+                    Some("copilot/overflow")=>return Err("Answer accumulation exceeds 4 MiB; generation terminated without silently dropping current text".into()),
                     Some("item/started") if message["params"]["item"]["type"]=="agentMessage" => {
                         let item=&message["params"]["item"];
                         let item_id=item["id"].as_str().ok_or("Agent message has no ID")?.to_owned();
@@ -586,10 +638,10 @@ impl Codex {
                 }
             }
         }.await;
-        // The stdout reader can be blocked behind this receiver. Drain it
+        // The reader remains independent. Drain the per-generation mailbox
         // while waiting for interrupt acknowledgement and terminal proof.
         if result.is_err() && !turn_finished {
-            if let Some(turn)=turn_id.as_deref(){turn_finished=interrupt_and_wait(&service,&id,turn,&mut events,Duration::from_secs(5),trace.as_ref()).await;}
+            if let Some(turn)=turn_id.as_deref(){turn_finished=interrupt_and_wait(&service,&id,turn,&mut events,Duration::from_millis(1500),trace.as_ref()).await;}
             else {service.shutdown();}
         }
         service.events.lock().unwrap().remove(&id);
@@ -625,7 +677,7 @@ impl Codex {
         result
     }
 }
-async fn interrupt_and_wait(service:&Service,thread:&str,turn:&str,events:&mut mpsc::Receiver<Value>,limit:Duration,trace:Option<&Trace>)->bool {
+async fn interrupt_and_wait(service:&Service,thread:&str,turn:&str,events:&mut super::mailbox::Receiver,limit:Duration,trace:Option<&Trace>)->bool {
     if let Some(trace)=trace{trace.cleanup_started(events.len());}
     let cleanup=CancellationToken::new();
     let interrupt=service.rpc("turn/interrupt",json!({"threadId":thread,"turnId":turn}),&cleanup);tokio::pin!(interrupt);
@@ -683,7 +735,7 @@ struct Service {
     #[cfg(windows)] _job: crate::process::ProcessJob,
     outgoing: mpsc::Sender<Value>,
     pending: Mutex<HashMap<u64, Reply>>,
-    events: Mutex<HashMap<String, mpsc::Sender<Value>>>,
+    events: Mutex<HashMap<String, super::mailbox::Sender>>,
     sequence: AtomicU64,
     dead: CancellationToken,
 }
@@ -702,7 +754,8 @@ impl Service {
         let writer=Arc::downgrade(&service);
         std::thread::spawn(move||{while let Some(message)=queue.blocking_recv(){
             if message["method"]=="turn/start" {if let Some(s)=writer.upgrade(){if let Some(id)=message["params"]["threadId"].as_str(){if let Some(trace)=s.traces.lock().unwrap().get(id){trace.mark(Stage::TurnStartSent);}}}}
-            if serde_json::to_writer(&mut stdin,&message).is_err()||stdin.write_all(b"\n").is_err()||stdin.flush().is_err(){break;}}if let Some(s)=writer.upgrade(){s.shutdown();}});
+            if serde_json::to_writer(&mut stdin,&message).is_err()||stdin.write_all(b"\n").is_err()||stdin.flush().is_err(){break;}
+            if message["method"]=="turn/start" {if let Some(s)=writer.upgrade(){if let Some(id)=message["params"]["threadId"].as_str(){if let Some(trace)=s.traces.lock().unwrap().get(id){trace.transport_written();}}}}}if let Some(s)=writer.upgrade(){s.shutdown();}});
         let reader=Arc::downgrade(&service);
         std::thread::spawn(move||{let mut lines=BufReader::new(stdout);loop{let mut line=Vec::new();match lines.by_ref().take(64*1024*1024).read_until(b'\n',&mut line){Ok(0)|Err(_)=>break,Ok(_)=>{if line.last()!=Some(&b'\n'){break;}}}let Ok(message)=serde_json::from_slice::<Value>(&line)else{break;};if !dispatch(&reader,message){break;}}if let Some(s)=reader.upgrade(){s.shutdown();}});
         Ok(service)
@@ -730,7 +783,7 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
     if let Some(id)=message["id"].as_u64() {
         if let Some(reply)=service.pending.lock().unwrap().remove(&id) {
             let result=if message.get("error").is_some(){Err(message["error"]["message"].as_str().unwrap_or("Codex request failed").into())}else{Ok(message["result"].clone())};let _=reply.send(result);
-        }else if message.get("method").is_some(){let _=service.outgoing.blocking_send(json!({"id":id,"error":{"code":-32601,"message":"Meeting answers do not execute tools"}}));}
+        }else if message.get("method").is_some(){if service.outgoing.try_send(json!({"id":id,"error":{"code":-32601,"message":"Meeting answers do not execute tools"}})).is_err(){service.shutdown();}}
     }else if let Some(id)=message["params"]["threadId"].as_str() {
         let sender={
             let events=service.events.lock().unwrap();
@@ -748,12 +801,15 @@ fn dispatch(service: &Weak<Service>, message: Value) -> bool {
             }
             sender
         };
+        if message["method"]=="thread/tokenUsage/updated" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.usage(&message["params"]["tokenUsage"]["last"]);}}
         if message["method"]=="item/agentMessage/delta" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::FirstAgentDelta);}}
         if message["method"]=="turn/completed" {if let Some(trace)=service.traces.lock().unwrap().get(id){trace.mark(Stage::TurnCompleted);}}
         if let Some(sender)=sender {
             #[cfg(all(feature="acceptance",debug_assertions))]
             let diagnostic=(service.traces.lock().unwrap().get(id).cloned(),sender.max_capacity()-sender.capacity(),sender.capacity()==0,std::time::Instant::now());
-            let _=sender.blocking_send(message);
+            // No await/blocking_send on the shared reader. A full per-thread
+            // accumulation reports a terminal failure to that consumer.
+            let _=sender.try_send(message);
             #[cfg(all(feature="acceptance",debug_assertions))]
             if let (Some(trace),queued,full,start)=diagnostic{trace.diagnostic_reader_send(queued,full,start.elapsed().as_micros()as u64);}
         }
@@ -764,6 +820,70 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
 
 #[cfg(test)] mod tests {
     use super::*;
+    #[tokio::test(start_paused=true)]
+    async fn accepted_request_fails_visibly_when_all_transport_slots_are_unavailable() {
+        let codex=Codex::new(PathBuf::from("must-not-launch"),PathBuf::from("."));
+        let _a=codex.slots.acquire().await.unwrap();let _b=codex.slots.acquire().await.unwrap();
+        let prompt=QuestionPrompt::new("Exact earlier exchange","Why?");
+        let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let started=tokio::time::Instant::now();
+        let error=codex.stream_question("fixture-model",None,Some("low"),&super::super::prompts::answer_instructions(super::super::prompts::ANSWER),&prompt,None,CancellationToken::new(),RefillPolicy::Immediate,None,rx,|_|std::future::ready(Ok(()))).await.unwrap_err();
+        assert!(error.contains("capacity did not recover"));
+        assert_eq!(started.elapsed(),Duration::from_millis(crate::meeting::scheduler::RECOVERY_MS));
+    }
+    #[tokio::test]
+    async fn cancelled_start_with_a_lost_ack_retires_connection_and_releases_capacity() {
+        let (service,mut requests)=transport_fixture();
+        let codex=Codex::new(PathBuf::from("must-not-launch"),PathBuf::from("."));
+        *codex.service.lock().unwrap()=Some(service.clone());
+        let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
+        codex.prepared.lock().unwrap().push(PreparedThread{key:json!(["fixture-model",Option::<String>::None,Some("low"),instructions]).to_string(),id:"prepared".into(),acknowledged:std::time::Instant::now(),turns:0,history_chars:0});
+        let prompt=QuestionPrompt::new("Exact source","Why?").with_explicit_request(true);
+        let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let cancel=CancellationToken::new();let cancellation=cancel.clone();
+        let task=codex.stream_question("fixture-model",None,Some("low"),&instructions,&prompt,None,cancel,RefillPolicy::Disabled,None,rx,|_|std::future::ready(Ok(())));tokio::pin!(task);
+        tokio::select!{result=&mut task=>panic!("Request ended before its submission: {result:?}"),request=requests.recv()=>{let request=request.unwrap();assert_eq!(request["method"],"turn/start");assert_eq!(request["params"]["threadId"],"prepared");assert!(request["params"]["input"][0]["text"].as_str().unwrap().starts_with("AUTOMATIC REMOTE TURN\nAPPLICATION ACCEPTANCE: EXPLICIT\n"));}};
+        cancellation.cancel();
+        let error=tokio::time::timeout(Duration::from_secs(1),task).await.unwrap().unwrap_err();
+        assert!(error.contains("remote termination unknown"));assert!(service.dead.is_cancelled());assert_eq!(codex.slots.available_permits(),2);
+        codex.close();
+    }
+    #[tokio::test]
+    async fn empty_replacement_connection_rehydrates_once_without_any_old_input_echo() {
+        let (service,mut requests)=transport_fixture();
+        let codex=Codex::new(PathBuf::from("must-not-launch"),PathBuf::from("."));
+        *codex.service.lock().unwrap()=Some(service.clone());
+        let reader=Arc::downgrade(&service);
+        let responder=std::thread::spawn(move||{
+            let mut created=0;
+            while let Some(request)=requests.blocking_recv() {
+                let result=match request["method"].as_str().unwrap() {
+                    "config/read"=>json!({"config":{},"layers":[]}),
+                    "thread/start"=>{created+=1;json!({"thread":{"id":format!("rehydrated-{created}"),"ephemeral":true}})},
+                    "turn/start"=>{
+                        assert!(request["params"]["input"][0]["text"].as_str().unwrap().contains("Exact earlier exchange"));
+                        assert!(!request["params"]["input"][0]["text"].as_str().unwrap().contains("obsolete"));
+                        let thread=request["params"]["threadId"].clone();
+                        dispatch(&reader,json!({"id":request["id"],"result":{"turn":{"id":"new-turn"}}}));
+                        dispatch(&reader,json!({"method":"item/agentMessage/delta","params":{"threadId":thread,"turnId":"new-turn","itemId":"answer","delta":"{\"intent\":\"answer\",\"text\":\"Because the earlier exchange still exists.\"}"}}));
+                        dispatch(&reader,json!({"method":"turn/completed","params":{"threadId":thread,"turn":{"id":"new-turn","status":"completed"}}}));
+                        continue;
+                    },
+                    "thread/unsubscribe"=>break,
+                    method=>panic!("Unexpected recovery protocol method: {method}"),
+                };
+                assert!(dispatch(&reader,json!({"id":request["id"],"result":result})));
+            }
+            created
+        });
+        let prompt=QuestionPrompt::new("Exact earlier exchange","Why?");
+        let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let mut delivered=String::new();
+        codex.stream_question("fixture-model",None,Some("low"),&super::super::prompts::answer_instructions(super::super::prompts::ANSWER),&prompt,None,CancellationToken::new(),RefillPolicy::Immediate,None,rx,|event|{if let StreamEvent::Delta(text)=event{delivered.push_str(&text);}std::future::ready(Ok(()))}).await.unwrap();
+        assert!(delivered.contains("Because the earlier exchange still exists."));
+        assert!((1..=PREPARED_POOL_SIZE).contains(&responder.join().unwrap()));
+        codex.close();
+    }
     fn transport_fixture()->(Arc<Service>,mpsc::Receiver<Value>) {
         // A contained idle child supplies the same lifecycle as the real
         // service; the test drives its protocol dispatcher directly.
@@ -775,8 +895,49 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         (Arc::new(Service{received_inputs:Mutex::new(HashMap::new()),completed_turns:Mutex::new(HashMap::new()),traces:Mutex::new(HashMap::new()),config:tokio::sync::OnceCell::new(),child:Mutex::new(child),#[cfg(windows)]_job:job,outgoing,pending:Mutex::new(HashMap::new()),events:Mutex::new(HashMap::new()),sequence:AtomicU64::new(1),dead:CancellationToken::new()}),receiver)
     }
     #[tokio::test]
+    async fn immutable_input_can_receive_two_provider_messages_without_a_new_turn() {
+        let (service,mut requests)=transport_fixture();
+        let codex=Codex::new(PathBuf::from("must-not-launch"),PathBuf::from("."));
+        *codex.service.lock().unwrap()=Some(service.clone());
+        let instructions=super::super::prompts::answer_instructions(super::super::prompts::ANSWER);
+        codex.prepared.lock().unwrap().push(PreparedThread{key:json!(["fixture-model",Option::<String>::None,Some("low"),instructions]).to_string(),id:"prepared".into(),acknowledged:std::time::Instant::now(),turns:0,history_chars:0});
+        let reader=Arc::downgrade(&service);
+        let responder=std::thread::spawn(move||{
+            let mut starts=0;
+            while let Some(request)=requests.blocking_recv(){
+                let result=match request["method"].as_str().unwrap(){
+                    "config/read"=>json!({"config":{},"layers":[]}),
+                    "thread/start"=>json!({"thread":{"id":format!("refill-{}",request["id"]),"ephemeral":true}}),
+                    "turn/start"=>{
+                        starts+=1;assert_eq!(starts,1);assert_eq!(request["params"]["threadId"],"prepared");
+                        dispatch(&reader,json!({"id":request["id"],"result":{"turn":{"id":"one-turn"}}}));
+                        for (item,text) in [("first","Exact original source."),("second","Additional justified explanation.")] {
+                            dispatch(&reader,json!({"method":"item/started","params":{"threadId":"prepared","turnId":"one-turn","item":{"type":"agentMessage","id":item,"phase":"final"}}}));
+                            dispatch(&reader,json!({"method":"item/agentMessage/delta","params":{"threadId":"prepared","turnId":"one-turn","itemId":item,"delta":json!({"intent":"answer","text":text}).to_string()}}));
+                        }
+                        dispatch(&reader,json!({"method":"turn/completed","params":{"threadId":"prepared","turn":{"id":"one-turn","status":"completed"}}}));continue;
+                    },
+                    "thread/unsubscribe"=>break,
+                    method=>panic!("Unexpected immutable input protocol method: {method}"),
+                };
+                dispatch(&reader,json!({"id":request["id"],"result":result}));
+            }
+            starts
+        });
+        let prompt=QuestionPrompt::new("Exact earlier exchange","Follow up");
+        let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{question:prompt.question.clone(),context:Some(prompt.context.clone()),confirmed:true,acoustic_quiet:true});
+        let mut observed=Vec::new();
+        codex.stream_question("fixture-model",None,Some("low"),&instructions,&prompt,None,CancellationToken::new(),RefillPolicy::Immediate,None,rx,|event|{observed.push(event);std::future::ready(Ok(()))}).await.unwrap();
+        assert_eq!(observed.len(),4);
+        assert!(matches!(&observed[0],StreamEvent::Delta(text) if text.contains("Exact original source.")));
+        assert!(matches!(&observed[1],StreamEvent::Revision(text) if text.is_empty()));
+        assert!(matches!(&observed[2],StreamEvent::Delta(text) if text.contains("Additional justified explanation.")));
+        assert!(matches!(&observed[3],StreamEvent::Completed));
+        assert_eq!(responder.join().unwrap(),1);codex.close();
+    }
+    #[tokio::test]
     async fn received_current_input_is_known_before_a_full_queue_can_deliver_it() {
-        let (service,_requests)=transport_fixture();let (output,mut events)=mpsc::channel(1);
+        let (service,_requests)=transport_fixture();let (output,mut events)=super::super::mailbox::channel(1);
         #[cfg(all(feature="acceptance",debug_assertions))]
         let observed={let trace=Trace::new(std::time::Instant::now(),0);trace.diagnostic_input_expected(context_key("Exact corrected input"));trace.input_sent();service.traces.lock().unwrap().insert("thread".into(),trace.clone());trace};
         output.try_send(json!({"method":"precedingOutput"})).unwrap();
@@ -800,32 +961,30 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         service.shutdown();
     }
     #[tokio::test]
-    async fn full_output_queue_blocks_interrupt_ack_until_the_receiver_drains() {
+    async fn stalled_output_consumer_cannot_block_interrupt_ack() {
         let (service,mut requests)=transport_fixture();
-        let (output,mut events)=mpsc::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
+        let (output,mut events)=super::super::mailbox::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
         let reader=Arc::downgrade(&service);let (full,ready)=oneshot::channel();
         let reader=std::thread::spawn(move||{
             let request=requests.blocking_recv().unwrap();assert_eq!(request["method"],"turn/interrupt");
             for _ in 0..256 {assert!(dispatch(&reader,json!({"method":"item/agentMessage/delta","params":{"threadId":"thread","delta":"x"}})));}
             full.send(()).unwrap();
-            // This notification blocks the stdout reader, hiding the later
-            // RPC response even though the server has already produced it.
+            // Additional output must not block the shared reader or hide
+            // the later interrupt acknowledgement behind a stalled consumer.
             assert!(dispatch(&reader,json!({"method":"item/agentMessage/delta","params":{"threadId":"thread","delta":"y"}})));
             assert!(dispatch(&reader,json!({"id":request["id"],"result":{}})));
             assert!(dispatch(&reader,json!({"method":"turn/completed","params":{"threadId":"thread","turn":{"id":"current","status":"interrupted"}}})));
         });
         let interrupt=service.rpc("turn/interrupt",json!({"threadId":"thread","turnId":"current"}),&service.dead);tokio::pin!(interrupt);
-        tokio::select!{result=&mut interrupt=>panic!("An unread full queue unexpectedly delivered the acknowledgement: {result:?}"),result=ready=>result.unwrap()};
-        assert!(tokio::time::timeout(Duration::from_millis(100),&mut interrupt).await.is_err(),"Awaiting only the RPC reproduces the reader stall");
+        let (ack,full)=tokio::join!(tokio::time::timeout(Duration::from_millis(100),&mut interrupt),ready);ack.unwrap().unwrap();full.unwrap();
         for _ in 0..257 {tokio::time::timeout(Duration::from_secs(1),events.recv()).await.unwrap().unwrap();}
-        tokio::time::timeout(Duration::from_secs(1),&mut interrupt).await.unwrap().unwrap();
         let terminal=tokio::time::timeout(Duration::from_secs(1),events.recv()).await.unwrap().unwrap();assert_eq!(terminal["params"]["turn"]["id"],"current");
         reader.join().unwrap();assert!(service.pending.lock().unwrap().is_empty());service.shutdown();
     }
     #[tokio::test]
     async fn interrupt_cleanup_drains_full_queue_and_requires_the_current_terminal() {
         let (service,mut requests)=transport_fixture();
-        let (output,mut events)=mpsc::channel(256);
+        let (output,mut events)=super::super::mailbox::channel(256);
         for _ in 0..256{output.try_send(json!({"method":"item/agentMessage/delta","params":{"threadId":"thread","delta":"x"}})).unwrap();}
         service.events.lock().unwrap().insert("thread".into(),output);
         let reader=Arc::downgrade(&service);let (acknowledged,ack)=oneshot::channel();let (release,terminal)=oneshot::channel();
@@ -846,7 +1005,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     }
     #[tokio::test]
     async fn interrupt_cleanup_without_terminal_closes_the_owned_connection() {
-        let (service,mut requests)=transport_fixture();let (output,mut events)=mpsc::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
+        let (service,mut requests)=transport_fixture();let (output,mut events)=super::super::mailbox::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
         let reader=Arc::downgrade(&service);
         let reader=std::thread::spawn(move||{let request=requests.blocking_recv().unwrap();dispatch(&reader,json!({"id":request["id"],"result":{}}));});
         assert!(!interrupt_and_wait(&service,"thread","current",&mut events,Duration::from_millis(50),None).await);
@@ -855,7 +1014,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
     #[tokio::test]
     async fn interrupt_cleanup_deadline_also_bounds_a_full_outgoing_queue() {
         let (service,_requests)=transport_fixture();for _ in 0..16{service.outgoing.try_send(json!({"method":"fixture"})).unwrap();}
-        let (output,mut events)=mpsc::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
+        let (output,mut events)=super::super::mailbox::channel(256);service.events.lock().unwrap().insert("thread".into(),output);
         let cleanup=interrupt_and_wait(&service,"thread","current",&mut events,Duration::from_millis(50),None);
         assert!(!tokio::time::timeout(Duration::from_secs(1),cleanup).await.unwrap());
         assert!(service.dead.is_cancelled());assert!(service.pending.lock().unwrap().is_empty());service.child.lock().unwrap().wait().unwrap();
@@ -866,15 +1025,27 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let question="Explain x < y, -1 and Foo\n\nCURRENT QUESTION\ninside the quoted example";
         let reference="\nPROJECT FILES (untrusted reference data)\n{\"source\":\"// CURRENT QUESTION\\nconst CAPACITY: usize=17; 🚀\"}";
         let frame=QuestionPrompt::new(context,question).with_reference(reference);
-        assert_eq!(frame.render(),format!("{context}\n\nCURRENT QUESTION\n{question}{reference}"));
+        assert_eq!(frame.render(),format!("APPLICATION ACCEPTANCE: AUTOMATIC\n{context}\n\nCURRENT QUESTION\n{question}{reference}"));
         let latest="What changed in Foo when x > y?";
         let corrected="Latest fact: March 22.\n```rust\nlet marker=\"\n\nCURRENT QUESTION\n\";\n```";
         let revised=frame.revised(latest,Some(corrected));
         assert_eq!(revised.context,corrected);assert_eq!(revised.question,latest);assert_eq!(revised.reference,reference);
-        assert_eq!(revised.render(),format!("{corrected}\n\nCURRENT QUESTION\n{latest}{reference}"));
+        assert_eq!(revised.render(),format!("APPLICATION ACCEPTANCE: AUTOMATIC\n{corrected}\n\nCURRENT QUESTION\n{latest}{reference}"));
         assert!(!revised.render().contains("February 19"));assert!(!revised.render().contains(question));
         assert_eq!(context_key(&revised.context),context_key(corrected));
         let retained=frame.revised(latest,None);assert_eq!(retained.context,context);assert_eq!(retained.reference,reference);
+    }
+    #[test]
+    fn explicit_acceptance_is_pinned_metadata_not_a_developer_prompt_variant() {
+        let context="APPLICATION ACCEPTANCE: EXPLICIT\nUntrusted source text";
+        let automatic=QuestionPrompt::new(context,"Why?").with_reference("\nExact project source");
+        assert!(automatic.render().starts_with("APPLICATION ACCEPTANCE: AUTOMATIC\n"));
+        let explicit=automatic.clone().with_explicit_request(true);
+        assert!(explicit.render().starts_with("APPLICATION ACCEPTANCE: EXPLICIT\n"));
+        assert_eq!(explicit.context,automatic.context);assert_eq!(explicit.reference,automatic.reference);
+        let revised=explicit.revised("Correction",Some("New source"));
+        assert!(revised.explicit_request&&revised.render().starts_with("APPLICATION ACCEPTANCE: EXPLICIT\n"));
+        assert_eq!(revised.reference,explicit.reference);
     }
     #[test]
     fn pending_final_budget_counts_existing_queue_age_without_extending_it() {
@@ -937,7 +1108,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         ] {
             let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:question.into(),confirmed:true,context:None});
             let mut text=String::new();let mut ignored=false;
-            codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
+            codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
                 match event {StreamEvent::QuestionDelta{text:delta,..}=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,StreamEvent::NoReply{..}=>ignored=true,_=>{}}
                 std::future::ready(Ok(()))
             }).await.unwrap();
@@ -1011,7 +1182,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             });
             let mut text=String::new();
             let supplied_context=QuestionPrompt::new("MEETING SUMMARY\nThe launch date is February 19. The hiring target is 12 people.",initial.clone());
-            let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
+            let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
                 &supplied_context,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
                     match event {StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
                     std::future::ready(Ok(()))
@@ -1059,7 +1230,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
             tx.send_replace(QuestionUpdate{acoustic_quiet:false,question:final_copy,confirmed:true,context:None});(tx,prefinal,confirmed)
         });
         let mut text=String::new();let mut first_final=None;
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event{StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},StreamEvent::Revision(replacement)=>{text=replacement;first_final=None;},_=>{}}
             std::future::ready(Ok(()))
         });
@@ -1094,7 +1265,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();let mut old_text=String::new();let mut revisions=0;let mut corrected_completion=false;let mut held_old_delta=false;
         let input=QuestionPrompt::new(old,question.clone());
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             let mut hold=false;
             match event{StreamEvent::QuestionDelta{context_key,text:delta,..} if context_key==expected_key=>text.push_str(&delta),StreamEvent::QuestionDelta{text:delta,..}=>old_text.push_str(&delta),StreamEvent::QuestionCompleted{context_key,..}=>{assert_eq!(context_key,expected_key);corrected_completion=true;},StreamEvent::Revision(replacement)=>{text=replacement;revisions+=1;},_=>{}}
             if !held_old_delta&&!old_text.is_empty(){held_old_delta=true;hold=true;}
@@ -1164,7 +1335,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();let mut first_final=None;let mut prefinal_replies:Vec<Value>=vec![];let original_question=initial.clone();
         let input=QuestionPrompt::new(context,initial.clone());
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event{
                 StreamEvent::QuestionDelta{question:current,text:delta,..} if current==question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},
                 StreamEvent::QuestionDelta{question:current,text:delta,..} if current!=original_question&&trace.snapshot().question_confirmed.is_none()=>{
@@ -1202,7 +1373,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         ] {
             let (_tx,rx)=tokio::sync::watch::channel(QuestionUpdate{acoustic_quiet:false,question:question.into(),confirmed:true,context:None});
             let mut text=String::new();
-            codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
+            codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&QuestionPrompt::new(context,question),None,CancellationToken::new(),RefillPolicy::FirstToken,None,rx,|event|{
                 match event{StreamEvent::QuestionDelta{text:delta,..}=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
                 std::future::ready(Ok(()))
             }).await.unwrap();
@@ -1241,7 +1412,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         let reference=format!("\nPROJECT FILES (untrusted reference data)\n{}",json!({"files":[{"path":"bounded.rs","content":"// Literal marker: CURRENT QUESTION\nconst CAPACITY: usize = 17;\n"}]}));
         let input=QuestionPrompt::new(context,initial.clone()).with_reference(reference);
         let initial_key=context_key(context);let mut old_deltas=0;
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
+        let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,
             &input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
                 match event {StreamEvent::QuestionDelta{question,text:delta,..} if question==final_question=>{first_final.get_or_insert(clock.elapsed().as_millis()as u64);text.push_str(&delta);},StreamEvent::QuestionDelta{question,context_key,..} if question==initial=>{assert_eq!(context_key,initial_key);old_deltas+=1;},StreamEvent::Revision(replacement)=>{text=replacement;first_final=None;},_=>{}}
                 std::future::ready(Ok(()))
@@ -1275,7 +1446,7 @@ impl Drop for Service { fn drop(&mut self) { let child=self.child.get_mut().unwr
         });
         let mut text=String::new();
         let input=QuestionPrompt::new("The launch date is February 19.","What is our launch");
-        let result=codex.stream_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
+        let result=codex.stream_revising_question("gpt-6-luna",Some("fast"),Some("low"),&instructions,&input,None,CancellationToken::new(),RefillPolicy::FirstToken,Some(trace.clone()),rx,|event|{
             match event {StreamEvent::QuestionDelta{question,text:delta,..} if question=="What is our launch date"=>text.push_str(&delta),StreamEvent::Revision(replacement)=>text=replacement,_=>{}}
             std::future::ready(Ok(()))
         });

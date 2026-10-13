@@ -1,0 +1,189 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "objective": "detailed",
+  "serviceTier": null,
+  "turns": [
+    {
+      "name": "context-1",
+      "question": "Implement exactly this C++ function, without changing its spelling or formatting:\n```cpp\nint Foo(int x) { return x < -1 ? 17 : 19; }\n```\nThen state its branch results for -2 and -1.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-2",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-3",
+      "question": "What if x is -1?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-4",
+      "question": "Correction: for the next example only, the guard is x <= -1. Does x=-1 select 17 or 19?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-5",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-6",
+      "question": "For CUDA threads numbered zero through 44 in a one-dimensional block, how many warps exist and how many lanes are active in the last warp?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-7",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-8",
+      "question": "What if the block has 64 threads instead?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-9",
+      "question": "Can a CUDA event that has never been recorded establish successful completion of earlier work? Explain precisely.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-10",
+      "question": "A divergent block executes __syncthreads only in the branch threadIdx.x < 7. Is this a safe general block barrier? State the requirement.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-11",
+      "question": "For exactly 10000 elements and 192 threads per block, compute the number of blocks for a conventional ceiling-divided launch.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-12",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-13",
+      "question": "In binary32 with rounding after each addition and no reassociation, compare (16777216 + -16777216) + 1 with 16777216 + (-16777216 + 1).",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-14",
+      "question": "Find the lower median of [9, 1, 4, 4, 7, 2] and explain how you select it.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-15",
+      "question": "A client retries a charge operation after a network timeout. How does a durable idempotency key avoid a duplicate charge, and what must be atomic?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-16",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-17",
+      "question": "Give the exact sequence of BFS visits starting at A when adjacency lists are A:[B,C], B:[D], C:[D], D:[]. Mark visited on enqueue.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-18",
+      "question": "What if D is marked visited only on dequeue?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-19",
+      "question": "For an initially empty stack, process push 3, push 8, pop, push 5, pop, pop. State the pop results in order.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-20",
+      "question": "Explain why a failed compare-and-swap must retry using the updated observed value rather than its obsolete expectation.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-21",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-22",
+      "question": "For a queue capacity 3 that rejects overflow, enqueue [10, 20, 30, 40] then dequeue twice. State both rejected item and dequeued items.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-23",
+      "question": "An exact calculation has initial value -17 and adds 9 then subtracts -4. State the final value.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-24",
+      "question": "Why does a transaction that commits before an external HTTP side effect need an outbox for reliable eventual delivery?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-25",
+      "question": "Repeat the exact original Foo code from the first exchange in one code fence, byte-for-byte. Preserve capitalization, guard, signs and constants. Do not use the later guard variant.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-26",
+      "question": "Implement a complete C++17 bounded FIFO class with push, pop, capacity 17 and overflow rejection. Include a test main that asserts empty-pop failure, fills all 17 slots, rejects one overflow, drains in FIFO order, and exercises wraparound. Give a useful opening before the full code.",
+      "settle": false,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-27",
+      "question": "Why?",
+      "settle": true,
+      "afterDisplayed": true,
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "context-28",
+      "question": "Actually switch to database isolation. Explain the difference between snapshot isolation and serializability with a concrete write-skew example.",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-29",
+      "question": "Correction: use a single atomic transaction for the entire read-check-write invariant. Does that alone guarantee serializability under snapshot isolation?",
+      "settle": true,
+      "ordinaryFollowup": false
+    },
+    {
+      "name": "context-30",
+      "question": "Why?",
+      "settle": true,
+      "ordinaryFollowup": true
+    }
+  ]
+}

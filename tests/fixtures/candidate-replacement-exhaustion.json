@@ -1,0 +1,4024 @@
+{
+  "baseline": "c704a75",
+  "failedCandidate": "c359e4d",
+  "journalSha256": "ad8e9f87ea8e74960b6de04c92d28f7d28446be1da33ab59ba253faea781cccd",
+  "waveSha256": "403b5cef8bc8ca34e2ff9488a89d968e92882ec44f1c68b216ef85df602eaaa4",
+  "sourceQuestion": "Your bounds separated observations from assumptions. Switch to cooling: two kilograms of well-mixed water starts at sixty degrees Celsius in a room held at twenty degrees. It reaches forty degrees after ten minutes and thirty after twenty. Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible; no evaporation or internal heating occurs. Heat-loss power equals constant conductance times water temperature minus room temperature. Derive conductance with units. [Interviewer pause: one point five seconds.] A later run starts at sixty and reaches twenty-seven after twenty minutes; its constant ambient temperature was not logged. Construct two exact explanations, one retaining conductance and one retaining twenty-degree ambient. What experiment distinguishes them?",
+  "selectedContext": "MEETING SUMMARY (selected relevant memory)\nSummary: A technical interview presented a hypothetical refill delivery service facing increasing customer reports of unreliability. The interviewer referenced a proposal to compare complaints with delivery performance, then supplied data for two consecutive 28-day periods. Late orders increased while complaint-producing orders decreased; overlap between the measures is unknown. The interviewer requested rate calculations, interpretation of reliability, limits on conclusions about complaints among late orders, and additional evidence needed before choosing an intervention. No intervention was selected.\nFact: The interviewer described the systems problems as hypothetical and instructed the candidate to ask for missing information rather than invent it.\nFact: The interviewer referenced the candidate's proposal to compare complaints with delivery performance.\nFact: Each of two consecutive 28-day periods had 12,000 orders.\nFact: Late means delivered after the promised calendar date.\nFact: Timestamps are complete.\nFact: Late orders increased from 900 in the first period to 1,440 in the second.\nFact: Complaint-producing orders decreased from 600 in the first period to 540 in the second.\nFact: Each order counts at most once in each measure.\nFact: Overlap between late orders and complaint-producing orders is unknown.\nDate: Two consecutive 28-day periods were compared; no calendar dates were supplied.\nPerson: REMOTE: unnamed technical interviewer.\nPerson: Unnamed interview candidate, addressed by the interviewer.\nOpen question: What are the late-order and complaint-producing-order rates in each period, and their percentage-point changes?\nOpen question: What can be concluded about reliability?\nOpen question: What cannot be concluded about complaints among late orders?\nOpen question: What additional evidence should be requested before choosing an intervention?\nOpen question: How should the service determine what is happening and what to address first, and why?\n\nEARLIER CONVERSATION AWAITING COMPRESSION (selected excerpts)\nREMOTE: you correctly calculated first period lateness as seven point five percent\nREMOTE: Interviewer pause\nREMOTE: one point five seconds\nREMOTE: Alice and Bob run concurrently\nREMOTE: Interviewer pause\nREMOTE: one point five seconds\nREMOTE: interviewer pause one point five seconds\nREMOTE: supply executable SQL for one doctor's transaction\nREMOTE: you distinguish direct conflicts from\nREMOTE: twenty thousand visitors split equally\nREMOTE: control records eight hundred purchases\nREMOTE: treatment nine hundred twenty\nREMOTE: each purchase contributes thirty currency units\nREMOTE: treatment costs zero point four currency units per assigned visitor\nREMOTE: incremental contribution per treatment assigned visitor\nREMOTE: and its approximate ninety five percent interval\nREMOTE: interview or pause\nREMOTE: one point five seconds\nREMOTE: crucially\nREMOTE: one thousand treatment assigned visitors never saw the offer\nREMOTE: their seventy purchases are included in the nine hundred twenty\nREMOTE: a colleague excludes them and claims a stronger causal profit estimate\nREMOTE: your selected viewer calculation subtracted zero point four currency units per viewer\nREMOTE: all ten thousand treatment assignments incurred the cost\nREMOTE: if the colleague divides total treatment cost by nine thousand viewers\nREMOTE: interviewer pause\nREMOTE: one point five seconds\nREMOTE: now suppose fixing rendering leaves the existing viewer's outcomes unchanged and affects only the one thousand non viewers\n\nRECENT CONVERSATION (selected excerpts)\nREMOTE: full delivery still costs zero point four currency units per assignment\nREMOTE: with no assumptions about those nonviewers purchase responses\nREMOTE: derive sharp bounds on full delivery incremental contribution per assigned visitor\nREMOTE: using observed control conversion as the benchmark\nREMOTE: show outcome configurations attaining both endpoints\nREMOTE: your negative zero point zero one one is correctly rounded\nREMOTE: complete the noncausality explanation\nREMOTE: then implement\nREMOTE: executable Python three code named bounds for this problem\nREMOTE: accept control assignments\nREMOTE: control purchases treatment assignments\nREMOTE: existing viewers and viewer purchases as integer arguments\nREMOTE: reject Booleans\nREMOTE: impossible counts\nREMOTE: and nonpositive assignment totals with value error\nREMOTE: keep thirty currency units per purchase and zero point four currency units per treatment assignment\nREMOTE: return exact lower and upper contribution bounds using fraction\nREMOTE: allowing every nonviewer either purchase outcome while existing viewers remain unchanged\nREMOTE: apply it to our counts\nREMOTE: exhibit endpoint configurations\nREMOTE: and explain why the bounds are sharp\nREMOTE: and if\nREMOTE: uh that thing changes\nREMOTE: the unchanged viewer assumption changes\nREMOTE: fixing rendering may alter purchase outcomes for at most two hundred of the nine thousand existing viewers\nREMOTE: previously\nREMOTE: eight hundred fifty viewers purchased\nREMOTE: the one thousand non viewers remain unrestricted\nREMOTE: control still has eight hundred purchases among ten thousand assignments\nREMOTE: treatment still costs zero point four currency units per assignment\nREMOTE: each purchase contributes thirty\nREMOTE: interviewer pause\nREMOTE: one point five seconds\nREMOTE: write executable Python three bounce accepting the five earlier counts plus a nonnegative integer change budget\nREMOTE: reject Booleans and invalid counts with value error return exact fraction endpoints\nREMOTE: derive the sharp endpoints for these figures and give attaining configurations\nREMOTE: your function must also handle budgets larger than the viewer count\nREMOTE: conversation\nREMOTE: no reply needed\nREMOTE: the room booking has moved to tomorrow\nREMOTE: I will send the address later\nREMOTE: we are still waiting for the others\n\nPRIOR COPILOT SUGGESTIONS AND EXACT CODE (may contain mistakes; not accepted meeting facts; later spoken corrections take precedence)\nQUESTION: the isolation level changes to postgr ializable they still update different rows. Since those writes cannot conflict both transactions must still commit correct explain precisely interviewer pause one point five seconds supply executable SQL for one doctor's transaction assuming doctors has a text primary key named name and a non nullion named on underscore call initially Alice and Bob are both on call Every writer follows your protocol identify the state requiring retry exactly which operations must rerun and why retrying only the failed statement cannot preserve the invariant\nSUGGESTED ANSWER:\nNo. Interpreting those terms as PostgreSQL SERIALIZABLE and a non-null boolean named on_call: different-row updates avoid a direct write–write conflict, but not a serialization conflict.\n\nIf both transactions count two doctors, Alice reads the Bob row that Bob subsequently changes, creating an Alice-to-Bob read–write dependency. Bob reads the Alice row that Alice changes, creating the reverse dependency. This cycle has no equivalent serial ordering, so PostgreSQL cannot let both transactions commit that execution; a transaction receives a serialization failure.\n\nFor Alice, execute this transaction; Bob uses the same code with 'Bob':\n\n```sql\nBEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;\n\nDO $$\nDECLARE\n    on_call_count bigint;\nBEGIN\n    SELECT COUNT(*) INTO on_call_count\n    FROM doctors\n    WHERE on_call;\n\n    IF on_call_count > 1 THEN\n        UPDATE doctors\n        SET on_call = FALSE\n        WHERE name = 'Alice';\n    END IF;\nEND;\n$$;\n\nCOMMIT;\n```\n\nThe retryable SQLSTATE is 40001, serialization_failure, and it can occur during a statement or at COMMIT. The client must roll back if necessary and rerun the entire transaction: BEGIN, the count, the conditional decision, the update if still warranted, and COMMIT, using a fresh snapshot.\n\nRetrying only the failed statement is insufficient: the transaction is aborted, and its earlier count and decision are no longer valid grounds for an update. Reissuing just the update in a new transaction could turn off the last on-call doctor because it skips the required check.\n\nCorrectness follows from serial equivalence: starting with two on-call doctors, the first transaction can leave one; the next counts one and does not update. With every writer following this protocol at SERIALIZABLE isolation, committed transactions preserve at least one on-call doctor.\n\nQUESTION: and if uh that thing changes\nSUGGESTED ANSWER:\nWhich part changes—the counts, the cost per assignment, or the assumption that existing viewers’ outcomes stay unchanged?\n\nQUESTION: the unchanged viewer assumption changes fixing rendering may alter purchase outcomes for at most two hundred of the nine thousand existing viewers previously eight hundred fifty viewers purchased the one thousand non viewers remain unrestricted control still has eight hundred purchases among ten thousand assignments treatment still costs zero point four currency units per assignment each purchase contributes thirty interviewer pause one point five seconds write executable Python three bounce accepting the five earlier counts plus a nonnegative integer change budget reject Booleans and invalid counts with value error return exact fraction endpoints derive the sharp endpoints for these figures and give attaining configurations your function must also handle budgets larger than the viewer count\nSUGGESTED ANSWER:\nInterpreting “bounce” as bounds: the sharp endpoints are −17/20 and 67/20, or −0.85 and +3.35 currency units per assignment. Budgets larger than the viewer count are valid; feasible purchase counts are capped at zero and the viewer total.\n\n```python\nfrom fractions import Fraction\n\n\ndef bounds(control_assignments, control_purchases,\n           treatment_assignments, existing_viewers,\n           viewer_purchases, change_budget):\n    values = (control_assignments, control_purchases,\n              treatment_assignments, existing_viewers,\n              viewer_purchases, change_budget)\n    if any(isinstance(x, bool) or not isinstance(x, int)\n           for x in values):\n        raise ValueError(\"Arguments must be integers, not Booleans\")\n    if control_assignments <= 0 or treatment_assignments <= 0:\n        raise ValueError(\"Assignment totals must be positive\")\n    if not 0 <= control_purchases <= control_assignments:\n        raise ValueError(\"Invalid control purchase count\")\n    if not 0 <= existing_viewers <= treatment_assignments:\n        raise ValueError(\"Invalid viewer count\")\n    if not 0 <= viewer_purchases <= existing_viewers:\n        raise ValueError(\"Invalid viewer purchase count\")\n    if change_budget < 0:\n        raise ValueError(\"Change budget must be nonnegative\")\n\n    nonviewers = treatment_assignments - existing_viewers\n    minimum = max(0, viewer_purchases - change_budget)\n    maximum = (min(existing_viewers, viewer_purchases + change_budget)\n               + nonviewers)\n    benchmark = Fraction(control_purchases, control_assignments)\n    cost = Fraction(2, 5)\n    lower = 30 * (Fraction(minimum, treatment_assignments) - benchmark) - cost\n    upper = 30 * (Fraction(maximum, treatment_assignments) - benchmark) - cost\n    return lower, upper\n\n\nif __name__ == \"__main__\":\n    result = bounds(10000, 800, 10000, 9000, 850, 200)\n    assert result == (Fraction(-17, 20), Fraction(67, 20))\n    assert bounds(10000, 800, 10000, 9000, 850, 0) == (\n        Fraction(-1, 4), Fraction(11, 4)\n    )\n    assert bounds(10000, 800, 10000, 9000, 850, 10000) == (\n        Fraction(-14, 5), Fraction(136, 5)\n    )\n    print(result)\n```\n\nSave as bounds.py and run `python3 bounds.py`; no external dependencies are required.\n\nWith budget 200, existing-viewer purchases range from 850 − 200 = 650 to 850 + 200 = 1,050. Adding unrestricted nonviewer purchases gives 650 to 2,050 total purchases. Thus:\nLower = 30 × (650/10,000 − 800/10,000) − 2/5 = −17/20.\nUpper = 30 × (2,050/10,000 − 800/10,000) − 2/5 = 67/20.\n\nThe lower configuration flips 200 existing purchasers to nonpurchasers and has no nonviewers purchase. The upper flips 200 existing nonpurchasers to purchasers and has all 1,000 nonviewers purchase. Each changes exactly 200 existing outcomes, so both endpoints are attainable and sharp.\n\nGenerally, the minimum flips at most min(change_budget, viewer_purchases) purchasers; the maximum flips at most min(change_budget, existing_viewers − viewer_purchases) nonpurchasers. This also establishes correctness for zero viewers, zero budgets, and budgets exceeding the viewer count.",
+  "expectedRecognizedQuestion": "Your bounds separated observations from assumptions Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units Interviewer pause one point five seconds a later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+  "failure": "Codex question replacement budget exhausted",
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": false,
+        "source": "remote",
+        "timestamp": 312,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723869615
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bound",
+        "startedAt": 312,
+        "endedAt": 1610,
+        "final": false
+      },
+      "receivedHostMs": 1791723870604
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bound",
+        "startedAt": 312,
+        "endedAt": 1770,
+        "final": false
+      },
+      "receivedHostMs": 1791723870752
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separ",
+        "startedAt": 312,
+        "endedAt": 1930,
+        "final": false
+      },
+      "receivedHostMs": 1791723870917
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated",
+        "startedAt": 312,
+        "endedAt": 2090,
+        "final": false
+      },
+      "receivedHostMs": 1791723871078
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated obser",
+        "startedAt": 312,
+        "endedAt": 2250,
+        "final": false
+      },
+      "receivedHostMs": 1791723871241
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observat",
+        "startedAt": 312,
+        "endedAt": 2410,
+        "final": false
+      },
+      "receivedHostMs": 1791723871394
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observat",
+        "startedAt": 312,
+        "endedAt": 2570,
+        "final": false
+      },
+      "receivedHostMs": 1791723871554
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations",
+        "startedAt": 312,
+        "endedAt": 2730,
+        "final": false
+      },
+      "receivedHostMs": 1791723871717
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from",
+        "startedAt": 312,
+        "endedAt": 2890,
+        "final": false
+      },
+      "receivedHostMs": 1791723871880
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from",
+        "startedAt": 312,
+        "endedAt": 3050,
+        "final": false
+      },
+      "receivedHostMs": 1791723872030
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumpt",
+        "startedAt": 312,
+        "endedAt": 3210,
+        "final": false
+      },
+      "receivedHostMs": 1791723872198
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumptions",
+        "startedAt": 312,
+        "endedAt": 3370,
+        "final": false
+      },
+      "receivedHostMs": 1791723872358
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 3501,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 3342
+      },
+      "receivedHostMs": 1791723872461
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumptions",
+        "startedAt": 312,
+        "endedAt": 3530,
+        "final": false
+      },
+      "receivedHostMs": 1791723872517
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumptions",
+        "startedAt": 312,
+        "endedAt": 3690,
+        "final": false
+      },
+      "receivedHostMs": 1791723872671
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 3342
+      },
+      "receivedHostMs": 1791723872819
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumptions",
+        "startedAt": 312,
+        "endedAt": 3850,
+        "final": false
+      },
+      "receivedHostMs": 1791723872832
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-3e549e63-72ba-4499-a32c-75131e7e08ae",
+        "source": "remote",
+        "text": "Your bounds separated observations from assumptions",
+        "startedAt": 312,
+        "endedAt": 4010,
+        "final": true
+      },
+      "receivedHostMs": 1791723872995
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 4037
+      },
+      "receivedHostMs": 1791723872997
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 4002,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723873304
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch",
+        "startedAt": 4002,
+        "endedAt": 4970,
+        "final": false
+      },
+      "receivedHostMs": 1791723873959
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to",
+        "startedAt": 4002,
+        "endedAt": 5130,
+        "final": false
+      },
+      "receivedHostMs": 1791723874120
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to cool",
+        "startedAt": 4002,
+        "endedAt": 5290,
+        "final": false
+      },
+      "receivedHostMs": 1791723874275
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 5392,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 5232
+      },
+      "receivedHostMs": 1791723874352
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to cooling",
+        "startedAt": 4002,
+        "endedAt": 5450,
+        "final": false
+      },
+      "receivedHostMs": 1791723874434
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to cooling",
+        "startedAt": 4002,
+        "endedAt": 5610,
+        "final": false
+      },
+      "receivedHostMs": 1791723874594
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 5690,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 5652
+      },
+      "receivedHostMs": 1791723874649
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to cooling",
+        "startedAt": 4002,
+        "endedAt": 5770,
+        "final": false
+      },
+      "receivedHostMs": 1791723874757
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-6c757d66-c2ff-41b9-9386-feb8c1bf2e22",
+        "source": "remote",
+        "text": "Switch to cooling",
+        "startedAt": 4002,
+        "endedAt": 5930,
+        "final": true
+      },
+      "receivedHostMs": 1791723874911
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two",
+        "startedAt": 4002,
+        "endedAt": 6410,
+        "final": false
+      },
+      "receivedHostMs": 1791723875397
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilog",
+        "startedAt": 4002,
+        "endedAt": 6570,
+        "final": false
+      },
+      "receivedHostMs": 1791723875560
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms",
+        "startedAt": 4002,
+        "endedAt": 6730,
+        "final": false
+      },
+      "receivedHostMs": 1791723875722
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of",
+        "startedAt": 4002,
+        "endedAt": 6890,
+        "final": false
+      },
+      "receivedHostMs": 1791723875875
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of",
+        "startedAt": 4002,
+        "endedAt": 7050,
+        "final": false
+      },
+      "receivedHostMs": 1791723876037
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of",
+        "startedAt": 4002,
+        "endedAt": 7210,
+        "final": false
+      },
+      "receivedHostMs": 1791723876198
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mix",
+        "startedAt": 4002,
+        "endedAt": 7370,
+        "final": false
+      },
+      "receivedHostMs": 1791723876363
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed",
+        "startedAt": 4002,
+        "endedAt": 7530,
+        "final": false
+      },
+      "receivedHostMs": 1791723876513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed",
+        "startedAt": 4002,
+        "endedAt": 7690,
+        "final": false
+      },
+      "receivedHostMs": 1791723876673
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water",
+        "startedAt": 4002,
+        "endedAt": 7850,
+        "final": false
+      },
+      "receivedHostMs": 1791723876838
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water",
+        "startedAt": 4002,
+        "endedAt": 8010,
+        "final": false
+      },
+      "receivedHostMs": 1791723876998
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts",
+        "startedAt": 4002,
+        "endedAt": 8170,
+        "final": false
+      },
+      "receivedHostMs": 1791723877153
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts",
+        "startedAt": 4002,
+        "endedAt": 8330,
+        "final": false
+      },
+      "receivedHostMs": 1791723877313
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at",
+        "startedAt": 4002,
+        "endedAt": 8490,
+        "final": false
+      },
+      "receivedHostMs": 1791723877477
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty",
+        "startedAt": 4002,
+        "endedAt": 8650,
+        "final": false
+      },
+      "receivedHostMs": 1791723877641
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty",
+        "startedAt": 4002,
+        "endedAt": 8810,
+        "final": false
+      },
+      "receivedHostMs": 1791723877799
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty deg",
+        "startedAt": 4002,
+        "endedAt": 8970,
+        "final": false
+      },
+      "receivedHostMs": 1791723877955
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees",
+        "startedAt": 4002,
+        "endedAt": 9130,
+        "final": false
+      },
+      "receivedHostMs": 1791723878117
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees",
+        "startedAt": 4002,
+        "endedAt": 9290,
+        "final": false
+      },
+      "receivedHostMs": 1791723878278
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Cels",
+        "startedAt": 4002,
+        "endedAt": 9450,
+        "final": false
+      },
+      "receivedHostMs": 1791723878439
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius",
+        "startedAt": 4002,
+        "endedAt": 9610,
+        "final": false
+      },
+      "receivedHostMs": 1791723878601
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius",
+        "startedAt": 4002,
+        "endedAt": 9770,
+        "final": false
+      },
+      "receivedHostMs": 1791723878751
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius",
+        "startedAt": 4002,
+        "endedAt": 9930,
+        "final": false
+      },
+      "receivedHostMs": 1791723878915
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a",
+        "startedAt": 4002,
+        "endedAt": 10090,
+        "final": false
+      },
+      "receivedHostMs": 1791723879078
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room",
+        "startedAt": 4002,
+        "endedAt": 10250,
+        "final": false
+      },
+      "receivedHostMs": 1791723879240
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held",
+        "startedAt": 4002,
+        "endedAt": 10410,
+        "final": false
+      },
+      "receivedHostMs": 1791723879402
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held",
+        "startedAt": 4002,
+        "endedAt": 10570,
+        "final": false
+      },
+      "receivedHostMs": 1791723879553
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at",
+        "startedAt": 4002,
+        "endedAt": 10730,
+        "final": false
+      },
+      "receivedHostMs": 1791723879714
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty",
+        "startedAt": 4002,
+        "endedAt": 10890,
+        "final": false
+      },
+      "receivedHostMs": 1791723879879
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty",
+        "startedAt": 4002,
+        "endedAt": 11050,
+        "final": false
+      },
+      "receivedHostMs": 1791723880037
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty deg",
+        "startedAt": 4002,
+        "endedAt": 11210,
+        "final": false
+      },
+      "receivedHostMs": 1791723880200
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees",
+        "startedAt": 4002,
+        "endedAt": 11370,
+        "final": false
+      },
+      "receivedHostMs": 1791723880361
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 11453,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 11292
+      },
+      "receivedHostMs": 1791723880413
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees",
+        "startedAt": 4002,
+        "endedAt": 11530,
+        "final": false
+      },
+      "receivedHostMs": 1791723880513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees",
+        "startedAt": 4002,
+        "endedAt": 11690,
+        "final": false
+      },
+      "receivedHostMs": 1791723880674
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 11292
+      },
+      "receivedHostMs": 1791723880770
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-f752586d-57de-4838-a7de-0966fcdd9f2e",
+        "source": "remote",
+        "text": "two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees",
+        "startedAt": 4002,
+        "endedAt": 11850,
+        "final": true
+      },
+      "receivedHostMs": 1791723880834
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 11878
+      },
+      "receivedHostMs": 1791723880837
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 11952,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723881255
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It",
+        "startedAt": 11952,
+        "endedAt": 12490,
+        "final": false
+      },
+      "receivedHostMs": 1791723881478
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It",
+        "startedAt": 11952,
+        "endedAt": 12650,
+        "final": false
+      },
+      "receivedHostMs": 1791723881637
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches",
+        "startedAt": 11952,
+        "endedAt": 12810,
+        "final": false
+      },
+      "receivedHostMs": 1791723881800
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches",
+        "startedAt": 11952,
+        "endedAt": 12970,
+        "final": false
+      },
+      "receivedHostMs": 1791723881951
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches",
+        "startedAt": 11952,
+        "endedAt": 13130,
+        "final": false
+      },
+      "receivedHostMs": 1791723882111
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty",
+        "startedAt": 11952,
+        "endedAt": 13290,
+        "final": false
+      },
+      "receivedHostMs": 1791723882275
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty",
+        "startedAt": 11952,
+        "endedAt": 13450,
+        "final": false
+      },
+      "receivedHostMs": 1791723882433
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty deg",
+        "startedAt": 11952,
+        "endedAt": 13610,
+        "final": false
+      },
+      "receivedHostMs": 1791723882598
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees",
+        "startedAt": 11952,
+        "endedAt": 13770,
+        "final": false
+      },
+      "receivedHostMs": 1791723882759
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees",
+        "startedAt": 11952,
+        "endedAt": 13930,
+        "final": false
+      },
+      "receivedHostMs": 1791723882911
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after",
+        "startedAt": 11952,
+        "endedAt": 14090,
+        "final": false
+      },
+      "receivedHostMs": 1791723883078
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after",
+        "startedAt": 11952,
+        "endedAt": 14250,
+        "final": false
+      },
+      "receivedHostMs": 1791723883237
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten",
+        "startedAt": 11952,
+        "endedAt": 14410,
+        "final": false
+      },
+      "receivedHostMs": 1791723883403
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes",
+        "startedAt": 11952,
+        "endedAt": 14570,
+        "final": false
+      },
+      "receivedHostMs": 1791723883555
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes",
+        "startedAt": 11952,
+        "endedAt": 14730,
+        "final": false
+      },
+      "receivedHostMs": 1791723883715
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes",
+        "startedAt": 11952,
+        "endedAt": 14890,
+        "final": false
+      },
+      "receivedHostMs": 1791723883878
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and",
+        "startedAt": 11952,
+        "endedAt": 15050,
+        "final": false
+      },
+      "receivedHostMs": 1791723884039
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty",
+        "startedAt": 11952,
+        "endedAt": 15210,
+        "final": false
+      },
+      "receivedHostMs": 1791723884194
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty",
+        "startedAt": 11952,
+        "endedAt": 15370,
+        "final": false
+      },
+      "receivedHostMs": 1791723884353
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after",
+        "startedAt": 11952,
+        "endedAt": 15530,
+        "final": false
+      },
+      "receivedHostMs": 1791723884518
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after",
+        "startedAt": 11952,
+        "endedAt": 15690,
+        "final": false
+      },
+      "receivedHostMs": 1791723884676
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after twenty",
+        "startedAt": 11952,
+        "endedAt": 15850,
+        "final": false
+      },
+      "receivedHostMs": 1791723884840
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 16008,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 15852
+      },
+      "receivedHostMs": 1791723884968
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after twenty",
+        "startedAt": 11952,
+        "endedAt": 16010,
+        "final": false
+      },
+      "receivedHostMs": 1791723884999
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after twenty",
+        "startedAt": 11952,
+        "endedAt": 16170,
+        "final": false
+      },
+      "receivedHostMs": 1791723885151
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after twenty",
+        "startedAt": 11952,
+        "endedAt": 16330,
+        "final": false
+      },
+      "receivedHostMs": 1791723885311
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 15852
+      },
+      "receivedHostMs": 1791723885332
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d9ed5599-575e-4c7a-86b1-0ccdfbb03f36",
+        "source": "remote",
+        "text": "It reaches forty degrees after ten minutes and thirty after twenty",
+        "startedAt": 11952,
+        "endedAt": 16490,
+        "final": true
+      },
+      "receivedHostMs": 1791723885472
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 16516
+      },
+      "receivedHostMs": 1791723885476
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 16542,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723885840
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific",
+        "startedAt": 16542,
+        "endedAt": 17610,
+        "final": false
+      },
+      "receivedHostMs": 1791723886600
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat",
+        "startedAt": 16542,
+        "endedAt": 17770,
+        "final": false
+      },
+      "receivedHostMs": 1791723886759
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is",
+        "startedAt": 16542,
+        "endedAt": 17930,
+        "final": false
+      },
+      "receivedHostMs": 1791723886912
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is",
+        "startedAt": 16542,
+        "endedAt": 18090,
+        "final": false
+      },
+      "receivedHostMs": 1791723887074
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four",
+        "startedAt": 16542,
+        "endedAt": 18250,
+        "final": false
+      },
+      "receivedHostMs": 1791723887239
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand",
+        "startedAt": 16542,
+        "endedAt": 18410,
+        "final": false
+      },
+      "receivedHostMs": 1791723887402
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand",
+        "startedAt": 16542,
+        "endedAt": 18570,
+        "final": false
+      },
+      "receivedHostMs": 1791723887554
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand",
+        "startedAt": 16542,
+        "endedAt": 18730,
+        "final": false
+      },
+      "receivedHostMs": 1791723887717
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two",
+        "startedAt": 16542,
+        "endedAt": 18890,
+        "final": false
+      },
+      "receivedHostMs": 1791723887881
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred",
+        "startedAt": 16542,
+        "endedAt": 19050,
+        "final": false
+      },
+      "receivedHostMs": 1791723888037
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred",
+        "startedAt": 16542,
+        "endedAt": 19210,
+        "final": false
+      },
+      "receivedHostMs": 1791723888196
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred",
+        "startedAt": 16542,
+        "endedAt": 19370,
+        "final": false
+      },
+      "receivedHostMs": 1791723888357
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred jou",
+        "startedAt": 16542,
+        "endedAt": 19530,
+        "final": false
+      },
+      "receivedHostMs": 1791723888513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred jou",
+        "startedAt": 16542,
+        "endedAt": 19690,
+        "final": false
+      },
+      "receivedHostMs": 1791723888674
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per",
+        "startedAt": 16542,
+        "endedAt": 19850,
+        "final": false
+      },
+      "receivedHostMs": 1791723888838
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kil",
+        "startedAt": 16542,
+        "endedAt": 20010,
+        "final": false
+      },
+      "receivedHostMs": 1791723889001
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilog",
+        "startedAt": 16542,
+        "endedAt": 20170,
+        "final": false
+      },
+      "receivedHostMs": 1791723889154
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram",
+        "startedAt": 16542,
+        "endedAt": 20330,
+        "final": false
+      },
+      "receivedHostMs": 1791723889317
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram",
+        "startedAt": 16542,
+        "endedAt": 20490,
+        "final": false
+      },
+      "receivedHostMs": 1791723889477
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per",
+        "startedAt": 16542,
+        "endedAt": 20650,
+        "final": false
+      },
+      "receivedHostMs": 1791723889638
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per",
+        "startedAt": 16542,
+        "endedAt": 20810,
+        "final": false
+      },
+      "receivedHostMs": 1791723889791
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per kelvin",
+        "startedAt": 16542,
+        "endedAt": 20970,
+        "final": false
+      },
+      "receivedHostMs": 1791723889959
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 21024,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 20862
+      },
+      "receivedHostMs": 1791723889984
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per kelvin.",
+        "startedAt": 16542,
+        "endedAt": 21130,
+        "final": false
+      },
+      "receivedHostMs": 1791723890117
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per kelvin.",
+        "startedAt": 16542,
+        "endedAt": 21290,
+        "final": false
+      },
+      "receivedHostMs": 1791723890279
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 20862
+      },
+      "receivedHostMs": 1791723890341
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per kelvin.",
+        "startedAt": 16542,
+        "endedAt": 21450,
+        "final": false
+      },
+      "receivedHostMs": 1791723890431
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-28a27e71-a5fd-4df6-b397-3d222889bd25",
+        "source": "remote",
+        "text": "Specific heat is four thousand two hundred joules per kilogram per kelvin.",
+        "startedAt": 16542,
+        "endedAt": 21610,
+        "final": true
+      },
+      "receivedHostMs": 1791723890592
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 21637
+      },
+      "receivedHostMs": 1791723890596
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 21522,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723890818
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel",
+        "startedAt": 21522,
+        "endedAt": 22410,
+        "final": false
+      },
+      "receivedHostMs": 1791723891397
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat",
+        "startedAt": 21522,
+        "endedAt": 22570,
+        "final": false
+      },
+      "receivedHostMs": 1791723891557
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat",
+        "startedAt": 21522,
+        "endedAt": 22730,
+        "final": false
+      },
+      "receivedHostMs": 1791723891717
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capac",
+        "startedAt": 21522,
+        "endedAt": 22890,
+        "final": false
+      },
+      "receivedHostMs": 1791723891882
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capac",
+        "startedAt": 21522,
+        "endedAt": 23050,
+        "final": false
+      },
+      "receivedHostMs": 1791723892034
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity",
+        "startedAt": 21522,
+        "endedAt": 23210,
+        "final": false
+      },
+      "receivedHostMs": 1791723892199
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is",
+        "startedAt": 21522,
+        "endedAt": 23370,
+        "final": false
+      },
+      "receivedHostMs": 1791723892353
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is",
+        "startedAt": 21522,
+        "endedAt": 23530,
+        "final": false
+      },
+      "receivedHostMs": 1791723892513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is",
+        "startedAt": 21522,
+        "endedAt": 23690,
+        "final": false
+      },
+      "receivedHostMs": 1791723892677
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is neglig",
+        "startedAt": 21522,
+        "endedAt": 23850,
+        "final": false
+      },
+      "receivedHostMs": 1791723892841
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is negligible",
+        "startedAt": 21522,
+        "endedAt": 24010,
+        "final": false
+      },
+      "receivedHostMs": 1791723893000
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 24085,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 23922
+      },
+      "receivedHostMs": 1791723893045
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is negligible",
+        "startedAt": 21522,
+        "endedAt": 24170,
+        "final": false
+      },
+      "receivedHostMs": 1791723893152
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is negligible",
+        "startedAt": 21522,
+        "endedAt": 24330,
+        "final": false
+      },
+      "receivedHostMs": 1791723893314
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 24384,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 24342
+      },
+      "receivedHostMs": 1791723893344
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4d5c4eb5-d738-4a7f-bdc7-16a1c13cfecb",
+        "source": "remote",
+        "text": "Vessel heat capacity is negligible",
+        "startedAt": 21522,
+        "endedAt": 24490,
+        "final": true
+      },
+      "receivedHostMs": 1791723893477
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evap",
+        "startedAt": 21522,
+        "endedAt": 25130,
+        "final": false
+      },
+      "receivedHostMs": 1791723894120
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evapor",
+        "startedAt": 21522,
+        "endedAt": 25290,
+        "final": false
+      },
+      "receivedHostMs": 1791723894279
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation",
+        "startedAt": 21522,
+        "endedAt": 25450,
+        "final": false
+      },
+      "receivedHostMs": 1791723894442
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation",
+        "startedAt": 21522,
+        "endedAt": 25610,
+        "final": false
+      },
+      "receivedHostMs": 1791723894592
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or",
+        "startedAt": 21522,
+        "endedAt": 25770,
+        "final": false
+      },
+      "receivedHostMs": 1791723894754
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or",
+        "startedAt": 21522,
+        "endedAt": 25930,
+        "final": false
+      },
+      "receivedHostMs": 1791723894916
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal",
+        "startedAt": 21522,
+        "endedAt": 26090,
+        "final": false
+      },
+      "receivedHostMs": 1791723895081
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal",
+        "startedAt": 21522,
+        "endedAt": 26250,
+        "final": false
+      },
+      "receivedHostMs": 1791723895232
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating",
+        "startedAt": 21522,
+        "endedAt": 26410,
+        "final": false
+      },
+      "receivedHostMs": 1791723895396
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating",
+        "startedAt": 21522,
+        "endedAt": 26570,
+        "final": false
+      },
+      "receivedHostMs": 1791723895556
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occ",
+        "startedAt": 21522,
+        "endedAt": 26730,
+        "final": false
+      },
+      "receivedHostMs": 1791723895719
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occurs",
+        "startedAt": 21522,
+        "endedAt": 26890,
+        "final": false
+      },
+      "receivedHostMs": 1791723895876
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 26993,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 26832
+      },
+      "receivedHostMs": 1791723895953
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occurs",
+        "startedAt": 21522,
+        "endedAt": 27050,
+        "final": false
+      },
+      "receivedHostMs": 1791723896035
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occurs",
+        "startedAt": 21522,
+        "endedAt": 27210,
+        "final": false
+      },
+      "receivedHostMs": 1791723896196
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 26832
+      },
+      "receivedHostMs": 1791723896310
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occurs",
+        "startedAt": 21522,
+        "endedAt": 27370,
+        "final": false
+      },
+      "receivedHostMs": 1791723896357
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-1169c372-da72-4e6d-980d-cbbacc33aec1",
+        "source": "remote",
+        "text": "no evaporation or internal heating occurs",
+        "startedAt": 21522,
+        "endedAt": 27530,
+        "final": true
+      },
+      "receivedHostMs": 1791723896511
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 27557
+      },
+      "receivedHostMs": 1791723896517
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 27522,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723896820
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "He",
+        "startedAt": 27522,
+        "endedAt": 28170,
+        "final": false
+      },
+      "receivedHostMs": 1791723897161
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat",
+        "startedAt": 27522,
+        "endedAt": 28330,
+        "final": false
+      },
+      "receivedHostMs": 1791723897314
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss",
+        "startedAt": 27522,
+        "endedAt": 28490,
+        "final": false
+      },
+      "receivedHostMs": 1791723897478
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss",
+        "startedAt": 27522,
+        "endedAt": 28650,
+        "final": false
+      },
+      "receivedHostMs": 1791723897638
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss",
+        "startedAt": 27522,
+        "endedAt": 28810,
+        "final": false
+      },
+      "receivedHostMs": 1791723897800
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power",
+        "startedAt": 27522,
+        "endedAt": 28970,
+        "final": false
+      },
+      "receivedHostMs": 1791723897955
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals",
+        "startedAt": 27522,
+        "endedAt": 29130,
+        "final": false
+      },
+      "receivedHostMs": 1791723898117
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals",
+        "startedAt": 27522,
+        "endedAt": 29290,
+        "final": false
+      },
+      "receivedHostMs": 1791723898279
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals",
+        "startedAt": 27522,
+        "endedAt": 29450,
+        "final": false
+      },
+      "receivedHostMs": 1791723898434
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals const",
+        "startedAt": 27522,
+        "endedAt": 29610,
+        "final": false
+      },
+      "receivedHostMs": 1791723898597
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant",
+        "startedAt": 27522,
+        "endedAt": 29770,
+        "final": false
+      },
+      "receivedHostMs": 1791723898758
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant",
+        "startedAt": 27522,
+        "endedAt": 29930,
+        "final": false
+      },
+      "receivedHostMs": 1791723898912
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant condu",
+        "startedAt": 27522,
+        "endedAt": 30090,
+        "final": false
+      },
+      "receivedHostMs": 1791723899077
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conduct",
+        "startedAt": 27522,
+        "endedAt": 30250,
+        "final": false
+      },
+      "receivedHostMs": 1791723899239
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance",
+        "startedAt": 27522,
+        "endedAt": 30410,
+        "final": false
+      },
+      "receivedHostMs": 1791723899394
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance tim",
+        "startedAt": 27522,
+        "endedAt": 30570,
+        "final": false
+      },
+      "receivedHostMs": 1791723899556
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times",
+        "startedAt": 27522,
+        "endedAt": 30730,
+        "final": false
+      },
+      "receivedHostMs": 1791723899717
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times",
+        "startedAt": 27522,
+        "endedAt": 30890,
+        "final": false
+      },
+      "receivedHostMs": 1791723899878
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water",
+        "startedAt": 27522,
+        "endedAt": 31050,
+        "final": false
+      },
+      "receivedHostMs": 1791723900034
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water",
+        "startedAt": 27522,
+        "endedAt": 31210,
+        "final": false
+      },
+      "receivedHostMs": 1791723900195
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water tem",
+        "startedAt": 27522,
+        "endedAt": 31370,
+        "final": false
+      },
+      "receivedHostMs": 1791723900358
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperat",
+        "startedAt": 27522,
+        "endedAt": 31530,
+        "final": false
+      },
+      "receivedHostMs": 1791723900521
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature",
+        "startedAt": 27522,
+        "endedAt": 31690,
+        "final": false
+      },
+      "receivedHostMs": 1791723900676
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature",
+        "startedAt": 27522,
+        "endedAt": 31850,
+        "final": false
+      },
+      "receivedHostMs": 1791723900835
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature min",
+        "startedAt": 27522,
+        "endedAt": 32010,
+        "final": false
+      },
+      "receivedHostMs": 1791723900999
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus",
+        "startedAt": 27522,
+        "endedAt": 32170,
+        "final": false
+      },
+      "receivedHostMs": 1791723901153
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus",
+        "startedAt": 27522,
+        "endedAt": 32330,
+        "final": false
+      },
+      "receivedHostMs": 1791723901312
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room",
+        "startedAt": 27522,
+        "endedAt": 32490,
+        "final": false
+      },
+      "receivedHostMs": 1791723901478
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room temperat",
+        "startedAt": 27522,
+        "endedAt": 32650,
+        "final": false
+      },
+      "receivedHostMs": 1791723901639
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 32815,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 32652
+      },
+      "receivedHostMs": 1791723901775
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room temperature",
+        "startedAt": 27522,
+        "endedAt": 32810,
+        "final": false
+      },
+      "receivedHostMs": 1791723901799
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room temperature",
+        "startedAt": 27522,
+        "endedAt": 32970,
+        "final": false
+      },
+      "receivedHostMs": 1791723901958
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room temperature",
+        "startedAt": 27522,
+        "endedAt": 33130,
+        "final": false
+      },
+      "receivedHostMs": 1791723902112
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 32652
+      },
+      "receivedHostMs": 1791723902133
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-8066dc64-eaef-4c75-969d-d0b03fece3a1",
+        "source": "remote",
+        "text": "Heat loss power equals constant conductance times water temperature minus room temperature",
+        "startedAt": 27522,
+        "endedAt": 33290,
+        "final": true
+      },
+      "receivedHostMs": 1791723902275
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 33316
+      },
+      "receivedHostMs": 1791723902276
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 33312,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723902610
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "der",
+        "startedAt": 33312,
+        "endedAt": 34090,
+        "final": false
+      },
+      "receivedHostMs": 1791723903078
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive",
+        "startedAt": 33312,
+        "endedAt": 34250,
+        "final": false
+      },
+      "receivedHostMs": 1791723903238
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive cond",
+        "startedAt": 33312,
+        "endedAt": 34410,
+        "final": false
+      },
+      "receivedHostMs": 1791723903401
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conduct",
+        "startedAt": 33312,
+        "endedAt": 34570,
+        "final": false
+      },
+      "receivedHostMs": 1791723903554
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance",
+        "startedAt": 33312,
+        "endedAt": 34730,
+        "final": false
+      },
+      "receivedHostMs": 1791723903715
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with",
+        "startedAt": 33312,
+        "endedAt": 34890,
+        "final": false
+      },
+      "receivedHostMs": 1791723903876
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with",
+        "startedAt": 33312,
+        "endedAt": 35050,
+        "final": false
+      },
+      "receivedHostMs": 1791723904037
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with un",
+        "startedAt": 33312,
+        "endedAt": 35210,
+        "final": false
+      },
+      "receivedHostMs": 1791723904199
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with units",
+        "startedAt": 33312,
+        "endedAt": 35370,
+        "final": false
+      },
+      "receivedHostMs": 1791723904353
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 35395,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 35232
+      },
+      "receivedHostMs": 1791723904355
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with units",
+        "startedAt": 33312,
+        "endedAt": 35530,
+        "final": false
+      },
+      "receivedHostMs": 1791723904513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with units",
+        "startedAt": 33312,
+        "endedAt": 35690,
+        "final": false
+      },
+      "receivedHostMs": 1791723904674
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 35232
+      },
+      "receivedHostMs": 1791723904711
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-63de8d98-fa3c-437f-a444-625a24795157",
+        "source": "remote",
+        "text": "derive conductance with units",
+        "startedAt": 33312,
+        "endedAt": 35850,
+        "final": true
+      },
+      "receivedHostMs": 1791723904835
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 35877
+      },
+      "receivedHostMs": 1791723904837
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 35862,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723905163
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Inter",
+        "startedAt": 35862,
+        "endedAt": 36810,
+        "final": false
+      },
+      "receivedHostMs": 1791723905801
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interview",
+        "startedAt": 35862,
+        "endedAt": 36970,
+        "final": false
+      },
+      "receivedHostMs": 1791723905961
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer",
+        "startedAt": 35862,
+        "endedAt": 37130,
+        "final": false
+      },
+      "receivedHostMs": 1791723906121
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 37283,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 37122
+      },
+      "receivedHostMs": 1791723906243
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer",
+        "startedAt": 35862,
+        "endedAt": 37290,
+        "final": false
+      },
+      "receivedHostMs": 1791723906275
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer pause",
+        "startedAt": 35862,
+        "endedAt": 37450,
+        "final": false
+      },
+      "receivedHostMs": 1791723906437
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 37578,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 37542
+      },
+      "receivedHostMs": 1791723906538
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer pause",
+        "startedAt": 35862,
+        "endedAt": 37610,
+        "final": false
+      },
+      "receivedHostMs": 1791723906594
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer pause",
+        "startedAt": 35862,
+        "endedAt": 37770,
+        "final": false
+      },
+      "receivedHostMs": 1791723906755
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-208b214d-9d93-4969-b4b6-5c29e57e21db",
+        "source": "remote",
+        "text": "Interviewer pause",
+        "startedAt": 35862,
+        "endedAt": 37930,
+        "final": true
+      },
+      "receivedHostMs": 1791723906916
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one",
+        "startedAt": 35862,
+        "endedAt": 38090,
+        "final": false
+      },
+      "receivedHostMs": 1791723907080
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one",
+        "startedAt": 35862,
+        "endedAt": 38250,
+        "final": false
+      },
+      "receivedHostMs": 1791723907232
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point",
+        "startedAt": 35862,
+        "endedAt": 38410,
+        "final": false
+      },
+      "receivedHostMs": 1791723907397
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five",
+        "startedAt": 35862,
+        "endedAt": 38570,
+        "final": false
+      },
+      "receivedHostMs": 1791723907558
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five",
+        "startedAt": 35862,
+        "endedAt": 38730,
+        "final": false
+      },
+      "receivedHostMs": 1791723907717
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five seco",
+        "startedAt": 35862,
+        "endedAt": 38890,
+        "final": false
+      },
+      "receivedHostMs": 1791723907880
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five seconds",
+        "startedAt": 35862,
+        "endedAt": 39050,
+        "final": false
+      },
+      "receivedHostMs": 1791723908032
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 39169,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 39012
+      },
+      "receivedHostMs": 1791723908129
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five seconds",
+        "startedAt": 35862,
+        "endedAt": 39210,
+        "final": false
+      },
+      "receivedHostMs": 1791723908193
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five seconds",
+        "startedAt": 35862,
+        "endedAt": 39370,
+        "final": false
+      },
+      "receivedHostMs": 1791723908353
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 39012
+      },
+      "receivedHostMs": 1791723908494
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-b806681f-ebeb-4855-b2b8-5fe2f2a5c95c",
+        "source": "remote",
+        "text": "one point five seconds",
+        "startedAt": 35862,
+        "endedAt": 39530,
+        "final": true
+      },
+      "receivedHostMs": 1791723908517
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 39596
+      },
+      "receivedHostMs": 1791723908557
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 39672,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723908967
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later",
+        "startedAt": 39672,
+        "endedAt": 40650,
+        "final": false
+      },
+      "receivedHostMs": 1791723909641
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later",
+        "startedAt": 39672,
+        "endedAt": 40810,
+        "final": false
+      },
+      "receivedHostMs": 1791723909792
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run",
+        "startedAt": 39672,
+        "endedAt": 40970,
+        "final": false
+      },
+      "receivedHostMs": 1791723909955
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run st",
+        "startedAt": 39672,
+        "endedAt": 41130,
+        "final": false
+      },
+      "receivedHostMs": 1791723910117
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts",
+        "startedAt": 39672,
+        "endedAt": 41290,
+        "final": false
+      },
+      "receivedHostMs": 1791723910277
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at",
+        "startedAt": 39672,
+        "endedAt": 41450,
+        "final": false
+      },
+      "receivedHostMs": 1791723910440
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at",
+        "startedAt": 39672,
+        "endedAt": 41610,
+        "final": false
+      },
+      "receivedHostMs": 1791723910591
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty",
+        "startedAt": 39672,
+        "endedAt": 41770,
+        "final": false
+      },
+      "receivedHostMs": 1791723910758
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty",
+        "startedAt": 39672,
+        "endedAt": 41930,
+        "final": false
+      },
+      "receivedHostMs": 1791723910920
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and",
+        "startedAt": 39672,
+        "endedAt": 42090,
+        "final": false
+      },
+      "receivedHostMs": 1791723911073
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reach",
+        "startedAt": 39672,
+        "endedAt": 42250,
+        "final": false
+      },
+      "receivedHostMs": 1791723911234
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reaches",
+        "startedAt": 39672,
+        "endedAt": 42410,
+        "final": false
+      },
+      "receivedHostMs": 1791723911397
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reaches twenty",
+        "startedAt": 39672,
+        "endedAt": 42570,
+        "final": false
+      },
+      "receivedHostMs": 1791723911560
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reaches twenty",
+        "startedAt": 39672,
+        "endedAt": 42730,
+        "final": false
+      },
+      "receivedHostMs": 1791723911719
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reaches twenty",
+        "startedAt": 39672,
+        "endedAt": 42890,
+        "final": false
+      },
+      "receivedHostMs": 1791723911872
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-ce6e7d6b-6cb9-4d1f-826f-a9273b190744",
+        "source": "remote",
+        "text": "a later run starts at sixty and reaches twenty",
+        "startedAt": 39672,
+        "endedAt": 43050,
+        "final": true
+      },
+      "receivedHostMs": 1791723912034
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven",
+        "startedAt": 39672,
+        "endedAt": 43210,
+        "final": false
+      },
+      "receivedHostMs": 1791723912197
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven",
+        "startedAt": 39672,
+        "endedAt": 43370,
+        "final": false
+      },
+      "receivedHostMs": 1791723912357
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after",
+        "startedAt": 39672,
+        "endedAt": 43530,
+        "final": false
+      },
+      "receivedHostMs": 1791723912522
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twent",
+        "startedAt": 39672,
+        "endedAt": 43690,
+        "final": false
+      },
+      "receivedHostMs": 1791723912675
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty",
+        "startedAt": 39672,
+        "endedAt": 43850,
+        "final": false
+      },
+      "receivedHostMs": 1791723912835
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty",
+        "startedAt": 39672,
+        "endedAt": 44010,
+        "final": false
+      },
+      "receivedHostMs": 1791723912997
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty min",
+        "startedAt": 39672,
+        "endedAt": 44170,
+        "final": false
+      },
+      "receivedHostMs": 1791723913159
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 44303,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 44142
+      },
+      "receivedHostMs": 1791723913263
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty minutes",
+        "startedAt": 39672,
+        "endedAt": 44330,
+        "final": false
+      },
+      "receivedHostMs": 1791723913321
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty minutes",
+        "startedAt": 39672,
+        "endedAt": 44490,
+        "final": false
+      },
+      "receivedHostMs": 1791723913473
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 44602,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 44562
+      },
+      "receivedHostMs": 1791723913562
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty minutes",
+        "startedAt": 39672,
+        "endedAt": 44650,
+        "final": false
+      },
+      "receivedHostMs": 1791723913635
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-959a1582-985b-443e-ae73-41d7626624f0",
+        "source": "remote",
+        "text": "seven after twenty minutes",
+        "startedAt": 39672,
+        "endedAt": 44810,
+        "final": true
+      },
+      "receivedHostMs": 1791723913796
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its",
+        "startedAt": 39672,
+        "endedAt": 45610,
+        "final": false
+      },
+      "receivedHostMs": 1791723914600
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant",
+        "startedAt": 39672,
+        "endedAt": 45770,
+        "final": false
+      },
+      "receivedHostMs": 1791723914755
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant amb",
+        "startedAt": 39672,
+        "endedAt": 45930,
+        "final": false
+      },
+      "receivedHostMs": 1791723914918
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient",
+        "startedAt": 39672,
+        "endedAt": 46090,
+        "final": false
+      },
+      "receivedHostMs": 1791723915079
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperat",
+        "startedAt": 39672,
+        "endedAt": 46250,
+        "final": false
+      },
+      "receivedHostMs": 1791723915242
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperat",
+        "startedAt": 39672,
+        "endedAt": 46410,
+        "final": false
+      },
+      "receivedHostMs": 1791723915399
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature",
+        "startedAt": 39672,
+        "endedAt": 46570,
+        "final": false
+      },
+      "receivedHostMs": 1791723915555
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was",
+        "startedAt": 39672,
+        "endedAt": 46730,
+        "final": false
+      },
+      "receivedHostMs": 1791723915718
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not",
+        "startedAt": 39672,
+        "endedAt": 46890,
+        "final": false
+      },
+      "receivedHostMs": 1791723915872
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not",
+        "startedAt": 39672,
+        "endedAt": 47050,
+        "final": false
+      },
+      "receivedHostMs": 1791723916035
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 47180,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 47022
+      },
+      "receivedHostMs": 1791723916140
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not logged",
+        "startedAt": 39672,
+        "endedAt": 47210,
+        "final": false
+      },
+      "receivedHostMs": 1791723916200
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not logged",
+        "startedAt": 39672,
+        "endedAt": 47370,
+        "final": false
+      },
+      "receivedHostMs": 1791723916358
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 47022
+      },
+      "receivedHostMs": 1791723916505
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not logged",
+        "startedAt": 39672,
+        "endedAt": 47530,
+        "final": false
+      },
+      "receivedHostMs": 1791723916520
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5babc69a-a0b8-4dd1-ad7d-1a13c425ad26",
+        "source": "remote",
+        "text": "its constant ambient temperature was not logged",
+        "startedAt": 39672,
+        "endedAt": 47690,
+        "final": true
+      },
+      "receivedHostMs": 1791723916673
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 47717
+      },
+      "receivedHostMs": 1791723916676
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 47802,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723917099
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4eac6404-48c2-4f11-85bc-ae1c89afdc49",
+        "source": "remote",
+        "text": "Construct",
+        "startedAt": 47802,
+        "endedAt": 48650,
+        "final": false
+      },
+      "receivedHostMs": 1791723917639
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4eac6404-48c2-4f11-85bc-ae1c89afdc49",
+        "source": "remote",
+        "text": "Construct",
+        "startedAt": 47802,
+        "endedAt": 48810,
+        "final": false
+      },
+      "receivedHostMs": 1791723917795
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4eac6404-48c2-4f11-85bc-ae1c89afdc49",
+        "source": "remote",
+        "text": "Construct",
+        "startedAt": 47802,
+        "endedAt": 48970,
+        "final": false
+      },
+      "receivedHostMs": 1791723917958
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4eac6404-48c2-4f11-85bc-ae1c89afdc49",
+        "source": "remote",
+        "text": "Construct",
+        "startedAt": 47802,
+        "endedAt": 49130,
+        "final": false
+      },
+      "receivedHostMs": 1791723918120
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-4eac6404-48c2-4f11-85bc-ae1c89afdc49",
+        "source": "remote",
+        "text": "Construct",
+        "startedAt": 47802,
+        "endedAt": 49290,
+        "final": true
+      },
+      "receivedHostMs": 1791723918274
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact",
+        "startedAt": 47802,
+        "endedAt": 49450,
+        "final": false
+      },
+      "receivedHostMs": 1791723918438
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact",
+        "startedAt": 47802,
+        "endedAt": 49610,
+        "final": false
+      },
+      "receivedHostMs": 1791723918596
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanat",
+        "startedAt": 47802,
+        "endedAt": 49770,
+        "final": false
+      },
+      "receivedHostMs": 1791723918764
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanat",
+        "startedAt": 47802,
+        "endedAt": 49930,
+        "final": false
+      },
+      "receivedHostMs": 1791723918912
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanat",
+        "startedAt": 47802,
+        "endedAt": 50090,
+        "final": false
+      },
+      "receivedHostMs": 1791723919076
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 50246,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 50082
+      },
+      "receivedHostMs": 1791723919205
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanations",
+        "startedAt": 47802,
+        "endedAt": 50250,
+        "final": false
+      },
+      "receivedHostMs": 1791723919237
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanations",
+        "startedAt": 47802,
+        "endedAt": 50410,
+        "final": false
+      },
+      "receivedHostMs": 1791723919398
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 50543,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 50502
+      },
+      "receivedHostMs": 1791723919503
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanations",
+        "startedAt": 47802,
+        "endedAt": 50570,
+        "final": false
+      },
+      "receivedHostMs": 1791723919559
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-52e22f47-04d6-4ec8-a320-9d3025868a83",
+        "source": "remote",
+        "text": "two exact explanations",
+        "startedAt": 47802,
+        "endedAt": 50730,
+        "final": true
+      },
+      "receivedHostMs": 1791723919712
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one",
+        "startedAt": 47802,
+        "endedAt": 51210,
+        "final": false
+      },
+      "receivedHostMs": 1791723920201
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retain",
+        "startedAt": 47802,
+        "endedAt": 51370,
+        "final": false
+      },
+      "receivedHostMs": 1791723920354
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining",
+        "startedAt": 47802,
+        "endedAt": 51530,
+        "final": false
+      },
+      "receivedHostMs": 1791723920513
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining cond",
+        "startedAt": 47802,
+        "endedAt": 51690,
+        "final": false
+      },
+      "receivedHostMs": 1791723920677
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conduct",
+        "startedAt": 47802,
+        "endedAt": 51850,
+        "final": false
+      },
+      "receivedHostMs": 1791723920838
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance",
+        "startedAt": 47802,
+        "endedAt": 52010,
+        "final": false
+      },
+      "receivedHostMs": 1791723921001
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance",
+        "startedAt": 47802,
+        "endedAt": 52170,
+        "final": false
+      },
+      "receivedHostMs": 1791723921154
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and",
+        "startedAt": 47802,
+        "endedAt": 52330,
+        "final": false
+      },
+      "receivedHostMs": 1791723921316
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one",
+        "startedAt": 47802,
+        "endedAt": 52490,
+        "final": false
+      },
+      "receivedHostMs": 1791723921478
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retain",
+        "startedAt": 47802,
+        "endedAt": 52650,
+        "final": false
+      },
+      "receivedHostMs": 1791723921634
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining",
+        "startedAt": 47802,
+        "endedAt": 52810,
+        "final": false
+      },
+      "receivedHostMs": 1791723921793
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining",
+        "startedAt": 47802,
+        "endedAt": 52970,
+        "final": false
+      },
+      "receivedHostMs": 1791723921954
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twent",
+        "startedAt": 47802,
+        "endedAt": 53130,
+        "final": false
+      },
+      "receivedHostMs": 1791723922118
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty",
+        "startedAt": 47802,
+        "endedAt": 53290,
+        "final": false
+      },
+      "receivedHostMs": 1791723922279
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty deg",
+        "startedAt": 47802,
+        "endedAt": 53450,
+        "final": false
+      },
+      "receivedHostMs": 1791723922439
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree",
+        "startedAt": 47802,
+        "endedAt": 53610,
+        "final": false
+      },
+      "receivedHostMs": 1791723922601
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree",
+        "startedAt": 47802,
+        "endedAt": 53770,
+        "final": false
+      },
+      "receivedHostMs": 1791723922753
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree amb",
+        "startedAt": 47802,
+        "endedAt": 53930,
+        "final": false
+      },
+      "receivedHostMs": 1791723922917
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 54051,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 53892
+      },
+      "receivedHostMs": 1791723923011
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree ambient",
+        "startedAt": 47802,
+        "endedAt": 54090,
+        "final": false
+      },
+      "receivedHostMs": 1791723923077
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree ambient",
+        "startedAt": 47802,
+        "endedAt": 54250,
+        "final": false
+      },
+      "receivedHostMs": 1791723923238
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 53892
+      },
+      "receivedHostMs": 1791723923369
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree ambient",
+        "startedAt": 47802,
+        "endedAt": 54410,
+        "final": false
+      },
+      "receivedHostMs": 1791723923392
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-5a864ba1-4937-45ee-bf67-735dc1724027",
+        "source": "remote",
+        "text": "one retaining conductance and one retaining twenty degree ambient",
+        "startedAt": 47802,
+        "endedAt": 54570,
+        "final": true
+      },
+      "receivedHostMs": 1791723923553
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 54597
+      },
+      "receivedHostMs": 1791723923556
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 54582,
+        "turnStartedAt": 312
+      },
+      "receivedHostMs": 1791723923880
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What",
+        "startedAt": 54582,
+        "endedAt": 55370,
+        "final": false
+      },
+      "receivedHostMs": 1791723924354
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What",
+        "startedAt": 54582,
+        "endedAt": 55530,
+        "final": false
+      },
+      "receivedHostMs": 1791723924515
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experim",
+        "startedAt": 54582,
+        "endedAt": 55690,
+        "final": false
+      },
+      "receivedHostMs": 1791723924680
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment",
+        "startedAt": 54582,
+        "endedAt": 55850,
+        "final": false
+      },
+      "receivedHostMs": 1791723924839
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment",
+        "startedAt": 54582,
+        "endedAt": 56010,
+        "final": false
+      },
+      "receivedHostMs": 1791723924999
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment dist",
+        "startedAt": 54582,
+        "endedAt": 56170,
+        "final": false
+      },
+      "receivedHostMs": 1791723925154
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment disting",
+        "startedAt": 54582,
+        "endedAt": 56330,
+        "final": false
+      },
+      "receivedHostMs": 1791723925315
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes",
+        "startedAt": 54582,
+        "endedAt": 56490,
+        "final": false
+      },
+      "receivedHostMs": 1791723925480
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes",
+        "startedAt": 54582,
+        "endedAt": 56650,
+        "final": false
+      },
+      "receivedHostMs": 1791723925639
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 56785,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 56622
+      },
+      "receivedHostMs": 1791723925745
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes them",
+        "startedAt": 54582,
+        "endedAt": 56810,
+        "final": false
+      },
+      "receivedHostMs": 1791723925794
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes them",
+        "startedAt": 54582,
+        "endedAt": 56970,
+        "final": false
+      },
+      "receivedHostMs": 1791723925953
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 56622
+      },
+      "receivedHostMs": 1791723926102
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes them",
+        "startedAt": 54582,
+        "endedAt": 57130,
+        "final": false
+      },
+      "receivedHostMs": 1791723926115
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-c9b9c5d3-7f9d-42b4-9592-fc9c922ff635",
+        "source": "remote",
+        "text": "What experiment distinguishes them",
+        "startedAt": 54582,
+        "endedAt": 57290,
+        "final": true
+      },
+      "receivedHostMs": 1791723926277
+    },
+    {
+      "name": "question.confirmed",
+      "payload": {
+        "id": "32280704-cd88-4b9e-af9f-59f8020d3528",
+        "timestamp": 57357
+      },
+      "receivedHostMs": 1791723926317
+    }
+  ]
+}

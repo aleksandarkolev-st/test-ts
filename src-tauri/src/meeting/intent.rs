@@ -436,7 +436,7 @@ mod tests {
     #[test]
     fn acoustic_end_updates_existing_hidden_work_once_without_an_intent_prediction() {
         use crate::meeting::scheduler::Scheduler;
-        let mut gate=Gate::default();let mut scheduler=Scheduler::default();scheduler.semantic_intent=true;
+        let mut gate=Gate::default();let mut scheduler=Scheduler{local_revisions:false,..Default::default()};scheduler.semantic_intent=true;
         let id=scheduler.propose("Initial request".into(),25,25,25);
         scheduler.next(25);let job=scheduler.find_mut(&id).unwrap();job.steer_supported=true;
         job.latency.remote_speech_started_at=Some(20);job.buffer="Old hidden answer".into();job.latency.first_word_at=Some(30);

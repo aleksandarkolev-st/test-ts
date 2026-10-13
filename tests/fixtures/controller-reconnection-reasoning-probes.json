@@ -1,0 +1,28 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "objective": "detailed",
+  "serviceTier": null,
+  "turns": [
+    {
+      "name": "cas-counterexample-and-code",
+      "question": "A compare_exchange_weak loop recomputes desired=expected+1 only before the loop. On failure, expected is overwritten with the observed value; desired remains unchanged. Is retrying this code correct for increment? Give a concrete execution that loses an increment and provide complete C++17 corrected code with a multithreaded test main checking the final count. Account for spurious failure. Supply one self-contained code fence."
+    },
+    {
+      "name": "conversation-after-transport-reconnection",
+      "question": "Continue the preceding CAS explanation. Here, reconnection means the assistant's backend transport reconnecting, not another CAS retry. Which concrete values, thread roles, and technical conclusions from our conversation can you still refer to now? Use the same counterexample to explain why desired must be recomputed. Do not infer implementation or persistence guarantees you have not been given.",
+      "ordinaryFollowup": true,
+      "disconnectBackend": true
+    },
+    {
+      "name": "exact-initial-code-after-reconnection",
+      "question": "Repeat the entire self-contained C++17 code fence from your first answer in this conversation exactly, character for character. Preserve the original names, constants, comments, and test main. Do not improve or reconstruct it."
+    },
+    {
+      "name": "why-after-exact-code",
+      "question": "Why does that exact implementation still handle spurious failure? Explain its actual retry invariant, then give a concrete counterexample if desired is computed only once outside its retry loop.",
+      "ordinaryFollowup": true
+    }
+  ],
+  "scope": "Typed authenticated reasoning and exact-code retention supplement. Explicit transport wording removes the earlier ambiguous reconnection question; no expected answers or production routing rules. Only Codex has an available actual disconnect injection. Plan's missing HTTP disconnect capability must remain disclosed. Exact code is compared with each backend's actual first answer, not a prewritten solution."
+}

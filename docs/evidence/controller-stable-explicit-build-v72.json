@@ -1,0 +1,371 @@
+{
+  "commit": "ac5684c22263753ecb6c20b8f5ebf87b729f0728",
+  "nativeBinarySha256": "fa7ed4e36b0db8c12d7c36d6bf46fa81e0fa9f8777597de65b8b7e295ca41e59",
+  "sources": [
+    {
+      "file": "src-tauri/src/attachments/folder.rs",
+      "compiledWorkingTreeSha256": "15696edbf8ae624e16da52361c88b4d2fb47644ea19a95f0c0f683e4ac783740",
+      "gitBlobSha256": "8d0bf4c16bdc93105c3648e7119049cdb281290503714537e8447790295c27f3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/mod.rs",
+      "compiledWorkingTreeSha256": "c95602fc46ba4dd8850fbdc2f10797799e13d777e69092ba0fe470d33a1260d0",
+      "gitBlobSha256": "b1af9b3547669f7fe3b7350b8e5db9cb637b77df2b107ec76111e226822a49fb",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/project.rs",
+      "compiledWorkingTreeSha256": "56e72ef66c21be9025a86fa3bb974340b812d63d7ae08a204c87ef22959ff4fb",
+      "gitBlobSha256": "dd43798243552a464880d633a67678a042ad1f9fa250a2be55afc3e2c5a80ce2",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/attachments/screenshot.rs",
+      "compiledWorkingTreeSha256": "d033ddccc9e5fb5a5ac2ac0548a8c74f01ce940dd3e04db5812f2263531da632",
+      "gitBlobSha256": "dd0c750fbdfb6bfe0f9c9b003c7a48a6e192a7996c144bd47834a9bb542cb15f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/mod.rs",
+      "compiledWorkingTreeSha256": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c",
+      "gitBlobSha256": "b4fc160e7ba82773b1eaf1c97d43721f460f588985849c8babfc202231912e73",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/resampler.rs",
+      "compiledWorkingTreeSha256": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+      "gitBlobSha256": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/audio/windows_capture.rs",
+      "compiledWorkingTreeSha256": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+      "gitBlobSha256": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/gaze.rs",
+      "compiledWorkingTreeSha256": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+      "gitBlobSha256": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/lib.rs",
+      "compiledWorkingTreeSha256": "0afa7079d881ec5df9f06a7343bce974ecbbec5201d3656068f5e547b5761e45",
+      "gitBlobSha256": "5abbaa8602f906afcaf80253ba0925ec82d311ae5aa0f2e35ac81e118ce52a7a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/main.rs",
+      "compiledWorkingTreeSha256": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+      "gitBlobSha256": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/context.rs",
+      "compiledWorkingTreeSha256": "948f93ed945642ef90c1c6c3419b3ffaae8260e0b2bede31589100ee4e25fb37",
+      "gitBlobSha256": "731e182b7c46f5926bad5a0c25fc71230e95fb4c90640c94a450d0c076ef8615",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/controller_tests.rs",
+      "compiledWorkingTreeSha256": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "gitBlobSha256": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/intent.rs",
+      "compiledWorkingTreeSha256": "a7b8f77ba7330cb9197faea155910dc7eb26e188f4dfc18513a083a1e5011c49",
+      "gitBlobSha256": "4096fb717d9f174a95fac6f78d55dd852c0777e41a7b13b4f4ebcc7e1e2f730d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/ledger.rs",
+      "compiledWorkingTreeSha256": "21e7fa726e533c4f517d23a638df61d5012c9f8dcea5d3bbf680b499de9ab93e",
+      "gitBlobSha256": "21e7fa726e533c4f517d23a638df61d5012c9f8dcea5d3bbf680b499de9ab93e",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/mod.rs",
+      "compiledWorkingTreeSha256": "2338f7db0ddad1cbe0ba949370044bc7e16ae5ecb118caf94948fc5e115cf42b",
+      "gitBlobSha256": "96c4d66106e0d164b6efe21aa4f4d652bc5bb9b46d175fbfaebc5458a9325088",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/provisional.rs",
+      "compiledWorkingTreeSha256": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "gitBlobSha256": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/questions.rs",
+      "compiledWorkingTreeSha256": "1632f97a7730f6d577bd039417a7bc34e3bb5d70cef41109dc2964eef4f89cec",
+      "gitBlobSha256": "25414c02141e84a1c8afae204a0c9d38c825b9f038a403c83b6608327413fc34",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/scheduler.rs",
+      "compiledWorkingTreeSha256": "1fc146fdaa9193c324c7aefc05c89baf6410d169e19b49121909618f680a6596",
+      "gitBlobSha256": "40d4943d4e02a3216e902f5262f244f9cab8c6ccb03fdd9734de591f23b9c7e9",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/meeting/state.rs",
+      "compiledWorkingTreeSha256": "e6c607c6a37273992ed322f02b950f849f1ff93600c45c4cb8561345eeb36fbe",
+      "gitBlobSha256": "27862188db190751da538a993c91188bdd3d5c2895528b7cc6ad3bbd831a889a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/auth.rs",
+      "compiledWorkingTreeSha256": "f15eaae8f242afa3106e5b870a190cb45e6c05699d2168cfb7ad2aeaf84e1007",
+      "gitBlobSha256": "6730813b3f96f2e5ce9170c64c4761ebbfa84e55788b4e5578df850fcc64e7b0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/client.rs",
+      "compiledWorkingTreeSha256": "ef2072927d19b862ef6cc38077e70cb187c268745b83c59d720503bfc80acb38",
+      "gitBlobSha256": "ef2072927d19b862ef6cc38077e70cb187c268745b83c59d720503bfc80acb38",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/codex.rs",
+      "compiledWorkingTreeSha256": "d6df3fcbe4ecd567cbe5854a1cd959e2a79075dfed9e24f87b96c80fefb3d800",
+      "gitBlobSha256": "d6df3fcbe4ecd567cbe5854a1cd959e2a79075dfed9e24f87b96c80fefb3d800",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/mailbox.rs",
+      "compiledWorkingTreeSha256": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+      "gitBlobSha256": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/mod.rs",
+      "compiledWorkingTreeSha256": "acd572fb118b3f9c07c3244d09d638948dad9c7e14683f16aea3bac46a5bdf68",
+      "gitBlobSha256": "84569ab707528a8ea88c9efc78244ca07e32f1e35642005020f627099adca7e0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/prompts.rs",
+      "compiledWorkingTreeSha256": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+      "gitBlobSha256": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/realtime.rs",
+      "compiledWorkingTreeSha256": "876f19ee02581bc13b11a16feb2573af7d956ee053ae4fc9c94c73bbf2579b9e",
+      "gitBlobSha256": "29677847f21b599c6618db1fb4101fe319e72a95a59753c752f74fd5fa67707c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/responses_ws.rs",
+      "compiledWorkingTreeSha256": "9eb9fd56572cc7b2d50ff3b54585b813ee9ce9636802fcdba8c4d7b0251d7a22",
+      "gitBlobSha256": "608d9dfec04349655349169c15f383f2e76cd078252527a5f04e9deb1f72eac9",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/openai/timing.rs",
+      "compiledWorkingTreeSha256": "5cd6f3cb3d75a7c8d9c5e0b42b87652efa28c04cfbe4c4ebfab9338afa0e6ac0",
+      "gitBlobSha256": "4c3f8a994f2a3309990a91e9c3018404765a76d795e5eae75afd68ae9d2e095a",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/capture_protection.rs",
+      "compiledWorkingTreeSha256": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+      "gitBlobSha256": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/mod.rs",
+      "compiledWorkingTreeSha256": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+      "gitBlobSha256": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/overlay/window.rs",
+      "compiledWorkingTreeSha256": "7db24ada7ba832f1d0cbdcf5a9a4b2a68617a3727dcaabd14e2ab404415c3e2e",
+      "gitBlobSha256": "68a1e192d3ac61fbc20e1cabffb1efa032ea325c510a888bd100105e0fc5eee7",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/process.rs",
+      "compiledWorkingTreeSha256": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+      "gitBlobSha256": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/runtime.rs",
+      "compiledWorkingTreeSha256": "ce4320c5026538987527176ae4cd0dcdcf0c25e1b4b7753d20c8787086c19da3",
+      "gitBlobSha256": "ce4320c5026538987527176ae4cd0dcdcf0c25e1b4b7753d20c8787086c19da3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/credentials.rs",
+      "compiledWorkingTreeSha256": "a162f8eba91242ec00bbc395594dfd202ec600c9f8ddd7397793205e6b210ee4",
+      "gitBlobSha256": "e467f986dac0850f08179b320c525d52f72ccd484761e5a804d412b139b980f9",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/db.rs",
+      "compiledWorkingTreeSha256": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+      "gitBlobSha256": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/instance.rs",
+      "compiledWorkingTreeSha256": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+      "gitBlobSha256": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/storage/mod.rs",
+      "compiledWorkingTreeSha256": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+      "gitBlobSha256": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/mod.rs",
+      "compiledWorkingTreeSha256": "5622a74f39b2382dd711c38df8624c1bef5bfc4ca082a943196164bfad6c1725",
+      "gitBlobSha256": "c588b9db23f85b56085422c3a7090c0f47180d9fa6f48d443066114325a7bfda",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/nemotron.rs",
+      "compiledWorkingTreeSha256": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "gitBlobSha256": "448b2fbc8d8395f01956f42eb94dcc224331ddc4442a543709bcb576a5013145",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/vad.rs",
+      "compiledWorkingTreeSha256": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "gitBlobSha256": "f65b0202c9a1c279210ad13793dc0463cbebeb39b32b209dd8d843735cf40fd0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src-tauri/src/transcription/whisper.rs",
+      "compiledWorkingTreeSha256": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d",
+      "gitBlobSha256": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/App.tsx",
+      "compiledWorkingTreeSha256": "e8767925760f0f4bd612c00b99aa7ac9b2426785b885ec33110f187109a939e1",
+      "gitBlobSha256": "3d24eb509c58b14347215cf1d1306cdc531c6a54b1e997558cdb1a430e9a5b0f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/bridge.ts",
+      "compiledWorkingTreeSha256": "8efaa6db96923cb4dce161b0c586d0b186893497a1cf5e85f3445a2b6b0cd0b3",
+      "gitBlobSha256": "8efaa6db96923cb4dce161b0c586d0b186893497a1cf5e85f3445a2b6b0cd0b3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/Camera.tsx",
+      "compiledWorkingTreeSha256": "9fd02930c7233600ed6f2a8821a30ad40a3d883016a3f751a00c3947a636f7f0",
+      "gitBlobSha256": "9fd02930c7233600ed6f2a8821a30ad40a3d883016a3f751a00c3947a636f7f0",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/ContextAttachments.tsx",
+      "compiledWorkingTreeSha256": "11a07b7bd658ad8037a07821d41b4b1fd707c416d17e1576a7bdcbcd9edec2c7",
+      "gitBlobSha256": "11a07b7bd658ad8037a07821d41b4b1fd707c416d17e1576a7bdcbcd9edec2c7",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/Debug.tsx",
+      "compiledWorkingTreeSha256": "339b567dd70ec42657ee0d502152e2f5945eb6e19237099f72f53d90cc615032",
+      "gitBlobSha256": "339b567dd70ec42657ee0d502152e2f5945eb6e19237099f72f53d90cc615032",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/main.tsx",
+      "compiledWorkingTreeSha256": "742991c6c080b258e37a2765a31ec40c4d60217f5e9455caf0809fdc900e84c3",
+      "gitBlobSha256": "742991c6c080b258e37a2765a31ec40c4d60217f5e9455caf0809fdc900e84c3",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Answer.tsx",
+      "compiledWorkingTreeSha256": "dacdf884e65b53abd6f541fa501741b6422135ab2df285eedaa5be72a8e599c9",
+      "gitBlobSha256": "3f09df5dd715b3421a5c0e43d5c18d128336754b0d1f057ab0ab8ab770c1b35c",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Overlay.tsx",
+      "compiledWorkingTreeSha256": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143",
+      "gitBlobSha256": "69b73787ed2551615606911437e029f32c6734dc04df8382d610f935d2733143",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/paintedText.ts",
+      "compiledWorkingTreeSha256": "30b4130b413f7817e5130b3b2d0dbc0d0dc7fdb7cc29a732fbd4653128a5e5da",
+      "gitBlobSha256": "30b4130b413f7817e5130b3b2d0dbc0d0dc7fdb7cc29a732fbd4653128a5e5da",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/overlay/Status.tsx",
+      "compiledWorkingTreeSha256": "2473c696459ff50dd81d591535aa3e7e6686fae256d8a132a65ef969b192e6ab",
+      "gitBlobSha256": "2473c696459ff50dd81d591535aa3e7e6686fae256d8a132a65ef969b192e6ab",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/model.ts",
+      "compiledWorkingTreeSha256": "4d0ef71d22c9453a12c0692c4b816212deb75fc38e68089862f86d126f08995e",
+      "gitBlobSha256": "da3520d99918efaaf251ede86dfcac3ada4f8d86a30754962ffaeecf480ec11f",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/store.test.ts",
+      "compiledWorkingTreeSha256": "9d001fb4aad74c78a0f543791b1a74af91f8f6bb2bb5400fab2e2d0e5b27fca4",
+      "gitBlobSha256": "9d001fb4aad74c78a0f543791b1a74af91f8f6bb2bb5400fab2e2d0e5b27fca4",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/state/store.ts",
+      "compiledWorkingTreeSha256": "db7f7ee5b90d87abfed8c9785d018727ae4650d7fa8df7862bb701a1ddd7177d",
+      "gitBlobSha256": "db7f7ee5b90d87abfed8c9785d018727ae4650d7fa8df7862bb701a1ddd7177d",
+      "canonicalLfMatches": true
+    },
+    {
+      "file": "src/style.css",
+      "compiledWorkingTreeSha256": "158dc9c07adfd65855b5936b56e6ad735beaf62f30d7cb16db7ef0e88a2b7b7b",
+      "gitBlobSha256": "eec2f8c11f7fb01b80f92bc14d2e1b9ea7835fec8de1ab9f5beb6e5363d092ae",
+      "canonicalLfMatches": true
+    }
+  ],
+  "verification": {
+    "file": "artifacts/controller-v72/expansion-verification-r3/verification.json",
+    "sha256": "1a30057d9aac75be7fd866758e831974757dc661216fe63357060b5e1fbaa0f9",
+    "logs": [
+      {
+        "name": "stable-explicit-correction",
+        "file": "artifacts\\controller-v72\\expansion-verification-r3\\stable-explicit-correction.log",
+        "sha256": "aaed649d66413e3004802227b592ec26c2d4a4da7799fb4b703b4a822ce63dc1",
+        "startedAt": "2026-10-12T02:37:44.382Z",
+        "completedAt": "2026-10-12T02:37:44.447Z"
+      },
+      {
+        "name": "rust-tests",
+        "file": "artifacts\\controller-v72\\expansion-verification-r3\\rust-tests.log",
+        "sha256": "cb00f2390bc7aad10045fc9a55e34f67fae8194d65a1caceda4d2c5cbd5a0576",
+        "startedAt": "2026-10-12T02:37:44.448Z",
+        "completedAt": "2026-10-12T02:38:04.951Z"
+      },
+      {
+        "name": "release-default-cfg",
+        "file": "artifacts\\controller-v72\\expansion-verification-r3\\release-default-cfg.log",
+        "sha256": "1ae8945549077245681f9e540a957f9a4c00a2af86c5432cda48cb58b79f7647",
+        "startedAt": "2026-10-12T02:38:04.951Z",
+        "completedAt": "2026-10-12T02:38:10.658Z"
+      },
+      {
+        "name": "native-build",
+        "file": "artifacts\\controller-v72\\expansion-verification-r3\\native-build.log",
+        "sha256": "e1387019390c9ed39a37b74e090b6582284a04d3182b5e029671f4429a139bc3",
+        "startedAt": "2026-10-12T02:38:10.658Z",
+        "completedAt": "2026-10-12T02:38:28.624Z"
+      }
+    ]
+  },
+  "scope": "Pre-capture attestation: verified frozen native binary and all compiled production sources match this reviewed commit after explicit Git CRLF-to-LF normalization. Not a reproducible-build attestation or live latency result."
+}

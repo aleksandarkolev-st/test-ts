@@ -1,0 +1,44 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "objective": "detailed",
+  "serviceTier": null,
+  "turns": [
+    {
+      "name": "fifo-complete",
+      "question": "Implement a complete C++17 bounded FIFO with capacity 17 and overflow rejection. Include a test main asserting empty pop fails, all 17 slots can be filled, the 18th insertion is rejected without changing the contents, draining returns FIFO order, and wraparound works. Explain the invariant distinguishing full from empty. Supply one self-contained code fence."
+    },
+    {
+      "name": "fifo-why",
+      "question": "Why does index equality alone not distinguish full from empty? Give the two concrete capacity-17 states and show how your actual implementation distinguishes them.",
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "lower-median-proof",
+      "question": "Find the lower median of [9,1,4,4,7,2] without mutating the caller's array. Supply a complete C++17 function and test main that checks duplicates, an odd-sized array, an even-sized array, a singleton, and rejected empty input. Prove why the selected zero-based index is correct. Supply one self-contained code fence."
+    },
+    {
+      "name": "floating-counterexample",
+      "question": "Under IEEE binary32, round after each addition and forbid reassociation. Evaluate (16777216 + -16777216) + 1 and 16777216 + (-16777216 + 1). Then change the leftmost operand to positive 16777216, the middle operand to 1, and the last operand to -16777216. Compare both parenthesizations of that changed triple. Explain representability at each intermediate step; do not simply cite nonassociativity."
+    },
+    {
+      "name": "quorum-counterexample",
+      "question": "Five replicas A,B,C,D,E retain the highest version. A writer finishes after three acknowledgements. A reader queries any three and returns the highest version, without write-back. Prove or disprove linearizability including reads overlapping an incomplete write: give a fully ordered execution with two nonoverlapping reads and show the attempted linearization contradiction. Then change only the reader to write the selected version to three replicas before returning and explain whether this fixes the counterexample."
+    },
+    {
+      "name": "quorum-why",
+      "question": "Why does the second read have to respect a value returned by the first read even if the writer never completed? State the relevant real-time order and distinguish it from requiring every unfinished operation to complete.",
+      "ordinaryFollowup": true
+    },
+    {
+      "name": "cas-correction",
+      "question": "A compare_exchange_weak loop recomputes desired=expected+1 only before the loop. On failure, expected is overwritten with the observed value; desired remains unchanged. Is retrying this code correct for increment? Give a concrete execution that loses an increment and provide complete C++17 corrected code with a multithreaded test main checking the final count. Account for spurious failure. Supply one self-contained code fence."
+    },
+    {
+      "name": "backend-reconnection",
+      "question": "Why must desired be recomputed after that failure? Refer to the concrete values in the preceding explanation, and state what is retained across a reconnection.",
+      "ordinaryFollowup": true,
+      "disconnectBackend": true
+    }
+  ]
+}

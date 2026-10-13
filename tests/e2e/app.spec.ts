@@ -31,6 +31,7 @@ async function nativeFixture(page: Page) {
         if (cmd === 'start_meeting') { w.fixtureStartedSettings = { ...args.settings }; state.active = true; state.status = 'listening'; broadcast(); return; }
         if (cmd === 'stop_meeting') { state = { ...state, active: false, status: 'off', answer: '', question: null, manual: false }; broadcast(); return; }
         if (cmd === 'action') {
+          w.fixtureLastAction = { ...args };
           if (args.action === 'manual') state.manual = true;
           if (args.action === 'pause') state.paused = !state.paused;
           if (args.action === 'dismiss') { state.question = null; state.answer = ''; state.status = 'listening'; state.manual = false; }
@@ -111,4 +112,38 @@ test('project selection and screenshot controls expose attached context and remo
   await expect(page.getByText('Screenshot attached', { exact: false })).toHaveCount(0);
   await page.getByRole('button', { name: 'Remove project' }).click();
   await expect(page.getByText('2 files attached', { exact: false })).toHaveCount(0);
+});
+
+test('a long complete question leaves the useful answer visible and remains scrollable', async ({ page }) => {
+  await page.setViewportSize({ width: 500, height: 700 });
+  await nativeFixture(page); await page.goto('/?view=overlay');
+  const question = 'State the preconditions, trace each operation, give a counterexample and justify the invariant. '.repeat(24);
+  const answer = 'The stream orders the device operations, but the host must wait for copy completion before rewriting the source buffer.';
+  await page.evaluate(({ question, answer }) => (window as any).fixtureState({ active: true, status: 'answer', question: { id: 'long-question', text: question, detectedAt: 1000 }, answer }), { question, answer });
+  await expect(page.locator('.question p')).toHaveText(question.trim());
+  await expect(page.locator('.answer p')).toHaveText(answer);
+  const geometry = await page.evaluate(() => {
+    const question = document.querySelector('.question p') as HTMLElement;
+    const answer = document.querySelector('.answer p') as HTMLElement;
+    const content = document.querySelector('.answer-content') as HTMLElement;
+    const rect = answer.getBoundingClientRect(), clip = content.getBoundingClientRect();
+    question.scrollTop = question.scrollHeight;
+    return { scrollable: question.scrollHeight > question.clientHeight, scrolled: question.scrollTop > 0,
+      fullyVisible: rect.top >= clip.top && rect.bottom <= clip.bottom && rect.bottom <= innerHeight };
+  });
+  expect(geometry).toEqual({ scrollable: true, scrolled: true, fullyVisible: true });
+});
+
+test('answer now accepts the current finalized draft and stays disabled for replaceable partials', async ({ page }) => {
+  await nativeFixture(page); await page.goto('/?view=overlay');
+  await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'listening', canAnswerNow: false,
+    questions: [{ id: 'draft-partial', text: 'Explain the current', state: 'speculative', queued: false }] }));
+  const button = page.getByRole('button', { name: 'Answer now', exact: true });
+  await expect(button).toBeDisabled();
+  await page.evaluate(() => (window as any).fixtureState({ canAnswerNow: true,
+    questions: [{ id: 'draft-final', text: 'Explain the current invariant', state: 'speculative', queued: false }] }));
+  await expect(button).toBeEnabled(); await button.click();
+  expect(await page.evaluate(() => (window as any).fixtureLastAction)).toEqual({ action: 'answer_now', generationId: 'draft-final' });
+  await page.evaluate(() => (window as any).fixtureState({ canAnswerNow: false, questions: [] }));
+  await expect(button).toBeDisabled();
 });

@@ -1,0 +1,1406 @@
+{
+  "source": {
+    "file": "artifacts/controller-v72/asr-finalization-controls-r2/results.json",
+    "sha256": "ae8f2a9cbd806344356d7c24684e6e6e5a933f4950638c4ea0185903526a5540"
+  },
+  "status": "complete_reviewed",
+  "startedAt": "2026-10-12T04:22:29.152Z",
+  "completedAt": "2026-10-12T04:44:46.005Z",
+  "journal": {
+    "file": "artifacts/controller-v72/native/final-source-r6-behavior-codex/interview.json",
+    "sha256": "6f0481680f6864c01337c61d9abbf4d80c4541fbe04eb808368db3268167a0c3"
+  },
+  "targetRound": 6,
+  "inputs": [
+    {
+      "round": 1,
+      "waveFile": "artifacts/controller-v72/prepared/multipart-pause-1500.wav",
+      "waveSha256": "2c72292d9444afecc493cfb0b5c420114e1ca589013b2f230bf8eeee9af0ac10",
+      "question": "For exactly ten thousand elements and one hundred ninety two threads per block, compute the minimum number of blocks needed to cover every element. Also report the active threads in the final block and the number of launched threads that need a bounds check. Explain the arithmetic.",
+      "startMs": 1791773714047
+    },
+    {
+      "round": 2,
+      "waveFile": "artifacts/controller-v72/prepared/late-correction-2500.wav",
+      "waveSha256": "4e2f878e12da1afc50edb7f984990d225ac9f580788610f68dbb8188ca02ce18",
+      "question": "The guard is x less than negative one. What does the function return at negative one? Correction, I said less than or equal to negative one. Return seventeen on the true branch and nineteen otherwise. Evaluate negative one using the corrected operator.",
+      "startMs": 1791773742254
+    },
+    {
+      "round": 3,
+      "waveFile": "artifacts/controller-v72/prepared/backchannel.wav",
+      "waveSha256": "f7ee44536ad69fca4779777c3937cee6fdabd007851db319de8aff683ce15312",
+      "question": "Okay, I see.",
+      "startMs": 1791773767437
+    },
+    {
+      "round": 4,
+      "waveFile": "artifacts/controller-v72/prepared/why.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "question": "Why?",
+      "startMs": 1791773773510
+    },
+    {
+      "round": 6,
+      "waveFile": "artifacts/controller-v72/prepared/why.wav",
+      "waveSha256": "a3b2ce9d9173843125c28d72458e99f6174c502644410f0b07d9dab5a2fbc469",
+      "question": "Why?",
+      "startMs": 1791773792172
+    }
+  ],
+  "inputPcmSha256": "5a93be1771fff16172ef173be36dac33ea59a71cd6cf58539e287e70a31f2737",
+  "chunkMs": 160,
+  "rightContext": 1,
+  "backend": "vulkan:1",
+  "runtimeSha256": "2ac2e3d697399fdbc6965a6e59ec3324a4f78b811af8015590e343e292691f19",
+  "modelSha256": "d9a01898d2a611c8764e23a1c2f45e70bbd5a425dc4de93692ac951dd603812d",
+  "protocolDoc": {
+    "file": ".local/nemotron/nemo-speech-0.2.0-windows-x86_64-vulkan/share/doc/nemo-speech/docs/api.md",
+    "sha256": "845c720a273b1831703dac5fe0edc5780e5d33c1654fa977621897f3f732ec66"
+  },
+  "wsLibrarySha256": "2d1ccc01d21b7d54ca99a6305991d7fb6e072ea4e725d7fec5eb6184188c52c9",
+  "collectorSha256": "aed38bc2da02a06ff2ce8396ff7421a5141d980e41ee60dc85c042ff18ff9583",
+  "scope": "Local pinned ASR only. Identical PCM and preceding source-wave timing for each paired cell, with controlled leading-zero phase shifts. Fresh owned service per trial, awaited process exit before the next. Source WAV is fed directly, excluding WASAPI/resampling and assistant output workload; not a native-loopback reproduction or proof of the original failure cause. Final events without usable source-time binding are explicitly unattributed. A separate post-observation commit drains both variants before the connection-reuse probe; it cannot establish automatic endpoint recovery. No words, model or endpoint thresholds are changed.",
+  "review": {
+    "allEightCellsRetained": true,
+    "serialOwnedServiceExitVerified": true,
+    "eventCollectionClosedVerified": true,
+    "primaryCommitAcknowledgements": 0,
+    "commitTrials": 4,
+    "drainAcknowledgements": 8,
+    "followingTurnsWithNonemptyText": 0,
+    "trialFailures": 0,
+    "conclusion": "No proven timely benefit from explicit commit. Delayed queued finals have no verified target source binding; target WER and recognition success remain unknown. A post-window drain acknowledgement verifies commit handling, not automatic endpoint recovery. Following-turn observation is bounded and does not prove a dead connection when text is empty. No production finalization policy, threshold, model, chunk or word repair is changed."
+  },
+  "trials": [
+    {
+      "repetition": 1,
+      "phaseMs": 0,
+      "commit": false,
+      "startedAt": "2026-10-12T04:22:29.596Z",
+      "completedAt": "2026-10-12T04:24:54.793Z",
+      "inputPcmSha256": "5a93be1771fff16172ef173be36dac33ea59a71cd6cf58539e287e70a31f2737",
+      "observationWindowAfterTargetMs": 6665.0625,
+      "targetSpeechEndHostMs": 1791779035892.9375,
+      "primaryWindowEndsAt": 1791779042558,
+      "commitSentAt": null,
+      "committedAcknowledgedInPrimaryWindow": null,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779042558,
+      "drainAcknowledgedAt": 1791779090331,
+      "drainAcknowledgementMs": 47773,
+      "drainedFinals": [
+        {
+          "hostMs": 1791778959292,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791778965524,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791778971245,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791778983167,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791778986524,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779007249,
+          "text": "The guard is X less than negative one."
+        },
+        {
+          "hostMs": 1791779012155,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779017513,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779021910,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779028629,
+          "text": "return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779034581,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779045337,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779046627,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779054814,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779090314,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779094793,
+      "serviceExitedAt": "2026-10-12T04:24:54.793Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 180,
+        "conversation.item.input_audio_transcription.completed": 15,
+        "input_audio_buffer.committed": 1
+      }
+    },
+    {
+      "repetition": 1,
+      "phaseMs": 0,
+      "commit": true,
+      "startedAt": "2026-10-12T04:24:54.794Z",
+      "completedAt": "2026-10-12T04:27:24.477Z",
+      "inputPcmSha256": "5a93be1771fff16172ef173be36dac33ea59a71cd6cf58539e287e70a31f2737",
+      "observationWindowAfterTargetMs": 6666.0625,
+      "targetSpeechEndHostMs": 1791779181272.9375,
+      "primaryWindowEndsAt": 1791779187939,
+      "commitSentAt": 1791779181738,
+      "committedAcknowledgedInPrimaryWindow": false,
+      "unattributedPrimaryFinals": [
+        {
+          "hostMs": 1791779182371,
+          "text": "evaluate negative one using the corrected operator"
+        }
+      ],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779187939,
+      "drainAcknowledgedAt": 1791779240022,
+      "drainAcknowledgementMs": 52083,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779104752,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779111183,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779117099,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779129390,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779132860,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779154213,
+          "text": "The guard is X less than negative one."
+        },
+        {
+          "hostMs": 1791779159245,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779164786,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779169329,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779176248,
+          "text": "return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779182371,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779193438,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779194765,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779203186,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779234484,
+          "text": ""
+        },
+        {
+          "hostMs": 1791779240022,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779244477,
+      "serviceExitedAt": "2026-10-12T04:27:24.477Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 180,
+        "conversation.item.input_audio_transcription.completed": 17,
+        "input_audio_buffer.committed": 3
+      }
+    },
+    {
+      "repetition": 1,
+      "phaseMs": 80,
+      "commit": false,
+      "startedAt": "2026-10-12T04:27:24.479Z",
+      "completedAt": "2026-10-12T04:30:16.566Z",
+      "inputPcmSha256": "bdf7f14797bd67a005482096f39022cfd4cf67b6684d593a7e37ece5b2c6d4d8",
+      "observationWindowAfterTargetMs": 6584.0625,
+      "targetSpeechEndHostMs": 1791779332053.9375,
+      "primaryWindowEndsAt": 1791779338638,
+      "commitSentAt": null,
+      "committedAcknowledgedInPrimaryWindow": null,
+      "unattributedPrimaryFinals": [
+        {
+          "hostMs": 1791779338508,
+          "text": "Return seventeen on the true branch and nineteen otherwise"
+        }
+      ],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779338638,
+      "drainAcknowledgedAt": 1791779412127,
+      "drainAcknowledgementMs": 73489,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779256051,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779263517,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779270336,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779284213,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779288494,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779312936,
+          "text": "The guard is X less than negative one"
+        },
+        {
+          "hostMs": 1791779319111,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779325540,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779330486,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779338508,
+          "text": "Return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779345612,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779358422,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779359960,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779369711,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779412114,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779416566,
+      "serviceExitedAt": "2026-10-12T04:30:16.566Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 184,
+        "conversation.item.input_audio_transcription.completed": 15,
+        "input_audio_buffer.committed": 1
+      }
+    },
+    {
+      "repetition": 1,
+      "phaseMs": 80,
+      "commit": true,
+      "startedAt": "2026-10-12T04:30:16.567Z",
+      "completedAt": "2026-10-12T04:33:10.555Z",
+      "inputPcmSha256": "bdf7f14797bd67a005482096f39022cfd4cf67b6684d593a7e37ece5b2c6d4d8",
+      "observationWindowAfterTargetMs": 6587.0625,
+      "targetSpeechEndHostMs": 1791779504136.9375,
+      "primaryWindowEndsAt": 1791779510724,
+      "commitSentAt": 1791779504522,
+      "committedAcknowledgedInPrimaryWindow": false,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779510724,
+      "drainAcknowledgedAt": 1791779585668,
+      "drainAcknowledgementMs": 74944,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779428144,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779435651,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779442539,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779456528,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779460870,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779485421,
+          "text": "The guard is X less than negative one"
+        },
+        {
+          "hostMs": 1791779491637,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779498107,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779503090,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779511191,
+          "text": "Return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779518356,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779531230,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779532776,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779542571,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779578928,
+          "text": ""
+        },
+        {
+          "hostMs": 1791779585659,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779590555,
+      "serviceExitedAt": "2026-10-12T04:33:10.555Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 184,
+        "conversation.item.input_audio_transcription.completed": 17,
+        "input_audio_buffer.committed": 3
+      }
+    },
+    {
+      "repetition": 2,
+      "phaseMs": 0,
+      "commit": true,
+      "startedAt": "2026-10-12T04:33:10.557Z",
+      "completedAt": "2026-10-12T04:36:05.502Z",
+      "inputPcmSha256": "5a93be1771fff16172ef173be36dac33ea59a71cd6cf58539e287e70a31f2737",
+      "observationWindowAfterTargetMs": 6666.0625,
+      "targetSpeechEndHostMs": 1791779678249.9375,
+      "primaryWindowEndsAt": 1791779684916,
+      "commitSentAt": 1791779678716,
+      "committedAcknowledgedInPrimaryWindow": false,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779684916,
+      "drainAcknowledgedAt": 1791779760568,
+      "drainAcknowledgementMs": 75652,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779602034,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779609572,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779616454,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779630819,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779634864,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779659928,
+          "text": "The guard is X less than negative one."
+        },
+        {
+          "hostMs": 1791779665849,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779672346,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779677664,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779685761,
+          "text": "return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779692939,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779705919,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779707476,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779717349,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779754068,
+          "text": ""
+        },
+        {
+          "hostMs": 1791779760566,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779765502,
+      "serviceExitedAt": "2026-10-12T04:36:05.502Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 180,
+        "conversation.item.input_audio_transcription.completed": 17,
+        "input_audio_buffer.committed": 3
+      }
+    },
+    {
+      "repetition": 2,
+      "phaseMs": 0,
+      "commit": false,
+      "startedAt": "2026-10-12T04:36:05.503Z",
+      "completedAt": "2026-10-12T04:38:58.186Z",
+      "inputPcmSha256": "5a93be1771fff16172ef173be36dac33ea59a71cd6cf58539e287e70a31f2737",
+      "observationWindowAfterTargetMs": 6666.0625,
+      "targetSpeechEndHostMs": 1791779852993.9375,
+      "primaryWindowEndsAt": 1791779859660,
+      "commitSentAt": null,
+      "committedAcknowledgedInPrimaryWindow": null,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791779859660,
+      "drainAcknowledgedAt": 1791779933751,
+      "drainAcknowledgementMs": 74091,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779776755,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779784238,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779791094,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779805402,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779809438,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791779834277,
+          "text": "The guard is X less than negative one."
+        },
+        {
+          "hostMs": 1791779840171,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791779846637,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791779851889,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791779859963,
+          "text": "return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791779867101,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791779880000,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791779881535,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791779891357,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791779933740,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791779938186,
+      "serviceExitedAt": "2026-10-12T04:38:58.186Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 180,
+        "conversation.item.input_audio_transcription.completed": 15,
+        "input_audio_buffer.committed": 1
+      }
+    },
+    {
+      "repetition": 2,
+      "phaseMs": 80,
+      "commit": true,
+      "startedAt": "2026-10-12T04:38:58.188Z",
+      "completedAt": "2026-10-12T04:41:51.900Z",
+      "inputPcmSha256": "bdf7f14797bd67a005482096f39022cfd4cf67b6684d593a7e37ece5b2c6d4d8",
+      "observationWindowAfterTargetMs": 6586.0625,
+      "targetSpeechEndHostMs": 1791780025757.9375,
+      "primaryWindowEndsAt": 1791780032344,
+      "commitSentAt": 1791780026143,
+      "committedAcknowledgedInPrimaryWindow": false,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791780032344,
+      "drainAcknowledgedAt": 1791780107005,
+      "drainAcknowledgementMs": 74661,
+      "drainedFinals": [
+        {
+          "hostMs": 1791779949730,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791779957207,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791779964023,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791779977969,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791779982302,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791780006836,
+          "text": "The guard is X less than negative one"
+        },
+        {
+          "hostMs": 1791780013009,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791780019453,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791780024425,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791780032481,
+          "text": "Return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791780039610,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791780052509,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791780054055,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791780063855,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791780100248,
+          "text": ""
+        },
+        {
+          "hostMs": 1791780106994,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791780111900,
+      "serviceExitedAt": "2026-10-12T04:41:51.900Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 184,
+        "conversation.item.input_audio_transcription.completed": 17,
+        "input_audio_buffer.committed": 3
+      }
+    },
+    {
+      "repetition": 2,
+      "phaseMs": 80,
+      "commit": false,
+      "startedAt": "2026-10-12T04:41:51.902Z",
+      "completedAt": "2026-10-12T04:44:46.002Z",
+      "inputPcmSha256": "bdf7f14797bd67a005482096f39022cfd4cf67b6684d593a7e37ece5b2c6d4d8",
+      "observationWindowAfterTargetMs": 6587.0625,
+      "targetSpeechEndHostMs": 1791780199464.9375,
+      "primaryWindowEndsAt": 1791780206052,
+      "commitSentAt": null,
+      "committedAcknowledgedInPrimaryWindow": null,
+      "unattributedPrimaryFinals": [],
+      "targetAttribution": "Unverified: finals received after target speech can belong to earlier queued audio. No target WER or target recovery success imputed from these events.",
+      "targetWER": null,
+      "targetRecognitionSuccess": null,
+      "postObservationDrainCommitSentAt": 1791780206052,
+      "drainAcknowledgedAt": 1791780281578,
+      "drainAcknowledgementMs": 75526,
+      "drainedFinals": [
+        {
+          "hostMs": 1791780123489,
+          "text": "For example,"
+        },
+        {
+          "hostMs": 1791780130998,
+          "text": "ten thousand elements and one hundred ninety two threads per block"
+        },
+        {
+          "hostMs": 1791780137915,
+          "text": "compute the minimum number of blocks needed to cover every element"
+        },
+        {
+          "hostMs": 1791780151934,
+          "text": "Also report the active threads in the final block and the number of launched threads that need a bounce check"
+        },
+        {
+          "hostMs": 1791780156296,
+          "text": "Explain the arithmetic"
+        },
+        {
+          "hostMs": 1791780181108,
+          "text": "The guard is X less than negative one"
+        },
+        {
+          "hostMs": 1791780187369,
+          "text": "What does the function return at negative one?"
+        },
+        {
+          "hostMs": 1791780193888,
+          "text": "Correction"
+        },
+        {
+          "hostMs": 1791780198899,
+          "text": "I said less than or equal to negative one"
+        },
+        {
+          "hostMs": 1791780207029,
+          "text": "Return seventeen on the true branch and nineteen otherwise"
+        },
+        {
+          "hostMs": 1791780214176,
+          "text": "evaluate negative one using the corrected operator"
+        },
+        {
+          "hostMs": 1791780227176,
+          "text": "Okay"
+        },
+        {
+          "hostMs": 1791780228733,
+          "text": "I see"
+        },
+        {
+          "hostMs": 1791780238641,
+          "text": "why"
+        },
+        {
+          "hostMs": 1791780281560,
+          "text": ""
+        }
+      ],
+      "followingTurnText": "",
+      "followingTurnWER": {
+        "distance": 1,
+        "referenceWords": 1,
+        "rate": 1,
+        "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+      },
+      "failure": null,
+      "eventCollectionClosedAt": 1791780286002,
+      "serviceExitedAt": "2026-10-12T04:44:46.002Z",
+      "serviceExitCode": null,
+      "serviceExitSignal": "SIGTERM",
+      "eventCounts": {
+        "session.created": 1,
+        "session.updated": 1,
+        "conversation.item.input_audio_transcription.delta": 184,
+        "conversation.item.input_audio_transcription.completed": 15,
+        "input_audio_buffer.committed": 1
+      }
+    }
+  ],
+  "rejectedExperiment": {
+    "source": {
+      "file": "artifacts/controller-v72/asr-finalization-controls-r1/results.json",
+      "sha256": "58987762567f6bc973aba834ba4bd3c5a6040be49a771665ff8af2cc70336251"
+    },
+    "status": "invalid_experiment",
+    "collectorSha256": "ef4d824537105dba183410498ff2db0346a704ab960e39c0ad351ccd9dffd421",
+    "reason": "Closing sockets were not awaited and message callbacks overlapped later trials. Completed trials continued receiving events. Operator stopped the owned ASR service to prevent further overlap; the resulting socket error is not an independently observed service failure.",
+    "interruptedByOperator": true,
+    "trials": [
+      {
+        "repetition": 1,
+        "phaseMs": 0,
+        "commit": false,
+        "startedAt": "2026-10-12T04:02:22.823Z",
+        "completedAt": "2026-10-12T04:03:52.394Z",
+        "eventsAfterDeclaredCompletion": [
+          {
+            "hostMs": 1791777832403,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777832657,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "I see"
+          },
+          {
+            "hostMs": 1791777844919,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777845419,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777845680,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777845946,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "why"
+          }
+        ],
+        "failure": null
+      },
+      {
+        "repetition": 1,
+        "phaseMs": 0,
+        "commit": true,
+        "startedAt": "2026-10-12T04:03:52.396Z",
+        "completedAt": "2026-10-12T04:05:21.962Z",
+        "eventsAfterDeclaredCompletion": [
+          {
+            "hostMs": 1791777922124,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777922385,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777922902,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777923403,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "return seventeen on the true branch and nineteen otherwise"
+          },
+          {
+            "hostMs": 1791777926200,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777926720,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777927260,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777927780,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777928282,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777928783,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777929060,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777929848,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777930110,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777930882,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777931390,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777931885,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777932160,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777932940,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777933445,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777933704,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777934203,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777934702,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "evaluate negative one using the corrected operator"
+          },
+          {
+            "hostMs": 1791777950907,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777951166,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791777951664,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          }
+        ],
+        "failure": null
+      },
+      {
+        "repetition": 1,
+        "phaseMs": 80,
+        "commit": false,
+        "startedAt": "2026-10-12T04:05:21.963Z",
+        "completedAt": "2026-10-12T04:06:51.528Z",
+        "eventsAfterDeclaredCompletion": [
+          {
+            "hostMs": 1791778013249,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778013784,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778014551,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778015084,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778015599,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778016125,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778016384,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778017176,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778017680,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778018205,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778018465,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778018989,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778019507,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778020293,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778020804,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778021301,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778021802,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778022298,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "evaluate negative one using the corrected operator"
+          },
+          {
+            "hostMs": 1791778038111,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778038632,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778039133,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778039393,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778039657,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "Okay"
+          },
+          {
+            "hostMs": 1791778040435,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778040959,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778041459,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          }
+        ],
+        "failure": null
+      },
+      {
+        "repetition": 1,
+        "phaseMs": 80,
+        "commit": true,
+        "startedAt": "2026-10-12T04:06:51.529Z",
+        "completedAt": "2026-10-12T04:08:21.098Z",
+        "eventsAfterDeclaredCompletion": [
+          {
+            "hostMs": 1791778102081,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778102594,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778103385,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778104145,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778104405,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778104914,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778105178,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778105709,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778106214,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778106999,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778107264,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778107790,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778108311,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778109099,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778109605,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778109862,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778110129,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778110646,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "evaluate negative one using the corrected operator"
+          },
+          {
+            "hostMs": 1791778126937,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778127202,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778127702,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778127963,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778128462,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "Okay"
+          },
+          {
+            "hostMs": 1791778128970,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778129493,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778129991,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778130257,
+            "type": "conversation.item.input_audio_transcription.delta",
+            "text": null
+          },
+          {
+            "hostMs": 1791778130755,
+            "type": "conversation.item.input_audio_transcription.completed",
+            "text": "I see"
+          }
+        ],
+        "failure": null
+      },
+      {
+        "repetition": 2,
+        "phaseMs": 0,
+        "commit": true,
+        "startedAt": "2026-10-12T04:08:21.099Z",
+        "completedAt": "2026-10-12T04:09:50.666Z",
+        "eventsAfterDeclaredCompletion": [],
+        "failure": null
+      },
+      {
+        "repetition": 2,
+        "phaseMs": 0,
+        "commit": false,
+        "startedAt": "2026-10-12T04:09:50.668Z",
+        "completedAt": null,
+        "eventsAfterDeclaredCompletion": [],
+        "failure": null
+      }
+    ]
+  }
+}

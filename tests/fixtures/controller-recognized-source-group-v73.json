@@ -1,0 +1,189 @@
+{
+  "journalFile": "artifacts/controller-v72/native/error-recovery-dual-r3-codex-three-hour/interview.json",
+  "journalSha256": "312c07a8817cb625f60840fef07968e2249a0f96b8c7d4e427cbcfbbbd9012ca",
+  "sourceRound": 2,
+  "recallRound": 113,
+  "sourceQuestionSha256": "89d4da7e582a237334e8b03d3b6292fad73809dcf06d829a40d014245499c850",
+  "recallQuestion": "After three hours, repeat the original first-hour Foo function exactly, then its corrected version separately. Recall the original Delta decision, Sigma's initial decision and its correction. Distinguish exact recognized source facts from any uncertainty or suggestion. Explain the branch result at -1 in each code version.",
+  "recallQuestionSha256": "635b40224a1101eba2e3cbd464ced33a0608668a9579480f65b2c90375a6f61e",
+  "hostToNativeOffset": 1791814372189,
+  "expectedFloor": 50389,
+  "confirmedAt": 65745,
+  "expectedRecognizedRequest": "We have agreed that release Delta uses a retention period of exactly thirty seven days Myra owns it and the checkpoint identifier is Foo underscore seventeen Keep this decision for the rest of this meeting",
+  "expectedSegmentIds": [
+    "Remote-84a154c4-f7f8-421a-9b81-e56f5eb652cc",
+    "Remote-38b46833-7172-4314-a9cb-fc9fa30e72ef",
+    "Remote-578d0594-6138-4db9-a1ab-20c486d9d5b6",
+    "Remote-d06685a9-a7ec-4934-a36a-4b9dc4795dbe",
+    "Remote-07671cb2-a964-4185-a692-afcda37cc7bc"
+  ],
+  "omittedSourceId": "Remote-578d0594-6138-4db9-a1ab-20c486d9d5b6",
+  "omittedSourceText": "Myra owns it",
+  "events": [
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": false,
+        "source": "remote",
+        "timestamp": 50389,
+        "turnStartedAt": 50389
+      },
+      "receivedHostMs": 1791814422578
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-84a154c4-f7f8-421a-9b81-e56f5eb652cc",
+        "source": "remote",
+        "text": "We have agreed that",
+        "startedAt": 50389,
+        "endedAt": 52171,
+        "final": true
+      },
+      "receivedHostMs": 1791814424045
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 55657,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 55489
+      },
+      "receivedHostMs": 1791814427493
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 55489
+      },
+      "receivedHostMs": 1791814427856
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-38b46833-7172-4314-a9cb-fc9fa30e72ef",
+        "source": "remote",
+        "text": "release Delta uses a retention period of exactly thirty seven days",
+        "startedAt": 50389,
+        "endedAt": 56011,
+        "final": true
+      },
+      "receivedHostMs": 1791814427889
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 56149,
+        "turnStartedAt": 50389
+      },
+      "receivedHostMs": 1791814428334
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 57307,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 57139
+      },
+      "receivedHostMs": 1791814429143
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 57670,
+        "quiet": false,
+        "source": "remote",
+        "timestamp": 57619
+      },
+      "receivedHostMs": 1791814429506
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-578d0594-6138-4db9-a1ab-20c486d9d5b6",
+        "source": "remote",
+        "text": "Myra owns it",
+        "startedAt": 56149,
+        "endedAt": 58091,
+        "final": true
+      },
+      "receivedHostMs": 1791814429968
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 61026,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 60859
+      },
+      "receivedHostMs": 1791814432862
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 60859
+      },
+      "receivedHostMs": 1791814433224
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-d06685a9-a7ec-4934-a36a-4b9dc4795dbe",
+        "source": "remote",
+        "text": "and the checkpoint identifier is Foo underscore seventeen",
+        "startedAt": 56149,
+        "endedAt": 61611,
+        "final": true
+      },
+      "receivedHostMs": 1791814433489
+    },
+    {
+      "name": "speech.started",
+      "payload": {
+        "continued": true,
+        "source": "remote",
+        "timestamp": 61549,
+        "turnStartedAt": 50389
+      },
+      "receivedHostMs": 1791814433732
+    },
+    {
+      "name": "speech.activity",
+      "payload": {
+        "observedAt": 64089,
+        "quiet": true,
+        "source": "remote",
+        "timestamp": 63919
+      },
+      "receivedHostMs": 1791814435925
+    },
+    {
+      "name": "speech.ended",
+      "payload": {
+        "source": "remote",
+        "timestamp": 63919
+      },
+      "receivedHostMs": 1791814436286
+    },
+    {
+      "name": "transcript",
+      "payload": {
+        "id": "Remote-07671cb2-a964-4185-a692-afcda37cc7bc",
+        "source": "remote",
+        "text": "Keep this decision for the rest of this meeting",
+        "startedAt": 61549,
+        "endedAt": 64651,
+        "final": true
+      },
+      "receivedHostMs": 1791814436530
+    }
+  ],
+  "scope": "Recorded synthetic source-window VAD and finalized recognized clauses only. Original authenticated capture is unchanged. Replay checks actual logical-floor membership and retrieval, not fresh ASR accuracy, live latency, acoustic provenance or all cross-utterance recall. The recognized owner remains exactly as emitted; no word/name repair."
+}

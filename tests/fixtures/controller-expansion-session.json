@@ -1,0 +1,51 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "objective": "brief",
+  "serviceTier": null,
+  "scope": "Typed native expansion lifecycle probes; keep distinct from spoken follow-up latency and the older frozen-build workloads.",
+  "turns": [
+    {
+      "name": "streaming-parent",
+      "question": "Implement a complete C++17 bounded FIFO class holding exactly 17 integers. Give push and pop that reject full and empty operations without mutating the queue or the pop output. Include a test main covering fill, overflow, FIFO draining and wraparound. Explain the invariant and complexity before the complete code.",
+      "settle": false
+    },
+    {
+      "name": "streaming-expansion",
+      "expandOf": "streaming-parent",
+      "afterDisplayed": true,
+      "settle": false
+    },
+    {
+      "name": "newer-focus",
+      "question": "Switch to transactions. Why can snapshot isolation permit write skew when concurrent transactions update different rows? Give a concrete two-doctor example.",
+      "afterDisplayed": true
+    },
+    {
+      "name": "stale-expansion",
+      "expandOf": "streaming-parent",
+      "expectedReply": false,
+      "observationBudgetMs": 1000
+    },
+    {
+      "name": "completed-parent",
+      "question": "Implement an unsigned C++17 atomic counter using a compare_exchange_weak retry loop with memory_order_relaxed. Eight threads each increment it 100000 times and join. Supply complete executable code and assertions, explain why the expected argument must be updated after failure, and state the expected final value. Arithmetic cannot overflow here; the counter publishes no other memory."
+    },
+    {
+      "name": "completed-expansion",
+      "expandOf": "completed-parent"
+    },
+    {
+      "name": "explicit-finalized-request",
+      "acceptRecognizedNow": true,
+      "question": "Explain why the compare_exchange_weak retry loop in the exact counter code above must recompute its desired value after failure. Give a concrete competing-update trace and distinguish spurious failure from overflow."
+    },
+    {
+      "name": "stale-explicit-acceptance",
+      "staleAnswerNowOf": "completed-parent",
+      "question": "A delayed control for the old counter request must not take focus back.",
+      "expectedReply": false,
+      "observationBudgetMs": 1000
+    }
+  ]
+}

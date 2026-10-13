@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "immutable_actual_source_exact_fence_comparison",
+  "recordedAt": "2026-10-13T05:37:47.491Z",
+  "completedCapture": true,
+  "review": {
+    "file": "docs/evidence/controller-reliability-plan-three-hour-prefix113-v73.json",
+    "sha256": "74a849c6866bce97686d67949af74afb399f50ff793962f6d1d956733f1e9b5e"
+  },
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-chatgpt-three-hour-prefix113/journal.json",
+    "sha256": "a9b51e6857df41d7e0350d1350f15acad419db27e3bc60ff2632a61ff6b5399a",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-chatgpt-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 113
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "chatgpt",
+  "origin": {
+    "round": 1,
+    "field": "question",
+    "fieldSha256": "6699f37deff45808ff1dc420e5101a3c48b7e9df038219fd06ad5b0f809a999d",
+    "fenceIndex": 0,
+    "fenceBytes": 44,
+    "fenceSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+    "acceptedAt": 20061
+  },
+  "recall": {
+    "round": 113,
+    "answerSha256": "39db87f3379259d6ab3ee15e32a1a99e3671b36e17c635d720b2774c70582ba0",
+    "fenceIndex": 0,
+    "fenceCount": 2,
+    "fenceBytes": 44,
+    "fenceSha256": "6b9a66a716783b7d11e19ae506117be44c9093d3fa3db61593a8b0b6eaeeadc6",
+    "acceptedAt": 10800132
+  },
+  "sourceRowsIntervening": 111,
+  "acceptedSourceAgeMs": 10780071,
+  "byteExact": true,
+  "scope": "Actual reviewed source fences compared as UTF8 bytes without trimming, whitespace/operator/name/sign normalization or source substitution. Uses original selected acceptance timestamps for source age, not model submission or paint. Canonical source-row separation is not a count of every intermediate accepted generation. No code execution or complete-long-capture certification.",
+  "checkerSha256": "32ac4da6e47305df7b24a0c1d29b2a39856c98f2c0067fd78ceb04e70e1ace97"
+}

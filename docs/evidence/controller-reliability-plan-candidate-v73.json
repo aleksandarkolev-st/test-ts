@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "authenticated_new_binary_plan_original_failed_candidate_waveform",
+  "recordedAt": "2026-10-12T23:19:38.613Z",
+  "journal": {
+    "file": "artifacts/controller-v73/native/reliability-v73-r1-chatgpt-candidate/interview.json",
+    "sha256": "a466b2a8c66ecbf84397798d9f54b78fdb3f8fdd3a41491d46f2c2949e8482c3",
+    "actualInterviewDurationMs": 96241
+  },
+  "manifest": {
+    "file": "artifacts/controller-v73/prepared/candidate-wave-regression.json",
+    "sha256": "07b51eddcbb059f9d31242fc2a1f8e1192da4eb7e2b1797f97e77b2031f3a477"
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "chatgpt",
+  "rows": [
+    {
+      "round": 1,
+      "name": "candidate-failed-waveform",
+      "question": "Your bounds separated observations from assumptions. Switch to cooling: two kilograms of well-mixed water starts at sixty degrees Celsius in a room held at twenty degrees. It reaches forty degrees after ten minutes and thirty after twenty. Specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible; no evaporation or internal heating occurs. Heat-loss power equals constant conductance times water temperature minus room temperature. Derive conductance with units. [Interviewer pause: one point five seconds.] A later run starts at sixty and reaches twenty-seven after twenty minutes; its constant ambient temperature was not logged. Construct two exact explanations, one retaining conductance and one retaining twenty-degree ambient. What experiment distinguishes them?",
+      "recognizedQuestion": "Switch to cooling two kilograms of well mixed water starts at sixty degrees Celsius in a room held at twenty degrees It reaches forty degrees after ten minutes and thirty after twenty specific heat is four thousand two hundred joules per kilogram per kelvin. Vessel heat capacity is negligible no evaporation or internal heating occurs Heat loss power equals constant conductance times water temperature minus room temperature derive conductance with units interviewer pause one point five seconds A later run starts at sixty and reaches twenty seven after twenty minutes its constant ambient temperature was not logged Construct two exact explanations one retaining conductance and one retaining twenty degree ambient What experiment distinguishes them",
+      "questionSha256": "824e3b8d6ddfce6ac8527dd29ff6f3eb5a7a3c28ec609a236dddb588aa20c765",
+      "recognizedQuestionSha256": "87717725089a842e7783b741cdbbbad615b45bf70ece650db7beb786de5df23c",
+      "answer": "The original conductance is 14 ln(2) watts per kelvin, approximately 9.70 W/K. The later result can be explained exactly either by a colder room at 16°C with that same conductance, or by increased conductance at a room temperature of 20°C.\n\nThe water’s heat capacity is C = mc = 2 × 4,200 = 8,400 J/K. Conservation of energy gives\nC dT/dt = −G(T − A),\nwhere G is conductance and A is constant ambient temperature. Integrating gives\nT(t) = A + (T(0) − A) exp(−Gt/C),\nwith time in seconds.\n\nIn the original run, the temperature excess above 20°C falls from 40 K to 20 K in 600 seconds, so\nexp(−600G/8,400) = 1/2,\nG = (8,400/600) ln(2) = 14 ln(2) W/K.\nAt twenty minutes the excess is one quarter of its initial value, predicting 20 + 40/4 = 30°C, consistent with the second observation.\n\nFor the later run, here are two exact explanations:\n\n1. Retain the original conductance. Its twenty-minute decay factor remains 1/4. Therefore\n27 = A + (60 − A)/4,\nwhich gives A = 16°C.\n\n2. Retain the 20°C ambient temperature. Then\n27 − 20 = (60 − 20) exp(−1,200G/8,400),\nso\nG = 7 ln(40/7) W/K ≈ 12.20 W/K.\nThis is about 26% greater than the original conductance.\n\nTo distinguish them, repeat the later setup while continuously measuring both ambient and water temperatures, preferably holding the ambient at a verified 20°C. Under the unchanged-conductance explanation, the water reaches 30°C after twenty minutes; under the increased-conductance explanation, it reaches 27°C. Fit the logged cooling curve to check conductance and whether the constant-ambient model actually holds. The single later endpoint alone cannot identify both ambient temperature and conductance, and a repeat only diagnoses the earlier run if its heat-transfer conditions are reproduced.",
+      "answerSha256": "f2f7110d2b7c8d66e105d9093d2d57c28b7da66a65a4ffc705c7fc721ea12177",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": false,
+      "usefulPrefix": "The original conductance is 14 ln(2) watts per kelvin, approximately 9.70 W/K.",
+      "note": "Full final recognized cooling request complete. C=8400J/K,energyconservation8400*dT/dt=-G(T-A),solutionA+(60-A)*exp(-Gt/C),originalG14ln2W/K fitsboth10/20min40/30. Later27at20min: fixedG givesA16; fixedA20 givesG7ln(40/7)~12.20W/K,~25.7%higher. Measuredambient pluscontrolled20repeat distinguishes30versus27; explicitly requires heat-transfer conditionsreproduced and verifiesconstantambientmodel. Manual math/proofcorrect, nouniquelyidentifiedcauseclaimed."
+    },
+    {
+      "round": 2,
+      "name": "original-candidate-context-why",
+      "question": "Why?",
+      "recognizedQuestion": "why",
+      "questionSha256": "5d8a995a6fa7cf7c577cc9d49ca9e00d4aee4d0bcd5e2ad5caff27e2a8097276",
+      "recognizedQuestionSha256": "2be23c585f15e5fd3279d0663036dd9f6e634f4225ef326fc83fb874dbb81a0f",
+      "answer": "Because cooling depends on both conductance and ambient temperature, the later endpoint alone cannot tell us which changed.\n\nThe water’s heat capacity is C = mc = 2 × 4,200 = 8,400 J/K. Energy conservation gives C dT/dt = −G(T − A), so T(t) = A + (60 − A)e^(−Gt/C), with time in seconds. In the original run, the temperature excess above 20°C halves in 600 seconds, giving G = (8,400/600) ln 2 = 14 ln 2 ≈ 9.70 W/K. That also predicts 30°C at twenty minutes, matching the second observation.\n\nFor the later run, retaining that conductance makes the twenty-minute decay factor exactly 1/4. Thus 27 = A + (60 − A)/4, which gives A = 16°C. Alternatively, retaining A = 20°C gives 7 = 40e^(−1,200G/8,400), so G = 7 ln(40/7) ≈ 12.20 W/K. Both explanations reproduce 27°C exactly.\n\nTo distinguish them, measure the ambient temperature during a repeat under the later run’s conditions: the explanations predict 16°C versus 20°C. An additional water-temperature measurement at ten minutes also distinguishes these two models: they predict 38°C versus 20 + √280 ≈ 36.73°C, provided the conditions remain unchanged.",
+      "answerSha256": "eb63289c456b1075f9cea26425a7c5522595b6d47a366e0be56054263d407547",
+      "phase": "complete",
+      "error": null,
+      "correctness": "correct",
+      "reasoningVerdict": "pass",
+      "completed": true,
+      "ordinaryFollowup": true,
+      "usefulPrefix": "Because cooling depends on both conductance and ambient temperature, the later endpoint alone cannot tell us which changed.",
+      "note": "Actual subsequentWhy uses precedingliveexchange after fixedcontextclear; causalnonidentifiability explained, same2exactscenarios. Additional10minatA16 gives16+44/2=38; A20/higherG gives20+40sqrt(7/40)=20+sqrt280~36.73. Conditionstabilityqualified. No originalcodeorprewrittenanswerhint supplied."
+    }
+  ],
+  "measurements": {
+    "scope": "Observed fixture workload; sample p95 is not a population guarantee. Missing/incorrect/incomplete rows remain in counts and have no successful latency. HTTP actual wire write remains unknown when not instrumented.",
+    "rows": [
+      {
+        "round": 1,
+        "name": "candidate-failed-waveform",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": false,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791847090181,
+          "low": 7309,
+          "high": 7314,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 6759,
+          "high": 6764
+        },
+        "acceptedToProtocolCompletionMs": 20076,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 21749,
+          "high": 21756
+        },
+        "acceptedToCorrectWorkCompletionMs": 20076,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 573,
+          "high": 580
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 1673,
+          "high": 1680
+        },
+        "acceptedToRequestAttemptMs": 2,
+        "acceptedToFirstProviderDeltaMs": 4747,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 1100,
+        "inputTokens": 3443,
+        "cachedInputTokens": 0,
+        "outputTokens": 594,
+        "reasoningTokens": 79,
+        "outputTokensPerStreamingSecond": 38.75008154478439,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 2,
+        "selectedRequestWER": {
+          "distance": 6,
+          "referenceWords": 120,
+          "rate": 0.05,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 120,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      },
+      {
+        "round": 2,
+        "name": "original-candidate-context-why",
+        "kind": "native_audio",
+        "phase": "complete",
+        "error": null,
+        "intentionalInterruption": false,
+        "ordinaryFollowup": true,
+        "completed": true,
+        "observedPlannedInterruption": false,
+        "injectedTransportFault": false,
+        "transportFaultProbe": false,
+        "observerInterference": null,
+        "requestedWorkComplete": true,
+        "missing": false,
+        "correctness": "correct",
+        "reasoningVerdict": "pass",
+        "acceptedToActualWriteMs": null,
+        "usefulFeedbackMs": {
+          "hostMs": 1791847113569,
+          "low": 8004,
+          "high": 8009,
+          "origin": "actual synthetic speech end"
+        },
+        "firstWordMs": {
+          "low": 7383,
+          "high": 7388
+        },
+        "acceptedToProtocolCompletionMs": 16077,
+        "sourceSpeechEndToProtocolCompletionMs": {
+          "low": 16737,
+          "high": 16744
+        },
+        "acceptedToCorrectWorkCompletionMs": 16077,
+        "sourceSpeechEndToTranscriptFinalMs": {
+          "low": 625,
+          "high": 632
+        },
+        "sourceSpeechEndToAcceptedMs": {
+          "low": 660,
+          "high": 667
+        },
+        "acceptedToRequestAttemptMs": 1,
+        "acceptedToFirstProviderDeltaMs": 6486,
+        "submissionAckMs": null,
+        "submittedToInputReaderReceiptMs": null,
+        "acceptanceAfterTranscriptFinalMs": 35,
+        "inputTokens": 1910,
+        "cachedInputTokens": 0,
+        "outputTokens": 377,
+        "reasoningTokens": 45,
+        "outputTokensPerStreamingSecond": 39.30768428735273,
+        "refinementChars": 0,
+        "steeringCount": 0,
+        "remoteTerminationConfirmed": true,
+        "localRetirementHoldMs": null,
+        "acceptedGenerationsInSourceWindow": 1,
+        "selectedRequestWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        },
+        "finalizedSourceWER": {
+          "distance": 0,
+          "referenceWords": 1,
+          "rate": 0,
+          "scope": "Case-insensitive lexical WER; numerals/identifiers are not normalized. Segmentation, source coverage and semantic/identifier errors need separate review."
+        }
+      }
+    ],
+    "counts": {
+      "all": 2,
+      "expectedReplies": 2,
+      "complete": 2,
+      "missing": 0,
+      "errors": 0,
+      "intentionallyInterrupted": 0,
+      "observedPlannedInterruptions": 0,
+      "observerInterference": 0,
+      "correct": 2,
+      "incorrect": 0,
+      "requestedWorkComplete": 2,
+      "requestedWorkIncomplete": 0,
+      "requestedCompletionPending": 0,
+      "reasoningPass": 2,
+      "reasoningFail": 0,
+      "correctnessPending": 0
+    },
+    "acceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "faultProbeAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverAcceptedToWriteMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "nonFaultNonObserverScope": "Excludes requested transport-fault probes and disclosed observer interference. All rows remain in correctness/completion/missing counts and overall latency distributions. This exclusion alone does not certify a healthy warm path.",
+    "nonFaultProbeScope": "Excludes requested transport-fault probes, including unsupported or unconfirmed injections. Does not independently certify every remaining sample as a healthy warm connection.",
+    "acceptedToProtocolCompletionMs": {
+      "count": 2,
+      "min": 16077,
+      "median": 18076.5,
+      "sampleP95": 20076,
+      "max": 20076
+    },
+    "acceptedToCorrectWorkCompletionMs": {
+      "count": 2,
+      "min": 16077,
+      "median": 18076.5,
+      "sampleP95": 20076,
+      "max": 20076
+    },
+    "sourceSpeechEndToProtocolCompletionMs": {
+      "count": 2,
+      "min": 16744,
+      "median": 19250,
+      "sampleP95": 21756,
+      "max": 21756
+    },
+    "outputTokensPerStreamingSecond": {
+      "count": 2,
+      "min": 38.75008154478439,
+      "median": 39.02888291606856,
+      "sampleP95": 39.30768428735273,
+      "max": 39.30768428735273
+    },
+    "usefulNativeFeedbackMs": {
+      "count": 2,
+      "min": 7314,
+      "median": 7661.5,
+      "sampleP95": 8009,
+      "max": 8009
+    },
+    "usefulTypedFeedbackMs": {
+      "count": 0,
+      "min": null,
+      "median": null,
+      "sampleP95": null,
+      "max": null
+    },
+    "usefulFollowupMs": {
+      "count": 1,
+      "min": 8009,
+      "median": 8009,
+      "sampleP95": 8009,
+      "max": 8009
+    },
+    "allFollowupUsefulP95Ms": {
+      "all": 1,
+      "observed": 1,
+      "missingOrUnverified": 0,
+      "p95": 8009,
+      "gateEvaluable": true,
+      "scope": "Missing, incorrect and unverified useful delivery rank after finite correct delivery; missing latency is never replaced with a timeout value."
+    },
+    "providerComputeIsolated": false,
+    "panelTransitions": {
+      "transitions": [],
+      "maxPossibleCarryHighMs": 0,
+      "oldPaintChangesAfterAcceptance": 0,
+      "uncleared": 0,
+      "scope": "Sampled viewport transitions and native/host clock bounds. Upper bounds allow prior text until the first observed clearing/new-generation paint; an unobserved blank paint may make the actual interval shorter. Lower bounds use only observed old-generation paint after acceptance. Not a universal stale-output certificate."
+    }
+  },
+  "scope": "Both selected actual answers manually read and mathematically reviewed. Same original candidate waveform and frozencontext as newCodex, same model/effort/controller, but actual ASR and answers differ. Whole finalrequesteligibility works inthispair; all-generationaudit remainsseparate and earlier extraresponses cannot be omitted. HTTP actualwiretimingunknown, synthetic2rowcase notpopulation/highstakescertificate. No canned answer, topicrule, lexicalrepair or billedfallback."
+}

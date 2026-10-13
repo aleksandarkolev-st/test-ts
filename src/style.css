@@ -15,3 +15,8 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
 .question-queue { padding-top: 12px; font-size: 11px; color: var(--muted); }
 .question-queue > div { display: flex; gap: 6px; padding: 4px 0; }
 .question-queue > div > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+/* Keep a long recognized request from pushing the live cue below the viewport.
+   Its complete text remains available through keyboard and pointer scrolling. */
+.question p { max-height: 4.5em; overflow: auto; }
+.question p:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }

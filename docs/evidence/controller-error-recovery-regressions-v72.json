@@ -1,0 +1,113 @@
+{
+  "commit": "f0c7e8c",
+  "scope": "Generic answer-error eligibility and explicit typed-focus retirement regressions. Fixture tests only; authenticated live validation remains separate. Earlier failing test assumed pruned cancelleddraft persisted; correctedtest asserts cancellation token and independent retained ledger. No productionanswer/topicrules.",
+  "verification": {
+    "file": "artifacts/controller-v72/schema-recovery-regressions-r4/verification.json",
+    "sha256": "b069e1240f9b66295c690db2ef5a35f821d28eed210f508eeb538504faba7ff7",
+    "sourceSha256": {
+      "src-tauri/src/attachments/folder.rs": "15696edbf8ae624e16da52361c88b4d2fb47644ea19a95f0c0f683e4ac783740",
+      "src-tauri/src/attachments/mod.rs": "c95602fc46ba4dd8850fbdc2f10797799e13d777e69092ba0fe470d33a1260d0",
+      "src-tauri/src/attachments/project.rs": "56e72ef66c21be9025a86fa3bb974340b812d63d7ae08a204c87ef22959ff4fb",
+      "src-tauri/src/attachments/screenshot.rs": "d033ddccc9e5fb5a5ac2ac0548a8c74f01ce940dd3e04db5812f2263531da632",
+      "src-tauri/src/audio/mod.rs": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c",
+      "src-tauri/src/audio/resampler.rs": "36834f38596f1767ada4ca35201ae86de2caac28567f666332e6fa1d0a123e62",
+      "src-tauri/src/audio/windows_capture.rs": "377fcee7b456bc02ba13ee8393d662900b93a1872429ca6a8c0b570180cc48a4",
+      "src-tauri/src/gaze.rs": "bada3ffb1bbb9d976c4b85da08808ddee7c4cda78a9a1b8044b2ee286b536662",
+      "src-tauri/src/lib.rs": "0afa7079d881ec5df9f06a7343bce974ecbbec5201d3656068f5e547b5761e45",
+      "src-tauri/src/main.rs": "160eaf059d4a92b74506cf5346f1d327efcda0afe3e500bf665865b5f4195f92",
+      "src-tauri/src/meeting/context.rs": "948f93ed945642ef90c1c6c3419b3ffaae8260e0b2bede31589100ee4e25fb37",
+      "src-tauri/src/meeting/controller_tests.rs": "e53c8cb5da1e1d0a23176906d3f8fbf8fc04a5f4d1b5c19874c70931cced1b49",
+      "src-tauri/src/meeting/intent.rs": "a7b8f77ba7330cb9197faea155910dc7eb26e188f4dfc18513a083a1e5011c49",
+      "src-tauri/src/meeting/ledger.rs": "21e7fa726e533c4f517d23a638df61d5012c9f8dcea5d3bbf680b499de9ab93e",
+      "src-tauri/src/meeting/mod.rs": "2338f7db0ddad1cbe0ba949370044bc7e16ae5ecb118caf94948fc5e115cf42b",
+      "src-tauri/src/meeting/provisional.rs": "f956b29a0b735b06463a55827d8d7f22a0c354aa24e00f5f9ec407fbcc15b903",
+      "src-tauri/src/meeting/questions.rs": "f6aef086aa462a47df3f8651bc666f4ffa9265d614a2412a2c501b8e1210ada5",
+      "src-tauri/src/meeting/scheduler.rs": "1fc146fdaa9193c324c7aefc05c89baf6410d169e19b49121909618f680a6596",
+      "src-tauri/src/meeting/state.rs": "e6c607c6a37273992ed322f02b950f849f1ff93600c45c4cb8561345eeb36fbe",
+      "src-tauri/src/openai/auth.rs": "f15eaae8f242afa3106e5b870a190cb45e6c05699d2168cfb7ad2aeaf84e1007",
+      "src-tauri/src/openai/client.rs": "1212dc19c9dac4c6f1f26e37fc27490c08ea0039c2aba9f86c1d65ee435dbfdb",
+      "src-tauri/src/openai/codex.rs": "600b610ef21532916e92e3d095227f4210e5bd1058385233a26044ad33769463",
+      "src-tauri/src/openai/mailbox.rs": "a136c31dc579fff3deb64503f1bdcb0e521657b9ed0336acd500f4a2381ac419",
+      "src-tauri/src/openai/mod.rs": "acd572fb118b3f9c07c3244d09d638948dad9c7e14683f16aea3bac46a5bdf68",
+      "src-tauri/src/openai/prompts.rs": "82bd6f98247de69d39450928e80a95d929d260211af0d3ea676962cd31ca99a4",
+      "src-tauri/src/openai/realtime.rs": "876f19ee02581bc13b11a16feb2573af7d956ee053ae4fc9c94c73bbf2579b9e",
+      "src-tauri/src/openai/responses_ws.rs": "9eb9fd56572cc7b2d50ff3b54585b813ee9ce9636802fcdba8c4d7b0251d7a22",
+      "src-tauri/src/openai/timing.rs": "5cd6f3cb3d75a7c8d9c5e0b42b87652efa28c04cfbe4c4ebfab9338afa0e6ac0",
+      "src-tauri/src/overlay/capture_protection.rs": "f4383aadd9a32ddfcca13f7a6f4c4ebba4909e5c06f8d0a5f0fc4fbebe729808",
+      "src-tauri/src/overlay/mod.rs": "865d5a07770f48b2dbe4a85066692bc0cd695f95e2f8925b624eb24cbc8606be",
+      "src-tauri/src/overlay/window.rs": "7db24ada7ba832f1d0cbdcf5a9a4b2a68617a3727dcaabd14e2ab404415c3e2e",
+      "src-tauri/src/process.rs": "7bda0c8116468013449bcf4b2d986723c091f0b63c367acc03ef79c5c50d050b",
+      "src-tauri/src/runtime.rs": "fec10689ea2a97a0491acd62980c1c931bc6e557119b6c8bb665f5a059e6e85b",
+      "src-tauri/src/storage/credentials.rs": "a162f8eba91242ec00bbc395594dfd202ec600c9f8ddd7397793205e6b210ee4",
+      "src-tauri/src/storage/db.rs": "efafb40f167ff3c9042b7fc71e866e029e8070719dc28ae88fb82b5188e91357",
+      "src-tauri/src/storage/instance.rs": "c70ec981c04f4e809975c0e9d654e6ee8a896f37c1b362dd3cd7942d5286b40c",
+      "src-tauri/src/storage/mod.rs": "37d9ca1d5f773f59cf36211fb8b0465f51dd5019d24e66da68078000645a0c09",
+      "src-tauri/src/transcription/mod.rs": "5622a74f39b2382dd711c38df8624c1bef5bfc4ca082a943196164bfad6c1725",
+      "src-tauri/src/transcription/nemotron.rs": "c9da4047fe634a4c197b354580fcc852f4dd152acbc7b7421c588b2a7ec5eb1c",
+      "src-tauri/src/transcription/vad.rs": "ea28b526075f81686aef37d8d5853b1a08fa91ae8aea4cbe221ff6a8859fe5ca",
+      "src-tauri/src/transcription/whisper.rs": "e9e9909a3a06c389c7815819a006e3ef2dd450d0ecf058af392e961c8953262d"
+    },
+    "steps": [
+      {
+        "name": "rust-tests",
+        "args": [
+          "test",
+          "--offline",
+          "--features",
+          "acceptance",
+          "--lib"
+        ],
+        "startedAt": "2026-10-12T08:10:51.454Z",
+        "processId": 42536,
+        "code": 0,
+        "completedAt": "2026-10-12T08:11:00.763Z"
+      },
+      {
+        "name": "release-default-cfg",
+        "args": [
+          "check",
+          "--offline",
+          "--release",
+          "--lib"
+        ],
+        "startedAt": "2026-10-12T08:11:00.763Z",
+        "processId": 24868,
+        "code": 0,
+        "completedAt": "2026-10-12T08:11:07.299Z"
+      }
+    ]
+  },
+  "rustTests": {
+    "passed": 188,
+    "failed": 0,
+    "ignored": 14,
+    "log": {
+      "file": "artifacts/controller-v72/schema-recovery-regressions-r4/rust-tests.log",
+      "sha256": "c52ba7a5bc94cac6c8cd4b82e8c893582b4e0b3d88900449674e94f40f2ad604"
+    }
+  },
+  "releaseCheck": {
+    "code": 0,
+    "log": {
+      "file": "artifacts/controller-v72/schema-recovery-regressions-r4/release-default-cfg.log",
+      "sha256": "0ef258a93c3fa33001a4b4a3c50739a6b63209f98670ab7179dcda6c5e2697af"
+    }
+  },
+  "preservedEarlierTestFailure": {
+    "verification": {
+      "file": "artifacts/controller-v72/schema-recovery-regressions-r3/verification.json",
+      "sha256": "8d9a41911d27859c5651b32948714c3a41d2109ae3272afc3f6c7ae3cdb62984"
+    },
+    "log": {
+      "file": "artifacts/controller-v72/schema-recovery-regressions-r3/rust-tests.log",
+      "sha256": "1c87e996ec3688083e2e31ce7b225a84af8f7febd1ea9d387b4af8a5d87e4d8b"
+    }
+  },
+  "regressions": [
+    "failed_answer_does_not_disable_next_spoken_request_or_erase_history",
+    "stopped_or_paused_capture_still_blocks_conversation_input",
+    "typed_request_does_not_inherit_an_old_drafts_identity_or_lose_focus_to_its_final",
+    "new_typed_focus_retires_old_drafts_and_delayed_finals_only",
+    "clearing_a_draft_keeps_its_retirement_fence_until_a_new_session"
+  ]
+}

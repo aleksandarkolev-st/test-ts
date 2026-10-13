@@ -1,0 +1,16 @@
+{
+  "recordedDate": "2026-10-13",
+  "exactFailureClockRecorded": false,
+  "evaluationKind": "preserved_validation_infrastructure_failure",
+  "command": "node scripts/check-warp-harness-sanity.mjs r1",
+  "exitCode": 1,
+  "error": "spawnSync powershell.exe EPERM",
+  "errno": -4048,
+  "failedOperation": "Fresh owned native/ASR process-exit check before fixture output directory creation or compilation",
+  "compilerOrModelProgramExecuted": false,
+  "modelVerdict": null,
+  "retryCommand": "node scripts/check-warp-harness-sanity.mjs r2",
+  "retryPermissions": "require_escalated",
+  "retryResult": "artifacts/controller-v73/warp-harness-sanity-r2/results.json",
+  "scope": "Tool-reported sandbox launch failure preserved. The separately approved retry uses a new attempt label and is not a model answer retry. No measured capture overlapped source execution. The standalone read-only process inventory immediately before promotion was empty."
+}

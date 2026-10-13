@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "evaluationKind": "immutable_actual_source_exact_fence_comparison",
+  "recordedAt": "2026-10-13T01:13:52.472Z",
+  "completedCapture": false,
+  "review": {
+    "file": "docs/evidence/controller-reliability-codex-three-hour-prefix58-v73.json",
+    "sha256": "a8cbc9d897b568dc3ba59313c1c6c3be2803760b2ae81ecc24bc83ee9857c013"
+  },
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-codex-three-hour-prefix58/journal.json",
+    "sha256": "9b3c040d3dfa62270df3135d3873e74cb2f934813aec308fe9942cc35ff40acf",
+    "originalFile": "artifacts/controller-v73/native/reliability-v73-r1-codex-three-hour/interview.json",
+    "capturedRowsAtSnapshot": 62
+  },
+  "nativeBinarySha256": "cbc821c0e1a7af8b6d9dcc221ba4045772c9e1e6563a6d3efddf2faa4e96e9bd",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "backend": "codex",
+  "origin": {
+    "round": 6,
+    "field": "answer",
+    "fieldSha256": "3979e29ab91759f3a112550d3fd68837e810581f60e4406757405da4a47278db",
+    "fenceIndex": 0,
+    "fenceBytes": 764,
+    "fenceSha256": "1238e24be729b36c602d73571cbb74f4fd0f7f6fdfe6c1f2be17af39aaea5b5b",
+    "acceptedAt": 395738
+  },
+  "recall": {
+    "round": 55,
+    "answerSha256": "14b2837dc93cedd924e32f2a10634303764546d95da8e1b70736696056165daa",
+    "fenceIndex": 0,
+    "fenceCount": 1,
+    "fenceBytes": 764,
+    "fenceSha256": "1238e24be729b36c602d73571cbb74f4fd0f7f6fdfe6c1f2be17af39aaea5b5b",
+    "acceptedAt": 5405739
+  },
+  "sourceRowsIntervening": 48,
+  "acceptedSourceAgeMs": 5010001,
+  "byteExact": true,
+  "scope": "Actual reviewed source fences compared as UTF8 bytes without trimming, whitespace/operator/name/sign normalization or source substitution. Uses original selected acceptance timestamps for source age, not model submission or paint. Canonical source-row separation is not a count of every intermediate accepted generation. No code execution or complete-long-capture certification.",
+  "generatedCompleteCodeAgeBoundsMs": {
+    "lower": 4979735,
+    "upper": 4996840,
+    "scope": "Full original code fence was available no earlier than first decoded answer text and no later than complete original answer. Exact first full-fence availability is not instrumented here. Accepted-source age above is a request clock, not complete generated-code age."
+  },
+  "checkerSha256": "32ac4da6e47305df7b24a0c1d29b2a39856c98f2c0067fd78ceb04e70e1ace97"
+}

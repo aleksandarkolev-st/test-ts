@@ -1,0 +1,67 @@
+{
+  "recordedAt": "2026-10-13T05:37:47.326Z",
+  "journal": {
+    "file": "artifacts/controller-v73/reviews/reliability-chatgpt-three-hour-prefix113/journal.json",
+    "sha256": "a9b51e6857df41d7e0350d1350f15acad419db27e3bc60ff2632a61ff6b5399a"
+  },
+  "targetRound": 111,
+  "selectedContext": {
+    "sha256": "42391b9df7694b4442f4559ceceae58042bd20f3952b3add9896234a73fe4e49",
+    "bytes": 240479
+  },
+  "sources": [
+    {
+      "round": 7,
+      "answerSha256": "62c8d673e9a425f047de38d1261b85d680caf57fb69aa8f452207eb358b41f0b",
+      "fullAnswerIncluded": false,
+      "generationId": "f71a455a-a9d4-4df9-b507-c40ae7b4e198",
+      "fences": [
+        {
+          "index": 0,
+          "language": "cpp",
+          "bytes": 1027,
+          "sha256": "7bee086eb4d68814e1d6a4abda08b1a97ea4f96d422948892a7d428cb20fcf71",
+          "exactSourceIncluded": false
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "answerSha256": "d9130842d213fc5340250b68a5a4bad47e4cd5e78c995c6de0c1c49cc5da5638",
+      "fullAnswerIncluded": false,
+      "generationId": "15c1dd81-749a-450e-a47e-deae790cb218",
+      "fences": [
+        {
+          "index": 0,
+          "language": "python",
+          "bytes": 457,
+          "sha256": "9d47ffa02b4187159894f2366010a905aab6f9e0797c5dd679d795ecf83bec6d",
+          "exactSourceIncluded": true
+        }
+      ]
+    },
+    {
+      "round": 36,
+      "answerSha256": "ad46e35348d452bd2bdabef3df4fc321743e1a6eb73d1740d30948f4dbebddfc",
+      "fullAnswerIncluded": false,
+      "generationId": "13cf230f-7465-4be9-b12a-6533eb58e860",
+      "fences": []
+    },
+    {
+      "round": 101,
+      "answerSha256": "f2b8432f6f6ae4c7e77a87c20d9725f4b93a4352a391ee9acedf900d42cda3f8",
+      "fullAnswerIncluded": false,
+      "generationId": "8ab95a88-5c92-4393-a66a-90c6042ff68c",
+      "fences": [
+        {
+          "index": 0,
+          "language": "cpp",
+          "bytes": 3116,
+          "sha256": "a2a71d9832cfe6ef13834d2e1033bd3095914054ee3aa49a5cf3c62bd31a7d16",
+          "exactSourceIncluded": true
+        }
+      ]
+    }
+  ],
+  "scope": "Exact unchanged source-fence and full-answer inclusion in actual target request selected context, not a claim of backend cache content or model attention. No whitespace/name normalization. A missing exact fence alone is not proof that all equivalent details were absent."
+}

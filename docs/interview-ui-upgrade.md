@@ -142,3 +142,11 @@ The dependency diagnosis identifies the n-1 completion condition, with the minim
 80 regular and 14 bug interviews are complete (282 completed-attempt measured responses). All 94 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All fourteen bug diagnoses pass; broader final review passes 76/94, retaining 18 failures.
 
 The room diagnosis identifies starts preceding ends at equal times and uses the minimal two-touching-interval witness. Both fixes pass 1557 independent direct-overlap tests, including negative and extreme finite endpoints, duplicates and empty input. Source constraints, actual smoke, explicit original/patched context and reading checks passed. Evidence: `evidence/interview-meeting-endpoint-completed.json` and `evidence/interview-room-half-open-domain.json`. Remaining: 20 regular and 6 bug interviews.
+
+### Unicode counting bug checkpoint
+
+80 regular and 15 bug interviews are complete (285 completed-attempt measured responses; 287 retained including prior incomplete attempts). All 95 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All fifteen completed source-bug diagnoses pass separate review. Broader final contract review passes 77/95, retaining 18 known failures.
+
+The Unicode diagnosis correctly cites code-unit splitting and the minimal one-supplementary-character witness: original count two, required count one. Both fixes pass 1112 independently encoded code-point-domain checks, including combining marks, joiner/variation selector, BMP and supplementary boundaries, repetition and a long mixture. The final answer preserves code-point semantics instead of counting graphemes. Constraints, actual smoke, original/patched source handoffs and reading checks passed.
+
+Median first word is 3161 ms (p95 7935 ms); median completion is 7987 ms (p95 15296 ms). Evidence: `evidence/interview-unicode-iteration-completed.json` and `evidence/interview-unicode-codepoint-domain.json`. The five pending bug cases ran in one native session using the new kind filter, with unchanged frozen binary/frontend/contracts and independent handoffs for each original and patched project. Remaining: 20 regular and 5 bug interviews. Full requested scope remains active and unfinished.

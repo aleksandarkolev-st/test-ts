@@ -1,0 +1,33 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen grades and distinct interview counts unchanged",
+  "domain": "Every code-point sequence of length 0..3 over ten BMP/supplementary/combining/joiner/variation-selector boundaries, plus a long repeated mixture.",
+  "codePoints": [
+    0,
+    65,
+    769,
+    8205,
+    65039,
+    65535,
+    65536,
+    128512,
+    128515,
+    1114111
+  ],
+  "oracle": "Encode known numeric code-point IDs with String.fromCodePoint, then require cardinality of original numeric IDs. No candidate UTF-16 iteration is reused in the oracle.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "e5c8ce1a2a2363e10d51a392c7803ae1c5fc4d5246bb2c80f42b693c2907946c",
+      "cases": 1112,
+      "passedCases": 1112,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "b07bc49e3db4a4136bfd6e7ccd78c35a847fef51759abc0228a39f10ce799ffa",
+      "cases": 1112,
+      "passedCases": 1112,
+      "failures": []
+    }
+  ]
+}

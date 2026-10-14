@@ -1183,6 +1183,28 @@
       "note": "Event ties now order -1 ends before +1 starts, so temporary counts cannot invent overlap. Each positive-length interval contributes one start/end; peak simultaneous activity gives required room count. Empty input zero, duplicate intervals count separately and negative/extreme finite times work. Both fixes pass 1557 independent direct-overlap tests; O(n log n) sorting/O(n) event storage. Same synchronous API/no dependencies or test edits. Actual smoke, original/patch markers and native reading checks pass.",
       "evidence": "interview-meeting-endpoint-completed.json",
       "supplementaryEvidence": "interview-room-half-open-domain.json"
+    },
+    {
+      "id": "unicode-iteration",
+      "kind": "bug",
+      "finalAnswerSha256": "b07bc49e3db4a4136bfd6e7ccd78c35a847fef51759abc0228a39f10ce799ffa",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "s.split(\"\") in new Set(s.split(\"\")).size",
+        "counterexample": {
+          "args": [
+            "😀"
+          ],
+          "originalActual": 2,
+          "expected": 1
+        },
+        "note": "One supplementary code point represented by two distinct surrogate halves is minimal in code-unit length; empty or one-code-unit strings cannot distinguish the implementations."
+      },
+      "note": "new Set(s) consumes the string code-point iterator, keeping surrogate pairs intact while counting repeated code points once. Empty input zero. Final answer correctly counts combining accent separately from its base letter, preserving code-point rather than grapheme semantics. Both candidates pass 1112 independently encoded numeric-code-point tests across BMP/supplementary boundaries, combining marks, joiner/variation selector and a long repeated mixture. Expected O(code units) time/O(distinct code points) storage. Same synchronous API/no dependencies or test edits; smoke, original/patch markers and native reading pass.",
+      "evidence": "interview-unicode-iteration-completed.json",
+      "supplementaryEvidence": "interview-unicode-codepoint-domain.json"
     }
   ]
 }

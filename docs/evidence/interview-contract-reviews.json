@@ -300,6 +300,51 @@
       "diagnosisReview": null,
       "note": "Separate result preserves every nonzero in encounter order, then pads exactly the original zero count. Empty/all-zero/nonzero input returns a new array and never mutates nums. O(n) time, O(n) returned space and O(1) additional state.",
       "evidence": "interview-counted-synthetic-26-30.json"
+    },
+    {
+      "id": "sorted-squares",
+      "kind": "regular",
+      "finalAnswerSha256": "69ed27d47a45aab98c8aff606b5a420789eaa2029bcf67fb2391e9398773a671",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Endpoint squares contain the largest remaining value; filling backward consumes exactly one input value per output slot. Empty, negative-only and tied-magnitude cases correct. O(n) time, O(n) output and O(1) extra state.",
+      "evidence": "interview-counted-synthetic-31-35.json"
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "kind": "regular",
+      "finalAnswerSha256": "a484fa66cec1b2d7e97a62d8bdbd3cca53fc36d86ec14c9bb3d264c5a00687e5",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Two heads select the least remaining value and remainder loops consume every occurrence exactly once, preserving multiplicity and ascending order. Inputs unchanged; O(n+m) time and output space, O(1) extra state.",
+      "evidence": "interview-counted-synthetic-31-35.json"
+    },
+    {
+      "id": "multiset-intersection",
+      "kind": "regular",
+      "finalAnswerSha256": "b9a782e77fe5b0a79b7b2bdb6e595f43e26a56568bd92d2307eee5049f76261a",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Frequency map decrements once per matching occurrence, limiting multiplicity to the minimum input counts; numeric sort orders the result. Inputs unchanged. Expected O(n+m+k log k) time and O(n+k) space, as stated.",
+      "evidence": "interview-counted-synthetic-31-35.json"
+    },
+    {
+      "id": "majority-element",
+      "kind": "regular",
+      "finalAnswerSha256": "5f0be2eb493742389f8df8de1b6c40e79450d6b37eb7948d81639bed97005a67",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Cancellation identifies a possible majority and a separate full count verifies the strict threshold. Empty, exact-half and positive-balance-without-majority cases return null. O(n) time and O(1) space.",
+      "evidence": "interview-counted-synthetic-31-35.json"
+    },
+    {
+      "id": "longest-consecutive-sequence",
+      "kind": "regular",
+      "finalAnswerSha256": "a0c1d8ed889b84c0beac00694f4512ffd5acaa7f0ac4d6eefd505a8781da2e7f",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Final exact-step guards prevent rounded predecessor/successor arithmetic from inventing adjacency or looping without progress. Set removes duplicates and scanning starts only at actual sequence heads. Expected O(n) time and O(n) space. Supplementary execution confirmed round 2 timeout/incorrect zero at +/-2^53 and correct final ones.",
+      "evidence": "interview-consecutive-integer-boundary.json"
     }
   ]
 }

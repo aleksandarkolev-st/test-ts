@@ -1,0 +1,57 @@
+{
+  "id": "longest-consecutive-sequence",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary execution of the large-integer self-review finding; frozen fixture scores remain unchanged.",
+  "runs": [
+    {
+      "round": 2,
+      "cases": [
+        {
+          "args": [
+            [
+              9007199254740992
+            ]
+          ],
+          "expected": 1,
+          "error": "Error: Script execution timed out after 1500ms",
+          "passed": false
+        },
+        {
+          "args": [
+            [
+              -9007199254740992
+            ]
+          ],
+          "expected": 1,
+          "actual": 0,
+          "passed": false
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "cases": [
+        {
+          "args": [
+            [
+              9007199254740992
+            ]
+          ],
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        },
+        {
+          "args": [
+            [
+              -9007199254740992
+            ]
+          ],
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

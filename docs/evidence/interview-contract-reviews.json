@@ -783,6 +783,51 @@
       },
       "note": "Set membership accepts arbitrary string IDs without prototype lookup. Records first ID even for zero delta or empty string, skips subsequent occurrences, preserves order and uses first deltas only. Empty input yields zero/empty output. Same synchronous export/API, no dependencies or test edits. Expected O(n) time/O(distinct IDs) auxiliary space plus output. Actual service smoke, fresh edited-project marker and native reading checks passed.",
       "evidence": "interview-event-identity-completed.json"
+    },
+    {
+      "id": "edit-distance",
+      "kind": "regular",
+      "finalAnswerSha256": "5d57fc7291aaf380fe3deb139ca612dbeea071a9eb1f129a118422fc6609f192",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "One-row unit-cost Levenshtein recurrence saves previous-row diagonal before overwrite, retains current-row left and previous-row above, and initializes empty prefixes correctly. Swapping strings is valid because edit costs are symmetric. Uses JavaScript code-unit semantics. O(mn) time and O(min(m,n)+1) space; empty-string fast path avoids allocation.",
+      "evidence": "interview-counted-synthetic-61-65.json"
+    },
+    {
+      "id": "word-segmentation",
+      "kind": "regular",
+      "finalAnswerSha256": "f54929252d91533c480a400bec5e696e6b18d12f8682c8eb2e0cd10eebed9126",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Trie traversal restarts at each reachable prefix and marks only consumed terminal words. Empty source is explicitly segmentable; root terminal for an empty dictionary word never advances a nonempty prefix. Maps handle arbitrary character keys, using consistent code units. Expected O(D+nL) time and O(D+n) space for total dictionary size D and maximum useful word length L.",
+      "evidence": "interview-counted-synthetic-61-65.json"
+    },
+    {
+      "id": "digit-message-decoding",
+      "kind": "regular",
+      "finalAnswerSha256": "9d9bf9d757f3551b9d5a9b2133e205451a55533592d93455b6328e0721567433",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Two prior counts implement valid one-digit and 10–26 two-digit choices; empty/leading-zero guard and internal invalid zero cases are correct. O(n) arithmetic steps/O(1) storage. Broad exact-count contract has no length/safe-count/modulo restriction: both Number implementations return 14472334024676220 for 78 ones, while independent combinatorial BigInt oracle gives 14472334024676221. Frozen small-count grades unchanged.",
+      "evidence": "interview-decoding-count-precision.json"
+    },
+    {
+      "id": "stair-climbing",
+      "kind": "regular",
+      "finalAnswerSha256": "a9eb004272993588340a17a689a827a090b39f20a08c45202dd040c074aecd21",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Disjoint final one-step/two-step choices give Fibonacci recurrence initialized at one for zero and one steps. Loop includes n and returns exactly ways(n). Bounded nonnegative step domain n<=40 keeps all counts exactly representable. O(n) time/O(1) storage.",
+      "evidence": "interview-counted-synthetic-61-65.json"
+    },
+    {
+      "id": "minimum-stair-cost",
+      "kind": "regular",
+      "finalAnswerSha256": "5cf0abb038b368a847d316a13b24e1accbaf9d749f9cdd8001661bcc4335c41d",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Rolling minimum-cost recurrence and initial min(0,cost[0]) correctly allow visiting a negative first stair before index one; independent negative witness returns -7. Broad sign/magnitude-unrestricted contract still fails the finite-optimum overflow witness: four MAX_VALUE costs followed by two negative MAX_VALUE costs have exact minimum zero, but both implementations return Infinity. Independent exhaustive BigInt path oracle verifies zero; frozen grades unchanged. O(n) arithmetic steps/O(1) storage.",
+      "evidence": "interview-stair-cost-overflow.json"
     }
   ]
 }

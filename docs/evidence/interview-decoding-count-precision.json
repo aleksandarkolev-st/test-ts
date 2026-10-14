@@ -1,0 +1,26 @@
+{
+  "id": "digit-message-decoding",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exact-count check; the supplied digit-string contract has no length, safe-count or modulo restriction. Frozen small-count fixtures remain unchanged.",
+  "oracle": "Independent BigInt sum of binomial counts of one/two-digit tilings",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "44e9926d0b7c3609e4a177eaa54bd93a14ed34a7d8ce2c7306f9022709c86329",
+      "inputConstruction": "'1'.repeat(78)",
+      "expectedExactCount": "14472334024676221",
+      "actualType": "number",
+      "actualExactInteger": "14472334024676220",
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "9d9bf9d757f3551b9d5a9b2133e205451a55533592d93455b6328e0721567433",
+      "inputConstruction": "'1'.repeat(78)",
+      "expectedExactCount": "14472334024676221",
+      "actualType": "number",
+      "actualExactInteger": "14472334024676220",
+      "passed": false
+    }
+  ]
+}

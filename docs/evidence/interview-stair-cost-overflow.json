@@ -1,0 +1,72 @@
+{
+  "id": "minimum-stair-cost",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary negative-cost and finite-optimum overflow checks. The supplied contract restricts neither sign nor magnitude. Frozen fixture scores remain unchanged.",
+  "oracle": "Independent exhaustive legal path enumeration with exact BigInt sums of integer-valued inputs",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "7678f63f83b7e99593e42a13a4e4e9bb8b2571484197f8329c6585d6b1cf0ccb",
+      "cases": [
+        {
+          "args": [
+            [
+              -5,
+              -2
+            ]
+          ],
+          "expected": -7,
+          "actual": -7,
+          "passed": true
+        },
+        {
+          "args": [
+            [
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              -1.7976931348623157e+308,
+              -1.7976931348623157e+308
+            ]
+          ],
+          "expected": 0,
+          "actual": "Infinity",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "5cf0abb038b368a847d316a13b24e1accbaf9d749f9cdd8001661bcc4335c41d",
+      "cases": [
+        {
+          "args": [
+            [
+              -5,
+              -2
+            ]
+          ],
+          "expected": -7,
+          "actual": -7,
+          "passed": true
+        },
+        {
+          "args": [
+            [
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              1.7976931348623157e+308,
+              -1.7976931348623157e+308,
+              -1.7976931348623157e+308
+            ]
+          ],
+          "expected": 0,
+          "actual": "Infinity",
+          "passed": false
+        }
+      ]
+    }
+  ]
+}

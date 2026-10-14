@@ -1,0 +1,27 @@
+{
+  "scope": "Supplementary actual model implementations; frozen grades unchanged",
+  "args": [
+    [
+      1
+    ],
+    12000
+  ],
+  "expectedSummary": {
+    "count": 1,
+    "length": 12000,
+    "allOnes": true
+  },
+  "proof": "One positive candidate equal to one has exactly one combination for target 12000: 12000 copies. Output size is linear, no exponential enumeration required.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "a6792fc1d5070c98913b7a345b4ac33ec125cdd72550653d478df6d192839ece",
+      "error": "RangeError: Maximum call stack size exceeded"
+    },
+    {
+      "round": 3,
+      "answerSha256": "6f00554bb68098031401af26e36c55bd6957ed7e9be56599770a2306f39b3325",
+      "error": "RangeError: Maximum call stack size exceeded"
+    }
+  ]
+}

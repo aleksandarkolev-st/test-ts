@@ -1,0 +1,194 @@
+{
+  "scope": "Supplementary actual implementations at n=0 through 10; no extra interview count",
+  "oracle": "Independent Catalan formula plus exact length, prefix balance, uniqueness and lexicographic order. Matching Catalan count with valid unique strings establishes complete enumeration for each tested n.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "ccaa2f0d561a57bf1fbbf256bb98208548cb81c1d9298c94b83d9b758d7be9d3",
+      "cases": [
+        {
+          "n": 0,
+          "expectedCount": 1,
+          "actualCount": 1,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 1,
+          "expectedCount": 1,
+          "actualCount": 1,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 2,
+          "expectedCount": 2,
+          "actualCount": 2,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 3,
+          "expectedCount": 5,
+          "actualCount": 5,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 4,
+          "expectedCount": 14,
+          "actualCount": 14,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 5,
+          "expectedCount": 42,
+          "actualCount": 42,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 6,
+          "expectedCount": 132,
+          "actualCount": 132,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 7,
+          "expectedCount": 429,
+          "actualCount": 429,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 8,
+          "expectedCount": 1430,
+          "actualCount": 1430,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 9,
+          "expectedCount": 4862,
+          "actualCount": 4862,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 10,
+          "expectedCount": 16796,
+          "actualCount": 16796,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "ee69810331013db47f4c5094e60a2650357b48430aeebc1d1bf1eb3e65730dda",
+      "cases": [
+        {
+          "n": 0,
+          "expectedCount": 1,
+          "actualCount": 1,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 1,
+          "expectedCount": 1,
+          "actualCount": 1,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 2,
+          "expectedCount": 2,
+          "actualCount": 2,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 3,
+          "expectedCount": 5,
+          "actualCount": 5,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 4,
+          "expectedCount": 14,
+          "actualCount": 14,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 5,
+          "expectedCount": 42,
+          "actualCount": 42,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 6,
+          "expectedCount": 132,
+          "actualCount": 132,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 7,
+          "expectedCount": 429,
+          "actualCount": 429,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 8,
+          "expectedCount": 1430,
+          "actualCount": 1430,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 9,
+          "expectedCount": 4862,
+          "actualCount": 4862,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        },
+        {
+          "n": 10,
+          "expectedCount": 16796,
+          "actualCount": 16796,
+          "allBalanced": true,
+          "unique": true,
+          "sorted": true
+        }
+      ]
+    }
+  ]
+}

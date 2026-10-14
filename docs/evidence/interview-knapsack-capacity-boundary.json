@@ -1,0 +1,26 @@
+{
+  "scope": "Supplementary actual model implementations; frozen grades unchanged",
+  "args": [
+    [
+      1
+    ],
+    [
+      7
+    ],
+    4294967296
+  ],
+  "expected": 7,
+  "proof": "Exactly one item of weight one and value seven fits the positive integer capacity; it can be selected once, so seven is optimal.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "44809333fdac779da9a6ee41f3aafaf723c0ee8f69bf761b71df324581abcbf5",
+      "error": "RangeError: Invalid array length"
+    },
+    {
+      "round": 3,
+      "answerSha256": "e34b5b2b547e216d20eb1cb894f5442c3420d34059f6bd854a7b6c042ae180fc",
+      "error": "RangeError: Invalid array length"
+    }
+  ]
+}

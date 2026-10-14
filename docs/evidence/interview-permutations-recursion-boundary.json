@@ -1,0 +1,25 @@
+{
+  "scope": "Supplementary actual model implementations; frozen grades unchanged",
+  "inputSummary": {
+    "length": 12000,
+    "allZeros": true
+  },
+  "expectedSummary": {
+    "count": 1,
+    "length": 12000,
+    "allZeros": true
+  },
+  "proof": "An array of identical zeros has exactly one distinct permutation, the array itself. Output is linear in input length.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "bd83218bb4bec616088efc41325a204345146d16fc1216d9be09ec26790f1ce4",
+      "error": "RangeError: Maximum call stack size exceeded"
+    },
+    {
+      "round": 3,
+      "answerSha256": "45ca070ebcc7419d039640a375edfdd49159b0da3a4fc0c8d1c2b64e5a7a383d",
+      "error": "RangeError: Maximum call stack size exceeded"
+    }
+  ]
+}

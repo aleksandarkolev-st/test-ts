@@ -92,3 +92,11 @@ Remaining: 30 regular and 12 bug interviews; full requested scope remains unfini
 The CSV diagnosis cites unconditional quote-state toggling and gives the minimal four-quote valid row: original output is one empty field, required output one literal quote. Both implementations pass 100 additional distinct valid rows produced by independently encoding expected field pairs, including empty values, Unicode, commas, CRLF/newlines and repeated quotes. These supplementary rows do not increase the distinct interview count. Original and fresh patched-source handoffs remain explicit shortcuts.
 
 Raw evidence: `evidence/interview-csv-escaping-completed.json`; additional execution: `evidence/interview-csv-valid-row-supplementary.json`. Remaining: 30 regular and 11 bug interviews.
+
+### Regular interviews 71–75
+
+75 regular and 9 bug interviews are complete (252 completed-attempt measured responses). All 84 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 68/84; 16 failures remain retained and unchanged.
+
+Knapsack exceeds the legal array-length boundary for a trivially solvable one-item case under a large integer capacity. Combination-sum and unique-permutations exceed the call stack on cases with only one linear-size result. Balanced-parentheses passes complete enumeration checks for n=0..10 using independent Catalan counts, balance/length validation, uniqueness and order. Subsets and permutations additionally pass every one of 364 arrays of length 0..5 over [-2,0,10] against independent exhaustive oracles; this does not erase the permutation recursion failure. Enumeration reviews describe resource-dependent limits and do not imply a universal runtime guarantee.
+
+Median first word is 3179 ms (p95 8365 ms), median completion 8053 ms (p95 15318 ms). The new 22628 ms first-word sample is retained. Evidence: `evidence/interview-counted-synthetic-71-75.json` and supplementary files referenced by the hash-bound contract ledger. Remaining: 25 regular and 11 bug interviews.

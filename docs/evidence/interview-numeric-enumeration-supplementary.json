@@ -1,0 +1,39 @@
+{
+  "scope": "Supplementary actual candidates; no extra interview count; frozen fixtures unchanged",
+  "domain": "Every array of length zero through five over [-2,0,10]: 364 arrays per candidate",
+  "oracles": "Subset oracle enumerates bit masks, numerically sorts each subset, deduplicates serializations and independently sorts numeric lexicographic arrays. Permutation oracle enumerates every remaining index choice without duplicate pruning, deduplicates serializations and independently sorts.",
+  "outcomes": [
+    {
+      "id": "unique-permutations",
+      "round": 2,
+      "answerSha256": "bd83218bb4bec616088efc41325a204345146d16fc1216d9be09ec26790f1ce4",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    },
+    {
+      "id": "unique-permutations",
+      "round": 3,
+      "answerSha256": "45ca070ebcc7419d039640a375edfdd49159b0da3a4fc0c8d1c2b64e5a7a383d",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    },
+    {
+      "id": "duplicate-aware-subsets",
+      "round": 2,
+      "answerSha256": "7b7866ba731592dd3886c841103878a39c3e7bf1875bf28673b24f96c909ebfa",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    },
+    {
+      "id": "duplicate-aware-subsets",
+      "round": 3,
+      "answerSha256": "b5af7602fe2462a43591c161c88c687c4be228eb0f66a4c30f46b23885ce01b7",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    }
+  ]
+}

@@ -943,6 +943,52 @@
       "note": "Lookahead while quoted emits one literal quote and consumes its partner without leaving quoted state; unquoted commas delimit fields, final push preserves empty trailing fields. Valid-row contract preserved, same synchronous export/API, no dependencies/test changes. Actual 100 independently encoded valid rows per candidate pass, including Unicode, quoted commas/newlines and repeated quotes. O(row length) scans and linear output storage. Original/patched context markers, actual service smoke and native reading checks pass.",
       "evidence": "interview-csv-escaping-completed.json",
       "supplementaryEvidence": "interview-csv-valid-row-supplementary.json"
+    },
+    {
+      "id": "zero-one-knapsack",
+      "kind": "regular",
+      "finalAnswerSha256": "e34b5b2b547e216d20eb1cb894f5442c3420d34059f6bd854a7b6c042ae180fc",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Descending capacity updates enforce at-most-once selection and initialize empty/zero-capacity optima correctly for integer weights and feasible allocation sizes. Contract has no capacity upper bound: one weight-one/value-seven item under integer capacity 4294967296 must return seven, but both candidates throw invalid array length. Assumes integer weights although task only says positive weights. Stated O((n+1)(C+1)) time/O(C+1) storage. Frozen grades unchanged.",
+      "evidence": "interview-knapsack-capacity-boundary.json"
+    },
+    {
+      "id": "combination-sum",
+      "kind": "regular",
+      "finalAnswerSha256": "6f00554bb68098031401af26e36c55bd6957ed7e9be56599770a2306f39b3325",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Sorted ascending candidate traversal with nondecreasing indices and same-index recursive reuse enumerates unique combinations in numeric lexicographic order for ordinary positive integer inputs. Empty/zero/unreachable cases correct. Unbounded target contract fails [1],12000 with Maximum call stack size exceeded in both candidates, although exactly one linear-size output combination exists. Frozen grades unchanged.",
+      "evidence": "interview-combination-recursion-boundary.json"
+    },
+    {
+      "id": "generate-balanced-parentheses",
+      "kind": "regular",
+      "finalAnswerSha256": "ee69810331013db47f4c5094e60a2650357b48430aeebc1d1bf1eb3e65730dda",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Open/close prefix invariant 0<=closed<=opened<=n permits exactly balanced completions; closed==n implies opened==n. Opening branches precede closing branches, yielding lexical order, with balanced push/pop restoration and empty result string for n=0. Both actual candidates exhaustively match independent Catalan counts, valid prefix balances, exact lengths, uniqueness and order for n=0..10. O(n*Catalan(n)) time/output and O(n) auxiliary recursion/path space. Resource-dependent enumeration limits remain; this review is not a universal runtime guarantee.",
+      "evidence": "interview-parentheses-enumeration-domain.json"
+    },
+    {
+      "id": "unique-permutations",
+      "kind": "regular",
+      "finalAnswerSha256": "45ca070ebcc7419d039640a375edfdd49159b0da3a4fc0c8d1c2b64e5a7a383d",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Numeric sort and used-index duplicate-sibling guard correctly enumerate each multiset permutation once, with lexical traversal and restored path/flags. Both actual candidates pass all 364 arrays of length 0..5 over [-2,0,10] against independent exhaustive-index oracle. Both still overflow the call stack on 12000 zeros, whose unique result is one linear-size permutation. No length bound in task. Worst-case O(n*n!) time/O(n) auxiliary storage, frozen grades unchanged.",
+      "evidence": "interview-permutations-recursion-boundary.json",
+      "supplementaryEvidence": "interview-numeric-enumeration-supplementary.json"
+    },
+    {
+      "id": "duplicate-aware-subsets",
+      "kind": "regular",
+      "finalAnswerSha256": "b5af7602fe2462a43591c161c88c687c4be228eb0f66a4c30f46b23885ce01b7",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Numeric sorting and strictly increasing selected indices preserve ascending subsets and occurrence limits. Equal sibling choices are skipped only at the current depth, preserving deeper multiplicities; recording each prefix before extensions yields numeric lexical order and includes empty. Both candidates pass all 364 arrays of length 0..5 over [-2,0,10] against independent bit-mask oracle. Worst-case O(n*2^n) time/output and O(n) auxiliary path/recursion. Resource-dependent recursion/enumeration limits remain; review is not a universal runtime guarantee.",
+      "evidence": "interview-numeric-enumeration-supplementary.json"
     }
   ]
 }

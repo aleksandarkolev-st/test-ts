@@ -1,0 +1,55 @@
+{
+  "id": "bounded-queue",
+  "runId": "run-935cb972a18c",
+  "scope": "Independent supplementary fractional-capacity check. Integer frozen grades remain unchanged.",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "621dfefea07631948b588b4f342128de7a0922b4c91eeb28d610b32884557bdd",
+      "args": [
+        0.5,
+        [
+          [
+            "push",
+            1
+          ],
+          [
+            "pop"
+          ]
+        ]
+      ],
+      "expected": [
+        false,
+        null
+      ],
+      "actual": [
+        true,
+        1
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "496363547c4361dd086791b5bc255bbb222b2ef468ecf5da0bb641a5eb19134c",
+      "args": [
+        0.5,
+        [
+          [
+            "push",
+            1
+          ],
+          [
+            "pop"
+          ]
+        ]
+      ],
+      "expected": [
+        false,
+        null
+      ],
+      "actual": [
+        false,
+        null
+      ]
+    }
+  ]
+}

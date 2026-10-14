@@ -416,6 +416,37 @@
       "diagnosisReview": null,
       "note": "Finds the rightmost increasing pivot, swaps with the rightmost strictly greater suffix entry, then reverses the nonincreasing suffix. This yields the smallest larger permutation; no pivot reverses the last permutation to the first. Empty, singleton and duplicates handled. Mutates and returns the supplied array, allowed by this contract. O(n) time/O(1) auxiliary space.",
       "evidence": "interview-counted-synthetic-36-40.json"
+    },
+    {
+      "id": "bounded-queue",
+      "kind": "bug",
+      "finalAnswerSha256": "496363547c4361dd086791b5bc255bbb222b2ef468ecf5da0bb641a5eb19134c",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "q.length>capacity",
+        "counterexample": {
+          "args": [
+            0,
+            [
+              [
+                "push",
+                1
+              ]
+            ]
+          ],
+          "originalActual": [
+            true
+          ],
+          "expected": [
+            false
+          ]
+        },
+        "note": "A single push into zero capacity is the minimal operation witness; strict greater-than checks current length too late."
+      },
+      "note": "Final prospective-length guard prevents exceeding any nonnegative capacity, including fractional capacities. Reject leaves queue unchanged; pop returns FIFO value or null. Same synchronous export/API, no dependencies or test edits. Array shift makes worst-case total time O(m × min(m,capacity)); stored queue and output space O(m). The actual round 2 service smoke passed; final code was evaluated independently. Fresh edited-project marker recognized. Fractional defect in round 2 independently identified and corrected in round 3.",
+      "evidence": "interview-bounded-queue-completed.json"
     }
   ]
 }

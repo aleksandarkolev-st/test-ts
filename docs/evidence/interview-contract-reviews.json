@@ -672,6 +672,38 @@
       "diagnosisReview": null,
       "note": "Processes digits right-to-left with carry bounded to 0/1 and local sum bounded to 0–3. Consumes remaining carry after both inputs end. Removes reversed high-order zeros while preserving one zero, then reverses/joins. No whole-number Number conversion. O(max input length) time and space.",
       "evidence": "interview-counted-synthetic-51-55.json"
+    },
+    {
+      "id": "window-reset",
+      "kind": "bug",
+      "finalAnswerSha256": "de9bcfd505ea9c11f4db630fb3b1d7f3abe930b696330a052a7a697a9f886591",
+      "finalContractPassed": false,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(t!==last){count=0;last=t;}",
+        "counterexample": {
+          "args": [
+            [
+              0,
+              1
+            ],
+            1,
+            2
+          ],
+          "originalActual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            false
+          ]
+        },
+        "note": "Counter resets on raw timestamp rather than fixed window id. Two events are minimal to expose an erroneous reset."
+      },
+      "note": "Window id calculation and accepted-event counting fix the targeted bug for integer limits in O(n) time/O(1) auxiliary space plus output. Nondecreasing times permit one active window. Broad at-most contract does not restrict limit to integers: both generated implementations accept two events for limit 1.5, violating the quota. Frozen integer scores unchanged; witness retained in interview-quota-fractional-limit.json. Same synchronous export/API, no dependencies or test edits. Actual smoke, fresh patch marker and native reading checks passed.",
+      "evidence": "interview-window-reset-completed.json"
     }
   ]
 }

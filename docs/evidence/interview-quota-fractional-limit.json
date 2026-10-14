@@ -1,0 +1,52 @@
+{
+  "id": "window-reset",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary fractional-limit check under the stated at-most contract, which supplies no integer-limit restriction. Frozen integer-fixture scores remain unchanged.",
+  "oracle": "Both events belong to floor(time/10)=0. Accepting two exceeds limit 1.5; earliest admission yields [true,false].",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "5867175deac2b29456e85976ef3bfdaa27084e4269d3981f67ee909c98cee561",
+      "args": [
+        [
+          0,
+          1
+        ],
+        1.5,
+        10
+      ],
+      "expected": [
+        true,
+        false
+      ],
+      "actual": [
+        true,
+        true
+      ],
+      "acceptedCount": 2,
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "de9bcfd505ea9c11f4db630fb3b1d7f3abe930b696330a052a7a697a9f886591",
+      "args": [
+        [
+          0,
+          1
+        ],
+        1.5,
+        10
+      ],
+      "expected": [
+        true,
+        false
+      ],
+      "actual": [
+        true,
+        true
+      ],
+      "acceptedCount": 2,
+      "passed": false
+    }
+  ]
+}

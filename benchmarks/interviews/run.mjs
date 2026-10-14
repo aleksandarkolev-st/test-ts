@@ -13,6 +13,8 @@ import {extractCode,gradeInterview,gradeBug} from './grade.mjs';
 const root=process.cwd(),local=path.join(root,'.local/interview-suite'),out=path.join(root,'artifacts/interview-suite');
 const pilot=process.argv.includes('--pilot'),resume=process.argv.includes('--resume');
 const selected=process.argv.find(v=>v.startsWith('--case='))?.slice(7);
+const selectedKind=process.argv.find(v=>v.startsWith('--kind='))?.slice(7);
+if(selectedKind!==undefined&&!['regular','bug'].includes(selectedKind))throw Error('--kind must be regular or bug');
 const limit=Number(process.argv.find(v=>v.startsWith('--limit='))?.slice(8)??120);
 const file=path.join(out,pilot?'pilot.json':'results.json');
 await mkdir(out,{recursive:true});await mkdir(local,{recursive:true});
@@ -184,6 +186,7 @@ try{
   ...bugs.map((task,i)=>({task,kind:'bug',index:101+i,mode:i%2?'project-explorer':'project-vscode'}))];
  let processed=0;
  for(const item of all){
+  if(selectedKind&&item.kind!==selectedKind)continue;
   if(selected&&item.task.id!==selected)continue;if(processed>=limit)break;
   const existing=report.rows.find(r=>r.id===item.task.id&&r.kind===item.kind);
   if(existing?.status==='responses_complete')continue;

@@ -17,16 +17,21 @@ const limit=Number(process.argv.find(v=>v.startsWith('--limit='))?.slice(8)??120
 const file=path.join(out,pilot?'pilot.json':'results.json');
 await mkdir(out,{recursive:true});await mkdir(local,{recursive:true});
 const digest=b=>createHash('sha256').update(b).digest('hex');
-const frontendFiles=['src/App.tsx','src/style.css','src/overlay/Answer.tsx','src/overlay/Overlay.tsx','src/overlay/FormattedAnswer.tsx','src/overlay/answerFormat.ts','src/overlay/paintedText.ts','src/useKeyboardScroll.ts','src/ui/PixelCompanion.tsx'];
+async function sourceFiles(directory){
+ const names=[];for(const entry of await readdir(directory,{withFileTypes:true})){
+  const file=path.join(directory,entry.name);if(entry.isDirectory())names.push(...await sourceFiles(file));else if(entry.isFile())names.push(file);
+ }return names;
+}
+const frontendFiles=[...await sourceFiles('src'),...await sourceFiles('public')].sort();
 const binary=path.join(root,'src-tauri/target/debug/meeting-copilot.exe');
 const fingerprint={
  binarySha256:digest(await readFile(binary)),
- frontendSha256:digest((await Promise.all(frontendFiles.map(f=>readFile(f)))).map(b=>b.toString()).join('\n')),
+ frontendSha256:digest(Buffer.concat(await Promise.all(frontendFiles.map(async f=>Buffer.concat([Buffer.from(f+'\0'),await readFile(f)]))))),
  contractsSha256:digest((await Promise.all(['catalog.mjs','bugs.mjs','cases.mjs','grade.mjs'].map(f=>readFile(path.join(root,'benchmarks/interviews',f))))).map(b=>b.toString()).join('\n')),
 };
 let report={version:1,status:'in_progress',startedAt:new Date().toISOString(),model:'gpt-6.1-sol',reasoningEffort:'low',serviceTier:'fast',
  scope:'100 distinct regular + 20 distinct bug interviews, three rounds each, live signed-in Codex through native app. Audio paused; no ASR reliability claim.',
- pilot,required:{regular:100,bug:20},fingerprint,rows:[],events:[]};
+ pilot,runId:(pilot?'pilot-':'run-')+randomBytes(6).toString('hex'),required:{regular:100,bug:20},fingerprint,rows:[],events:[]};
 if(resume){
  report=JSON.parse(await readFile(file,'utf8'));
  if(JSON.stringify(report.fingerprint)!==JSON.stringify(fingerprint))throw Error('Resume fingerprint differs. Preserve this report and start a new evaluated build explicitly.');
@@ -53,7 +58,7 @@ const server=createServer(async(req,res)=>{
   if(req.url==='/snapshot'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('get_snapshot')));return;}
   if(req.url==='/detect'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('detect_context')));return;}
   if(req.url==='/diagnostics'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('native_diagnostics')));return;}
-  res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>'+escape(ready?.title??'Interview evaluation IDE')+'</title><style>body{margin:28px;background:#f5f3ed;color:#172029;font:18px/1.5 Segoe UI;max-width:780px}h1{font-size:27px;line-height:1.25}pre{font:18px/1.5 Consolas;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#43524d}</style><h1>'+escape(ready?.title??'Preparing interview')+'</h1><pre>'+escape(ready?.content??'Synthetic benchmark workspace. Waiting for the next handoff.')+'</pre><small>Synthetic test workspace. No private files, messages, or credentials.</small>');
+  res.setHeader('Content-Type','text/html; charset=utf-8');res.end('<!doctype html><meta charset="utf-8"><title>'+escape(ready?.title??'Interview evaluation IDE')+'</title><style>body{margin:28px;background:#f5f3ed;color:#172029;font:18px/1.5 Segoe UI;max-width:780px}h1{font-size:27px;line-height:1.25}pre{font:18px/1.5 Consolas;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#43524d}</style><h1>'+escape(ready?.title??'Preparing interview')+'</h1><pre>'+escape(ready?.content??'Synthetic benchmark workspace. Waiting for the next handoff.')+'</pre><small>Synthetic test workspace. No private files, messages, or credentials.</small>');
  }catch(e){res.statusCode=400;res.end(String(e));}
 });
 await new Promise(r=>server.listen(9571,'127.0.0.1',r));
@@ -105,6 +110,7 @@ async function handoff(task,kind,index,mode,marker,patched=false){
  const ack=await waitForComputerUse(payload);
  const expected=mode==='screenshot'?'screenshot':'project';
  if(ack.detected?.kind!== (mode==='screenshot'?'browser':mode==='project-vscode'?'vscode':'folder'))throw Error('Unexpected source detection: '+JSON.stringify(ack.detected));
+ if(mode!=='screenshot'&&path.normalize((ack.detected.projectPath??'').replace(/^\\\\\?\\/,'')).toLowerCase()!==path.normalize(folder).toLowerCase())throw Error('A different project folder was detected');
  const attached=await until(s=>!s.attachmentBusy&&!!s[expected]);
  if(attached[expected==='project'?'screenshot':'project'])throw Error('Historical attachment survived the clear boundary');
  const auto=await until(s=>s.latency?.completedAt!=null);
@@ -116,7 +122,18 @@ async function readingCheck(task,kind,index){
   verticalNeeded:before.height>before.viewport,horizontalNeeded:!!before.code&&before.code.width>before.code.viewport,
   directions:['end','home',...(before.code&&before.code.width>before.code.viewport?['right','left']:[])]});
  const after=await geometry();
- return{before,ack,after,footerReachable:after.footerBottom<=after.windowHeight+1};
+ const checks=(ack.steps??[]).map(step=>{
+  const g=step.geometry;
+  const passed=step.token===ack.token&&step.id===task.id&&step.source?.startsWith('Computer Use')&&(
+   step.direction==='end'?Math.abs(g.top-Math.max(0,g.height-g.viewport))<=1.5:
+   step.direction==='home'?Math.abs(g.top)<=1:
+   step.direction==='right'?(g.code?.left??0)>0:
+   step.direction==='left'?Math.abs(g.code?.left??Infinity)<=1:false);
+  return{direction:step.direction,passed};
+ });
+ const expected=before.code&&before.code.width>before.code.viewport?['end','home','right','left']:['end','home'];
+ const complete=expected.every(d=>checks.some(c=>c.direction===d&&c.passed));
+ return{before,ack,after,checks,passed:complete&&after.footerBottom<=after.windowHeight+1,footerReachable:after.footerBottom<=after.windowHeight+1};
 }
 try{
  await persist();
@@ -129,21 +146,10 @@ try{
  let stderr='';app.stderr.on('data',b=>stderr=(stderr+b).slice(-6000));
  for(let i=0;i<200;i++){try{browser=await chromium.connectOverCDP('http://127.0.0.1:9570');break;}catch{if(app.exitCode!==null)throw Error('Native app exited: '+stderr);await delay(100);}}
  if(!browser)throw Error('Native CDP unavailable');
- for(let i=0;i<100;i++){const pages=browser.contexts()[0].pages();main=pages.find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));overlay=pages.find(p=>p.url().includes('view=overlay'));if(main&&overlay)break;await delay(100);}
- if(!main||!overlay)throw Error('Native surfaces missing');
- await overlay.evaluate(()=>{
-  const bridge=window.__TAURI_INTERNALS__,original=bridge.invoke;
-  window.__interviewPaints=[];
-  bridge.invoke=function(name,args={}){
-   const result=original.call(this,name,args);
-   if(name==='answer_displayed'){
-    const p={id:args.id,revision:args.revision,start:args.visibleStart,end:args.visibleEnd,textLength:args.text.length,source:args.text.slice(args.visibleStart,args.visibleEnd),paintHostMs:args.paintHostMs,accepted:false};
-    window.__interviewPaints.push(p);if(window.__interviewPaints.length>12000)window.__interviewPaints.splice(0,4000);
-    result.then(()=>p.accepted=true,()=>p.accepted=false);
-   }
-   return result;
-  };
- });
+ const surfacesDeadline=Date.now()+45000;
+ while(Date.now()<surfacesDeadline){main=browser.contexts().flatMap(c=>c.pages()).find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));if(main)break;await delay(200);}
+ if(!main)throw Error('Native setup missing: '+browser.contexts().flatMap(c=>c.pages()).map(p=>p.url()).join(', ')+'; '+stderr.slice(-1000));
+ await main.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.setup'),undefined,{timeout:30000});
  const boot=await invoke('bootstrap');if(!boot.selected?.planEnabled)throw Error('A signed-in Codex account is required');
  const models=await invoke('list_models');if(!models.some(m=>m.slug===report.model))throw Error('GPT-6.1 Sol absent from live catalog');
  report.liveCatalogVerified=true;report.shortcutErrors=boot.shortcutErrors;
@@ -154,6 +160,19 @@ try{
   output:boot.devices.find(d=>d.source==='remote'&&d.default)?.id??boot.devices.find(d=>d.source==='remote')?.id};
  await invoke('start_meeting',{settings});await invoke('action',{action:'pause'});await until(s=>s.paused);
  report.actualSettings={model:settings.model,reasoningEffort:settings.reasoningEffort,answerBackend:settings.answerBackend,serviceTier:settings.serviceTier,answerObjective:settings.answerObjective,speechBackend:settings.speechBackend,paused:true};
+ const overlayDeadline=Date.now()+45000;
+ while(Date.now()<overlayDeadline){overlay=browser.contexts().flatMap(c=>c.pages()).find(p=>p.url().includes('view=overlay'));if(overlay)break;await delay(200);}
+ if(!overlay)throw Error('Native overlay did not initialize after meeting startup: '+stderr.slice(-1000));
+ await overlay.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.answer-content'),undefined,{timeout:30000});
+ await overlay.evaluate(async()=>{
+  const bridge=window.__TAURI_INTERNALS__;
+  window.__interviewPaints=[];
+  const handler=bridge.transformCallback(event=>{
+   window.__interviewPaints.push(event.payload);
+   if(window.__interviewPaints.length>12000)window.__interviewPaints.splice(0,4000);
+  });
+  await bridge.invoke('plugin:event|listen',{event:'copilot:paint',target:{kind:'WebviewWindow',label:'overlay'},handler});
+ });
  fixtureBrowser=await chromium.launch({channel:'msedge',headless:false,args:['--remote-debugging-port=9572']});
  fixture=await fixtureBrowser.newPage({viewport:null});
  const all=[...interviews.map((task,i)=>({task,kind:'regular',index:i+1,mode:['screenshot','project-vscode','project-explorer'][i%3]})),
@@ -170,20 +189,22 @@ try{
   row.attempts.push(attempt);row.status='running';await persist();
   attempt.handoff=await handoff(task,kind,index,mode,attempt.marker);
   for(let r=0;r<3;r++){
-   const question=task.rounds[r]+'\nUse only the current application attachments; earlier tasks are historical. Identify the exact current marker '+(r===2&&attempt.patchHandoff?attempt.patchHandoff.marker:'from the attachment')+'.';
+   const question=task.rounds[r]+'\nUse only the current application attachments; earlier tasks are historical. Identify the exact current marker from the attachment.';
    const answer=await response(question);
    const currentMarker=r===2&&attempt.patchHandoff?attempt.patchHandoff.marker:attempt.marker;
    answer.markerCorrect=answer.answer.includes(currentMarker);
    if(r>0){
     answer.code=extractCode(answer.answer,kind==='bug');
     answer.grade=kind==='bug'?gradeBug(task,answer.code):gradeInterview(task.id,answer.code);
-    await writeFile(path.join(out,kind+'-'+task.id+'-attempt-'+row.attempts.length+'-round-'+(r+1)+'.mjs'),answer.code);
+    const codeDir=path.join(out,report.runId);await mkdir(codeDir,{recursive:true});
+    answer.codePath=path.join(codeDir,kind+'-'+task.id+'-attempt-'+row.attempts.length+'-round-'+(r+1)+'.mjs');
+    await writeFile(answer.codePath,answer.code);
    }else answer.diagnosisNeedsReview=kind==='bug';
    attempt.rounds.push(answer);await persist();
    console.log('ROUND_RESULT',JSON.stringify({id:task.id,kind,round:r+1,markerCorrect:answer.markerCorrect,passed:answer.grade?.passed,firstWordMs:answer.firstWordMs,completedMs:answer.completedMs}));
    if(kind==='bug'&&r===1&&answer.grade?.contractOkay){
     await writeFile(path.join(local,'projects','bug-'+task.id,'src/core.mjs'),answer.code+'\n');
-    attempt.patchHandoff=await handoff(task,kind,index,mode,attempt.marker+'-PATCH',true);await persist();
+    attempt.patchHandoff=await handoff(task,kind,index,mode,attempt.marker+'-PATCH-'+randomBytes(6).toString('hex'),true);await persist();
    }
   }
   attempt.reading=await readingCheck(task,kind,index);

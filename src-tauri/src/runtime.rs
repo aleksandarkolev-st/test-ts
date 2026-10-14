@@ -327,7 +327,17 @@ async fn actor(
                         // Browser offsets are UTF-16, while the exact source
                         // ledger uses UTF-8 byte boundaries.
                         if let (Some(start),Some(end))=(utf16_byte_offset(&text,visible_start),utf16_byte_offset(&text,visible_end)){
-                            engine.context.ledger.acknowledge_paint(&id,&text,start,end,at);
+                            let accepted=engine.context.ledger.acknowledge_paint(&id,&text,start,end,at);
+                            // Local evaluation observes the actual ledger verdict rather
+                            // than replacing Tauri's intentionally read-only IPC bridge.
+                            #[cfg(debug_assertions)]
+                            let _=app.emit_to("overlay","copilot:paint",serde_json::json!({
+                                "id":id,"revision":revision,"start":visible_start,"end":visible_end,
+                                "textLength":text.encode_utf16().count(),"source":&text[start..end],
+                                "paintHostMs":paint_host_ms,"sessionPaintMs":at,"accepted":accepted
+                            }));
+                            #[cfg(not(debug_assertions))]
+                            let _=accepted;
                         }
                     }}
                 }},

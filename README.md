@@ -20,7 +20,8 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 | Ctrl + Shift + X | Dismiss answer |
 | Ctrl + Shift + M | Pause/resume capture |
 | Ctrl + Shift + Up | Request a longer answer |
-| Ctrl + Shift + P | Send the selected project to AI |
+| Ctrl + Shift + P | Detect and send the active project or browser view to AI |
+| Ctrl + Alt + Arrow keys | Move the focused setup window, or the overlay |
 | Ctrl + Shift + F8 | Capture the monitor under the pointer and send it to AI |
 
 Drag the overlay by its status header. Automatic answers do not request focus; manual input explicitly does. If another app owns a shortcut, startup reports the conflict and the corresponding on-screen control remains available.
@@ -41,7 +42,7 @@ Meeting startup prepares three ephemeral threads for the selected model, speed a
 
 During a meeting, **Ctrl + Shift + F8** (or **Send screenshot**) captures the complete monitor under the mouse pointer as a lossless PNG and asks the AI to explain the visible task. The overlay hides during capture and returns without taking focus. The latest screenshot remains in RAM for follow-up answers until **Remove screenshot** or **Stop meeting**. Retaking replaces it. Screenshots are sent inline to OpenAI; there is no file upload or screenshot library. Image understanding requires a model that accepts image inputs; service errors are shown normally. [ChatGPT plan input support](https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations).
 
-Choose a **Project folder** before starting the meeting. During a meeting, **Ctrl + Shift + P** (or **Send project**) reads it again and sends its complete readable text to OpenAI for a streamed overview. The source remains in RAM for automatic and manual follow-up answers until **Remove project** or **Stop meeting**. No project content is saved to SQLite. The folder path is saved with settings.
+During a meeting, **Ctrl + Shift + P** (or **Send active context**) detects the active VS Code workspace or Explorer folder and sends its complete readable text to OpenAI for a streamed overview. A browser view or an unresolved editor uses a screenshot of that window's monitor. Detection is local; transmission requires this explicit action. To override detection, choose a **Project folder** before starting and use **Send selected project**. Attached source remains in RAM for follow-up answers until **Remove project** or **Stop meeting**. No project content is saved to SQLite. Only an explicitly selected folder path is saved with settings.
 
 Project collection respects `.gitignore`, `.ignore`, and Git exclusions; generated folders, repository metadata, and common credential files are excluded. Binary/non-UTF-8 files and symbolic links appear in the skipped-file list. Limits are 2 MiB per file, 4 MiB total text, and 4000 scanned files. Exceeding a limit fails the attachment instead of silently truncating it. These local limits do not guarantee the selected answer model can accept the project's full context; a model/service context-limit error is shown normally.
 

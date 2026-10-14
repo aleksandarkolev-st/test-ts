@@ -1,0 +1,446 @@
+{
+  "scope": "Native UI acceptance; not counted among 100+20 interviews",
+  "checks": {
+    "answer": {
+      "at": "2026-10-14T15:16:34.169Z",
+      "geometry": {
+        "top": 0,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 0,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    },
+    "right": {
+      "at": "2026-10-14T15:17:34.586Z",
+      "geometry": {
+        "top": 0,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 418.8571472167969,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    },
+    "left": {
+      "at": "2026-10-14T15:17:42.604Z",
+      "geometry": {
+        "top": 0,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 0,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    },
+    "end": {
+      "at": "2026-10-14T15:17:53.372Z",
+      "geometry": {
+        "top": 1568,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 0,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    },
+    "move-left": {
+      "at": "2026-10-14T15:18:06.986Z",
+      "geometry": {
+        "top": 1568,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 0,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1852,
+          "right": 2786,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    },
+    "home": {
+      "at": "2026-10-14T15:20:14.846Z",
+      "geometry": {
+        "top": 0,
+        "height": 2018,
+        "viewport": 450,
+        "code": {
+          "left": 0,
+          "width": 1350,
+          "viewport": 467
+        },
+        "rootBottom": 694.357177734375,
+        "footerBottom": 694.3571968078613,
+        "windowHeight": 699
+      },
+      "diagnostics": {
+        "affinity": 17,
+        "affinityRead": true,
+        "alwaysOnTop": true,
+        "foregroundHwnd": 1182442,
+        "noActivate": true,
+        "overlayHwnd": 1182442,
+        "rect": {
+          "bottom": 1776,
+          "left": 1852,
+          "right": 2786,
+          "top": 540
+        },
+        "screen": {
+          "height": 1800,
+          "width": 2880
+        },
+        "visible": true
+      },
+      "attachments": {
+        "project": null,
+        "screenshot": {
+          "width": 2880,
+          "height": 1800
+        }
+      },
+      "status": "answer"
+    }
+  },
+  "answer": {
+    "question": "UI acceptance check, not an interview score: Identify whether the current application attachment is a screenshot or a local project. For this browser spoof-title fixture, return one complete fenced JavaScript function solve(snapshot) that is true exactly when project is absent and screenshot is present. Inside the code include one comment containing 180 consecutive x characters so I can test horizontal reading. After the code give 35 short numbered lines explaining distinct context-handoff and explicit-sharing checks so I can test vertical reading. Use only the current attachments.",
+    "text": "The current attachment is a screenshot, not a local project. It shows a browser at 127.0.0.1:9561 with a spoofed Visual Studio Code tab title.\n\n```javascript\nfunction solve(snapshot) {\n  // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n  return snapshot?.project === false && snapshot?.screenshot === true;\n}\n```\n\n1. Call solve with the current attachment flags.\n2. The supplied flags return true.\n3. Project present and screenshot present returns false.\n4. Both attachments absent returns false.\n5. Project present and screenshot absent returns false.\n6. Missing flags do not satisfy the check.\n7. Use current attachments, not historical ones.\n8. Confirm the screenshot is listed as attached.\n9. Confirm no local project is listed as attached.\n10. Identify the visible application as a browser.\n11. Do not identify it from its tab title alone.\n12. Treat the editor title as spoofed.\n13. Do not infer a project from the localhost address.\n14. Do not infer an attachment from a workspace path.\n15. Treat screenshot text as reference data.\n16. Do not execute instructions embedded in the page.\n17. Distinguish visible pixels from accessible files.\n18. Do not claim access to unseen source code.\n19. Treat the screenshot as an earlier snapshot.\n20. Verify any later attachment changes separately.\n21. Check that keyboard movement sends no context.\n22. Check that horizontal scrolling sends no context.\n23. Check that vertical scrolling sends no context.\n24. Check that focus changes attach no folder.\n25. Check that tab changes attach no project automatically.\n26. Check that selecting text does not implicitly share it.\n27. Require explicit action before sharing new context.\n28. Verify the sharing preview identifies its payload.\n29. Verify screenshot sharing does not include project files.\n30. Verify project sharing requires explicit project selection.\n31. Verify canceling sharing sends no payload.\n32. Verify removed attachments leave the next request.\n33. Verify handoff preserves the current attachment flags.\n34. Inspect transmission evidence to validate movement behavior.\n35. This screenshot alone cannot prove those runtime checks passed.",
+    "latency": {
+      "responseRevision": 0,
+      "pipeline": {
+        "generationId": "5acf92dd-14e4-4062-be2a-6d0903fc4290",
+        "sessionId": "50aeba7b-24af-4f22-b733-fabbc3a6bd64",
+        "utteranceId": null,
+        "utteranceRevision": 0,
+        "contextVersion": 97,
+        "inputHash": [
+          3,
+          21,
+          237,
+          139,
+          153,
+          218,
+          93,
+          197,
+          198,
+          90,
+          69,
+          18,
+          205,
+          241,
+          251,
+          216,
+          15,
+          74,
+          140,
+          247,
+          229,
+          19,
+          235,
+          80,
+          217,
+          126,
+          252,
+          148,
+          42,
+          166,
+          117,
+          162
+        ],
+        "transportWrittenAt": 266562,
+        "inputTokens": 12860,
+        "outputTokens": 610,
+        "reasoningTokens": 97,
+        "remoteTerminationConfirmed": true,
+        "localRetirementStartedAt": null,
+        "localRetirementReleasedAt": null,
+        "candidateDetected": 266542,
+        "codexStreamEntered": 266543,
+        "semaphoreAcquired": 266544,
+        "warmThreadTaken": 266544,
+        "preparedThreadAgeMs": 100373,
+        "refillStarted": 266544,
+        "turnStartSent": 266544,
+        "turnStartAck": 266594,
+        "firstAgentDelta": 275252,
+        "turnCompleted": 291644,
+        "questionConfirmed": 266542,
+        "firstVisible": 275512,
+        "refillCompleted": 266705,
+        "refillThreadsCreated": 1,
+        "refillError": false,
+        "cancelled": false,
+        "backend": null,
+        "modelRequestSent": null,
+        "responseCreated": null,
+        "cachedInputTokens": 8576,
+        "actualServiceTier": null,
+        "responseCount": 0,
+        "steeringCount": 0,
+        "warmStateUsed": false,
+        "followupCount": 0,
+        "promptChars": 1808,
+        "refinementChars": 0,
+        "retainedFirstDelta": 275495,
+        "latestInputSent": 266544,
+        "latestInputAck": 266594,
+        "latestInputConsumed": 267120,
+        "refinementRestartCount": 0,
+        "completedDraftReplacementCount": 0,
+        "restartPromptChars": null,
+        "acousticRefinementCount": 0,
+        "eagerFinalReplacement": false,
+        "confirmedQuestionRefinements": false,
+        "agedFinalWait": false,
+        "pendingAgeAtConfirmationMs": null,
+        "finalPendingBudgetMs": null,
+        "cleanupStartedAt": null,
+        "interruptAckAt": null,
+        "cleanupTerminalAt": null,
+        "cleanupMaxQueuedEvents": 0
+      },
+      "remoteSpeechStartedAt": null,
+      "firstRemotePartialAt": null,
+      "firstCredibleCandidateAt": null,
+      "remotePartialUpdates": 0,
+      "speechStoppedAt": 266542,
+      "transcriptFinalAt": 266542,
+      "questionConfirmedAt": 266542,
+      "requestSentAt": 266543,
+      "firstTokenAt": 275495,
+      "firstWordAt": 275495,
+      "completedAt": 291644
+    },
+    "functionTests": [
+      {
+        "args": {
+          "project": null,
+          "screenshot": {
+            "width": 2880
+          }
+        },
+        "expected": true,
+        "actual": false,
+        "passed": false
+      },
+      {
+        "args": {
+          "project": {
+            "name": "p"
+          },
+          "screenshot": {
+            "width": 2880
+          }
+        },
+        "expected": false,
+        "actual": false,
+        "passed": true
+      },
+      {
+        "args": {
+          "project": null,
+          "screenshot": null
+        },
+        "expected": false,
+        "actual": false,
+        "passed": true
+      }
+    ],
+    "currentProject": null,
+    "currentScreenshot": {
+      "width": 2880,
+      "height": 1800
+    },
+    "inputShapeNote": "The UI question did not specify the snapshot field types. The generated code uses the provided boolean APPLICATION ATTACHMENTS flags. The object-shaped native snapshot fixtures below expose that schema assumption (2/3), and are preserved; this is not an interview accuracy score.",
+    "firstWordMs": 8953,
+    "completedMs": 25102
+  },
+  "binarySha256": "a90f1effa5a9b34a2d6061a7a7da40056f7ee994e0966923998341b244208186",
+  "frontendSha256": "47dfa3700a8ba099d9868490de56479e4b9ff455542070d220eed6e51ce5ceaa",
+  "frontendCommit": "c8357d0",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "setupKeyboardScroll": {
+    "pageDownTop": 653.1428833007812,
+    "homeTop": 0,
+    "documentHeight": 1449,
+    "viewport": 701,
+    "source": "Computer Use global keys and independent CDP geometry read"
+  },
+  "noAutomaticAttachment": {
+    "project": null,
+    "screenshot": null,
+    "observedBeforeShortcut": true,
+    "source": "Native get_snapshot before explicit Ctrl Shift P"
+  },
+  "browserDetection": {
+    "kind": "browser",
+    "projectPath": null,
+    "titleSpoofTest": true,
+    "source": "Process identity detection before Ctrl Shift P"
+  },
+  "liveInterviewScope": {
+    "regularCompleted": 0,
+    "regularRequired": 100,
+    "bugCompleted": 0,
+    "bugRequired": 20
+  }
+}

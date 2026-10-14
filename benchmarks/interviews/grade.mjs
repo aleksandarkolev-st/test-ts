@@ -31,6 +31,6 @@ export function gradeInterview(id,source){
 export function gradeBug(bug,source){
  const grade=checkBug(bug,source);
  // The bug interviews promise the same synchronous public function.
- const contractOkay=/\b(?:export\s+)?function\s+solve\s*\(/.test(source)&&!/\basync\s+function\s+solve/.test(source)&&!/\bimport\s/.test(source);
+ const contractOkay=/\bexport\s+function\s+solve\s*\(/.test(source)&&!/\basync\s+function\s+solve/.test(source)&&!/\bimport\s/.test(source);
  return {...grade,contractOkay,passed:grade.passed&&contractOkay};
 }

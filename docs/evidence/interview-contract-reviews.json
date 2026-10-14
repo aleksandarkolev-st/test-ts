@@ -828,6 +828,50 @@
       "diagnosisReview": null,
       "note": "Rolling minimum-cost recurrence and initial min(0,cost[0]) correctly allow visiting a negative first stair before index one; independent negative witness returns -7. Broad sign/magnitude-unrestricted contract still fails the finite-optimum overflow witness: four MAX_VALUE costs followed by two negative MAX_VALUE costs have exact minimum zero, but both implementations return Infinity. Independent exhaustive BigInt path oracle verifies zero; frozen grades unchanged. O(n) arithmetic steps/O(1) storage.",
       "evidence": "interview-stair-cost-overflow.json"
+    },
+    {
+      "id": "reservation-transaction",
+      "kind": "bug",
+      "finalAnswerSha256": "3bd07e8b73fb10e0404e033be656b3929230da96480d187b60fa7173647607d0",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "stock[sku]-=quantity; catch returns partially depleted stock",
+        "counterexample": {
+          "args": [
+            {
+              "A": 1
+            },
+            [
+              {
+                "sku": "A",
+                "quantity": 1
+              },
+              {
+                "sku": "A",
+                "quantity": 1
+              }
+            ]
+          ],
+          "originalActual": {
+            "accepted": false,
+            "stock": {
+              "A": 0
+            }
+          },
+          "expected": {
+            "accepted": false,
+            "stock": {
+              "A": 1
+            }
+          }
+        },
+        "note": "Two positive quantity items are minimal: one successful deduction followed by rejection."
+      },
+      "note": "Separate original/working copies restore atomic rollback and duplicate-SKU balance checks. Round 3 independently identifies inherited-property inventory in round 2 and adds an own-property guard. Actual supplementary tests reject absent toString and consume owned constructor/__proto__ keys correctly. Caller stock unchanged; success returns all deductions, empty order succeeds. Same synchronous export/API, no dependencies/test edits; O(stock keys + items) time and O(stock keys) space. Actual service smoke, fresh patch marker and native vertical/horizontal reading checks passed.",
+      "evidence": "interview-reservation-transaction-completed.json",
+      "supplementaryEvidence": "interview-reservation-property-boundary.json"
     }
   ]
 }

@@ -1,0 +1,169 @@
+{
+  "scope": "Supplementary actual model implementations; independent expected results; no frozen fixture changes",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "2028109ad058c520013a278f154d049c98034c24c38e409b5480f4f2a48059c5",
+      "cases": [
+        {
+          "args": [
+            {},
+            [
+              {
+                "sku": "toString",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": false,
+            "stock": {}
+          },
+          "actual": {
+            "accepted": true,
+            "stock": {
+              "toString": null
+            }
+          },
+          "nonFiniteStock": true,
+          "passed": false
+        },
+        {
+          "args": [
+            {
+              "constructor": 2
+            },
+            [
+              {
+                "sku": "constructor",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": true,
+            "stock": {
+              "constructor": 1
+            }
+          },
+          "actual": {
+            "accepted": true,
+            "stock": {
+              "constructor": 1
+            }
+          },
+          "nonFiniteStock": false,
+          "passed": true
+        },
+        {
+          "args": [
+            {
+              "__proto__": 2
+            },
+            [
+              {
+                "sku": "__proto__",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": true,
+            "stock": {
+              "__proto__": 1
+            }
+          },
+          "actual": {
+            "accepted": true,
+            "stock": {
+              "__proto__": 1
+            }
+          },
+          "nonFiniteStock": false,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "3bd07e8b73fb10e0404e033be656b3929230da96480d187b60fa7173647607d0",
+      "cases": [
+        {
+          "args": [
+            {},
+            [
+              {
+                "sku": "toString",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": false,
+            "stock": {}
+          },
+          "actual": {
+            "accepted": false,
+            "stock": {}
+          },
+          "nonFiniteStock": false,
+          "passed": true
+        },
+        {
+          "args": [
+            {
+              "constructor": 2
+            },
+            [
+              {
+                "sku": "constructor",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": true,
+            "stock": {
+              "constructor": 1
+            }
+          },
+          "actual": {
+            "accepted": true,
+            "stock": {
+              "constructor": 1
+            }
+          },
+          "nonFiniteStock": false,
+          "passed": true
+        },
+        {
+          "args": [
+            {
+              "__proto__": 2
+            },
+            [
+              {
+                "sku": "__proto__",
+                "quantity": 1
+              }
+            ]
+          ],
+          "expected": {
+            "accepted": true,
+            "stock": {
+              "__proto__": 1
+            }
+          },
+          "actual": {
+            "accepted": true,
+            "stock": {
+              "__proto__": 1
+            }
+          },
+          "nonFiniteStock": false,
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

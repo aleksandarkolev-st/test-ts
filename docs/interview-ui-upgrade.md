@@ -66,3 +66,11 @@ The remaining 35 regular and 13 bug interviews, and their contract/diagnosis rev
 The first search-boundary bug attempt completed a correct source diagnosis and a replacement passing 4/4 fixtures, then its edited-source handoff was interrupted by foreground input. Computer Use rejected the shortcut, but the orchestration mistakenly continued the acknowledgment; native detection returned Task Switching and the runner rejected that source. The incomplete attempt is retained in `docs/evidence/interview-search-boundary-interrupted-attempt.json` and is excluded from completed counts. The handoff helper now rejects a changed source kind or folder before posting an acknowledgment, and shortcut results are inspected separately.
 
 The retry completed all three rounds, both explicit source handoffs and keyboard reading checks, with the original attempt retained in `interview-search-boundary-completed.json`. Diagnosis review confirmed the cited `src/core.mjs` expression `hi=nums.length-1` and executed the minimal witness `solve([0],1)`: original 0, required 1. Both replacements passed 4/4 independent fixtures; the edited module also passed its real service smoke test. Round 3 recovered the fresh patch marker from the reattached project. Final contract and diagnosis reviews pass; this is one completed bug interview, not two.
+
+### Reservation service checkpoint
+
+65 regular and 8 bug interviews are complete (219 measured completed-attempt responses). All 73 marker, frozen-fixture, accepted paint-source and native keyboard checks pass. Hash-bound final contract review passes 64/73; the nine prior failures remain retained.
+
+The eighth bug interview identifies missing rollback with the minimal two-item duplicate-SKU rejection. After an explicit updated-source handoff, round 3 also finds and fixes inherited-property inventory in the round 2 candidate. Supplementary execution confirms rejection of absent `toString` and correct handling of owned `constructor` and `__proto__` stock entries. Raw responses and latency: `evidence/interview-reservation-transaction-completed.json`; supplementary results: `evidence/interview-reservation-property-boundary.json`.
+
+Remaining: 35 regular and 12 bug interviews. Full 100+20 scope is unfinished.

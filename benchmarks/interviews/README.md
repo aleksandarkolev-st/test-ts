@@ -13,4 +13,6 @@ The live runner run.mjs collects actual native responses, source-paint acknowled
 
 The localhost:9571/state endpoint advertises each Computer Use handoff or reading check. Its /ack endpoint requires the matching token. The harness never sends context automatically: Computer Use focuses the synthetic browser, VS Code folder, or Explorer folder and presses Ctrl+Shift+P. Bug round 2 replacements are reattached before round 3.
 
-Functional grades do not establish complexity or diagnosis. Those contract reviews remain pending until actual answers are inspected. The responses_complete_pending_contract_review status is not the goal completion gate. All required interviews remain unrun as of runner preparation.
+Functional grades do not establish complexity or diagnosis. Those contract reviews remain pending until actual answers are inspected. The responses_complete_pending_contract_review status is not the goal completion gate. The first three counted interviews and their manual reviews are preserved in docs/evidence/interview-counted-first-three-2026-10-14.json and interview-counted-first-three-review.md; subsequent progress remains in artifacts/interview-suite/results.json.
+
+For horizontal reading checks, first bring the code into view (for example, Home then End, then Right/Left). The shortcut intentionally targets the focused or visible code block. Preserve failed observations and explain any corrected test targeting rather than overwriting the failure evidence.

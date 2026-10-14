@@ -371,6 +371,51 @@
       },
       "note": "Lower-bound binary search continues left on equality and verifies the final candidate. Correct empty/absent/duplicate boundaries, same synchronous export and API, no dependencies or test edits. O(log(n+1)) time and O(1) space. Fresh patch marker recovered after explicit reattachment; actual service smoke test passed.",
       "evidence": "interview-duplicate-search-completed.json"
+    },
+    {
+      "id": "kth-largest",
+      "kind": "regular",
+      "finalAnswerSha256": "d9ea2f67beb7d7d4f605df8c0b1f733f561f95d75ff5e53edf5683aa304b7981",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "A min heap retains the k largest occurrences. Insertions bubble up; root replacements choose the smaller child and sift down. Valid k, duplicate occurrences and negative values handled without modifying input. O(n log(k+1)) time and O(k) space.",
+      "evidence": "interview-counted-synthetic-36-40.json"
+    },
+    {
+      "id": "three-sum",
+      "kind": "regular",
+      "finalAnswerSha256": "bd9164e01911b1b230612917d652c82b8b6b8f2baa18b002c7fbac3265814399",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Numeric sorting and duplicate-skipping two pointers provide ordered unique triplets in O(n²) time and O(n) auxiliary space on ordinary bounded integers. Broad numeric contract fails the executed exact-integer witness [-2^53,-1,2^53]: both implementations return a triplet whose exact sum is -1. The stated contract has no safe-sum restriction; frozen fixture scores are unchanged.",
+      "evidence": "interview-three-sum-integer-boundary.json"
+    },
+    {
+      "id": "subarray-sum-count",
+      "kind": "regular",
+      "finalAnswerSha256": "68a977f8a3f8151db838df5fd6404987182db2c19c424a75c4ef2d3fa5dde16b",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Prior-prefix frequencies correctly exclude empty subarrays and account for negatives in expected O(n) time/O(n) space on bounded sums. Safe-integer inputs [MAX_SAFE_INTEGER,1,1], k=2 lose prefix precision: both implementations return 0 instead of 1. The broad contract supplies no safe-prefix restriction; frozen fixture scores remain unchanged.",
+      "evidence": "interview-subarray-sum-integer-boundary.json"
+    },
+    {
+      "id": "pivot-index",
+      "kind": "regular",
+      "finalAnswerSha256": "3bb7562cb318dcd24941579fe1dbed075b588236dec2b52caacc420e348ca130",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Total-minus-prefix scan chooses the first pivot in O(n) time/O(1) space on bounded sums. Safe-integer inputs [1,MAX_SAFE_INTEGER,1] have pivot 1, but both implementations return -1 after total rounding. No safe-total restriction appears in the contract; frozen fixture scores remain unchanged.",
+      "evidence": "interview-pivot-integer-boundary.json"
+    },
+    {
+      "id": "next-permutation",
+      "kind": "regular",
+      "finalAnswerSha256": "dbe2c31b0f05d72fea028c9cbec810801b5e123928b837d16c11dff3f1278b83",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Finds the rightmost increasing pivot, swaps with the rightmost strictly greater suffix entry, then reverses the nonincreasing suffix. This yields the smallest larger permutation; no pivot reverses the last permutation to the first. Empty, singleton and duplicates handled. Mutates and returns the supplied array, allowed by this contract. O(n) time/O(1) auxiliary space.",
+      "evidence": "interview-counted-synthetic-36-40.json"
     }
   ]
 }

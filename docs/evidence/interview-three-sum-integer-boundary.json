@@ -1,0 +1,48 @@
+{
+  "id": "three-sum",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exact-integer counterexample; frozen fixture scores remain unchanged.",
+  "exactIntegerSum": "-1",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "8c1d63670208a1746c96b95181716b90a4ad818c3805c9d853057d36d2313a27",
+      "args": [
+        [
+          -9007199254740992,
+          -1,
+          9007199254740992
+        ]
+      ],
+      "expected": [],
+      "actual": [
+        [
+          -9007199254740992,
+          -1,
+          9007199254740992
+        ]
+      ],
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "bd9164e01911b1b230612917d652c82b8b6b8f2baa18b002c7fbac3265814399",
+      "args": [
+        [
+          -9007199254740992,
+          -1,
+          9007199254740992
+        ]
+      ],
+      "expected": [],
+      "actual": [
+        [
+          -9007199254740992,
+          -1,
+          9007199254740992
+        ]
+      ],
+      "passed": false
+    }
+  ]
+}

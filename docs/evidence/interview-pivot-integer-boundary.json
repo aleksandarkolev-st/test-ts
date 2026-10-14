@@ -1,0 +1,36 @@
+{
+  "id": "pivot-index",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exact-integer counterexample with safe-integer inputs; frozen fixture scores remain unchanged.",
+  "oracle": "Independent BigInt sums strictly left and right",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "ab8dcfdde08876bac2dd2b4ae23056cdb037d3687596b45d63168470bda5c97e",
+      "args": [
+        [
+          1,
+          9007199254740991,
+          1
+        ]
+      ],
+      "expected": 1,
+      "actual": -1,
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "3bb7562cb318dcd24941579fe1dbed075b588236dec2b52caacc420e348ca130",
+      "args": [
+        [
+          1,
+          9007199254740991,
+          1
+        ]
+      ],
+      "expected": 1,
+      "actual": -1,
+      "passed": false
+    }
+  ]
+}

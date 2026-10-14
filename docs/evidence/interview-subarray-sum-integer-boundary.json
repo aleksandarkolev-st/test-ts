@@ -1,0 +1,38 @@
+{
+  "id": "subarray-sum-count",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exact-integer counterexample with safe-integer inputs; frozen fixture scores remain unchanged.",
+  "oracle": "Independent exhaustive BigInt contiguous sums",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "28699915a5bffb72add4a17676e3861384a1fa31f97f8e3ff936c7964ee2e978",
+      "args": [
+        [
+          9007199254740991,
+          1,
+          1
+        ],
+        2
+      ],
+      "expected": 1,
+      "actual": 0,
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "68a977f8a3f8151db838df5fd6404987182db2c19c424a75c4ef2d3fa5dde16b",
+      "args": [
+        [
+          9007199254740991,
+          1,
+          1
+        ],
+        2
+      ],
+      "expected": 1,
+      "actual": 0,
+      "passed": false
+    }
+  ]
+}

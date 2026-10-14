@@ -1,0 +1,39 @@
+{
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exhaustive bounded-domain verification, separate from frozen fixture scores and interview counts.",
+  "oracle": "Independent positional thousands/hundreds/tens/ones canonical construction",
+  "runs": [
+    {
+      "id": "roman-numeral-parser",
+      "round": 2,
+      "answerSha256": "579e8b5b0e74c564f40d20b5601fa49122427535f4f62b5f7bec203c6e023944",
+      "totalCases": 3999,
+      "passedCases": 3999,
+      "failures": []
+    },
+    {
+      "id": "roman-numeral-parser",
+      "round": 3,
+      "answerSha256": "34446bc70287e5b538563cbf9a33d96a57f471433bbd318437b27d36f785dfe0",
+      "totalCases": 3999,
+      "passedCases": 3999,
+      "failures": []
+    },
+    {
+      "id": "roman-numeral-encoder",
+      "round": 2,
+      "answerSha256": "e7b9432634d6704d9eed5c8f16208cb59f051b254259894ee11720a3c95e1917",
+      "totalCases": 3999,
+      "passedCases": 3999,
+      "failures": []
+    },
+    {
+      "id": "roman-numeral-encoder",
+      "round": 3,
+      "answerSha256": "77d192f0c17de65095454d488b4f092d19e08e2e20dd2daf0080c62e4896bbee",
+      "totalCases": 3999,
+      "passedCases": 3999,
+      "failures": []
+    }
+  ]
+}

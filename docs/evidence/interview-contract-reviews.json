@@ -544,6 +544,51 @@
       },
       "note": "Delete/reinsert refreshes successful gets and replacement puts; misses preserve order; overflow evicts the first key. Correct zero-valued entries through has check and unchanged synchronous export/API. No dependencies or test edits. Expected O(m) map work with implementation-dependent iteration costs, O(m) output and bounded cache space. Actual service smoke passed; fresh patch marker and reading checks passed.",
       "evidence": "interview-lru-recency-completed.json"
+    },
+    {
+      "id": "group-anagrams",
+      "kind": "regular",
+      "finalAnswerSha256": "cf24525d93970fca374ceb0eca28b0fe5251bc382a5c19fde1cb4a06c96d4e36",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Sorted character keys group equivalent lowercase strings; occurrences and empty strings are retained. Each group is sorted before numeric-independent lexicographic first-word comparison sorts groups. Does not mutate input array. Comparison cost accounts for string lengths: O(nL log(L+1) + nL log(n+1)), O(n(L+1)) space. Uses JavaScript UTF-16 lexical/string semantics; no grapheme or locale collation claim.",
+      "evidence": "interview-counted-synthetic-46-50.json"
+    },
+    {
+      "id": "anagram-window-indices",
+      "kind": "regular",
+      "finalAnswerSha256": "7ce021d6b89119a8a1e8c41ba1c574ff8c24c334b09fcef9aed5025f7d9e64de",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Nonzero difference map tracks current window versus pattern. Incoming character is added and outgoing character removed before testing each full window; overlapping matches preserved. Handles repeated counts, missing characters and pattern longer than text. Consistently indexes UTF-16 code units, matching JavaScript index semantics; nonempty pattern is guaranteed. Expected O(s.length+p.length) time and O(p.length) auxiliary space plus returned indices.",
+      "evidence": "interview-counted-synthetic-46-50.json"
+    },
+    {
+      "id": "longest-palindromic-substring",
+      "kind": "regular",
+      "finalAnswerSha256": "805bf109065e2ee09d74c7759bf230c8f4872c196b3d8d476b5fd6dee8cb1c28",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Expansion visits both character and gap centers; update chooses larger length or earlier start on ties. Empty string returns empty. O(n²) time and O(1) auxiliary space excluding returned string. Uses JavaScript UTF-16 code-unit equality/indices; no separate Unicode code-point/grapheme interpretation was specified.",
+      "evidence": "interview-counted-synthetic-46-50.json"
+    },
+    {
+      "id": "roman-numeral-parser",
+      "kind": "regular",
+      "finalAnswerSha256": "34446bc70287e5b538563cbf9a33d96a57f471433bbd318437b27d36f785dfe0",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Canonical domain allows adjacent subtractive-value recognition; larger/equal next symbols and final symbol are handled correctly. O(s.length) time and O(1) auxiliary space. Independent positional canonical construction exhaustively verified all 3999 valid inputs for both generated implementations.",
+      "evidence": "interview-roman-exhaustive-domain.json"
+    },
+    {
+      "id": "roman-numeral-encoder",
+      "kind": "regular",
+      "finalAnswerSha256": "77d192f0c17de65095454d488b4f092d19e08e2e20dd2daf0080c62e4896bbee",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Descending denominations include all six subtractive pairs. Repeated subtraction terminates at zero and emits canonical uppercase numerals. Bounded 1–3999 contract gives O(1) time/space. Independent positional oracle exhaustively verified all 3999 integers for both generated implementations.",
+      "evidence": "interview-roman-exhaustive-domain.json"
     }
   ]
 }

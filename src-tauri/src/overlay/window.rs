@@ -139,3 +139,31 @@ pub fn resize(app: &tauri::AppHandle, height: f64) -> Result<(), String> {
     ))
     .map_err(|e| e.to_string())
 }
+fn bounded_position(x:i32,y:i32,width:i32,height:i32,left:i32,top:i32,right:i32,bottom:i32)->(i32,i32){
+    (x.clamp(left,(right-width).max(left)),y.clamp(top,(bottom-height).max(top)))
+}
+/// Move setup when it has focus, otherwise move the interview overlay.
+pub fn move_by(app:&tauri::AppHandle,dx:i32,dy:i32)->Result<(),String>{
+    let main=app.get_webview_window("main").ok_or("Main window missing")?;
+    let w=if main.is_focused().unwrap_or(false){main}else{app.get_webview_window("overlay").ok_or("Overlay missing")?};
+    let pos=w.outer_position().map_err(|e|e.to_string())?;
+    let size=w.outer_size().map_err(|e|e.to_string())?;
+    let scale=w.scale_factor().unwrap_or(1.);
+    let mut x=pos.x+(dx as f64*scale).round()as i32;let mut y=pos.y+(dy as f64*scale).round()as i32;
+    #[cfg(windows)]unsafe{
+        use windows::Win32::{Foundation::HWND,Graphics::Gdi::*};
+        let monitor=MonitorFromWindow(HWND(w.hwnd().map_err(|e|e.to_string())?.0),MONITOR_DEFAULTTONEAREST);
+        let mut info=MONITORINFO{cbSize:std::mem::size_of::<MONITORINFO>()as u32,..Default::default()};
+        if !GetMonitorInfoW(monitor,&mut info).as_bool(){return Err("Could not inspect the window monitor".into());}
+        (x,y)=bounded_position(x,y,size.width as i32,size.height as i32,info.rcWork.left,info.rcWork.top,info.rcWork.right,info.rcWork.bottom);
+    }
+    w.set_position(tauri::PhysicalPosition::new(x,y)).map_err(|e|e.to_string())
+}
+#[cfg(test)]mod movement_tests{
+    use super::bounded_position;
+    #[test]fn clamps_to_work_area_including_negative_monitor_coordinates(){
+        assert_eq!(bounded_position(-2000,900,520,140,-1920,0,0,1040),(-1920,900));
+        assert_eq!(bounded_position(0,2000,520,140,-1920,0,0,1040),(-520,900));
+        assert_eq!(bounded_position(40,-80,2000,2000,0,0,1920,1080),(0,0));
+    }
+}

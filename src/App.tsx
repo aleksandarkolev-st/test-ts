@@ -73,7 +73,8 @@ export default function App() {
     <section className="device-section"><div className="section-label">PROJECT CONTEXT</div>
       <label>Project folder<input aria-label="Project folder" value={settings.projectPath || ''} placeholder="Choose the project you want to discuss" disabled={!!busy || snapshot.active} onChange={e => setSettings(s => ({ ...s, projectPath: e.target.value }))} /></label>
       <button disabled={!!busy || snapshot.active || !native()} onClick={() => run('Choosing project…', async () => { const path = await command<string | null>('choose_project'); if (path) setSettings(s => ({ ...s, projectPath: path })); })}>Choose project folder</button>
-      <p className="field-note">Ctrl Shift P sends all readable project text to OpenAI and attaches it for follow-up questions. Ignore rules, generated folders and credential files are excluded.</p>
+      <button disabled={!!busy || snapshot.attachmentBusy || !snapshot.active} onClick={() => run('Detecting context…', () => command('action', { action: 'context' }))}>Send active context · Ctrl Shift P</button>
+      <p className="field-note">Focus VS Code, an Explorer folder, or a browser IDE, then press Ctrl Shift P. A detected local project is attached; a browser or unresolved editor is captured as a screenshot. Detection stays local until you use this control. The folder above is an explicit override for Send project.</p>
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy || !settings.projectPath} onClick={() => run('Sending project…', () => command('action', { action: 'project' }))}>Send project · Ctrl Shift P</button>}
       <ContextAttachments snapshot={snapshot} onError={setError} />
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>Send screenshot · Ctrl Shift F8</button>}
@@ -85,7 +86,7 @@ export default function App() {
       <p className="privacy">Audio and transcription stay on this device. Meeting context is sent to OpenAI to answer questions, with response storage disabled.</p>
     </section>
     <Camera />
-    <footer><span>Ask manually <kbd>Ctrl Shift Space</kbd></span><span>Hide overlay <kbd>Ctrl Shift H</kbd></span>{data?.debug && <button className="text-button" onClick={() => command('open_debug')}>Debug transcript</button>}</footer>
+    <footer><span>Ask manually <kbd>Ctrl Shift Space</kbd></span><span>Hide overlay <kbd>Ctrl Shift H</kbd></span><span>Move window <kbd>Ctrl Alt ← ↑ → ↓</kbd></span>{data?.debug && <button className="text-button" onClick={() => command('open_debug')}>Debug transcript</button>}</footer>
   </main>;
 }
 function Meter({ label, level }: { label: string; level: number }) { return <div className="meter"><span>{label}</span><div><i style={{ width: `${Math.min(100, level * 600)}%` }} /></div></div>; }

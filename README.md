@@ -78,6 +78,10 @@ The native build includes baseline, SSE4.2, AVX, AVX2, and AVX512 CPU backends. 
 
 ## Tests
 
+`Ctrl Shift P` detects the current VS Code workspace or Explorer folder and attaches it on demand. Browser IDEs and editors whose local folder cannot be resolved use a screenshot of that window's monitor. Detection does not transmit context until the shortcut or **Send active context** control is used. A manually selected folder remains available through **Send project**. VS Code detection currently supports existing single-folder workspace-storage records; ambiguous matches require explicit folder selection.
+
+`Ctrl Alt Left/Right/Up/Down` moves the focused setup window, or the overlay when another app has focus, in 40 logical-pixel steps. Positions are clamped to the current monitor's work area.
+
 ```powershell
 npm test
 npm run test:e2e

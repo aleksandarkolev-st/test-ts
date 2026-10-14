@@ -25,11 +25,19 @@ fn encode(width: u32, height: u32, bgra: &[u8]) -> Result<Screenshot, String> {
 
 #[cfg(windows)]
 pub fn capture() -> Result<Screenshot, String> {
+    capture_window(None)
+}
+#[cfg(windows)]
+pub fn capture_window(source_window: Option<usize>) -> Result<Screenshot, String> {
     use windows::Win32::{Foundation::POINT, Graphics::Gdi::*, UI::WindowsAndMessaging::GetCursorPos};
     unsafe {
         let mut point = POINT::default();
         GetCursorPos(&mut point).map_err(|_| "Could not find the current screen")?;
-        let monitor = MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST);
+        let monitor = if let Some(raw)=source_window {
+            let hwnd=windows::Win32::Foundation::HWND(raw as *mut _);
+            if !windows::Win32::UI::WindowsAndMessaging::IsWindow(Some(hwnd)).as_bool(){return Err("The context window has closed; capture again".into());}
+            MonitorFromWindow(hwnd,MONITOR_DEFAULTTONEAREST)
+        }else{MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST)};
         let mut info = MONITORINFO { cbSize: std::mem::size_of::<MONITORINFO>() as u32, ..Default::default() };
         if !GetMonitorInfoW(monitor, &mut info).as_bool() { return Err("Could not find the current screen".into()); }
         let rect = info.rcMonitor;
@@ -62,6 +70,8 @@ pub fn capture() -> Result<Screenshot, String> {
 }
 #[cfg(not(windows))]
 pub fn capture() -> Result<Screenshot, String> { Err("Windows required".into()) }
+#[cfg(not(windows))]
+pub fn capture_window(_:Option<usize>)->Result<Screenshot,String>{capture()}
 
 #[cfg(test)]
 mod tests {

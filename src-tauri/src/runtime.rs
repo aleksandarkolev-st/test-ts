@@ -129,8 +129,10 @@ enum Control {
     Dismiss,
     Expand(Option<String>),
     Project(Option<String>),
+    DetectContext,
+    ContextDetected(String, Result<crate::attachments::active_context::ActiveContext, String>),
     ClearProject,
-    Screenshot,
+    Screenshot(Option<usize>),
     ClearScreenshot,
 }
 enum Work {
@@ -358,11 +360,30 @@ async fn actor(
                     let session_id=s.id.clone();let tx=work_tx.clone();
                     tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||crate::attachments::project::collect(std::path::Path::new(&path))).await.map_err(|_|"Project collection failed".to_string()).and_then(|r|r);let _=tx.send(Work::Project(session_id,id,result)).await;});
                 }},
+                Control::DetectContext=>{if let Some(s)=session.as_ref(){
+                    let session_id=s.id.clone();let tx=app.state::<Runtime>().tx.clone();
+                    tauri::async_runtime::spawn(async move{
+                        let result=tokio::task::spawn_blocking(crate::attachments::active_context::detect).await.map_err(|_|"Context inspection failed".to_string()).and_then(|r|r);
+                        let _=tx.send(Control::ContextDetected(session_id,result)).await;
+                    });
+                }},
+                Control::ContextDetected(session_id,result)=>{if session.as_ref().is_some_and(|s|s.id==session_id){
+                    match result {
+                        Ok(context)=>{
+                            emit(&app,"context.detected",&context);
+                            let command=context.project_path.map(|p|Control::Project(Some(p))).unwrap_or(Control::Screenshot(Some(context.source_window)));
+                            // Return to the actor queue; inspection itself never sends to a model.
+                            let tx=app.state::<Runtime>().tx.clone();
+                            tauri::async_runtime::spawn(async move{let _=tx.send(command).await;});
+                        },
+                        Err(error)=>{engine.view.error=Some(error);publish(&app,&mut engine,&view);}
+                    }
+                }},
                 Control::ClearProject=>{project_request=None;engine.project=None;engine.view.project=None;engine.view.attachment_busy=screenshot_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
-                Control::Screenshot=>{if let Some(s)=session.as_ref(){if screenshot_request.is_none(){
+                Control::Screenshot(source_window)=>{if let Some(s)=session.as_ref(){if screenshot_request.is_none(){
                     let id=uuid::Uuid::new_v4().to_string();screenshot_request=Some(id.clone());engine.view.attachment_busy=true;engine.view.error=None;publish(&app,&mut engine,&view);let suppression=window::suspend_for_capture(&app);
                     let session_id=s.id.clone();let tx=work_tx.clone();
-                    tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||{let _suppression=suppression;std::thread::sleep(Duration::from_millis(80));crate::attachments::screenshot::capture()}).await.map_err(|_|"Screen capture failed".to_string()).and_then(|r|r);let _=tx.send(Work::Screenshot(session_id,id,result)).await;});
+                    tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||{let _suppression=suppression;std::thread::sleep(Duration::from_millis(80));crate::attachments::screenshot::capture_window(source_window)}).await.map_err(|_|"Screen capture failed".to_string()).and_then(|r|r);let _=tx.send(Work::Screenshot(session_id,id,result)).await;});
                 }}},
                 Control::ClearScreenshot=>{screenshot_request=None;engine.screenshot_data=None;engine.view.screenshot=None;engine.view.attachment_busy=project_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();if session.is_some(){window::show(&app,&hidden);}publish(&app,&mut engine,&view);},
             }},
@@ -1274,6 +1295,11 @@ async fn action(
     generation_id: Option<String>,
 ) -> Result<(), String> {
     match action.as_str() {
+        "context" => request_active_context(&app,&rt).await,
+        "move_left" => window::move_by(&app,-40,0),
+        "move_right" => window::move_by(&app,40,0),
+        "move_up" => window::move_by(&app,0,-40),
+        "move_down" => window::move_by(&app,0,40),
         "hide" => {
             window::toggle(&app, &rt.hidden);
             emit(
@@ -1294,10 +1320,18 @@ async fn action(
         "expand" => send(&rt, Control::Expand(generation_id)).await,
         "project" => send(&rt, Control::Project(None)).await,
         "clear_project" => send(&rt, Control::ClearProject).await,
-        "screenshot" => send(&rt, Control::Screenshot).await,
+        "screenshot" => send(&rt, Control::Screenshot(None)).await,
         "clear_screenshot" => send(&rt, Control::ClearScreenshot).await,
         _ => Err("Unknown action".into()),
     }
+}
+async fn request_active_context(app:&tauri::AppHandle,rt:&Runtime)->Result<(),String>{
+    if !rt.view.lock().unwrap().active{return Err("Start a meeting first".into());}
+    let _=app;send(rt,Control::DetectContext).await
+}
+#[tauri::command]
+async fn detect_context()->Result<crate::attachments::active_context::ActiveContext,String>{
+    tokio::task::spawn_blocking(crate::attachments::active_context::detect).await.map_err(|_|"Context inspection failed".to_string())?
 }
 #[tauri::command]
 fn resize_overlay(app: tauri::AppHandle, height: f64) -> Result<(), String> {
@@ -1366,6 +1400,15 @@ pub fn run() {
                 return;
             }
             let rt = app.state::<Runtime>();
+            if shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT) {
+                let delta=match shortcut.key {Code::ArrowLeft=>(-40,0),Code::ArrowRight=>(40,0),Code::ArrowUp=>(0,-40),Code::ArrowDown=>(0,40),_=>return};
+                let _=window::move_by(app,delta.0,delta.1);return;
+            }
+            if shortcut.key == Code::KeyP {
+                let handle=app.clone();tauri::async_runtime::spawn(async move{
+                    let rt=handle.state::<Runtime>();let _=request_active_context(&handle,&rt).await;
+                });return;
+            }
             if shortcut.key == Code::KeyH {
                 window::toggle(app, &rt.hidden);
                 return;
@@ -1375,8 +1418,7 @@ pub fn run() {
                 Code::KeyX => Control::Dismiss,
                 Code::KeyM => Control::Pause,
                 Code::ArrowUp => Control::Expand(None),
-                Code::KeyP => Control::Project(None),
-                Code::F8 => Control::Screenshot,
+                Code::F8 => Control::Screenshot(None),
                 _ => return,
             };
             let _ = rt.tx.try_send(c);
@@ -1406,6 +1448,7 @@ pub fn run() {
             stop_meeting,
             ask,
             choose_project,
+            detect_context,
             send_project,
             action,
             resize_overlay,
@@ -1415,6 +1458,9 @@ pub fn run() {
         ])
         .setup(|app| {
             app.manage(crate::gaze::Runtime::new(app.handle())?);
+            tauri::async_runtime::spawn(async {
+                loop {crate::attachments::active_context::observe_foreground();tokio::time::sleep(Duration::from_millis(750)).await;}
+            });
             #[cfg(debug_assertions)] eprintln!("runtime: setup");
         let dir = if cfg!(debug_assertions) {
                 std::env::var_os("COPILOT_DATA_DIR")
@@ -1448,7 +1494,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             let timings:crate::openai::timing::Registry=Default::default();

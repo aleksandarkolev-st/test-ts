@@ -1061,6 +1061,28 @@
       "note": "Per-source Set deduplicates outgoing edges before indegree increments. Min-heap contains exactly unprocessed zero-indegree vertices, so each greedy choice is smallest among possible next vertices. Heap insertion/sifting and single/empty extraction are correct; cycle count rejects partial output. Round 3 replaces bit-shift parent indexing with ordinary floor arithmetic. Both candidates pass 1062 exhaustive directed graph/duplicate-edge cases on n=0..3, 20000-vertex duplicate-edge directed chain and wide isolated frontier. Expected O(m+n log(n+1)) time/O(n+unique edges) storage.",
       "evidence": "interview-small-directed-orderings.json",
       "supplementaryEvidence": "interview-large-graph-shapes.json"
+    },
+    {
+      "id": "opening-brackets",
+      "kind": "bug",
+      "finalAnswerSha256": "36cb9900c7e16c9917175cdc32d7bf0f5cff1babbe5d4c5d579541e23a61fa28",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "final return true",
+        "counterexample": {
+          "args": [
+            "("
+          ],
+          "originalActual": true,
+          "expected": false
+        },
+        "note": "One unmatched opening is minimal; empty input must be accepted."
+      },
+      "note": "Final stack emptiness restores balanced nesting; closing brackets must match the most recent unmatched opening. Round 3 explicitly recognizes non-bracket behavior was unspecified and adds conservative rejection, rather than claiming the README required it. Both actual candidates pass all 1555 bracket words of length 0..4 plus 12000-pair balanced nesting and 12000 unmatched openings against independent adjacent-pair reduction. Iterative O(length) scan/O(depth) stack; same synchronous API, no dependencies/test edits. Actual service smoke, original/patched markers and native reading checks pass.",
+      "evidence": "interview-opening-brackets-completed.json",
+      "supplementaryEvidence": "interview-bracket-domain-supplementary.json"
     }
   ]
 }

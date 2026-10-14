@@ -116,3 +116,9 @@ Raw evidence: `evidence/interview-signed-division-completed.json`; numerical wit
 Both N-Queens candidates pass independent exhaustive board enumeration across their entire stated n=0..10 domain. Both components and bipartite candidates pass all 1099 undirected graphs through four vertices with optional self-loops; shortest-path candidates pass all 610 endpoint queries through three vertices. Topological-order candidates pass all 1062 directed graph/duplicated-edge checks through three vertices. All four graph implementations also pass 20000-vertex shape checks, including a long chain, duplicated directed edges and a wide isolated frontier. Supplementary cases do not increase distinct interview counts.
 
 Median first word: 3179 ms (p95 8003 ms). Median completion: 8034 ms (p95 15296 ms). Raw evidence: `evidence/interview-counted-synthetic-76-80.json`; supplementary files are referenced by the exact-answer-hash review ledger. Remaining: 20 regular and 10 bug interviews; full scope remains active.
+
+### Bracket validation bug checkpoint
+
+80 regular and 11 bug interviews are complete (273 completed-attempt measured responses). All 91 frozen-fixture, marker, accepted paint-source and native keyboard checks pass; broader final contract review passes 74/91. All eleven completed bug diagnoses pass separate source/counterexample review.
+
+The bracket diagnosis correctly cites final unconditional success and a single unmatched opening as the smallest counterexample. Both fixes pass every bracket word of length 0..4 plus two deep-input witnesses (1557 supplementary cases each). The final answer distinguishes unspecified non-bracket input behavior before adding conservative rejection. Actual original and patched-source handoffs remain explicit shortcuts. Raw evidence: `evidence/interview-opening-brackets-completed.json`; supplementary execution: `evidence/interview-bracket-domain-supplementary.json`. Remaining: 20 regular and 9 bug interviews.

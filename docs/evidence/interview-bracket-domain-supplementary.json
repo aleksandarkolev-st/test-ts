@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen fixtures unchanged",
+  "domain": "Every word over ()[]{} of length 0..4 (1555), plus balanced 12000-pair nesting and 12000 unmatched openings.",
+  "oracle": "Independent repeated removal of adjacent matching pairs until stable, then check for empty. Long witnesses have known balanced/unbalanced construction.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "6ac5d18d214ccac3eeb9035c822903c11ecf07728048283fe8976dccf6c6dc9a",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "36cb9900c7e16c9917175cdc32d7bf0f5cff1babbe5d4c5d579541e23a61fa28",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    }
+  ]
+}

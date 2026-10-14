@@ -210,6 +210,51 @@
       "diagnosisReview": null,
       "note": "For the referenced LeetCode integer-denomination/nonnegative-integer-amount domain, amount-order DP considers every final coin and uses already-optimal smaller totals. Unlimited reuse, zero, impossible totals, empty coin set and nongreedy optimum handled. O(amount*(coins.length+1)) time and O(amount+1) space. The answer states its integer-domain assumption.",
       "evidence": "interview-counted-medium-16-20.json"
+    },
+    {
+      "id": "algorithm-1",
+      "kind": "regular",
+      "finalAnswerSha256": "713e3ae57d37ae01dd92e98caee905637df924944f44e0a7f91d98e5ff72ec51",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Complement lookup precedes insertion, so the map contains only earlier indices and cannot self-pair. Duplicate values, zero and negatives handled under exactly-one-pair contract. Expected O(n) time and O(n) space.",
+      "evidence": "interview-counted-easy-21-25.json"
+    },
+    {
+      "id": "algorithm-20",
+      "kind": "regular",
+      "finalAnswerSha256": "4220d6de8faeb0f7b754ccd1e78afc81a81cd6f46cb8a4485bc5263a85847977",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Stack of unmatched open brackets checks each closing type against the top and rejects premature, mismatched or unknown symbols; only an empty final stack accepts. Empty and nested/crossed cases handled. O(n) time and space.",
+      "evidence": "interview-counted-easy-21-25.json"
+    },
+    {
+      "id": "algorithm-121",
+      "kind": "regular",
+      "finalAnswerSha256": "005dd2b5a185c3f891a36d9b9dd1310d7052f834b0f1813a2d8459813da44457",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Sale profit is evaluated against the earlier minimum before inserting current price, preserving buy-before-sell ordering. Zero baseline handles empty/single/decreasing inputs. O(n) time and O(1) space.",
+      "evidence": "interview-counted-easy-21-25.json"
+    },
+    {
+      "id": "algorithm-217",
+      "kind": "regular",
+      "finalAnswerSha256": "03cf6beccc72aa028ecba655e6562a29d58b69dfdbf03951dfbee4cfc93194ba",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Set contains exactly prior values; checking before insertion avoids self-matching and finds duplicates including zero/negative integers. Empty returns false. Expected O(n) time, O(n) space.",
+      "evidence": "interview-counted-easy-21-25.json"
+    },
+    {
+      "id": "algorithm-704",
+      "kind": "regular",
+      "finalAnswerSha256": "350f46a21d4fb388b4aefd6b0b0a8951d565de2b5038957506c04b55f6003f73",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Inclusive search interval retains any target and strictly shrinks after nonmatching midpoint, including singleton/end positions and empty/missing cases. Overflow-safe midpoint, O(log(n+1)) time, O(1) space.",
+      "evidence": "interview-counted-easy-21-25.json"
     }
   ]
 }

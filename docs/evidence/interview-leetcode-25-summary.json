@@ -1,0 +1,91 @@
+{
+  "runId": "run-935cb972a18c",
+  "fingerprint": {
+    "binarySha256": "12cd4c0f6b56e55d4c35a470aa7b6003eab1db5be8cae5c3dbadc03d9566489f",
+    "frontendSha256": "8918c9b8528c926b36552e6d32fea42ecc3ac2872fd975c441b6381545b926a3",
+    "contractsSha256": "eb421777c940f1a6d8c0144c65db740a8458eccda08d16f795fa2f7b18ad9ed8"
+  },
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "sourceSha256": "f810e525f0b7d2dcd294d1bfc4d7cde0448ee5f73d85c199fb35491ab116b5d6",
+  "scope": "Counted 15 hard, 5 medium, 5 easy LeetCode interviews; three rounds each. Text-driven native app, actual explicit Computer Use context handoffs and keyboard checks. No ASR claim. Bug and pilot responses excluded from this summary.",
+  "groups": [
+    {
+      "difficulty": "Hard",
+      "interviews": 15,
+      "finalFixturesPassed": 15,
+      "fixtureCasesPerImplementationRound": 1096,
+      "firstWord": {
+        "samples": 45,
+        "medianMs": 4265,
+        "p95Ms": 10317,
+        "maxMs": 12313
+      },
+      "completion": {
+        "samples": 45,
+        "medianMs": 10866,
+        "p95Ms": 20848,
+        "maxMs": 24556
+      },
+      "firstPaint": {
+        "samples": 45,
+        "medianMs": 4285,
+        "p95Ms": 10337,
+        "maxMs": 12354
+      }
+    },
+    {
+      "difficulty": "Medium",
+      "interviews": 5,
+      "finalFixturesPassed": 5,
+      "fixtureCasesPerImplementationRound": 363,
+      "firstWord": {
+        "samples": 15,
+        "medianMs": 3179,
+        "p95Ms": 5205,
+        "maxMs": 5205
+      },
+      "completion": {
+        "samples": 15,
+        "medianMs": 7584,
+        "p95Ms": 14255,
+        "maxMs": 14255
+      },
+      "firstPaint": {
+        "samples": 15,
+        "medianMs": 3210,
+        "p95Ms": 5225,
+        "maxMs": 5225
+      }
+    },
+    {
+      "difficulty": "Easy",
+      "interviews": 5,
+      "finalFixturesPassed": 5,
+      "fixtureCasesPerImplementationRound": 361,
+      "firstWord": {
+        "samples": 15,
+        "medianMs": 3143,
+        "p95Ms": 4468,
+        "maxMs": 4468
+      },
+      "completion": {
+        "samples": 15,
+        "medianMs": 6702,
+        "p95Ms": 10624,
+        "maxMs": 10624
+      },
+      "firstPaint": {
+        "samples": 15,
+        "medianMs": 3170,
+        "p95Ms": 4484,
+        "maxMs": 4484
+      }
+    }
+  ],
+  "notes": [
+    "Accuracy means frozen functional-fixture accuracy; manual contract reviews are separately bound to actual answer hashes.",
+    "Median round 2 overflow on an additional Number.MAX_VALUE case is retained; round 3 independently corrected it.",
+    "The expanded 100 regular plus 20 bug evaluation remains unfinished."
+  ]
+}

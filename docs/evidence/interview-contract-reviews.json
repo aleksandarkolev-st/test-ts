@@ -165,6 +165,51 @@
       "diagnosisReview": null,
       "note": "Merge-sort counts cross-half strict double comparisons before merging, with a monotonic right pointer over sorted halves. Equal thresholds excluded, negative duplicates handled, original input copied. O(n log n) time and O(n) space.",
       "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-3",
+      "kind": "regular",
+      "finalAnswerSha256": "e07291f6b8b8dfa72e87265d01824c7f7da885244c321630ee0cc8daf5f6f228",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Last-seen code-point positions and monotonic left boundary preserve the no-duplicate window. Updating the best length after each code point handles empty, repeated and abba cases. O(n) time and O(k) space under standard Map operations.",
+      "evidence": "interview-counted-medium-16-20.json"
+    },
+    {
+      "id": "algorithm-33",
+      "kind": "regular",
+      "finalAnswerSha256": "6bb9dd0d31b368f8580d5a7cf02c709f6e351069e2722a5646a36531a7a5e334",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Binary search identifies a sorted half using an inclusive left boundary, retains any existing target in the search range, and discards half each iteration. Empty and singleton arrays handled; strictly increasing pre-rotation contract observed. O(log(n+1)) time and O(1) space.",
+      "evidence": "interview-counted-medium-16-20.json"
+    },
+    {
+      "id": "algorithm-56",
+      "kind": "regular",
+      "finalAnswerSha256": "d2149d0d1c307d53c28802e1dafb5118948ef413f79a5df081211dda5b4b625c",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Copy/sort then merge into the last interval using start<=lastEnd treats touching closed intervals as overlapping; max end handles containment. Empty inputs, point intervals and unsorted nesting handled. O(n log n) time and O(n) space.",
+      "evidence": "interview-counted-medium-16-20.json"
+    },
+    {
+      "id": "algorithm-200",
+      "kind": "regular",
+      "finalAnswerSha256": "228a5610ecd004f73819e0bfb65f0853efe84b58b5e51b6f13c01458d672ab74",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Iterative DFS marks string-one cells on push and exhausts one orthogonal component before continuing. Diagonal land stays separate; each cell enters at most once. Empty dimensions return zero, input unchanged. O(rows*columns) time and auxiliary space.",
+      "evidence": "interview-counted-medium-16-20.json"
+    },
+    {
+      "id": "algorithm-322",
+      "kind": "regular",
+      "finalAnswerSha256": "959f38cf84cc2a3878895af9b97fe19559f7dcb77dddb607876530fbc71f7e41",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "For the referenced LeetCode integer-denomination/nonnegative-integer-amount domain, amount-order DP considers every final coin and uses already-optimal smaller totals. Unlimited reuse, zero, impossible totals, empty coin set and nongreedy optimum handled. O(amount*(coins.length+1)) time and O(amount+1) space. The answer states its integer-domain assumption.",
+      "evidence": "interview-counted-medium-16-20.json"
     }
   ]
 }

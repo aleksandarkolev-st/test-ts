@@ -1,0 +1,112 @@
+{
+  "startedAt": "2026-10-14T13:26:26.941Z",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "scope": "Live signed-in Codex through the native app; manual typed follow-up; no ASR or audio latency claim.",
+  "rows": [],
+  "interview": [],
+  "binarySha256": "0870590a2d492b6d7b1b8ee18d476d20ea68bec3f741bd53b9a46ecda6cba439",
+  "sourceCommit": "c3de42e837f1bea1cbffd7ebeab69f5e9dbf8eae",
+  "catalogVerified": true,
+  "shortcutErrors": [],
+  "status": "complete",
+  "completedAt": "2026-10-14T13:29:34.932Z",
+  "observed": {
+    "recordedAt": "2026-10-14T13:29:34.869Z",
+    "spoofDetection": {
+      "title": "case-14 - Visual Studio Code - Profile 1 - Microsoft​ Edge",
+      "kind": "browser",
+      "projectPath": null,
+      "sourceWindow": 1444426
+    },
+    "latestCodeDetection": {
+      "title": "Welcome - project - Visual Studio Code",
+      "kind": "vscode",
+      "projectPath": "\\\\?\\C:\\Users\\dev\\Downloads\\test-ts\\benchmarks\\context-handoff\\project",
+      "sourceWindow": 2494638
+    },
+    "latestExplorerDetection": {
+      "title": "case-2 - File Explorer",
+      "kind": "folder",
+      "projectPath": "\\\\?\\C:\\Users\\dev\\Downloads\\test-ts\\.local\\context-handoff\\case-2",
+      "sourceWindow": 198470
+    },
+    "noContextSentAfterLocalInspections": true
+  },
+  "movement": {
+    "latestOverlayLeft": {
+      "before": {
+        "bottom": 1776,
+        "left": 1922,
+        "right": 2856,
+        "top": 1413
+      },
+      "after": {
+        "bottom": 1776,
+        "left": 1852,
+        "right": 2786,
+        "top": 1413
+      }
+    },
+    "overlayRight": {
+      "before": {
+        "bottom": 1776,
+        "left": 1852,
+        "right": 2786,
+        "top": 1463
+      },
+      "after": {
+        "bottom": 1776,
+        "left": 1922,
+        "right": 2856,
+        "top": 1463
+      }
+    },
+    "overlayUp": {
+      "before": {
+        "bottom": 1776,
+        "left": 1922,
+        "right": 2856,
+        "top": 1463
+      },
+      "after": {
+        "bottom": 1706,
+        "left": 1922,
+        "right": 2856,
+        "top": 1393
+      }
+    },
+    "overlayDown": {
+      "before": {
+        "bottom": 1706,
+        "left": 1922,
+        "right": 2856,
+        "top": 1393
+      },
+      "after": {
+        "bottom": 1776,
+        "left": 1922,
+        "right": 2856,
+        "top": 1463
+      }
+    },
+    "latestSetupRight": {
+      "before": {
+        "x": 176,
+        "y": 176
+      },
+      "after": {
+        "x": 246,
+        "y": 176
+      },
+      "restored": {
+        "x": 176,
+        "y": 176
+      }
+    },
+    "logicalStep": 40,
+    "physicalStep": 70,
+    "displayScale": 1.75
+  },
+  "passed": true
+}

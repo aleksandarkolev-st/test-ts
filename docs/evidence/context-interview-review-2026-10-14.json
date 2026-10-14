@@ -1,0 +1,72 @@
+{
+  "diagnosisReviewed": true,
+  "source": "src/reservations.mjs",
+  "mechanism": "Inventory is deducted per line item before later validation; rejection leaves partial mutations.",
+  "counterexample": {
+    "stockBefore": {
+      "A": 1
+    },
+    "requestId": "r1",
+    "items": [
+      {
+        "sku": "A",
+        "quantity": 1
+      },
+      {
+        "sku": "A",
+        "quantity": 1
+      }
+    ],
+    "rejected": true,
+    "stockAfter": {
+      "A": 0
+    },
+    "requiredStockAfter": {
+      "A": 1
+    }
+  },
+  "originalDefectiveImplementationControl": {
+    "passed": false,
+    "results": [
+      {
+        "name": "accepted and idempotent",
+        "passed": true
+      },
+      {
+        "name": "late insufficient item atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 2,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "duplicate sku aggregate atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 1,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "zero quantity atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 2,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "negative quantity atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 2,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "fractional quantity atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 2,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "unknown sku atomic",
+        "passed": false,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   A: 2,\n-   A: 3,\n    B: 2\n  }\n"
+      },
+      {
+        "name": "duplicate sku accepted preserves items",
+        "passed": true
+      }
+    ]
+  },
+  "review": "Source inspection and independent execution confirm the round 1 diagnosis and counterexample. Rounds 2 and 3 are independently executed by grade-interview.mjs."
+}

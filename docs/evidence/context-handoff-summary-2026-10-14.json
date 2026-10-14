@@ -1,0 +1,319 @@
+{
+  "overall": {
+    "n": 25,
+    "correct": 25,
+    "firstWordP50Ms": 4273,
+    "firstWordP95Ms": 6914,
+    "completionP50Ms": 9570,
+    "completionP95Ms": 14621
+  },
+  "difficulty": {
+    "Hard": {
+      "n": 15,
+      "correct": 15,
+      "firstWordP50Ms": 5044,
+      "firstWordP95Ms": 9438,
+      "completionP50Ms": 10967,
+      "completionP95Ms": 17853
+    },
+    "Medium": {
+      "n": 5,
+      "correct": 5,
+      "firstWordP50Ms": 4364,
+      "firstWordP95Ms": 6252,
+      "completionP50Ms": 8645,
+      "completionP95Ms": 12430
+    },
+    "Easy": {
+      "n": 5,
+      "correct": 5,
+      "firstWordP50Ms": 3628,
+      "firstWordP95Ms": 5189,
+      "completionP50Ms": 5962,
+      "completionP95Ms": 7752
+    }
+  },
+  "mode": {
+    "screenshot": {
+      "n": 13,
+      "correct": 13,
+      "firstWordP50Ms": 3883,
+      "firstWordP95Ms": 6174,
+      "completionP50Ms": 9060,
+      "completionP95Ms": 12430
+    },
+    "project": {
+      "n": 12,
+      "correct": 12,
+      "firstWordP50Ms": 5044,
+      "firstWordP95Ms": 9438,
+      "completionP50Ms": 9691,
+      "completionP95Ms": 17853
+    }
+  },
+  "functionalChecks": 1820,
+  "functionalChecksPassed": 1820,
+  "stress": [
+    {
+      "id": 32,
+      "passed": true,
+      "elapsedMs": 3.313100000000002,
+      "inputShape": [
+        30000
+      ],
+      "actualPreview": 30000,
+      "expectedPreview": 30000
+    },
+    {
+      "id": 42,
+      "passed": true,
+      "elapsedMs": 2.9365000000000023,
+      "inputShape": [
+        [
+          20000,
+          null
+        ]
+      ],
+      "actualPreview": 19998000,
+      "expectedPreview": 19998000
+    },
+    {
+      "id": 84,
+      "passed": true,
+      "elapsedMs": 4.728400000000001,
+      "inputShape": [
+        [
+          20000,
+          null
+        ]
+      ],
+      "actualPreview": 100010000,
+      "expectedPreview": 100010000
+    },
+    {
+      "id": 85,
+      "passed": true,
+      "elapsedMs": 8.0103,
+      "inputShape": [
+        [
+          200,
+          200
+        ]
+      ],
+      "actualPreview": 40000,
+      "expectedPreview": 40000
+    },
+    {
+      "id": 115,
+      "passed": true,
+      "elapsedMs": 0.6521000000000043,
+      "inputShape": [
+        30,
+        15
+      ],
+      "actualPreview": 155117520,
+      "expectedPreview": 155117520
+    },
+    {
+      "id": 132,
+      "passed": true,
+      "elapsedMs": 272.2579,
+      "inputShape": [
+        2000
+      ],
+      "actualPreview": 0,
+      "expectedPreview": 0
+    },
+    {
+      "id": 239,
+      "passed": true,
+      "elapsedMs": 8.148599999999988,
+      "inputShape": [
+        [
+          20000,
+          null
+        ],
+        10000
+      ],
+      "actualPreview": null,
+      "expectedPreview": null
+    },
+    {
+      "id": 315,
+      "passed": true,
+      "elapsedMs": 14.562100000000044,
+      "inputShape": [
+        [
+          20000,
+          null
+        ]
+      ],
+      "actualPreview": null,
+      "expectedPreview": null
+    },
+    {
+      "id": 329,
+      "passed": true,
+      "elapsedMs": 22.968500000000006,
+      "inputShape": [
+        [
+          200,
+          200
+        ]
+      ],
+      "actualPreview": 40000,
+      "expectedPreview": 40000
+    },
+    {
+      "id": 493,
+      "passed": true,
+      "elapsedMs": 5.547300000000007,
+      "inputShape": [
+        [
+          8000,
+          null
+        ]
+      ],
+      "actualPreview": 15996000,
+      "expectedPreview": 15996000
+    },
+    {
+      "id": 3,
+      "passed": true,
+      "elapsedMs": 10.08680000000004,
+      "inputShape": [
+        30000
+      ],
+      "actualPreview": 3,
+      "expectedPreview": 3
+    },
+    {
+      "id": 200,
+      "passed": true,
+      "elapsedMs": 16.79540000000003,
+      "inputShape": [
+        [
+          300,
+          300
+        ]
+      ],
+      "actualPreview": 1,
+      "expectedPreview": 1
+    },
+    {
+      "id": 322,
+      "passed": true,
+      "elapsedMs": 6.688800000000015,
+      "inputShape": [
+        [
+          3,
+          null
+        ],
+        10000
+      ],
+      "actualPreview": 440,
+      "expectedPreview": 440
+    },
+    {
+      "id": 20,
+      "passed": true,
+      "elapsedMs": 1.9187000000000012,
+      "inputShape": [
+        10000
+      ],
+      "actualPreview": true,
+      "expectedPreview": true
+    }
+  ],
+  "interview": [
+    {
+      "round": 1,
+      "firstWordMs": 5926,
+      "completedMs": 13445
+    },
+    {
+      "round": 2,
+      "firstWordMs": 5194,
+      "completedMs": 10690,
+      "implementationGrade": {
+        "passed": true,
+        "results": [
+          {
+            "name": "accepted and idempotent",
+            "passed": true
+          },
+          {
+            "name": "late insufficient item atomic",
+            "passed": true
+          },
+          {
+            "name": "duplicate sku aggregate atomic",
+            "passed": true
+          },
+          {
+            "name": "zero quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "negative quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "fractional quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "unknown sku atomic",
+            "passed": true
+          },
+          {
+            "name": "duplicate sku accepted preserves items",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "round": 3,
+      "firstWordMs": 4499,
+      "completedMs": 16250,
+      "implementationGrade": {
+        "passed": true,
+        "results": [
+          {
+            "name": "accepted and idempotent",
+            "passed": true
+          },
+          {
+            "name": "late insufficient item atomic",
+            "passed": true
+          },
+          {
+            "name": "duplicate sku aggregate atomic",
+            "passed": true
+          },
+          {
+            "name": "zero quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "negative quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "fractional quantity atomic",
+            "passed": true
+          },
+          {
+            "name": "unknown sku atomic",
+            "passed": true
+          },
+          {
+            "name": "duplicate sku accepted preserves items",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ]
+}

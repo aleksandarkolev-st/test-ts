@@ -87,6 +87,30 @@
       "diagnosisReview": null,
       "note": "Backward prefix-count DP prevents source-position reuse. Saturating nonnegative counts at the promised signed-32-bit bound preserves any final result within that bound and avoids intermediate precision loss. Empty target returns one. O(nm+n+m+1) time, O(m+1) space.",
       "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "search-boundary",
+      "kind": "bug",
+      "finalAnswerSha256": "c91e79da48336fb925ce6f78280238d7b11a73a0f5797af64f2166dfe59496a2",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "hi=nums.length-1",
+        "counterexample": {
+          "args": [
+            [
+              0
+            ],
+            1
+          ],
+          "originalActual": 0,
+          "expected": 1
+        },
+        "note": "Excluding the end insertion position is the actual defect. Empty input passes, so a one-element counterexample is minimal."
+      },
+      "note": "Exclusive upper-bound binary search restores lower-bound invariant, retains n as a valid result, handles duplicates and empty arrays, and shrinks every iteration. Same synchronous export and no dependencies/test/API changes. O(log(n+1)) time and O(1) space. Revised marker was recovered from the explicitly reattached project.",
+      "evidence": "interview-search-boundary-completed.json"
     }
   ]
 }

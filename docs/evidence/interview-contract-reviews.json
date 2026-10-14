@@ -1083,6 +1083,50 @@
       "note": "Final stack emptiness restores balanced nesting; closing brackets must match the most recent unmatched opening. Round 3 explicitly recognizes non-bracket behavior was unspecified and adds conservative rejection, rather than claiming the README required it. Both actual candidates pass all 1555 bracket words of length 0..4 plus 12000-pair balanced nesting and 12000 unmatched openings against independent adjacent-pair reduction. Iterative O(length) scan/O(depth) stack; same synchronous API, no dependencies/test edits. Actual service smoke, original/patched markers and native reading checks pass.",
       "evidence": "interview-opening-brackets-completed.json",
       "supplementaryEvidence": "interview-bracket-domain-supplementary.json"
+    },
+    {
+      "id": "shortest-path-settlement",
+      "kind": "bug",
+      "finalAnswerSha256": "49e58b42e427503aab13c2053b4b594b057d070950a097bacb51f1207570e2c2",
+      "finalContractPassed": false,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "seen.add(b) at discovery, guarded by !seen.has(b)",
+        "counterexample": {
+          "args": [
+            2,
+            [
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ]
+            ],
+            0
+          ],
+          "originalActual": [
+            0,
+            1
+          ],
+          "expected": [
+            0,
+            0
+          ]
+        },
+        "note": "Parallel edges are contract-valid. Two vertices and two competing edges are minimal; nonnegative paths cannot improve the source zero with one vertex."
+      },
+      "note": "Strict distance improvements enqueue new candidates; stale entries are skipped, restoring ordinary nonnegative shortest-route relaxation, including parallel edges and zero-cost cycles. Both candidates pass 2356 independently enumerated weighted graph/witness cases. Broad mathematical-distance review still fails a unique-chain safe-integer-edge witness: terminal exact distance 9007199254740996 is representable, but both return 9007199254740992. Some intermediate exact distances exceed safe precision, explicitly described in supplementary evidence. Round 3 acknowledges Number precision/overflow limits but does not restore unrestricted exact arithmetic. Repeated sorting and full edge scans are not an optimized heap/adjacency implementation; no stronger complexity requirement supplied. API/dependencies/tests unchanged; service smoke, fresh patch marker and native reading pass.",
+      "evidence": "interview-shortest-path-settlement-completed.json",
+      "supplementaryEvidence": "interview-routing-integer-precision.json",
+      "additionalEvidence": [
+        "interview-routing-weighted-graphs.json"
+      ]
     }
   ]
 }

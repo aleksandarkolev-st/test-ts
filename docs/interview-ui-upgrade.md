@@ -122,3 +122,11 @@ Median first word: 3179 ms (p95 8003 ms). Median completion: 8034 ms (p95 15296 
 80 regular and 11 bug interviews are complete (273 completed-attempt measured responses). All 91 frozen-fixture, marker, accepted paint-source and native keyboard checks pass; broader final contract review passes 74/91. All eleven completed bug diagnoses pass separate source/counterexample review.
 
 The bracket diagnosis correctly cites final unconditional success and a single unmatched opening as the smallest counterexample. Both fixes pass every bracket word of length 0..4 plus two deep-input witnesses (1557 supplementary cases each). The final answer distinguishes unspecified non-bracket input behavior before adding conservative rejection. Actual original and patched-source handoffs remain explicit shortcuts. Raw evidence: `evidence/interview-opening-brackets-completed.json`; supplementary execution: `evidence/interview-bracket-domain-supplementary.json`. Remaining: 20 regular and 9 bug interviews.
+
+### Directed routing bug checkpoint
+
+80 regular and 12 bug interviews are complete (276 completed-attempt measured responses). All 92 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All twelve bug diagnoses pass; broader final contract review passes 74/92, retaining 18 known failures.
+
+The routing diagnosis uses the minimal two-vertex parallel-edge counterexample and correctly explains premature settlement at discovery. Both candidates pass 2356 additional nonnegative weighted graph/witness checks against independent vertex-simple path enumeration. A unique-chain safe-integer-edge witness still yields an incorrect exactly representable terminal distance after intermediate precision loss. The final answer acknowledges Number limitations, which remain recorded as a broader mathematical-distance contract failure; no hidden size bound is added. The numerical evidence explicitly does not claim every intermediate exact distance is representable.
+
+Evidence: `evidence/interview-shortest-path-settlement-completed.json`, `evidence/interview-routing-weighted-graphs.json`, and `evidence/interview-routing-integer-precision.json`. Remaining: 20 regular and 8 bug interviews.

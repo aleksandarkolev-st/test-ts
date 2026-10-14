@@ -1,0 +1,74 @@
+{
+  "scope": "Supplementary terminal-distance witness from actual candidates; no frozen fixture changes",
+  "args": [
+    7,
+    [
+      [
+        0,
+        1,
+        9007199254740991
+      ],
+      [
+        1,
+        2,
+        1
+      ],
+      [
+        2,
+        3,
+        1
+      ],
+      [
+        3,
+        4,
+        1
+      ],
+      [
+        4,
+        5,
+        1
+      ],
+      [
+        5,
+        6,
+        1
+      ]
+    ],
+    0
+  ],
+  "expectedTerminalExact": "9007199254740996",
+  "expectedTerminalNumber": 9007199254740996,
+  "oracle": "Unique directed chain route. Independent BigInt sum of safe integer edge weights gives an exactly representable Number at terminal vertex 6. Some intermediate exact distances exceed safe integer precision; no claim they are all representable. This check compares only the representable terminal result.",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "db0de79ccd09caa46e6d48d7e6b35c61b564dfa883af724673ac4e2534af0c76",
+      "actualDistances": [
+        0,
+        9007199254740991,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992
+      ],
+      "actualTerminal": 9007199254740992,
+      "terminalPassed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "49e58b42e427503aab13c2053b4b594b057d070950a097bacb51f1207570e2c2",
+      "actualDistances": [
+        0,
+        9007199254740991,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992,
+        9007199254740992
+      ],
+      "actualTerminal": 9007199254740992,
+      "terminalPassed": false
+    }
+  ]
+}

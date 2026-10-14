@@ -1376,6 +1376,10 @@ fn open_debug(app: tauri::AppHandle) -> Result<(), String> {
     }
     Ok(())
 }
+fn scroll_content(app:&tauri::AppHandle,operation:&str)->Result<(),String>{
+    let label=if app.get_webview_window("main").is_some_and(|w|w.is_focused().unwrap_or(false)){"main"}else{"overlay"};
+    app.emit_to(label,"copilot:scroll",operation).map_err(|e|e.to_string())
+}
 pub fn run() {
     #[cfg(windows)]
     let _instance = {
@@ -1400,6 +1404,12 @@ pub fn run() {
                 return;
             }
             let rt = app.state::<Runtime>();
+            let scroll=match shortcut.key {
+                Code::PageUp=>Some("page_up"),Code::PageDown=>Some("page_down"),
+                Code::Home=>Some("start"),Code::End=>Some("end"),
+                _=>None,
+            };
+            if let Some(operation)=scroll {let _=scroll_content(app,operation);return;}
             if shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT) {
                 let delta=match shortcut.key {Code::ArrowLeft=>(-40,0),Code::ArrowRight=>(40,0),Code::ArrowUp=>(0,-40),Code::ArrowDown=>(0,40),_=>return};
                 let _=window::move_by(app,delta.0,delta.1);return;
@@ -1494,7 +1504,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             let timings:crate::openai::timing::Registry=Default::default();

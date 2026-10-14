@@ -44,10 +44,14 @@ async function nativeFixture(page: Page) {
         }
         if (cmd === 'ask') { state.question = { id: 'q', text: args.question, detectedAt: 1000 }; state.answer = ''; state.status = 'thinking'; state.manual = false; broadcast(); return; }
         if (cmd === 'resize_overlay') return;
+        if (cmd === 'answer_visible') return;
+        if (cmd === 'answer_displayed') { (w.fixturePaint ||= []).push(args);return; }
         throw new Error(`Unexpected fixture command ${cmd}`);
       }
     };
     w.fixtureState = (patch: any) => { state = { ...state, ...patch }; broadcast(); };
+    w.fixturePaint=[];
+    w.fixtureScroll=(payload:string)=>{for(const[eventId,l]of listeners)if(l.event==='copilot:scroll')callbacks.get(l.handler)?.({event:l.event,id:eventId,payload});};
   });
 }
 test('browser does not pretend to capture audio or sign in', async ({ page }) => {
@@ -103,7 +107,7 @@ test('project selection and screenshot controls expose attached context and remo
   await page.getByRole('button', { name: 'Choose project folder' }).click();
   await expect(page.getByLabel('Project folder')).toHaveValue('C:\\fixture\\project');
   await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'listening' }));
-  await page.getByRole('button', { name: 'Send project · Ctrl Shift P' }).click();
+  await page.getByRole('button', { name: 'Send selected project' }).click();
   await expect(page.getByText('2 files attached', { exact: false })).toBeVisible();
   await page.getByText('1 files skipped').click(); await expect(page.getByText('image.png', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Send screenshot · Ctrl Shift F8' }).click();
@@ -132,6 +136,19 @@ test('a long complete question leaves the useful answer visible and remains scro
       fullyVisible: rect.top >= clip.top && rect.bottom <= clip.bottom && rect.bottom <= innerHeight };
   });
   expect(geometry).toEqual({ scrollable: true, scrolled: true, fullyVisible: true });
+});
+
+test('streamed code retains exact source offsets, safe markup and keyboard scrolling',async({page})=>{
+  await nativeFixture(page);await page.setViewportSize({width:520,height:700});await page.goto('/?view=overlay');
+  const answer='Here is the implementation.\n```javascript\n'+Array.from({length:35},(_,i)=>`const value${i} = "<script>"; // line ${i}`).join('\n')+'\n```\nThe final explanation.';
+  await page.evaluate(answer=>(window as any).fixtureState({active:true,status:'answer',question:{id:'code',text:'Implement the parser',detectedAt:1},answer}),answer);
+  await expect(page.getByRole('button',{name:'Copy code'})).toBeVisible();await expect(page.locator('.syntax-keyword').first()).toHaveText('const');
+  expect(await page.locator('.answer-body').getAttribute('data-raw-answer')).toBe(answer);
+  expect(await page.locator('.code-block script').count()).toBe(0);
+  await expect.poll(()=>page.evaluate(()=>(window as any).fixturePaint.length)).toBeGreaterThan(0);
+  const paints=await page.evaluate(()=>(window as any).fixturePaint);for(const paint of paints){expect(paint.text).toBe(answer);expect(paint.visibleStart).toBeGreaterThanOrEqual(0);expect(paint.visibleEnd).toBeLessThanOrEqual(answer.length);}
+  await page.evaluate(()=>(window as any).fixtureScroll('end'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBeGreaterThan(0);
+  await page.evaluate(()=>(window as any).fixtureScroll('start'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBe(0);
 });
 
 test('answer now accepts the current finalized draft and stays disabled for replaceable partials', async ({ page }) => {

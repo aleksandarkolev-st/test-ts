@@ -20,3 +20,14 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
    Its complete text remains available through keyboard and pointer scrolling. */
 .question p { max-height: 4.5em; overflow: auto; }
 .question p:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+/* Code is a separate reading surface; raw Markdown is retained only for source mapping. */
+.answer-body p { font-size:16px; line-height:1.65; white-space:pre-wrap; margin:0 0 14px; }
+.code-block { margin:16px 0; background:#11191b; border:1px solid #394b48; border-radius:10px; overflow:hidden; }
+.code-toolbar { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#202d2b; font-size:11px; color:#b9cdc3; }
+.code-toolbar button { font-size:11px; padding:4px 8px; background:transparent; }
+.code-block pre { margin:0; padding:14px; overflow:auto; max-height:330px; font:13px/1.65 Consolas,'Courier New',monospace; tab-size:2; }
+.code-block code { font:inherit; color:#e3eae6; }
+.syntax-keyword { color:#bce3a7; } .syntax-string { color:#edcc9c; } .syntax-number { color:#b4c9ed; } .syntax-comment { color:#a1b3a9; }
+.copy-error { padding:8px 12px; color:#edcc9c; }
+.answer-body [hidden] { display:none!important; }

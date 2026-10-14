@@ -5,8 +5,10 @@ import type { Account, Bootstrap, Model, Settings } from './state/model';
 import Status from './overlay/Status';
 import ContextAttachments from './ContextAttachments';
 import Camera from './Camera';
+import {useKeyboardScroll} from './useKeyboardScroll';
 const empty: Settings = { microphone: '', output: '', modelPath: '', model: '', speechBackend: 'nemotron', speechChunkMs: 160, nemotronDevice: 1 };
 export default function App() {
+  useKeyboardScroll(()=>document.scrollingElement as HTMLElement);
   const snapshot = useMeeting(s => s.snapshot);
   const [data, setData] = useState<Bootstrap>(); const [settings, setSettings] = useState<Settings>(empty);
   const [models, setModels] = useState<Model[]>([]); const [busy, setBusy] = useState(''); const [error, setError] = useState('');

@@ -1,15 +1,20 @@
 import type { Snapshot } from '../state/model';
 import { useEffect, useRef } from 'react';
 import { command, native } from '../bridge';
-import { visibleAnswerRange } from './paintedText';
+import { visibleAnswerRanges } from './paintedText';
+import FormattedAnswer from './FormattedAnswer';
+import {useKeyboardScroll} from '../useKeyboardScroll';
 export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
   const recorded = useRef<string | null>(null);
   const content = useRef<HTMLDivElement>(null);
+  useKeyboardScroll(()=>content.current);
   const paint = useRef({ first: 0, second: 0 });
   const acknowledged = useRef('');
   useEffect(() => () => {
     cancelAnimationFrame(paint.current.first);
     cancelAnimationFrame(paint.current.second);
+    paint.current.first=0;
+    paint.current.second=0;
   }, []);
   const queuePaint = () => {
     if (!native() || paint.current.first || paint.current.second) return;
@@ -22,13 +27,13 @@ export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
         const element = content.current;
         const id = element?.dataset.questionId;
         const revision = Number(element?.dataset.responseRevision ?? 0);
-        const paragraph = element?.querySelector<HTMLParagraphElement>('.answer p');
-        const text = paragraph?.textContent ?? '';
-        const [visibleStart, visibleEnd] = paragraph ? visibleAnswerRange(paragraph) : [0, 0];
-        const version = `${id}:${revision}:${visibleStart}:${visibleEnd}:${text}`;
-        if (!id || !text || visibleStart === visibleEnd || acknowledged.current === version) return;
+        const body=element?.querySelector<HTMLElement>('.answer-body');
+        const text=body?.dataset.rawAnswer??'';
+        const ranges=body?visibleAnswerRanges(body):[];
+        const version = `${id}:${revision}:${JSON.stringify(ranges)}:${text}`;
+        if (!id || !text || !ranges.length || acknowledged.current === version) return;
         const paintHostMs = Date.now();
-        command('answer_displayed', { id, revision, text, visibleStart, visibleEnd, paintHostMs }).then(() => {
+        Promise.all(ranges.map(([visibleStart,visibleEnd])=>command('answer_displayed', { id, revision, text, visibleStart, visibleEnd, paintHostMs }))).then(() => {
           acknowledged.current = version;
         }).catch(() => {});
       });
@@ -37,11 +42,11 @@ export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
   useEffect(queuePaint, [s.question?.id, s.answer, s.latency?.responseRevision]);
   useEffect(() => {
     const element = content.current;
-    element?.addEventListener('scroll', queuePaint, { passive: true });
+    element?.addEventListener('scroll', queuePaint, { passive: true,capture:true });
     window.addEventListener('resize', queuePaint);
     document.addEventListener('visibilitychange', queuePaint);
     return () => {
-      element?.removeEventListener('scroll', queuePaint);
+      element?.removeEventListener('scroll', queuePaint,true);
       window.removeEventListener('resize', queuePaint);
       document.removeEventListener('visibilitychange', queuePaint);
     };
@@ -61,7 +66,7 @@ export default function Answer({ snapshot: s }: { snapshot: Snapshot }) {
   return <div ref={content} className="answer-content" data-question-id={s.question?.id} data-response-revision={s.latency?.responseRevision ?? 0}>
     {!!s.questions?.length && <div className="question-queue" aria-label="Question queue">{s.questions.map((q, i) => <div key={q.id}><span>Q{i + 1}</span> {q.queued ? 'queued' : q.state === 'complete' ? 'complete' : q.state === 'speculative' ? 'confirming…' : 'answering…'}<span title={q.text}> {q.text}</span></div>)}</div>}
     {s.question && <div className="question"><div className="section-label">QUESTION</div><p tabIndex={0} title="Scroll to read the complete question">{s.question.text}</p></div>}
-    {s.answer && <div className="answer"><div className="section-label">SUGGESTED ANSWER</div><p aria-live="polite" aria-atomic="false">{s.answer}<span className={s.latency?.completedAt == null && s.status === 'answer' ? 'caret' : ''} /></p></div>}
+    {s.answer && <div className="answer"><div className="section-label">SUGGESTED ANSWER</div><FormattedAnswer text={s.answer}/>{s.latency?.completedAt == null && s.status === 'answer'&&<span className="caret" aria-hidden="true"/>}</div>}
     {s.status === 'thinking' && !s.answer && <div className="thinking" role="status">Finding the useful words<span>•••</span></div>}
     {s.error && <div className="error" role="alert">{s.error}</div>}
   </div>;

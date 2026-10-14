@@ -17,6 +17,7 @@ export default function Overlay() {
   return <div className={`overlay ${s.expanded ? 'expanded' : ''}`} ref={ref}>
     <header className="overlay-header"><div onPointerDown={e => { if (e.button === 0 && native()) getCurrentWindow().startDragging(); }} className="drag-handle"><Status snapshot={s} /></div><button title="Hide overlay · Ctrl Shift H" onClick={() => act('hide')}>Hide <span>−</span></button></header>
     <Answer snapshot={s} />
+    {s.answer&&<div className="scroll-hint">Scroll <kbd>Ctrl Shift Page Up / Down</kbd> · Top / bottom <kbd>Ctrl Shift Home / End</kbd></div>}
     <ContextAttachments snapshot={s} onError={setError} />
     <div className="context-attachments"><button disabled={!s.active || s.attachmentBusy} title="Send screenshot · Ctrl Shift F8" onClick={() => act('screenshot')}>Screenshot</button><button disabled={!s.active || s.attachmentBusy} title="Send active context · Ctrl Shift P" onClick={() => act('context')}>Active context</button></div>
     {s.manual && <form className="manual-form" onSubmit={async e => { e.preventDefault(); try { await command('ask', { question }); setQuestion(''); setError(''); } catch (e) { setError(errorText(e)); } }}><label htmlFor="manual-question">Ask about this meeting…</label><div className="ask-row"><input ref={input} id="manual-question" value={question} maxLength={4000} onChange={e => setQuestion(e.target.value)} onKeyDown={e => { if (e.key === 'Escape') act('dismiss'); }} placeholder="What did they say the launch date was?" /><button disabled={!question.trim()}>Ask</button></div></form>}

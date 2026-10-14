@@ -88,7 +88,7 @@ export default function App() {
       <p className="privacy">Audio and transcription stay on this device. Meeting context is sent to OpenAI to answer questions, with response storage disabled.</p>
     </section>
     <Camera />
-    <footer><span>Ask manually <kbd>Ctrl Shift Space</kbd></span><span>Hide overlay <kbd>Ctrl Shift H</kbd></span><span>Move window <kbd>Ctrl Alt ← ↑ → ↓</kbd></span>{data?.debug && <button className="text-button" onClick={() => command('open_debug')}>Debug transcript</button>}</footer>
+    <footer><span>Ask manually <kbd>Ctrl Shift Space</kbd></span><span>Hide overlay <kbd>Ctrl Shift H</kbd></span><span>Move window <kbd>Ctrl Alt ← ↑ → ↓</kbd></span><span>Scroll <kbd>Ctrl Shift Page Up / Down</kbd></span>{data?.debug && <button className="text-button" onClick={() => command('open_debug')}>Debug transcript</button>}</footer>
   </main>;
 }
 function Meter({ label, level }: { label: string; level: number }) { return <div className="meter"><span>{label}</span><div><i style={{ width: `${Math.min(100, level * 600)}%` }} /></div></div>; }

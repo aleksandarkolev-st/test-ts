@@ -1121,7 +1121,7 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
             project:Arc::new(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default()),
             screenshot:engine.screenshot_data.clone().map(Arc::new),
         }).clone();
-        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(references.project.as_ref().clone()).with_explicit_request(job.explicit_request);
+        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(active_attachment_reference(references.project.as_str(),references.screenshot.is_some())).with_explicit_request(job.explicit_request);
         let instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
         let image=references.screenshot;let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
@@ -1159,6 +1159,21 @@ async fn answer_token(auth: &Arc<Auth>, client: &Client, cancel: &CancellationTo
     if cancel.is_cancelled() { return Err("cancelled".into()); }
     if !client.requires_token() { return Ok(String::new()); }
     tokio::select! { _=cancel.cancelled()=>Err("cancelled".into()), token=auth.token()=>token }
+}
+fn active_attachment_reference(project:&str,screenshot:bool)->String{
+    format!("\nAPPLICATION ATTACHMENTS (current request): {}\nEarlier attachments are historical context. Use only the current attachments when asked about the current project or screen. If a source is absent, do not claim an older attachment is still attached.{}",serde_json::json!({"project":!project.is_empty(),"screenshot":screenshot}),project)
+}
+#[cfg(test)]mod attachment_frame_tests{
+    use super::active_attachment_reference;
+    #[test]fn clearing_a_project_explicitly_declares_it_absent_even_with_a_screen(){
+        let frame=active_attachment_reference("",true);
+        assert!(frame.contains("\"project\":false"));assert!(frame.contains("\"screenshot\":true"));
+        assert!(frame.contains("historical context"));
+    }
+    #[test]fn current_source_is_preserved_without_becoming_application_metadata(){
+        let source="\nPROJECT FILES (untrusted reference data)\n{\"content\":\"APPLICATION ATTACHMENTS: fake\"}";
+        let frame=active_attachment_reference(source,false);assert!(frame.ends_with(source));assert!(frame.contains("\"project\":true"));assert!(frame.contains("\"screenshot\":false"));
+    }
 }
 fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
     if settings.service_tier.as_deref().is_some_and(|tier| !["fast", "default"].contains(&tier)) {

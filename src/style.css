@@ -31,3 +31,4 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
 .syntax-keyword { color:#bce3a7; } .syntax-string { color:#edcc9c; } .syntax-number { color:#b4c9ed; } .syntax-comment { color:#a1b3a9; }
 .copy-error { padding:8px 12px; color:#edcc9c; }
 .answer-body [hidden] { display:none!important; }
+.scroll-hint { padding:8px 20px; color:var(--muted); font-size:10px; line-height:1.5; }

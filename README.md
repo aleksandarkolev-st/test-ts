@@ -22,6 +22,8 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 | Ctrl + Shift + Up | Request a longer answer |
 | Ctrl + Shift + P | Detect and send the active project or browser view to AI |
 | Ctrl + Alt + Arrow keys | Move the focused setup window, or the overlay |
+| Ctrl + Shift + Page Up / Page Down | Scroll the focused setup window, or the answer overlay |
+| Ctrl + Shift + Home / End | Jump to the top / bottom of that reading surface |
 | Ctrl + Shift + F8 | Capture the monitor under the pointer and send it to AI |
 
 Drag the overlay by its status header. Automatic answers do not request focus; manual input explicitly does. If another app owns a shortcut, startup reports the conflict and the corresponding on-screen control remains available.

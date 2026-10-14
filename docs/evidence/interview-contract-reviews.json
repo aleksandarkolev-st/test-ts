@@ -627,6 +627,51 @@
       },
       "note": "Greater-than-or-equal rejects reads exactly at expiry and later; puts replace value and expiry together. Empty input, zero TTL, pre-boundary get and overwrite traces are correct. Retains entries and evaluates each get timestamp using specified putTime+ttl JavaScript arithmetic. Same synchronous export/API; no dependencies or test edits. Expected O(m) time and O(distinct keys + get count) space. Actual service smoke, fresh patch marker and native reading checks passed.",
       "evidence": "interview-ttl-expiry-completed.json"
+    },
+    {
+      "id": "run-length-encoding",
+      "kind": "regular",
+      "finalAnswerSha256": "48650c41f04867f8113b1c645aa530b26d4f7cc5c0bb71d73021087c3e242ca6",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "For-of iterates Unicode code points as explicitly required. Only the latest run increments on equality; later separated repeats create new runs. Empty input returns []. O(n) time for n code points, O(r) output and O(1) auxiliary space.",
+      "evidence": "interview-counted-synthetic-51-55.json"
+    },
+    {
+      "id": "quoted-csv-row",
+      "kind": "regular",
+      "finalAnswerSha256": "5c1088d154caf7fcc581f9758001d7f1bdfa921d6d06931f1e970d4c8573aa1c",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Quoted state makes commas literal inside fields; doubled quoted quotes append one quote and skip the partner. Only unquoted commas flush fields; final unconditional flush preserves trailing and empty fields, including a wholly empty row as one empty field. Valid-row contract excludes malformed quote syntax. Array buffers avoid repeated concatenation: O(n) time/O(n) total space.",
+      "evidence": "interview-counted-synthetic-51-55.json"
+    },
+    {
+      "id": "absolute-path-normalization",
+      "kind": "regular",
+      "finalAnswerSha256": "d0be9fbd86dcd0e4b557ea2aeeb8826dc13224133ecbc6b5864c877d858c0f15",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Only exact empty/dot segments are skipped and exact dot-dot pops a prior segment if present. Root cannot be crossed; other dotted names are preserved. Joining the stack with a leading slash yields canonical absolute path. O(n) time/O(n) space.",
+      "evidence": "interview-counted-synthetic-51-55.json"
+    },
+    {
+      "id": "version-comparison",
+      "kind": "regular",
+      "finalAnswerSha256": "f793e88585eaa7050748d6571846fad843f942cf03db22ea8048fd3708d4a879",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Normalizes leading zeros to zero, treats absent segments as zero, then compares digit length and equal-length lexical text. Handles arbitrarily long decimal segments without numeric conversion; returns only -1/0/1. O(n) time/O(n) space over combined input lengths.",
+      "evidence": "interview-counted-synthetic-51-55.json"
+    },
+    {
+      "id": "binary-string-addition",
+      "kind": "regular",
+      "finalAnswerSha256": "2d9c96db7ac26db46b895623e3fcba318d26dff4859d85315cb486b9c5a54ed5",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Processes digits right-to-left with carry bounded to 0/1 and local sum bounded to 0–3. Consumes remaining carry after both inputs end. Removes reversed high-order zeros while preserving one zero, then reverses/joins. No whole-number Number conversion. O(max input length) time and space.",
+      "evidence": "interview-counted-synthetic-51-55.json"
     }
   ]
 }

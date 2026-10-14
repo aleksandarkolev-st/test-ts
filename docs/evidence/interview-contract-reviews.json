@@ -1205,6 +1205,37 @@
       "note": "new Set(s) consumes the string code-point iterator, keeping surrogate pairs intact while counting repeated code points once. Empty input zero. Final answer correctly counts combining accent separately from its base letter, preserving code-point rather than grapheme semantics. Both candidates pass 1112 independently encoded numeric-code-point tests across BMP/supplementary boundaries, combining marks, joiner/variation selector and a long repeated mixture. Expected O(code units) time/O(distinct code points) storage. Same synchronous API/no dependencies or test edits; smoke, original/patch markers and native reading pass.",
       "evidence": "interview-unicode-iteration-completed.json",
       "supplementaryEvidence": "interview-unicode-codepoint-domain.json"
+    },
+    {
+      "id": "cache-zero",
+      "kind": "bug",
+      "finalAnswerSha256": "bc034e182255541ba4f1118d5ae58a6ac78c9acdc5492f97635b8023bf2540a3",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "values[k]||-1",
+        "counterexample": {
+          "args": [
+            {
+              "a": 0
+            },
+            [
+              "a"
+            ]
+          ],
+          "originalActual": [
+            -1
+          ],
+          "expected": [
+            0
+          ]
+        },
+        "note": "One request for one stored falsy value is minimal for this loss-of-value defect."
+      },
+      "note": "Prototype hasOwnProperty.call distinguishes own entries from absent/inherited keys while preserving all stored JSON values regardless of truthiness. Shadowed hasOwnProperty and owned __proto__ data properties remain valid. Both fixes pass 56 independent property/value tests with repeated keys and empty requests. Expected O(request count) time/O(output length) storage. Same synchronous API, no dependencies/test edits; actual smoke, original/patch markers, native vertical/horizontal reading pass.",
+      "evidence": "interview-cache-zero-completed.json",
+      "supplementaryEvidence": "interview-value-lookup-property-domain.json"
     }
   ]
 }

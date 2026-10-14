@@ -150,3 +150,9 @@ The room diagnosis identifies starts preceding ends at equal times and uses the 
 The Unicode diagnosis correctly cites code-unit splitting and the minimal one-supplementary-character witness: original count two, required count one. Both fixes pass 1112 independently encoded code-point-domain checks, including combining marks, joiner/variation selector, BMP and supplementary boundaries, repetition and a long mixture. The final answer preserves code-point semantics instead of counting graphemes. Constraints, actual smoke, original/patched source handoffs and reading checks passed.
 
 Median first word is 3161 ms (p95 7935 ms); median completion is 7987 ms (p95 15296 ms). Evidence: `evidence/interview-unicode-iteration-completed.json` and `evidence/interview-unicode-codepoint-domain.json`. The five pending bug cases ran in one native session using the new kind filter, with unchanged frozen binary/frontend/contracts and independent handoffs for each original and patched project. Remaining: 20 regular and 5 bug interviews. Full requested scope remains active and unfinished.
+
+### Value lookup bug checkpoint
+
+80 regular and 16 bug interviews are complete (288 completed-attempt measured responses). All 96 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All sixteen completed bug diagnoses pass; broader final review passes 78/96, retaining 18 failures.
+
+The lookup diagnosis identifies falsy-value fallback and the minimal stored-zero request. Both fixes pass 56 additional own/absent property tests, preserving zero/false/empty/null and handling prototype-named keys, shadowed hasOwnProperty, owned __proto__, repeated and empty requests. Original/patched source context and vertical/horizontal reading passed. Evidence: `evidence/interview-cache-zero-completed.json` and `evidence/interview-value-lookup-property-domain.json`. Remaining: 20 regular and 4 bug interviews.

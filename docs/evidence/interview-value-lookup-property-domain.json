@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen fixtures unchanged",
+  "domain": "Own and absent ordinary/prototype-named/empty-string keys with eight falsy/truthy JSON value kinds, repeated requests and empty lookup. JSON parsing inside each VM preserves owned __proto__ data properties.",
+  "oracle": "Expected values are the independently assigned entries, with -1 only for explicit absent keys.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "f41c149c68b13eea25f5a69219e4ca76233b5f070176559c17bc28a4918b47d6",
+      "cases": 56,
+      "passedCases": 56,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "bc034e182255541ba4f1118d5ae58a6ac78c9acdc5492f97635b8023bf2540a3",
+      "cases": 56,
+      "passedCases": 56,
+      "failures": []
+    }
+  ]
+}

@@ -30,6 +30,7 @@ let report={version:1,status:'in_progress',startedAt:new Date().toISOString(),mo
 if(resume){
  report=JSON.parse(await readFile(file,'utf8'));
  if(JSON.stringify(report.fingerprint)!==JSON.stringify(fingerprint))throw Error('Resume fingerprint differs. Preserve this report and start a new evaluated build explicitly.');
+ if(report.error)report.events.push({at:new Date().toISOString(),event:'preserved_previous_failure',error:report.error});
  report.status='in_progress';report.resumedAt=new Date().toISOString();delete report.error;
 }else{
  try{await readFile(file);throw Error('Evidence already exists. Use --resume or a separate --pilot report.');}catch(e){if(e.code!=='ENOENT')throw e;}
@@ -103,7 +104,7 @@ async function handoff(task,kind,index,mode,marker,patched=false){
  ready=payload;await fixture.goto('http://127.0.0.1:9571/');
  const ack=await waitForComputerUse(payload);
  const expected=mode==='screenshot'?'screenshot':'project';
- if(ack.detected?.kind!== (mode==='screenshot'?'browser':mode==='project-vscode'?'vscode':'explorer'))throw Error('Unexpected source detection: '+JSON.stringify(ack.detected));
+ if(ack.detected?.kind!== (mode==='screenshot'?'browser':mode==='project-vscode'?'vscode':'folder'))throw Error('Unexpected source detection: '+JSON.stringify(ack.detected));
  const attached=await until(s=>!s.attachmentBusy&&!!s[expected]);
  if(attached[expected==='project'?'screenshot':'project'])throw Error('Historical attachment survived the clear boundary');
  const auto=await until(s=>s.latency?.completedAt!=null);
@@ -147,7 +148,7 @@ try{
  const models=await invoke('list_models');if(!models.some(m=>m.slug===report.model))throw Error('GPT-6.1 Sol absent from live catalog');
  report.liveCatalogVerified=true;report.shortcutErrors=boot.shortcutErrors;
  if(boot.shortcutErrors.length)throw Error('Shortcut registration failed: '+boot.shortcutErrors.join('; '));
- const settings={...boot.settings,model:report.model,reasoningEffort:'low',answerBackend:'codex',serviceTier:'fast',answerObjective:'detailed',speechBackend:'whisper',projectPath:null,
+ const settings={...boot.settings,model:report.model,reasoningEffort:'low',answerBackend:'codex',serviceTier:'fast',answerObjective:'detailed',speechBackend:'whisper',projectPath:'',
   modelPath:path.join(root,'models/ggml-tiny.en.bin'),
   microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id??boot.devices.find(d=>d.source==='self')?.id,
   output:boot.devices.find(d=>d.source==='remote'&&d.default)?.id??boot.devices.find(d=>d.source==='remote')?.id};

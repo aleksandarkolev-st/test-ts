@@ -1,0 +1,25 @@
+{
+  "id": "remove-invalid-parentheses",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary feasible long-input check; a string containing no parentheses is already balanced and has exactly one zero-removal result. No input-length limit was supplied. Frozen fixture scores remain unchanged.",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "e9e3c505dc744de08f5e30cdcdebbec77bcf044d33aaf16812b16d3e1be6ea44",
+      "inputConstruction": "'abc'.repeat(4000)",
+      "inputLength": 12000,
+      "expectedSha256": "437d0db812351a9b64131b0cb5f2613e27e23a2de42578be71f8241c246c7035",
+      "error": "RangeError: Maximum call stack size exceeded",
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "120b8978ba427635eaa05d88e672ad716b49c1687df07ae5e606e0aa60f2ffdd",
+      "inputConstruction": "'abc'.repeat(4000)",
+      "inputLength": 12000,
+      "expectedSha256": "437d0db812351a9b64131b0cb5f2613e27e23a2de42578be71f8241c246c7035",
+      "error": "RangeError: Maximum call stack size exceeded",
+      "passed": false
+    }
+  ]
+}

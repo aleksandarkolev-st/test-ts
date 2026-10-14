@@ -722,6 +722,33 @@
       "diagnosisReview": null,
       "note": "IPv4 validates four nonempty ASCII decimal groups of at most three digits, range<=255 and no leading zeros. IPv6 validates eight nonempty 1–4-character ASCII hex groups; shorthand rejected. Negative character classes reject trailing newlines and Unicode separators without relying on dollar-anchor semantics. O(n) time/space. Ten supplementary strict-character and positive controls pass in both rounds.",
       "evidence": "interview-decimal-ip-supplementary.json"
+    },
+    {
+      "id": "longest-common-prefix",
+      "kind": "regular",
+      "finalAnswerSha256": "6eaf7a7cbf01c9e9445f7f698d8f7924b8786c0d57191358082c5088c7d24a8a",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Empty-array guard and vertical scan stop at the first ended word or mismatch. Every completed position agrees across all words. Handles empty first word and singleton array. Uses JavaScript code-unit indexing. O(nL) upper bound and O(1) auxiliary space excluding returned substring. Completed retry has a fresh marker; prior native connection interruption retained and uncounted.",
+      "evidence": "interview-counted-synthetic-58-60.json"
+    },
+    {
+      "id": "remove-invalid-parentheses",
+      "kind": "regular",
+      "finalAnswerSha256": "120b8978ba427635eaa05d88e672ad716b49c1687df07ae5e606e0aa60f2ffdd",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Removal budgets count unmatched parentheses; search preserves other characters and nonnegative prefix balance, exhausts budgets at zero final balance, and compares all complete candidates for lexicographic minimum. Correct finite search logic, O(n·2^p) worst-case time and O(n) stack/path space. Both generated implementations throw Maximum call stack size exceeded on a feasible 12000-character already-valid literal string. Contract specifies no length limit, so final review fails despite frozen fixture passes.",
+      "evidence": "interview-parentheses-recursion-boundary.json"
+    },
+    {
+      "id": "subsequence-check",
+      "kind": "regular",
+      "finalAnswerSha256": "320d5d8a7e9fa790a055d6afe1643dc13417077c47a50ad7287b25ca20f109cb",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "A forward target scan consumes at most one required character per match, preserving order and preventing reuse. Empty source returns true and exhausted target with incomplete source returns false. Uses consistent JavaScript code-unit indexing. O(|t|) time/O(1) auxiliary space.",
+      "evidence": "interview-counted-synthetic-58-60.json"
     }
   ]
 }

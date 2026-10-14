@@ -213,7 +213,7 @@ try{
   attempt.functionalPassed=attempt.rounds.every(r=>r.markerCorrect&&r.renderedSourceMatches)&&attempt.rounds.slice(1).every(r=>r.grade?.passed);
   attempt.paintObserved=attempt.rounds.every(r=>r.paints.some(p=>p.accepted&&p.end>p.start));
   row.status='responses_complete';row.manualContractReview='pending';row.diagnosisReview=kind==='bug'?'pending':null;processed++;await persist();
-  console.log('INTERVIEW_RESULT',JSON.stringify({id:task.id,kind,functionalPassed:attempt.functionalPassed,paintObserved:attempt.paintObserved,reading:attempt.reading.footerReachable}));
+  console.log('INTERVIEW_RESULT',JSON.stringify({id:task.id,kind,functionalPassed:attempt.functionalPassed,paintObserved:attempt.paintObserved,reading:attempt.reading.passed,footerReachable:attempt.reading.footerReachable}));
  }
  report.status=report.rows.filter(r=>r.status==='responses_complete').length===120?'responses_complete_pending_contract_review':'partial';
  report.stoppedAt=new Date().toISOString();ready=null;await persist();

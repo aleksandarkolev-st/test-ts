@@ -36,5 +36,10 @@ console.log(JSON.stringify({source:file,sourceSha256:createHash('sha256').update
  runId:report.runId,status:report.status,model:report.model,reasoningEffort:report.reasoningEffort,
  required:report.required,completed:{regular:completed.filter(r=>r.kind==='regular').length,bug:completed.filter(r=>r.kind==='bug').length},
  scope:'Text-driven native trials. Functional fixture counts are separate from contract and diagnosis review. No ASR accuracy claim.',
+ checks:{denominator:rows.length,firstImplementationFixturesPassed:rows.filter(r=>r.firstImplementationPassed).length,
+  finalImplementationFixturesPassed:rows.filter(r=>r.finalImplementationPassed).length,
+  allMarkersCorrect:rows.filter(r=>r.markerCorrect).length,paintSourcesExact:rows.filter(r=>r.paintSourceMatches).length,
+  keyboardPassed:rows.filter(r=>r.keyboardPassed).length,finalContractsReviewed:rows.filter(r=>typeof r.manualContractReview==='object').length,
+  finalContractsPassed:rows.filter(r=>r.manualContractReview?.passed===true).length},
  firstWord:distribution('firstWordMs'),completion:distribution('completedMs'),firstPaint:distribution('firstPaintMs'),
  incomplete:report.rows.filter(r=>r.status!=='responses_complete').map(r=>({id:r.id,status:r.status,attempts:r.attempts.length})),rows},null,2));

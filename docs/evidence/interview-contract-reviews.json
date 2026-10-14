@@ -345,6 +345,32 @@
       "diagnosisReview": null,
       "note": "Final exact-step guards prevent rounded predecessor/successor arithmetic from inventing adjacency or looping without progress. Set removes duplicates and scanning starts only at actual sequence heads. Expected O(n) time and O(n) space. Supplementary execution confirmed round 2 timeout/incorrect zero at +/-2^53 and correct final ones.",
       "evidence": "interview-consecutive-integer-boundary.json"
+    },
+    {
+      "id": "duplicate-search",
+      "kind": "bug",
+      "finalAnswerSha256": "cec12cf1925efe4575d30645af0656eb08ce178032ea86fca74db41f1546a9ae",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(nums[mid]===target)return mid;",
+        "counterexample": {
+          "args": [
+            [
+              1,
+              1,
+              2
+            ],
+            1
+          ],
+          "originalActual": 1,
+          "expected": 0
+        },
+        "note": "Immediate match returns a non-leftmost duplicate. A three-element example is minimal for the original floor-midpoint search; one/two-element arrays cannot exhibit this defect."
+      },
+      "note": "Lower-bound binary search continues left on equality and verifies the final candidate. Correct empty/absent/duplicate boundaries, same synchronous export and API, no dependencies or test edits. O(log(n+1)) time and O(1) space. Fresh patch marker recovered after explicit reattachment; actual service smoke test passed.",
+      "evidence": "interview-duplicate-search-completed.json"
     }
   ]
 }

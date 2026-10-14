@@ -84,3 +84,11 @@ Increasing-subsequence meets its O(n log n) requirement. Four supplementary witn
 Median first word: 3182 ms (p95 8003 ms). Median completion: 8053 ms (p95 15318 ms). Raw checkpoint: `evidence/interview-counted-synthetic-66-70.json`; supplementary files are linked by the contract-review ledger.
 
 Remaining: 30 regular and 12 bug interviews; full requested scope remains unfinished.
+
+### Delimited record bug checkpoint
+
+70 regular and 9 bug interviews are complete (237 measured completed-attempt responses). All 79 frozen-fixture, marker, accepted paint-source and native keyboard checks pass; broader final contract review passes 66/79. All nine completed bug diagnoses pass their separate source/counterexample review.
+
+The CSV diagnosis cites unconditional quote-state toggling and gives the minimal four-quote valid row: original output is one empty field, required output one literal quote. Both implementations pass 100 additional distinct valid rows produced by independently encoding expected field pairs, including empty values, Unicode, commas, CRLF/newlines and repeated quotes. These supplementary rows do not increase the distinct interview count. Original and fresh patched-source handoffs remain explicit shortcuts.
+
+Raw evidence: `evidence/interview-csv-escaping-completed.json`; additional execution: `evidence/interview-csv-valid-row-supplementary.json`. Remaining: 30 regular and 11 bug interviews.

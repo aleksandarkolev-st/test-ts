@@ -917,6 +917,32 @@
       "diagnosisReview": null,
       "note": "Infinity sentinel excludes nonexistent predecessors and zero seed enters only the first cell; rolling costs correctly count endpoints in ordinary nonempty rectangular cases. O(rows*columns) time/O(columns) storage. Magnitude-unrestricted contract fails single row [MAX_SAFE_INTEGER,1,1,1,1,1]: its sole path has exact representable sum 9007199254740996, but both candidates return 9007199254740992. Independent BigInt sum, all input integers safe, frozen grades unchanged.",
       "evidence": "interview-minimum-grid-sum-precision.json"
+    },
+    {
+      "id": "csv-escaping",
+      "kind": "bug",
+      "finalAnswerSha256": "5f60b2c543a3ed2327b04f1365a0d46fe8fd5aef3a85b625be4b62df23774031",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(ch===String.fromCharCode(34))quoted=!quoted",
+        "counterexample": {
+          "args": [
+            "\"\"\"\""
+          ],
+          "originalActual": [
+            ""
+          ],
+          "expected": [
+            "\""
+          ]
+        },
+        "note": "Four quotes are minimal for an enclosed escaped quote. Original toggles four times but emits none."
+      },
+      "note": "Lookahead while quoted emits one literal quote and consumes its partner without leaving quoted state; unquoted commas delimit fields, final push preserves empty trailing fields. Valid-row contract preserved, same synchronous export/API, no dependencies/test changes. Actual 100 independently encoded valid rows per candidate pass, including Unicode, quoted commas/newlines and repeated quotes. O(row length) scans and linear output storage. Original/patched context markers, actual service smoke and native reading checks pass.",
+      "evidence": "interview-csv-escaping-completed.json",
+      "supplementaryEvidence": "interview-csv-valid-row-supplementary.json"
     }
   ]
 }

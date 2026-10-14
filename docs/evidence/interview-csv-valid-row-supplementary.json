@@ -1,0 +1,2418 @@
+{
+  "scope": "100 distinct valid encoded rows per actual model implementation; separate from interview count and frozen grades",
+  "oracle": "Encode independently chosen fields by surrounding each field with quotes and doubling every inner quote. Decoder must return the original fields.",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "09d7d45d55c425a0c0eacb92f854c5798b48014d87e4cc88b3061071e1ae7118",
+      "cases": [
+        {
+          "row": "\"\",\"\"",
+          "expected": [
+            "",
+            ""
+          ],
+          "actual": [
+            "",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"plain\"",
+          "expected": [
+            "",
+            "plain"
+          ],
+          "actual": [
+            "",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\",\"",
+          "expected": [
+            "",
+            ","
+          ],
+          "actual": [
+            "",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\"\"\"",
+          "expected": [
+            "",
+            "\""
+          ],
+          "actual": [
+            "",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"a\"\"b\"",
+          "expected": [
+            "",
+            "a\"b"
+          ],
+          "actual": [
+            "",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"a,b\"",
+          "expected": [
+            "",
+            "a,b"
+          ],
+          "actual": [
+            "",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\"\"\"\"\"",
+          "expected": [
+            "",
+            "\"\""
+          ],
+          "actual": [
+            "",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"😀\"",
+          "expected": [
+            "",
+            "😀"
+          ],
+          "actual": [
+            "",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"line\nnext\"",
+          "expected": [
+            "",
+            "line\nnext"
+          ],
+          "actual": [
+            "",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\r\n\"",
+          "expected": [
+            "",
+            "\r\n"
+          ],
+          "actual": [
+            "",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"",
+          "expected": [
+            "plain",
+            ""
+          ],
+          "actual": [
+            "plain",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"plain\"",
+          "expected": [
+            "plain",
+            "plain"
+          ],
+          "actual": [
+            "plain",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\",\"",
+          "expected": [
+            "plain",
+            ","
+          ],
+          "actual": [
+            "plain",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"\"\"",
+          "expected": [
+            "plain",
+            "\""
+          ],
+          "actual": [
+            "plain",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"a\"\"b\"",
+          "expected": [
+            "plain",
+            "a\"b"
+          ],
+          "actual": [
+            "plain",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"a,b\"",
+          "expected": [
+            "plain",
+            "a,b"
+          ],
+          "actual": [
+            "plain",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"\"\"\"\"",
+          "expected": [
+            "plain",
+            "\"\""
+          ],
+          "actual": [
+            "plain",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"😀\"",
+          "expected": [
+            "plain",
+            "😀"
+          ],
+          "actual": [
+            "plain",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"line\nnext\"",
+          "expected": [
+            "plain",
+            "line\nnext"
+          ],
+          "actual": [
+            "plain",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\r\n\"",
+          "expected": [
+            "plain",
+            "\r\n"
+          ],
+          "actual": [
+            "plain",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"",
+          "expected": [
+            ",",
+            ""
+          ],
+          "actual": [
+            ",",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"plain\"",
+          "expected": [
+            ",",
+            "plain"
+          ],
+          "actual": [
+            ",",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\",\"",
+          "expected": [
+            ",",
+            ","
+          ],
+          "actual": [
+            ",",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"\"\"",
+          "expected": [
+            ",",
+            "\""
+          ],
+          "actual": [
+            ",",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"a\"\"b\"",
+          "expected": [
+            ",",
+            "a\"b"
+          ],
+          "actual": [
+            ",",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"a,b\"",
+          "expected": [
+            ",",
+            "a,b"
+          ],
+          "actual": [
+            ",",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"\"\"\"\"",
+          "expected": [
+            ",",
+            "\"\""
+          ],
+          "actual": [
+            ",",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"😀\"",
+          "expected": [
+            ",",
+            "😀"
+          ],
+          "actual": [
+            ",",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"line\nnext\"",
+          "expected": [
+            ",",
+            "line\nnext"
+          ],
+          "actual": [
+            ",",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\r\n\"",
+          "expected": [
+            ",",
+            "\r\n"
+          ],
+          "actual": [
+            ",",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"",
+          "expected": [
+            "\"",
+            ""
+          ],
+          "actual": [
+            "\"",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"plain\"",
+          "expected": [
+            "\"",
+            "plain"
+          ],
+          "actual": [
+            "\"",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\",\"",
+          "expected": [
+            "\"",
+            ","
+          ],
+          "actual": [
+            "\"",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"\"\"",
+          "expected": [
+            "\"",
+            "\""
+          ],
+          "actual": [
+            "\"",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"a\"\"b\"",
+          "expected": [
+            "\"",
+            "a\"b"
+          ],
+          "actual": [
+            "\"",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"a,b\"",
+          "expected": [
+            "\"",
+            "a,b"
+          ],
+          "actual": [
+            "\"",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"\"\"\"\"",
+          "expected": [
+            "\"",
+            "\"\""
+          ],
+          "actual": [
+            "\"",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"😀\"",
+          "expected": [
+            "\"",
+            "😀"
+          ],
+          "actual": [
+            "\"",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"line\nnext\"",
+          "expected": [
+            "\"",
+            "line\nnext"
+          ],
+          "actual": [
+            "\"",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\r\n\"",
+          "expected": [
+            "\"",
+            "\r\n"
+          ],
+          "actual": [
+            "\"",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"",
+          "expected": [
+            "a\"b",
+            ""
+          ],
+          "actual": [
+            "a\"b",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"plain\"",
+          "expected": [
+            "a\"b",
+            "plain"
+          ],
+          "actual": [
+            "a\"b",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\",\"",
+          "expected": [
+            "a\"b",
+            ","
+          ],
+          "actual": [
+            "a\"b",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"\"\"",
+          "expected": [
+            "a\"b",
+            "\""
+          ],
+          "actual": [
+            "a\"b",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"a\"\"b\"",
+          "expected": [
+            "a\"b",
+            "a\"b"
+          ],
+          "actual": [
+            "a\"b",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"a,b\"",
+          "expected": [
+            "a\"b",
+            "a,b"
+          ],
+          "actual": [
+            "a\"b",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"\"\"\"\"",
+          "expected": [
+            "a\"b",
+            "\"\""
+          ],
+          "actual": [
+            "a\"b",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"😀\"",
+          "expected": [
+            "a\"b",
+            "😀"
+          ],
+          "actual": [
+            "a\"b",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"line\nnext\"",
+          "expected": [
+            "a\"b",
+            "line\nnext"
+          ],
+          "actual": [
+            "a\"b",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\r\n\"",
+          "expected": [
+            "a\"b",
+            "\r\n"
+          ],
+          "actual": [
+            "a\"b",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"",
+          "expected": [
+            "a,b",
+            ""
+          ],
+          "actual": [
+            "a,b",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"plain\"",
+          "expected": [
+            "a,b",
+            "plain"
+          ],
+          "actual": [
+            "a,b",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\",\"",
+          "expected": [
+            "a,b",
+            ","
+          ],
+          "actual": [
+            "a,b",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"\"\"",
+          "expected": [
+            "a,b",
+            "\""
+          ],
+          "actual": [
+            "a,b",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"a\"\"b\"",
+          "expected": [
+            "a,b",
+            "a\"b"
+          ],
+          "actual": [
+            "a,b",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"a,b\"",
+          "expected": [
+            "a,b",
+            "a,b"
+          ],
+          "actual": [
+            "a,b",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"\"\"\"\"",
+          "expected": [
+            "a,b",
+            "\"\""
+          ],
+          "actual": [
+            "a,b",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"😀\"",
+          "expected": [
+            "a,b",
+            "😀"
+          ],
+          "actual": [
+            "a,b",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"line\nnext\"",
+          "expected": [
+            "a,b",
+            "line\nnext"
+          ],
+          "actual": [
+            "a,b",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\r\n\"",
+          "expected": [
+            "a,b",
+            "\r\n"
+          ],
+          "actual": [
+            "a,b",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"",
+          "expected": [
+            "\"\"",
+            ""
+          ],
+          "actual": [
+            "\"\"",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"plain\"",
+          "expected": [
+            "\"\"",
+            "plain"
+          ],
+          "actual": [
+            "\"\"",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\",\"",
+          "expected": [
+            "\"\"",
+            ","
+          ],
+          "actual": [
+            "\"\"",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"\"\"",
+          "expected": [
+            "\"\"",
+            "\""
+          ],
+          "actual": [
+            "\"\"",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"a\"\"b\"",
+          "expected": [
+            "\"\"",
+            "a\"b"
+          ],
+          "actual": [
+            "\"\"",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"a,b\"",
+          "expected": [
+            "\"\"",
+            "a,b"
+          ],
+          "actual": [
+            "\"\"",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"\"\"\"\"",
+          "expected": [
+            "\"\"",
+            "\"\""
+          ],
+          "actual": [
+            "\"\"",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"😀\"",
+          "expected": [
+            "\"\"",
+            "😀"
+          ],
+          "actual": [
+            "\"\"",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"line\nnext\"",
+          "expected": [
+            "\"\"",
+            "line\nnext"
+          ],
+          "actual": [
+            "\"\"",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\r\n\"",
+          "expected": [
+            "\"\"",
+            "\r\n"
+          ],
+          "actual": [
+            "\"\"",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"",
+          "expected": [
+            "😀",
+            ""
+          ],
+          "actual": [
+            "😀",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"plain\"",
+          "expected": [
+            "😀",
+            "plain"
+          ],
+          "actual": [
+            "😀",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\",\"",
+          "expected": [
+            "😀",
+            ","
+          ],
+          "actual": [
+            "😀",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"\"\"",
+          "expected": [
+            "😀",
+            "\""
+          ],
+          "actual": [
+            "😀",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"a\"\"b\"",
+          "expected": [
+            "😀",
+            "a\"b"
+          ],
+          "actual": [
+            "😀",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"a,b\"",
+          "expected": [
+            "😀",
+            "a,b"
+          ],
+          "actual": [
+            "😀",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"\"\"\"\"",
+          "expected": [
+            "😀",
+            "\"\""
+          ],
+          "actual": [
+            "😀",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"😀\"",
+          "expected": [
+            "😀",
+            "😀"
+          ],
+          "actual": [
+            "😀",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"line\nnext\"",
+          "expected": [
+            "😀",
+            "line\nnext"
+          ],
+          "actual": [
+            "😀",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\r\n\"",
+          "expected": [
+            "😀",
+            "\r\n"
+          ],
+          "actual": [
+            "😀",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"",
+          "expected": [
+            "line\nnext",
+            ""
+          ],
+          "actual": [
+            "line\nnext",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"plain\"",
+          "expected": [
+            "line\nnext",
+            "plain"
+          ],
+          "actual": [
+            "line\nnext",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\",\"",
+          "expected": [
+            "line\nnext",
+            ","
+          ],
+          "actual": [
+            "line\nnext",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"\"\"",
+          "expected": [
+            "line\nnext",
+            "\""
+          ],
+          "actual": [
+            "line\nnext",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"a\"\"b\"",
+          "expected": [
+            "line\nnext",
+            "a\"b"
+          ],
+          "actual": [
+            "line\nnext",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"a,b\"",
+          "expected": [
+            "line\nnext",
+            "a,b"
+          ],
+          "actual": [
+            "line\nnext",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"\"\"\"\"",
+          "expected": [
+            "line\nnext",
+            "\"\""
+          ],
+          "actual": [
+            "line\nnext",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"😀\"",
+          "expected": [
+            "line\nnext",
+            "😀"
+          ],
+          "actual": [
+            "line\nnext",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"line\nnext\"",
+          "expected": [
+            "line\nnext",
+            "line\nnext"
+          ],
+          "actual": [
+            "line\nnext",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\r\n\"",
+          "expected": [
+            "line\nnext",
+            "\r\n"
+          ],
+          "actual": [
+            "line\nnext",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"",
+          "expected": [
+            "\r\n",
+            ""
+          ],
+          "actual": [
+            "\r\n",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"plain\"",
+          "expected": [
+            "\r\n",
+            "plain"
+          ],
+          "actual": [
+            "\r\n",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\",\"",
+          "expected": [
+            "\r\n",
+            ","
+          ],
+          "actual": [
+            "\r\n",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"\"\"",
+          "expected": [
+            "\r\n",
+            "\""
+          ],
+          "actual": [
+            "\r\n",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"a\"\"b\"",
+          "expected": [
+            "\r\n",
+            "a\"b"
+          ],
+          "actual": [
+            "\r\n",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"a,b\"",
+          "expected": [
+            "\r\n",
+            "a,b"
+          ],
+          "actual": [
+            "\r\n",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"\"\"\"\"",
+          "expected": [
+            "\r\n",
+            "\"\""
+          ],
+          "actual": [
+            "\r\n",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"😀\"",
+          "expected": [
+            "\r\n",
+            "😀"
+          ],
+          "actual": [
+            "\r\n",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"line\nnext\"",
+          "expected": [
+            "\r\n",
+            "line\nnext"
+          ],
+          "actual": [
+            "\r\n",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\r\n\"",
+          "expected": [
+            "\r\n",
+            "\r\n"
+          ],
+          "actual": [
+            "\r\n",
+            "\r\n"
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "5f60b2c543a3ed2327b04f1365a0d46fe8fd5aef3a85b625be4b62df23774031",
+      "cases": [
+        {
+          "row": "\"\",\"\"",
+          "expected": [
+            "",
+            ""
+          ],
+          "actual": [
+            "",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"plain\"",
+          "expected": [
+            "",
+            "plain"
+          ],
+          "actual": [
+            "",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\",\"",
+          "expected": [
+            "",
+            ","
+          ],
+          "actual": [
+            "",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\"\"\"",
+          "expected": [
+            "",
+            "\""
+          ],
+          "actual": [
+            "",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"a\"\"b\"",
+          "expected": [
+            "",
+            "a\"b"
+          ],
+          "actual": [
+            "",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"a,b\"",
+          "expected": [
+            "",
+            "a,b"
+          ],
+          "actual": [
+            "",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\"\"\"\"\"",
+          "expected": [
+            "",
+            "\"\""
+          ],
+          "actual": [
+            "",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"😀\"",
+          "expected": [
+            "",
+            "😀"
+          ],
+          "actual": [
+            "",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"line\nnext\"",
+          "expected": [
+            "",
+            "line\nnext"
+          ],
+          "actual": [
+            "",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\",\"\r\n\"",
+          "expected": [
+            "",
+            "\r\n"
+          ],
+          "actual": [
+            "",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"",
+          "expected": [
+            "plain",
+            ""
+          ],
+          "actual": [
+            "plain",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"plain\"",
+          "expected": [
+            "plain",
+            "plain"
+          ],
+          "actual": [
+            "plain",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\",\"",
+          "expected": [
+            "plain",
+            ","
+          ],
+          "actual": [
+            "plain",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"\"\"",
+          "expected": [
+            "plain",
+            "\""
+          ],
+          "actual": [
+            "plain",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"a\"\"b\"",
+          "expected": [
+            "plain",
+            "a\"b"
+          ],
+          "actual": [
+            "plain",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"a,b\"",
+          "expected": [
+            "plain",
+            "a,b"
+          ],
+          "actual": [
+            "plain",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\"\"\"\"\"",
+          "expected": [
+            "plain",
+            "\"\""
+          ],
+          "actual": [
+            "plain",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"😀\"",
+          "expected": [
+            "plain",
+            "😀"
+          ],
+          "actual": [
+            "plain",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"line\nnext\"",
+          "expected": [
+            "plain",
+            "line\nnext"
+          ],
+          "actual": [
+            "plain",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"plain\",\"\r\n\"",
+          "expected": [
+            "plain",
+            "\r\n"
+          ],
+          "actual": [
+            "plain",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"",
+          "expected": [
+            ",",
+            ""
+          ],
+          "actual": [
+            ",",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"plain\"",
+          "expected": [
+            ",",
+            "plain"
+          ],
+          "actual": [
+            ",",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\",\"",
+          "expected": [
+            ",",
+            ","
+          ],
+          "actual": [
+            ",",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"\"\"",
+          "expected": [
+            ",",
+            "\""
+          ],
+          "actual": [
+            ",",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"a\"\"b\"",
+          "expected": [
+            ",",
+            "a\"b"
+          ],
+          "actual": [
+            ",",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"a,b\"",
+          "expected": [
+            ",",
+            "a,b"
+          ],
+          "actual": [
+            ",",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\"\"\"\"\"",
+          "expected": [
+            ",",
+            "\"\""
+          ],
+          "actual": [
+            ",",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"😀\"",
+          "expected": [
+            ",",
+            "😀"
+          ],
+          "actual": [
+            ",",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"line\nnext\"",
+          "expected": [
+            ",",
+            "line\nnext"
+          ],
+          "actual": [
+            ",",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\",\",\"\r\n\"",
+          "expected": [
+            ",",
+            "\r\n"
+          ],
+          "actual": [
+            ",",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"",
+          "expected": [
+            "\"",
+            ""
+          ],
+          "actual": [
+            "\"",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"plain\"",
+          "expected": [
+            "\"",
+            "plain"
+          ],
+          "actual": [
+            "\"",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\",\"",
+          "expected": [
+            "\"",
+            ","
+          ],
+          "actual": [
+            "\"",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"\"\"",
+          "expected": [
+            "\"",
+            "\""
+          ],
+          "actual": [
+            "\"",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"a\"\"b\"",
+          "expected": [
+            "\"",
+            "a\"b"
+          ],
+          "actual": [
+            "\"",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"a,b\"",
+          "expected": [
+            "\"",
+            "a,b"
+          ],
+          "actual": [
+            "\"",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\"\"\"\"\"",
+          "expected": [
+            "\"",
+            "\"\""
+          ],
+          "actual": [
+            "\"",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"😀\"",
+          "expected": [
+            "\"",
+            "😀"
+          ],
+          "actual": [
+            "\"",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"line\nnext\"",
+          "expected": [
+            "\"",
+            "line\nnext"
+          ],
+          "actual": [
+            "\"",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\",\"\r\n\"",
+          "expected": [
+            "\"",
+            "\r\n"
+          ],
+          "actual": [
+            "\"",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"",
+          "expected": [
+            "a\"b",
+            ""
+          ],
+          "actual": [
+            "a\"b",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"plain\"",
+          "expected": [
+            "a\"b",
+            "plain"
+          ],
+          "actual": [
+            "a\"b",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\",\"",
+          "expected": [
+            "a\"b",
+            ","
+          ],
+          "actual": [
+            "a\"b",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"\"\"",
+          "expected": [
+            "a\"b",
+            "\""
+          ],
+          "actual": [
+            "a\"b",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"a\"\"b\"",
+          "expected": [
+            "a\"b",
+            "a\"b"
+          ],
+          "actual": [
+            "a\"b",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"a,b\"",
+          "expected": [
+            "a\"b",
+            "a,b"
+          ],
+          "actual": [
+            "a\"b",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\"\"\"\"\"",
+          "expected": [
+            "a\"b",
+            "\"\""
+          ],
+          "actual": [
+            "a\"b",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"😀\"",
+          "expected": [
+            "a\"b",
+            "😀"
+          ],
+          "actual": [
+            "a\"b",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"line\nnext\"",
+          "expected": [
+            "a\"b",
+            "line\nnext"
+          ],
+          "actual": [
+            "a\"b",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a\"\"b\",\"\r\n\"",
+          "expected": [
+            "a\"b",
+            "\r\n"
+          ],
+          "actual": [
+            "a\"b",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"",
+          "expected": [
+            "a,b",
+            ""
+          ],
+          "actual": [
+            "a,b",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"plain\"",
+          "expected": [
+            "a,b",
+            "plain"
+          ],
+          "actual": [
+            "a,b",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\",\"",
+          "expected": [
+            "a,b",
+            ","
+          ],
+          "actual": [
+            "a,b",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"\"\"",
+          "expected": [
+            "a,b",
+            "\""
+          ],
+          "actual": [
+            "a,b",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"a\"\"b\"",
+          "expected": [
+            "a,b",
+            "a\"b"
+          ],
+          "actual": [
+            "a,b",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"a,b\"",
+          "expected": [
+            "a,b",
+            "a,b"
+          ],
+          "actual": [
+            "a,b",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\"\"\"\"\"",
+          "expected": [
+            "a,b",
+            "\"\""
+          ],
+          "actual": [
+            "a,b",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"😀\"",
+          "expected": [
+            "a,b",
+            "😀"
+          ],
+          "actual": [
+            "a,b",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"line\nnext\"",
+          "expected": [
+            "a,b",
+            "line\nnext"
+          ],
+          "actual": [
+            "a,b",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"a,b\",\"\r\n\"",
+          "expected": [
+            "a,b",
+            "\r\n"
+          ],
+          "actual": [
+            "a,b",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"",
+          "expected": [
+            "\"\"",
+            ""
+          ],
+          "actual": [
+            "\"\"",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"plain\"",
+          "expected": [
+            "\"\"",
+            "plain"
+          ],
+          "actual": [
+            "\"\"",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\",\"",
+          "expected": [
+            "\"\"",
+            ","
+          ],
+          "actual": [
+            "\"\"",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"\"\"",
+          "expected": [
+            "\"\"",
+            "\""
+          ],
+          "actual": [
+            "\"\"",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"a\"\"b\"",
+          "expected": [
+            "\"\"",
+            "a\"b"
+          ],
+          "actual": [
+            "\"\"",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"a,b\"",
+          "expected": [
+            "\"\"",
+            "a,b"
+          ],
+          "actual": [
+            "\"\"",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\"\"\"\"\"",
+          "expected": [
+            "\"\"",
+            "\"\""
+          ],
+          "actual": [
+            "\"\"",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"😀\"",
+          "expected": [
+            "\"\"",
+            "😀"
+          ],
+          "actual": [
+            "\"\"",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"line\nnext\"",
+          "expected": [
+            "\"\"",
+            "line\nnext"
+          ],
+          "actual": [
+            "\"\"",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\"\"\"\"\",\"\r\n\"",
+          "expected": [
+            "\"\"",
+            "\r\n"
+          ],
+          "actual": [
+            "\"\"",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"",
+          "expected": [
+            "😀",
+            ""
+          ],
+          "actual": [
+            "😀",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"plain\"",
+          "expected": [
+            "😀",
+            "plain"
+          ],
+          "actual": [
+            "😀",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\",\"",
+          "expected": [
+            "😀",
+            ","
+          ],
+          "actual": [
+            "😀",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"\"\"",
+          "expected": [
+            "😀",
+            "\""
+          ],
+          "actual": [
+            "😀",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"a\"\"b\"",
+          "expected": [
+            "😀",
+            "a\"b"
+          ],
+          "actual": [
+            "😀",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"a,b\"",
+          "expected": [
+            "😀",
+            "a,b"
+          ],
+          "actual": [
+            "😀",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\"\"\"\"\"",
+          "expected": [
+            "😀",
+            "\"\""
+          ],
+          "actual": [
+            "😀",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"😀\"",
+          "expected": [
+            "😀",
+            "😀"
+          ],
+          "actual": [
+            "😀",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"line\nnext\"",
+          "expected": [
+            "😀",
+            "line\nnext"
+          ],
+          "actual": [
+            "😀",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"😀\",\"\r\n\"",
+          "expected": [
+            "😀",
+            "\r\n"
+          ],
+          "actual": [
+            "😀",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"",
+          "expected": [
+            "line\nnext",
+            ""
+          ],
+          "actual": [
+            "line\nnext",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"plain\"",
+          "expected": [
+            "line\nnext",
+            "plain"
+          ],
+          "actual": [
+            "line\nnext",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\",\"",
+          "expected": [
+            "line\nnext",
+            ","
+          ],
+          "actual": [
+            "line\nnext",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"\"\"",
+          "expected": [
+            "line\nnext",
+            "\""
+          ],
+          "actual": [
+            "line\nnext",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"a\"\"b\"",
+          "expected": [
+            "line\nnext",
+            "a\"b"
+          ],
+          "actual": [
+            "line\nnext",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"a,b\"",
+          "expected": [
+            "line\nnext",
+            "a,b"
+          ],
+          "actual": [
+            "line\nnext",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\"\"\"\"\"",
+          "expected": [
+            "line\nnext",
+            "\"\""
+          ],
+          "actual": [
+            "line\nnext",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"😀\"",
+          "expected": [
+            "line\nnext",
+            "😀"
+          ],
+          "actual": [
+            "line\nnext",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"line\nnext\"",
+          "expected": [
+            "line\nnext",
+            "line\nnext"
+          ],
+          "actual": [
+            "line\nnext",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"line\nnext\",\"\r\n\"",
+          "expected": [
+            "line\nnext",
+            "\r\n"
+          ],
+          "actual": [
+            "line\nnext",
+            "\r\n"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"",
+          "expected": [
+            "\r\n",
+            ""
+          ],
+          "actual": [
+            "\r\n",
+            ""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"plain\"",
+          "expected": [
+            "\r\n",
+            "plain"
+          ],
+          "actual": [
+            "\r\n",
+            "plain"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\",\"",
+          "expected": [
+            "\r\n",
+            ","
+          ],
+          "actual": [
+            "\r\n",
+            ","
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"\"\"",
+          "expected": [
+            "\r\n",
+            "\""
+          ],
+          "actual": [
+            "\r\n",
+            "\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"a\"\"b\"",
+          "expected": [
+            "\r\n",
+            "a\"b"
+          ],
+          "actual": [
+            "\r\n",
+            "a\"b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"a,b\"",
+          "expected": [
+            "\r\n",
+            "a,b"
+          ],
+          "actual": [
+            "\r\n",
+            "a,b"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\"\"\"\"\"",
+          "expected": [
+            "\r\n",
+            "\"\""
+          ],
+          "actual": [
+            "\r\n",
+            "\"\""
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"😀\"",
+          "expected": [
+            "\r\n",
+            "😀"
+          ],
+          "actual": [
+            "\r\n",
+            "😀"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"line\nnext\"",
+          "expected": [
+            "\r\n",
+            "line\nnext"
+          ],
+          "actual": [
+            "\r\n",
+            "line\nnext"
+          ],
+          "passed": true
+        },
+        {
+          "row": "\"\r\n\",\"\r\n\"",
+          "expected": [
+            "\r\n",
+            "\r\n"
+          ],
+          "actual": [
+            "\r\n",
+            "\r\n"
+          ],
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

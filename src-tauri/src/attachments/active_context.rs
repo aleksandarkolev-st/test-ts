@@ -57,7 +57,7 @@ fn vscode_workspaces(title: &str) -> Vec<PathBuf> {
 }
 #[cfg(windows)]
 pub fn detect() -> Result<ActiveContext,String> {
-    use windows::Win32::{Foundation::HWND, System::Com::*, UI::{Accessibility::*,WindowsAndMessaging::*}};
+    use windows::Win32::{Foundation::{HWND,CloseHandle}, System::{Com::*,Threading::*}, UI::{Accessibility::*,WindowsAndMessaging::*}};
     observe_foreground();
     let source_window=LAST_EXTERNAL.load(Ordering::Acquire);
     if source_window==0 {return Err("Focus VS Code, an Explorer folder, or a browser IDE, then press Ctrl Shift P".into());}
@@ -66,11 +66,19 @@ pub fn detect() -> Result<ActiveContext,String> {
         if !IsWindow(Some(hwnd)).as_bool(){return Err("The previous context window has closed; focus the project and retry".into());}
         let mut buf=[0u16;4096];let length=GetWindowTextW(hwnd,&mut buf);
         let title=String::from_utf16_lossy(&buf[..length.max(0) as usize]);
-        let lower=title.to_lowercase();
-        let vscode=lower.contains("visual studio code")||lower.contains("vscodium");
-        let browser=lower.contains("edge")||lower.contains("chrome")||lower.contains("firefox");
+        let mut pid=0;GetWindowThreadProcessId(hwnd,Some(&mut pid));
+        let process=OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,false,pid).map_err(|_|"Could not identify the context application")?;
+        let mut image=[0u16;32768];let mut image_len=image.len()as u32;
+        let queried=QueryFullProcessImageNameW(process,PROCESS_NAME_WIN32,windows::core::PWSTR(image.as_mut_ptr()),&mut image_len);
+        let _=CloseHandle(process);queried.map_err(|_|"Could not identify the context application")?;
+        let image=String::from_utf16_lossy(&image[..image_len as usize]);
+        let executable=PathBuf::from(image).file_name().unwrap_or_default().to_string_lossy().to_ascii_lowercase();
+        // Web-page titles cannot impersonate an editor and expose a local folder.
+        let vscode=["code.exe","code - insiders.exe","vscodium.exe"].contains(&executable.as_str());
+        let browser=["msedge.exe","chrome.exe","firefox.exe"].contains(&executable.as_str());
+        let explorer=executable=="explorer.exe";
         let mut candidates=if vscode{vscode_workspaces(&title)}else{vec![]};
-        if let Some(path)=existing_directory(&title){candidates.push(path);}
+        if explorer {if let Some(path)=existing_directory(&title){candidates.push(path);}}
         // UIA is inspected on the explicit handoff, never on the idle timer.
         let initialized=CoInitializeEx(None,COINIT_MULTITHREADED).is_ok();
         {
@@ -78,7 +86,7 @@ pub fn detect() -> Result<ActiveContext,String> {
             // Query the shell view associated with this precise window instead.
             use windows::core::Interface;
             use windows::Win32::{UI::Shell::{IShellWindows,IWebBrowserApp,ShellWindows},System::Variant::VARIANT};
-            if let Ok(shell)=CoCreateInstance::<_,IShellWindows>(&ShellWindows,None,CLSCTX_LOCAL_SERVER) {
+            if explorer {if let Ok(shell)=CoCreateInstance::<_,IShellWindows>(&ShellWindows,None,CLSCTX_LOCAL_SERVER) {
                 for index in 0..shell.Count().unwrap_or(0).min(256) {
                     let view=shell.Item(&VARIANT::from(index)).and_then(|item|item.cast::<IWebBrowserApp>());
                     if let Ok(view)=view {
@@ -87,8 +95,9 @@ pub fn detect() -> Result<ActiveContext,String> {
                         }
                     }
                 }
-            }
+            }}
             let inspected=(||->windows::core::Result<()>{
+                if !explorer{return Ok(());}
                 let automation:IUIAutomation=CoCreateInstance(&CUIAutomation,None,CLSCTX_INPROC_SERVER)?;
                 let root=automation.ElementFromHandle(hwnd)?;
                 let nodes=root.FindAll(TreeScope_Descendants,&automation.CreateTrueCondition()?)?;

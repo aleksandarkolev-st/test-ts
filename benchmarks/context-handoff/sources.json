@@ -1,0 +1,327 @@
+[
+  {
+    "id": 4,
+    "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+    "retrievedAt": "2026-10-14T12:34:31.190Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "4",
+      "title": "Median of Two Sorted Arrays",
+      "difficulty": "Hard",
+      "titleSlug": "median-of-two-sorted-arrays"
+    },
+    "verified": true
+  },
+  {
+    "id": 10,
+    "url": "https://leetcode.com/problems/regular-expression-matching/",
+    "retrievedAt": "2026-10-14T12:34:31.417Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "10",
+      "title": "Regular Expression Matching",
+      "difficulty": "Hard",
+      "titleSlug": "regular-expression-matching"
+    },
+    "verified": true
+  },
+  {
+    "id": 32,
+    "url": "https://leetcode.com/problems/longest-valid-parentheses/",
+    "retrievedAt": "2026-10-14T12:34:31.634Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "32",
+      "title": "Longest Valid Parentheses",
+      "difficulty": "Hard",
+      "titleSlug": "longest-valid-parentheses"
+    },
+    "verified": true
+  },
+  {
+    "id": 42,
+    "url": "https://leetcode.com/problems/trapping-rain-water/",
+    "retrievedAt": "2026-10-14T12:34:31.887Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "42",
+      "title": "Trapping Rain Water",
+      "difficulty": "Hard",
+      "titleSlug": "trapping-rain-water"
+    },
+    "verified": true
+  },
+  {
+    "id": 44,
+    "url": "https://leetcode.com/problems/wildcard-matching/",
+    "retrievedAt": "2026-10-14T12:34:32.152Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "44",
+      "title": "Wildcard Matching",
+      "difficulty": "Hard",
+      "titleSlug": "wildcard-matching"
+    },
+    "verified": true
+  },
+  {
+    "id": 76,
+    "url": "https://leetcode.com/problems/minimum-window-substring/",
+    "retrievedAt": "2026-10-14T12:34:32.402Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "76",
+      "title": "Minimum Window Substring",
+      "difficulty": "Hard",
+      "titleSlug": "minimum-window-substring"
+    },
+    "verified": true
+  },
+  {
+    "id": 84,
+    "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+    "retrievedAt": "2026-10-14T12:34:32.618Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "84",
+      "title": "Largest Rectangle in Histogram",
+      "difficulty": "Hard",
+      "titleSlug": "largest-rectangle-in-histogram"
+    },
+    "verified": true
+  },
+  {
+    "id": 85,
+    "url": "https://leetcode.com/problems/maximal-rectangle/",
+    "retrievedAt": "2026-10-14T12:34:32.893Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "85",
+      "title": "Maximal Rectangle",
+      "difficulty": "Hard",
+      "titleSlug": "maximal-rectangle"
+    },
+    "verified": true
+  },
+  {
+    "id": 115,
+    "url": "https://leetcode.com/problems/distinct-subsequences/",
+    "retrievedAt": "2026-10-14T12:34:33.127Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "115",
+      "title": "Distinct Subsequences",
+      "difficulty": "Hard",
+      "titleSlug": "distinct-subsequences"
+    },
+    "verified": true
+  },
+  {
+    "id": 132,
+    "url": "https://leetcode.com/problems/palindrome-partitioning-ii/",
+    "retrievedAt": "2026-10-14T12:34:33.428Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "132",
+      "title": "Palindrome Partitioning II",
+      "difficulty": "Hard",
+      "titleSlug": "palindrome-partitioning-ii"
+    },
+    "verified": true
+  },
+  {
+    "id": 239,
+    "url": "https://leetcode.com/problems/sliding-window-maximum/",
+    "retrievedAt": "2026-10-14T12:34:33.831Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "239",
+      "title": "Sliding Window Maximum",
+      "difficulty": "Hard",
+      "titleSlug": "sliding-window-maximum"
+    },
+    "verified": true
+  },
+  {
+    "id": 312,
+    "url": "https://leetcode.com/problems/burst-balloons/",
+    "retrievedAt": "2026-10-14T12:34:34.061Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "312",
+      "title": "Burst Balloons",
+      "difficulty": "Hard",
+      "titleSlug": "burst-balloons"
+    },
+    "verified": true
+  },
+  {
+    "id": 315,
+    "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+    "retrievedAt": "2026-10-14T12:34:34.320Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "315",
+      "title": "Count of Smaller Numbers After Self",
+      "difficulty": "Hard",
+      "titleSlug": "count-of-smaller-numbers-after-self"
+    },
+    "verified": true
+  },
+  {
+    "id": 329,
+    "url": "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/",
+    "retrievedAt": "2026-10-14T12:34:34.548Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "329",
+      "title": "Longest Increasing Path in a Matrix",
+      "difficulty": "Hard",
+      "titleSlug": "longest-increasing-path-in-a-matrix"
+    },
+    "verified": true
+  },
+  {
+    "id": 493,
+    "url": "https://leetcode.com/problems/reverse-pairs/",
+    "retrievedAt": "2026-10-14T12:34:34.782Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "493",
+      "title": "Reverse Pairs",
+      "difficulty": "Hard",
+      "titleSlug": "reverse-pairs"
+    },
+    "verified": true
+  },
+  {
+    "id": 3,
+    "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+    "retrievedAt": "2026-10-14T12:34:35.013Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "3",
+      "title": "Longest Substring Without Repeating Characters",
+      "difficulty": "Medium",
+      "titleSlug": "longest-substring-without-repeating-characters"
+    },
+    "verified": true
+  },
+  {
+    "id": 33,
+    "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+    "retrievedAt": "2026-10-14T12:34:35.269Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "33",
+      "title": "Search in Rotated Sorted Array",
+      "difficulty": "Medium",
+      "titleSlug": "search-in-rotated-sorted-array"
+    },
+    "verified": true
+  },
+  {
+    "id": 56,
+    "url": "https://leetcode.com/problems/merge-intervals/",
+    "retrievedAt": "2026-10-14T12:34:35.492Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "56",
+      "title": "Merge Intervals",
+      "difficulty": "Medium",
+      "titleSlug": "merge-intervals"
+    },
+    "verified": true
+  },
+  {
+    "id": 200,
+    "url": "https://leetcode.com/problems/number-of-islands/",
+    "retrievedAt": "2026-10-14T12:34:35.739Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "200",
+      "title": "Number of Islands",
+      "difficulty": "Medium",
+      "titleSlug": "number-of-islands"
+    },
+    "verified": true
+  },
+  {
+    "id": 322,
+    "url": "https://leetcode.com/problems/coin-change/",
+    "retrievedAt": "2026-10-14T12:34:35.953Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "322",
+      "title": "Coin Change",
+      "difficulty": "Medium",
+      "titleSlug": "coin-change"
+    },
+    "verified": true
+  },
+  {
+    "id": 1,
+    "url": "https://leetcode.com/problems/two-sum/",
+    "retrievedAt": "2026-10-14T12:34:36.351Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "1",
+      "title": "Two Sum",
+      "difficulty": "Easy",
+      "titleSlug": "two-sum"
+    },
+    "verified": true
+  },
+  {
+    "id": 20,
+    "url": "https://leetcode.com/problems/valid-parentheses/",
+    "retrievedAt": "2026-10-14T12:34:36.572Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "20",
+      "title": "Valid Parentheses",
+      "difficulty": "Easy",
+      "titleSlug": "valid-parentheses"
+    },
+    "verified": true
+  },
+  {
+    "id": 121,
+    "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+    "retrievedAt": "2026-10-14T12:34:37.063Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "121",
+      "title": "Best Time to Buy and Sell Stock",
+      "difficulty": "Easy",
+      "titleSlug": "best-time-to-buy-and-sell-stock"
+    },
+    "verified": true
+  },
+  {
+    "id": 217,
+    "url": "https://leetcode.com/problems/contains-duplicate/",
+    "retrievedAt": "2026-10-14T12:34:37.391Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "217",
+      "title": "Contains Duplicate",
+      "difficulty": "Easy",
+      "titleSlug": "contains-duplicate"
+    },
+    "verified": true
+  },
+  {
+    "id": 704,
+    "url": "https://leetcode.com/problems/binary-search/",
+    "retrievedAt": "2026-10-14T12:34:37.620Z",
+    "httpStatus": 200,
+    "metadata": {
+      "questionFrontendId": "704",
+      "title": "Binary Search",
+      "difficulty": "Easy",
+      "titleSlug": "binary-search"
+    },
+    "verified": true
+  }
+]

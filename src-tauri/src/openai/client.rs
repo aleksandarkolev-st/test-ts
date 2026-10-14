@@ -471,32 +471,20 @@ fn stream_error(v: &serde_json::Value) -> String {
 #[derive(Default)]
 pub struct SseParser {
     bytes: Vec<u8>,
+    search_from: usize,
 }
 impl SseParser {
     pub fn push(&mut self, chunk: &[u8]) -> Result<Vec<String>, String> {
         self.bytes.extend_from_slice(chunk);
-        if self.bytes.len() > 1_048_576 {
-            return Err("Answer stream event exceeds size limit".into());
-        }
         let mut result = vec![];
-        loop {
-            let lf = self
-                .bytes
-                .windows(2)
-                .position(|w| w == b"\n\n")
-                .map(|i| (i, 2));
-            let crlf = self
-                .bytes
-                .windows(4)
-                .position(|w| w == b"\r\n\r\n")
-                .map(|i| (i, 4));
-            let delim = match (lf, crlf) {
-                (Some(a), Some(b)) => Some(if a.0 < b.0 { a } else { b }),
-                (a, None) => a,
-                (None, b) => b,
-            };
-            let Some((i, n)) = delim else { break };
-            let data: Vec<_> = self.bytes.drain(..i + n).collect();
+        let mut consumed=0;
+        let mut cursor=self.search_from;
+        while cursor+1<self.bytes.len() {
+            let width=if self.bytes[cursor..].starts_with(b"\n\n"){2}
+                else if self.bytes[cursor..].starts_with(b"\r\n\r\n"){4}
+                else {cursor+=1;continue;};
+            if cursor+width-consumed>1_048_576{return Err("Answer stream event exceeds size limit".into());}
+            let data=&self.bytes[consumed..cursor+width];
             let s =
                 std::str::from_utf8(&data).map_err(|_| "Answer stream contains invalid UTF-8")?;
             let joined = s
@@ -510,7 +498,14 @@ impl SseParser {
             if !joined.is_empty() {
                 result.push(joined)
             }
+            consumed=cursor+width;
+            cursor=consumed;
         }
+        // Drain once per network chunk, and only rescan the possible delimiter
+        // overlap next time. A fragmented large event must not rescan its prefix.
+        if consumed>0{self.bytes.drain(..consumed);}
+        self.search_from=self.bytes.len().saturating_sub(3);
+        if self.bytes.len()>1_048_576{return Err("Answer stream event exceeds size limit".into());}
         Ok(result)
     }
 }
@@ -521,6 +516,24 @@ mod tests {
         io::{AsyncReadExt, AsyncWriteExt},
         net::TcpListener,
     };
+    #[test]
+    fn sse_size_limit_applies_to_each_event_not_the_network_chunk() {
+        let text="x".repeat(600_000);
+        let mut parser=SseParser::default();
+        let batch=format!("data: {text}\n\ndata: {text}\r\n\r\n");
+        assert_eq!(parser.push(batch.as_bytes()).unwrap(),vec![text.clone(),text]);
+        assert!(parser.push(format!("data: {}\n\n","x".repeat(1_048_576)).as_bytes()).is_err());
+    }
+    #[test]
+    fn sse_delimiters_and_utf8_survive_every_chunk_boundary() {
+        let body="data: first α\r\n\r\ndata: second 😀\n\ndata: third\n\ndata: tail";
+        for width in 1..=body.len(){
+            let mut parser=SseParser::default();let mut events=vec![];
+            for chunk in body.as_bytes().chunks(width){events.extend(parser.push(chunk).unwrap());}
+            events.extend(parser.push(b"\n\n").unwrap());
+            assert_eq!(events,vec!["first α","second 😀","third","tail"]);
+        }
+    }
     fn automatic_message(intent:&str,text:&str)->StreamEvent {
         StreamEvent::Delta(serde_json::json!({"intent":intent,"text":text}).to_string())
     }

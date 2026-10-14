@@ -111,6 +111,60 @@
       },
       "note": "Exclusive upper-bound binary search restores lower-bound invariant, retains n as a valid result, handles duplicates and empty arrays, and shrinks every iteration. Same synchronous export and no dependencies/test/API changes. O(log(n+1)) time and O(1) space. Revised marker was recovered from the explicitly reattached project.",
       "evidence": "interview-search-boundary-completed.json"
+    },
+    {
+      "id": "algorithm-132",
+      "kind": "regular",
+      "finalAnswerSha256": "c027cf628c927319127240b95cef2e3d37e1216b34cd63b251f9af362287e45a",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Palindrome table dependencies end before the current end index; prefix cuts use previously optimal prefixes and zero for whole-prefix palindromes. Nonempty-string contract honored. O(n^2) time and space.",
+      "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-239",
+      "kind": "regular",
+      "finalAnswerSha256": "93558d9898ebc94a986319b60e8df23055a30ae9e3de2a02da43596de20ec39c",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Circular index deque expires before insertion, removes dominated/equal tails, preserves maximum at its head and never exceeds k slots. Each index enters/leaves once: O(n) time, O(k) auxiliary space plus result.",
+      "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-312",
+      "kind": "regular",
+      "finalAnswerSha256": "7312d0699b30e8005e7e2fa14e986b99d9e736fc7047574559b5dd3628fff3e0",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Interval DP chooses the last balloon between surviving boundaries. Smaller-width subproblems are available first, and best=-Infinity handles required negative totals under the broader visible contract. Empty interval returns zero. O(n^3) time and O(n^2) space.",
+      "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-315",
+      "kind": "regular",
+      "finalAnswerSha256": "f45e1964de06708e2a1e7cca61babb8e3e1024fc6af7d9b94830a3fa7788b801",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Coordinate compression and strict rank-1 Fenwick query count only smaller right-side values; insert after querying, retaining duplicate frequencies. Input copy/compressed values avoid mutation. O(n log n) time, O(n) space.",
+      "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-329",
+      "kind": "regular",
+      "finalAnswerSha256": "405d9295dbcecc80ab39580e2716c97f3ea59f415bf100248378404dd5ac553b",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Iterative topological removal starts at cells with no larger neighbors; next-layer boundaries wait for every larger dependency, yielding maximum path length. Strict comparisons exclude equal moves and cycles. Head-index queue avoids shift and recursion. O(rows*columns) time and space.",
+      "evidence": "interview-counted-regular-10-15.json"
+    },
+    {
+      "id": "algorithm-493",
+      "kind": "regular",
+      "finalAnswerSha256": "087ca212a153535388a893d0d919bf01e9119cf16c531a7973400568c3b3220c",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Merge-sort counts cross-half strict double comparisons before merging, with a monotonic right pointer over sorted halves. Equal thresholds excluded, negative duplicates handled, original input copied. O(n log n) time and O(n) space.",
+      "evidence": "interview-counted-regular-10-15.json"
     }
   ]
 }

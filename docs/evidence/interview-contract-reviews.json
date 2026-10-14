@@ -492,6 +492,58 @@
       "diagnosisReview": null,
       "note": "Stack stores parent parts and count, resets count on each opening bracket, and restores the parent on closing before appending repeated inner text. Handles nesting, multidigit counts, adjacent groups, literal text and empty input. Iterative parsing avoids call-stack depth. Time includes all intermediate joins/repeats, so O(n + total materialized characters), not an unsupported O(n + final output) claim; space includes stored parts and expanded strings. Review assumes strings/counts materializable by the JavaScript runtime.",
       "evidence": "interview-counted-synthetic-41-45.json"
+    },
+    {
+      "id": "lru-recency",
+      "kind": "bug",
+      "finalAnswerSha256": "aa77ce58e0b6d25f9009f61c0bbcfb95658756417a0890ac6d3343dc053c56e5",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.push(m.has(k)?m.get(k):-1)",
+        "counterexample": {
+          "args": [
+            2,
+            [
+              [
+                "put",
+                "a",
+                1
+              ],
+              [
+                "put",
+                "b",
+                2
+              ],
+              [
+                "get",
+                "a"
+              ],
+              [
+                "put",
+                "c",
+                3
+              ],
+              [
+                "get",
+                "a"
+              ]
+            ]
+          ],
+          "originalActual": [
+            1,
+            -1
+          ],
+          "expected": [
+            1,
+            1
+          ]
+        },
+        "note": "Map.get does not refresh insertion order. Capacity two and five operations are minimal: two inserts, refresh, overflow insertion and observing read; capacity one cannot distinguish recency."
+      },
+      "note": "Delete/reinsert refreshes successful gets and replacement puts; misses preserve order; overflow evicts the first key. Correct zero-valued entries through has check and unchanged synchronous export/API. No dependencies or test edits. Expected O(m) map work with implementation-dependent iteration costs, O(m) output and bounded cache space. Actual service smoke passed; fresh patch marker and reading checks passed.",
+      "evidence": "interview-lru-recency-completed.json"
     }
   ]
 }

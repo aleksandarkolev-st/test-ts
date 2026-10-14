@@ -589,6 +589,44 @@
       "diagnosisReview": null,
       "note": "Descending denominations include all six subtractive pairs. Repeated subtraction terminates at zero and emits canonical uppercase numerals. Bounded 1–3999 contract gives O(1) time/space. Independent positional oracle exhaustively verified all 3999 integers for both generated implementations.",
       "evidence": "interview-roman-exhaustive-domain.json"
+    },
+    {
+      "id": "ttl-expiry",
+      "kind": "bug",
+      "finalAnswerSha256": "8c2424de6dc3806842f7a2a6e22eeb7e968602445f8762a00739c333b2201d3b",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.push(!x||t>x.end?null:x.v)",
+        "counterexample": {
+          "args": [
+            [
+              [
+                0,
+                "put",
+                "a",
+                7,
+                1
+              ],
+              [
+                1,
+                "get",
+                "a"
+              ]
+            ]
+          ],
+          "originalActual": [
+            7
+          ],
+          "expected": [
+            null
+          ]
+        },
+        "note": "Equality was incorrectly live. Two operations are minimal: store a value then observe it at its expiry."
+      },
+      "note": "Greater-than-or-equal rejects reads exactly at expiry and later; puts replace value and expiry together. Empty input, zero TTL, pre-boundary get and overwrite traces are correct. Retains entries and evaluates each get timestamp using specified putTime+ttl JavaScript arithmetic. Same synchronous export/API; no dependencies or test edits. Expected O(m) time and O(distinct keys + get count) space. Actual service smoke, fresh patch marker and native reading checks passed.",
+      "evidence": "interview-ttl-expiry-completed.json"
     }
   ]
 }

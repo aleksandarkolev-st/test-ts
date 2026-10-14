@@ -1127,6 +1127,31 @@
       "additionalEvidence": [
         "interview-routing-weighted-graphs.json"
       ]
+    },
+    {
+      "id": "dependency-completion",
+      "kind": "bug",
+      "finalAnswerSha256": "77c5888c00f59923d5a6e71bdb119f004a7c6cebab125eff5b0dc4589fc25cd5",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.length===n-1",
+        "counterexample": {
+          "args": [
+            1,
+            []
+          ],
+          "originalActual": [],
+          "expected": [
+            0
+          ]
+        },
+        "note": "One isolated vertex is minimal; the zero-vertex graph returns the required empty order."
+      },
+      "note": "Completion now requires exactly n emitted vertices, rejecting cyclic partial orders. Sorting every ready queue before extraction selects the smallest available vertex; per-occurrence indegree increments and outgoing decrements remain consistent even with duplicate edges. Both candidates pass all 1062 small directed-graph/duplicate-edge cases against independent complete permutation search. API/dependencies/tests unchanged; actual smoke, patch marker and native reading checks pass. Repeated sorting and full-edge scans have higher time cost than a heap/adjacency approach; no optimized complexity requirement supplied.",
+      "evidence": "interview-dependency-completion-completed.json",
+      "supplementaryEvidence": "interview-dependency-ordering-supplementary.json"
     }
   ]
 }

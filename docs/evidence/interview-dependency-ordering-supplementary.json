@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen grades and distinct interview counts unchanged",
+  "domain": "All 531 directed graphs on n=0..3 vertices with optional self-loops, each once with unique edges and once with every edge duplicated: 1062 cases per candidate.",
+  "oracle": "Independent exhaustive numeric-lexicographic permutation search: choose the first permutation placing every edge source strictly before its destination, or empty if none.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "a55d5e93fd47d1832b22a555001c798a79114cf1122655ade9f2f71a4df4113e",
+      "cases": 1062,
+      "passedCases": 1062,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "77c5888c00f59923d5a6e71bdb119f004a7c6cebab125eff5b0dc4589fc25cd5",
+      "cases": 1062,
+      "passedCases": 1062,
+      "failures": []
+    }
+  ]
+}

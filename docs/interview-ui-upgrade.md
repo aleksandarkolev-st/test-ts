@@ -130,3 +130,9 @@ The bracket diagnosis correctly cites final unconditional success and a single u
 The routing diagnosis uses the minimal two-vertex parallel-edge counterexample and correctly explains premature settlement at discovery. Both candidates pass 2356 additional nonnegative weighted graph/witness checks against independent vertex-simple path enumeration. A unique-chain safe-integer-edge witness still yields an incorrect exactly representable terminal distance after intermediate precision loss. The final answer acknowledges Number limitations, which remain recorded as a broader mathematical-distance contract failure; no hidden size bound is added. The numerical evidence explicitly does not claim every intermediate exact distance is representable.
 
 Evidence: `evidence/interview-shortest-path-settlement-completed.json`, `evidence/interview-routing-weighted-graphs.json`, and `evidence/interview-routing-integer-precision.json`. Remaining: 20 regular and 8 bug interviews.
+
+### Dependency completion bug checkpoint
+
+80 regular and 13 bug interviews are complete (279 completed-attempt measured responses). All 93 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All thirteen bug diagnoses pass; broader final contract review passes 75/93, retaining the same 18 failures.
+
+The dependency diagnosis identifies the n-1 completion condition, with the minimal one-vertex empty-edge graph returning [] instead of [0]. Both fixes pass 1062 independently checked directed graph/duplicate-edge cases. Their repeated queue sorting and full edge scans are documented without claiming heap-level complexity. Source/API/dependencies/tests constraints, actual smoke, original/patched handoffs and reading checks passed. Evidence: `evidence/interview-dependency-completion-completed.json` and `evidence/interview-dependency-ordering-supplementary.json`. Remaining: 20 regular and 7 bug interviews.

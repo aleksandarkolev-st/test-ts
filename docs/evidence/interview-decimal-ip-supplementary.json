@@ -1,0 +1,250 @@
+{
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary long decimal carry and strict IP character checks. No interview counts or frozen fixture scores changed.",
+  "decimalOracle": "Independent BigInt multiplication in evaluator only; candidate still forbids BigInt.",
+  "ipOracle": "Literal malformed characters must yield Neither; last two addresses conform to the supplied bounded syntax.",
+  "runs": [
+    {
+      "id": "decimal-string-multiplication",
+      "round": 2,
+      "answerSha256": "b4ef6352aaa5af1fb7312e1ca09de3205fa3e204c7d42b730d13cb6737576eee",
+      "cases": [
+        {
+          "args": [
+            "9999999999999999999999999999999999999999999999999999999999999999",
+            "9999999999999999999999999999999999999999999999999999999999999999"
+          ],
+          "expected": "99999999999999999999999999999999999999999999999999999999999999980000000000000000000000000000000000000000000000000000000000000001",
+          "actual": "99999999999999999999999999999999999999999999999999999999999999980000000000000000000000000000000000000000000000000000000000000001",
+          "passed": true
+        },
+        {
+          "args": [
+            "000000",
+            "77777777777777777777777777777777777777777777777777777777777777777777777777777777"
+          ],
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "args": [
+            "000123456789012345678901234567890",
+            "0012345678901234567890"
+          ],
+          "expected": "1524157875323883675034293577501905199875019052100",
+          "actual": "1524157875323883675034293577501905199875019052100",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "decimal-string-multiplication",
+      "round": 3,
+      "answerSha256": "26100f30d8079959c18bf8e4a234bbc51889ab30d7ac033d96d0d218f2b5b6f3",
+      "cases": [
+        {
+          "args": [
+            "9999999999999999999999999999999999999999999999999999999999999999",
+            "9999999999999999999999999999999999999999999999999999999999999999"
+          ],
+          "expected": "99999999999999999999999999999999999999999999999999999999999999980000000000000000000000000000000000000000000000000000000000000001",
+          "actual": "99999999999999999999999999999999999999999999999999999999999999980000000000000000000000000000000000000000000000000000000000000001",
+          "passed": true
+        },
+        {
+          "args": [
+            "000000",
+            "77777777777777777777777777777777777777777777777777777777777777777777777777777777"
+          ],
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "args": [
+            "000123456789012345678901234567890",
+            "0012345678901234567890"
+          ],
+          "expected": "1524157875323883675034293577501905199875019052100",
+          "actual": "1524157875323883675034293577501905199875019052100",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "ip-address-classification",
+      "round": 2,
+      "answerSha256": "d04f5ea0de08f28568df26beecfdfd53597c535d1533a42f42ed59f4591b16b5",
+      "cases": [
+        {
+          "args": [
+            "1.2.3.4\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:8\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.4\r\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:8 "
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            " 1.2.3.4"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.4 "
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.+4"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:g"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "255.0.1.10"
+          ],
+          "expected": "IPv4",
+          "actual": "IPv4",
+          "passed": true
+        },
+        {
+          "args": [
+            "ABCD:0:0:0:0:0:0:ffff"
+          ],
+          "expected": "IPv6",
+          "actual": "IPv6",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "ip-address-classification",
+      "round": 3,
+      "answerSha256": "702d712c2ae55942d1600bf2fb43dac206424d3a16452d639b5e322ed449f3e4",
+      "cases": [
+        {
+          "args": [
+            "1.2.3.4\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:8\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.4\r\n"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:8 "
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            " 1.2.3.4"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.4 "
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1.2.3.+4"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "1:2:3:4:5:6:7:g"
+          ],
+          "expected": "Neither",
+          "actual": "Neither",
+          "passed": true
+        },
+        {
+          "args": [
+            "255.0.1.10"
+          ],
+          "expected": "IPv4",
+          "actual": "IPv4",
+          "passed": true
+        },
+        {
+          "args": [
+            "ABCD:0:0:0:0:0:0:ffff"
+          ],
+          "expected": "IPv6",
+          "actual": "IPv6",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

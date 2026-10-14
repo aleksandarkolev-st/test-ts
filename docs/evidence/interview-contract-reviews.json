@@ -704,6 +704,24 @@
       },
       "note": "Window id calculation and accepted-event counting fix the targeted bug for integer limits in O(n) time/O(1) auxiliary space plus output. Nondecreasing times permit one active window. Broad at-most contract does not restrict limit to integers: both generated implementations accept two events for limit 1.5, violating the quota. Frozen integer scores unchanged; witness retained in interview-quota-fractional-limit.json. Same synchronous export/API, no dependencies or test edits. Actual smoke, fresh patch marker and native reading checks passed.",
       "evidence": "interview-window-reset-completed.json"
+    },
+    {
+      "id": "decimal-string-multiplication",
+      "kind": "regular",
+      "finalAnswerSha256": "26100f30d8079959c18bf8e4a234bbc51889ab30d7ac033d96d0d218f2b5b6f3",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Grade-school rows propagate bounded carries through normalized digits. Prior rows never touched the assigned leading carry position, so digits[i]=carry is safe. Leading zeros trim to a single zero. No BigInt or whole-value Number conversion in candidate. O(mn) time/O(m+n) space. Three supplementary zero/leading-zero/long-carry cases, including 64-digit nines multiplied together, match independent evaluator BigInt in both implementation rounds.",
+      "evidence": "interview-decimal-ip-supplementary.json"
+    },
+    {
+      "id": "ip-address-classification",
+      "kind": "regular",
+      "finalAnswerSha256": "702d712c2ae55942d1600bf2fb43dac206424d3a16452d639b5e322ed449f3e4",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "IPv4 validates four nonempty ASCII decimal groups of at most three digits, range<=255 and no leading zeros. IPv6 validates eight nonempty 1–4-character ASCII hex groups; shorthand rejected. Negative character classes reject trailing newlines and Unicode separators without relying on dollar-anchor semantics. O(n) time/space. Ten supplementary strict-character and positive controls pass in both rounds.",
+      "evidence": "interview-decimal-ip-supplementary.json"
     }
   ]
 }

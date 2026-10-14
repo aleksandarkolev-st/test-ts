@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-14",
+  "tool": "Computer Use @oai/sky",
+  "checks": [
+    {"check": "Browser IDE on explicit Ctrl Shift P uses screenshot", "passed": true, "evidence": "Formal cases 1, 3, 5, 7, 9: current marker recovered and executable solution graded"},
+    {"check": "Explorer collapsed address bar resolves exact project", "passed": true, "evidence": "Native detect_context returned case-2 as folder with its canonical path after Return collapsed the address bar; case 2 passed 76 functional cases"},
+    {"check": "Actual VS Code workspace resolves exact project", "passed": true, "evidence": "Native detect_context returned Welcome - case-4 - Visual Studio Code as vscode and the case-4 canonical path; subsequent case folders resolved after switching workspace"},
+    {"check": "Local detection does not attach or ask", "passed": true, "evidence": "Before case 7 shortcut, detect_context returned the browser while snapshot project, screenshot, question and answer remained empty"},
+    {"check": "Ctrl Alt Left moves overlay from an external app", "passed": true, "before": {"x":1932,"y":1463}, "after": {"x":1862,"y":1463}, "physicalDelta": {"x":-70,"y":0}, "expectedLogicalStep":40, "displayScale":1.75}
+  ],
+  "limitations": ["Single-folder VS Code workspace storage; ambiguous folders require explicit selection", "Browser IDE handoff captures rendered screen, not hidden project files", "Current-monitor work-area movement; no cross-monitor jump shortcut"]
+}

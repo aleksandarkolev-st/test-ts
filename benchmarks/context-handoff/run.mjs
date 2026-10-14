@@ -7,7 +7,8 @@ import {createHash,randomBytes} from 'node:crypto';
 import path from 'node:path';
 import {problems} from './catalog.mjs';
 import {gradeCode} from './oracles.mjs';
-const root=process.cwd(),out=path.join(root,'artifacts/context-handoff'),local=path.join(root,'.local/context-handoff');
+const controlsOnly=process.argv.includes('--controls-only');
+const root=process.cwd(),out=path.join(root,controlsOnly?'artifacts/context-controls':'artifacts/context-handoff'),local=path.join(root,'.local/context-handoff');
 await mkdir(out,{recursive:true});await mkdir(local,{recursive:true});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let app,vite,browser,screenBrowser,main,overlay,screen,ready=null,ack=false;
@@ -22,7 +23,8 @@ const server=createServer(async(req,res)=>{
   if(req.url==='/ack'&&req.method==='POST'){ack=true;res.end('ok');return;}
   if(req.url==='/snapshot'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('get_snapshot')));return;}
   if(req.url==='/detect'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('detect_context')));return;}
-  res.setHeader('Content-Type','text/html');res.end(`<!doctype html><title>Context Handoff Benchmark IDE</title><style>body{background:#f8f5ef;color:#151515;font:24px Segoe UI;margin:30px;max-width:700px}h1{font-size:30px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:20px Consolas}small{color:#555}</style><h1>${escape(ready?.title??'Preparing benchmark')}</h1><pre>${escape(ready?.content??'Please wait')}</pre><small>Synthetic test workspace. No private files or messages.</small>`);
+  if(req.url==='/diagnostics'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('native_diagnostics')));return;}
+  res.setHeader('Content-Type','text/html');res.end(`<!doctype html><title>${escape(ready?.windowTitle??'Context Handoff Benchmark IDE')}</title><style>body{background:#f8f5ef;color:#151515;font:24px Segoe UI;margin:30px;max-width:700px}h1{font-size:30px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:20px Consolas}small{color:#555}</style><h1>${escape(ready?.title??'Preparing benchmark')}</h1><pre>${escape(ready?.content??'Please wait')}</pre><small>Synthetic test workspace. No private files or messages.</small>`);
  }catch(e){res.statusCode=500;res.end(String(e));}
 });
 await new Promise(r=>server.listen(9561,'127.0.0.1',r));
@@ -81,6 +83,11 @@ try{
  const settings={...boot.settings,model:report.model,reasoningEffort:'low',answerBackend:'codex',serviceTier:'fast',answerObjective:'detailed',speechBackend:'whisper',modelPath:path.join(root,'models/ggml-tiny.en.bin'),microphone:boot.devices.find(d=>d.source==='self'&&d.default)?.id??boot.devices.find(d=>d.source==='self')?.id,output:boot.devices.find(d=>d.source==='remote'&&d.default)?.id??boot.devices.find(d=>d.source==='remote')?.id};
  await invoke('start_meeting',{settings});await invoke('action',{action:'pause'});await until(s=>s.paused);
  screenBrowser=await chromium.launch({channel:'msedge',headless:false,args:['--start-maximized','--remote-debugging-port=9562']});screen=await screenBrowser.newPage();
+ if(controlsOnly){
+  ready={title:'Local context and movement verification',windowTitle:'case-14 - Visual Studio Code',content:'This is a browser page with a spoofed editor title. Local detection must identify the browser and must not attach a folder. Keyboard movement checks do not send context.'};ack=false;
+  await screen.goto('http://127.0.0.1:9561/');console.log('CONTROLS_READY');while(!ack)await sleep(100);
+  report.status='complete';report.completedAt=new Date().toISOString();await persist();
+ }else{
  for(let i=0;i<problems.length;i++){
   const p=problems[i],mode=i%2===0?'screenshot':'project';
   if(report.rows.some(row=>row.id===p.id))continue;
@@ -102,5 +109,6 @@ try{
   'Interview round 3: Check your fix on stock A=3 and an order with two A line items of quantity 2, and on stock A=3,B=2 with A quantity 1 then B quantity 0. Show that both rejections are atomic, then explain the accepted-request retry behavior. Return the final complete src/reservations.mjs again in a fenced javascript block.'
  ]){const response=await answer(question);report.interview.push(response);await persist();console.log('INTERVIEW_RESULT',report.interview.length,response.firstWordMs,response.completedMs);}
  ready=null;report.completedAt=new Date().toISOString();report.status='complete';await persist();
+ }
 }catch(e){report.status='failed';report.error=String(e);await persist();console.error(e);process.exitCode=1;}
 finally{if(main)try{await invoke('stop_meeting');}catch{}await browser?.close();await screenBrowser?.close();app?.kill();vite?.kill();server.closeAllConnections();server.close();}

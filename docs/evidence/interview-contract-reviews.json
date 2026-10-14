@@ -872,6 +872,51 @@
       "note": "Separate original/working copies restore atomic rollback and duplicate-SKU balance checks. Round 3 independently identifies inherited-property inventory in round 2 and adds an own-property guard. Actual supplementary tests reject absent toString and consume owned constructor/__proto__ keys correctly. Caller stock unchanged; success returns all deductions, empty order succeeds. Same synchronous export/API, no dependencies/test edits; O(stock keys + items) time and O(stock keys) space. Actual service smoke, fresh patch marker and native vertical/horizontal reading checks passed.",
       "evidence": "interview-reservation-transaction-completed.json",
       "supplementaryEvidence": "interview-reservation-property-boundary.json"
+    },
+    {
+      "id": "house-robber",
+      "kind": "regular",
+      "finalAnswerSha256": "7908005cf566b3f90774595e7616008b4fca56d9ee95eee1858507e5e1e0535f",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Two prior prefix optima implement the correct nonadjacent take/skip recurrence, including empty and zero inputs. O(n) time/O(1) storage. Unbounded nonnegative-value contract fails repeated small additions above the safe-integer boundary: all positive houses separated by zero have exact optimum 9007199254740996, representable as Number, but both candidates return 9007199254740992. All input integers individually safe; frozen grades unchanged.",
+      "evidence": "interview-house-robber-precision.json"
+    },
+    {
+      "id": "equal-subset-partition",
+      "kind": "regular",
+      "finalAnswerSha256": "a4a6741152deac346a08828c6eb1140c37de0e1081e66e45262ca5fbf915fc26",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Descending sum updates prevent reuse, and odd-total/zero-target handling is correct. O(n(T+1)) time/O(T+1) storage. Contract has no magnitude bound: [4294967296,4294967296] is trivially partitionable into one item per subset, but both implementations allocate an invalid-length array and throw RangeError. Frozen small-value grades unchanged.",
+      "evidence": "interview-partition-array-boundary.json"
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "kind": "regular",
+      "finalAnswerSha256": "3d0430fefc12125a5da9b17ad9ae2b12e8ad418193ee661ebe4d31a72e18a191",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Lower bound replaces the first tail >=value, so equal inputs never increase length. Smaller tails preserve future extension opportunities; appends increase attainable subsequence length only. Empty/decreasing/duplicate/negative cases correct. Midpoint uses ordinary arithmetic without 32-bit truncation; O(n log n) time/O(n) storage matches requirement.",
+      "evidence": "interview-counted-synthetic-66-70.json"
+    },
+    {
+      "id": "obstacle-grid-path-count",
+      "kind": "regular",
+      "finalAnswerSha256": "d177261c15d89153c8bd361e545f89a6881459c31b33bb823453e982e7991e31",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Rolling row correctly combines above/left free-cell counts and resets obstacle entries; start/end/one-dimensional cases correct. O(rows*columns) additions/O(columns) storage. Exact unbounded count contract fails 24x40 all-free grid: independent multiplicative binomial oracle yields exact 59678358445158600, representable as Number; both candidates return a different Number because intermediate counts lose precision. Frozen grades unchanged.",
+      "evidence": "interview-grid-count-precision.json"
+    },
+    {
+      "id": "minimum-grid-path-sum",
+      "kind": "regular",
+      "finalAnswerSha256": "dc162aa7e86dc89e5d78e55ec7d1057d49b530121c2d0144ca6d55c81c4d331e",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Infinity sentinel excludes nonexistent predecessors and zero seed enters only the first cell; rolling costs correctly count endpoints in ordinary nonempty rectangular cases. O(rows*columns) time/O(columns) storage. Magnitude-unrestricted contract fails single row [MAX_SAFE_INTEGER,1,1,1,1,1]: its sole path has exact representable sum 9007199254740996, but both candidates return 9007199254740992. Independent BigInt sum, all input integers safe, frozen grades unchanged.",
+      "evidence": "interview-minimum-grid-sum-precision.json"
     }
   ]
 }

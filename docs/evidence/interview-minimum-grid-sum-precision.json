@@ -1,0 +1,28 @@
+{
+  "scope": "Supplementary actual model implementations; frozen grades unchanged",
+  "grid": [
+    [
+      9007199254740991,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  ],
+  "expectedExact": "9007199254740996",
+  "expectedNumber": 9007199254740996,
+  "proof": "A single-row grid has exactly one path through every cell. Independent BigInt sum is exactly representable as Number; all individual input integers are safe.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "552bc0de8fc8749d68956e926b8f11b49510e3c55a90e468a48a878a0be9ab76",
+      "actual": 9007199254740992
+    },
+    {
+      "round": 3,
+      "answerSha256": "dc162aa7e86dc89e5d78e55ec7d1057d49b530121c2d0144ca6d55c81c4d331e",
+      "actual": 9007199254740992
+    }
+  ]
+}

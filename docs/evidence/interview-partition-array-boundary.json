@@ -1,0 +1,23 @@
+{
+  "scope": "Supplementary actual model implementations; frozen fixture grades unchanged",
+  "args": [
+    [
+      4294967296,
+      4294967296
+    ]
+  ],
+  "expected": true,
+  "proof": "Each identical positive integer can be assigned to a different subset; both sums equal 4294967296.",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "03621178de157d945dece1ae59afd1e86a0d0b0c5d1c712d773fd5266e41de7c",
+      "error": "RangeError: Invalid array length"
+    },
+    {
+      "round": 3,
+      "answerSha256": "a4a6741152deac346a08828c6eb1140c37de0e1081e66e45262ca5fbf915fc26",
+      "error": "RangeError: Invalid array length"
+    }
+  ]
+}

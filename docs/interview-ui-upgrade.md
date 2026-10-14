@@ -74,3 +74,13 @@ The retry completed all three rounds, both explicit source handoffs and keyboard
 The eighth bug interview identifies missing rollback with the minimal two-item duplicate-SKU rejection. After an explicit updated-source handoff, round 3 also finds and fixes inherited-property inventory in the round 2 candidate. Supplementary execution confirms rejection of absent `toString` and correct handling of owned `constructor` and `__proto__` stock entries. Raw responses and latency: `evidence/interview-reservation-transaction-completed.json`; supplementary results: `evidence/interview-reservation-property-boundary.json`.
 
 Remaining: 35 regular and 12 bug interviews. Full 100+20 scope is unfinished.
+
+### Regular interviews 66–70
+
+70 regular and 8 bug interviews are complete (234 completed-attempt measured responses). All 78 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 65/78, with 13 failures retained. The five newest final responses were reviewed against their exact saved hashes.
+
+Increasing-subsequence meets its O(n log n) requirement. Four supplementary witnesses expose the unconstrained synthetic numeric contracts: repeated large-value additions lose precision in house-robber and minimum-grid-sum; two equal 2^32 values make partition DP allocate an invalid array; a 24×40 free grid yields an incorrect exact path count. The three precision witnesses have correct outputs exactly representable as JavaScript Numbers. Frozen fixtures and actual model responses remain unchanged.
+
+Median first word: 3182 ms (p95 8003 ms). Median completion: 8053 ms (p95 15318 ms). Raw checkpoint: `evidence/interview-counted-synthetic-66-70.json`; supplementary files are linked by the contract-review ledger.
+
+Remaining: 30 regular and 12 bug interviews; full requested scope remains unfinished.

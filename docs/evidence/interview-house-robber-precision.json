@@ -1,0 +1,31 @@
+{
+  "scope": "Supplementary actual implementations; frozen grades unchanged",
+  "nums": [
+    9007199254740991,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1
+  ],
+  "expectedExact": "9007199254740996",
+  "expectedNumber": 9007199254740996,
+  "proof": "All positive values are separated by zero houses, so selecting all positive values attains the sum of every positive input. Expected is exactly representable as Number.",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "00a93688851516e80203a31db0421705ea3a42486e9e7a1f904534b77ec65a12",
+      "actual": 9007199254740992
+    },
+    {
+      "round": 3,
+      "answerSha256": "7908005cf566b3f90774595e7616008b4fca56d9ee95eee1858507e5e1e0535f",
+      "actual": 9007199254740992
+    }
+  ]
+}

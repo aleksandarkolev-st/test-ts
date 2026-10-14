@@ -1,0 +1,9 @@
+# Interview evaluation protocol
+
+The requested scope is **100 distinct technical interviews and 20 distinct bug interviews**, each with three rounds. `catalog.mjs` contains 100 different contracts; 25 reference the earlier LeetCode tasks and 75 cover additional algorithm, parsing, graph, cache, and scheduling topics. `bugs.mjs` contains 20 distinct injected defect mechanisms, independent reference functions, and executable failing witnesses. The synthetic projects have contracts, source, service wrappers, and smoke tests.
+
+Preparation and a passing grader self-test do not count as live interviews. `prepared.json` starts with every case pending. The final evaluation must preserve each native context handoff, all actual questions and answers, marker verification, runnable implementation tests, latency, visible source acknowledgements, code rendering, and keyboard-scroll results. Keep original failures and reruns separate. Use the previously requested GPT-6.1 Sol with low effort unless the user changes that preference.
+
+The regular interviews ask for reasoning, an implementation, and adversarial self-review. Bug interviews ask for exact source diagnosis and a counterexample, a constrained source replacement, and adversarial verification of that replacement. No hidden oracle or grading witness is placed in attached projects. Audio-independent trials must be labeled as such; successful text trials do not establish ASR reliability.
+
+Run `node --test benchmarks/interviews/*.test.mjs` to check catalog uniqueness and that every defective control fails an executable witness while every reference control passes. Run `node benchmarks/interviews/prepare.mjs` to materialize fixtures under `.local/interview-suite/projects`. Live runner and the 75 additional regular-interview graders remain to be completed.

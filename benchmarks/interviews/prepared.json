@@ -1,0 +1,2235 @@
+{
+  "status": "prepared_not_run",
+  "interviews": [
+    {
+      "id": "algorithm-4",
+      "index": 1,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-4",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums1, nums2). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums1, nums2), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums1, nums2). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-10",
+      "index": 2,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-10",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s, p). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s, p), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s, p). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-32",
+      "index": 3,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-32",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-42",
+      "index": 4,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-42",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(height). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(height), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(height). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-44",
+      "index": 5,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-44",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s, p). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s, p), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s, p). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-76",
+      "index": 6,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-76",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s, t). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s, t), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s, t). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-84",
+      "index": 7,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-84",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(heights). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(heights), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(heights). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-85",
+      "index": 8,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-85",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(matrix). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(matrix), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(matrix). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-115",
+      "index": 9,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-115",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s, t). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s, t), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s, t). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-132",
+      "index": 10,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-132",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-239",
+      "index": 11,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-239",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums, k). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums, k), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums, k). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-312",
+      "index": 12,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-312",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-315",
+      "index": 13,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-315",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-329",
+      "index": 14,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-329",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(matrix). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(matrix), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(matrix). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-493",
+      "index": 15,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-493",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-3",
+      "index": 16,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-3",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-33",
+      "index": 17,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-33",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums, target). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums, target), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums, target). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-56",
+      "index": 18,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-56",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(intervals). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(intervals), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(intervals). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-200",
+      "index": 19,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-200",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(grid). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(grid), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(grid). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-322",
+      "index": 20,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-322",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(coins, amount). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(coins, amount), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(coins, amount). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-1",
+      "index": 21,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-1",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums, target). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums, target), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums, target). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-20",
+      "index": 22,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-20",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-121",
+      "index": 23,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-121",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(prices). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(prices), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(prices). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-217",
+      "index": 24,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-217",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "algorithm-704",
+      "index": 25,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\algorithm-704",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums, target). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums, target), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums, target). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "leetcode-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "maximum-subarray",
+      "index": 26,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\maximum-subarray",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "maximum-product-subarray",
+      "index": 27,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\maximum-product-subarray",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "rotate-array",
+      "index": 28,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\rotate-array",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums,k). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums,k), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums,k). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "product-except-self",
+      "index": 29,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\product-except-self",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "move-zeros",
+      "index": 30,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\move-zeros",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "sorted-squares",
+      "index": 31,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\sorted-squares",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "index": 32,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\merge-sorted-arrays",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "multiset-intersection",
+      "index": 33,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\multiset-intersection",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "majority-element",
+      "index": 34,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\majority-element",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "longest-consecutive-sequence",
+      "index": 35,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\longest-consecutive-sequence",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "kth-largest",
+      "index": 36,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\kth-largest",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums,k). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums,k), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums,k). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "three-sum",
+      "index": 37,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\three-sum",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "subarray-sum-count",
+      "index": 38,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\subarray-sum-count",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums,k). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums,k), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums,k). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "pivot-index",
+      "index": 39,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\pivot-index",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "next-permutation",
+      "index": 40,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\next-permutation",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "daily-temperatures",
+      "index": 41,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\daily-temperatures",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(temperatures). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(temperatures), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(temperatures). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "circular-next-greater",
+      "index": 42,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\circular-next-greater",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "asteroid-collisions",
+      "index": 43,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\asteroid-collisions",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(asteroids). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(asteroids), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(asteroids). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "reverse-polish-notation",
+      "index": 44,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\reverse-polish-notation",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(tokens). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(tokens), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(tokens). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "nested-string-decoder",
+      "index": 45,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\nested-string-decoder",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "group-anagrams",
+      "index": 46,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\group-anagrams",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(words). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(words), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(words). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "anagram-window-indices",
+      "index": 47,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\anagram-window-indices",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s,p). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s,p), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s,p). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "longest-palindromic-substring",
+      "index": 48,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\longest-palindromic-substring",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "roman-numeral-parser",
+      "index": 49,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\roman-numeral-parser",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "roman-numeral-encoder",
+      "index": 50,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\roman-numeral-encoder",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "run-length-encoding",
+      "index": 51,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\run-length-encoding",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "quoted-csv-row",
+      "index": 52,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\quoted-csv-row",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(row). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(row), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(row). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "absolute-path-normalization",
+      "index": 53,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\absolute-path-normalization",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(path). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(path), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(path). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "version-comparison",
+      "index": 54,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\version-comparison",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "binary-string-addition",
+      "index": 55,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\binary-string-addition",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "decimal-string-multiplication",
+      "index": 56,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\decimal-string-multiplication",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "ip-address-classification",
+      "index": 57,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\ip-address-classification",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(address). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(address), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(address). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "longest-common-prefix",
+      "index": 58,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\longest-common-prefix",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(words). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(words), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(words). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "remove-invalid-parentheses",
+      "index": 59,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\remove-invalid-parentheses",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "subsequence-check",
+      "index": 60,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\subsequence-check",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s,t). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s,t), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s,t). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "edit-distance",
+      "index": 61,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\edit-distance",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "word-segmentation",
+      "index": 62,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\word-segmentation",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s,words). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s,words), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s,words). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "digit-message-decoding",
+      "index": 63,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\digit-message-decoding",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(s). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(s), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(s). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "stair-climbing",
+      "index": 64,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\stair-climbing",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "minimum-stair-cost",
+      "index": 65,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\minimum-stair-cost",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(cost). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(cost), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(cost). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "house-robber",
+      "index": 66,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\house-robber",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "equal-subset-partition",
+      "index": 67,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\equal-subset-partition",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "index": 68,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\longest-increasing-subsequence",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "obstacle-grid-path-count",
+      "index": 69,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\obstacle-grid-path-count",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(grid). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(grid), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(grid). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "minimum-grid-path-sum",
+      "index": 70,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\minimum-grid-path-sum",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(grid). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(grid), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(grid). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "zero-one-knapsack",
+      "index": 71,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\zero-one-knapsack",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(weights,values,capacity). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(weights,values,capacity), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(weights,values,capacity). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "combination-sum",
+      "index": 72,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\combination-sum",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(candidates,target). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(candidates,target), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(candidates,target). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "generate-balanced-parentheses",
+      "index": 73,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\generate-balanced-parentheses",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "unique-permutations",
+      "index": 74,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\unique-permutations",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "duplicate-aware-subsets",
+      "index": 75,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\duplicate-aware-subsets",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "n-queens-count",
+      "index": 76,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\n-queens-count",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "undirected-connected-components",
+      "index": 77,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\undirected-connected-components",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,edges). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,edges), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,edges). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "bipartite-graph",
+      "index": 78,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bipartite-graph",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(graph). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(graph), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(graph). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "unweighted-shortest-path",
+      "index": 79,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\unweighted-shortest-path",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,edges,source,target). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,edges,source,target), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,edges,source,target). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "index": 80,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\lexicographic-topological-sort",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,edges). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,edges), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,edges). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "nonnegative-weight-shortest-paths",
+      "index": 81,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\nonnegative-weight-shortest-paths",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,edges,source). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,edges,source), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,edges,source). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "course-prerequisite-cycle",
+      "index": 82,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\course-prerequisite-cycle",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,prerequisites). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,prerequisites), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,prerequisites). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "flood-fill",
+      "index": 83,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\flood-fill",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(image,row,col,newColor). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(image,row,col,newColor), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(image,row,col,newColor). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "eight-direction-binary-path",
+      "index": 84,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\eight-direction-binary-path",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(grid). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(grid), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(grid). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "spiral-matrix-traversal",
+      "index": 85,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\spiral-matrix-traversal",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(matrix). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(matrix), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(matrix). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "rotate-square-matrix",
+      "index": 86,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\rotate-square-matrix",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(matrix). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(matrix), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(matrix). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "maximum-island-area",
+      "index": 87,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\maximum-island-area",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(grid). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(grid), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(grid). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "interval-intersections",
+      "index": 88,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\interval-intersections",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(a,b). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(a,b), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(a,b). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "minimum-meeting-rooms",
+      "index": 89,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\minimum-meeting-rooms",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(intervals). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(intervals), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(intervals). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "smallest-range-covering-lists",
+      "index": 90,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\smallest-range-covering-lists",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(lists). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(lists), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(lists). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "insert-closed-interval",
+      "index": 91,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\insert-closed-interval",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(intervals,interval). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(intervals,interval), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(intervals,interval). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "lru-cache-simulation",
+      "index": 92,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\lru-cache-simulation",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(capacity,operations). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(capacity,operations), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(capacity,operations). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "ttl-cache-simulation",
+      "index": 93,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\ttl-cache-simulation",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(operations). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(operations), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(operations). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "fixed-window-rate-limiter",
+      "index": 94,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\fixed-window-rate-limiter",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(times,limit,windowMs). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(times,limit,windowMs), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(times,limit,windowMs). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "token-bucket-rate-limiter",
+      "index": 95,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\token-bucket-rate-limiter",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(times,capacity,rate). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(times,capacity,rate), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(times,capacity,rate). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "streaming-median",
+      "index": 96,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\streaming-median",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(nums). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(nums), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(nums). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "time-indexed-key-value",
+      "index": 97,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\time-indexed-key-value",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(operations). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(operations), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(operations). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "idempotent-event-processing",
+      "index": 98,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\idempotent-event-processing",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(events). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(events), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(events). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "bounded-fifo-queue",
+      "index": 99,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bounded-fifo-queue",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(capacity,operations). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(capacity,operations), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(capacity,operations). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    },
+    {
+      "id": "dependency-batch-scheduler",
+      "index": 100,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\dependency-batch-scheduler",
+      "rounds": [
+        "Interview round 1. Read the current context and identify its marker. Explain the approach, invariant, and boundary cases for solve(n,edges). Do not implement yet.",
+        "Interview round 2. Implement the current task exactly. Identify its marker, then return complete JavaScript defining solve(n,edges), without imports or exports. State time and space complexity.",
+        "Interview round 3. Independently check your preceding implementation on at least three edge cases, including a case most likely to falsify it. Correct any bug and return the final complete JavaScript implementation of solve(n,edges). Preserve the exact contract; do not solve an earlier task."
+      ],
+      "gradeProvider": "synthetic-oracles",
+      "status": "pending"
+    }
+  ],
+  "bugInterviews": [
+    {
+      "id": "search-boundary",
+      "index": 1,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-search-boundary",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "13f621feb901ceaaafd886e28a316f77481e9a1775993e40594aa8da9f781dbd",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              [
+                1,
+                3,
+                5
+              ],
+              6
+            ],
+            "expected": 3,
+            "actual": 2
+          },
+          {
+            "args": [
+              [
+                2
+              ],
+              3
+            ],
+            "expected": 1,
+            "actual": 0
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "duplicate-search",
+      "index": 2,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-duplicate-search",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "9624b227cc147c62479c0319e1e70fe92adedfc9bfd0dc90a15ca11b52bdaf60",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 3,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              [
+                2,
+                2,
+                2,
+                2,
+                2
+              ],
+              2
+            ],
+            "expected": 0,
+            "actual": 2
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "bounded-queue",
+      "index": 3,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-bounded-queue",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "135b58e3601cd9fc8a55f98992df2c89c4e8f98ec1a1ebd3e859bf4be34bd71e",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              1,
+              [
+                [
+                  "push",
+                  1
+                ],
+                [
+                  "push",
+                  2
+                ],
+                [
+                  "pop"
+                ]
+              ]
+            ],
+            "expected": [
+              true,
+              false,
+              1
+            ],
+            "actual": [
+              true,
+              true,
+              1
+            ]
+          },
+          {
+            "args": [
+              0,
+              [
+                [
+                  "push",
+                  1
+                ],
+                [
+                  "pop"
+                ]
+              ]
+            ],
+            "expected": [
+              false,
+              null
+            ],
+            "actual": [
+              true,
+              1
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "lru-recency",
+      "index": 4,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-lru-recency",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "3c221c97c0e8558e689eab3143ba115aa6f1fe1afbe22093d19d66491e25d896",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              2,
+              [
+                [
+                  "put",
+                  "a",
+                  1
+                ],
+                [
+                  "put",
+                  "b",
+                  2
+                ],
+                [
+                  "get",
+                  "a"
+                ],
+                [
+                  "put",
+                  "c",
+                  3
+                ],
+                [
+                  "get",
+                  "b"
+                ]
+              ]
+            ],
+            "expected": [
+              1,
+              -1
+            ],
+            "actual": [
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "ttl-expiry",
+      "index": 5,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-ttl-expiry",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "0c878cf2c03f89c160d17a3b2f2ae62752a8abfc9157f2daea9168371cc4d513",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              [
+                [
+                  0,
+                  "put",
+                  "a",
+                  7,
+                  5
+                ],
+                [
+                  5,
+                  "get",
+                  "a"
+                ]
+              ]
+            ],
+            "expected": [
+              null
+            ],
+            "actual": [
+              7
+            ]
+          },
+          {
+            "args": [
+              [
+                [
+                  2,
+                  "put",
+                  "x",
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  "get",
+                  "x"
+                ]
+              ]
+            ],
+            "expected": [
+              null
+            ],
+            "actual": [
+              0
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "window-reset",
+      "index": 6,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-window-reset",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "f0ee4ba5407afae9f396a6d2ef4d718c8d0b4ec2e7e439b215bef536805d0458",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              [
+                0,
+                1,
+                2
+              ],
+              2,
+              10
+            ],
+            "expected": [
+              true,
+              true,
+              false
+            ],
+            "actual": [
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "args": [
+              [
+                9,
+                10,
+                11
+              ],
+              1,
+              10
+            ],
+            "expected": [
+              true,
+              true,
+              false
+            ],
+            "actual": [
+              true,
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "event-identity",
+      "index": 7,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-event-identity",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "9b3c06138345545b2a8a83b0f669d2e00f81085cca025d3155045216a83296d5",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              [
+                {
+                  "id": "toString",
+                  "delta": 4
+                }
+              ]
+            ],
+            "expected": {
+              "total": 4,
+              "acceptedIds": [
+                "toString"
+              ]
+            },
+            "actual": {
+              "total": 0,
+              "acceptedIds": []
+            }
+          },
+          {
+            "args": [
+              [
+                {
+                  "id": "__proto__",
+                  "delta": 5
+                },
+                {
+                  "id": "b",
+                  "delta": 1
+                }
+              ]
+            ],
+            "expected": {
+              "total": 6,
+              "acceptedIds": [
+                "__proto__",
+                "b"
+              ]
+            },
+            "actual": {
+              "total": 1,
+              "acceptedIds": [
+                "b"
+              ]
+            }
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "reservation-transaction",
+      "index": 8,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-reservation-transaction",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "3c9176dc3f3920752bf18feb832d770f22da3b1528dc4fe8411136a553425a70",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              {
+                "A": 3,
+                "B": 1
+              },
+              [
+                {
+                  "sku": "A",
+                  "quantity": 1
+                },
+                {
+                  "sku": "B",
+                  "quantity": 2
+                }
+              ]
+            ],
+            "expected": {
+              "accepted": false,
+              "stock": {
+                "A": 3,
+                "B": 1
+              }
+            },
+            "actual": {
+              "accepted": false,
+              "stock": {
+                "A": 2,
+                "B": 1
+              }
+            }
+          },
+          {
+            "args": [
+              {
+                "A": 3
+              },
+              [
+                {
+                  "sku": "A",
+                  "quantity": 2
+                },
+                {
+                  "sku": "A",
+                  "quantity": 2
+                }
+              ]
+            ],
+            "expected": {
+              "accepted": false,
+              "stock": {
+                "A": 3
+              }
+            },
+            "actual": {
+              "accepted": false,
+              "stock": {
+                "A": 1
+              }
+            }
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "csv-escaping",
+      "index": 9,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-csv-escaping",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "29271c9ea8e504eb7e49837e61b5d6cd77b2c05e2c5feac00034ddc55a7b8a99",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 3,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              "\"a\"\"b\",c"
+            ],
+            "expected": [
+              "a\"b",
+              "c"
+            ],
+            "actual": [
+              "ab",
+              "c"
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "signed-division",
+      "index": 10,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-signed-division",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "4312aba9d1a48f49e3b5d6475f6276d31becfc0206da93a738cbef03ad597a5a",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 3,
+        "totalCases": 5,
+        "failures": [
+          {
+            "args": [
+              -7,
+              3
+            ],
+            "expected": -2,
+            "actual": -3
+          },
+          {
+            "args": [
+              7,
+              -3
+            ],
+            "expected": -2,
+            "actual": -3
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "opening-brackets",
+      "index": 11,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-opening-brackets",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "e321f8afcc9324e293fdf7d5f3163edc413faf741e38658384e7d315d415c86c",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 3,
+        "totalCases": 5,
+        "failures": [
+          {
+            "args": [
+              "("
+            ],
+            "expected": false,
+            "actual": true
+          },
+          {
+            "args": [
+              "([]"
+            ],
+            "expected": false,
+            "actual": true
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "shortest-path-settlement",
+      "index": 12,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-shortest-path-settlement",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "072ffb47afe16de1117a055f43c27fa8fa59ad23de0302e911cff3afa2c9ffa8",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              3,
+              [
+                [
+                  0,
+                  1,
+                  10
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ],
+                [
+                  2,
+                  1,
+                  1
+                ]
+              ],
+              0
+            ],
+            "expected": [
+              0,
+              2,
+              1
+            ],
+            "actual": [
+              0,
+              10,
+              1
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "dependency-completion",
+      "index": 13,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-dependency-completion",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "b74ba9854c724266fd699e05b7a7d3d22e7f0a271c9a9b42a75a9da7fb114aab",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              2,
+              [
+                [
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "expected": [
+              0,
+              1
+            ],
+            "actual": []
+          },
+          {
+            "args": [
+              1,
+              []
+            ],
+            "expected": [
+              0
+            ],
+            "actual": []
+          },
+          {
+            "args": [
+              3,
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  1,
+                  2
+                ]
+              ]
+            ],
+            "expected": [
+              0,
+              1,
+              2
+            ],
+            "actual": []
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "meeting-endpoint",
+      "index": 14,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-meeting-endpoint",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "7fc79f615f7dd160f35c7c4ed181ca35bf628d751837b044e61a0ca9af43ca27",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  1,
+                  2
+                ]
+              ]
+            ],
+            "expected": 1,
+            "actual": 2
+          },
+          {
+            "args": [
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  2,
+                  3
+                ]
+              ]
+            ],
+            "expected": 1,
+            "actual": 2
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "unicode-iteration",
+      "index": 15,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-unicode-iteration",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "df5ec6235418ba6794fe74104f182ae74822f425a2d32bad35d4f649131e5103",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 5,
+        "failures": [
+          {
+            "args": [
+              "😀"
+            ],
+            "expected": 1,
+            "actual": 2
+          },
+          {
+            "args": [
+              "😀😃"
+            ],
+            "expected": 2,
+            "actual": 3
+          },
+          {
+            "args": [
+              "😀😀"
+            ],
+            "expected": 1,
+            "actual": 2
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "cache-zero",
+      "index": 16,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-cache-zero",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "5213a622520db733dc975a7296f3d36784eb4a1ca6422c9834575481d9db8302",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              {
+                "a": 0,
+                "b": false,
+                "c": "",
+                "d": null
+              },
+              [
+                "a",
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "expected": [
+              0,
+              false,
+              "",
+              null
+            ],
+            "actual": [
+              -1,
+              -1,
+              -1,
+              -1
+            ]
+          },
+          {
+            "args": [
+              {},
+              [
+                "toString"
+              ]
+            ],
+            "expected": [
+              -1
+            ],
+            "actual": [
+              null
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "zero-product",
+      "index": 17,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-zero-product",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "61a47927b93cc71e1db344a5036c85e189975b887b3e09f7dacaf6c3341214da",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              [
+                0,
+                2,
+                3
+              ]
+            ],
+            "expected": [
+              6,
+              0,
+              0
+            ],
+            "actual": [
+              null,
+              0,
+              0
+            ]
+          },
+          {
+            "args": [
+              [
+                0,
+                2,
+                0
+              ]
+            ],
+            "expected": [
+              0,
+              0,
+              0
+            ],
+            "actual": [
+              null,
+              0,
+              null
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "window-multiplicity",
+      "index": 18,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-window-multiplicity",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "6bbc0cbe8b0a391d12c93f23043a1ed47f1733cc27e1cd344013d7a26cec6732",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 1,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              "AAB",
+              "AA"
+            ],
+            "expected": "AA",
+            "actual": "A"
+          },
+          {
+            "args": [
+              "AB",
+              "AA"
+            ],
+            "expected": "",
+            "actual": "A"
+          },
+          {
+            "args": [
+              "BAAA",
+              "AA"
+            ],
+            "expected": "AA",
+            "actual": "A"
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "stable-order",
+      "index": 19,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-stable-order",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "717c631e7d8e96dec8334566a0aa3903c4a40dbb860c884bc82e8388d1c7cafd",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 2,
+        "totalCases": 3,
+        "failures": [
+          {
+            "args": [
+              [
+                {
+                  "key": 1,
+                  "id": "a"
+                },
+                {
+                  "key": 1,
+                  "id": "b"
+                }
+              ]
+            ],
+            "expected": [
+              {
+                "key": 1,
+                "id": "a"
+              },
+              {
+                "key": 1,
+                "id": "b"
+              }
+            ],
+            "actual": [
+              {
+                "key": 1,
+                "id": "b"
+              },
+              {
+                "key": 1,
+                "id": "a"
+              }
+            ]
+          }
+        ]
+      },
+      "status": "pending"
+    },
+    {
+      "id": "root-path",
+      "index": 20,
+      "folder": "C:\\Users\\dev\\Downloads\\test-ts\\.local\\interview-suite\\projects\\bug-root-path",
+      "rounds": [
+        "Read the attached project and identify its context marker. Under its contract, find the correctness bug, cite the exact source file and expression, and produce a smallest valid counterexample with actual versus required behavior. Do not implement yet.",
+        "Fix the project bug. Return a complete replacement for src/core.mjs defining export function solve with the same argument contract. No dependencies, test edits or API changes. Explain the invariant restored.",
+        "Try to falsify your fix with at least three boundary cases, including a rejected or empty case where the contract allows it. Correct any flaw and return the final complete src/core.mjs implementation. Keep the same public contract."
+      ],
+      "sourceSha256": "a284bc600418a56a06b288ff139434b8c435b32f4816d2dc7103d1a9e1b4b175",
+      "defectControl": {
+        "passed": false,
+        "passedCases": 3,
+        "totalCases": 4,
+        "failures": [
+          {
+            "args": [
+              "/../a"
+            ],
+            "expected": "/a",
+            "actual": "/../a"
+          }
+        ]
+      },
+      "status": "pending"
+    }
+  ],
+  "note": "Catalog preparation is not evidence of completed live interviews. All 120 scenarios require native handoff, actual model responses, independent grades, and UI evidence."
+}

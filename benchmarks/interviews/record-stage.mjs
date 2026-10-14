@@ -1,0 +1,15 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+import {interviews} from './catalog.mjs';
+import {bugs,checkBug} from './bugs.mjs';
+const read=async file=>JSON.parse(await readFile(file,'utf8'));
+const before=await read('artifacts/context-controls/scroll-before.json');
+const page=await read('artifacts/context-controls/scroll-after-page.json');
+const home=await read('artifacts/context-controls/scroll-after-home.json');
+const end=await read('artifacts/context-controls/scroll-after-end.json');
+assert.equal(before.top,0);assert(page.top>0);assert.equal(home.top,0);assert(Math.abs(end.top-(end.height-end.viewport))<2);
+const controls=bugs.map(b=>({id:b.id,defective:checkBug(b,b.source),reference:checkBug(b,`function solve(...args){return (${b.oracle.toString()})(...args);}`)}));
+assert(controls.every(c=>!c.defective.passed&&c.reference.passed));
+const report={status:'in_progress',recordedAt:new Date().toISOString(),completed:{sourceAwareCodeRendering:true,codeParserUnitTests:4,browserTests:9,keyboardVerticalNative:{before,page,home,end},keyboardHorizontal:'Browser event path verified; latest native build verification pending',strictModePaintBugFixed:true,currentAttachmentHeaderUnitTests:2},nativeScrollTestBinarySha256:createHash('sha256').update(await readFile('.local/context-handoff/app/meeting-copilot.exe')).digest('hex'),evaluation:{requested:{interviews:100,bugInterviews:20},prepared:{interviews:interviews.length,bugInterviews:bugs.length},liveCompleted:{interviews:0,bugInterviews:0},bugGraderControls:controls},remaining:['Visual redesign and rendered review','75 additional regular-interview independent graders','Resumable live native runner','100 complete live interviews','20 complete live bug interviews','Latest native horizontal-scroll, rich-code visibility and attachment-history regression checks']};
+await mkdir('docs/evidence',{recursive:true});await writeFile('docs/evidence/interview-ui-upgrade-stage-1-2026-10-14.json',JSON.stringify(report,null,2));console.log('Stage 1 evidence recorded; full goal remains active.');

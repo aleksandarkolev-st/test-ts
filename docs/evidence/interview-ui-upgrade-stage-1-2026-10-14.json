@@ -1,0 +1,1026 @@
+{
+  "status": "in_progress",
+  "recordedAt": "2026-10-14T14:38:35.931Z",
+  "completed": {
+    "sourceAwareCodeRendering": true,
+    "codeParserUnitTests": 4,
+    "browserTests": 9,
+    "keyboardVerticalNative": {
+      "before": {
+        "top": 0,
+        "height": 2175,
+        "viewport": 701
+      },
+      "page": {
+        "top": 653.1428833007812,
+        "height": 2175,
+        "viewport": 701
+      },
+      "home": {
+        "top": 0,
+        "height": 2175,
+        "viewport": 701
+      },
+      "end": {
+        "top": 1474.2857666015625,
+        "height": 2175,
+        "viewport": 701
+      }
+    },
+    "keyboardHorizontal": "Browser event path verified; latest native build verification pending",
+    "strictModePaintBugFixed": true,
+    "currentAttachmentHeaderUnitTests": 2
+  },
+  "nativeScrollTestBinarySha256": "e1eabbae7532bbd8abfa33e5d816ae2af6cc23367b3119a4cccc3420daccb23e",
+  "evaluation": {
+    "requested": {
+      "interviews": 100,
+      "bugInterviews": 20
+    },
+    "prepared": {
+      "interviews": 100,
+      "bugInterviews": 20
+    },
+    "liveCompleted": {
+      "interviews": 0,
+      "bugInterviews": 0
+    },
+    "bugGraderControls": [
+      {
+        "id": "search-boundary",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                [
+                  1,
+                  3,
+                  5
+                ],
+                6
+              ],
+              "expected": 3,
+              "actual": 2
+            },
+            {
+              "args": [
+                [
+                  2
+                ],
+                3
+              ],
+              "expected": 1,
+              "actual": 0
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "duplicate-search",
+        "defective": {
+          "passed": false,
+          "passedCases": 3,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                [
+                  2,
+                  2,
+                  2,
+                  2,
+                  2
+                ],
+                2
+              ],
+              "expected": 0,
+              "actual": 2
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "bounded-queue",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                1,
+                [
+                  [
+                    "push",
+                    1
+                  ],
+                  [
+                    "push",
+                    2
+                  ],
+                  [
+                    "pop"
+                  ]
+                ]
+              ],
+              "expected": [
+                true,
+                false,
+                1
+              ],
+              "actual": [
+                true,
+                true,
+                1
+              ]
+            },
+            {
+              "args": [
+                0,
+                [
+                  [
+                    "push",
+                    1
+                  ],
+                  [
+                    "pop"
+                  ]
+                ]
+              ],
+              "expected": [
+                false,
+                null
+              ],
+              "actual": [
+                true,
+                1
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "lru-recency",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                2,
+                [
+                  [
+                    "put",
+                    "a",
+                    1
+                  ],
+                  [
+                    "put",
+                    "b",
+                    2
+                  ],
+                  [
+                    "get",
+                    "a"
+                  ],
+                  [
+                    "put",
+                    "c",
+                    3
+                  ],
+                  [
+                    "get",
+                    "b"
+                  ]
+                ]
+              ],
+              "expected": [
+                1,
+                -1
+              ],
+              "actual": [
+                1,
+                2
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "ttl-expiry",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                [
+                  [
+                    0,
+                    "put",
+                    "a",
+                    7,
+                    5
+                  ],
+                  [
+                    5,
+                    "get",
+                    "a"
+                  ]
+                ]
+              ],
+              "expected": [
+                null
+              ],
+              "actual": [
+                7
+              ]
+            },
+            {
+              "args": [
+                [
+                  [
+                    2,
+                    "put",
+                    "x",
+                    0,
+                    0
+                  ],
+                  [
+                    2,
+                    "get",
+                    "x"
+                  ]
+                ]
+              ],
+              "expected": [
+                null
+              ],
+              "actual": [
+                0
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "window-reset",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                [
+                  0,
+                  1,
+                  2
+                ],
+                2,
+                10
+              ],
+              "expected": [
+                true,
+                true,
+                false
+              ],
+              "actual": [
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "args": [
+                [
+                  9,
+                  10,
+                  11
+                ],
+                1,
+                10
+              ],
+              "expected": [
+                true,
+                true,
+                false
+              ],
+              "actual": [
+                true,
+                true,
+                true
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "event-identity",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                [
+                  {
+                    "id": "toString",
+                    "delta": 4
+                  }
+                ]
+              ],
+              "expected": {
+                "total": 4,
+                "acceptedIds": [
+                  "toString"
+                ]
+              },
+              "actual": {
+                "total": 0,
+                "acceptedIds": []
+              }
+            },
+            {
+              "args": [
+                [
+                  {
+                    "id": "__proto__",
+                    "delta": 5
+                  },
+                  {
+                    "id": "b",
+                    "delta": 1
+                  }
+                ]
+              ],
+              "expected": {
+                "total": 6,
+                "acceptedIds": [
+                  "__proto__",
+                  "b"
+                ]
+              },
+              "actual": {
+                "total": 1,
+                "acceptedIds": [
+                  "b"
+                ]
+              }
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "reservation-transaction",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                {
+                  "A": 3,
+                  "B": 1
+                },
+                [
+                  {
+                    "sku": "A",
+                    "quantity": 1
+                  },
+                  {
+                    "sku": "B",
+                    "quantity": 2
+                  }
+                ]
+              ],
+              "expected": {
+                "accepted": false,
+                "stock": {
+                  "A": 3,
+                  "B": 1
+                }
+              },
+              "actual": {
+                "accepted": false,
+                "stock": {
+                  "A": 2,
+                  "B": 1
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "A": 3
+                },
+                [
+                  {
+                    "sku": "A",
+                    "quantity": 2
+                  },
+                  {
+                    "sku": "A",
+                    "quantity": 2
+                  }
+                ]
+              ],
+              "expected": {
+                "accepted": false,
+                "stock": {
+                  "A": 3
+                }
+              },
+              "actual": {
+                "accepted": false,
+                "stock": {
+                  "A": 1
+                }
+              }
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "csv-escaping",
+        "defective": {
+          "passed": false,
+          "passedCases": 3,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                "\"a\"\"b\",c"
+              ],
+              "expected": [
+                "a\"b",
+                "c"
+              ],
+              "actual": [
+                "ab",
+                "c"
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "signed-division",
+        "defective": {
+          "passed": false,
+          "passedCases": 3,
+          "totalCases": 5,
+          "failures": [
+            {
+              "args": [
+                -7,
+                3
+              ],
+              "expected": -2,
+              "actual": -3
+            },
+            {
+              "args": [
+                7,
+                -3
+              ],
+              "expected": -2,
+              "actual": -3
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 5,
+          "totalCases": 5,
+          "failures": []
+        }
+      },
+      {
+        "id": "opening-brackets",
+        "defective": {
+          "passed": false,
+          "passedCases": 3,
+          "totalCases": 5,
+          "failures": [
+            {
+              "args": [
+                "("
+              ],
+              "expected": false,
+              "actual": true
+            },
+            {
+              "args": [
+                "([]"
+              ],
+              "expected": false,
+              "actual": true
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 5,
+          "totalCases": 5,
+          "failures": []
+        }
+      },
+      {
+        "id": "shortest-path-settlement",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                3,
+                [
+                  [
+                    0,
+                    1,
+                    10
+                  ],
+                  [
+                    0,
+                    2,
+                    1
+                  ],
+                  [
+                    2,
+                    1,
+                    1
+                  ]
+                ],
+                0
+              ],
+              "expected": [
+                0,
+                2,
+                1
+              ],
+              "actual": [
+                0,
+                10,
+                1
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "dependency-completion",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                2,
+                [
+                  [
+                    0,
+                    1
+                  ]
+                ]
+              ],
+              "expected": [
+                0,
+                1
+              ],
+              "actual": []
+            },
+            {
+              "args": [
+                1,
+                []
+              ],
+              "expected": [
+                0
+              ],
+              "actual": []
+            },
+            {
+              "args": [
+                3,
+                [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ]
+              ],
+              "expected": [
+                0,
+                1,
+                2
+              ],
+              "actual": []
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "meeting-endpoint",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ]
+              ],
+              "expected": 1,
+              "actual": 2
+            },
+            {
+              "args": [
+                [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ]
+              ],
+              "expected": 1,
+              "actual": 2
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "unicode-iteration",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 5,
+          "failures": [
+            {
+              "args": [
+                "😀"
+              ],
+              "expected": 1,
+              "actual": 2
+            },
+            {
+              "args": [
+                "😀😃"
+              ],
+              "expected": 2,
+              "actual": 3
+            },
+            {
+              "args": [
+                "😀😀"
+              ],
+              "expected": 1,
+              "actual": 2
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 5,
+          "totalCases": 5,
+          "failures": []
+        }
+      },
+      {
+        "id": "cache-zero",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                {
+                  "a": 0,
+                  "b": false,
+                  "c": "",
+                  "d": null
+                },
+                [
+                  "a",
+                  "b",
+                  "c",
+                  "d"
+                ]
+              ],
+              "expected": [
+                0,
+                false,
+                "",
+                null
+              ],
+              "actual": [
+                -1,
+                -1,
+                -1,
+                -1
+              ]
+            },
+            {
+              "args": [
+                {},
+                [
+                  "toString"
+                ]
+              ],
+              "expected": [
+                -1
+              ],
+              "actual": [
+                null
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "zero-product",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                [
+                  0,
+                  2,
+                  3
+                ]
+              ],
+              "expected": [
+                6,
+                0,
+                0
+              ],
+              "actual": [
+                null,
+                0,
+                0
+              ]
+            },
+            {
+              "args": [
+                [
+                  0,
+                  2,
+                  0
+                ]
+              ],
+              "expected": [
+                0,
+                0,
+                0
+              ],
+              "actual": [
+                null,
+                0,
+                null
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "window-multiplicity",
+        "defective": {
+          "passed": false,
+          "passedCases": 1,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                "AAB",
+                "AA"
+              ],
+              "expected": "AA",
+              "actual": "A"
+            },
+            {
+              "args": [
+                "AB",
+                "AA"
+              ],
+              "expected": "",
+              "actual": "A"
+            },
+            {
+              "args": [
+                "BAAA",
+                "AA"
+              ],
+              "expected": "AA",
+              "actual": "A"
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      },
+      {
+        "id": "stable-order",
+        "defective": {
+          "passed": false,
+          "passedCases": 2,
+          "totalCases": 3,
+          "failures": [
+            {
+              "args": [
+                [
+                  {
+                    "key": 1,
+                    "id": "a"
+                  },
+                  {
+                    "key": 1,
+                    "id": "b"
+                  }
+                ]
+              ],
+              "expected": [
+                {
+                  "key": 1,
+                  "id": "a"
+                },
+                {
+                  "key": 1,
+                  "id": "b"
+                }
+              ],
+              "actual": [
+                {
+                  "key": 1,
+                  "id": "b"
+                },
+                {
+                  "key": 1,
+                  "id": "a"
+                }
+              ]
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 3,
+          "totalCases": 3,
+          "failures": []
+        }
+      },
+      {
+        "id": "root-path",
+        "defective": {
+          "passed": false,
+          "passedCases": 3,
+          "totalCases": 4,
+          "failures": [
+            {
+              "args": [
+                "/../a"
+              ],
+              "expected": "/a",
+              "actual": "/../a"
+            }
+          ]
+        },
+        "reference": {
+          "passed": true,
+          "passedCases": 4,
+          "totalCases": 4,
+          "failures": []
+        }
+      }
+    ]
+  },
+  "remaining": [
+    "Visual redesign and rendered review",
+    "75 additional regular-interview independent graders",
+    "Resumable live native runner",
+    "100 complete live interviews",
+    "20 complete live bug interviews",
+    "Latest native horizontal-scroll, rich-code visibility and attachment-history regression checks"
+  ]
+}

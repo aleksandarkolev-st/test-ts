@@ -59,21 +59,25 @@ test('browser does not pretend to capture audio or sign in', async ({ page }) =>
 });
 test('Codex discovers its model and passes Fast mode separately from reasoning effort', async ({ page }) => {
   await nativeFixture(page); await page.goto('/');
+  await page.getByRole('tab', { name: 'Answers', exact: true }).click();
   await page.getByLabel('Answer backend').selectOption('codex');
   await expect(page.getByText('Signed in to Codex', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Answer model')).toHaveValue('gpt-6-luna');
   await expect(page.getByLabel('Answer speed')).toHaveValue('fast');
   await expect(page.getByLabel('Reasoning effort')).toHaveValue('low');
+  await page.getByRole('tab', { name: 'Meeting', exact: true }).click();
   await page.getByLabel('Speech GPU').selectOption('Fixture discrete GPU');
   await page.getByLabel('Local speech model').fill('C:\\fixture\\speech.gguf');
   await page.getByRole('button', { name: 'Start meeting' }).click();
   await expect(page.getByText('Listening', { exact: true })).toBeVisible();
   const settings = await page.evaluate(() => (window as any).fixtureStartedSettings);
   expect(settings).toMatchObject({ answerBackend: 'codex', model: 'gpt-6-luna', serviceTier: 'fast', reasoningEffort: 'low', nemotronDevice: 1, nemotronDeviceName: 'Fixture discrete GPU' });
+  await page.getByRole('tab', { name: 'Answers', exact: true }).click();
   await expect(page.getByLabel('Answer backend')).toBeDisabled();
 });
 test('camera uses named input and GPU, calibrates in order and clears on stop', async ({ page }) => {
   await nativeFixture(page); await page.goto('/');
+  await page.getByRole('tab', { name: 'Camera', exact: true }).click();
   await expect(page.getByLabel('Input camera')).toHaveValue('0');
   await expect(page.getByLabel('Input camera').getByRole('option', { name: 'OBS Virtual Camera' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Start camera preview' }).click();
@@ -86,8 +90,9 @@ test('camera uses named input and GPU, calibrates in order and clears on stop', 
   await expect(page.getByAltText('Live local gaze-correction preview')).toHaveCount(0);
 });
 test('startup, account model discovery, meeting start, pause and stop', async ({ page }) => {
-  await nativeFixture(page); await page.goto('/'); await page.getByRole('button', { name: 'Continue with ChatGPT' }).click();
+  await nativeFixture(page); await page.goto('/'); await page.getByRole('tab', { name: 'Answers', exact: true }).click(); await page.getByRole('button', { name: 'Continue with ChatGPT' }).click();
   await expect(page.getByText('fixture@example.invalid', { exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'Meeting', exact: true }).click();
   await page.getByLabel('Local speech model').fill('C:\\models\\fixture.bin');
   await page.getByRole('button', { name: 'Start meeting' }).click(); await expect(page.getByText('Listening', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Pause listening' }).click(); await expect(page.getByText('Paused', { exact: true })).toBeVisible();
@@ -104,13 +109,14 @@ test('overlay shows incremental answer, honest protection, manual ask and dismis
 });
 test('project selection and screenshot controls expose attached context and removal', async ({ page }) => {
   await nativeFixture(page); await page.goto('/');
+  await page.getByRole('tab', { name: 'Context', exact: true }).click();
   await page.getByRole('button', { name: 'Choose project folder' }).click();
   await expect(page.getByLabel('Project folder')).toHaveValue('C:\\fixture\\project');
   await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'listening' }));
   await page.getByRole('button', { name: 'Send selected project' }).click();
   await expect(page.getByText('2 files attached', { exact: false })).toBeVisible();
   await page.getByText('1 files skipped').click(); await expect(page.getByText('image.png', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Send screenshot · Ctrl Shift F8' }).click();
+  await page.getByRole('button', { name: 'Send screenshot' }).click();
   await expect(page.getByText('Screenshot attached · 1920 × 1080', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Remove screenshot' }).click();
   await expect(page.getByText('Screenshot attached', { exact: false })).toHaveCount(0);
@@ -165,4 +171,54 @@ test('answer now accepts the current finalized draft and stays disabled for repl
   expect(await page.evaluate(() => (window as any).fixtureLastAction)).toEqual({ action: 'answer_now', generationId: 'draft-final' });
   await page.evaluate(() => (window as any).fixtureState({ canAnswerNow: false, questions: [] }));
   await expect(button).toBeDisabled();
+});
+
+
+test('setup navigation and crowded overlay preserve readable content and reachable controls', async ({ page }) => {
+  await nativeFixture(page); await page.setViewportSize({width:520,height:700}); await page.goto('/');
+  await page.getByRole('tab',{name:'Meeting',exact:true}).focus(); await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab',{name:'Answers',exact:true})).toHaveAttribute('aria-selected','true');
+  await expect(page.getByRole('heading',{name:'Your answers'})).toBeVisible();
+  await page.keyboard.press('End'); await expect(page.getByRole('heading',{name:'Keep eye contact'})).toBeVisible();
+  await expect.poll(() => page.locator('.pixel-companion img').evaluate(e => (e as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  if(process.env.UI_CAPTURE){
+    for(const name of ['Meeting','Answers','Context','Camera']){
+      await page.getByRole('tab',{name,exact:true}).click();
+      await page.screenshot({animations:'disabled',path:`.impeccable/review/setup-${name.toLowerCase()}-520.png`});
+    }
+  }
+  await page.goto('/?view=overlay');
+  if(process.env.UI_CAPTURE) await page.screenshot({animations:'disabled',path:'.impeccable/review/overlay-empty-520.png'});
+  const answer='Use the map to preserve the invariant.\n```javascript\n'+Array.from({length:55},(_,i)=>`const value${i} = ${i}; // preserve exact code`).join('\n')+'\n```\nCheck the boundary before committing the update.';
+  await page.evaluate(answer=>(window as any).fixtureState({active:true,status:'answer',manual:true,protection:true,
+    question:{id:'crowded',text:'Find the boundary bug and return a complete implementation.',detectedAt:1},answer,
+    project:{name:'inventory-service',files:12,bytes:6400,skipped:[{path:'image.png',reason:'binary'}]},screenshot:{width:1920,height:1080}}),answer);
+  await expect(page.getByRole('button',{name:'Dismiss answer'})).toBeVisible();
+  const geometry=await page.evaluate(()=>{
+    const root=document.querySelector('.overlay')!.getBoundingClientRect();
+    const footer=document.querySelector('.overlay-footer')!.getBoundingClientRect();
+    const content=document.querySelector('.answer-content') as HTMLElement;
+    const tools=document.querySelector('.overlay-tools') as HTMLElement;
+    return {rootBottom:root.bottom,footerBottom:footer.bottom,readingHeight:content.clientHeight,
+      answerScrolls:content.scrollHeight>content.clientHeight,toolsScroll:tools.scrollHeight>tools.clientHeight};
+  });
+  expect(geometry.rootBottom).toBeLessThanOrEqual(700);expect(geometry.footerBottom).toBeLessThanOrEqual(700);
+  expect(geometry.readingHeight).toBeGreaterThan(170);expect(geometry.answerScrolls).toBe(true);expect(geometry.toolsScroll).toBe(true);
+  await page.evaluate(()=>(window as any).fixtureScroll('end'));
+  await expect(page.getByText('Check the boundary before committing the update.',{exact:true})).toBeVisible();
+  if(process.env.UI_CAPTURE) await page.screenshot({animations:'disabled',path:'.impeccable/review/overlay-code-end-520.png'});
+  await page.evaluate(()=>(window as any).fixtureScroll('start'));
+  if(process.env.UI_CAPTURE) await page.screenshot({animations:'disabled',path:'.impeccable/review/overlay-code-520.png'});
+});
+
+
+test('pixel companion receives coordinates without intercepting controls and respects reduced motion',async({page})=>{
+  await nativeFixture(page);await page.goto('/');await page.locator('.pixel-companion').hover({position:{x:20,y:20}});
+  await expect.poll(()=>page.locator('.companion-pixels canvas').evaluate((e:HTMLCanvasElement)=>{
+    const data=e.getContext('2d')!.getImageData(0,0,e.width,e.height).data;
+    return Array.from(data).filter((v,i)=>i%4===3&&v>0).length;
+  })).toBeGreaterThan(0);
+  await page.mouse.move(500,690);await expect(page.locator('.companion-pixels')).toHaveCount(0);
+  await page.emulateMedia({reducedMotion:'reduce'});await page.locator('.pixel-companion').hover();
+  await expect(page.locator('.companion-pixels')).toHaveCount(0);
 });

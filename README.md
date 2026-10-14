@@ -6,10 +6,10 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 The existing x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.2_x64_en-US.msi`. It bundles the official native Codex runtime, Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. The current source selects speech GPUs by name and resolves their current Vulkan indices at startup. The installer predates the latest realtime changes. OBS Virtual Camera's driver must already be installed for camera output.
 
-1. Open Meeting Copilot, set **Answer backend** to **Codex**, then reconnect the native Codex account or complete sign-in. Choose **GPT-6 Luna** from the account's live catalog and **Fast** under **Answer speed**. Reasoning effort is a separate setting. The alternative ChatGPT-plan API backend retains its own browser sign-in flow.
-2. Choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose a named speech GPU. Automatic selection prefers a discrete GPU. The default chunk is 160 ms.
+1. Open **Answers** in Meeting Copilot, set **Answer backend** to **Codex**, then reconnect the native Codex account or complete sign-in. Choose **GPT-6 Luna** from the account's live catalog and **Fast** under **Answer speed**. Reasoning effort is a separate setting. The alternative ChatGPT-plan API backend retains its own browser sign-in flow.
+2. Open **Meeting** and choose your microphone and the playback device used by your meeting. Use the installed Nemotron runtime and English GGUF model, select 80/160/560/1120 ms chunks, and choose a named speech GPU. Automatic selection prefers a discrete GPU. The default chunk is 160 ms.
 3. Click **Start meeting**. Questions from the playback stream trigger answers automatically. **Stop meeting** releases capture and clears meeting content held in memory.
-4. For eye contact, select your input camera under **Eye contact**, start preview, calibrate looking at the camera, then calibrate looking at notes below it. Select **OBS Virtual Camera** in your call. Start around 10–12°; the maximum is 15°. **Stop camera** closes video and clears calibration. See [camera verification and current input limitations](docs/camera-verification.md).
+4. For eye contact, select your input camera under **Camera**, start preview, calibrate looking at the camera, then calibrate looking at notes below it. Select **OBS Virtual Camera** in your call. Start around 10–12°; the maximum is 15°. **Stop camera** closes video and clears calibration. See [camera verification and current input limitations](docs/camera-verification.md).
 
 Headphones help avoid playback voices entering the microphone. Loopback captures all audio on the selected output, so other apps playing speech are also treated as REMOTE. This MVP does not identify individual speakers.
 
@@ -26,6 +26,8 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 | Ctrl + Shift + Home / End | Jump to the top / bottom of that reading surface |
 | Ctrl + Shift + Left / Right | Scroll the visible code block horizontally |
 | Ctrl + Shift + F8 | Capture the monitor under the pointer and send it to AI |
+
+Setup uses four keyboard-accessible sections: **Meeting**, **Answers**, **Context**, and **Camera**. Meeting controls stay within reach while you read settings. Answers distinguish fenced and recognizable code from prose, retain exact source offsets, and provide a copy control. Focus a long question with Tab to page through its complete text; otherwise the reading shortcuts scroll the answer. The pixel companion uses Space UI navigation, a Componentry pointer trail, and a Canvas UI ripple, with motion disabled when requested.
 
 Drag the overlay by its status header. Automatic answers do not request focus; manual input explicitly does. If another app owns a shortcut, startup reports the conflict and the corresponding on-screen control remains available.
 

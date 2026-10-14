@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-14T15:13:49Z",
+  "title": "Design System: Meeting Copilot",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Companion Mint",
+        "tonalRamp": [
+          "oklch(15% 0.07028 161.90)",
+          "oklch(26.43% 0.07028 161.90)",
+          "oklch(37.86% 0.07028 161.90)",
+          "oklch(49.29% 0.07028 161.90)",
+          "oklch(60.71% 0.07028 161.90)",
+          "oklch(72.14% 0.07028 161.90)",
+          "oklch(83.57% 0.07028 161.90)",
+          "oklch(95% 0.07028 161.90)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Light Mint",
+        "tonalRamp": [
+          "oklch(15% 0.05766 160.68)",
+          "oklch(26.43% 0.05766 160.68)",
+          "oklch(37.86% 0.05766 160.68)",
+          "oklch(49.29% 0.05766 160.68)",
+          "oklch(60.71% 0.05766 160.68)",
+          "oklch(72.14% 0.05766 160.68)",
+          "oklch(83.57% 0.05766 160.68)",
+          "oklch(95% 0.05766 160.68)"
+        ]
+      },
+      "primary-ink": {
+        "role": "neutral",
+        "displayName": "Forest Ink",
+        "tonalRamp": [
+          "oklch(15% 0.03796 160.58)",
+          "oklch(26.43% 0.03796 160.58)",
+          "oklch(37.86% 0.03796 160.58)",
+          "oklch(49.29% 0.03796 160.58)",
+          "oklch(60.71% 0.03796 160.58)",
+          "oklch(72.14% 0.03796 160.58)",
+          "oklch(83.57% 0.03796 160.58)",
+          "oklch(95% 0.03796 160.58)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Night Slate",
+        "tonalRamp": [
+          "oklch(15% 0.01264 248.45)",
+          "oklch(26.43% 0.01264 248.45)",
+          "oklch(37.86% 0.01264 248.45)",
+          "oklch(49.29% 0.01264 248.45)",
+          "oklch(60.71% 0.01264 248.45)",
+          "oklch(72.14% 0.01264 248.45)",
+          "oklch(83.57% 0.01264 248.45)",
+          "oklch(95% 0.01264 248.45)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Reading Slate",
+        "tonalRamp": [
+          "oklch(15% 0.02169 248.75)",
+          "oklch(26.43% 0.02169 248.75)",
+          "oklch(37.86% 0.02169 248.75)",
+          "oklch(49.29% 0.02169 248.75)",
+          "oklch(60.71% 0.02169 248.75)",
+          "oklch(72.14% 0.02169 248.75)",
+          "oklch(83.57% 0.02169 248.75)",
+          "oklch(95% 0.02169 248.75)"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field Slate",
+        "tonalRamp": [
+          "oklch(15% 0.01931 248.64)",
+          "oklch(26.43% 0.01931 248.64)",
+          "oklch(37.86% 0.01931 248.64)",
+          "oklch(49.29% 0.01931 248.64)",
+          "oklch(60.71% 0.01931 248.64)",
+          "oklch(72.14% 0.01931 248.64)",
+          "oklch(83.57% 0.01931 248.64)",
+          "oklch(95% 0.01931 248.64)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Pale Slate",
+        "tonalRamp": [
+          "oklch(15% 0.00762 241.67)",
+          "oklch(26.43% 0.00762 241.67)",
+          "oklch(37.86% 0.00762 241.67)",
+          "oklch(49.29% 0.00762 241.67)",
+          "oklch(60.71% 0.00762 241.67)",
+          "oklch(72.14% 0.00762 241.67)",
+          "oklch(83.57% 0.00762 241.67)",
+          "oklch(95% 0.00762 241.67)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Soft Sage Gray",
+        "tonalRamp": [
+          "oklch(15% 0.01541 175.59)",
+          "oklch(26.43% 0.01541 175.59)",
+          "oklch(37.86% 0.01541 175.59)",
+          "oklch(49.29% 0.01541 175.59)",
+          "oklch(60.71% 0.01541 175.59)",
+          "oklch(72.14% 0.01541 175.59)",
+          "oklch(83.57% 0.01541 175.59)",
+          "oklch(95% 0.01541 175.59)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Sage Divider",
+        "tonalRamp": [
+          "oklch(15% 0.01869 180.81)",
+          "oklch(26.43% 0.01869 180.81)",
+          "oklch(37.86% 0.01869 180.81)",
+          "oklch(49.29% 0.01869 180.81)",
+          "oklch(60.71% 0.01869 180.81)",
+          "oklch(72.14% 0.01869 180.81)",
+          "oklch(83.57% 0.01869 180.81)",
+          "oklch(95% 0.01869 180.81)"
+        ]
+      },
+      "button": {
+        "role": "neutral",
+        "displayName": "Control Slate",
+        "tonalRamp": [
+          "oklch(15% 0.02358 246.11)",
+          "oklch(26.43% 0.02358 246.11)",
+          "oklch(37.86% 0.02358 246.11)",
+          "oklch(49.29% 0.02358 246.11)",
+          "oklch(60.71% 0.02358 246.11)",
+          "oklch(72.14% 0.02358 246.11)",
+          "oklch(83.57% 0.02358 246.11)",
+          "oklch(95% 0.02358 246.11)"
+        ]
+      },
+      "button-hover": {
+        "role": "neutral",
+        "displayName": "Raised Slate",
+        "tonalRamp": [
+          "oklch(15% 0.02549 244.07)",
+          "oklch(26.43% 0.02549 244.07)",
+          "oklch(37.86% 0.02549 244.07)",
+          "oklch(49.29% 0.02549 244.07)",
+          "oklch(60.71% 0.02549 244.07)",
+          "oklch(72.14% 0.02549 244.07)",
+          "oklch(83.57% 0.02549 244.07)",
+          "oklch(95% 0.02549 244.07)"
+        ]
+      },
+      "tab-selected": {
+        "role": "primary",
+        "displayName": "Selected Forest",
+        "tonalRamp": [
+          "oklch(15% 0.02830 166.74)",
+          "oklch(26.43% 0.02830 166.74)",
+          "oklch(37.86% 0.02830 166.74)",
+          "oklch(49.29% 0.02830 166.74)",
+          "oklch(60.71% 0.02830 166.74)",
+          "oklch(72.14% 0.02830 166.74)",
+          "oklch(83.57% 0.02830 166.74)",
+          "oklch(95% 0.02830 166.74)"
+        ]
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Placeholder Sage",
+        "tonalRamp": [
+          "oklch(15% 0.01871 169.90)",
+          "oklch(26.43% 0.01871 169.90)",
+          "oklch(37.86% 0.01871 169.90)",
+          "oklch(49.29% 0.01871 169.90)",
+          "oklch(60.71% 0.01871 169.90)",
+          "oklch(72.14% 0.01871 169.90)",
+          "oklch(83.57% 0.01871 169.90)",
+          "oklch(95% 0.01871 169.90)"
+        ]
+      },
+      "code-background": {
+        "role": "neutral",
+        "displayName": "Code Night",
+        "tonalRamp": [
+          "oklch(15% 0.01248 214.72)",
+          "oklch(26.43% 0.01248 214.72)",
+          "oklch(37.86% 0.01248 214.72)",
+          "oklch(49.29% 0.01248 214.72)",
+          "oklch(60.71% 0.01248 214.72)",
+          "oklch(72.14% 0.01248 214.72)",
+          "oklch(83.57% 0.01248 214.72)",
+          "oklch(95% 0.01248 214.72)"
+        ]
+      },
+      "code-toolbar": {
+        "role": "neutral",
+        "displayName": "Code Forest",
+        "tonalRamp": [
+          "oklch(15% 0.02588 167.15)",
+          "oklch(26.43% 0.02588 167.15)",
+          "oklch(37.86% 0.02588 167.15)",
+          "oklch(49.29% 0.02588 167.15)",
+          "oklch(60.71% 0.02588 167.15)",
+          "oklch(72.14% 0.02588 167.15)",
+          "oklch(83.57% 0.02588 167.15)",
+          "oklch(95% 0.02588 167.15)"
+        ]
+      },
+      "code-text": {
+        "role": "neutral",
+        "displayName": "Code Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00918 161.34)",
+          "oklch(26.43% 0.00918 161.34)",
+          "oklch(37.86% 0.00918 161.34)",
+          "oklch(49.29% 0.00918 161.34)",
+          "oklch(60.71% 0.00918 161.34)",
+          "oklch(72.14% 0.00918 161.34)",
+          "oklch(83.57% 0.00918 161.34)",
+          "oklch(95% 0.00918 161.34)"
+        ]
+      },
+      "code-label": {
+        "role": "neutral",
+        "displayName": "Code Sage",
+        "tonalRamp": [
+          "oklch(15% 0.02568 164.31)",
+          "oklch(26.43% 0.02568 164.31)",
+          "oklch(37.86% 0.02568 164.31)",
+          "oklch(49.29% 0.02568 164.31)",
+          "oklch(60.71% 0.02568 164.31)",
+          "oklch(72.14% 0.02568 164.31)",
+          "oklch(83.57% 0.02568 164.31)",
+          "oklch(95% 0.02568 164.31)"
+        ]
+      },
+      "syntax-keyword": {
+        "role": "semantic",
+        "displayName": "Keyword Green",
+        "tonalRamp": [
+          "oklch(15% 0.09018 134.86)",
+          "oklch(26.43% 0.09018 134.86)",
+          "oklch(37.86% 0.09018 134.86)",
+          "oklch(49.29% 0.09018 134.86)",
+          "oklch(60.71% 0.09018 134.86)",
+          "oklch(72.14% 0.09018 134.86)",
+          "oklch(83.57% 0.09018 134.86)",
+          "oklch(95% 0.09018 134.86)"
+        ]
+      },
+      "syntax-string": {
+        "role": "semantic",
+        "displayName": "String Sand",
+        "tonalRamp": [
+          "oklch(15% 0.07281 76.83)",
+          "oklch(26.43% 0.07281 76.83)",
+          "oklch(37.86% 0.07281 76.83)",
+          "oklch(49.29% 0.07281 76.83)",
+          "oklch(60.71% 0.07281 76.83)",
+          "oklch(72.14% 0.07281 76.83)",
+          "oklch(83.57% 0.07281 76.83)",
+          "oklch(95% 0.07281 76.83)"
+        ]
+      },
+      "syntax-number": {
+        "role": "semantic",
+        "displayName": "Number Blue",
+        "tonalRamp": [
+          "oklch(15% 0.05564 261.21)",
+          "oklch(26.43% 0.05564 261.21)",
+          "oklch(37.86% 0.05564 261.21)",
+          "oklch(49.29% 0.05564 261.21)",
+          "oklch(60.71% 0.05564 261.21)",
+          "oklch(72.14% 0.05564 261.21)",
+          "oklch(83.57% 0.05564 261.21)",
+          "oklch(95% 0.05564 261.21)"
+        ]
+      },
+      "syntax-comment": {
+        "role": "semantic",
+        "displayName": "Comment Sage",
+        "tonalRamp": [
+          "oklch(15% 0.02449 161.52)",
+          "oklch(26.43% 0.02449 161.52)",
+          "oklch(37.86% 0.02449 161.52)",
+          "oklch(49.29% 0.02449 161.52)",
+          "oklch(60.71% 0.02449 161.52)",
+          "oklch(72.14% 0.02449 161.52)",
+          "oklch(83.57% 0.02449 161.52)",
+          "oklch(95% 0.02449 161.52)"
+        ]
+      },
+      "account": {
+        "role": "neutral",
+        "displayName": "Account Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00171 247.84)",
+          "oklch(26.43% 0.00171 247.84)",
+          "oklch(37.86% 0.00171 247.84)",
+          "oklch(49.29% 0.00171 247.84)",
+          "oklch(60.71% 0.00171 247.84)",
+          "oklch(72.14% 0.00171 247.84)",
+          "oklch(83.57% 0.00171 247.84)",
+          "oklch(95% 0.00171 247.84)"
+        ]
+      },
+      "account-hover": {
+        "role": "neutral",
+        "displayName": "Account Mist",
+        "tonalRamp": [
+          "oklch(15% 0.01996 159.73)",
+          "oklch(26.43% 0.01996 159.73)",
+          "oklch(37.86% 0.01996 159.73)",
+          "oklch(49.29% 0.01996 159.73)",
+          "oklch(60.71% 0.01996 159.73)",
+          "oklch(72.14% 0.01996 159.73)",
+          "oklch(83.57% 0.01996 159.73)",
+          "oklch(95% 0.01996 159.73)"
+        ]
+      },
+      "account-ink": {
+        "role": "neutral",
+        "displayName": "Account Ink",
+        "tonalRamp": [
+          "oklch(15% 0.02051 162.58)",
+          "oklch(26.43% 0.02051 162.58)",
+          "oklch(37.86% 0.02051 162.58)",
+          "oklch(49.29% 0.02051 162.58)",
+          "oklch(60.71% 0.02051 162.58)",
+          "oklch(72.14% 0.02051 162.58)",
+          "oklch(83.57% 0.02051 162.58)",
+          "oklch(95% 0.02051 162.58)"
+        ]
+      },
+      "error-text": {
+        "role": "semantic",
+        "displayName": "Error Peach",
+        "tonalRamp": [
+          "oklch(15% 0.06977 30.59)",
+          "oklch(26.43% 0.06977 30.59)",
+          "oklch(37.86% 0.06977 30.59)",
+          "oklch(49.29% 0.06977 30.59)",
+          "oklch(60.71% 0.06977 30.59)",
+          "oklch(72.14% 0.06977 30.59)",
+          "oklch(83.57% 0.06977 30.59)",
+          "oklch(95% 0.06977 30.59)"
+        ]
+      },
+      "error-background": {
+        "role": "semantic",
+        "displayName": "Error Earth",
+        "tonalRamp": [
+          "oklch(15% 0.03489 30.71)",
+          "oklch(26.43% 0.03489 30.71)",
+          "oklch(37.86% 0.03489 30.71)",
+          "oklch(49.29% 0.03489 30.71)",
+          "oklch(60.71% 0.03489 30.71)",
+          "oklch(72.14% 0.03489 30.71)",
+          "oklch(83.57% 0.03489 30.71)",
+          "oklch(95% 0.03489 30.71)"
+        ]
+      },
+      "error-border": {
+        "role": "semantic",
+        "displayName": "Error Border",
+        "tonalRamp": [
+          "oklch(15% 0.06787 34.31)",
+          "oklch(26.43% 0.06787 34.31)",
+          "oklch(37.86% 0.06787 34.31)",
+          "oklch(49.29% 0.06787 34.31)",
+          "oklch(60.71% 0.06787 34.31)",
+          "oklch(72.14% 0.06787 34.31)",
+          "oklch(83.57% 0.06787 34.31)",
+          "oklch(95% 0.06787 34.31)"
+        ]
+      },
+      "warning": {
+        "role": "semantic",
+        "displayName": "Protection Amber",
+        "tonalRamp": [
+          "oklch(15% 0.10478 72.54)",
+          "oklch(26.43% 0.10478 72.54)",
+          "oklch(37.86% 0.10478 72.54)",
+          "oklch(49.29% 0.10478 72.54)",
+          "oklch(60.71% 0.10478 72.54)",
+          "oklch(72.14% 0.10478 72.54)",
+          "oklch(83.57% 0.10478 72.54)",
+          "oklch(95% 0.10478 72.54)"
+        ]
+      },
+      "protected": {
+        "role": "semantic",
+        "displayName": "Protection Sage",
+        "tonalRamp": [
+          "oklch(15% 0.05099 161.47)",
+          "oklch(26.43% 0.05099 161.47)",
+          "oklch(37.86% 0.05099 161.47)",
+          "oklch(49.29% 0.05099 161.47)",
+          "oklch(60.71% 0.05099 161.47)",
+          "oklch(72.14% 0.05099 161.47)",
+          "oklch(83.57% 0.05099 161.47)",
+          "oklch(95% 0.05099 161.47)"
+        ]
+      },
+      "status-thinking": {
+        "role": "semantic",
+        "displayName": "Thinking Sand",
+        "tonalRamp": [
+          "oklch(15% 0.07784 81.20)",
+          "oklch(26.43% 0.07784 81.20)",
+          "oklch(37.86% 0.07784 81.20)",
+          "oklch(49.29% 0.07784 81.20)",
+          "oklch(60.71% 0.07784 81.20)",
+          "oklch(72.14% 0.07784 81.20)",
+          "oklch(83.57% 0.07784 81.20)",
+          "oklch(95% 0.07784 81.20)"
+        ]
+      },
+      "status-error": {
+        "role": "semantic",
+        "displayName": "Status Coral",
+        "tonalRamp": [
+          "oklch(15% 0.11257 29.99)",
+          "oklch(26.43% 0.11257 29.99)",
+          "oklch(37.86% 0.11257 29.99)",
+          "oklch(49.29% 0.11257 29.99)",
+          "oklch(60.71% 0.11257 29.99)",
+          "oklch(72.14% 0.11257 29.99)",
+          "oklch(83.57% 0.11257 29.99)",
+          "oklch(95% 0.11257 29.99)"
+        ]
+      },
+      "status-off": {
+        "role": "semantic",
+        "displayName": "Inactive Slate",
+        "tonalRamp": [
+          "oklch(15% 0.02442 239.71)",
+          "oklch(26.43% 0.02442 239.71)",
+          "oklch(37.86% 0.02442 239.71)",
+          "oklch(49.29% 0.02442 239.71)",
+          "oklch(60.71% 0.02442 239.71)",
+          "oklch(72.14% 0.02442 239.71)",
+          "oklch(83.57% 0.02442 239.71)",
+          "oklch(95% 0.02442 239.71)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Setup Headline",
+        "purpose": "Setup brand heading."
+      },
+      "title": {
+        "displayName": "Section Title",
+        "purpose": "Setup section headings."
+      },
+      "body": {
+        "displayName": "Answer Body",
+        "purpose": "Suggested answer prose."
+      },
+      "supporting": {
+        "displayName": "Supporting Text",
+        "purpose": "Setup introductions, question text, and empty-state explanation."
+      },
+      "label": {
+        "displayName": "Reading Label",
+        "purpose": "Question and answer section labels."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Base buttons and fields."
+      },
+      "quiet-control": {
+        "displayName": "Quiet Control",
+        "purpose": "Low-emphasis text actions."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Shortcut hints and metadata."
+      },
+      "code": {
+        "displayName": "Source Code",
+        "purpose": "Exact monospaced answer source."
+      },
+      "wordmark": {
+        "displayName": "Italic Wordmark",
+        "purpose": "Small overlay signature; italic style is applied in the component."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay-floating",
+        "value": "0 8px 25px #0005",
+        "purpose": "Structural elevation of the overlay shell."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-state",
+        "value": "background-color 150ms ease-out, border-color 150ms ease-out",
+        "purpose": "Buttons and fields; disabled under reduced motion."
+      },
+      {
+        "name": "tab-indicator",
+        "value": "width 180ms ease-out, translate 180ms ease-out",
+        "purpose": "Selected setup tab feedback; disabled under reduced motion."
+      },
+      {
+        "name": "status-pulse",
+        "value": "pulse 1.3s infinite",
+        "purpose": "Existing thinking/status feedback; keyframe opacity is .3 at 50%; disabled under reduced motion."
+      },
+      {
+        "name": "streaming-caret",
+        "value": "pulse .8s infinite",
+        "purpose": "Existing answer streaming cursor; disabled under reduced motion."
+      },
+      {
+        "name": "companion-trail",
+        "value": "gap=8; speed=0.12; noFocus; controlled pointer",
+        "purpose": "Localized Componentry trail, unmounted on leave and not mounted under reduced motion."
+      },
+      {
+        "name": "companion-ripple",
+        "value": "amplitude=0.25; shine=0.18; dispersion=0; refraction=0; interval=0; trigger=click",
+        "purpose": "Localized Canvas UI click glint; trigger becomes none under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "420px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Mint action for the principal task.",
+      "html": "<button class=\"ds-primary\">Start meeting</button>",
+      "css": ".ds-primary{font-family:Segoe UI,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;border:1px solid var(--border,#394744);border-radius:8px;padding:9px 13px;font-size:13px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;background:var(--green,#a7dfc2);color:#142c20;border-color:var(--green,#a7dfc2);font-weight:600}.ds-primary:hover{background:#bfecd3}.ds-primary:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}.ds-primary:disabled{opacity:.55;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Slated control for device, meeting, and supporting actions.",
+      "html": "<button class=\"ds-secondary\">Pause listening</button>",
+      "css": ".ds-secondary{font-family:Segoe UI,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;border:1px solid var(--border,#394744);border-radius:8px;padding:9px 13px;font-size:13px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;background:#25303a;color:#e8edf1}.ds-secondary:hover{background:#34414c}.ds-secondary:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}.ds-secondary:disabled{opacity:.55;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Quiet Text Action",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Low-emphasis action used below meeting and account controls.",
+      "html": "<button class=\"ds-ghost\">Hide / show overlay</button>",
+      "css": ".ds-ghost{font-family:Segoe UI,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;background:transparent;color:var(--muted,#b0bdb9);border:0;border-radius:8px;padding:6px 0;font-size:12px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out}.ds-ghost:hover{color:#fff;background:transparent}.ds-ghost:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}.ds-ghost:disabled{opacity:.55;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-ghost{transition:none}}"
+    },
+    {
+      "name": "Account Button",
+      "kind": "button",
+      "refersTo": "button-account",
+      "description": "Existing pale full-width ChatGPT connection action.",
+      "html": "<button class=\"ds-account\">Continue with ChatGPT</button>",
+      "css": ".ds-account{font-family:Segoe UI,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;border:1px solid var(--border,#394744);border-radius:8px;padding:9px 13px;font-size:13px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;width:100%;background:#f5f6f7;color:#15211b;font-weight:600;padding:13px;justify-content:space-between}.ds-account:hover{background:#dcebe2}.ds-account:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}.ds-account:disabled{opacity:.55;cursor:not-allowed;}@media(prefers-reduced-motion:reduce){.ds-account{transition:none}}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Setup field with external label and quiet placeholder.",
+      "html": "<label class=\"ds-field-label\">Project folder<input class=\"ds-field\" placeholder=\"Choose the project you want to discuss\" /></label>",
+      "css": ".ds-field-label{font-family:Segoe UI,Arial,sans-serif;display:block;font-size:13px;font-weight:500;margin-bottom:18px;color:#e8edf1}.ds-field{font-family:Segoe UI,Arial,sans-serif;display:block;margin-top:7px;width:100%;color:#e8edf1;background:#182028;border:1px solid var(--border,#394744);border-radius:8px;padding:11px;font-size:13px;caret-color:var(--green,#a7dfc2);transition:background-color 150ms ease-out,border-color 150ms ease-out}.ds-field::placeholder{color:#a5b4ae}.ds-field:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-field{transition:none}}"
+    },
+    {
+      "name": "Setup Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Static preview of the four-section Space UI tab track; the app owns tab behavior.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Setup sections\"><button class=\"ds-tab\">Meeting</button><button class=\"ds-tab ds-tab-selected\" aria-current=\"page\">Answers</button><button class=\"ds-tab\">Context</button><button class=\"ds-tab\">Camera</button></nav>",
+      "css": ".ds-nav{display:flex;width:100%;gap:4px;padding:4px;background:#182028;border-radius:8px}.ds-tab{font-family:Segoe UI,Arial,sans-serif;flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;background:transparent;border:0;color:var(--muted,#b0bdb9);border-radius:6px;padding:8px 4px;font-size:13px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out}.ds-tab-selected{background:#283b33;color:var(--green,#a7dfc2)}.ds-tab:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-tab{transition:none}}"
+    },
+    {
+      "name": "Code Card",
+      "kind": "card",
+      "refersTo": "code-card",
+      "description": "Source-preserving scrollable code surface and language/copy toolbar.",
+      "html": "<section class=\"ds-code-card\" aria-label=\"TypeScript code snippet\"><div class=\"ds-code-toolbar\"><span>typescript</span><button class=\"ds-copy\">Copy code</button></div><pre class=\"ds-code-pre\" tabindex=\"0\" aria-label=\"Code snippet\"><code><span class=\"ds-keyword\">const</span> answer = <span class=\"ds-number\">42</span>; <span class=\"ds-comment\">// preserve exact code</span></code></pre></section>",
+      "css": ".ds-code-card{margin:16px 0;background:#11191b;border:1px solid var(--border,#394744);border-radius:8px;overflow:hidden}.ds-code-toolbar{font-family:Segoe UI,Arial,sans-serif;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#20312a;font-size:11px;color:#b9cdc3}.ds-copy{font-family:Segoe UI,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;border:1px solid var(--border,#394744);border-radius:8px;padding:9px 13px;font-size:13px;cursor:pointer;transition:background-color 150ms ease-out,border-color 150ms ease-out;min-height:26px;font-size:11px;padding:4px 8px;background:transparent;color:#e8edf1}.ds-copy:hover{background:#34414c}.ds-copy:focus-visible{outline:2px solid var(--green,#a7dfc2);outline-offset:3px;}.ds-code-pre{margin:0;padding:14px;overflow:auto;font:13px/1.7 Consolas,'Courier New',monospace;tab-size:2;color:#e3eae6}.ds-code-pre code{font:inherit;color:inherit}.ds-keyword{color:#bce3a7}.ds-number{color:#b4c9ed}.ds-comment{color:#a1b3a9}@media(prefers-reduced-motion:reduce){.ds-copy{transition:none}}"
+    },
+    {
+      "name": "Meeting Status",
+      "kind": "custom",
+      "description": "Dot plus explicit status text; color never carries the state alone.",
+      "html": "<div class=\"ds-status\"><i class=\"ds-status-dot\" aria-hidden=\"true\"></i><span>Suggested answer</span></div>",
+      "css": ".ds-status{font-family:Segoe UI,Arial,sans-serif;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.2px;color:#e8edf1}.ds-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green,#a7dfc2)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The interview companion",
+    "overview": "Meeting Copilot pairs a quiet Windows-style control surface with a small, original pixel robot. Dark slate surfaces and soft mint accents give setup and reading a shared identity. The personality lives in the companion, the italic wordmark, and direct, reassuring copy; controls remain calm and familiar.\n\nDensity changes with the task. Setup groups practical choices into four sections; the overlay gives priority to the answer and its exact code. The companion appears in setup and the empty reading state. Motion stays around that companion or in brief control feedback, leaving streamed answers clear and steady.",
+    "keyCharacteristics": [
+      "Dark slate foundations, one soft mint action accent.",
+      "Familiar native typography with a restrained italic wordmark.",
+      "Source-faithful, selectable code in a dedicated reading surface.",
+      "A pixel companion whose effects stay local and respect reduced motion.",
+      "Visible context controls and reachable keyboard reading tools."
+    ],
+    "rules": [
+      {
+        "name": "The Signal Rule",
+        "body": "Use mint to identify action, current state, and reading structure. Keep secondary explanation in the muted neutral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Exact Source Rule",
+        "body": "Syntax styling may separate code visually, but source text, indentation, selection, and copied content must remain faithful.",
+        "section": "typography"
+      },
+      {
+        "name": "The Reachable Footer Rule",
+        "body": "Long questions, code, attachments, and manual input must scroll within their allocated areas while leaving overlay actions accessible.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "Do use the later stylesheet declarations as the current muted, border, and surface values.",
+      "Do preserve source text, selection, horizontal code scrolling, and exact copying.",
+      "Do keep context sharing explicit, visible, and removable.",
+      "Do preserve focus outlines, tab semantics, and reduced-motion behavior.",
+      "Do verify long-content states within the 520×700 overlay frame."
+    ],
+    "donts": [
+      "Don't place companion effects over streamed answer text or code.",
+      "Don't turn setup into a collection of independently elevated cards.",
+      "Don't use the italic wordmark family for paragraphs or ordinary controls.",
+      "Don't allow expanding tools to push the overlay footer outside its height budget.",
+      "Don't describe browser fixtures as proof of native protection, global shortcuts, model quality, or completed live interviews."
+    ]
+  }
+}

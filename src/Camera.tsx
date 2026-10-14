@@ -27,7 +27,7 @@ export default function Camera() {
   }, []);
   const active = view.running || view.loading;
   return <section className="camera-section device-section">
-    <div className="section-label">EYE CONTACT</div>
+    <h2>Keep eye contact</h2>
     <p className="field-note">Small eye corrections for reading notes below the camera. Video stays on this device and feeds OBS Virtual Camera.</p>
     <fieldset disabled={busy || active || !native()}>
       <label>Input camera<select aria-label="Input camera" value={camera ?? ''} onChange={e => setCamera(Number(e.target.value))}><option value="" disabled>Choose a camera</option>{devices.cameras.filter(c => c.allowed).map(c => <option key={c.index} value={c.index}>{c.name}</option>)}</select></label>

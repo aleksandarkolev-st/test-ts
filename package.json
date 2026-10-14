@@ -13,6 +13,7 @@
     "package": "tauri build --bundles msi"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
     "@tauri-apps/api": "^2.8.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

@@ -1,0 +1,130 @@
+{
+  "scope": "Supplementary actual implementations at 20000 vertices; frozen grades and distinct interview counts unchanged",
+  "oracle": "A chain is one connected bipartite component and endpoint distance is n-1. A directed chain has the unique order 0..n-1; all isolated vertices have lexicographically smallest order 0..n-1.",
+  "outcomes": [
+    {
+      "id": "undirected-connected-components",
+      "round": 2,
+      "answerSha256": "8602b9f2deb98162c7b57e84dc407b82b4543a15db2099d0f188fc0aee823e11",
+      "shape": "undirected chain",
+      "n": 20000,
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "id": "undirected-connected-components",
+      "round": 3,
+      "answerSha256": "0a163444ffb688d6eea626a5e3ecfe2335ba0ee7d73ea25394d7920b0e66d808",
+      "shape": "undirected chain",
+      "n": 20000,
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "id": "bipartite-graph",
+      "round": 2,
+      "answerSha256": "ceed4f3db2d141695ff8210beb02de8b04143c2be1d06e93591ddee049939a65",
+      "shape": "undirected chain",
+      "n": 20000,
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "id": "bipartite-graph",
+      "round": 3,
+      "answerSha256": "8023a1862c3852fdf399d50adfd995f9e39b0c48695b005b5ba24c5d539c9f88",
+      "shape": "undirected chain",
+      "n": 20000,
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "id": "unweighted-shortest-path",
+      "round": 2,
+      "answerSha256": "7b9f86d0b4188e1ba583ddc5920d104b6a7ca886577ff9879b41ea44bc7d4ca8",
+      "shape": "undirected chain endpoints",
+      "n": 20000,
+      "expected": 19999,
+      "actual": 19999,
+      "passed": true
+    },
+    {
+      "id": "unweighted-shortest-path",
+      "round": 3,
+      "answerSha256": "cd14b48937b865b93284ebf0db0487d9ccec4a3981b4286bcc64ce5bf1a07d60",
+      "shape": "undirected chain endpoints",
+      "n": 20000,
+      "expected": 19999,
+      "actual": 19999,
+      "passed": true
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "round": 2,
+      "answerSha256": "083cdbfc6ed50cad765894a8519ebe2682e70aa2bf7ea085a037dc2078766e51",
+      "shape": "directed chain with every edge duplicated",
+      "n": 20000,
+      "expectedSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "actualSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "passed": true
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "round": 3,
+      "answerSha256": "9e12015c636ea42e2226b723fcfedc043b0d8a167d1877dcc0dd88bb27e32fc8",
+      "shape": "directed chain with every edge duplicated",
+      "n": 20000,
+      "expectedSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "actualSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "passed": true
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "round": 2,
+      "answerSha256": "083cdbfc6ed50cad765894a8519ebe2682e70aa2bf7ea085a037dc2078766e51",
+      "shape": "all isolated vertices, wide ready frontier",
+      "n": 20000,
+      "expectedSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "actualSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "passed": true
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "round": 3,
+      "answerSha256": "9e12015c636ea42e2226b723fcfedc043b0d8a167d1877dcc0dd88bb27e32fc8",
+      "shape": "all isolated vertices, wide ready frontier",
+      "n": 20000,
+      "expectedSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "actualSummary": {
+        "length": 20000,
+        "ascendingRange": true
+      },
+      "passed": true
+    }
+  ]
+}

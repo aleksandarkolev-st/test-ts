@@ -1012,6 +1012,55 @@
       "note": "Math.trunc fixes the stated negative-fraction defect and frozen sign fixtures, with negative zero numerically valid. Broad integer contract has no safe-integer restriction: for exactly represented numerator 18014398509481988 and divisor 3, both candidates return 6004799503160663; independent exact BigInt quotient is 6004799503160662, a safe and exactly represented result. Division rounds upward before truncation, leaving the broader contract unmet. Same synchronous API, no dependencies/test edits; original/patch markers, actual service smoke and native reading checks pass.",
       "evidence": "interview-signed-division-completed.json",
       "supplementaryEvidence": "interview-division-precision-boundary.json"
+    },
+    {
+      "id": "n-queens-count",
+      "kind": "regular",
+      "finalAnswerSha256": "dbf0fd1aa7baf0a3cc60842ad11f72ff2fa37a27f86d9de137011b7fdc94bf07",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "One queen per row and column/diagonal occupancy enforce nonattacks; restoring only newly marked entries cannot remove ancestor occupancy. Empty row base case counts n=0 once. Both actual candidates match independent complete-column-permutation enumeration and diagonal rejection across the full stated integer domain n=0..10. O(n*n!) conservative time/O(n) storage; bounded domain keeps counts and recursion exact.",
+      "evidence": "interview-nqueens-full-domain.json"
+    },
+    {
+      "id": "undirected-connected-components",
+      "kind": "regular",
+      "finalAnswerSha256": "0a163444ffb688d6eea626a5e3ecfe2335ba0ee7d73ea25394d7920b0e66d808",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Scanning every vertex counts isolated components; iterative DFS marks before pushing, so each vertex enters the stack at most once and each undirected edge is scanned at most twice. Empty/cycle/duplicate/self-loop behavior correct. Both candidates pass all 1099 undirected graphs on n=0..4 with self-loops, plus a 20000-vertex chain. O(n+m) time and storage.",
+      "evidence": "interview-small-undirected-graphs.json",
+      "supplementaryEvidence": "interview-large-graph-shapes.json"
+    },
+    {
+      "id": "bipartite-graph",
+      "kind": "regular",
+      "finalAnswerSha256": "8023a1862c3852fdf399d50adfd995f9e39b0c48695b005b5ba24c5d539c9f88",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Every component gets its own iterative traversal. Opposite colors are assigned once on discovery and every already-colored endpoint is checked, rejecting self-loops and odd cycles. Empty graph true. Both candidates pass all 1099 graphs on n=0..4 against exhaustive color assignments, plus a 20000-vertex chain. O(V+E) time/O(V) auxiliary storage.",
+      "evidence": "interview-small-undirected-graphs.json",
+      "supplementaryEvidence": "interview-large-graph-shapes.json"
+    },
+    {
+      "id": "unweighted-shortest-path",
+      "kind": "regular",
+      "finalAnswerSha256": "cd14b48937b865b93284ebf0db0487d9ccec4a3981b4286bcc64ce5bf1a07d60",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "BFS uses head-index queue and marks distances before enqueue. FIFO layers guarantee first target discovery is shortest; identical valid endpoints return zero and exhausted reachability returns -1. Builds both edge directions. Both candidates pass all 610 ordered endpoint queries for every undirected graph on n=1..3 with self-loops against independent Floyd-Warshall distances, plus a 20000-vertex endpoint chain. O(n+m) time/storage.",
+      "evidence": "interview-small-undirected-graphs.json",
+      "supplementaryEvidence": "interview-large-graph-shapes.json"
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "kind": "regular",
+      "finalAnswerSha256": "9e12015c636ea42e2226b723fcfedc043b0d8a167d1877dcc0dd88bb27e32fc8",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Per-source Set deduplicates outgoing edges before indegree increments. Min-heap contains exactly unprocessed zero-indegree vertices, so each greedy choice is smallest among possible next vertices. Heap insertion/sifting and single/empty extraction are correct; cycle count rejects partial output. Round 3 replaces bit-shift parent indexing with ordinary floor arithmetic. Both candidates pass 1062 exhaustive directed graph/duplicate-edge cases on n=0..3, 20000-vertex duplicate-edge directed chain and wide isolated frontier. Expected O(m+n log(n+1)) time/O(n+unique edges) storage.",
+      "evidence": "interview-small-directed-orderings.json",
+      "supplementaryEvidence": "interview-large-graph-shapes.json"
     }
   ]
 }

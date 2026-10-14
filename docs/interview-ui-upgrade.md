@@ -108,3 +108,11 @@ Median first word is 3179 ms (p95 8365 ms), median completion 8053 ms (p95 15318
 The tenth diagnosis correctly identifies `Math.floor(a/b)` and the smallest total-magnitude counterexample `solve(-1,2)`: original -1, required zero. Both fixes use `Math.trunc`, with round 3 additionally normalizing negative zero. Supplementary execution exposes a remaining unrestricted-integer failure: exactly represented numerator 18014398509481988 divided by 3 rounds upward before truncation. Both candidates return 6004799503160663, while independent exact BigInt division gives the safe, exactly represented quotient 6004799503160662. Frozen sign fixtures and actual answers remain unchanged.
 
 Raw evidence: `evidence/interview-signed-division-completed.json`; numerical witness: `evidence/interview-division-precision-boundary.json`. Median first word is 3182 ms (p95 8365 ms); median completion is 8053 ms (p95 15318 ms). Remaining: 25 regular and 10 bug interviews. Full requested scope remains active and unfinished.
+
+### Regular interviews 76–80
+
+80 regular and 10 bug interviews are complete (270 completed-attempt measured responses). All 90 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 73/90; all 17 earlier failures remain retained. This batch adds five passing final reviews.
+
+Both N-Queens candidates pass independent exhaustive board enumeration across their entire stated n=0..10 domain. Both components and bipartite candidates pass all 1099 undirected graphs through four vertices with optional self-loops; shortest-path candidates pass all 610 endpoint queries through three vertices. Topological-order candidates pass all 1062 directed graph/duplicated-edge checks through three vertices. All four graph implementations also pass 20000-vertex shape checks, including a long chain, duplicated directed edges and a wide isolated frontier. Supplementary cases do not increase distinct interview counts.
+
+Median first word: 3179 ms (p95 8003 ms). Median completion: 8034 ms (p95 15296 ms). Raw evidence: `evidence/interview-counted-synthetic-76-80.json`; supplementary files are referenced by the exact-answer-hash review ledger. Remaining: 20 regular and 10 bug interviews; full scope remains active.

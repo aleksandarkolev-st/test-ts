@@ -1,0 +1,150 @@
+{
+  "scope": "Supplementary actual candidates over full stated integer domain n=0..10; frozen fixtures unchanged",
+  "oracle": "Independent enumeration of every column permutation, then pairwise diagonal rejection only at complete boards. Empty permutation counts once.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "3065fca2847251d33fddc9ec2b4a0cca7bb8eb0abf1ba04d76a628e46f42f242",
+      "cases": [
+        {
+          "n": 0,
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        },
+        {
+          "n": 1,
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        },
+        {
+          "n": 2,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "n": 3,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "n": 4,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "n": 5,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "n": 6,
+          "expected": 4,
+          "actual": 4,
+          "passed": true
+        },
+        {
+          "n": 7,
+          "expected": 40,
+          "actual": 40,
+          "passed": true
+        },
+        {
+          "n": 8,
+          "expected": 92,
+          "actual": 92,
+          "passed": true
+        },
+        {
+          "n": 9,
+          "expected": 352,
+          "actual": 352,
+          "passed": true
+        },
+        {
+          "n": 10,
+          "expected": 724,
+          "actual": 724,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "dbf0fd1aa7baf0a3cc60842ad11f72ff2fa37a27f86d9de137011b7fdc94bf07",
+      "cases": [
+        {
+          "n": 0,
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        },
+        {
+          "n": 1,
+          "expected": 1,
+          "actual": 1,
+          "passed": true
+        },
+        {
+          "n": 2,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "n": 3,
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        },
+        {
+          "n": 4,
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        },
+        {
+          "n": 5,
+          "expected": 10,
+          "actual": 10,
+          "passed": true
+        },
+        {
+          "n": 6,
+          "expected": 4,
+          "actual": 4,
+          "passed": true
+        },
+        {
+          "n": 7,
+          "expected": 40,
+          "actual": 40,
+          "passed": true
+        },
+        {
+          "n": 8,
+          "expected": 92,
+          "actual": 92,
+          "passed": true
+        },
+        {
+          "n": 9,
+          "expected": 352,
+          "actual": 352,
+          "passed": true
+        },
+        {
+          "n": 10,
+          "expected": 724,
+          "actual": 724,
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

@@ -136,3 +136,9 @@ Evidence: `evidence/interview-shortest-path-settlement-completed.json`, `evidenc
 80 regular and 13 bug interviews are complete (279 completed-attempt measured responses). All 93 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All thirteen bug diagnoses pass; broader final contract review passes 75/93, retaining the same 18 failures.
 
 The dependency diagnosis identifies the n-1 completion condition, with the minimal one-vertex empty-edge graph returning [] instead of [0]. Both fixes pass 1062 independently checked directed graph/duplicate-edge cases. Their repeated queue sorting and full edge scans are documented without claiming heap-level complexity. Source/API/dependencies/tests constraints, actual smoke, original/patched handoffs and reading checks passed. Evidence: `evidence/interview-dependency-completion-completed.json` and `evidence/interview-dependency-ordering-supplementary.json`. Remaining: 20 regular and 7 bug interviews.
+
+### Room allocation bug checkpoint
+
+80 regular and 14 bug interviews are complete (282 completed-attempt measured responses). All 94 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All fourteen bug diagnoses pass; broader final review passes 76/94, retaining 18 failures.
+
+The room diagnosis identifies starts preceding ends at equal times and uses the minimal two-touching-interval witness. Both fixes pass 1557 independent direct-overlap tests, including negative and extreme finite endpoints, duplicates and empty input. Source constraints, actual smoke, explicit original/patched context and reading checks passed. Evidence: `evidence/interview-meeting-endpoint-completed.json` and `evidence/interview-room-half-open-domain.json`. Remaining: 20 regular and 6 bug interviews.

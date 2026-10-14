@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen fixtures and distinct interview counts unchanged",
+  "domain": "Every interval list of length 0..4 over the six positive-length intervals from endpoints [-2,0,1,3], plus two finite extreme-endpoint cases.",
+  "oracle": "Independently count active half-open intervals at each start time. Maximum overlap can increase only at a start, so this yields the exact room requirement without event-tie sorting.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "61ce7ae3a25ce34230385090173b05deb17688eca6e45f8de503d0c09a823577",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "fc7d88b17d375294ed92fe1a65a9646d189752662a244b781c83657eb1af47d5",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    }
+  ]
+}

@@ -1152,6 +1152,37 @@
       "note": "Completion now requires exactly n emitted vertices, rejecting cyclic partial orders. Sorting every ready queue before extraction selects the smallest available vertex; per-occurrence indegree increments and outgoing decrements remain consistent even with duplicate edges. Both candidates pass all 1062 small directed-graph/duplicate-edge cases against independent complete permutation search. API/dependencies/tests unchanged; actual smoke, patch marker and native reading checks pass. Repeated sorting and full-edge scans have higher time cost than a heap/adjacency approach; no optimized complexity requirement supplied.",
       "evidence": "interview-dependency-completion-completed.json",
       "supplementaryEvidence": "interview-dependency-ordering-supplementary.json"
+    },
+    {
+      "id": "meeting-endpoint",
+      "kind": "bug",
+      "finalAnswerSha256": "fc7d88b17d375294ed92fe1a65a9646d189752662a244b781c83657eb1af47d5",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "a[0]-b[0]||b[1]-a[1]",
+        "counterexample": {
+          "args": [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "originalActual": 2,
+          "expected": 1
+        },
+        "note": "Two touching positive-length intervals are minimal; zero or one cannot expose the same-time start/end ordering defect."
+      },
+      "note": "Event ties now order -1 ends before +1 starts, so temporary counts cannot invent overlap. Each positive-length interval contributes one start/end; peak simultaneous activity gives required room count. Empty input zero, duplicate intervals count separately and negative/extreme finite times work. Both fixes pass 1557 independent direct-overlap tests; O(n log n) sorting/O(n) event storage. Same synchronous API/no dependencies or test edits. Actual smoke, original/patch markers and native reading checks pass.",
+      "evidence": "interview-meeting-endpoint-completed.json",
+      "supplementaryEvidence": "interview-room-half-open-domain.json"
     }
   ]
 }

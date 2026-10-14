@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-14T22:21:07.608Z",
+  "id": "longest-common-prefix",
+  "marker": "INTERVIEW-58-df5ba311bc50ecb9",
+  "token": "2c4fc405b4035fea37e00fee",
+  "scope": "Read-only native inspection after Computer Use shortcut; original runner bridge is closed and fresh Playwright connection fails on shared-worker attachment.",
+  "detected": {
+    "title": "Interview 58 · longest common prefix - Personal - Microsoft​ Edge",
+    "kind": "browser",
+    "projectPath": null,
+    "sourceWindow": 2493810
+  },
+  "answer": "The screen shows Interview 58: longest common prefix, with marker INTERVIEW-58-df5ba311bc50ecb9. The task is to define solve(words), returning the longest prefix shared by every string; an empty array returns \"\".\n\nTrack the matching prefix length, shortening it for each word. The invariant is that this length describes the longest common prefix of all words processed so far.\n\n```javascript\nfunction solve(words) {\n  if (words.length === 0) return '';\n\n  const first = words[0];\n  let length = first.length;\n\n  for (let i = 1; i < words.length; i++) {\n    length = Math.min(length, words[i].length);\n    let j = 0;\n    while (j < length && first[j] === words[i][j]) {\n      j++;\n    }\n    length = j;\n    if (length === 0) return '';\n  }\n\n  return first.slice(0, length);\n}\n```\n\nChecks: [] returns \"\"; [\"flower\", \"flow\", \"flight\"] returns \"fl\"; [\"\", \"abc\"] returns \"\"; a single word returns itself. Time is O(S), where S is the total input length, with O(1) auxiliary space excluding the returned string. Call solve(words) directly; no imports, exports, or stdin/stdout.",
+  "screenshotPresent": true,
+  "projectPresent": false,
+  "error": null,
+  "paused": true
+}

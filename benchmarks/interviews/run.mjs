@@ -72,7 +72,11 @@ async function waitForComputerUse(payload){
  report.events.push({at:new Date().toISOString(),event:'computer_use_requested',id:ready.id,phase:ready.phase,token:ready.token});await persist();
  console.log('COMPUTER_USE_READY',JSON.stringify(ready));
  const start=Date.now();
- while(!acknowledgements.has(ready.token)){if(Date.now()-start>1200000)throw Error('Computer Use acknowledgement timed out');await delay(150);}
+ while(!acknowledgements.has(ready.token)){
+  if(main?.isClosed()||!browser?.isConnected())throw Error('Native debugging connection closed while waiting for Computer Use; retain this attempt and resume on a fresh connection.');
+  if(Date.now()-start>1200000)throw Error('Computer Use acknowledgement timed out');
+  await delay(150);
+ }
  const ack=acknowledgements.get(ready.token);acknowledgements.delete(ready.token);return ack;
 }
 async function geometry(){

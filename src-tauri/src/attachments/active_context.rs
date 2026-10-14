@@ -74,6 +74,20 @@ pub fn detect() -> Result<ActiveContext,String> {
         // UIA is inspected on the explicit handoff, never on the idle timer.
         let initialized=CoInitializeEx(None,COINIT_MULTITHREADED).is_ok();
         {
+            // Explorer's breadcrumb control may hide its actual path from UIA.
+            // Query the shell view associated with this precise window instead.
+            use windows::core::Interface;
+            use windows::Win32::{UI::Shell::{IShellWindows,IWebBrowserApp,ShellWindows},System::Variant::VARIANT};
+            if let Ok(shell)=CoCreateInstance::<_,IShellWindows>(&ShellWindows,None,CLSCTX_LOCAL_SERVER) {
+                for index in 0..shell.Count().unwrap_or(0).min(256) {
+                    let view=shell.Item(&VARIANT::from(index)).and_then(|item|item.cast::<IWebBrowserApp>());
+                    if let Ok(view)=view {
+                        if view.HWND().is_ok_and(|handle|handle.0 as usize==source_window) {
+                            if let Ok(location)=view.LocationURL(){if let Some(path)=existing_directory(&location.to_string()){candidates.push(path);}}
+                        }
+                    }
+                }
+            }
             let inspected=(||->windows::core::Result<()>{
                 let automation:IUIAutomation=CoCreateInstance(&CUIAutomation,None,CLSCTX_INPROC_SERVER)?;
                 let root=automation.ElementFromHandle(hwnd)?;

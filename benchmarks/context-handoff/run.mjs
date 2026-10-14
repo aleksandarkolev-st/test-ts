@@ -11,7 +11,8 @@ const root=process.cwd(),out=path.join(root,'artifacts/context-handoff'),local=p
 await mkdir(out,{recursive:true});await mkdir(local,{recursive:true});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let app,vite,browser,screenBrowser,main,overlay,screen,ready=null,ack=false;
-const report={startedAt:new Date().toISOString(),model:'gpt-6.1-sol',reasoningEffort:'low',scope:'Live signed-in Codex through the native app; manual typed follow-up; no ASR or audio latency claim.',rows:[],interview:[]};
+let report={startedAt:new Date().toISOString(),model:'gpt-6.1-sol',reasoningEffort:'low',scope:'Live signed-in Codex through the native app; manual typed follow-up; no ASR or audio latency claim.',rows:[],interview:[]};
+if(process.argv.includes('--resume')){report=JSON.parse(await readFile(path.join(out,'results.json'),'utf8'));report.resumedAt=new Date().toISOString();report.priorTrials=report.rows.filter(r=>!r.accurate);report.rows=report.rows.filter(r=>r.accurate);delete report.error;report.status='in_progress';}
 const persist=()=>writeFile(path.join(out,'results.json'),JSON.stringify(report,null,2));
 const invoke=(name,args={})=>main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
 const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -21,7 +22,7 @@ const server=createServer(async(req,res)=>{
   if(req.url==='/ack'&&req.method==='POST'){ack=true;res.end('ok');return;}
   if(req.url==='/snapshot'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('get_snapshot')));return;}
   if(req.url==='/detect'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('detect_context')));return;}
-  res.setHeader('Content-Type','text/html');res.end(`<!doctype html><title>Context Handoff Benchmark IDE</title><style>body{background:#f8f5ef;color:#151515;font:24px Segoe UI;margin:50px;max-width:1350px}h1{font-size:40px}pre{white-space:pre-wrap;font:23px Consolas}small{color:#555}</style><h1>${escape(ready?.title??'Preparing benchmark')}</h1><pre>${escape(ready?.content??'Please wait')}</pre><small>Synthetic test workspace. No private files or messages.</small>`);
+  res.setHeader('Content-Type','text/html');res.end(`<!doctype html><title>Context Handoff Benchmark IDE</title><style>body{background:#f8f5ef;color:#151515;font:24px Segoe UI;margin:30px;max-width:700px}h1{font-size:30px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:20px Consolas}small{color:#555}</style><h1>${escape(ready?.title??'Preparing benchmark')}</h1><pre>${escape(ready?.content??'Please wait')}</pre><small>Synthetic test workspace. No private files or messages.</small>`);
  }catch(e){res.statusCode=500;res.end(String(e));}
 });
 await new Promise(r=>server.listen(9561,'127.0.0.1',r));
@@ -82,8 +83,9 @@ try{
  screenBrowser=await chromium.launch({channel:'msedge',headless:false,args:['--start-maximized','--remote-debugging-port=9562']});screen=await screenBrowser.newPage();
  for(let i=0;i<problems.length;i++){
   const p=problems[i],mode=i%2===0?'screenshot':'project';
+  if(report.rows.some(row=>row.id===p.id))continue;
   const evidence=await handoff(p,i+1,mode);
-  const response=await answer('Solve only the current attached TASK.md or visible LeetCode task. Start with the exact context marker from that attachment. Then give a single fenced javascript block defining function solve with the specified arguments and return value, with no imports or exports. Include complete runnable implementation, then state time and space complexity. Do not use prior tasks.');
+  const response=await answer(`Solve only the current ${mode==='project'?'attached TASK.md file; disregard every earlier screenshot':'screenshot task; disregard every earlier TASK.md file'}. Start with the exact context marker from that attachment. Then give a single fenced javascript block defining function solve with the specified arguments and return value, with no imports or exports. Include complete runnable implementation, then state time and space complexity. Do not use prior tasks.`);
   const code=codeFrom(response.answer),grade=gradeCode(p.id,code),markerCorrect=response.answer.includes(evidence.marker);
   await writeFile(path.join(out,`solution-${p.id}.js`),code);
   const row={id:p.id,title:p.title,difficulty:p.difficulty,url:p.url,mode,...evidence,...response,markerCorrect,grade,accurate:markerCorrect&&grade.passed};

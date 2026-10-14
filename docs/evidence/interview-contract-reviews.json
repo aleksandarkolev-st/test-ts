@@ -749,6 +749,40 @@
       "diagnosisReview": null,
       "note": "A forward target scan consumes at most one required character per match, preserving order and preventing reuse. Empty source returns true and exhausted target with incomplete source returns false. Uses consistent JavaScript code-unit indexing. O(|t|) time/O(1) auxiliary space.",
       "evidence": "interview-counted-synthetic-58-60.json"
+    },
+    {
+      "id": "event-identity",
+      "kind": "bug",
+      "finalAnswerSha256": "a880c00b9f91631016058215ce9e3fa199a92d3accd299306dea1dc9841f4f23",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(!seen[id])",
+        "counterexample": {
+          "args": [
+            [
+              {
+                "id": "constructor",
+                "delta": 1
+              }
+            ]
+          ],
+          "originalActual": {
+            "total": 0,
+            "acceptedIds": []
+          },
+          "expected": {
+            "total": 1,
+            "acceptedIds": [
+              "constructor"
+            ]
+          }
+        },
+        "note": "Inherited truthy Object constructor is mistaken for an accepted ID. One event is minimal; empty input cannot distinguish the defect."
+      },
+      "note": "Set membership accepts arbitrary string IDs without prototype lookup. Records first ID even for zero delta or empty string, skips subsequent occurrences, preserves order and uses first deltas only. Empty input yields zero/empty output. Same synchronous export/API, no dependencies or test edits. Expected O(n) time/O(distinct IDs) auxiliary space plus output. Actual service smoke, fresh edited-project marker and native reading checks passed.",
+      "evidence": "interview-event-identity-completed.json"
     }
   ]
 }

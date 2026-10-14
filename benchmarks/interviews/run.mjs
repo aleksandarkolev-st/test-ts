@@ -149,8 +149,9 @@ try{
  const surfacesDeadline=Date.now()+45000;
  while(Date.now()<surfacesDeadline){main=browser.contexts().flatMap(c=>c.pages()).find(p=>p.url()!=='about:blank'&&!p.url().includes('view='));if(main)break;await delay(200);}
  if(!main)throw Error('Native setup missing: '+browser.contexts().flatMap(c=>c.pages()).map(p=>p.url()).join(', ')+'; '+stderr.slice(-1000));
- await main.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.setup'),undefined,{timeout:30000});
- const boot=await invoke('bootstrap');if(!boot.selected?.planEnabled)throw Error('A signed-in Codex account is required');
+ await main.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.setup'),undefined,{timeout:30000,polling:100});
+ const boot=await invoke('bootstrap');
+ if(!boot.selected?.planEnabled)throw Error('Native account check failed: backend='+boot.settings.answerBackend+'; '+(boot.connectionError??'No ChatGPT plan account returned'));
  const models=await invoke('list_models');if(!models.some(m=>m.slug===report.model))throw Error('GPT-6.1 Sol absent from live catalog');
  report.liveCatalogVerified=true;report.shortcutErrors=boot.shortcutErrors;
  if(boot.shortcutErrors.length)throw Error('Shortcut registration failed: '+boot.shortcutErrors.join('; '));
@@ -163,7 +164,7 @@ try{
  const overlayDeadline=Date.now()+45000;
  while(Date.now()<overlayDeadline){overlay=browser.contexts().flatMap(c=>c.pages()).find(p=>p.url().includes('view=overlay'));if(overlay)break;await delay(200);}
  if(!overlay)throw Error('Native overlay did not initialize after meeting startup: '+stderr.slice(-1000));
- await overlay.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.answer-content'),undefined,{timeout:30000});
+ await overlay.waitForFunction(()=>!!window.__TAURI_INTERNALS__&&!!document.querySelector('.answer-content'),undefined,{timeout:30000,polling:100});
  await overlay.evaluate(async()=>{
   const bridge=window.__TAURI_INTERNALS__;
   window.__interviewPaints=[];

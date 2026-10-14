@@ -140,13 +140,15 @@ test('a long complete question leaves the useful answer visible and remains scro
 
 test('streamed code retains exact source offsets, safe markup and keyboard scrolling',async({page})=>{
   await nativeFixture(page);await page.setViewportSize({width:520,height:700});await page.goto('/?view=overlay');
-  const answer='Here is the implementation.\n```javascript\n'+Array.from({length:35},(_,i)=>`const value${i} = "<script>"; // line ${i}`).join('\n')+'\n```\nThe final explanation.';
+  const answer='Here is the implementation.\n```javascript\nconst message = "'+('x'.repeat(180))+'";\n'+Array.from({length:35},(_,i)=>`const value${i} = "<script>"; // line ${i}`).join('\n')+'\n```\nThe final explanation.';
   await page.evaluate(answer=>(window as any).fixtureState({active:true,status:'answer',question:{id:'code',text:'Implement the parser',detectedAt:1},answer}),answer);
   await expect(page.getByRole('button',{name:'Copy code'})).toBeVisible();await expect(page.locator('.syntax-keyword').first()).toHaveText('const');
   expect(await page.locator('.answer-body').getAttribute('data-raw-answer')).toBe(answer);
   expect(await page.locator('.code-block script').count()).toBe(0);
   await expect.poll(()=>page.evaluate(()=>(window as any).fixturePaint.length)).toBeGreaterThan(0);
   const paints=await page.evaluate(()=>(window as any).fixturePaint);for(const paint of paints){expect(paint.text).toBe(answer);expect(paint.visibleStart).toBeGreaterThanOrEqual(0);expect(paint.visibleEnd).toBeLessThanOrEqual(answer.length);}
+  await page.evaluate(()=>(window as any).fixtureScroll('right'));await expect.poll(()=>page.locator('.code-block pre').evaluate(e=>e.scrollLeft)).toBeGreaterThan(0);
+  await page.evaluate(()=>(window as any).fixtureScroll('left'));await expect.poll(()=>page.locator('.code-block pre').evaluate(e=>e.scrollLeft)).toBe(0);
   await page.evaluate(()=>(window as any).fixtureScroll('end'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBeGreaterThan(0);
   await page.evaluate(()=>(window as any).fixtureScroll('start'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBe(0);
 });

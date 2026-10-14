@@ -1422,6 +1422,8 @@ pub fn run() {
             let scroll=match shortcut.key {
                 Code::PageUp=>Some("page_up"),Code::PageDown=>Some("page_down"),
                 Code::Home=>Some("start"),Code::End=>Some("end"),
+                Code::ArrowLeft if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("left"),
+                Code::ArrowRight if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("right"),
                 _=>None,
             };
             if let Some(operation)=scroll {let _=scroll_content(app,operation);return;}
@@ -1519,7 +1521,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             let timings:crate::openai::timing::Registry=Default::default();

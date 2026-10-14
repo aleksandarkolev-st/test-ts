@@ -1,10 +1,10 @@
 import {useMemo,useState} from 'react';
 import {answerParts,codeTokens,type AnswerPart} from './answerFormat';
 function CodeBlock({part}:{part:AnswerPart}){
-  const [copied,setCopied]=useState(false);const [error,setError]=useState('');
+  const [copiedText,setCopiedText]=useState<string|null>(null);const [error,setError]=useState('');
   const tokens=useMemo(()=>codeTokens(part.text,part.start),[part.text,part.start]);
   return <section className="code-block" aria-label={`${part.language} code snippet`}>
-    <div className="code-toolbar"><span>{part.language}{part.open?' · streaming':''}</span><button aria-label="Copy code" onClick={async()=>{try{await navigator.clipboard.writeText(part.text);setCopied(true);setError('');}catch{setError('Copy unavailable. Select the code to copy it.');}}}>{copied?'Copied':'Copy code'}</button></div>
+    <div className="code-toolbar"><span>{part.language}{part.open?' · streaming':''}</span><button aria-label="Copy code" onClick={async()=>{try{await navigator.clipboard.writeText(part.text);setCopiedText(part.text);setError('');}catch{setError('Copy unavailable. Select the code to copy it.');}}}>{copiedText===part.text?'Copied':'Copy code'}</button></div>
     <pre tabIndex={0} aria-label="Code snippet"><code>{tokens.map((token,i)=><span key={i} data-source-start={token.start} className={token.style?`syntax-${token.style}`:undefined}>{token.text}</span>)}</code></pre>
     {error&&<p role="status" className="copy-error">{error}</p>}
   </section>;

@@ -989,6 +989,29 @@
       "diagnosisReview": null,
       "note": "Numeric sorting and strictly increasing selected indices preserve ascending subsets and occurrence limits. Equal sibling choices are skipped only at the current depth, preserving deeper multiplicities; recording each prefix before extensions yields numeric lexical order and includes empty. Both candidates pass all 364 arrays of length 0..5 over [-2,0,10] against independent bit-mask oracle. Worst-case O(n*2^n) time/output and O(n) auxiliary path/recursion. Resource-dependent recursion/enumeration limits remain; review is not a universal runtime guarantee.",
       "evidence": "interview-numeric-enumeration-supplementary.json"
+    },
+    {
+      "id": "signed-division",
+      "kind": "bug",
+      "finalAnswerSha256": "afcd3328d950a52ebc708471dbc9e11ba2cf09c30c88b3dafccd9e8aff1f34e8",
+      "finalContractPassed": false,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "Math.floor(a/b)",
+        "counterexample": {
+          "args": [
+            -1,
+            2
+          ],
+          "originalActual": -1,
+          "expected": 0
+        },
+        "note": "Minimal total absolute operand magnitude: zero numerator and unit divisor cannot distinguish floor from truncation; -1 divided by 2 can."
+      },
+      "note": "Math.trunc fixes the stated negative-fraction defect and frozen sign fixtures, with negative zero numerically valid. Broad integer contract has no safe-integer restriction: for exactly represented numerator 18014398509481988 and divisor 3, both candidates return 6004799503160663; independent exact BigInt quotient is 6004799503160662, a safe and exactly represented result. Division rounds upward before truncation, leaving the broader contract unmet. Same synchronous API, no dependencies/test edits; original/patch markers, actual service smoke and native reading checks pass.",
+      "evidence": "interview-signed-division-completed.json",
+      "supplementaryEvidence": "interview-division-precision-boundary.json"
     }
   ]
 }

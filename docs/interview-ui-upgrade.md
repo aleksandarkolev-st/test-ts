@@ -100,3 +100,11 @@ Raw evidence: `evidence/interview-csv-escaping-completed.json`; additional execu
 Knapsack exceeds the legal array-length boundary for a trivially solvable one-item case under a large integer capacity. Combination-sum and unique-permutations exceed the call stack on cases with only one linear-size result. Balanced-parentheses passes complete enumeration checks for n=0..10 using independent Catalan counts, balance/length validation, uniqueness and order. Subsets and permutations additionally pass every one of 364 arrays of length 0..5 over [-2,0,10] against independent exhaustive oracles; this does not erase the permutation recursion failure. Enumeration reviews describe resource-dependent limits and do not imply a universal runtime guarantee.
 
 Median first word is 3179 ms (p95 8365 ms), median completion 8053 ms (p95 15318 ms). The new 22628 ms first-word sample is retained. Evidence: `evidence/interview-counted-synthetic-71-75.json` and supplementary files referenced by the hash-bound contract ledger. Remaining: 25 regular and 11 bug interviews.
+
+### Signed division bug checkpoint
+
+75 regular and 10 bug interviews are complete (255 completed-attempt measured responses). All 85 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All ten completed source-bug diagnoses pass their separate review. Broader final-answer contract review passes 68/85, with 17 known failures retained.
+
+The tenth diagnosis correctly identifies `Math.floor(a/b)` and the smallest total-magnitude counterexample `solve(-1,2)`: original -1, required zero. Both fixes use `Math.trunc`, with round 3 additionally normalizing negative zero. Supplementary execution exposes a remaining unrestricted-integer failure: exactly represented numerator 18014398509481988 divided by 3 rounds upward before truncation. Both candidates return 6004799503160663, while independent exact BigInt division gives the safe, exactly represented quotient 6004799503160662. Frozen sign fixtures and actual answers remain unchanged.
+
+Raw evidence: `evidence/interview-signed-division-completed.json`; numerical witness: `evidence/interview-division-precision-boundary.json`. Median first word is 3182 ms (p95 8365 ms); median completion is 8053 ms (p95 15318 ms). Remaining: 25 regular and 10 bug interviews. Full requested scope remains active and unfinished.

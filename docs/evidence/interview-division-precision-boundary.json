@@ -1,0 +1,22 @@
+{
+  "scope": "Supplementary actual candidates; frozen grades unchanged",
+  "args": [
+    18014398509481988,
+    3
+  ],
+  "expectedExact": "6004799503160662",
+  "expectedNumber": 6004799503160662,
+  "oracle": "BigInt converts the exact represented integer inputs and divides with exact truncation toward zero. Expected quotient is safe and exactly representable as Number; numerator is exactly representable but exceeds MAX_SAFE_INTEGER.",
+  "rounds": [
+    {
+      "round": 2,
+      "answerSha256": "d17ed7795f8c6351f93942f6c55a84b4592d03a5ec4276bff5e07b7d004a57cc",
+      "actual": 6004799503160663
+    },
+    {
+      "round": 3,
+      "answerSha256": "afcd3328d950a52ebc708471dbc9e11ba2cf09c30c88b3dafccd9e8aff1f34e8",
+      "actual": 6004799503160663
+    }
+  ]
+}

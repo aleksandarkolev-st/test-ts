@@ -1,0 +1,38 @@
+{
+  "runId": "run-935cb972a18c",
+  "fingerprint": {
+    "binarySha256": "12cd4c0f6b56e55d4c35a470aa7b6003eab1db5be8cae5c3dbadc03d9566489f",
+    "frontendSha256": "8918c9b8528c926b36552e6d32fea42ecc3ac2872fd975c441b6381545b926a3",
+    "contractsSha256": "eb421777c940f1a6d8c0144c65db740a8458eccda08d16f795fa2f7b18ad9ed8"
+  },
+  "scope": "Manual final implementation contract and complexity review; supplementary findings remain separate from frozen fixture grades.",
+  "entries": [
+    {
+      "id": "algorithm-4",
+      "kind": "regular",
+      "finalAnswerSha256": "9b8354b484e8c7961b397b3eadd44f91d4487d3ddaf377b453ff2e48a18cefcf",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Binary partition: logarithmic time, constant space; finite averaging fixed in round 3. Round 2 overflow limitation retained in checkpoint review.",
+      "evidence": "interview-counted-first-three-review.md"
+    },
+    {
+      "id": "algorithm-10",
+      "kind": "regular",
+      "finalAnswerSha256": "646a4df3753e2ece2411ca917870fc53b1307fa3add01c5a66eac5eb07e855ce",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Prefix DP: whole-string matching, valid star dependencies, empty inputs; stated quadratic time and space match implementation.",
+      "evidence": "interview-counted-first-three-review.md"
+    },
+    {
+      "id": "algorithm-32",
+      "kind": "regular",
+      "finalAnswerSha256": "9a0513091b698d9807589380a023887d06256f6335408166eb344edf2614b053",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Index stack: boundary sentinel reset and unmatched opens; stated linear time and space match implementation.",
+      "evidence": "interview-counted-first-three-review.md"
+    }
+  ]
+}

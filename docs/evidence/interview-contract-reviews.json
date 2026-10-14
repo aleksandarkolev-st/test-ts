@@ -33,6 +33,60 @@
       "diagnosisReview": null,
       "note": "Index stack: boundary sentinel reset and unmatched opens; stated linear time and space match implementation.",
       "evidence": "interview-counted-first-three-review.md"
+    },
+    {
+      "id": "algorithm-42",
+      "kind": "regular",
+      "finalAnswerSha256": "1e0aae83f8ade7c3339369400aaa084a3e5daf21a0fc400446a9c1cc06494750",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Two-pointer smaller-maximum invariant finalizes each nonnegative height contribution once. Empty/single/monotonic/asymmetric cases correct; O(n) time and O(1) space.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "algorithm-44",
+      "kind": "regular",
+      "finalAnswerSha256": "0026ce1deaf6900c4097506040ebdcd87243a14410bedccffea4ccae715ba55a",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Rolling prefix DP preserves above and diagonal before overwrite, initializes leading stars and matches whole strings. O(nm+n+m) time, O(m+1) space.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "algorithm-76",
+      "kind": "regular",
+      "finalAnswerSha256": "d631e3fc012cd6225bfb5f21dffc3a109e95bc6ae9895da2bf61cadd5e4ef1dc",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Sliding-window deficit counts track multiplicity. Each boundary moves forward, surplus removal does not invalidate the window; empty and impossible targets handled. O(n+m) time under constant-time Map operations; O(k) auxiliary space. Strings use JavaScript UTF-16 indexing.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "algorithm-84",
+      "kind": "regular",
+      "finalAnswerSha256": "dc20e6da2fa693bb4ff1dbaf9ae3ab0721bfb5eac052c61f73571ec427bc0100",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Nondecreasing stack pops each positive bar once with width i-left-1; virtual zero flushes heights, earlier equal bars receive wider spans. O(n) time and space.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "algorithm-85",
+      "kind": "regular",
+      "finalAnswerSha256": "d3ec43c0d3225235b04f392df37a79daabb3759e12e593ce487ea5feb0a74eef",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Per-row heights reset on string zero, then histogram stack measures contiguous all-one rectangles. Empty matrix guards and width boundaries correct. O(rows*columns) time, O(columns) space.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
+    },
+    {
+      "id": "algorithm-115",
+      "kind": "regular",
+      "finalAnswerSha256": "2ace7316ba95e8ef54586ca3ef7cda1e0553e99414f6930648520040cbdb6e11",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Backward prefix-count DP prevents source-position reuse. Saturating nonnegative counts at the promised signed-32-bit bound preserves any final result within that bound and avoids intermediate precision loss. Empty target returns one. O(nm+n+m+1) time, O(m+1) space.",
+      "evidence": "interview-counted-through-nine-2026-10-14.json"
     }
   ]
 }

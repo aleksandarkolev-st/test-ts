@@ -255,6 +255,51 @@
       "diagnosisReview": null,
       "note": "Inclusive search interval retains any target and strictly shrinks after nonmatching midpoint, including singleton/end positions and empty/missing cases. Overflow-safe midpoint, O(log(n+1)) time, O(1) space.",
       "evidence": "interview-counted-easy-21-25.json"
+    },
+    {
+      "id": "maximum-subarray",
+      "kind": "regular",
+      "finalAnswerSha256": "34f94c20be6fce023cdfe357da74185947e68db85d34e9a2ae3d98f847cb04a4",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Kadane state starts at the first element and retains a nonempty best ending here; extension/restart covers all-negative and zero cases. Nonempty input honored. O(n) time and O(1) extra space.",
+      "evidence": "interview-counted-synthetic-26-30.json"
+    },
+    {
+      "id": "maximum-product-subarray",
+      "kind": "regular",
+      "finalAnswerSha256": "48a422b296834fb55075bfa9d2f3ecb3394dd04ea0614708c7d439945f08ad1d",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Maximum and minimum ending products are both derived from the previous states before update; negative multiplication can swap roles and zeros reset chains. Nonempty numeric domain used. O(n) time and O(1) extra space.",
+      "evidence": "interview-counted-synthetic-26-30.json"
+    },
+    {
+      "id": "rotate-array",
+      "kind": "regular",
+      "finalAnswerSha256": "d737a1ff131ac306f7455077d16f4f8335a6ba8c9534ec610d2fe28759504e13",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Modulo reduces the rotation before two slices/concat; empty returns a fresh array before modulo, and zero/oversized rotation still returns a copy without mutation. O(n) time and space.",
+      "evidence": "interview-counted-synthetic-26-30.json"
+    },
+    {
+      "id": "product-except-self",
+      "kind": "regular",
+      "finalAnswerSha256": "c54d4afa2d7b8d0ad0521b3e7eed2fdf1c2649e8cb351cd7b28e792289b1d9e4",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Final implementation fails the visible zero-handling contract on 310 tens followed by two zeros: expected 312 zeros, actual three NaN values. Both round 2 and round 3 fail this supplementary witness. Frozen fixtures stay passing and unchanged. Prefix/suffix structure uses no division and is linear, but it does not guard intermediate overflow.",
+      "evidence": "interview-product-except-self-overflow.json"
+    },
+    {
+      "id": "move-zeros",
+      "kind": "regular",
+      "finalAnswerSha256": "aac30d2d458564cbb14089bca0056da869aa14228ffd377db2bb48f837d7c390",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Separate result preserves every nonzero in encounter order, then pads exactly the original zero count. Empty/all-zero/nonzero input returns a new array and never mutates nums. O(n) time, O(n) returned space and O(1) additional state.",
+      "evidence": "interview-counted-synthetic-26-30.json"
     }
   ]
 }

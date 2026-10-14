@@ -1,0 +1,60 @@
+{
+  "id": "product-except-self",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary manual contract witness, added after observing answers. Frozen fixture scores remain unchanged.",
+  "input": {
+    "repeat": {
+      "value": 10,
+      "count": 310
+    },
+    "append": [
+      0,
+      0
+    ]
+  },
+  "expected": {
+    "value": 0,
+    "count": 312
+  },
+  "reason": "Every product except self contains at least one zero. Intermediate prefix overflow can still produce NaN when multiplied by zero.",
+  "runs": [
+    {
+      "round": 2,
+      "passed": false,
+      "length": 312,
+      "nonfinite": [
+        {
+          "index": 309,
+          "value": "NaN"
+        },
+        {
+          "index": 310,
+          "value": "NaN"
+        },
+        {
+          "index": 311,
+          "value": "NaN"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "passed": false,
+      "length": 312,
+      "nonfinite": [
+        {
+          "index": 309,
+          "value": "NaN"
+        },
+        {
+          "index": 310,
+          "value": "NaN"
+        },
+        {
+          "index": 311,
+          "value": "NaN"
+        }
+      ]
+    }
+  ]
+}

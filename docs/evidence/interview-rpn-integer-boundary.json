@@ -1,0 +1,40 @@
+{
+  "id": "reverse-polish-notation",
+  "runId": "run-935cb972a18c",
+  "scope": "Supplementary exact-integer counterexample with safe-integer operands and final result; frozen fixture scores remain unchanged.",
+  "oracle": "Independent BigInt evaluation of the concrete expression",
+  "runs": [
+    {
+      "round": 2,
+      "answerSha256": "56738555e36c6e2af2442af1072919493116e265cea31bac7cdc35d9dff20b55",
+      "args": [
+        [
+          "9007199254740991",
+          "2",
+          "+",
+          "2",
+          "-"
+        ]
+      ],
+      "expected": 9007199254740991,
+      "actual": 9007199254740990,
+      "passed": false
+    },
+    {
+      "round": 3,
+      "answerSha256": "d5e38059933eb2eaeaf0f7130a8ffd40999231e6b76b1b7f833fde9c213a9e47",
+      "args": [
+        [
+          "9007199254740991",
+          "2",
+          "+",
+          "2",
+          "-"
+        ]
+      ],
+      "expected": 9007199254740991,
+      "actual": 9007199254740990,
+      "passed": false
+    }
+  ]
+}

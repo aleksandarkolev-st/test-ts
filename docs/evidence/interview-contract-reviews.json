@@ -447,6 +447,51 @@
       },
       "note": "Final prospective-length guard prevents exceeding any nonnegative capacity, including fractional capacities. Reject leaves queue unchanged; pop returns FIFO value or null. Same synchronous export/API, no dependencies or test edits. Array shift makes worst-case total time O(m × min(m,capacity)); stored queue and output space O(m). The actual round 2 service smoke passed; final code was evaluated independently. Fresh edited-project marker recognized. Fractional defect in round 2 independently identified and corrected in round 3.",
       "evidence": "interview-bounded-queue-completed.json"
+    },
+    {
+      "id": "daily-temperatures",
+      "kind": "regular",
+      "finalAnswerSha256": "f5d4f1f6a8c0c7821779a579ebb948377ad1f7a0f253e47df2a7436c56b5dae5",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Decreasing stack retains unresolved day indices. Strictly warmer values pop and fill first warmer distances; equality stays unresolved. Empty and descending inputs return zero/default entries. Each day pushed/popped once: O(n) time and O(n) space.",
+      "evidence": "interview-counted-synthetic-41-45.json"
+    },
+    {
+      "id": "circular-next-greater",
+      "kind": "regular",
+      "finalAnswerSha256": "9a3917d2f07cb6ab312013938f484208ff0b466aa653710686df90c2095a15f6",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Two forward traversals resolve first strictly greater values, while indices are pushed only in the first traversal. Equal values never resolve one another; empty loop avoids modulo zero. Each index pushed/popped once: O(n) time and O(n) space.",
+      "evidence": "interview-counted-synthetic-41-45.json"
+    },
+    {
+      "id": "asteroid-collisions",
+      "kind": "regular",
+      "finalAnswerSha256": "2f9d8364c979f46378c87f4c43a4efc8591ef01e351934b8457c85f017987e97",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Only a positive stack tail and incoming negative asteroid can collide. Smaller positives are popped repeatedly; ties remove both, larger positives destroy the incoming asteroid. Alive flag resets per asteroid. Preserves survivor order, handles moving apart and chained collisions. O(n) amortized time/O(n) space.",
+      "evidence": "interview-counted-synthetic-41-45.json"
+    },
+    {
+      "id": "reverse-polish-notation",
+      "kind": "regular",
+      "finalAnswerSha256": "d5e38059933eb2eaeaf0f7130a8ffd40999231e6b76b1b7f833fde9c213a9e47",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Exact operator recognition distinguishes negative literals; right/left pop order and Math.trunc handle normal postfix semantics. O(n) stack operations and O(n) space. Broad integer contract fails the executed safe-operand/final-result witness MAX_SAFE_INTEGER + 2 - 2: both implementations return MAX_SAFE_INTEGER - 1 after intermediate rounding. No safe-intermediate restriction appears in the contract; frozen scores remain unchanged.",
+      "evidence": "interview-rpn-integer-boundary.json"
+    },
+    {
+      "id": "nested-string-decoder",
+      "kind": "regular",
+      "finalAnswerSha256": "d8cda69ba90534e4a12414c05708486783beb36cc65c09f392485d4d0fd5df87",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Stack stores parent parts and count, resets count on each opening bracket, and restores the parent on closing before appending repeated inner text. Handles nesting, multidigit counts, adjacent groups, literal text and empty input. Iterative parsing avoids call-stack depth. Time includes all intermediate joins/repeats, so O(n + total materialized characters), not an unsupported O(n + final output) claim; space includes stored parts and expanded strings. Review assumes strings/counts materializable by the JavaScript runtime.",
+      "evidence": "interview-counted-synthetic-41-45.json"
     }
   ]
 }

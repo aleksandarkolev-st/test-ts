@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "All integer streams length 0..4 over -2..2 and [1e308,1e308], both exactly represented integral Numbers.",
+  "oracle": "Independent sorted copies of every prefix; large identical-value median equals that value without arithmetic.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "eb8d7eb8c1dc1f788977f1bab2e97972bd1dc7ca1f48bd138d61662fc3ced3dc",
+      "cases": 782,
+      "passedCases": 782,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "90ce10d888ed114f9247354a9419fe2828090dda0a34644a88d42361d71a6e4f",
+      "cases": 782,
+      "passedCases": 782,
+      "failures": []
+    }
+  ]
+}

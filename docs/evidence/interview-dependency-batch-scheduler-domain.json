@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "All directed graphs with self-loops on n=0..3, each unique and duplicated; 20000-node chain and wide independent batch.",
+  "oracle": "Independent transitive closure rejects self reachability; repeated longest-prerequisite-path relaxation assigns parallel layer levels, then groups ascending IDs.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "8ccc515e52503ae7cf2d3a51088296e87f277589be1ec038bc82cf4252080d3b",
+      "cases": 1064,
+      "passedCases": 1064,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "f60d6120004535a2b62e40cbbd6d2a73270ae03989636ff971d12911b92a0217",
+      "cases": 1064,
+      "passedCases": 1064,
+      "failures": []
+    }
+  ]
+}

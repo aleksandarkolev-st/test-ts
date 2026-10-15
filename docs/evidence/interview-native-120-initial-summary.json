@@ -1,0 +1,2891 @@
+{
+  "source": "docs/evidence/interview-native-120-initial-results.json",
+  "sourceSha256": "e9f35459dc03d7a197eaf8bd589c14c025af7d217dce04c26516718fce732309",
+  "runId": "run-935cb972a18c",
+  "status": "responses_complete_pending_contract_review",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "required": {
+    "regular": 100,
+    "bug": 20
+  },
+  "completed": {
+    "regular": 100,
+    "bug": 20
+  },
+  "scope": "Text-driven native trials. Functional fixture counts are separate from contract and diagnosis review. No ASR accuracy claim.",
+  "latencyScope": "Latest completed attempt per interview. Incomplete/retried responses remain in raw evidence and retainedResponses counts.",
+  "retainedResponses": {
+    "total": 362,
+    "completedAttemptResponses": 360,
+    "incompleteAttempts": 2
+  },
+  "checks": {
+    "denominator": 120,
+    "firstImplementationFixturesPassed": 119,
+    "finalImplementationFixturesPassed": 119,
+    "allMarkersCorrect": 120,
+    "paintSourcesExact": 120,
+    "keyboardPassed": 120,
+    "finalContractsReviewed": 120,
+    "finalContractsPassed": 91
+  },
+  "firstWord": {
+    "samples": 360,
+    "minMs": 1921,
+    "medianMs": 3078,
+    "p95Ms": 7872,
+    "maxMs": 22628
+  },
+  "completion": {
+    "samples": 360,
+    "minMs": 3462,
+    "medianMs": 7763,
+    "p95Ms": 15250,
+    "maxMs": 24734
+  },
+  "firstPaint": {
+    "samples": 360,
+    "minMs": 1949,
+    "medianMs": 3115,
+    "p95Ms": 7891,
+    "maxMs": 22652
+  },
+  "incomplete": [],
+  "rows": [
+    {
+      "id": "algorithm-4",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 338,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Binary partition: logarithmic time, constant space; finite averaging fixed in round 3. Round 2 overflow limitation retained in checkpoint review.",
+        "evidence": "interview-counted-first-three-review.md"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-10",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 196,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Prefix DP: whole-string matching, valid star dependencies, empty inputs; stated quadratic time and space match implementation.",
+        "evidence": "interview-counted-first-three-review.md"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-32",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 173,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Index stack: boundary sentinel reset and unmatched opens; stated linear time and space match implementation.",
+        "evidence": "interview-counted-first-three-review.md"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-42",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 114,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Two-pointer smaller-maximum invariant finalizes each nonnegative height contribution once. Empty/single/monotonic/asymmetric cases correct; O(n) time and O(1) space.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-44",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 189,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Rolling prefix DP preserves above and diagonal before overwrite, initializes leading stars and matches whole strings. O(nm+n+m) time, O(m+1) space.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-76",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 171,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Sliding-window deficit counts track multiplicity. Each boundary moves forward, surplus removal does not invalidate the window; empty and impossible targets handled. O(n+m) time under constant-time Map operations; O(k) auxiliary space. Strings use JavaScript UTF-16 indexing.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-84",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 187,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Nondecreasing stack pops each positive bar once with width i-left-1; virtual zero flushes heights, earlier equal bars receive wider spans. O(n) time and space.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-85",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 157,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Per-row heights reset on string zero, then histogram stack measures contiguous all-one rectangles. Empty matrix guards and width boundaries correct. O(rows*columns) time, O(columns) space.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-115",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 164,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Backward prefix-count DP prevents source-position reuse. Saturating nonnegative counts at the promised signed-32-bit bound preserves any final result within that bound and avoids intermediate precision loss. Empty target returns one. O(nm+n+m+1) time, O(m+1) space.",
+        "evidence": "interview-counted-through-nine-2026-10-14.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "search-boundary",
+      "kind": "bug",
+      "attempts": 2,
+      "incompleteAttempts": 1,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 111,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Exclusive upper-bound binary search restores lower-bound invariant, retains n as a valid result, handles duplicates and empty arrays, and shrinks every iteration. Same synchronous export and no dependencies/test/API changes. O(log(n+1)) time and O(1) space. Revised marker was recovered from the explicitly reattached project.",
+        "evidence": "interview-search-boundary-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "hi=nums.length-1",
+        "counterexample": {
+          "args": [
+            [
+              0
+            ],
+            1
+          ],
+          "originalActual": 0,
+          "expected": 1
+        },
+        "note": "Excluding the end insertion position is the actual defect. Empty input passes, so a one-element counterexample is minimal."
+      }
+    },
+    {
+      "id": "algorithm-132",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 121,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Palindrome table dependencies end before the current end index; prefix cuts use previously optimal prefixes and zero for whole-prefix palindromes. Nonempty-string contract honored. O(n^2) time and space.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-239",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 111,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Circular index deque expires before insertion, removes dominated/equal tails, preserves maximum at its head and never exceeds k slots. Each index enters/leaves once: O(n) time, O(k) auxiliary space plus result.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-312",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 101,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Interval DP chooses the last balloon between surviving boundaries. Smaller-width subproblems are available first, and best=-Infinity handles required negative totals under the broader visible contract. Empty interval returns zero. O(n^3) time and O(n^2) space.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-315",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 99,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Coordinate compression and strict rank-1 Fenwick query count only smaller right-side values; insert after querying, retaining duplicate frequencies. Input copy/compressed values avoid mutation. O(n log n) time, O(n) space.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-329",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 133,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Iterative topological removal starts at cells with no larger neighbors; next-layer boundaries wait for every larger dependency, yielding maximum path length. Strict comparisons exclude equal moves and cycles. Head-index queue avoids shift and recursion. O(rows*columns) time and space.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-493",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 135,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Merge-sort counts cross-half strict double comparisons before merging, with a monotonic right pointer over sorted halves. Equal thresholds excluded, negative duplicates handled, original input copied. O(n log n) time and O(n) space.",
+        "evidence": "interview-counted-regular-10-15.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-3",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 78,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Last-seen code-point positions and monotonic left boundary preserve the no-duplicate window. Updating the best length after each code point handles empty, repeated and abba cases. O(n) time and O(k) space under standard Map operations.",
+        "evidence": "interview-counted-medium-16-20.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-33",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 107,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Binary search identifies a sorted half using an inclusive left boundary, retains any existing target in the search range, and discards half each iteration. Empty and singleton arrays handled; strictly increasing pre-rotation contract observed. O(log(n+1)) time and O(1) space.",
+        "evidence": "interview-counted-medium-16-20.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-56",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 83,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Copy/sort then merge into the last interval using start<=lastEnd treats touching closed intervals as overlapping; max end handles containment. Empty inputs, point intervals and unsorted nesting handled. O(n log n) time and O(n) space.",
+        "evidence": "interview-counted-medium-16-20.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-200",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 126,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Iterative DFS marks string-one cells on push and exhausts one orthogonal component before continuing. Diagonal land stays separate; each cell enters at most once. Empty dimensions return zero, input unchanged. O(rows*columns) time and auxiliary space.",
+        "evidence": "interview-counted-medium-16-20.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-322",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 84,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "For the referenced LeetCode integer-denomination/nonnegative-integer-amount domain, amount-order DP considers every final coin and uses already-optimal smaller totals. Unlimited reuse, zero, impossible totals, empty coin set and nongreedy optimum handled. O(amount*(coins.length+1)) time and O(amount+1) space. The answer states its integer-domain assumption.",
+        "evidence": "interview-counted-medium-16-20.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-1",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 98,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Complement lookup precedes insertion, so the map contains only earlier indices and cannot self-pair. Duplicate values, zero and negatives handled under exactly-one-pair contract. Expected O(n) time and O(n) space.",
+        "evidence": "interview-counted-easy-21-25.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-20",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 84,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Stack of unmatched open brackets checks each closing type against the top and rejects premature, mismatched or unknown symbols; only an empty final stack accepts. Empty and nested/crossed cases handled. O(n) time and space.",
+        "evidence": "interview-counted-easy-21-25.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-121",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 70,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Sale profit is evaluated against the earlier minimum before inserting current price, preserving buy-before-sell ordering. Zero baseline handles empty/single/decreasing inputs. O(n) time and O(1) space.",
+        "evidence": "interview-counted-easy-21-25.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-217",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 64,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Set contains exactly prior values; checking before insertion avoids self-matching and finds duplicates including zero/negative integers. Empty returns false. Expected O(n) time, O(n) space.",
+        "evidence": "interview-counted-easy-21-25.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "algorithm-704",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 87,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Inclusive search interval retains any target and strictly shrinks after nonmatching midpoint, including singleton/end positions and empty/missing cases. Overflow-safe midpoint, O(log(n+1)) time, O(1) space.",
+        "evidence": "interview-counted-easy-21-25.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "maximum-subarray",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 80,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Kadane state starts at the first element and retains a nonempty best ending here; extension/restart covers all-negative and zero cases. Nonempty input honored. O(n) time and O(1) extra space.",
+        "evidence": "interview-counted-synthetic-26-30.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "maximum-product-subarray",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 86,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Maximum and minimum ending products are both derived from the previous states before update; negative multiplication can swap roles and zeros reset chains. Nonempty numeric domain used. O(n) time and O(1) extra space.",
+        "evidence": "interview-counted-synthetic-26-30.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "rotate-array",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 52,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Modulo reduces the rotation before two slices/concat; empty returns a fresh array before modulo, and zero/oversized rotation still returns a copy without mutation. O(n) time and space.",
+        "evidence": "interview-counted-synthetic-26-30.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "product-except-self",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 58,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Final implementation fails the visible zero-handling contract on 310 tens followed by two zeros: expected 312 zeros, actual three NaN values. Both round 2 and round 3 fail this supplementary witness. Frozen fixtures stay passing and unchanged. Prefix/suffix structure uses no division and is linear, but it does not guard intermediate overflow.",
+        "evidence": "interview-product-except-self-overflow.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "move-zeros",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 61,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Separate result preserves every nonzero in encounter order, then pads exactly the original zero count. Empty/all-zero/nonzero input returns a new array and never mutates nums. O(n) time, O(n) returned space and O(1) additional state.",
+        "evidence": "interview-counted-synthetic-26-30.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "sorted-squares",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 96,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Endpoint squares contain the largest remaining value; filling backward consumes exactly one input value per output slot. Empty, negative-only and tied-magnitude cases correct. O(n) time, O(n) output and O(1) extra state.",
+        "evidence": "interview-counted-synthetic-31-35.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 77,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Two heads select the least remaining value and remainder loops consume every occurrence exactly once, preserving multiplicity and ascending order. Inputs unchanged; O(n+m) time and output space, O(1) extra state.",
+        "evidence": "interview-counted-synthetic-31-35.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "multiset-intersection",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 58,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Frequency map decrements once per matching occurrence, limiting multiplicity to the minimum input counts; numeric sort orders the result. Inputs unchanged. Expected O(n+m+k log k) time and O(n+k) space, as stated.",
+        "evidence": "interview-counted-synthetic-31-35.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "majority-element",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 69,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Cancellation identifies a possible majority and a separate full count verifies the strict threshold. Empty, exact-half and positive-balance-without-majority cases return null. O(n) time and O(1) space.",
+        "evidence": "interview-counted-synthetic-31-35.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "longest-consecutive-sequence",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 81,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Final exact-step guards prevent rounded predecessor/successor arithmetic from inventing adjacency or looping without progress. Set removes duplicates and scanning starts only at actual sequence heads. Expected O(n) time and O(n) space. Supplementary execution confirmed round 2 timeout/incorrect zero at +/-2^53 and correct final ones.",
+        "evidence": "interview-consecutive-integer-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "duplicate-search",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 101,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Lower-bound binary search continues left on equality and verifies the final candidate. Correct empty/absent/duplicate boundaries, same synchronous export and API, no dependencies or test edits. O(log(n+1)) time and O(1) space. Fresh patch marker recovered after explicit reattachment; actual service smoke test passed.",
+        "evidence": "interview-duplicate-search-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(nums[mid]===target)return mid;",
+        "counterexample": {
+          "args": [
+            [
+              1,
+              1,
+              2
+            ],
+            1
+          ],
+          "originalActual": 1,
+          "expected": 0
+        },
+        "note": "Immediate match returns a non-leftmost duplicate. A three-element example is minimal for the original floor-midpoint search; one/two-element arrays cannot exhibit this defect."
+      }
+    },
+    {
+      "id": "kth-largest",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 112,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "A min heap retains the k largest occurrences. Insertions bubble up; root replacements choose the smaller child and sift down. Valid k, duplicate occurrences and negative values handled without modifying input. O(n log(k+1)) time and O(k) space.",
+        "evidence": "interview-counted-synthetic-36-40.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "three-sum",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 106,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Numeric sorting and duplicate-skipping two pointers provide ordered unique triplets in O(n²) time and O(n) auxiliary space on ordinary bounded integers. Broad numeric contract fails the executed exact-integer witness [-2^53,-1,2^53]: both implementations return a triplet whose exact sum is -1. The stated contract has no safe-sum restriction; frozen fixture scores are unchanged.",
+        "evidence": "interview-three-sum-integer-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "subarray-sum-count",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 72,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Prior-prefix frequencies correctly exclude empty subarrays and account for negatives in expected O(n) time/O(n) space on bounded sums. Safe-integer inputs [MAX_SAFE_INTEGER,1,1], k=2 lose prefix precision: both implementations return 0 instead of 1. The broad contract supplies no safe-prefix restriction; frozen fixture scores remain unchanged.",
+        "evidence": "interview-subarray-sum-integer-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "pivot-index",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 83,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Total-minus-prefix scan chooses the first pivot in O(n) time/O(1) space on bounded sums. Safe-integer inputs [1,MAX_SAFE_INTEGER,1] have pivot 1, but both implementations return -1 after total rounding. No safe-total restriction appears in the contract; frozen fixture scores remain unchanged.",
+        "evidence": "interview-pivot-integer-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "next-permutation",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 96,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Finds the rightmost increasing pivot, swaps with the rightmost strictly greater suffix entry, then reverses the nonincreasing suffix. This yields the smallest larger permutation; no pivot reverses the last permutation to the first. Empty, singleton and duplicates handled. Mutates and returns the supplied array, allowed by this contract. O(n) time/O(1) auxiliary space.",
+        "evidence": "interview-counted-synthetic-36-40.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "bounded-queue",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 84,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Final prospective-length guard prevents exceeding any nonnegative capacity, including fractional capacities. Reject leaves queue unchanged; pop returns FIFO value or null. Same synchronous export/API, no dependencies or test edits. Array shift makes worst-case total time O(m × min(m,capacity)); stored queue and output space O(m). The actual round 2 service smoke passed; final code was evaluated independently. Fresh edited-project marker recognized. Fractional defect in round 2 independently identified and corrected in round 3.",
+        "evidence": "interview-bounded-queue-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "q.length>capacity",
+        "counterexample": {
+          "args": [
+            0,
+            [
+              [
+                "push",
+                1
+              ]
+            ]
+          ],
+          "originalActual": [
+            true
+          ],
+          "expected": [
+            false
+          ]
+        },
+        "note": "A single push into zero capacity is the minimal operation witness; strict greater-than checks current length too late."
+      }
+    },
+    {
+      "id": "daily-temperatures",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 64,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Decreasing stack retains unresolved day indices. Strictly warmer values pop and fill first warmer distances; equality stays unresolved. Empty and descending inputs return zero/default entries. Each day pushed/popped once: O(n) time and O(n) space.",
+        "evidence": "interview-counted-synthetic-41-45.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "circular-next-greater",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 74,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Two forward traversals resolve first strictly greater values, while indices are pushed only in the first traversal. Equal values never resolve one another; empty loop avoids modulo zero. Each index pushed/popped once: O(n) time and O(n) space.",
+        "evidence": "interview-counted-synthetic-41-45.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "asteroid-collisions",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 86,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Only a positive stack tail and incoming negative asteroid can collide. Smaller positives are popped repeatedly; ties remove both, larger positives destroy the incoming asteroid. Alive flag resets per asteroid. Preserves survivor order, handles moving apart and chained collisions. O(n) amortized time/O(n) space.",
+        "evidence": "interview-counted-synthetic-41-45.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "reverse-polish-notation",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 73,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Exact operator recognition distinguishes negative literals; right/left pop order and Math.trunc handle normal postfix semantics. O(n) stack operations and O(n) space. Broad integer contract fails the executed safe-operand/final-result witness MAX_SAFE_INTEGER + 2 - 2: both implementations return MAX_SAFE_INTEGER - 1 after intermediate rounding. No safe-intermediate restriction appears in the contract; frozen scores remain unchanged.",
+        "evidence": "interview-rpn-integer-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "nested-string-decoder",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 76,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Stack stores parent parts and count, resets count on each opening bracket, and restores the parent on closing before appending repeated inner text. Handles nesting, multidigit counts, adjacent groups, literal text and empty input. Iterative parsing avoids call-stack depth. Time includes all intermediate joins/repeats, so O(n + total materialized characters), not an unsupported O(n + final output) claim; space includes stored parts and expanded strings. Review assumes strings/counts materializable by the JavaScript runtime.",
+        "evidence": "interview-counted-synthetic-41-45.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "lru-recency",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 128,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Delete/reinsert refreshes successful gets and replacement puts; misses preserve order; overflow evicts the first key. Correct zero-valued entries through has check and unchanged synchronous export/API. No dependencies or test edits. Expected O(m) map work with implementation-dependent iteration costs, O(m) output and bounded cache space. Actual service smoke passed; fresh patch marker and reading checks passed.",
+        "evidence": "interview-lru-recency-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.push(m.has(k)?m.get(k):-1)",
+        "counterexample": {
+          "args": [
+            2,
+            [
+              [
+                "put",
+                "a",
+                1
+              ],
+              [
+                "put",
+                "b",
+                2
+              ],
+              [
+                "get",
+                "a"
+              ],
+              [
+                "put",
+                "c",
+                3
+              ],
+              [
+                "get",
+                "a"
+              ]
+            ]
+          ],
+          "originalActual": [
+            1,
+            -1
+          ],
+          "expected": [
+            1,
+            1
+          ]
+        },
+        "note": "Map.get does not refresh insertion order. Capacity two and five operations are minimal: two inserts, refresh, overflow insertion and observing read; capacity one cannot distinguish recency."
+      }
+    },
+    {
+      "id": "group-anagrams",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 91,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Sorted character keys group equivalent lowercase strings; occurrences and empty strings are retained. Each group is sorted before numeric-independent lexicographic first-word comparison sorts groups. Does not mutate input array. Comparison cost accounts for string lengths: O(nL log(L+1) + nL log(n+1)), O(n(L+1)) space. Uses JavaScript UTF-16 lexical/string semantics; no grapheme or locale collation claim.",
+        "evidence": "interview-counted-synthetic-46-50.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "anagram-window-indices",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 99,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Nonzero difference map tracks current window versus pattern. Incoming character is added and outgoing character removed before testing each full window; overlapping matches preserved. Handles repeated counts, missing characters and pattern longer than text. Consistently indexes UTF-16 code units, matching JavaScript index semantics; nonempty pattern is guaranteed. Expected O(s.length+p.length) time and O(p.length) auxiliary space plus returned indices.",
+        "evidence": "interview-counted-synthetic-46-50.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "longest-palindromic-substring",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 78,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Expansion visits both character and gap centers; update chooses larger length or earlier start on ties. Empty string returns empty. O(n²) time and O(1) auxiliary space excluding returned string. Uses JavaScript UTF-16 code-unit equality/indices; no separate Unicode code-point/grapheme interpretation was specified.",
+        "evidence": "interview-counted-synthetic-46-50.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "roman-numeral-parser",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 75,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Canonical domain allows adjacent subtractive-value recognition; larger/equal next symbols and final symbol are handled correctly. O(s.length) time and O(1) auxiliary space. Independent positional canonical construction exhaustively verified all 3999 valid inputs for both generated implementations.",
+        "evidence": "interview-roman-exhaustive-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "roman-numeral-encoder",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 89,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Descending denominations include all six subtractive pairs. Repeated subtraction terminates at zero and emits canonical uppercase numerals. Bounded 1–3999 contract gives O(1) time/space. Independent positional oracle exhaustively verified all 3999 integers for both generated implementations.",
+        "evidence": "interview-roman-exhaustive-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "ttl-expiry",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 86,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Greater-than-or-equal rejects reads exactly at expiry and later; puts replace value and expiry together. Empty input, zero TTL, pre-boundary get and overwrite traces are correct. Retains entries and evaluates each get timestamp using specified putTime+ttl JavaScript arithmetic. Same synchronous export/API; no dependencies or test edits. Expected O(m) time and O(distinct keys + get count) space. Actual service smoke, fresh patch marker and native reading checks passed. Subsequent independent integer deadline witness fails: put at 9007199254740991 with TTL 2 expires mathematically at 9007199254740993. Query at exactly represented 9007199254740992 should return 7, but rounded deadline causes null. Diagnosis still passes; final broader contract no longer passes. Frozen expectations are unchanged.",
+        "evidence": "interview-ttl-expiry-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.push(!x||t>x.end?null:x.v)",
+        "counterexample": {
+          "args": [
+            [
+              [
+                0,
+                "put",
+                "a",
+                7,
+                1
+              ],
+              [
+                1,
+                "get",
+                "a"
+              ]
+            ]
+          ],
+          "originalActual": [
+            7
+          ],
+          "expected": [
+            null
+          ]
+        },
+        "note": "Equality was incorrectly live. Two operations are minimal: store a value then observe it at its expiry."
+      }
+    },
+    {
+      "id": "run-length-encoding",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 74,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "For-of iterates Unicode code points as explicitly required. Only the latest run increments on equality; later separated repeats create new runs. Empty input returns []. O(n) time for n code points, O(r) output and O(1) auxiliary space.",
+        "evidence": "interview-counted-synthetic-51-55.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "quoted-csv-row",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 86,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Quoted state makes commas literal inside fields; doubled quoted quotes append one quote and skip the partner. Only unquoted commas flush fields; final unconditional flush preserves trailing and empty fields, including a wholly empty row as one empty field. Valid-row contract excludes malformed quote syntax. Array buffers avoid repeated concatenation: O(n) time/O(n) total space.",
+        "evidence": "interview-counted-synthetic-51-55.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "absolute-path-normalization",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 65,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Only exact empty/dot segments are skipped and exact dot-dot pops a prior segment if present. Root cannot be crossed; other dotted names are preserved. Joining the stack with a leading slash yields canonical absolute path. O(n) time/O(n) space.",
+        "evidence": "interview-counted-synthetic-51-55.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "version-comparison",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 71,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Normalizes leading zeros to zero, treats absent segments as zero, then compares digit length and equal-length lexical text. Handles arbitrarily long decimal segments without numeric conversion; returns only -1/0/1. O(n) time/O(n) space over combined input lengths.",
+        "evidence": "interview-counted-synthetic-51-55.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "binary-string-addition",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 83,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Processes digits right-to-left with carry bounded to 0/1 and local sum bounded to 0–3. Consumes remaining carry after both inputs end. Removes reversed high-order zeros while preserving one zero, then reverses/joins. No whole-number Number conversion. O(max input length) time and space.",
+        "evidence": "interview-counted-synthetic-51-55.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "window-reset",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 95,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Window id calculation and accepted-event counting fix the targeted bug for integer limits in O(n) time/O(1) auxiliary space plus output. Nondecreasing times permit one active window. Broad at-most contract does not restrict limit to integers: both generated implementations accept two events for limit 1.5, violating the quota. Frozen integer scores unchanged; witness retained in interview-quota-fractional-limit.json. Same synchronous export/API, no dependencies or test edits. Actual smoke, fresh patch marker and native reading checks passed.",
+        "evidence": "interview-window-reset-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(t!==last){count=0;last=t;}",
+        "counterexample": {
+          "args": [
+            [
+              0,
+              1
+            ],
+            1,
+            2
+          ],
+          "originalActual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            false
+          ]
+        },
+        "note": "Counter resets on raw timestamp rather than fixed window id. Two events are minimal to expose an erroneous reset."
+      }
+    },
+    {
+      "id": "decimal-string-multiplication",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 91,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Grade-school rows propagate bounded carries through normalized digits. Prior rows never touched the assigned leading carry position, so digits[i]=carry is safe. Leading zeros trim to a single zero. No BigInt or whole-value Number conversion in candidate. O(mn) time/O(m+n) space. Three supplementary zero/leading-zero/long-carry cases, including 64-digit nines multiplied together, match independent evaluator BigInt in both implementation rounds.",
+        "evidence": "interview-decimal-ip-supplementary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "ip-address-classification",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 96,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "IPv4 validates four nonempty ASCII decimal groups of at most three digits, range<=255 and no leading zeros. IPv6 validates eight nonempty 1–4-character ASCII hex groups; shorthand rejected. Negative character classes reject trailing newlines and Unicode separators without relying on dollar-anchor semantics. O(n) time/space. Ten supplementary strict-character and positive controls pass in both rounds.",
+        "evidence": "interview-decimal-ip-supplementary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "longest-common-prefix",
+      "kind": "regular",
+      "attempts": 2,
+      "incompleteAttempts": 1,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 65,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Empty-array guard and vertical scan stop at the first ended word or mismatch. Every completed position agrees across all words. Handles empty first word and singleton array. Uses JavaScript code-unit indexing. O(nL) upper bound and O(1) auxiliary space excluding returned substring. Completed retry has a fresh marker; prior native connection interruption retained and uncounted.",
+        "evidence": "interview-counted-synthetic-58-60.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "remove-invalid-parentheses",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 173,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Removal budgets count unmatched parentheses; search preserves other characters and nonnegative prefix balance, exhausts budgets at zero final balance, and compares all complete candidates for lexicographic minimum. Correct finite search logic, O(n·2^p) worst-case time and O(n) stack/path space. Both generated implementations throw Maximum call stack size exceeded on a feasible 12000-character already-valid literal string. Contract specifies no length limit, so final review fails despite frozen fixture passes.",
+        "evidence": "interview-parentheses-recursion-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "subsequence-check",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 69,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "A forward target scan consumes at most one required character per match, preserving order and preventing reuse. Empty source returns true and exhausted target with incomplete source returns false. Uses consistent JavaScript code-unit indexing. O(|t|) time/O(1) auxiliary space.",
+        "evidence": "interview-counted-synthetic-58-60.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "event-identity",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 92,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Set membership accepts arbitrary string IDs without prototype lookup. Records first ID even for zero delta or empty string, skips subsequent occurrences, preserves order and uses first deltas only. Empty input yields zero/empty output. Same synchronous export/API, no dependencies or test edits. Expected O(n) time/O(distinct IDs) auxiliary space plus output. Actual service smoke, fresh edited-project marker and native reading checks passed. Subsequent independent integer total witness fails: MAX_SAFE_INTEGER plus five distinct-ID unit deltas has exactly represented required total 9007199254740996, but actual total is 9007199254740992. Identity diagnosis remains passed and frozen fixtures remain unchanged; broader final contract fails.",
+        "evidence": "interview-event-identity-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(!seen[id])",
+        "counterexample": {
+          "args": [
+            [
+              {
+                "id": "constructor",
+                "delta": 1
+              }
+            ]
+          ],
+          "originalActual": {
+            "total": 0,
+            "acceptedIds": []
+          },
+          "expected": {
+            "total": 1,
+            "acceptedIds": [
+              "constructor"
+            ]
+          }
+        },
+        "note": "Inherited truthy Object constructor is mistaken for an accepted ID. One event is minimal; empty input cannot distinguish the defect."
+      }
+    },
+    {
+      "id": "edit-distance",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 187,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "One-row unit-cost Levenshtein recurrence saves previous-row diagonal before overwrite, retains current-row left and previous-row above, and initializes empty prefixes correctly. Swapping strings is valid because edit costs are symmetric. Uses JavaScript code-unit semantics. O(mn) time and O(min(m,n)+1) space; empty-string fast path avoids allocation.",
+        "evidence": "interview-counted-synthetic-61-65.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "word-segmentation",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 163,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Trie traversal restarts at each reachable prefix and marks only consumed terminal words. Empty source is explicitly segmentable; root terminal for an empty dictionary word never advances a nonempty prefix. Maps handle arbitrary character keys, using consistent code units. Expected O(D+nL) time and O(D+n) space for total dictionary size D and maximum useful word length L.",
+        "evidence": "interview-counted-synthetic-61-65.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "digit-message-decoding",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 124,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Two prior counts implement valid one-digit and 10–26 two-digit choices; empty/leading-zero guard and internal invalid zero cases are correct. O(n) arithmetic steps/O(1) storage. Broad exact-count contract has no length/safe-count/modulo restriction: both Number implementations return 14472334024676220 for 78 ones, while independent combinatorial BigInt oracle gives 14472334024676221. Frozen small-count grades unchanged.",
+        "evidence": "interview-decoding-count-precision.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "stair-climbing",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 122,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Disjoint final one-step/two-step choices give Fibonacci recurrence initialized at one for zero and one steps. Loop includes n and returns exactly ways(n). Bounded nonnegative step domain n<=40 keeps all counts exactly representable. O(n) time/O(1) storage.",
+        "evidence": "interview-counted-synthetic-61-65.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "minimum-stair-cost",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 111,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Rolling minimum-cost recurrence and initial min(0,cost[0]) correctly allow visiting a negative first stair before index one; independent negative witness returns -7. Broad sign/magnitude-unrestricted contract still fails the finite-optimum overflow witness: four MAX_VALUE costs followed by two negative MAX_VALUE costs have exact minimum zero, but both implementations return Infinity. Independent exhaustive BigInt path oracle verifies zero; frozen grades unchanged. O(n) arithmetic steps/O(1) storage.",
+        "evidence": "interview-stair-cost-overflow.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "reservation-transaction",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 159,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Separate original/working copies restore atomic rollback and duplicate-SKU balance checks. Round 3 independently identifies inherited-property inventory in round 2 and adds an own-property guard. Actual supplementary tests reject absent toString and consume owned constructor/__proto__ keys correctly. Caller stock unchanged; success returns all deductions, empty order succeeds. Same synchronous export/API, no dependencies/test edits; O(stock keys + items) time and O(stock keys) space. Actual service smoke, fresh patch marker and native vertical/horizontal reading checks passed.",
+        "evidence": "interview-reservation-transaction-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "stock[sku]-=quantity; catch returns partially depleted stock",
+        "counterexample": {
+          "args": [
+            {
+              "A": 1
+            },
+            [
+              {
+                "sku": "A",
+                "quantity": 1
+              },
+              {
+                "sku": "A",
+                "quantity": 1
+              }
+            ]
+          ],
+          "originalActual": {
+            "accepted": false,
+            "stock": {
+              "A": 0
+            }
+          },
+          "expected": {
+            "accepted": false,
+            "stock": {
+              "A": 1
+            }
+          }
+        },
+        "note": "Two positive quantity items are minimal: one successful deduction followed by rejection."
+      }
+    },
+    {
+      "id": "house-robber",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 74,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Two prior prefix optima implement the correct nonadjacent take/skip recurrence, including empty and zero inputs. O(n) time/O(1) storage. Unbounded nonnegative-value contract fails repeated small additions above the safe-integer boundary: all positive houses separated by zero have exact optimum 9007199254740996, representable as Number, but both candidates return 9007199254740992. All input integers individually safe; frozen grades unchanged.",
+        "evidence": "interview-house-robber-precision.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "equal-subset-partition",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 114,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Descending sum updates prevent reuse, and odd-total/zero-target handling is correct. O(n(T+1)) time/O(T+1) storage. Contract has no magnitude bound: [4294967296,4294967296] is trivially partitionable into one item per subset, but both implementations allocate an invalid-length array and throw RangeError. Frozen small-value grades unchanged.",
+        "evidence": "interview-partition-array-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 103,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Lower bound replaces the first tail >=value, so equal inputs never increase length. Smaller tails preserve future extension opportunities; appends increase attainable subsequence length only. Empty/decreasing/duplicate/negative cases correct. Midpoint uses ordinary arithmetic without 32-bit truncation; O(n log n) time/O(n) storage matches requirement.",
+        "evidence": "interview-counted-synthetic-66-70.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "obstacle-grid-path-count",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 142,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Rolling row correctly combines above/left free-cell counts and resets obstacle entries; start/end/one-dimensional cases correct. O(rows*columns) additions/O(columns) storage. Exact unbounded count contract fails 24x40 all-free grid: independent multiplicative binomial oracle yields exact 59678358445158600, representable as Number; both candidates return a different Number because intermediate counts lose precision. Frozen grades unchanged.",
+        "evidence": "interview-grid-count-precision.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "minimum-grid-path-sum",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 117,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Infinity sentinel excludes nonexistent predecessors and zero seed enters only the first cell; rolling costs correctly count endpoints in ordinary nonempty rectangular cases. O(rows*columns) time/O(columns) storage. Magnitude-unrestricted contract fails single row [MAX_SAFE_INTEGER,1,1,1,1,1]: its sole path has exact representable sum 9007199254740996, but both candidates return 9007199254740992. Independent BigInt sum, all input integers safe, frozen grades unchanged.",
+        "evidence": "interview-minimum-grid-sum-precision.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "csv-escaping",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 152,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Lookahead while quoted emits one literal quote and consumes its partner without leaving quoted state; unquoted commas delimit fields, final push preserves empty trailing fields. Valid-row contract preserved, same synchronous export/API, no dependencies/test changes. Actual 100 independently encoded valid rows per candidate pass, including Unicode, quoted commas/newlines and repeated quotes. O(row length) scans and linear output storage. Original/patched context markers, actual service smoke and native reading checks pass.",
+        "evidence": "interview-csv-escaping-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(ch===String.fromCharCode(34))quoted=!quoted",
+        "counterexample": {
+          "args": [
+            "\"\"\"\""
+          ],
+          "originalActual": [
+            ""
+          ],
+          "expected": [
+            "\""
+          ]
+        },
+        "note": "Four quotes are minimal for an enclosed escaped quote. Original toggles four times but emits none."
+      }
+    },
+    {
+      "id": "zero-one-knapsack",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 119,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Descending capacity updates enforce at-most-once selection and initialize empty/zero-capacity optima correctly for integer weights and feasible allocation sizes. Contract has no capacity upper bound: one weight-one/value-seven item under integer capacity 4294967296 must return seven, but both candidates throw invalid array length. Assumes integer weights although task only says positive weights. Stated O((n+1)(C+1)) time/O(C+1) storage. Frozen grades unchanged.",
+        "evidence": "interview-knapsack-capacity-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "combination-sum",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 154,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Sorted ascending candidate traversal with nondecreasing indices and same-index recursive reuse enumerates unique combinations in numeric lexicographic order for ordinary positive integer inputs. Empty/zero/unreachable cases correct. Unbounded target contract fails [1],12000 with Maximum call stack size exceeded in both candidates, although exactly one linear-size output combination exists. Frozen grades unchanged.",
+        "evidence": "interview-combination-recursion-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "generate-balanced-parentheses",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 144,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Open/close prefix invariant 0<=closed<=opened<=n permits exactly balanced completions; closed==n implies opened==n. Opening branches precede closing branches, yielding lexical order, with balanced push/pop restoration and empty result string for n=0. Both actual candidates exhaustively match independent Catalan counts, valid prefix balances, exact lengths, uniqueness and order for n=0..10. O(n*Catalan(n)) time/output and O(n) auxiliary recursion/path space. Resource-dependent enumeration limits remain; this review is not a universal runtime guarantee.",
+        "evidence": "interview-parentheses-enumeration-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "unique-permutations",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 171,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Numeric sort and used-index duplicate-sibling guard correctly enumerate each multiset permutation once, with lexical traversal and restored path/flags. Both actual candidates pass all 364 arrays of length 0..5 over [-2,0,10] against independent exhaustive-index oracle. Both still overflow the call stack on 12000 zeros, whose unique result is one linear-size permutation. No length bound in task. Worst-case O(n*n!) time/O(n) auxiliary storage, frozen grades unchanged.",
+        "evidence": "interview-permutations-recursion-boundary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "duplicate-aware-subsets",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 146,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Numeric sorting and strictly increasing selected indices preserve ascending subsets and occurrence limits. Equal sibling choices are skipped only at the current depth, preserving deeper multiplicities; recording each prefix before extensions yields numeric lexical order and includes empty. Both candidates pass all 364 arrays of length 0..5 over [-2,0,10] against independent bit-mask oracle. Worst-case O(n*2^n) time/output and O(n) auxiliary path/recursion. Resource-dependent recursion/enumeration limits remain; review is not a universal runtime guarantee.",
+        "evidence": "interview-numeric-enumeration-supplementary.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "signed-division",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 69,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Math.trunc fixes the stated negative-fraction defect and frozen sign fixtures, with negative zero numerically valid. Broad integer contract has no safe-integer restriction: for exactly represented numerator 18014398509481988 and divisor 3, both candidates return 6004799503160663; independent exact BigInt quotient is 6004799503160662, a safe and exactly represented result. Division rounds upward before truncation, leaving the broader contract unmet. Same synchronous API, no dependencies/test edits; original/patch markers, actual service smoke and native reading checks pass.",
+        "evidence": "interview-signed-division-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "Math.floor(a/b)",
+        "counterexample": {
+          "args": [
+            -1,
+            2
+          ],
+          "originalActual": -1,
+          "expected": 0
+        },
+        "note": "Minimal total absolute operand magnitude: zero numerator and unit divisor cannot distinguish floor from truncation; -1 divided by 2 can."
+      }
+    },
+    {
+      "id": "n-queens-count",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 191,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "One queen per row and column/diagonal occupancy enforce nonattacks; restoring only newly marked entries cannot remove ancestor occupancy. Empty row base case counts n=0 once. Both actual candidates match independent complete-column-permutation enumeration and diagonal rejection across the full stated integer domain n=0..10. O(n*n!) conservative time/O(n) storage; bounded domain keeps counts and recursion exact.",
+        "evidence": "interview-nqueens-full-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "undirected-connected-components",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 174,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Scanning every vertex counts isolated components; iterative DFS marks before pushing, so each vertex enters the stack at most once and each undirected edge is scanned at most twice. Empty/cycle/duplicate/self-loop behavior correct. Both candidates pass all 1099 undirected graphs on n=0..4 with self-loops, plus a 20000-vertex chain. O(n+m) time and storage.",
+        "evidence": "interview-small-undirected-graphs.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "bipartite-graph",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 156,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Every component gets its own iterative traversal. Opposite colors are assigned once on discovery and every already-colored endpoint is checked, rejecting self-loops and odd cycles. Empty graph true. Both candidates pass all 1099 graphs on n=0..4 against exhaustive color assignments, plus a 20000-vertex chain. O(V+E) time/O(V) auxiliary storage.",
+        "evidence": "interview-small-undirected-graphs.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "unweighted-shortest-path",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 218,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "BFS uses head-index queue and marks distances before enqueue. FIFO layers guarantee first target discovery is shortest; identical valid endpoints return zero and exhausted reachability returns -1. Builds both edge directions. Both candidates pass all 610 ordered endpoint queries for every undirected graph on n=1..3 with self-loops against independent Floyd-Warshall distances, plus a 20000-vertex endpoint chain. O(n+m) time/storage.",
+        "evidence": "interview-small-undirected-graphs.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "lexicographic-topological-sort",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 225,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Per-source Set deduplicates outgoing edges before indegree increments. Min-heap contains exactly unprocessed zero-indegree vertices, so each greedy choice is smallest among possible next vertices. Heap insertion/sifting and single/empty extraction are correct; cycle count rejects partial output. Round 3 replaces bit-shift parent indexing with ordinary floor arithmetic. Both candidates pass 1062 exhaustive directed graph/duplicate-edge cases on n=0..3, 20000-vertex duplicate-edge directed chain and wide isolated frontier. Expected O(m+n log(n+1)) time/O(n+unique edges) storage.",
+        "evidence": "interview-small-directed-orderings.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "opening-brackets",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 104,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Final stack emptiness restores balanced nesting; closing brackets must match the most recent unmatched opening. Round 3 explicitly recognizes non-bracket behavior was unspecified and adds conservative rejection, rather than claiming the README required it. Both actual candidates pass all 1555 bracket words of length 0..4 plus 12000-pair balanced nesting and 12000 unmatched openings against independent adjacent-pair reduction. Iterative O(length) scan/O(depth) stack; same synchronous API, no dependencies/test edits. Actual service smoke, original/patched markers and native reading checks pass.",
+        "evidence": "interview-opening-brackets-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "final return true",
+        "counterexample": {
+          "args": [
+            "("
+          ],
+          "originalActual": true,
+          "expected": false
+        },
+        "note": "One unmatched opening is minimal; empty input must be accepted."
+      }
+    },
+    {
+      "id": "shortest-path-settlement",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 212,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Strict distance improvements enqueue new candidates; stale entries are skipped, restoring ordinary nonnegative shortest-route relaxation, including parallel edges and zero-cost cycles. Both candidates pass 2356 independently enumerated weighted graph/witness cases. Broad mathematical-distance review still fails a unique-chain safe-integer-edge witness: terminal exact distance 9007199254740996 is representable, but both return 9007199254740992. Some intermediate exact distances exceed safe precision, explicitly described in supplementary evidence. Round 3 acknowledges Number precision/overflow limits but does not restore unrestricted exact arithmetic. Repeated sorting and full edge scans are not an optimized heap/adjacency implementation; no stronger complexity requirement supplied. API/dependencies/tests unchanged; service smoke, fresh patch marker and native reading pass.",
+        "evidence": "interview-shortest-path-settlement-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "seen.add(b) at discovery, guarded by !seen.has(b)",
+        "counterexample": {
+          "args": [
+            2,
+            [
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ]
+            ],
+            0
+          ],
+          "originalActual": [
+            0,
+            1
+          ],
+          "expected": [
+            0,
+            0
+          ]
+        },
+        "note": "Parallel edges are contract-valid. Two vertices and two competing edges are minimal; nonnegative paths cannot improve the source zero with one vertex."
+      }
+    },
+    {
+      "id": "dependency-completion",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 187,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Completion now requires exactly n emitted vertices, rejecting cyclic partial orders. Sorting every ready queue before extraction selects the smallest available vertex; per-occurrence indegree increments and outgoing decrements remain consistent even with duplicate edges. Both candidates pass all 1062 small directed-graph/duplicate-edge cases against independent complete permutation search. API/dependencies/tests unchanged; actual smoke, patch marker and native reading checks pass. Repeated sorting and full-edge scans have higher time cost than a heap/adjacency approach; no optimized complexity requirement supplied.",
+        "evidence": "interview-dependency-completion-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "out.length===n-1",
+        "counterexample": {
+          "args": [
+            1,
+            []
+          ],
+          "originalActual": [],
+          "expected": [
+            0
+          ]
+        },
+        "note": "One isolated vertex is minimal; the zero-vertex graph returns the required empty order."
+      }
+    },
+    {
+      "id": "meeting-endpoint",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 170,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Event ties now order -1 ends before +1 starts, so temporary counts cannot invent overlap. Each positive-length interval contributes one start/end; peak simultaneous activity gives required room count. Empty input zero, duplicate intervals count separately and negative/extreme finite times work. Both fixes pass 1557 independent direct-overlap tests; O(n log n) sorting/O(n) event storage. Same synchronous API/no dependencies or test edits. Actual smoke, original/patch markers and native reading checks pass.",
+        "evidence": "interview-meeting-endpoint-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "a[0]-b[0]||b[1]-a[1]",
+        "counterexample": {
+          "args": [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "originalActual": 2,
+          "expected": 1
+        },
+        "note": "Two touching positive-length intervals are minimal; zero or one cannot expose the same-time start/end ordering defect."
+      }
+    },
+    {
+      "id": "unicode-iteration",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 88,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "new Set(s) consumes the string code-point iterator, keeping surrogate pairs intact while counting repeated code points once. Empty input zero. Final answer correctly counts combining accent separately from its base letter, preserving code-point rather than grapheme semantics. Both candidates pass 1112 independently encoded numeric-code-point tests across BMP/supplementary boundaries, combining marks, joiner/variation selector and a long repeated mixture. Expected O(code units) time/O(distinct code points) storage. Same synchronous API/no dependencies or test edits; smoke, original/patch markers and native reading pass.",
+        "evidence": "interview-unicode-iteration-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "s.split(\"\") in new Set(s.split(\"\")).size",
+        "counterexample": {
+          "args": [
+            "😀"
+          ],
+          "originalActual": 2,
+          "expected": 1
+        },
+        "note": "One supplementary code point represented by two distinct surrogate halves is minimal in code-unit length; empty or one-code-unit strings cannot distinguish the implementations."
+      }
+    },
+    {
+      "id": "cache-zero",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 101,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Prototype hasOwnProperty.call distinguishes own entries from absent/inherited keys while preserving all stored JSON values regardless of truthiness. Shadowed hasOwnProperty and owned __proto__ data properties remain valid. Both fixes pass 56 independent property/value tests with repeated keys and empty requests. Expected O(request count) time/O(output length) storage. Same synchronous API, no dependencies/test edits; actual smoke, original/patch markers, native vertical/horizontal reading pass.",
+        "evidence": "interview-cache-zero-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "values[k]||-1",
+        "counterexample": {
+          "args": [
+            {
+              "a": 0
+            },
+            [
+              "a"
+            ]
+          ],
+          "originalActual": [
+            -1
+          ],
+          "expected": [
+            0
+          ]
+        },
+        "note": "One request for one stored falsy value is minimal for this loss-of-value defect."
+      }
+    },
+    {
+      "id": "zero-product",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 141,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Prefix/suffix exclusion fixes ordinary zero handling without division and preserves singleton/empty behavior. Both candidates pass all 1365 arrays of length 0..5 over [-2,0,1,3] against independent BigInt products. Both still produce three NaN entries for 310 tens followed by two zeros, although every exclusion product contains at least one zero and must be exactly zero. Frozen grades remain unchanged. O(n) time/O(1) auxiliary storage beyond output; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
+        "evidence": "interview-zero-product-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "all/x in nums.map(x=>all/x)",
+        "counterexample": {
+          "args": [
+            [
+              0
+            ]
+          ],
+          "originalActual": [
+            {
+              "nonFinite": "NaN"
+            }
+          ],
+          "expected": [
+            1
+          ],
+          "representation": "Non-finite actual numbers are recorded with explicit nonFinite tags."
+        },
+        "note": "Singleton zero is minimal. No minimum array size is supplied; excluding its sole entry leaves empty product one."
+      }
+    },
+    {
+      "id": "window-multiplicity",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 272,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Required-count deficits and missing occurrence total enforce multiplicity; shrinking valid windows and strict best updates preserve leftmost ties. Both candidates pass all 945 A/B source/target pairs including empty targets and four Unicode identity cases. Source code points and offsets keep surrogate pairs intact. Round 3 chooses code-point window length instead of round 2 UTF-16-unit length; the task does not explicitly specify the metric, so this review accepts the coherent code-point interpretation and records the unresolved alternative separately. Actual execution confirms the answer discards its first faulty Unicode witness and supplies a valid conditional metric witness. Expected O(|s|+|t|) scans/O(|s|+distinct target code points) storage. API/dependencies/tests unchanged; smoke, original/patch markers and native vertical/horizontal reading pass.",
+        "evidence": "interview-window-multiplicity-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "new Set(t) and every(c=>w.includes(c))",
+        "counterexample": {
+          "args": [
+            "a",
+            "aa"
+          ],
+          "originalActual": "a",
+          "expected": ""
+        },
+        "note": "One source occurrence and two target occurrences are minimal for the lost-multiplicity defect. Empty-target handling is a separate reference-helper gap."
+      }
+    },
+    {
+      "id": "stable-order",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 162,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Strictly inverted adjacent records swap; equal keys never cross, so insertion prefixes remain sorted and stable. Records are cloned before sorting, preserving input array and properties. Both fixes pass all 364 key sequences through length five over [-2,0,10] against explicit original-index tie-break oracle, with deep input snapshots unchanged. O(n^2) worst-case time/O(n) copy storage; no stronger complexity requirement supplied. API/dependencies/tests unchanged; actual smoke, original/patched markers and reading pass.",
+        "evidence": "interview-stable-order-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "a[j-1].key>=a[j].key",
+        "counterexample": {
+          "args": [
+            [
+              {
+                "key": 1,
+                "id": "a"
+              },
+              {
+                "key": 1,
+                "id": "b"
+              }
+            ]
+          ],
+          "originalActual": [
+            {
+              "key": 1,
+              "id": "b"
+            },
+            {
+              "key": 1,
+              "id": "a"
+            }
+          ],
+          "expected": [
+            {
+              "key": 1,
+              "id": "a"
+            },
+            {
+              "key": 1,
+              "id": "b"
+            }
+          ]
+        },
+        "note": "Two distinct equal-key records are minimal for observing a relative-order reversal."
+      }
+    },
+    {
+      "id": "root-path",
+      "kind": "bug",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 149,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Dot-dot is handled separately, popping an ordinary segment only when available and never storing dot-dot at root. Empty/dot components are ignored; ordinary names including three dots or dot-dot prefixes remain literal. Both fixes pass 1557 independent list-rewrite and deep/above-root witnesses. O(path length) time and storage; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
+        "evidence": "interview-root-path-completed.json"
+      },
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(p===\"..\"&&st.length)st.pop();else st.push(p)",
+        "counterexample": {
+          "args": [
+            "/.."
+          ],
+          "originalActual": "/..",
+          "expected": "/"
+        },
+        "note": "The shortest absolute path exposing dot-dot at root is /..; shorter root, empty-segment and dot paths already normalize correctly."
+      }
+    },
+    {
+      "id": "nonnegative-weight-shortest-paths",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 170,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Min-heap Dijkstra with adjacency, stale-entry rejection, distance relaxation and null unreachable outputs; R3 uses ordinary floor heap indexing. Both pass 2356 independently enumerated small weighted graphs. Both fail a unique seven-vertex chain whose individual weights are safe integers and terminal distance is exactly representable: expected 9007199254740996, actual 9007199254740992. Intermediate exact distances include unrepresentable integers; terminal-only comparison avoids requiring impossible intermediate Number representation. R2 states an unstated precision restriction. Frozen fixtures remain passed; broader task accuracy fails.",
+        "evidence": "interview-weighted-paths-integer-precision.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "course-prerequisite-cycle",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 141,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Kahn indegree traversal accounts for prerequisite orientation b before a and duplicates consistently; a course enters the head-index queue only when its indegree reaches zero. Processing n vertices is equivalent to absence of a cycle. Empty n returns true. Iterative O(n+m) time/storage. Both pass 1064 independent cases including every directed graph on n=0..3 with self-loops, duplicate prerequisites, and 20000-course chain/cycle.",
+        "evidence": "interview-course-cycle-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "flood-fill",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 147,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Copies outer image and each row before traversal. Equal replacement returns fresh copy immediately; recoloring before pushing marks each starting-color orthogonal neighbor once, so cycles terminate and diagonal components remain separate. Iterative O(cells) time/storage including copy. Both pass 1475 independent cases with copy and deep input preservation checks, ragged/invalid starts and 20000-cell region.",
+        "evidence": "interview-flood-fill-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "eight-direction-binary-path",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 111,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "BFS marks on enqueue, uses a head-index queue, skips the zero offset and permits all eight neighboring offsets. First removed target is shortest in cell-count distance initialized to one. Blocked endpoints and exhaustion return -1; input preserved. O(n squared) time/storage. Both pass every binary n=1..3 square against synchronous relaxation, empty grid and a 256-square open grid: 532 cases.",
+        "evidence": "interview-eight-direction-path-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "spiral-matrix-traversal",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 86,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Shrinking top/bottom/left/right bounds consume each perimeter once. Additional row/column guards prevent duplicates when a single row or column remains; loop bounds naturally skip exhausted right and bottom loops. Empty outer/first row returns empty. Input preserved, O(rows*columns) time/output storage. Both pass 442 independently rotated-matrix oracle cases covering all dimensions 0..20 and a 20000-cell column.",
+        "evidence": "interview-spiral-matrix-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "rotate-square-matrix",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 112,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Coordinate transformation result[col][n-1-row]=matrix[row][col] maps each input cell to the unique clockwise destination. Rows are freshly allocated, input preserved and empty square returns empty. O(n squared) time/output storage. Both pass sizes 0..30 with unique labels and copy assertions.",
+        "evidence": "interview-rotate-square-matrix-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "maximum-island-area",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 165,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Full rectangular scan starts a component only on an unvisited numeric one. Marking before push prevents duplicate counting; exactly four neighbors preserve orthogonal connectivity. Iterative stack avoids recursion depth. O(rows*cols) time/storage, input preserved. Both pass 690 disjoint-set oracle cases including all small binary rectangular shapes and a 20000-cell island.",
+        "evidence": "interview-maximum-island-area-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "interval-intersections",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 119,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Two pointers calculate max starts/min ends; <= includes closed point intersections. Advancing only earlier end cannot miss later intersections; equal ends advance both under separately disjoint-list contract. Comparisons avoid precision-losing arithmetic for result endpoints. O(m+n) time/O(1) auxiliary excluding output, input preserved. Both pass 6241 independent Cartesian overlap lists.",
+        "evidence": "interview-interval-intersections-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "minimum-meeting-rooms",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 72,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Skips zero-duration empty half-open intervals. Sorting by timestamp then delta processes ends before starts; maximum prefix occupancy equals minimum rooms. O(n log n) time/O(n) storage, input preserved. Both pass 1117 direct occupancy cases including empty durations and extreme safe-integer timestamps.",
+        "evidence": "interview-minimum-meeting-rooms-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "smallest-range-covering-lists",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 143,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Heap retains one current value per nonempty list and running maximum; advancing a minimum explores necessary candidate ranges and exhaustion terminates correctly. Sift-down after increasing root and bottom-up heap construction correct; O(N log(k+1)) time/O(k) storage. Both pass 819 small list collections but fail safe-integer endpoints [[-9007199254740991,-9007199254740990],[2]]: widths 9007199254740993 and 9007199254740992 both round to the latter Number, preserving the wider first range. Expected [-9007199254740990,2], actual [-9007199254740991,2]. Outputs and inputs are exactly representable; no numeric bound is in the task. Frozen fixtures remain passed; broader final contract fails.",
+        "evidence": "interview-smallest-range-covering-lists-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "insert-closed-interval",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 166,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Copies strictly preceding intervals, extends the inserted interval across each start<=currentEnd overlap, then copies the strictly following suffix. Strict-before and non-strict-overlap conditions merge touching closed endpoints without losing gaps. O(n) time/output space, input unchanged structurally. Both pass 1185 independent overlap-component cases.",
+        "evidence": "interview-insert-closed-interval-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "lru-cache-simulation",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 133,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Map insertion order is least-to-most recent; successful get and replacement put delete/reinsert, and new put evicts first key after capacity overflow. Map.has distinguishes zero values from misses. Expected O(operations) time with hash-map operations, O(capacity) cache storage plus get outputs. Both pass 2343 independent last-access-clock traces.",
+        "evidence": "interview-lru-cache-simulation-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "ttl-cache-simulation",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 153,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Latest put replaces value and deadline; >= expiry rejects equality and deletes expired entries, Map lookup handles zero values. Both pass 781 backward-history cases. Both fail exactly represented integer timestamps with deadline beyond safe-integer range: put at MAX_SAFE_INTEGER with TTL 2 should survive query at 2^53, but rounded time+ttl expires it early. Expected [7,null], actual [null,null]. Integer time is explicitly stated without upper bound. Frozen fixtures pass; broader final contract fails. Same witness revised earlier bug ttl-expiry final review while preserving diagnosis pass.",
+        "evidence": "interview-ttl-cache-simulation-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "fixed-window-rate-limiter",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 167,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Correct floor(time/windowMs) reset for nondecreasing timestamps, including skipped windows; accepted count increments only on acceptance. All 1134 integer-limit cases pass. The accepted<limit test permits one event at limit 0.5 and two at limit 1.5, violating the literal at-most-limit contract, which supplies no integer restriction. Both pass 1198 of 1890 supplementary cases. O(n) time/result space and constant auxiliary state. Frozen fixtures pass; broader final contract fails.",
+        "evidence": "interview-fixed-window-rate-limiter-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "token-bucket-rate-limiter",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 136,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Refills for elapsed time, caps capacity, updates previousTime on every event, spends one only when tokens>=1. All 1512 exactly dyadic small cases pass. Both fail capacity 1, rate 0.1, events at every integer 0..10: cumulative rounding produces 0.9999999999999999 at time 10 and rejects although a token is available. IEEE input 0.1=3602879701896397/36028797018963968 is slightly above exact one-tenth, so exact binary-rational accounting also requires acceptance. O(n) time/output space and constant auxiliary state. Frozen fixtures pass; broader final contract fails.",
+        "evidence": "interview-token-bucket-rate-limiter-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "streaming-median",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 209,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Two heaps maintain all lower values <= upper values and lower size equal to upper or one greater. Standard compare-based insertion, ordinary-floor parent indexing, pop/sift and one-step rebalance preserve invariants. Odd median is lower maximum; even median a/2+b/2 avoids finite-integer addition overflow. O(n log n) time/O(n) heaps and results. Both pass 782 independent sorted-prefix cases including repeated 1e308 integral Numbers.",
+        "evidence": "interview-streaming-median-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "time-indexed-key-value",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": false,
+      "firstImplementationPassed": false,
+      "finalImplementationPassed": false,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 88,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Marker and correct binary-search approach identified, but toolbar covered the no-match rule in the screenshot. R1 explicitly reported occlusion; R2 requested clarification and R3 returned no implementation. Both frozen grades fail all four cases. This is an observed capture/presentation limitation, not a completed implementation or invented solution. Retain failure; test a fully visible prompt separately without replacing this initial counted attempt.",
+        "evidence": "interview-counted-synthetic-96-100.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "idempotent-event-processing",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 106,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Set handles arbitrary string IDs and first-seen output order; duplicate events contribute no delta. Both pass all 781 small event sequences including inherited property names and zero/negative deltas. Both fail individually safe integer deltas MAX_SAFE_INTEGER plus five distinct-ID ones: required exactly representable total 9007199254740996, actual 9007199254740992. O(n) expected hash-set time/O(unique IDs) auxiliary and output. Frozen fixtures pass; broader final contract fails.",
+        "evidence": "interview-idempotent-event-processing-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "bounded-fifo-queue",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 142,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": false,
+        "note": "Circular buffer, head and live size give O(operations) time/O(capacity) buffer for integer nonnegative capacity; zero capacity rejects pushes. Equality-only size===capacity and modulo capacity fail literal nonnegative fractional capacity: a push at 0.5 is accepted although occupancy exceeds capacity, and further pushes can overwrite. Both pass 409 of 605 independently enumerated traces; all 363 integer-capacity traces pass. Task provides no integer restriction. Frozen fixtures pass; broader final contract fails.",
+        "evidence": "interview-bounded-fifo-queue-domain.json"
+      },
+      "diagnosisReview": null
+    },
+    {
+      "id": "dependency-batch-scheduler",
+      "kind": "regular",
+      "attempts": 1,
+      "incompleteAttempts": 0,
+      "markerCorrect": true,
+      "functionalPassed": true,
+      "firstImplementationPassed": true,
+      "finalImplementationPassed": true,
+      "renderedSourceMatches": true,
+      "acceptedPaints": 197,
+      "paintSourceMatches": true,
+      "keyboardPassed": true,
+      "manualContractReview": {
+        "passed": true,
+        "note": "Kahn indegrees with current/next frontiers ensure a whole batch completes before newly ready tasks appear. Ascending sort handles each frontier; duplicate edges are incremented and decremented consistently. Processed count rejects cycles, n=0 returns empty batches. O(m+n log n) conservative time/O(n+m) storage including batches. Both pass 1064 transitive-closure/longest-prerequisite-layer cases including duplicate graphs, 20000-node chain and independent wide batch.",
+        "evidence": "interview-dependency-batch-scheduler-domain.json"
+      },
+      "diagnosisReview": null
+    }
+  ]
+}

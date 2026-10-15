@@ -1,0 +1,157 @@
+{
+  "scope": "Cross-task precision audit of actual candidates; frozen grades unchanged",
+  "args": [
+    [
+      {
+        "id": "0",
+        "delta": 9007199254740991
+      },
+      {
+        "id": "1",
+        "delta": 1
+      },
+      {
+        "id": "2",
+        "delta": 1
+      },
+      {
+        "id": "3",
+        "delta": 1
+      },
+      {
+        "id": "4",
+        "delta": 1
+      },
+      {
+        "id": "5",
+        "delta": 1
+      }
+    ]
+  ],
+  "oracle": "Exact BigInt total of individually safe-integer deltas; terminal expected total 9007199254740996 is exactly representable.",
+  "expected": {
+    "total": 9007199254740996,
+    "acceptedIds": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
+  },
+  "outcomes": [
+    {
+      "id": "event-identity",
+      "round": 2,
+      "answerSha256": "c209bda24f0c36c1c47b968e6c001a0effd40e15ba8601d883703572d11bc959",
+      "actual": {
+        "total": 9007199254740992,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "expected": {
+        "total": 9007199254740996,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "id": "event-identity",
+      "round": 3,
+      "answerSha256": "a880c00b9f91631016058215ce9e3fa199a92d3accd299306dea1dc9841f4f23",
+      "actual": {
+        "total": 9007199254740992,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "expected": {
+        "total": 9007199254740996,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "id": "idempotent-event-processing",
+      "round": 2,
+      "answerSha256": "1d167d6284e16b28c0e9590f4532bd1a46234831e3d3cb9784879396bd62cbd0",
+      "actual": {
+        "total": 9007199254740992,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "expected": {
+        "total": 9007199254740996,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "id": "idempotent-event-processing",
+      "round": 3,
+      "answerSha256": "f31b77df675f8545e64c365c845f7aae039df8882ad4daf656f6fcfb10de98d2",
+      "actual": {
+        "total": 9007199254740992,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "expected": {
+        "total": 9007199254740996,
+        "acceptedIds": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "passed": false
+    }
+  ]
+}

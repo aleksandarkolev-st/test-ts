@@ -755,7 +755,7 @@
       "id": "event-identity",
       "kind": "bug",
       "finalAnswerSha256": "a880c00b9f91631016058215ce9e3fa199a92d3accd299306dea1dc9841f4f23",
-      "finalContractPassed": true,
+      "finalContractPassed": false,
       "diagnosisReview": {
         "passed": true,
         "source": "src/core.mjs",
@@ -782,8 +782,9 @@
         },
         "note": "Inherited truthy Object constructor is mistaken for an accepted ID. One event is minimal; empty input cannot distinguish the defect."
       },
-      "note": "Set membership accepts arbitrary string IDs without prototype lookup. Records first ID even for zero delta or empty string, skips subsequent occurrences, preserves order and uses first deltas only. Empty input yields zero/empty output. Same synchronous export/API, no dependencies or test edits. Expected O(n) time/O(distinct IDs) auxiliary space plus output. Actual service smoke, fresh edited-project marker and native reading checks passed.",
-      "evidence": "interview-event-identity-completed.json"
+      "note": "Set membership accepts arbitrary string IDs without prototype lookup. Records first ID even for zero delta or empty string, skips subsequent occurrences, preserves order and uses first deltas only. Empty input yields zero/empty output. Same synchronous export/API, no dependencies or test edits. Expected O(n) time/O(distinct IDs) auxiliary space plus output. Actual service smoke, fresh edited-project marker and native reading checks passed. Subsequent independent integer total witness fails: MAX_SAFE_INTEGER plus five distinct-ID unit deltas has exactly represented required total 9007199254740996, but actual total is 9007199254740992. Identity diagnosis remains passed and frozen fixtures remain unchanged; broader final contract fails.",
+      "evidence": "interview-event-identity-completed.json",
+      "supplementaryEvidence": "interview-event-total-integer-precision.json"
     },
     {
       "id": "edit-distance",
@@ -1506,6 +1507,52 @@
       "diagnosisReview": null,
       "note": "Refills for elapsed time, caps capacity, updates previousTime on every event, spends one only when tokens>=1. All 1512 exactly dyadic small cases pass. Both fail capacity 1, rate 0.1, events at every integer 0..10: cumulative rounding produces 0.9999999999999999 at time 10 and rejects although a token is available. IEEE input 0.1=3602879701896397/36028797018963968 is slightly above exact one-tenth, so exact binary-rational accounting also requires acceptance. O(n) time/output space and constant auxiliary state. Frozen fixtures pass; broader final contract fails.",
       "evidence": "interview-token-bucket-rate-limiter-domain.json"
+    },
+    {
+      "id": "streaming-median",
+      "kind": "regular",
+      "finalAnswerSha256": "90ce10d888ed114f9247354a9419fe2828090dda0a34644a88d42361d71a6e4f",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Two heaps maintain all lower values <= upper values and lower size equal to upper or one greater. Standard compare-based insertion, ordinary-floor parent indexing, pop/sift and one-step rebalance preserve invariants. Odd median is lower maximum; even median a/2+b/2 avoids finite-integer addition overflow. O(n log n) time/O(n) heaps and results. Both pass 782 independent sorted-prefix cases including repeated 1e308 integral Numbers.",
+      "evidence": "interview-streaming-median-domain.json"
+    },
+    {
+      "id": "time-indexed-key-value",
+      "kind": "regular",
+      "finalAnswerSha256": "21ff30149d0571fcc4207f854696c89de21bbadadee6612fc905da4e7341a574",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Marker and correct binary-search approach identified, but toolbar covered the no-match rule in the screenshot. R1 explicitly reported occlusion; R2 requested clarification and R3 returned no implementation. Both frozen grades fail all four cases. This is an observed capture/presentation limitation, not a completed implementation or invented solution. Retain failure; test a fully visible prompt separately without replacing this initial counted attempt.",
+      "evidence": "interview-counted-synthetic-96-100.json"
+    },
+    {
+      "id": "idempotent-event-processing",
+      "kind": "regular",
+      "finalAnswerSha256": "f31b77df675f8545e64c365c845f7aae039df8882ad4daf656f6fcfb10de98d2",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Set handles arbitrary string IDs and first-seen output order; duplicate events contribute no delta. Both pass all 781 small event sequences including inherited property names and zero/negative deltas. Both fail individually safe integer deltas MAX_SAFE_INTEGER plus five distinct-ID ones: required exactly representable total 9007199254740996, actual 9007199254740992. O(n) expected hash-set time/O(unique IDs) auxiliary and output. Frozen fixtures pass; broader final contract fails.",
+      "evidence": "interview-idempotent-event-processing-domain.json",
+      "supplementaryEvidence": "interview-event-total-integer-precision.json"
+    },
+    {
+      "id": "bounded-fifo-queue",
+      "kind": "regular",
+      "finalAnswerSha256": "8f747b4adb1cb093d1c4c9d54eaa301f1b666480a6514ac476ca5297e1755477",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Circular buffer, head and live size give O(operations) time/O(capacity) buffer for integer nonnegative capacity; zero capacity rejects pushes. Equality-only size===capacity and modulo capacity fail literal nonnegative fractional capacity: a push at 0.5 is accepted although occupancy exceeds capacity, and further pushes can overwrite. Both pass 409 of 605 independently enumerated traces; all 363 integer-capacity traces pass. Task provides no integer restriction. Frozen fixtures pass; broader final contract fails.",
+      "evidence": "interview-bounded-fifo-queue-domain.json"
+    },
+    {
+      "id": "dependency-batch-scheduler",
+      "kind": "regular",
+      "finalAnswerSha256": "f60d6120004535a2b62e40cbbd6d2a73270ae03989636ff971d12911b92a0217",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Kahn indegrees with current/next frontiers ensure a whole batch completes before newly ready tasks appear. Ascending sort handles each frontier; duplicate edges are incremented and decremented consistently. Processed count rejects cycles, n=0 returns empty batches. O(m+n log n) conservative time/O(n+m) storage including batches. Both pass 1064 transitive-closure/longest-prerequisite-layer cases including duplicate graphs, 20000-node chain and independent wide batch.",
+      "evidence": "interview-dependency-batch-scheduler-domain.json"
     }
   ]
 }

@@ -1346,6 +1346,28 @@
       "note": "Strictly inverted adjacent records swap; equal keys never cross, so insertion prefixes remain sorted and stable. Records are cloned before sorting, preserving input array and properties. Both fixes pass all 364 key sequences through length five over [-2,0,10] against explicit original-index tie-break oracle, with deep input snapshots unchanged. O(n^2) worst-case time/O(n) copy storage; no stronger complexity requirement supplied. API/dependencies/tests unchanged; actual smoke, original/patched markers and reading pass.",
       "evidence": "interview-stable-order-completed.json",
       "supplementaryEvidence": "interview-stable-order-domain.json"
+    },
+    {
+      "id": "root-path",
+      "kind": "bug",
+      "finalAnswerSha256": "2fd06a092f44d55c3aa2f0298ab573d818d7f8ed50e5fd1fd2cd41ba30a3da6f",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "if(p===\"..\"&&st.length)st.pop();else st.push(p)",
+        "counterexample": {
+          "args": [
+            "/.."
+          ],
+          "originalActual": "/..",
+          "expected": "/"
+        },
+        "note": "The shortest absolute path exposing dot-dot at root is /..; shorter root, empty-segment and dot paths already normalize correctly."
+      },
+      "note": "Dot-dot is handled separately, popping an ordinary segment only when available and never storing dot-dot at root. Empty/dot components are ignored; ordinary names including three dots or dot-dot prefixes remain literal. Both fixes pass 1557 independent list-rewrite and deep/above-root witnesses. O(path length) time and storage; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
+      "evidence": "interview-root-path-completed.json",
+      "supplementaryEvidence": "interview-root-path-domain.json"
     }
   ]
 }

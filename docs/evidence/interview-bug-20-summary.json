@@ -1,0 +1,416 @@
+{
+  "runId": "run-935cb972a18c",
+  "fingerprint": {
+    "binarySha256": "12cd4c0f6b56e55d4c35a470aa7b6003eab1db5be8cae5c3dbadc03d9566489f",
+    "frontendSha256": "8918c9b8528c926b36552e6d32fea42ecc3ac2872fd975c441b6381545b926a3",
+    "contractsSha256": "eb421777c940f1a6d8c0144c65db740a8458eccda08d16f795fa2f7b18ad9ed8"
+  },
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "scope": "All twenty source-bug interviews are complete; the separate 100-regular corpus still has pending rows.",
+  "completed": 20,
+  "diagnosesPassed": 20,
+  "finalContractsPassed": 16,
+  "finalFixturesPassed": 20,
+  "latencyScope": "Three measured rounds from the latest completed attempt per bug interview; interrupted attempts preserved outside these statistics.",
+  "firstWord": {
+    "samples": 60,
+    "medianMs": 3163,
+    "p95Ms": 7935,
+    "maxMs": 10634
+  },
+  "completion": {
+    "samples": 60,
+    "medianMs": 6700,
+    "p95Ms": 13934,
+    "maxMs": 24734
+  },
+  "rows": [
+    {
+      "id": "search-boundary",
+      "index": 101,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        7774,
+        9279,
+        3161
+      ],
+      "completedMs": [
+        10481,
+        12571,
+        11213
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "duplicate-search",
+      "index": 102,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3289,
+        3780,
+        3848
+      ],
+      "completedMs": [
+        5800,
+        6969,
+        13285
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "bounded-queue",
+      "index": 103,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3199,
+        2140,
+        6342
+      ],
+      "completedMs": [
+        5150,
+        4464,
+        13114
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "lru-recency",
+      "index": 104,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        4099,
+        3588,
+        3441
+      ],
+      "completedMs": [
+        9036,
+        7497,
+        11631
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "ttl-expiry",
+      "index": 105,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3289,
+        2483,
+        2613
+      ],
+      "completedMs": [
+        6071,
+        4897,
+        8811
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "window-reset",
+      "index": 106,
+      "diagnosisPassed": true,
+      "finalContractPassed": false,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2237,
+        3544,
+        4391
+      ],
+      "completedMs": [
+        5468,
+        6329,
+        10876
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "event-identity",
+      "index": 107,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        6980,
+        2796,
+        4033
+      ],
+      "completedMs": [
+        9157,
+        6519,
+        10206
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "reservation-transaction",
+      "index": 108,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2337,
+        7935,
+        7578
+      ],
+      "completedMs": [
+        5569,
+        11386,
+        16862
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "csv-escaping",
+      "index": 109,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2592,
+        3113,
+        2364
+      ],
+      "completedMs": [
+        4944,
+        6700,
+        9550
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "signed-division",
+      "index": 110,
+      "diagnosisPassed": true,
+      "finalContractPassed": false,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3589,
+        2616,
+        4490
+      ],
+      "completedMs": [
+        4998,
+        4478,
+        8311
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "opening-brackets",
+      "index": 111,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        6033,
+        1986,
+        6157
+      ],
+      "completedMs": [
+        6726,
+        4386,
+        11949
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "shortest-path-settlement",
+      "index": 112,
+      "diagnosisPassed": true,
+      "finalContractPassed": false,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3855,
+        2730,
+        6633
+      ],
+      "completedMs": [
+        7426,
+        6556,
+        16040
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "dependency-completion",
+      "index": 113,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3225,
+        3222,
+        2844
+      ],
+      "completedMs": [
+        5173,
+        7583,
+        10228
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "meeting-endpoint",
+      "index": 114,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        1974,
+        2749,
+        2104
+      ],
+      "completedMs": [
+        4299,
+        6221,
+        7260
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "unicode-iteration",
+      "index": 115,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2093,
+        2363,
+        2442
+      ],
+      "completedMs": [
+        4354,
+        3838,
+        5288
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "cache-zero",
+      "index": 116,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2644,
+        4404,
+        2252
+      ],
+      "completedMs": [
+        4442,
+        6499,
+        6066
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "zero-product",
+      "index": 117,
+      "diagnosisPassed": true,
+      "finalContractPassed": false,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        3078,
+        2157,
+        3163
+      ],
+      "completedMs": [
+        5674,
+        5631,
+        8064
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "window-multiplicity",
+      "index": 118,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        1921,
+        6742,
+        10634
+      ],
+      "completedMs": [
+        3462,
+        13664,
+        24734
+      ],
+      "ambiguity": {
+        "feature": "Unicode window length",
+        "chosen": "code-point count",
+        "alternative": "UTF-16-unit count",
+        "explicitlySpecified": false,
+        "evidence": "interview-window-length-metric-ambiguity.json"
+      }
+    },
+    {
+      "id": "stable-order",
+      "index": 119,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2266,
+        4622,
+        2055
+      ],
+      "completedMs": [
+        5411,
+        7250,
+        7784
+      ],
+      "ambiguity": null
+    },
+    {
+      "id": "root-path",
+      "index": 120,
+      "diagnosisPassed": true,
+      "finalContractPassed": true,
+      "finalFixturesPassed": true,
+      "markerPassed": true,
+      "firstWordMs": [
+        2413,
+        2297,
+        9825
+      ],
+      "completedMs": [
+        4381,
+        4547,
+        13934
+      ],
+      "ambiguity": null
+    }
+  ]
+}

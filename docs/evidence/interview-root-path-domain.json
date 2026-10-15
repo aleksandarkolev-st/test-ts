@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual fixes; frozen fixtures and interview counts unchanged",
+  "domain": "Distinct absolute paths with 0..4 segments from a/b/dot/dot-dot/empty/three-dots, plus literal-prefix and long root/depth witnesses.",
+  "oracle": "Independent whole-list rewrite: remove empty/dot segments, repeatedly delete the first dot-dot and its predecessor when one exists, otherwise delete that leading dot-dot. Long constructed witnesses have known root output.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "250cb236e995c61a2a5ba2d9a648f181817e4ec5cf0d8224a73eb72d67662d46",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "2fd06a092f44d55c3aa2f0298ab573d818d7f8ed50e5fd1fd2cd41ba30a3da6f",
+      "cases": 1557,
+      "passedCases": 1557,
+      "failures": []
+    }
+  ]
+}

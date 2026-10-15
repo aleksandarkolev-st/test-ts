@@ -176,3 +176,11 @@ Two reference-helper edge gaps are recorded in `evidence/interview-pending-refer
 80 regular and 19 bug interviews are complete (297 completed-attempt measured responses). All 99 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All nineteen completed diagnoses pass; broader final implementation review passes 80/99, retaining 19 failures and the recorded Unicode metric ambiguity.
 
 The stable-order diagnosis identifies equal-key swapping and the minimal two-record witness. Both fixes pass all 364 small key sequences with explicit original-index tie-break oracles and unchanged deep input snapshots. Actual smoke, source constraints, original/patched handoffs and reading checks passed. Evidence: `evidence/interview-stable-order-completed.json` and `evidence/interview-stable-order-domain.json`. Remaining: 20 regular and 1 bug interview, plus reference-helper repairs after the frozen run.
+
+### All twenty bug interviews complete
+
+80 regular and 20 bug interviews are complete (300 completed-attempt measured responses). All 100 completed interviews pass frozen fixtures, current markers, accepted paint-source and native keyboard checks. All twenty source-bug diagnoses pass exact file/expression/counterexample review. Final bug implementation review passes 16/20; four numerical/quota limitations remain retained. Across the current 100 completed interviews, broader final implementation review passes 81/100, with 19 known failures and the documented Unicode metric interpretation.
+
+The last path diagnosis identifies dot-dot being pushed at root and uses the minimal /.. witness. Both fixes pass 1557 independent path-rewrite, ordinary-name and deep/root-boundary tests. Evidence: `evidence/interview-root-path-completed.json`, `evidence/interview-root-path-domain.json`, and the twenty-bug comparison `evidence/interview-bug-20-summary.json`.
+
+Overall median first word is 3133 ms (p95 8003 ms); median completion is 7784 ms (p95 15296 ms). The new longest completion, 24734 ms, is retained. Remaining: 20 regular interviews and the two recorded reference-helper repairs after the full frozen native run. The requested 100 regular + 20 bug objective remains active.

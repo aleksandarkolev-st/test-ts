@@ -1,0 +1,52 @@
+{
+  "scope": "Actual execution of the final answer Unicode discussion; metric is not explicit in the supplied task",
+  "note": "The answer discards its first attempted Unicode witness, where ba wins under either metric, then changes the implementation to code-point window length. This changes behavior versus UTF-16 minimum length. Both interpretations remain distinct; frozen ASCII fixtures cannot resolve that ambiguity.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "3bc06f62abdeb7d5ed0cdc937e7f82e04ebd9a6c7749b21652ac5f4d98c28129",
+      "cases": [
+        {
+          "args": [
+            "axxba😀b",
+            "ab"
+          ],
+          "expectedBoth": "ba",
+          "actual": "ba"
+        },
+        {
+          "args": [
+            "axxbxxa😀b",
+            "ab"
+          ],
+          "expectedByUtf16Length": "axxb",
+          "expectedByCodePointLength": "a😀b",
+          "actual": "axxb"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "4d4500e92fcb273565a16d2bb6125dea1d18c8593a353a265d19dd6688d7c45b",
+      "cases": [
+        {
+          "args": [
+            "axxba😀b",
+            "ab"
+          ],
+          "expectedBoth": "ba",
+          "actual": "ba"
+        },
+        {
+          "args": [
+            "axxbxxa😀b",
+            "ab"
+          ],
+          "expectedByUtf16Length": "axxb",
+          "expectedByCodePointLength": "a😀b",
+          "actual": "a😀b"
+        }
+      ]
+    }
+  ]
+}

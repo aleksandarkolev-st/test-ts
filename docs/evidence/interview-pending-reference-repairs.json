@@ -1,0 +1,1283 @@
+{
+  "runId": "run-935cb972a18c",
+  "frozenFingerprint": {
+    "binarySha256": "12cd4c0f6b56e55d4c35a470aa7b6003eab1db5be8cae5c3dbadc03d9566489f",
+    "frontendSha256": "8918c9b8528c926b36552e6d32fea42ecc3ac2872fd975c441b6381545b926a3",
+    "contractsSha256": "eb421777c940f1a6d8c0144c65db740a8458eccda08d16f795fa2f7b18ad9ed8"
+  },
+  "status": "pending_after_full_frozen_native_run",
+  "repairPlan": "After all 120 native interviews complete, repair these reference-helper edge cases with focused regressions, verify existing frozen fixture expectations are unchanged, and preserve the original measured fingerprint and evidence. Application binary/frontend are unaffected.",
+  "repairs": [
+    {
+      "id": "window-empty-target",
+      "file": "benchmarks/interviews/bugs.mjs",
+      "args": [
+        "A",
+        ""
+      ],
+      "actual": "A",
+      "expected": "",
+      "evidence": "interview-window-multiplicity-domain.json"
+    },
+    {
+      "id": "exclusion-product-zero-overflow",
+      "file": "benchmarks/interviews/bugs.mjs",
+      "input": {
+        "tens": 310,
+        "trailingZeros": 2
+      },
+      "expected": "312 zeros",
+      "actualBadIndices": [
+        {
+          "index": 0,
+          "value": "NaN"
+        },
+        {
+          "index": 1,
+          "value": "NaN"
+        },
+        {
+          "index": 2,
+          "value": "NaN"
+        },
+        {
+          "index": 3,
+          "value": "NaN"
+        },
+        {
+          "index": 4,
+          "value": "NaN"
+        },
+        {
+          "index": 5,
+          "value": "NaN"
+        },
+        {
+          "index": 6,
+          "value": "NaN"
+        },
+        {
+          "index": 7,
+          "value": "NaN"
+        },
+        {
+          "index": 8,
+          "value": "NaN"
+        },
+        {
+          "index": 9,
+          "value": "NaN"
+        },
+        {
+          "index": 10,
+          "value": "NaN"
+        },
+        {
+          "index": 11,
+          "value": "NaN"
+        },
+        {
+          "index": 12,
+          "value": "NaN"
+        },
+        {
+          "index": 13,
+          "value": "NaN"
+        },
+        {
+          "index": 14,
+          "value": "NaN"
+        },
+        {
+          "index": 15,
+          "value": "NaN"
+        },
+        {
+          "index": 16,
+          "value": "NaN"
+        },
+        {
+          "index": 17,
+          "value": "NaN"
+        },
+        {
+          "index": 18,
+          "value": "NaN"
+        },
+        {
+          "index": 19,
+          "value": "NaN"
+        },
+        {
+          "index": 20,
+          "value": "NaN"
+        },
+        {
+          "index": 21,
+          "value": "NaN"
+        },
+        {
+          "index": 22,
+          "value": "NaN"
+        },
+        {
+          "index": 23,
+          "value": "NaN"
+        },
+        {
+          "index": 24,
+          "value": "NaN"
+        },
+        {
+          "index": 25,
+          "value": "NaN"
+        },
+        {
+          "index": 26,
+          "value": "NaN"
+        },
+        {
+          "index": 27,
+          "value": "NaN"
+        },
+        {
+          "index": 28,
+          "value": "NaN"
+        },
+        {
+          "index": 29,
+          "value": "NaN"
+        },
+        {
+          "index": 30,
+          "value": "NaN"
+        },
+        {
+          "index": 31,
+          "value": "NaN"
+        },
+        {
+          "index": 32,
+          "value": "NaN"
+        },
+        {
+          "index": 33,
+          "value": "NaN"
+        },
+        {
+          "index": 34,
+          "value": "NaN"
+        },
+        {
+          "index": 35,
+          "value": "NaN"
+        },
+        {
+          "index": 36,
+          "value": "NaN"
+        },
+        {
+          "index": 37,
+          "value": "NaN"
+        },
+        {
+          "index": 38,
+          "value": "NaN"
+        },
+        {
+          "index": 39,
+          "value": "NaN"
+        },
+        {
+          "index": 40,
+          "value": "NaN"
+        },
+        {
+          "index": 41,
+          "value": "NaN"
+        },
+        {
+          "index": 42,
+          "value": "NaN"
+        },
+        {
+          "index": 43,
+          "value": "NaN"
+        },
+        {
+          "index": 44,
+          "value": "NaN"
+        },
+        {
+          "index": 45,
+          "value": "NaN"
+        },
+        {
+          "index": 46,
+          "value": "NaN"
+        },
+        {
+          "index": 47,
+          "value": "NaN"
+        },
+        {
+          "index": 48,
+          "value": "NaN"
+        },
+        {
+          "index": 49,
+          "value": "NaN"
+        },
+        {
+          "index": 50,
+          "value": "NaN"
+        },
+        {
+          "index": 51,
+          "value": "NaN"
+        },
+        {
+          "index": 52,
+          "value": "NaN"
+        },
+        {
+          "index": 53,
+          "value": "NaN"
+        },
+        {
+          "index": 54,
+          "value": "NaN"
+        },
+        {
+          "index": 55,
+          "value": "NaN"
+        },
+        {
+          "index": 56,
+          "value": "NaN"
+        },
+        {
+          "index": 57,
+          "value": "NaN"
+        },
+        {
+          "index": 58,
+          "value": "NaN"
+        },
+        {
+          "index": 59,
+          "value": "NaN"
+        },
+        {
+          "index": 60,
+          "value": "NaN"
+        },
+        {
+          "index": 61,
+          "value": "NaN"
+        },
+        {
+          "index": 62,
+          "value": "NaN"
+        },
+        {
+          "index": 63,
+          "value": "NaN"
+        },
+        {
+          "index": 64,
+          "value": "NaN"
+        },
+        {
+          "index": 65,
+          "value": "NaN"
+        },
+        {
+          "index": 66,
+          "value": "NaN"
+        },
+        {
+          "index": 67,
+          "value": "NaN"
+        },
+        {
+          "index": 68,
+          "value": "NaN"
+        },
+        {
+          "index": 69,
+          "value": "NaN"
+        },
+        {
+          "index": 70,
+          "value": "NaN"
+        },
+        {
+          "index": 71,
+          "value": "NaN"
+        },
+        {
+          "index": 72,
+          "value": "NaN"
+        },
+        {
+          "index": 73,
+          "value": "NaN"
+        },
+        {
+          "index": 74,
+          "value": "NaN"
+        },
+        {
+          "index": 75,
+          "value": "NaN"
+        },
+        {
+          "index": 76,
+          "value": "NaN"
+        },
+        {
+          "index": 77,
+          "value": "NaN"
+        },
+        {
+          "index": 78,
+          "value": "NaN"
+        },
+        {
+          "index": 79,
+          "value": "NaN"
+        },
+        {
+          "index": 80,
+          "value": "NaN"
+        },
+        {
+          "index": 81,
+          "value": "NaN"
+        },
+        {
+          "index": 82,
+          "value": "NaN"
+        },
+        {
+          "index": 83,
+          "value": "NaN"
+        },
+        {
+          "index": 84,
+          "value": "NaN"
+        },
+        {
+          "index": 85,
+          "value": "NaN"
+        },
+        {
+          "index": 86,
+          "value": "NaN"
+        },
+        {
+          "index": 87,
+          "value": "NaN"
+        },
+        {
+          "index": 88,
+          "value": "NaN"
+        },
+        {
+          "index": 89,
+          "value": "NaN"
+        },
+        {
+          "index": 90,
+          "value": "NaN"
+        },
+        {
+          "index": 91,
+          "value": "NaN"
+        },
+        {
+          "index": 92,
+          "value": "NaN"
+        },
+        {
+          "index": 93,
+          "value": "NaN"
+        },
+        {
+          "index": 94,
+          "value": "NaN"
+        },
+        {
+          "index": 95,
+          "value": "NaN"
+        },
+        {
+          "index": 96,
+          "value": "NaN"
+        },
+        {
+          "index": 97,
+          "value": "NaN"
+        },
+        {
+          "index": 98,
+          "value": "NaN"
+        },
+        {
+          "index": 99,
+          "value": "NaN"
+        },
+        {
+          "index": 100,
+          "value": "NaN"
+        },
+        {
+          "index": 101,
+          "value": "NaN"
+        },
+        {
+          "index": 102,
+          "value": "NaN"
+        },
+        {
+          "index": 103,
+          "value": "NaN"
+        },
+        {
+          "index": 104,
+          "value": "NaN"
+        },
+        {
+          "index": 105,
+          "value": "NaN"
+        },
+        {
+          "index": 106,
+          "value": "NaN"
+        },
+        {
+          "index": 107,
+          "value": "NaN"
+        },
+        {
+          "index": 108,
+          "value": "NaN"
+        },
+        {
+          "index": 109,
+          "value": "NaN"
+        },
+        {
+          "index": 110,
+          "value": "NaN"
+        },
+        {
+          "index": 111,
+          "value": "NaN"
+        },
+        {
+          "index": 112,
+          "value": "NaN"
+        },
+        {
+          "index": 113,
+          "value": "NaN"
+        },
+        {
+          "index": 114,
+          "value": "NaN"
+        },
+        {
+          "index": 115,
+          "value": "NaN"
+        },
+        {
+          "index": 116,
+          "value": "NaN"
+        },
+        {
+          "index": 117,
+          "value": "NaN"
+        },
+        {
+          "index": 118,
+          "value": "NaN"
+        },
+        {
+          "index": 119,
+          "value": "NaN"
+        },
+        {
+          "index": 120,
+          "value": "NaN"
+        },
+        {
+          "index": 121,
+          "value": "NaN"
+        },
+        {
+          "index": 122,
+          "value": "NaN"
+        },
+        {
+          "index": 123,
+          "value": "NaN"
+        },
+        {
+          "index": 124,
+          "value": "NaN"
+        },
+        {
+          "index": 125,
+          "value": "NaN"
+        },
+        {
+          "index": 126,
+          "value": "NaN"
+        },
+        {
+          "index": 127,
+          "value": "NaN"
+        },
+        {
+          "index": 128,
+          "value": "NaN"
+        },
+        {
+          "index": 129,
+          "value": "NaN"
+        },
+        {
+          "index": 130,
+          "value": "NaN"
+        },
+        {
+          "index": 131,
+          "value": "NaN"
+        },
+        {
+          "index": 132,
+          "value": "NaN"
+        },
+        {
+          "index": 133,
+          "value": "NaN"
+        },
+        {
+          "index": 134,
+          "value": "NaN"
+        },
+        {
+          "index": 135,
+          "value": "NaN"
+        },
+        {
+          "index": 136,
+          "value": "NaN"
+        },
+        {
+          "index": 137,
+          "value": "NaN"
+        },
+        {
+          "index": 138,
+          "value": "NaN"
+        },
+        {
+          "index": 139,
+          "value": "NaN"
+        },
+        {
+          "index": 140,
+          "value": "NaN"
+        },
+        {
+          "index": 141,
+          "value": "NaN"
+        },
+        {
+          "index": 142,
+          "value": "NaN"
+        },
+        {
+          "index": 143,
+          "value": "NaN"
+        },
+        {
+          "index": 144,
+          "value": "NaN"
+        },
+        {
+          "index": 145,
+          "value": "NaN"
+        },
+        {
+          "index": 146,
+          "value": "NaN"
+        },
+        {
+          "index": 147,
+          "value": "NaN"
+        },
+        {
+          "index": 148,
+          "value": "NaN"
+        },
+        {
+          "index": 149,
+          "value": "NaN"
+        },
+        {
+          "index": 150,
+          "value": "NaN"
+        },
+        {
+          "index": 151,
+          "value": "NaN"
+        },
+        {
+          "index": 152,
+          "value": "NaN"
+        },
+        {
+          "index": 153,
+          "value": "NaN"
+        },
+        {
+          "index": 154,
+          "value": "NaN"
+        },
+        {
+          "index": 155,
+          "value": "NaN"
+        },
+        {
+          "index": 156,
+          "value": "NaN"
+        },
+        {
+          "index": 157,
+          "value": "NaN"
+        },
+        {
+          "index": 158,
+          "value": "NaN"
+        },
+        {
+          "index": 159,
+          "value": "NaN"
+        },
+        {
+          "index": 160,
+          "value": "NaN"
+        },
+        {
+          "index": 161,
+          "value": "NaN"
+        },
+        {
+          "index": 162,
+          "value": "NaN"
+        },
+        {
+          "index": 163,
+          "value": "NaN"
+        },
+        {
+          "index": 164,
+          "value": "NaN"
+        },
+        {
+          "index": 165,
+          "value": "NaN"
+        },
+        {
+          "index": 166,
+          "value": "NaN"
+        },
+        {
+          "index": 167,
+          "value": "NaN"
+        },
+        {
+          "index": 168,
+          "value": "NaN"
+        },
+        {
+          "index": 169,
+          "value": "NaN"
+        },
+        {
+          "index": 170,
+          "value": "NaN"
+        },
+        {
+          "index": 171,
+          "value": "NaN"
+        },
+        {
+          "index": 172,
+          "value": "NaN"
+        },
+        {
+          "index": 173,
+          "value": "NaN"
+        },
+        {
+          "index": 174,
+          "value": "NaN"
+        },
+        {
+          "index": 175,
+          "value": "NaN"
+        },
+        {
+          "index": 176,
+          "value": "NaN"
+        },
+        {
+          "index": 177,
+          "value": "NaN"
+        },
+        {
+          "index": 178,
+          "value": "NaN"
+        },
+        {
+          "index": 179,
+          "value": "NaN"
+        },
+        {
+          "index": 180,
+          "value": "NaN"
+        },
+        {
+          "index": 181,
+          "value": "NaN"
+        },
+        {
+          "index": 182,
+          "value": "NaN"
+        },
+        {
+          "index": 183,
+          "value": "NaN"
+        },
+        {
+          "index": 184,
+          "value": "NaN"
+        },
+        {
+          "index": 185,
+          "value": "NaN"
+        },
+        {
+          "index": 186,
+          "value": "NaN"
+        },
+        {
+          "index": 187,
+          "value": "NaN"
+        },
+        {
+          "index": 188,
+          "value": "NaN"
+        },
+        {
+          "index": 189,
+          "value": "NaN"
+        },
+        {
+          "index": 190,
+          "value": "NaN"
+        },
+        {
+          "index": 191,
+          "value": "NaN"
+        },
+        {
+          "index": 192,
+          "value": "NaN"
+        },
+        {
+          "index": 193,
+          "value": "NaN"
+        },
+        {
+          "index": 194,
+          "value": "NaN"
+        },
+        {
+          "index": 195,
+          "value": "NaN"
+        },
+        {
+          "index": 196,
+          "value": "NaN"
+        },
+        {
+          "index": 197,
+          "value": "NaN"
+        },
+        {
+          "index": 198,
+          "value": "NaN"
+        },
+        {
+          "index": 199,
+          "value": "NaN"
+        },
+        {
+          "index": 200,
+          "value": "NaN"
+        },
+        {
+          "index": 201,
+          "value": "NaN"
+        },
+        {
+          "index": 202,
+          "value": "NaN"
+        },
+        {
+          "index": 203,
+          "value": "NaN"
+        },
+        {
+          "index": 204,
+          "value": "NaN"
+        },
+        {
+          "index": 205,
+          "value": "NaN"
+        },
+        {
+          "index": 206,
+          "value": "NaN"
+        },
+        {
+          "index": 207,
+          "value": "NaN"
+        },
+        {
+          "index": 208,
+          "value": "NaN"
+        },
+        {
+          "index": 209,
+          "value": "NaN"
+        },
+        {
+          "index": 210,
+          "value": "NaN"
+        },
+        {
+          "index": 211,
+          "value": "NaN"
+        },
+        {
+          "index": 212,
+          "value": "NaN"
+        },
+        {
+          "index": 213,
+          "value": "NaN"
+        },
+        {
+          "index": 214,
+          "value": "NaN"
+        },
+        {
+          "index": 215,
+          "value": "NaN"
+        },
+        {
+          "index": 216,
+          "value": "NaN"
+        },
+        {
+          "index": 217,
+          "value": "NaN"
+        },
+        {
+          "index": 218,
+          "value": "NaN"
+        },
+        {
+          "index": 219,
+          "value": "NaN"
+        },
+        {
+          "index": 220,
+          "value": "NaN"
+        },
+        {
+          "index": 221,
+          "value": "NaN"
+        },
+        {
+          "index": 222,
+          "value": "NaN"
+        },
+        {
+          "index": 223,
+          "value": "NaN"
+        },
+        {
+          "index": 224,
+          "value": "NaN"
+        },
+        {
+          "index": 225,
+          "value": "NaN"
+        },
+        {
+          "index": 226,
+          "value": "NaN"
+        },
+        {
+          "index": 227,
+          "value": "NaN"
+        },
+        {
+          "index": 228,
+          "value": "NaN"
+        },
+        {
+          "index": 229,
+          "value": "NaN"
+        },
+        {
+          "index": 230,
+          "value": "NaN"
+        },
+        {
+          "index": 231,
+          "value": "NaN"
+        },
+        {
+          "index": 232,
+          "value": "NaN"
+        },
+        {
+          "index": 233,
+          "value": "NaN"
+        },
+        {
+          "index": 234,
+          "value": "NaN"
+        },
+        {
+          "index": 235,
+          "value": "NaN"
+        },
+        {
+          "index": 236,
+          "value": "NaN"
+        },
+        {
+          "index": 237,
+          "value": "NaN"
+        },
+        {
+          "index": 238,
+          "value": "NaN"
+        },
+        {
+          "index": 239,
+          "value": "NaN"
+        },
+        {
+          "index": 240,
+          "value": "NaN"
+        },
+        {
+          "index": 241,
+          "value": "NaN"
+        },
+        {
+          "index": 242,
+          "value": "NaN"
+        },
+        {
+          "index": 243,
+          "value": "NaN"
+        },
+        {
+          "index": 244,
+          "value": "NaN"
+        },
+        {
+          "index": 245,
+          "value": "NaN"
+        },
+        {
+          "index": 246,
+          "value": "NaN"
+        },
+        {
+          "index": 247,
+          "value": "NaN"
+        },
+        {
+          "index": 248,
+          "value": "NaN"
+        },
+        {
+          "index": 249,
+          "value": "NaN"
+        },
+        {
+          "index": 250,
+          "value": "NaN"
+        },
+        {
+          "index": 251,
+          "value": "NaN"
+        },
+        {
+          "index": 252,
+          "value": "NaN"
+        },
+        {
+          "index": 253,
+          "value": "NaN"
+        },
+        {
+          "index": 254,
+          "value": "NaN"
+        },
+        {
+          "index": 255,
+          "value": "NaN"
+        },
+        {
+          "index": 256,
+          "value": "NaN"
+        },
+        {
+          "index": 257,
+          "value": "NaN"
+        },
+        {
+          "index": 258,
+          "value": "NaN"
+        },
+        {
+          "index": 259,
+          "value": "NaN"
+        },
+        {
+          "index": 260,
+          "value": "NaN"
+        },
+        {
+          "index": 261,
+          "value": "NaN"
+        },
+        {
+          "index": 262,
+          "value": "NaN"
+        },
+        {
+          "index": 263,
+          "value": "NaN"
+        },
+        {
+          "index": 264,
+          "value": "NaN"
+        },
+        {
+          "index": 265,
+          "value": "NaN"
+        },
+        {
+          "index": 266,
+          "value": "NaN"
+        },
+        {
+          "index": 267,
+          "value": "NaN"
+        },
+        {
+          "index": 268,
+          "value": "NaN"
+        },
+        {
+          "index": 269,
+          "value": "NaN"
+        },
+        {
+          "index": 270,
+          "value": "NaN"
+        },
+        {
+          "index": 271,
+          "value": "NaN"
+        },
+        {
+          "index": 272,
+          "value": "NaN"
+        },
+        {
+          "index": 273,
+          "value": "NaN"
+        },
+        {
+          "index": 274,
+          "value": "NaN"
+        },
+        {
+          "index": 275,
+          "value": "NaN"
+        },
+        {
+          "index": 276,
+          "value": "NaN"
+        },
+        {
+          "index": 277,
+          "value": "NaN"
+        },
+        {
+          "index": 278,
+          "value": "NaN"
+        },
+        {
+          "index": 279,
+          "value": "NaN"
+        },
+        {
+          "index": 280,
+          "value": "NaN"
+        },
+        {
+          "index": 281,
+          "value": "NaN"
+        },
+        {
+          "index": 282,
+          "value": "NaN"
+        },
+        {
+          "index": 283,
+          "value": "NaN"
+        },
+        {
+          "index": 284,
+          "value": "NaN"
+        },
+        {
+          "index": 285,
+          "value": "NaN"
+        },
+        {
+          "index": 286,
+          "value": "NaN"
+        },
+        {
+          "index": 287,
+          "value": "NaN"
+        },
+        {
+          "index": 288,
+          "value": "NaN"
+        },
+        {
+          "index": 289,
+          "value": "NaN"
+        },
+        {
+          "index": 290,
+          "value": "NaN"
+        },
+        {
+          "index": 291,
+          "value": "NaN"
+        },
+        {
+          "index": 292,
+          "value": "NaN"
+        },
+        {
+          "index": 293,
+          "value": "NaN"
+        },
+        {
+          "index": 294,
+          "value": "NaN"
+        },
+        {
+          "index": 295,
+          "value": "NaN"
+        },
+        {
+          "index": 296,
+          "value": "NaN"
+        },
+        {
+          "index": 297,
+          "value": "NaN"
+        },
+        {
+          "index": 298,
+          "value": "NaN"
+        },
+        {
+          "index": 299,
+          "value": "NaN"
+        },
+        {
+          "index": 300,
+          "value": "NaN"
+        },
+        {
+          "index": 301,
+          "value": "NaN"
+        },
+        {
+          "index": 302,
+          "value": "NaN"
+        },
+        {
+          "index": 303,
+          "value": "NaN"
+        },
+        {
+          "index": 304,
+          "value": "NaN"
+        },
+        {
+          "index": 305,
+          "value": "NaN"
+        },
+        {
+          "index": 306,
+          "value": "NaN"
+        },
+        {
+          "index": 307,
+          "value": "NaN"
+        },
+        {
+          "index": 308,
+          "value": "NaN"
+        },
+        {
+          "index": 309,
+          "value": "NaN"
+        },
+        {
+          "index": 310,
+          "value": "NaN"
+        },
+        {
+          "index": 311,
+          "value": "NaN"
+        }
+      ],
+      "evidence": "interview-exclusion-product-zero-domain.json"
+    }
+  ]
+}

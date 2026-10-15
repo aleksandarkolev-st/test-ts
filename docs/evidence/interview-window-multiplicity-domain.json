@@ -1,0 +1,110 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every A/B source of length 0..5 and target of length 0..3 (945 pairs), plus four well-formed supplementary-character identity/containment witnesses.",
+  "oracle": "Independent exhaustive substring search including empty substrings, count multiplicity and choose shortest then leftmost. Unicode witnesses have direct identity/unique-containing-substring expectations valid under either consistent code-point or code-unit counting.",
+  "frozenReferenceGap": {
+    "args": [
+      "A",
+      ""
+    ],
+    "actual": "A",
+    "expected": "",
+    "note": "Empty target is outside existing frozen fixtures. The frozen reference helper misses the required empty substring; no contract or frozen fixture is changed during the live run."
+  },
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "3bc06f62abdeb7d5ed0cdc937e7f82e04ebd9a6c7749b21652ac5f4d98c28129",
+      "asciiDomain": {
+        "cases": 945,
+        "passedCases": 945,
+        "failures": []
+      },
+      "unicodeIdentityCases": [
+        {
+          "args": [
+            "😀",
+            "😀"
+          ],
+          "expected": "😀",
+          "actual": "😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "😀😀",
+            "😀😀"
+          ],
+          "expected": "😀😀",
+          "actual": "😀😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "x😀",
+            "😀"
+          ],
+          "expected": "😀",
+          "actual": "😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "😀😃",
+            "😃"
+          ],
+          "expected": "😃",
+          "actual": "😃",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "4d4500e92fcb273565a16d2bb6125dea1d18c8593a353a265d19dd6688d7c45b",
+      "asciiDomain": {
+        "cases": 945,
+        "passedCases": 945,
+        "failures": []
+      },
+      "unicodeIdentityCases": [
+        {
+          "args": [
+            "😀",
+            "😀"
+          ],
+          "expected": "😀",
+          "actual": "😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "😀😀",
+            "😀😀"
+          ],
+          "expected": "😀😀",
+          "actual": "😀😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "x😀",
+            "😀"
+          ],
+          "expected": "😀",
+          "actual": "😀",
+          "passed": true
+        },
+        {
+          "args": [
+            "😀😃",
+            "😃"
+          ],
+          "expected": "😃",
+          "actual": "😃",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

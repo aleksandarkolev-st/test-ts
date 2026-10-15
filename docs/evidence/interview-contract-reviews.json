@@ -1267,6 +1267,36 @@
       "note": "Prefix/suffix exclusion fixes ordinary zero handling without division and preserves singleton/empty behavior. Both candidates pass all 1365 arrays of length 0..5 over [-2,0,1,3] against independent BigInt products. Both still produce three NaN entries for 310 tens followed by two zeros, although every exclusion product contains at least one zero and must be exactly zero. Frozen grades remain unchanged. O(n) time/O(1) auxiliary storage beyond output; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
       "evidence": "interview-zero-product-completed.json",
       "supplementaryEvidence": "interview-exclusion-product-zero-domain.json"
+    },
+    {
+      "id": "window-multiplicity",
+      "kind": "bug",
+      "finalAnswerSha256": "4d4500e92fcb273565a16d2bb6125dea1d18c8593a353a265d19dd6688d7c45b",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "new Set(t) and every(c=>w.includes(c))",
+        "counterexample": {
+          "args": [
+            "a",
+            "aa"
+          ],
+          "originalActual": "a",
+          "expected": ""
+        },
+        "note": "One source occurrence and two target occurrences are minimal for the lost-multiplicity defect. Empty-target handling is a separate reference-helper gap."
+      },
+      "note": "Required-count deficits and missing occurrence total enforce multiplicity; shrinking valid windows and strict best updates preserve leftmost ties. Both candidates pass all 945 A/B source/target pairs including empty targets and four Unicode identity cases. Source code points and offsets keep surrogate pairs intact. Round 3 chooses code-point window length instead of round 2 UTF-16-unit length; the task does not explicitly specify the metric, so this review accepts the coherent code-point interpretation and records the unresolved alternative separately. Actual execution confirms the answer discards its first faulty Unicode witness and supplies a valid conditional metric witness. Expected O(|s|+|t|) scans/O(|s|+distinct target code points) storage. API/dependencies/tests unchanged; smoke, original/patch markers and native vertical/horizontal reading pass.",
+      "evidence": "interview-window-multiplicity-completed.json",
+      "supplementaryEvidence": "interview-window-multiplicity-domain.json",
+      "contractAmbiguity": {
+        "feature": "Unicode window length",
+        "chosen": "code-point count",
+        "alternative": "UTF-16-unit count",
+        "explicitlySpecified": false,
+        "evidence": "interview-window-length-metric-ambiguity.json"
+      }
     }
   ]
 }

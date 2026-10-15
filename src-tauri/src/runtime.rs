@@ -1391,6 +1391,7 @@ async fn action(
 ) -> Result<(), String> {
     match action.as_str() {
         "context" => request_active_context(&app,&rt).await,
+        "show_main" => window::show_main(&app),
         "move_left" => window::move_by(&app,-40,0),
         "move_right" => window::move_by(&app,40,0),
         "move_up" => window::move_by(&app,0,-40),
@@ -1488,7 +1489,7 @@ fn scroll_content(app:&tauri::AppHandle,operation:&str)->Result<(),String>{
 }
 pub fn run() {
     #[cfg(windows)]
-    let _instance = {
+    let instance = Arc::new({
         let scope = if crate::openai::acceptance_mode() && !crate::openai::authenticated_acceptance_mode() {
             std::env::var("COPILOT_DATA_DIR").unwrap_or_else(|_| "acceptance".into())
         } else {
@@ -1502,7 +1503,7 @@ pub fn run() {
                 return;
             }
         }
-    };
+    });
     let plugin = tauri_plugin_global_shortcut::Builder::new()
         .with_handler(|app, shortcut, event| {
             use tauri_plugin_global_shortcut::{Code, ShortcutState};
@@ -1523,6 +1524,9 @@ pub fn run() {
             if shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT) {
                 let delta=match shortcut.key {Code::ArrowLeft=>(-40,0),Code::ArrowRight=>(40,0),Code::ArrowUp=>(0,-40),Code::ArrowDown=>(0,40),_=>return};
                 let _=window::move_by(app,delta.0,delta.1);return;
+            }
+            if shortcut.key == Code::F9 {
+                let _=window::show_main(app);return;
             }
             if shortcut.key == Code::KeyP {
                 let handle=app.clone();tauri::async_runtime::spawn(async move{
@@ -1577,7 +1581,17 @@ pub fn run() {
             open_debug
             ,crate::gaze::gaze_snapshot,crate::gaze::gaze_devices,crate::gaze::gaze_start,crate::gaze::gaze_control,crate::gaze::gaze_stop
         ])
-        .setup(|app| {
+        .setup(move |app| {
+            #[cfg(windows)] {
+                let instance=instance.clone();let handle=app.handle().clone();
+                tauri::async_runtime::spawn(async move {
+                    let mut interval=tokio::time::interval(Duration::from_millis(150));
+                    loop {
+                        interval.tick().await;
+                        if instance.take_activation_request(){let _=window::show_main(&handle);}
+                    }
+                });
+            }
             app.manage(crate::gaze::Runtime::new(app.handle())?);
             tauri::async_runtime::spawn(async {
                 loop {crate::attachments::active_context::observe_foreground();tokio::time::sleep(Duration::from_millis(750)).await;}
@@ -1615,7 +1629,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Shift+F9","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             let timings:crate::openai::timing::Registry=Default::default();

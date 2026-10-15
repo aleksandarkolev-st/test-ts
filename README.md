@@ -6,6 +6,8 @@ A local Windows 10/11 meeting assistant. It captures playback and microphone aud
 
 New Windows builds use **mscv32.exe** with the Task Manager display name **mscv32** and a gray cogwheel icon. The in-app name remains Meeting Copilot. The Windows installer upgrade ID and application settings identity stay the same. Rebuild and relaunch the app to use the new executable and icon.
 
+Run `npm run desktop` from this project to launch the development app, or open the built `mscv32.exe`. While it is running, press **Ctrl + Shift + F9** from any application to restore and focus the setup window, including when it is hidden or minimized. Launching the executable again brings the existing setup window forward. The overlay's **Setup** button opens the same window.
+
 The existing x64 installer is `src-tauri/target/release/bundle/msi/Meeting Copilot_0.2.2_x64_en-US.msi`. It bundles the official native Codex runtime, Nemotron Vulkan runtime and English Q8 weights, the standalone DirectML camera worker, FLX eye models and MediaPipe landmark model. The current source selects speech GPUs by name and resolves their current Vulkan indices at startup. The installer predates the latest realtime changes. OBS Virtual Camera's driver must already be installed for camera output.
 
 1. Open **Answers** in Meeting Copilot, set **Answer backend** to **Codex**, then reconnect the native Codex account or complete sign-in. Choose **GPT-6 Luna** from the account's live catalog and **Fast** under **Answer speed**. Reasoning effort is a separate setting. The alternative ChatGPT-plan API backend retains its own browser sign-in flow.
@@ -17,6 +19,7 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 
 | Shortcut | Action |
 | --- | --- |
+| Ctrl + Shift + F9 | Restore and focus the setup window |
 | Ctrl + Shift + Space | Open manual question input |
 | Ctrl + Shift + H | Hide/show overlay in native code |
 | Ctrl + Shift + X | Dismiss answer |

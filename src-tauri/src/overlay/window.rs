@@ -10,6 +10,12 @@ pub fn suspend_for_capture(app: &tauri::AppHandle) -> CaptureSuspension {
     CaptureSuspension
 }
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
+pub fn show_main(app: &tauri::AppHandle) -> Result<(), String> {
+    let window = app.get_webview_window("main").ok_or("Setup window missing")?;
+    window.unminimize().map_err(|error| error.to_string())?;
+    window.show().map_err(|error| error.to_string())?;
+    window.set_focus().map_err(|error| error.to_string())
+}
 pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
     let window = WebviewWindowBuilder::new(
         app,

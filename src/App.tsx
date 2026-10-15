@@ -4,6 +4,7 @@ import { useMeeting } from './state/store';
 import type { Account, Bootstrap, Model, Settings } from './state/model';
 import Status from './overlay/Status';
 import ContextAttachments from './ContextAttachments';
+import TaskContext from './TaskContext';
 import Camera from './Camera';
 import PixelCompanion from './ui/PixelCompanion';
 import { Tabs, TabsList, TabsTab, TabsPanel } from './ui/Tabs';
@@ -18,6 +19,7 @@ export default function App() {
   const [page, setPage] = useState<'meeting' | 'answers' | 'context' | 'camera'>('meeting');
   useEffect(() => { document.scrollingElement?.scrollTo({ top: 0, behavior: 'instant' }); }, [page]);
   useEffect(() => { if (!snapshot.active) setQuestion(''); }, [snapshot.active]);
+  useEffect(() => { setQuestion(''); setError(''); }, [snapshot.task.id]);
   async function refresh() {
     const b = await command<Bootstrap>('bootstrap'); setData(b);
     setSettings({ ...b.settings, microphone: b.settings.microphone || b.devices.find(d => d.source === 'self' && d.default)?.id || '', output: b.settings.output || b.devices.find(d => d.source === 'remote' && d.default)?.id || '' });
@@ -88,6 +90,7 @@ export default function App() {
       </fieldset>
     </section></TabsPanel>
     <TabsPanel value="context"><section className="device-section"><h2>Bring the source</h2><p className="section-intro">A project or screen helps your copilot follow along. You choose when to share.</p>
+      <TaskContext snapshot={snapshot} onError={setError} />
       <label>Project folder<input aria-label="Project folder" value={settings.projectPath || ''} placeholder="Choose the project you want to discuss" disabled={!!busy || snapshot.active} onChange={e => setSettings(s => ({ ...s, projectPath: e.target.value }))} /></label>
       <button disabled={!!busy || snapshot.active || !native()} onClick={() => run('Choosing project…', async () => { const path = await command<string | null>('choose_project'); if (path) setSettings(s => ({ ...s, projectPath: path })); })}>Choose project folder</button>
       <button disabled={!!busy || snapshot.attachmentBusy || !snapshot.active} onClick={() => run('Detecting context…', () => command('action', { action: 'context' }))}>Send active context</button>

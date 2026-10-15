@@ -36,7 +36,7 @@ fn expansion_pins_parent_context_and_identity_while_a_new_transcript_is_local() 
     let mut c=Scheduler::default();
     let parent=c.confirm_with_context("Explain the exact code".into(),100,90,95,Some("Original accepted context and exact code".into()));
     let job=c.find_mut(&parent).unwrap();job.context_version=17;job.utterance_revision=3;job.latency.remote_speech_started_at=Some(80);
-    job.references=Some(super::scheduler::FrozenReferences{project:std::sync::Arc::new("Original project snapshot".into()),screenshot:Some(std::sync::Arc::new("Original screenshot".into()))});
+    job.references=Some(super::scheduler::FrozenReferences{task:std::sync::Arc::new("Pinned problem and latest test output".into()),project:std::sync::Arc::new("Original project snapshot".into()),screenshot:Some(std::sync::Arc::new("Original screenshot".into()))});
     c.next(100);c.find_mut(&parent).unwrap().buffer="An unseen later generated tail".into();
     let draft=c.propose("A later unaccepted correction".into(),110,110,110);
     let detail=c.expand(&parent,120).unwrap();
@@ -45,6 +45,7 @@ fn expansion_pins_parent_context_and_identity_while_a_new_transcript_is_local() 
     assert_eq!(job.context_version,17);assert_eq!(job.utterance_revision,3);assert_eq!(job.latency.remote_speech_started_at,Some(80));
     assert_eq!(job.updates.borrow().context.as_deref(),Some("Original accepted context and exact code"));
     assert_eq!(job.references.as_ref().unwrap().project.as_str(),"Original project snapshot");
+    assert_eq!(job.references.as_ref().unwrap().task.as_str(),"Pinned problem and latest test output");
     assert_eq!(job.references.as_ref().unwrap().screenshot.as_ref().unwrap().as_str(),"Original screenshot");
     assert!(c.find_mut(&parent).unwrap().cancel.is_cancelled());assert_eq!(c.next(120),Some(detail));assert_eq!(c.active(),2);
 }

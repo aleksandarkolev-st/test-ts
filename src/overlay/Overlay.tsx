@@ -5,10 +5,12 @@ import { useMeeting } from '../state/store';
 import Status from './Status';
 import Answer from './Answer';
 import ContextAttachments from '../ContextAttachments';
+import TaskContext from '../TaskContext';
 import Icon from '../ui/Icon';
 export default function Overlay() {
   const s = useMeeting(v => v.snapshot); const ref = useRef<HTMLDivElement>(null); const input = useRef<HTMLInputElement>(null);
   const [question, setQuestion] = useState(''); const [error, setError] = useState('');
+  useEffect(() => { setQuestion(''); setError(''); }, [s.task.id]);
   useEffect(() => { if (!s.active || !s.manual) setQuestion(''); if (!s.active) setError(''); }, [s.active, s.manual]);
   useEffect(() => { let off: (() => void) | undefined; let disposed = false; connectState().then(f => { if (disposed) f(); else off = f; }).catch(e => setError(errorText(e))); return () => { disposed = true; off?.(); }; }, []);
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function Overlay() {
     <Answer snapshot={s} />
     {s.answer&&<details className="scroll-hint"><summary>Reading shortcuts <kbd>Ctrl Shift ↑ / ↓</kbd></summary><p>Page up / down <kbd>Ctrl Shift Page Up / Down</kbd><br/>Top / bottom <kbd>Ctrl Shift Home / End</kbd><br/>Code left / right <kbd>Ctrl Shift ← / →</kbd><br/>Move window <kbd>Ctrl Alt ← ↑ → ↓</kbd></p></details>}
     <div className="overlay-tools">
+    <TaskContext snapshot={s} onError={setError} />
     <ContextAttachments snapshot={s} onError={setError} />
     <div className="context-actions"><button disabled={!s.active || s.attachmentBusy} title="Send screenshot of the monitor under your pointer · Ctrl Shift F8" onClick={() => act('screenshot')}><Icon name="screen"/> {s.screenshot ? 'Retake screenshot' : 'Screenshot'} <kbd>F8</kbd></button><button disabled={!s.active || s.attachmentBusy} title="Send active context · Ctrl Shift P" onClick={() => act('context')}><Icon name="folder"/> Active context <kbd>P</kbd></button><span>Ctrl Shift</span></div>
     {s.manual && <form className="manual-form" onSubmit={async e => { e.preventDefault(); try { await command('ask', { question }); setQuestion(''); setError(''); } catch (e) { setError(errorText(e)); } }}><label htmlFor="manual-question">Ask about this meeting…</label><div className="ask-row"><input ref={input} id="manual-question" value={question} maxLength={4000} onChange={e => setQuestion(e.target.value)} onKeyDown={e => { if (e.key === 'Escape') act('dismiss'); }} placeholder="What did they say the launch date was?" /><button disabled={!question.trim()}>Ask</button></div></form>}

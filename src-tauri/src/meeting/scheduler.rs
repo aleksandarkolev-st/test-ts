@@ -13,6 +13,7 @@ pub enum Phase { Speculative, Confirmed, Superseded, Cancelled, Complete }
 pub struct Row { pub id: String, pub text: String, pub state: Phase, pub queued: bool }
 #[derive(Clone,Default)]
 pub struct FrozenReferences {
+    pub task: Arc<String>,
     pub project: Arc<String>,
     pub screenshot: Option<Arc<String>>,
 }

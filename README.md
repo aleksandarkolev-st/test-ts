@@ -54,7 +54,11 @@ Project collection respects `.gitignore`, `.ignore`, and Git exclusions; generat
 
 Save editor changes, then use **Refresh project** beside the attachment to re-read the same folder, even if another window is now active. **Included files** lists the shared paths and total text size; the read time helps identify an older snapshot. Unsaved editor buffers are not included.
 
-Sharing or refreshing context re-answers the current interview question using the latest attachments. With no current question, a project starts an architecture overview and a screenshot starts help with the visible task. **Retake screenshot** replaces the previous image and updates its capture time. Dismiss the current answer first when switching to a different task.
+**Interview task** is available in the overlay and the setup window's **Context** section during a meeting. Save a **Problem statement**, or use **Use current question** to keep the current question as the problem. Paste new results into **Test output** and choose **Update test output** after running your code. The saved problem stays attached across follow-ups, project refreshes and screenshot retakes. Source labels show when the screenshot, saved project files and test output were last updated. Task context stays in RAM.
+
+**New task** clears the problem, test output, project, screenshot, question, answer and prior task conversation without stopping audio capture or changing pause state. Pending context results from the previous task are discarded. Use it when the interviewer moves to a different problem; **Dismiss** only dismisses the answer and retains the task.
+
+Sharing or refreshing context re-answers the current interview question using the latest attachments. Without a current question, it uses the saved problem; without a saved problem, a project starts an architecture overview and a screenshot starts help with the visible task. **Retake screenshot** replaces the previous image and updates its capture time.
 
 - Raw audio is processed locally. No audio upload, recording library, or transcript database is implemented.
 - Recent transcript and compact meeting memory are sent to OpenAI when answering questions or compressing context. Codex uses ephemeral threads with history persistence disabled; the ChatGPT-plan API uses `store:false` and `stream:true`. These settings do not override the service's data policies.

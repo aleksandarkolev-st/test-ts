@@ -4,7 +4,7 @@ async function nativeFixture(page: Page) {
     const w = window as any;
     w.isTauri = true;
     const callbacks = new Map<number, Function>(); const listeners = new Map<number, { event: string; handler: number }>(); let id = 0;
-    let state = { revision: 1, active: false, paused: false, status: 'off', question: null as any, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null as any, remoteLevel: 0, selfLevel: 0, project: null as any, screenshot: null as any, attachmentBusy: false };
+    let state = { task: { id: 'task-1', problem: '', testOutput: null as any }, revision: 1, active: false, paused: false, status: 'off', question: null as any, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null as any, remoteLevel: 0, selfLevel: 0, project: null as any, screenshot: null as any, attachmentBusy: false };
     const account = { clientId: 'fixture-client', email: 'fixture@example.invalid', name: 'Fixture', planEnabled: true };
     let signedIn = false;
     let settings: any = { microphone: '', output: '', modelPath: '', model: '', speechBackend: 'nemotron', speechChunkMs: 160, nemotronRuntime: 'C:\\fixture\\nemo-speech.exe', nemotronDevice: 1 };
@@ -30,11 +30,23 @@ async function nativeFixture(page: Page) {
         if (cmd === 'choose_project') return 'C:\\fixture\\project';
         if (cmd === 'start_meeting') { w.fixtureStartedSettings = { ...args.settings }; state.active = true; state.status = 'listening'; broadcast(); return; }
         if (cmd === 'stop_meeting') { state = { ...state, active: false, status: 'off', answer: '', question: null, manual: false }; broadcast(); return; }
+        if (cmd === 'update_task') {
+          w.fixtureLastTaskUpdate = { ...args };
+          if (args.taskId !== state.task.id) throw new Error('This task has ended');
+          if (w.fixtureTaskError) throw new Error(w.fixtureTaskError);
+          if (args.field === 'problem') state.task = { ...state.task, problem: args.text };
+          if (args.field === 'test_output') state.task = { ...state.task, testOutput: args.text ? { text: args.text, updatedAt: Date.now() } : null };
+          broadcast(); return;
+        }
         if (cmd === 'action') {
           w.fixtureLastAction = { ...args };
           if (args.action === 'manual') state.manual = true;
           if (args.action === 'pause') state.paused = !state.paused;
           if (args.action === 'dismiss') { state.question = null; state.answer = ''; state.status = 'listening'; state.manual = false; }
+          if (args.action === 'new_task') {
+            state = { ...state, task: { id: `task-${++id}`, problem: '', testOutput: null }, project: null, screenshot: null,
+              question: null, answer: '', error: null, manual: false, expanded: false, latency: null, attachmentBusy: false, status: 'listening' };
+          }
           if (args.action === 'expand') state.expanded = true;
           if (args.action === 'project') state.project = { name: 'project', files: 2, bytes: 120, sourcePath: 'C:\\fixture\\project', collectedAt: Date.now(), filePaths: ['src/main.ts', 'README.md'], skipped: [{ path: 'image.png', reason: 'binary or non-UTF-8 file' }] };
           if (args.action === 'refresh_project') {
@@ -170,6 +182,56 @@ test('a small native overlay requests enough height for the task and context imm
     screenshot: { width: 1920, height: 1080, capturedAt: Date.now() } }));
   await expect.poll(() => page.evaluate(() => (window as any).fixtureResizeRequests?.at(-1) || 0)).toBeGreaterThan(600);
   expect(await page.evaluate(() => (window as any).fixtureResizeRequests.at(-1))).toBeLessThanOrEqual(700);
+});
+
+for (const route of ['/', '/?view=overlay']) {
+  test(`interview tasks preserve the problem during refresh and clear everything on New task in ${route}`, async ({ page }) => {
+    await nativeFixture(page); await page.goto(route);
+    if (route === '/') await page.getByRole('tab', { name: 'Context', exact: true }).click();
+    await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'answer',
+      question: { id: 'followup', text: 'What is the time complexity?', detectedAt: 1 }, answer: 'Linear in the input size.',
+      project: { name: 'parser', files: 1, bytes: 120, collectedAt: Date.now(), filePaths: ['parser.ts'], skipped: [] },
+      screenshot: { width: 1280, height: 720, capturedAt: Date.now() } }));
+    await page.locator('.task-context summary').click();
+    const problem = 'Parse balanced delimiters. Return the first unmatched index, or -1.';
+    await page.getByLabel('Problem statement', { exact: true }).fill(problem);
+    await page.getByRole('button', { name: 'Save problem', exact: true }).click();
+    await expect(page.locator('.task-problem')).toHaveText(problem);
+    expect(await page.evaluate(() => (window as any).fixtureLastTaskUpdate)).toEqual({ taskId: 'task-1', field: 'problem', text: problem });
+    await page.getByLabel('Test output', { exact: true }).fill('FAIL: expected -1, received 0');
+    await page.getByRole('button', { name: 'Update test output', exact: true }).click();
+    await expect(page.getByText('Test output updated at', { exact: false })).toBeVisible();
+    await page.getByRole('button', { name: 'Refresh project', exact: true }).click();
+    await page.getByRole('button', { name: 'Retake screenshot', exact: false }).click();
+    await expect(page.locator('.task-problem')).toHaveText(problem);
+    await expect(page.getByText('3 saved files updated at', { exact: false })).toBeVisible();
+    await page.getByLabel('Test output', { exact: true }).fill('PASS: all 12 cases');
+    await page.getByRole('button', { name: 'Update test output', exact: true }).click();
+    await expect(page.getByLabel('Problem statement', { exact: true })).toHaveValue(problem);
+    await page.evaluate(() => (window as any).fixtureState({ attachmentBusy: true }));
+    await expect(page.getByRole('button', { name: 'New task', exact: true })).toBeEnabled();
+    await page.getByRole('button', { name: 'New task', exact: true }).click();
+    await expect(page.locator('.task-problem')).toHaveCount(0);
+    await expect(page.locator('.context-attachments')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'New task', exact: true })).toBeVisible();
+    await page.locator('.task-context summary').click();
+    await expect(page.getByLabel('Problem statement', { exact: true })).toBeEmpty();
+    await expect(page.getByLabel('Test output', { exact: true })).toBeEmpty();
+    if (route !== '/') await expect(page.locator('.question')).toHaveCount(0);
+  });
+}
+
+test('failed task updates retain the draft and saved context, and New task clears the error', async ({ page }) => {
+  await nativeFixture(page); await page.goto('/?view=overlay');
+  await page.evaluate(() => { (window as any).fixtureState({ active: true, status: 'listening', task: { id: 'task-1', problem: 'Original problem', testOutput: null } }); (window as any).fixtureTaskError = 'Task update failed; try again'; });
+  await page.locator('.task-context summary').click();
+  await page.getByLabel('Problem statement', { exact: true }).fill('My unsaved correction');
+  await page.getByRole('button', { name: 'Save problem', exact: true }).click();
+  await expect(page.getByRole('alert')).toHaveText('Task update failed; try again');
+  await expect(page.locator('.task-problem')).toHaveText('Original problem');
+  await expect(page.getByLabel('Problem statement', { exact: true })).toHaveValue('My unsaved correction');
+  await page.getByRole('button', { name: 'New task', exact: true }).click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
 });
 
 for (const route of ['/', '/?view=overlay']) {

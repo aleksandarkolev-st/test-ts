@@ -127,12 +127,14 @@ enum Control {
     AnswerNow(String),
     Displayed(String,u64,String,usize,usize,u64),
     Dismiss,
+    NewTask,
+    UpdateTask(String, String, String),
     Expand(Option<String>),
-    Project(Option<String>),
+    Project(Option<String>, String),
     DetectContext,
-    ContextDetected(String, Result<crate::attachments::active_context::ActiveContext, String>),
+    ContextDetected(String, String, Result<crate::attachments::active_context::ActiveContext, String>),
     ClearProject,
-    Screenshot(Option<usize>),
+    Screenshot(Option<usize>, String),
     ClearScreenshot,
 }
 enum Work {
@@ -146,8 +148,8 @@ enum Work {
     QuestionComplete(String,String,[u8;32]),
     Complete(String),
     Error(String, String),
-    Summary(String, meeting::context::Memory),
-    SummaryError(String, String),
+    Summary(String, String, meeting::context::Memory),
+    SummaryError(String, String, String),
     Project(String, String, Result<crate::attachments::project::Project, String>),
     Screenshot(String, String, Result<crate::attachments::screenshot::Screenshot, String>),
 }
@@ -363,7 +365,32 @@ async fn actor(
                 Control::Manual(question)=>{if let Some(s)=session.as_ref(){let question=question.trim().to_string();if !question.is_empty()&&question.len()<=4000{engine.view.manual=false;window::set_manual(&app,false);cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;accept_typed_question(&mut engine,&mut answers,question,now);drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}},
                 Control::Dismiss=>{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();engine.view.question=None;engine.view.answer.clear();engine.view.error=None;engine.view.expanded=false;engine.view.manual=false;window::set_manual(&app,false);engine.view.status=if engine.view.active{"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
                 Control::Expand(expected)=>{if let Some(s)=session.as_ref(){if let Some(q)=engine.view.question.clone().filter(|q|expected.as_ref().map_or(true,|id|q.id==*id)){let now=s.clock.elapsed().as_millis()as u64;if let Some(id)=answers.expand(&q.id,now){engine.view.expanded=true;cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}engine.context.ledger.accept(&id,&q.text,now);drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}}}},
-                Control::Project(path)=>{if let Some(s)=session.as_ref(){
+                Control::NewTask=>{if let Some(s)=session.as_ref(){
+                    let now=s.clock.elapsed().as_millis()as u64;
+                    project_request=None;screenshot_request=None;
+                    answers.clear();cancel_answer(&app,&mut generation);
+                    if let Some(c)=summary.take(){c.cancel();}
+                    intent_gate=meeting::intent::Gate::default();speech_metrics=Latency::default();summary_retry_at=now;
+                    engine.new_task(now);timings.lock().unwrap().clear();
+                    emit(&app,"task.started",());
+                    window::set_manual(&app,false);window::show(&app,&hidden);
+                    publish(&app,&mut engine,&view);
+                }},
+                Control::UpdateTask(task_id,field,text)=>{if let Some(s)=session.as_ref(){
+                    if engine.view.task.id!=task_id{continue;}
+                    if let Err(error)=engine.view.task.update(&field,text){engine.view.error=Some(error);publish(&app,&mut engine,&view);continue;}
+                    engine.view.error=None;
+                    let question=engine.view.question.as_ref().map(|q|q.text.clone());
+                    answers.clear();cancel_answer(&app,&mut generation);
+                    if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
+                    if let Some(question)=question {
+                        let now=s.clock.elapsed().as_millis()as u64;
+                        accept_typed_question(&mut engine,&mut answers,question,now);
+                        drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);
+                    }
+                    sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);
+                }},
+                Control::Project(path,task_id)=>{if task_id!=engine.view.task.id{continue;}if let Some(s)=session.as_ref(){
                     let path=path.unwrap_or_else(||s.settings.project_path.clone());
                     if path.trim().is_empty(){engine.view.error=Some("Choose a project folder in the main window first".into());publish(&app,&mut engine,&view);continue;}
                     let id=uuid::Uuid::new_v4().to_string();project_request=Some(id.clone());engine.view.attachment_busy=true;engine.view.error=None;publish(&app,&mut engine,&view);
@@ -371,17 +398,17 @@ async fn actor(
                     tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||crate::attachments::project::collect(std::path::Path::new(&path))).await.map_err(|_|"Project collection failed".to_string()).and_then(|r|r);let _=tx.send(Work::Project(session_id,id,result)).await;});
                 }},
                 Control::DetectContext=>{if let Some(s)=session.as_ref(){
-                    let session_id=s.id.clone();let tx=app.state::<Runtime>().tx.clone();
+                    let session_id=s.id.clone();let task_id=engine.view.task.id.clone();let tx=app.state::<Runtime>().tx.clone();
                     tauri::async_runtime::spawn(async move{
                         let result=tokio::task::spawn_blocking(crate::attachments::active_context::detect).await.map_err(|_|"Context inspection failed".to_string()).and_then(|r|r);
-                        let _=tx.send(Control::ContextDetected(session_id,result)).await;
+                        let _=tx.send(Control::ContextDetected(session_id,task_id,result)).await;
                     });
                 }},
-                Control::ContextDetected(session_id,result)=>{if session.as_ref().is_some_and(|s|s.id==session_id){
+                Control::ContextDetected(session_id,task_id,result)=>{if engine.view.task.id==task_id&&session.as_ref().is_some_and(|s|s.id==session_id){
                     match result {
                         Ok(context)=>{
                             emit(&app,"context.detected",&context);
-                            let command=context.project_path.map(|p|Control::Project(Some(p))).unwrap_or(Control::Screenshot(Some(context.source_window)));
+                            let command=context.project_path.map(|p|Control::Project(Some(p),task_id.clone())).unwrap_or(Control::Screenshot(Some(context.source_window),task_id));
                             // Return to the actor queue; inspection itself never sends to a model.
                             let tx=app.state::<Runtime>().tx.clone();
                             tauri::async_runtime::spawn(async move{let _=tx.send(command).await;});
@@ -390,7 +417,7 @@ async fn actor(
                     }
                 }},
                 Control::ClearProject=>{project_request=None;engine.project=None;engine.view.project=None;engine.view.attachment_busy=screenshot_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();publish(&app,&mut engine,&view);},
-                Control::Screenshot(source_window)=>{if let Some(s)=session.as_ref(){if screenshot_request.is_none(){
+                Control::Screenshot(source_window,task_id)=>{if task_id!=engine.view.task.id{continue;}if let Some(s)=session.as_ref(){if screenshot_request.is_none(){
                     let id=uuid::Uuid::new_v4().to_string();screenshot_request=Some(id.clone());engine.view.attachment_busy=true;engine.view.error=None;publish(&app,&mut engine,&view);let suppression=window::suspend_for_capture(&app);
                     let session_id=s.id.clone();let tx=work_tx.clone();
                     tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||{let _suppression=suppression;std::thread::sleep(Duration::from_millis(80));crate::attachments::screenshot::capture_window(source_window)}).await.map_err(|_|"Screen capture failed".to_string()).and_then(|r|r);let _=tx.send(Work::Screenshot(session_id,id,result)).await;});
@@ -426,6 +453,7 @@ async fn actor(
                         emit(&app,"speech.activity",serde_json::json!({"source":source,"timestamp":t,"quiet":quiet,"observedAt":now}));
                     },
                     InputEvent::Transcript(segment)=>{
+                        if segment.started_at<engine.task_started_at{continue;}
                         #[cfg(debug_assertions)]{let _=app.emit("copilot:transcript",&segment);}
                         engine.context.ledger.observe(segment.clone(),now);
                         if segment.final_&&!segment.text.trim().is_empty(){engine.context.push(segment.clone());}
@@ -503,16 +531,16 @@ async fn actor(
                 Work::Delta(id,delta)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);if let Some(l)=engine.view.latency.as_mut(){l.observe_answer_delta(&delta,now);if l.first_token_at==Some(now){l.first_token_at=Some(now);if let Some(trace)=timings.lock().unwrap().get(&id){trace.retained_delta_at(now);}}}if engine.view.answer.len()+delta.len()>32_000{answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.error=Some("Answer exceeds display size limit".into());engine.view.status="error".into();publish(&app,&mut engine,&view);continue;}engine.view.answer.push_str(&delta);engine.view.status="answer".into();emit(&app,"answer.delta",serde_json::json!({"id":id,"delta":delta}));publish(&app,&mut engine,&view);}},
                 Work::Complete(id)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;if let Some(q)=&engine.view.question{engine.context.remember_answer_at(&id,&q.text,&engine.view.answer,q.detected_at);}if let Some(l)=engine.view.latency.as_mut(){l.completed_at=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);let metrics=serde_json::json!({"speech_to_transcript":l.transcript_final_at.saturating_sub(l.speech_stopped_at),"question_detection":l.question_confirmed_at.saturating_sub(l.transcript_final_at),"request_to_first_token":l.first_token_at.map(|t|t.saturating_sub(l.request_sent_at)),"total_to_first_answer":l.first_token_at.map(|t|t.saturating_sub(l.speech_stopped_at))});emit(&app,"latency.measured",metrics.clone());let _=writeln!(std::io::stderr(),"latency {metrics}");}emit(&app,"answer.completed",serde_json::json!({"id":id}));publish(&app,&mut engine,&view);}},
                 Work::Error(id,error)=>{if engine.view.question.as_ref().is_some_and(|q|q.id==id)&&generation.is_some(){generation=None;engine.view.status="error".into();engine.view.error=Some(error);publish(&app,&mut engine,&view);}},
-                Work::Summary(id,memory)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.complete_summary(memory);summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;}},
-                Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
+                Work::Summary(id,task_id,memory)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id&&engine.view.task.id==task_id){summary=None;engine.context.complete_summary(memory);summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;}},
+                Work::SummaryError(id,task_id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id&&engine.view.task.id==task_id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
                 Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
                     project_request=None;engine.view.attachment_busy=screenshot_request.is_some();
-                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),PROJECT_CONTEXT_QUESTION);let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),task_question(&engine.view.task,PROJECT_CONTEXT_QUESTION));let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     publish(&app,&mut engine,&view);
                 }},
                 Work::Screenshot(session_id,id,result)=>{if session.is_some(){window::show(&app,&hidden);}if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&screenshot_request.as_ref()==Some(&id)){
                     screenshot_request=None;engine.view.attachment_busy=project_request.is_some();
-                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),SCREEN_CONTEXT_QUESTION);let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),task_question(&engine.view.task,SCREEN_CONTEXT_QUESTION));let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
             }},
@@ -587,7 +615,7 @@ async fn actor(
                         }
                     }
                     if answers.busy(){if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);publish(&app,&mut engine,&view);}
-                    if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,m),Err(e)=>Work::SummaryError(id,e)};let _=tx.send(result).await;});}}
+                    if generation.is_none()&&!answers.busy()&&summary.is_none()&&now>=summary_retry_at{if let Some(batch)=engine.context.take_summary_batch(){let input=format!("PRIOR MEMORY\n{}\nOLDER TRANSCRIPT\n{}",serde_json::to_string(&engine.context.memory).unwrap_or_default(),meeting::context::conversation(&batch));let cancel=CancellationToken::new();summary=Some(cancel.clone());let id=s.id.clone();let task_id=engine.view.task.id.clone();let model=s.settings.model.clone();let auth=auth.clone();let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());let tx=work_tx.clone();tauri::async_runtime::spawn(async move{let result=async{let token=answer_token(&auth,&client,&cancel).await?;let text=client.text(&token,&model,prompts::SUMMARY,&input,cancel.clone()).await?;serde_json::from_str(&text).map_err(|_|"Could not parse meeting memory".to_string())}.await;if cancel.is_cancelled(){return;}let result=match result{Ok(m)=>Work::Summary(id,task_id,m),Err(e)=>Work::SummaryError(id,task_id,e)};let _=tx.send(result).await;});}}
                 }
                 let (remote,self_)=*levels.lock().unwrap();if (engine.view.remote_level-remote).abs()>0.002||(engine.view.self_level-self_).abs()>0.002{engine.view.remote_level=remote;engine.view.self_level=self_;publish(&app,&mut engine,&view);}
             }}
@@ -1128,10 +1156,11 @@ fn drive_answers(app:&tauri::AppHandle,engine:&Engine,s:&Session,auth:&Arc<Auth>
         job.set_context(selected_context.clone());
         let updates=job.updates.subscribe();
         let references=job.references.get_or_insert_with(||meeting::scheduler::FrozenReferences {
+            task:Arc::new(engine.view.task.reference()),
             project:Arc::new(engine.project.as_ref().map(|project|project.prompt()).unwrap_or_default()),
             screenshot:engine.screenshot_data.clone().map(Arc::new),
         }).clone();
-        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(active_attachment_reference(references.project.as_str(),references.screenshot.is_some())).with_explicit_request(job.explicit_request);
+        let input=crate::openai::codex::QuestionPrompt::new(selected_context,job.question.text.clone()).with_reference(format!("{}{}",active_attachment_reference(references.project.as_str(),references.screenshot.is_some()),references.task)).with_explicit_request(job.explicit_request);
         let instructions=prompts::answer_instructions(if job.detailed||matches!(s.settings.answer_objective,AnswerObjective::Detailed){prompts::ANSWER}else{prompts::BRIEF});
         let image=references.screenshot;let model=s.settings.model.clone();let auth=auth.clone();let clock=s.clock;let tx=tx.clone();
         let client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref());
@@ -1172,6 +1201,9 @@ async fn answer_token(auth: &Arc<Auth>, client: &Client, cancel: &CancellationTo
 }
 const PROJECT_CONTEXT_QUESTION: &str = "Give a concise overview of this project and explain its main architecture.";
 const SCREEN_CONTEXT_QUESTION: &str = "Explain what is on this screen and help me with the visible task.";
+fn task_question<'a>(task: &'a meeting::task::Task, fallback: &'a str) -> &'a str {
+    if task.problem.trim().is_empty() { fallback } else { &task.problem }
+}
 fn attachment_question(current: Option<&meeting::state::CurrentQuestion>, fallback: &str) -> String {
     current.map(|question| question.text.as_str())
         .filter(|text| !text.trim().is_empty() && ![PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION].contains(text))
@@ -1181,7 +1213,13 @@ fn active_attachment_reference(project:&str,screenshot:bool)->String{
     format!("\nAPPLICATION ATTACHMENTS (current request): {}\nEarlier attachments are historical context. Use only the current attachments when asked about the current project or screen. If a source is absent, do not claim an older attachment is still attached.{}",serde_json::json!({"project":!project.is_empty(),"screenshot":screenshot}),project)
 }
 #[cfg(test)]mod attachment_frame_tests{
-    use super::{active_attachment_reference, attachment_question, PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION};
+    use super::{active_attachment_reference, attachment_question, task_question, PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION};
+    #[test]fn a_saved_task_problem_is_the_default_after_dismissing_a_followup(){
+        let mut task=crate::meeting::task::Task::default();
+        task.update("problem","Implement a bounded queue".into()).unwrap();
+        assert_eq!(attachment_question(None,task_question(&task,SCREEN_CONTEXT_QUESTION)),"Implement a bounded queue");
+        assert_eq!(attachment_question(None,task_question(&task,PROJECT_CONTEXT_QUESTION)),"Implement a bounded queue");
+    }
     #[test]fn context_updates_keep_the_interview_question_and_choose_source_specific_defaults(){
         use crate::meeting::state::CurrentQuestion;
         let mut question = CurrentQuestion { id: "q".into(), text: "Find the boundary bug and explain the fix".into(), detected_at: 1 };
@@ -1333,6 +1371,17 @@ async fn ask(rt: State<'_, Runtime>, question: String) -> Result<(), String> {
     }
     send(&rt, Control::Manual(question)).await
 }
+fn active_task_id(rt: &Runtime) -> Result<String,String> {
+    let view=rt.view.lock().unwrap();
+    if !view.active { return Err("Start a meeting first".into()); }
+    Ok(view.task.id.clone())
+}
+#[tauri::command]
+async fn update_task(rt: State<'_, Runtime>, task_id: String, field: String, text: String) -> Result<(), String> {
+    meeting::task::validate(&field,&text)?;
+    if active_task_id(&rt)?!=task_id { return Err("This task has ended; add context to the new task".into()); }
+    send(&rt,Control::UpdateTask(task_id,field,text)).await
+}
 #[tauri::command]
 async fn action(
     app: tauri::AppHandle,
@@ -1363,19 +1412,20 @@ async fn action(
         "manual" => send(&rt, Control::ManualOpen).await,
         "answer_now" => send(&rt, Control::AnswerNow(generation_id.ok_or("Choose a current recognized request")?)).await,
         "dismiss" => send(&rt, Control::Dismiss).await,
+        "new_task" => { active_task_id(&rt)?; send(&rt,Control::NewTask).await },
         "expand" => send(&rt, Control::Expand(generation_id)).await,
-        "project" => send(&rt, Control::Project(None)).await,
+        "project" => send(&rt, Control::Project(None, active_task_id(&rt)?)).await,
         "refresh_project" => {
-            let path = {
+            let (path, task_id) = {
                 let view = rt.view.lock().unwrap();
                 if !view.active { return Err("Start a meeting first".into()); }
                 if view.attachment_busy { return Err("Wait for the current context update".into()); }
-                view.project.as_ref().ok_or("Attach a project first")?.source_path.clone()
+                (view.project.as_ref().ok_or("Attach a project first")?.source_path.clone(),view.task.id.clone())
             };
-            send(&rt, Control::Project(Some(path))).await
+            send(&rt, Control::Project(Some(path), task_id)).await
         },
         "clear_project" => send(&rt, Control::ClearProject).await,
-        "screenshot" => send(&rt, Control::Screenshot(None)).await,
+        "screenshot" => send(&rt, Control::Screenshot(None, active_task_id(&rt)?)).await,
         "clear_screenshot" => send(&rt, Control::ClearScreenshot).await,
         _ => Err("Unknown action".into()),
     }
@@ -1403,7 +1453,7 @@ async fn choose_project(app: tauri::AppHandle) -> Result<Option<String>, String>
 #[tauri::command]
 async fn send_project(rt: State<'_, Runtime>, path: String) -> Result<(), String> {
     if !rt.view.lock().unwrap().active { return Err("Start a meeting first".into()); }
-    send(&rt, Control::Project(Some(path))).await
+    send(&rt, Control::Project(Some(path), active_task_id(&rt)?)).await
 }
 #[tauri::command]
 fn manage_usage() -> Result<(), String> {
@@ -1488,7 +1538,7 @@ pub fn run() {
                 Code::KeyX => Control::Dismiss,
                 Code::KeyM => Control::Pause,
                 Code::KeyE => Control::Expand(None),
-                Code::F8 => Control::Screenshot(None),
+                Code::F8 => Control::Screenshot(None, rt.view.lock().unwrap().task.id.clone()),
                 _ => return,
             };
             let _ = rt.tx.try_send(c);
@@ -1521,6 +1571,7 @@ pub fn run() {
             detect_context,
             send_project,
             action,
+            update_task,
             resize_overlay,
             manage_usage,
             open_debug

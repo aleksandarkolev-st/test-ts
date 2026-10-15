@@ -51,6 +51,7 @@ impl Latency {
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Snapshot {
+    pub task: super::task::Task,
     pub questions: Vec<super::scheduler::Row>,
     pub revision: u64,
     pub active: bool,
@@ -73,6 +74,7 @@ pub struct Snapshot {
 impl Default for Snapshot {
     fn default() -> Self {
         Self {
+            task: super::task::Task::default(),
             questions: Vec::new(),
             revision: 0,
             active: false,
@@ -96,6 +98,7 @@ impl Default for Snapshot {
 }
 #[derive(Default)]
 pub struct Engine {
+    pub task_started_at: u64,
     pub view: Snapshot,
     pub context: MeetingContext,
     pub detector: QuestionDetector,
@@ -103,6 +106,26 @@ pub struct Engine {
     pub screenshot_data: Option<String>,
 }
 impl Engine {
+    pub fn new_task(&mut self, now: u64) {
+        self.task_started_at = now;
+        self.context.clear();
+        self.detector.supersede_remote_before(now);
+        self.project = None;
+        self.screenshot_data = None;
+        self.view.task = super::task::Task::default();
+        self.view.project = None;
+        self.view.screenshot = None;
+        self.view.attachment_busy = false;
+        self.view.questions.clear();
+        self.view.question = None;
+        self.view.answer.clear();
+        self.view.error = None;
+        self.view.latency = None;
+        self.view.expanded = false;
+        self.view.manual = false;
+        self.view.can_answer_now = false;
+        self.view.status = if self.view.active { "listening" } else { "off" }.into();
+    }
     pub fn clear_meeting(&mut self) {
         self.project = None;
         let protection = self.view.protection;
@@ -110,5 +133,37 @@ impl Engine {
         *self = Self::default();
         self.view.protection = protection;
         self.view.revision = revision;
+    }
+}
+
+#[cfg(test)]
+mod task_tests {
+    use super::*;
+    #[test]
+    fn new_task_drops_old_context_and_attachments_without_stopping_capture() {
+        let mut engine = Engine::default();
+        engine.view.active = true; engine.view.paused = true; engine.view.protection = true;
+        engine.view.remote_level = 0.3; engine.view.manual = true; engine.view.expanded = true;
+        engine.view.task.update("problem", "OLD_TASK_PROBLEM".into()).unwrap();
+        engine.view.task.update("test_output", "OLD_TEST_FAILURE".into()).unwrap();
+        let old_id = engine.view.task.id.clone();
+        engine.view.question = Some(CurrentQuestion { id: "old".into(), text: "OLD_QUESTION".into(), detected_at: 1 });
+        engine.view.answer = "OLD_ANSWER".into(); engine.view.error = Some("Old error".into());
+        engine.view.attachment_busy = true; engine.screenshot_data = Some("old pixels".into());
+        engine.context.push(super::super::TranscriptSegment { id: "old-transcript".into(), source: super::super::SpeakerSource::Remote,
+            text: "OLD_TASK_CONVERSATION".into(), started_at: 10, ended_at: 20, final_: true });
+        engine.context.remember_answer("old", "OLD_QUESTION", "OLD_SUGGESTION");
+        engine.new_task(100);
+        assert_ne!(engine.view.task.id, old_id);
+        assert!(engine.view.task.problem.is_empty() && engine.view.task.test_output.is_none());
+        assert!(engine.view.question.is_none() && engine.view.answer.is_empty() && engine.view.error.is_none());
+        assert!(engine.screenshot_data.is_none() && engine.project.is_none());
+        assert!(engine.view.project.is_none() && engine.view.screenshot.is_none() && !engine.view.attachment_busy);
+        assert!(!engine.view.manual && !engine.view.expanded && engine.view.latency.is_none());
+        assert!(!engine.context.answer_context("Next task").contains("OLD_"));
+        assert!(!engine.detector.remote_source_current(10));
+        assert!(engine.view.active && engine.view.paused && engine.view.protection);
+        assert_eq!(engine.view.remote_level, 0.3);
+        assert_eq!(engine.task_started_at, 100);
     }
 }

@@ -22,6 +22,7 @@ export interface PipelineTimeline {
 }
 export interface Latency { responseRevision?: number; speechStoppedAt: number; transcriptFinalAt: number; questionConfirmedAt: number; requestSentAt: number; firstTokenAt: number | null; firstWordAt?: number | null; completedAt: number | null; pipeline?: PipelineTimeline; remoteSpeechStartedAt?: number | null; firstRemotePartialAt?: number | null; firstCredibleCandidateAt?: number | null; remotePartialUpdates?: number }
 export interface Snapshot {
+  task: { id: string; problem: string; testOutput: { text: string; updatedAt: number } | null };
   questions?: { id: string; text: string; state: 'speculative' | 'confirmed' | 'superseded' | 'cancelled' | 'complete'; queued: boolean }[];
   revision: number; active: boolean; paused: boolean;
   status: 'off' | 'loading' | 'listening' | 'question' | 'thinking' | 'answer' | 'error';
@@ -37,4 +38,4 @@ export interface AudioDevice { id: string; name: string; source: SpeakerSource; 
 export interface Account { clientId: string; email: string | null; name: string | null; planEnabled: boolean }
 export interface Model { slug: string; display_name: string }
 export interface Bootstrap { settings: Settings; devices: AudioDevice[]; speechDevices?: { index: number; name: string; kind: string; memoryTotal: number }[]; speechDeviceError?: string | null; accounts: Account[]; selected: Account | null; models: Model[]; snapshot: Snapshot; debug: boolean; shortcutErrors: string[]; connectionError?: string | null }
-export const initialSnapshot: Snapshot = { revision: 0, active: false, paused: false, status: 'off', question: null, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null, remoteLevel: 0, selfLevel: 0, project: null, attachmentBusy: false, screenshot: null };
+export const initialSnapshot: Snapshot = { task: { id: '', problem: '', testOutput: null }, revision: 0, active: false, paused: false, status: 'off', question: null, answer: '', error: null, protection: false, expanded: false, manual: false, latency: null, remoteLevel: 0, selfLevel: 0, project: null, attachmentBusy: false, screenshot: null };

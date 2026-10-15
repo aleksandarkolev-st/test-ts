@@ -110,6 +110,7 @@ During a meeting, open **Context** in setup or use **Interview task** in the ove
 
 The coding instructions ask the AI to:
 
+- **Start in C++.** New solutions default to C++17. An explicitly requested language, required assessment signature, or existing project language takes precedence; follow-ups keep the current solution's language.
 - **Find an efficient solution.** Optimize time and auxiliary space under your constraints, explain real trade-offs, and choose the simplest correct implementation.
 - **Check before presenting.** Mentally trace examples and relevant edge cases, including empty input, duplicates, boundaries, and overflow. A mental check is not an executed test.
 - **Keep follow-ups focused.** Explain only what changed and why. Show the necessary changed code; provide the full implementation when you ask for it or when the change needs it to be usable.

@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every operation sequence up to length four from two keys, get/missing lookup, zero value and replacement put; capacities 1,2,3.",
+  "oracle": "Independent values and logical last-access clocks; evict smallest clock.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "f95febe1e56aac4c2c83e23c5974a1871497e47b4e87d5528af2e3cb23312da2",
+      "cases": 2343,
+      "passedCases": 2343,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "bff1257aefd113a173ed9d9f26c191fda7a93e1b7b4f7bb64304203def0eb632",
+      "cases": 2343,
+      "passedCases": 2343,
+      "failures": []
+    }
+  ]
+}

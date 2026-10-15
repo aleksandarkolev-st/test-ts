@@ -1,0 +1,115 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "All nondecreasing times length 0..4 over 0..4; capacities 0,0.5,1,2 and rates 0,0.5,1. Additional capacity-one/rate-0.1 event each integer time 0..10.",
+  "oracle": "Exact scaled-integer token accounting for dyadic rates/capacities. For the decimal witness, initial event spends the token and ten unit intervals refill at least one token: IEEE rate 0.1 is slightly ABOVE exact 1/10, so exact binary-rational accounting also permits time ten.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "2b12ee45b35e4022470e702d290c4aa78cfa325cb9cfcd4f6495ecdd953c4260",
+      "cases": 1513,
+      "passedCases": 1512,
+      "failures": [
+        {
+          "case": 1512,
+          "args": [
+            [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            1,
+            0.1
+          ],
+          "expected": [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "actual": [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "d837f707dc4784bab92d25605e1c8f0f4a7fd55ecef9860e22fef8e30eeb65e7",
+      "cases": 1513,
+      "passedCases": 1512,
+      "failures": [
+        {
+          "case": 1512,
+          "args": [
+            [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            1,
+            0.1
+          ],
+          "expected": [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "actual": [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        }
+      ]
+    }
+  ]
+}

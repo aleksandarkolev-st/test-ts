@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every sequence up to length four from two keys, missing lookups, zero value, zero TTL and replacement; integer timestamp equals operation index.",
+  "oracle": "Backward history search for latest put per key followed by explicit expiry comparison.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "b465fdef1357930bdbc407ae6623d0cba9bfcc78e565d80f83b01bfc37690efb",
+      "cases": 781,
+      "passedCases": 781,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "a7aa53320160c04c0c2ce7bfd55aa7c2511c07167ed41b64d8590abb4662ebdc",
+      "cases": 781,
+      "passedCases": 781,
+      "failures": []
+    }
+  ]
+}

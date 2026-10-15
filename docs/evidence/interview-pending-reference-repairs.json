@@ -1278,6 +1278,41 @@
         }
       ],
       "evidence": "interview-exclusion-product-zero-domain.json"
+    },
+    {
+      "id": "ttl-integer-deadline",
+      "file": "benchmarks/interviews/bugs.mjs",
+      "args": [
+        [
+          [
+            9007199254740991,
+            "put",
+            "a",
+            7,
+            2
+          ],
+          [
+            9007199254740992,
+            "get",
+            "a"
+          ],
+          [
+            9007199254740994,
+            "get",
+            "a"
+          ]
+        ]
+      ],
+      "actual": [
+        null,
+        null
+      ],
+      "expected": [
+        7,
+        null
+      ],
+      "evidence": "interview-ttl-integer-deadline-precision.json",
+      "repair": "For integer put time and TTL, use exact BigInt deadline in the reference; Number queries compare relationally against BigInt. Preserve Number fallback for noninteger inputs, existing frozen fixtures and historical measurement fingerprint."
     }
   ]
 }

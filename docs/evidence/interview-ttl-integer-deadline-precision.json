@@ -1,0 +1,87 @@
+{
+  "scope": "Actual candidates; frozen fixtures unchanged",
+  "args": [
+    [
+      [
+        9007199254740991,
+        "put",
+        "a",
+        7,
+        2
+      ],
+      [
+        9007199254740992,
+        "get",
+        "a"
+      ],
+      [
+        9007199254740994,
+        "get",
+        "a"
+      ]
+    ]
+  ],
+  "oracle": "Exact BigInt expiry 9007199254740991+2=9007199254740993; integer query 9007199254740992 is before expiry, query 9007199254740994 is after. All input Numbers are exactly representable; task says integer time with no safe-integer upper bound.",
+  "expected": [
+    7,
+    null
+  ],
+  "outcomes": [
+    {
+      "id": "ttl-cache-simulation",
+      "round": 2,
+      "answerSha256": "b465fdef1357930bdbc407ae6623d0cba9bfcc78e565d80f83b01bfc37690efb",
+      "actual": [
+        null,
+        null
+      ],
+      "expected": [
+        7,
+        null
+      ],
+      "passed": false
+    },
+    {
+      "id": "ttl-cache-simulation",
+      "round": 3,
+      "answerSha256": "a7aa53320160c04c0c2ce7bfd55aa7c2511c07167ed41b64d8590abb4662ebdc",
+      "actual": [
+        null,
+        null
+      ],
+      "expected": [
+        7,
+        null
+      ],
+      "passed": false
+    },
+    {
+      "id": "ttl-expiry",
+      "round": 2,
+      "answerSha256": "18059fd2e26f720be8d01d828e4f6324da2c46f4e30d7fa83b3735794a163980",
+      "actual": [
+        null,
+        null
+      ],
+      "expected": [
+        7,
+        null
+      ],
+      "passed": false
+    },
+    {
+      "id": "ttl-expiry",
+      "round": 3,
+      "answerSha256": "8c2424de6dc3806842f7a2a6e22eeb7e968602445f8762a00739c333b2201d3b",
+      "actual": [
+        null,
+        null
+      ],
+      "expected": [
+        7,
+        null
+      ],
+      "passed": false
+    }
+  ]
+}

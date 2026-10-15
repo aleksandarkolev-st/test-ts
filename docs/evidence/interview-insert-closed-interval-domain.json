@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "79 separately disjoint sorted interval lists up to length three over endpoints -2..2, each with every one of 15 possible new closed intervals.",
+  "oracle": "Independent interval-overlap graph connected components and minimum/maximum bounds.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "9e8e2ecdff50824dfc2fd949936a7854e8d501b5067b8a942a4fbdce5d64964b",
+      "cases": 1185,
+      "passedCases": 1185,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "5e92a7bb496f3638badad5c98ad9aa3ecaa8ab073751f4e64619cbd2481deaa1",
+      "cases": 1185,
+      "passedCases": 1185,
+      "failures": []
+    }
+  ]
+}

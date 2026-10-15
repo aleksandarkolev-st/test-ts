@@ -594,7 +594,7 @@
       "id": "ttl-expiry",
       "kind": "bug",
       "finalAnswerSha256": "8c2424de6dc3806842f7a2a6e22eeb7e968602445f8762a00739c333b2201d3b",
-      "finalContractPassed": true,
+      "finalContractPassed": false,
       "diagnosisReview": {
         "passed": true,
         "source": "src/core.mjs",
@@ -625,8 +625,9 @@
         },
         "note": "Equality was incorrectly live. Two operations are minimal: store a value then observe it at its expiry."
       },
-      "note": "Greater-than-or-equal rejects reads exactly at expiry and later; puts replace value and expiry together. Empty input, zero TTL, pre-boundary get and overwrite traces are correct. Retains entries and evaluates each get timestamp using specified putTime+ttl JavaScript arithmetic. Same synchronous export/API; no dependencies or test edits. Expected O(m) time and O(distinct keys + get count) space. Actual service smoke, fresh patch marker and native reading checks passed.",
-      "evidence": "interview-ttl-expiry-completed.json"
+      "note": "Greater-than-or-equal rejects reads exactly at expiry and later; puts replace value and expiry together. Empty input, zero TTL, pre-boundary get and overwrite traces are correct. Retains entries and evaluates each get timestamp using specified putTime+ttl JavaScript arithmetic. Same synchronous export/API; no dependencies or test edits. Expected O(m) time and O(distinct keys + get count) space. Actual service smoke, fresh patch marker and native reading checks passed. Subsequent independent integer deadline witness fails: put at 9007199254740991 with TTL 2 expires mathematically at 9007199254740993. Query at exactly represented 9007199254740992 should return 7, but rounded deadline causes null. Diagnosis still passes; final broader contract no longer passes. Frozen expectations are unchanged.",
+      "evidence": "interview-ttl-expiry-completed.json",
+      "supplementaryEvidence": "interview-ttl-integer-deadline-precision.json"
     },
     {
       "id": "run-length-encoding",
@@ -1459,6 +1460,52 @@
       "diagnosisReview": null,
       "note": "Heap retains one current value per nonempty list and running maximum; advancing a minimum explores necessary candidate ranges and exhaustion terminates correctly. Sift-down after increasing root and bottom-up heap construction correct; O(N log(k+1)) time/O(k) storage. Both pass 819 small list collections but fail safe-integer endpoints [[-9007199254740991,-9007199254740990],[2]]: widths 9007199254740993 and 9007199254740992 both round to the latter Number, preserving the wider first range. Expected [-9007199254740990,2], actual [-9007199254740991,2]. Outputs and inputs are exactly representable; no numeric bound is in the task. Frozen fixtures remain passed; broader final contract fails.",
       "evidence": "interview-smallest-range-covering-lists-domain.json"
+    },
+    {
+      "id": "insert-closed-interval",
+      "kind": "regular",
+      "finalAnswerSha256": "5e92a7bb496f3638badad5c98ad9aa3ecaa8ab073751f4e64619cbd2481deaa1",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Copies strictly preceding intervals, extends the inserted interval across each start<=currentEnd overlap, then copies the strictly following suffix. Strict-before and non-strict-overlap conditions merge touching closed endpoints without losing gaps. O(n) time/output space, input unchanged structurally. Both pass 1185 independent overlap-component cases.",
+      "evidence": "interview-insert-closed-interval-domain.json"
+    },
+    {
+      "id": "lru-cache-simulation",
+      "kind": "regular",
+      "finalAnswerSha256": "bff1257aefd113a173ed9d9f26c191fda7a93e1b7b4f7bb64304203def0eb632",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Map insertion order is least-to-most recent; successful get and replacement put delete/reinsert, and new put evicts first key after capacity overflow. Map.has distinguishes zero values from misses. Expected O(operations) time with hash-map operations, O(capacity) cache storage plus get outputs. Both pass 2343 independent last-access-clock traces.",
+      "evidence": "interview-lru-cache-simulation-domain.json"
+    },
+    {
+      "id": "ttl-cache-simulation",
+      "kind": "regular",
+      "finalAnswerSha256": "a7aa53320160c04c0c2ce7bfd55aa7c2511c07167ed41b64d8590abb4662ebdc",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Latest put replaces value and deadline; >= expiry rejects equality and deletes expired entries, Map lookup handles zero values. Both pass 781 backward-history cases. Both fail exactly represented integer timestamps with deadline beyond safe-integer range: put at MAX_SAFE_INTEGER with TTL 2 should survive query at 2^53, but rounded time+ttl expires it early. Expected [7,null], actual [null,null]. Integer time is explicitly stated without upper bound. Frozen fixtures pass; broader final contract fails. Same witness revised earlier bug ttl-expiry final review while preserving diagnosis pass.",
+      "evidence": "interview-ttl-cache-simulation-domain.json",
+      "supplementaryEvidence": "interview-ttl-integer-deadline-precision.json"
+    },
+    {
+      "id": "fixed-window-rate-limiter",
+      "kind": "regular",
+      "finalAnswerSha256": "a436f6d06653fb3ee881b58816aea2b3eec36b17c3e34cca0fcae1a90cb5f7e8",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Correct floor(time/windowMs) reset for nondecreasing timestamps, including skipped windows; accepted count increments only on acceptance. All 1134 integer-limit cases pass. The accepted<limit test permits one event at limit 0.5 and two at limit 1.5, violating the literal at-most-limit contract, which supplies no integer restriction. Both pass 1198 of 1890 supplementary cases. O(n) time/result space and constant auxiliary state. Frozen fixtures pass; broader final contract fails.",
+      "evidence": "interview-fixed-window-rate-limiter-domain.json"
+    },
+    {
+      "id": "token-bucket-rate-limiter",
+      "kind": "regular",
+      "finalAnswerSha256": "d837f707dc4784bab92d25605e1c8f0f4a7fd55ecef9860e22fef8e30eeb65e7",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Refills for elapsed time, caps capacity, updates previousTime on every event, spends one only when tokens>=1. All 1512 exactly dyadic small cases pass. Both fail capacity 1, rate 0.1, events at every integer 0..10: cumulative rounding produces 0.9999999999999999 at time 10 and rejects although a token is available. IEEE input 0.1=3602879701896397/36028797018963968 is slightly above exact one-tenth, so exact binary-rational accounting also requires acceptance. O(n) time/output space and constant auxiliary state. Frozen fixtures pass; broader final contract fails.",
+      "evidence": "interview-token-bucket-rate-limiter-domain.json"
     }
   ]
 }

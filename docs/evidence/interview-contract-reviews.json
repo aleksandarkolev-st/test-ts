@@ -1236,6 +1236,37 @@
       "note": "Prototype hasOwnProperty.call distinguishes own entries from absent/inherited keys while preserving all stored JSON values regardless of truthiness. Shadowed hasOwnProperty and owned __proto__ data properties remain valid. Both fixes pass 56 independent property/value tests with repeated keys and empty requests. Expected O(request count) time/O(output length) storage. Same synchronous API, no dependencies/test edits; actual smoke, original/patch markers, native vertical/horizontal reading pass.",
       "evidence": "interview-cache-zero-completed.json",
       "supplementaryEvidence": "interview-value-lookup-property-domain.json"
+    },
+    {
+      "id": "zero-product",
+      "kind": "bug",
+      "finalAnswerSha256": "b210a7d0a17631f5b67a611e1b5dc0e28fe0e5929cfce0f09d8f9a96db956b1d",
+      "finalContractPassed": false,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "all/x in nums.map(x=>all/x)",
+        "counterexample": {
+          "args": [
+            [
+              0
+            ]
+          ],
+          "originalActual": [
+            {
+              "nonFinite": "NaN"
+            }
+          ],
+          "expected": [
+            1
+          ],
+          "representation": "Non-finite actual numbers are recorded with explicit nonFinite tags."
+        },
+        "note": "Singleton zero is minimal. No minimum array size is supplied; excluding its sole entry leaves empty product one."
+      },
+      "note": "Prefix/suffix exclusion fixes ordinary zero handling without division and preserves singleton/empty behavior. Both candidates pass all 1365 arrays of length 0..5 over [-2,0,1,3] against independent BigInt products. Both still produce three NaN entries for 310 tens followed by two zeros, although every exclusion product contains at least one zero and must be exactly zero. Frozen grades remain unchanged. O(n) time/O(1) auxiliary storage beyond output; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
+      "evidence": "interview-zero-product-completed.json",
+      "supplementaryEvidence": "interview-exclusion-product-zero-domain.json"
     }
   ]
 }

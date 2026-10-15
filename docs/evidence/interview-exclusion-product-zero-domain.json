@@ -1,0 +1,70 @@
+{
+  "scope": "Supplementary actual bug fixes; frozen grades and distinct interview count unchanged",
+  "oracle": "Small expected products computed independently with BigInt excluding each index. Empty product is one. For the large finite-input witness, two zeros guarantee every exclusion product is exactly zero.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "6380491cf36f0f3c3e0c3fade620369a7390753853f03882e14dd9b86444a564",
+      "smallDomain": {
+        "cases": 1365,
+        "passedCases": 1365,
+        "failures": []
+      },
+      "twoZeroOverflow": {
+        "input": {
+          "tens": 310,
+          "trailingZeros": 2
+        },
+        "expected": "312 zeros",
+        "actualLength": 312,
+        "badIndices": [
+          {
+            "index": 309,
+            "actual": "NaN"
+          },
+          {
+            "index": 310,
+            "actual": "NaN"
+          },
+          {
+            "index": 311,
+            "actual": "NaN"
+          }
+        ],
+        "passed": false
+      }
+    },
+    {
+      "round": 3,
+      "answerSha256": "b210a7d0a17631f5b67a611e1b5dc0e28fe0e5929cfce0f09d8f9a96db956b1d",
+      "smallDomain": {
+        "cases": 1365,
+        "passedCases": 1365,
+        "failures": []
+      },
+      "twoZeroOverflow": {
+        "input": {
+          "tens": 310,
+          "trailingZeros": 2
+        },
+        "expected": "312 zeros",
+        "actualLength": 312,
+        "badIndices": [
+          {
+            "index": 309,
+            "actual": "NaN"
+          },
+          {
+            "index": 310,
+            "actual": "NaN"
+          },
+          {
+            "index": 311,
+            "actual": "NaN"
+          }
+        ],
+        "passed": false
+      }
+    }
+  ]
+}

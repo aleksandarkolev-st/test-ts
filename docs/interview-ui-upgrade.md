@@ -156,3 +156,9 @@ Median first word is 3161 ms (p95 7935 ms); median completion is 7987 ms (p95 15
 80 regular and 16 bug interviews are complete (288 completed-attempt measured responses). All 96 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All sixteen completed bug diagnoses pass; broader final review passes 78/96, retaining 18 failures.
 
 The lookup diagnosis identifies falsy-value fallback and the minimal stored-zero request. Both fixes pass 56 additional own/absent property tests, preserving zero/false/empty/null and handling prototype-named keys, shadowed hasOwnProperty, owned __proto__, repeated and empty requests. Original/patched source context and vertical/horizontal reading passed. Evidence: `evidence/interview-cache-zero-completed.json` and `evidence/interview-value-lookup-property-domain.json`. Remaining: 20 regular and 4 bug interviews.
+
+### Exclusion product bug checkpoint
+
+80 regular and 17 bug interviews are complete (291 completed-attempt measured responses). All 97 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All seventeen completed diagnoses pass; broader final implementation review passes 78/97, retaining 19 failures.
+
+The product diagnosis correctly uses singleton zero: original NaN, required empty product one. Both division-free fixes pass 1365 additional small integer arrays, but both still emit three NaNs on 310 finite tens followed by two zeros, where every exclusion product must be zero. This failure is retained separately from the passing frozen fixtures and diagnosis. API/dependencies/tests, actual smoke, original/patched source handoffs and reading checks passed. Evidence: `evidence/interview-zero-product-completed.json` and `evidence/interview-exclusion-product-zero-domain.json`. Remaining: 20 regular and 3 bug interviews.

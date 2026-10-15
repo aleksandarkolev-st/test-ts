@@ -15,8 +15,12 @@ const pilot=process.argv.includes('--pilot'),resume=process.argv.includes('--res
 const selected=process.argv.find(v=>v.startsWith('--case='))?.slice(7);
 const selectedKind=process.argv.find(v=>v.startsWith('--kind='))?.slice(7);
 if(selectedKind!==undefined&&!['regular','bug'].includes(selectedKind))throw Error('--kind must be regular or bug');
+const reportName=process.argv.find(v=>v.startsWith('--report='))?.slice('--report='.length);
+if(reportName!==undefined&&!/^[a-z0-9][a-z0-9-]*\.json$/.test(reportName))throw Error('--report must be a plain lowercase JSON filename');
+const fixtureWidth=Number(process.argv.find(v=>v.startsWith('--fixture-width='))?.slice('--fixture-width='.length)??780);
+if(!Number.isInteger(fixtureWidth)||fixtureWidth<360||fixtureWidth>1200)throw Error('--fixture-width must be an integer from 360 to 1200 CSS pixels');
 const limit=Number(process.argv.find(v=>v.startsWith('--limit='))?.slice(8)??120);
-const file=path.join(out,pilot?'pilot.json':'results.json');
+const file=path.join(out,reportName??(pilot?'pilot.json':'results.json'));
 await mkdir(out,{recursive:true});await mkdir(local,{recursive:true});
 const digest=b=>createHash('sha256').update(b).digest('hex');
 async function sourceFiles(directory){
@@ -34,9 +38,12 @@ const fingerprint={
 let report={version:1,status:'in_progress',startedAt:new Date().toISOString(),model:'gpt-6.1-sol',reasoningEffort:'low',serviceTier:'fast',
  scope:'100 distinct regular + 20 distinct bug interviews, three rounds each, live signed-in Codex through native app. Audio paused; no ASR reliability claim.',
  pilot,runId:(pilot?'pilot-':'run-')+randomBytes(6).toString('hex'),required:{regular:100,bug:20},fingerprint,rows:[],events:[]};
+report.presentation={fixtureWidthCssPx:fixtureWidth};
+report.purpose=selected?'scoped_recheck':'full_corpus';
 if(resume){
  report=JSON.parse(await readFile(file,'utf8'));
  if(JSON.stringify(report.fingerprint)!==JSON.stringify(fingerprint))throw Error('Resume fingerprint differs. Preserve this report and start a new evaluated build explicitly.');
+ if((report.presentation?.fixtureWidthCssPx??780)!==fixtureWidth)throw Error('Resume fixture width differs. Use a separate --report for presentation rechecks.');
  if(report.error)report.events.push({at:new Date().toISOString(),event:'preserved_previous_failure',error:report.error});
  report.status='in_progress';report.resumedAt=new Date().toISOString();delete report.error;
 }else{
@@ -60,7 +67,7 @@ const server=createServer(async(req,res)=>{
   if(req.url==='/snapshot'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('get_snapshot')));return;}
   if(req.url==='/detect'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('detect_context')));return;}
   if(req.url==='/diagnostics'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(await invoke('native_diagnostics')));return;}
-  res.setHeader('Content-Type','text/html; charset=utf-8');res.end('<!doctype html><meta charset="utf-8"><title>'+escape(ready?.title??'Interview evaluation IDE')+'</title><style>body{margin:28px;background:#f5f3ed;color:#172029;font:18px/1.5 Segoe UI;max-width:780px}h1{font-size:27px;line-height:1.25}pre{font:18px/1.5 Consolas;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#43524d}</style><h1>'+escape(ready?.title??'Preparing interview')+'</h1><pre>'+escape(ready?.content??'Synthetic benchmark workspace. Waiting for the next handoff.')+'</pre><small>Synthetic test workspace. No private files, messages, or credentials.</small>');
+  res.setHeader('Content-Type','text/html; charset=utf-8');res.end('<!doctype html><meta charset="utf-8"><title>'+escape(ready?.title??'Interview evaluation IDE')+'</title><style>body{margin:28px;background:#f5f3ed;color:#172029;font:18px/1.5 Segoe UI;max-width:'+fixtureWidth+'px}h1{font-size:27px;line-height:1.25}pre{font:18px/1.5 Consolas;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#43524d}</style><h1>'+escape(ready?.title??'Preparing interview')+'</h1><pre>'+escape(ready?.content??'Synthetic benchmark workspace. Waiting for the next handoff.')+'</pre><small>Synthetic test workspace. No private files, messages, or credentials.</small>');
  }catch(e){res.statusCode=400;res.end(String(e));}
 });
 await new Promise(r=>server.listen(9571,'127.0.0.1',r));

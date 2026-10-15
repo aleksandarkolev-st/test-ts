@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every operation sequence length 0..4 from six put/get choices on two keys, increasing per-key set timestamps and arbitrary earlier/later query times; inherited-name keys and zero-value lookup.",
+  "oracle": "Independent reverse-time sort of preceding matching-key set history, selecting latest timestamp <= query.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "6c6c32a6049274216e5de9d313eb8fcae755215b44d3fc9be52b9f6f0278974b",
+      "cases": 1556,
+      "passedCases": 1556,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "00b94ef0f19afcbfa09830dc0f28363f09e903d25ee15fc613d9dd88bb2d7948",
+      "cases": 1556,
+      "passedCases": 1556,
+      "failures": []
+    }
+  ]
+}

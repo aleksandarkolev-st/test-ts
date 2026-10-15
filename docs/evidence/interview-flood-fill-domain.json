@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "All binary rectangles h=1..2,w=1..3; every starting cell; replacement 0,1,2. Empty/invalid-start, ragged and 20000-cell cases. Deep input preservation and fresh rows verified.",
+  "oracle": "Independent repeated whole-image fixed-point reachability on original colors; output generated after convergence.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "88b871e24ab660ecddece742e420c50431617d1dde3d0d09e14ff304a033457e",
+      "cases": 1475,
+      "passedCases": 1475,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "ec9e38f9c168e33850411646e546c2546550ce37fdf741dfe5bf68bf7649ae73",
+      "cases": 1475,
+      "passedCases": 1475,
+      "failures": []
+    }
+  ]
+}

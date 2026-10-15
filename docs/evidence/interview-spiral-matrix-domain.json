@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every height/width 0..20 with unique cell labels; 20000-cell column; input preservation.",
+  "oracle": "Independent remove-first-row then rotate remaining matrix counterclockwise until empty.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "2adc615ff48d14f9bac86832ffa9bd6e41474aab379daa0177499ddfde9e26c8",
+      "cases": 442,
+      "passedCases": 442,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "7cc1aa79497706dfd11adbe52f90e07d57b7e895738ed5ea4e40e66f1519b746",
+      "cases": 442,
+      "passedCases": 442,
+      "failures": []
+    }
+  ]
+}

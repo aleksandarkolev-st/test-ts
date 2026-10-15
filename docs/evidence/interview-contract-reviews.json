@@ -1368,6 +1368,52 @@
       "note": "Dot-dot is handled separately, popping an ordinary segment only when available and never storing dot-dot at root. Empty/dot components are ignored; ordinary names including three dots or dot-dot prefixes remain literal. Both fixes pass 1557 independent list-rewrite and deep/above-root witnesses. O(path length) time and storage; API/dependencies/tests unchanged. Actual smoke, original/patch markers and native reading pass.",
       "evidence": "interview-root-path-completed.json",
       "supplementaryEvidence": "interview-root-path-domain.json"
+    },
+    {
+      "id": "nonnegative-weight-shortest-paths",
+      "kind": "regular",
+      "finalAnswerSha256": "18ad240fbf6090782c3fa585cf31cfae1a7ddf93539f59833dd98696e32183bc",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Min-heap Dijkstra with adjacency, stale-entry rejection, distance relaxation and null unreachable outputs; R3 uses ordinary floor heap indexing. Both pass 2356 independently enumerated small weighted graphs. Both fail a unique seven-vertex chain whose individual weights are safe integers and terminal distance is exactly representable: expected 9007199254740996, actual 9007199254740992. Intermediate exact distances include unrepresentable integers; terminal-only comparison avoids requiring impossible intermediate Number representation. R2 states an unstated precision restriction. Frozen fixtures remain passed; broader task accuracy fails.",
+      "evidence": "interview-weighted-paths-integer-precision.json",
+      "supplementaryEvidence": "interview-weighted-paths-small-graphs.json"
+    },
+    {
+      "id": "course-prerequisite-cycle",
+      "kind": "regular",
+      "finalAnswerSha256": "ad5d25b733defc0745e6f560d9a56b327f0df90227f65febc4c487da3a573c86",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Kahn indegree traversal accounts for prerequisite orientation b before a and duplicates consistently; a course enters the head-index queue only when its indegree reaches zero. Processing n vertices is equivalent to absence of a cycle. Empty n returns true. Iterative O(n+m) time/storage. Both pass 1064 independent cases including every directed graph on n=0..3 with self-loops, duplicate prerequisites, and 20000-course chain/cycle.",
+      "evidence": "interview-course-cycle-domain.json"
+    },
+    {
+      "id": "flood-fill",
+      "kind": "regular",
+      "finalAnswerSha256": "ec9e38f9c168e33850411646e546c2546550ce37fdf741dfe5bf68bf7649ae73",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Copies outer image and each row before traversal. Equal replacement returns fresh copy immediately; recoloring before pushing marks each starting-color orthogonal neighbor once, so cycles terminate and diagonal components remain separate. Iterative O(cells) time/storage including copy. Both pass 1475 independent cases with copy and deep input preservation checks, ragged/invalid starts and 20000-cell region.",
+      "evidence": "interview-flood-fill-domain.json"
+    },
+    {
+      "id": "eight-direction-binary-path",
+      "kind": "regular",
+      "finalAnswerSha256": "149e4c0f9ec394cb8568a895902718b80cc8765d4fba37fabd700d424ccd8b07",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "BFS marks on enqueue, uses a head-index queue, skips the zero offset and permits all eight neighboring offsets. First removed target is shortest in cell-count distance initialized to one. Blocked endpoints and exhaustion return -1; input preserved. O(n squared) time/storage. Both pass every binary n=1..3 square against synchronous relaxation, empty grid and a 256-square open grid: 532 cases.",
+      "evidence": "interview-eight-direction-path-domain.json"
+    },
+    {
+      "id": "spiral-matrix-traversal",
+      "kind": "regular",
+      "finalAnswerSha256": "7cc1aa79497706dfd11adbe52f90e07d57b7e895738ed5ea4e40e66f1519b746",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Shrinking top/bottom/left/right bounds consume each perimeter once. Additional row/column guards prevent duplicates when a single row or column remains; loop bounds naturally skip exhausted right and bottom loops. Empty outer/first row returns empty. Input preserved, O(rows*columns) time/output storage. Both pass 442 independently rotated-matrix oracle cases covering all dimensions 0..20 and a 20000-cell column.",
+      "evidence": "interview-spiral-matrix-domain.json"
     }
   ]
 }

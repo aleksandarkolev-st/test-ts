@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every binary square grid n=1..3, empty grid, and 256-square open grid; input preservation verified.",
+  "oracle": "Independent synchronous repeated relaxation over every pair of adjacent zero cells; large open grid Chebyshev distance plus one.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "cd6a461952dab448dca7a004094a705fc5bdfbacbf3c3b553835789575ca2ca8",
+      "cases": 532,
+      "passedCases": 532,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "149e4c0f9ec394cb8568a895902718b80cc8765d4fba37fabd700d424ccd8b07",
+      "cases": 532,
+      "passedCases": 532,
+      "failures": []
+    }
+  ]
+}

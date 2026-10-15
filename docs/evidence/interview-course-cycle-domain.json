@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "All directed graphs with self-loops on n=0..3, unique and duplicated prerequisites; 20000-vertex chain and cycle.",
+  "oracle": "Exhaustive permutation existence with b before a for every [a,b]; explicit large acyclic/cyclic constructions.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "e4c04cdd1a78db3d3b984762255a781d0e29e2ec289dc0d8d49dff7aa7814641",
+      "cases": 1064,
+      "passedCases": 1064,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "ad5d25b733defc0745e6f560d9a56b327f0df90227f65febc4c487da3a573c86",
+      "cases": 1064,
+      "passedCases": 1064,
+      "failures": []
+    }
+  ]
+}

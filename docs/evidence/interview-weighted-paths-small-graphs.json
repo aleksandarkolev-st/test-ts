@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual regular implementations; frozen fixtures unchanged",
+  "domain": "n=1..2 directed edges including optional self-loops, each absent or weight 0/1; n=3 loop-free directed edges with the same choices; every source; four parallel/alternative/zero-cycle witnesses.",
+  "oracle": "Independent exhaustive vertex-simple path enumeration. Nonnegative cycles can be removed from a shortest route, so simple paths suffice.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "c2649d07364e4674a1f02bd58fb20a24e68b9cd80f5b8f8d69f9bb192fa7e3cf",
+      "cases": 2356,
+      "passedCases": 2356,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "18ad240fbf6090782c3fa585cf31cfae1a7ddf93539f59833dd98696e32183bc",
+      "cases": 2356,
+      "passedCases": 2356,
+      "failures": []
+    }
+  ]
+}

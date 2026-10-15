@@ -184,3 +184,9 @@ The stable-order diagnosis identifies equal-key swapping and the minimal two-rec
 The last path diagnosis identifies dot-dot being pushed at root and uses the minimal /.. witness. Both fixes pass 1557 independent path-rewrite, ordinary-name and deep/root-boundary tests. Evidence: `evidence/interview-root-path-completed.json`, `evidence/interview-root-path-domain.json`, and the twenty-bug comparison `evidence/interview-bug-20-summary.json`.
 
 Overall median first word is 3133 ms (p95 8003 ms); median completion is 7784 ms (p95 15296 ms). The new longest completion, 24734 ms, is retained. Remaining: 20 regular interviews and the two recorded reference-helper repairs after the full frozen native run. The requested 100 regular + 20 bug objective remains active.
+
+### Native regular checkpoint 81–85 (2026-10-15)
+
+The signed-in gpt-6.1-sol/low run has completed 85 distinct regular and all 20 bug interviews, with 315 measured completed-attempt responses. All 105 latest completed attempts passed frozen implementation fixtures, exact accepted source paints, task markers and physical keyboard reading checks. SHA-bound broader final review passes 85/105; this batch adds four passes and retains the weighted-path terminal integer precision failure (individual weights safe, terminal expected 9007199254740996, actual 9007199254740992).
+
+Independent checks per candidate: 2356 small weighted graphs plus the failing precision witness; 1064 course-cycle graphs and large chain/cycle; 1475 flood-fill cases with input/copy preservation; 532 eight-direction binary paths; 442 spiral matrix shapes. These supplementary cases do not increase distinct interview counts. Current first-word median/p95 3163/8365 ms and completion median/p95 7876/15318 ms. Fifteen regular interviews and the two recorded reference-helper repairs remain required; the frozen native run remains resumable before those repairs.

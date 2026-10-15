@@ -1,0 +1,11 @@
+{
+  "productName": "mscv32",
+  "mainBinaryName": "mscv32",
+  "bundle": {
+    "windows": {
+      "wix": {
+        "upgradeCode": "2b90011f-9395-505e-aea3-eaa4264c24e1"
+      }
+    }
+  }
+}

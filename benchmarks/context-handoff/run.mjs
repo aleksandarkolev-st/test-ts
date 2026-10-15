@@ -66,13 +66,13 @@ async function handoff(task,index,mode){
  return{marker,attachment:mode==='project'?attached.project:attached.screenshot,automaticLatency:automatic.latency,ackToAutomaticCompletedMs:performance.now()-before};
 }
 try{
- const binary=path.join(root,'src-tauri/target/debug/meeting-copilot.exe');
+ const binary=path.join(root,'src-tauri/target/debug/mscv32.exe');
  report.binarySha256=createHash('sha256').update(await readFile(binary)).digest('hex');
  report.sourceCommit=(await new Promise(resolve=>{const p=spawn('git',['rev-parse','HEAD'],{windowsHide:true,stdio:['ignore','pipe','ignore']});let text='';p.stdout.on('data',b=>text+=b);p.on('exit',()=>resolve(text.trim()));}));
  const exeDir=path.join(local,'app');await mkdir(exeDir,{recursive:true});
- for(const name of await readdir(path.dirname(binary)))if(name==='meeting-copilot.exe'||name.endsWith('.dll'))await copyFile(path.join(path.dirname(binary),name),path.join(exeDir,name));
+ for(const name of await readdir(path.dirname(binary)))if(name==='mscv32.exe'||name.endsWith('.dll'))await copyFile(path.join(path.dirname(binary),name),path.join(exeDir,name));
  try{await fetch('http://127.0.0.1:1420');}catch{vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','1420','--strictPort'],{windowsHide:true,stdio:'ignore'});await sleep(1500);}
- app=spawn(path.join(exeDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_DATA_DIR:path.join(local,'data'),WEBVIEW2_USER_DATA_FOLDER:path.join(local,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9560'},stdio:['ignore','ignore','pipe']});
+ app=spawn(path.join(exeDir,'mscv32.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_DATA_DIR:path.join(local,'data'),WEBVIEW2_USER_DATA_FOLDER:path.join(local,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9560'},stdio:['ignore','ignore','pipe']});
  let stderr='';app.stderr.on('data',b=>stderr=(stderr+b.toString()).slice(-4000));
  for(let i=0;i<150;i++){try{browser=await chromium.connectOverCDP('http://127.0.0.1:9560');break;}catch{if(app.exitCode!==null)throw Error(`App exited ${app.exitCode}: ${stderr}`);await sleep(100);}}
  if(!browser)throw Error('Native CDP did not open');

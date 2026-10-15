@@ -4,18 +4,18 @@ import {mkdir,writeFile,access,readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-const root=process.cwd(),dir=process.env.COPILOT_PACKAGE_DIR||path.join(root,'.local/msi-extracted/PFiles/Meeting Copilot'),keep=process.argv.includes('--keep');
+const root=process.cwd(),dir=process.env.COPILOT_PACKAGE_DIR||path.join(root,'.local/msi-extracted/PFiles/mscv32'),keep=process.argv.includes('--keep');
 await mkdir(path.join(root,'artifacts/package'),{recursive:true});
-const required=['meeting-copilot.exe','whisper.dll','ggml.dll','ggml-base.dll',...['x64','sse42','sandybridge','haswell','skylakex','icelake','alderlake'].map(n=>`ggml-cpu-${n}.dll`),'models/ggml-tiny.en.bin','LICENSE.txt','THIRD_PARTY_NOTICES.txt','models/nemotron-speech-streaming-en-0.6b.q8_0.gguf','nemotron/nemo-speech.exe','gaze/gaze-worker.exe','gaze/_internal/onnxruntime/capi/DirectML.dll','gaze/licenses/PYTHON-LICENSE.txt','models/gaze/flx-l.onnx','models/gaze/flx-r.onnx','models/gaze/face_landmarker.task','licenses/models/FLX-LICENSE.txt','licenses/models/NVIDIA-OPEN-MODEL-LICENSE.pdf','licenses/models/Nemotron-Notice.txt','codex/codex.exe','codex/LICENSE.txt','codex/NOTICE.txt','codex/manifest.json'];
+const required=['mscv32.exe','whisper.dll','ggml.dll','ggml-base.dll',...['x64','sse42','sandybridge','haswell','skylakex','icelake','alderlake'].map(n=>`ggml-cpu-${n}.dll`),'models/ggml-tiny.en.bin','LICENSE.txt','THIRD_PARTY_NOTICES.txt','models/nemotron-speech-streaming-en-0.6b.q8_0.gguf','nemotron/nemo-speech.exe','gaze/gaze-worker.exe','gaze/_internal/onnxruntime/capi/DirectML.dll','gaze/licenses/PYTHON-LICENSE.txt','models/gaze/flx-l.onnx','models/gaze/flx-r.onnx','models/gaze/face_landmarker.task','licenses/models/FLX-LICENSE.txt','licenses/models/NVIDIA-OPEN-MODEL-LICENSE.pdf','licenses/models/Nemotron-Notice.txt','codex/codex.exe','codex/LICENSE.txt','codex/NOTICE.txt','codex/manifest.json'];
 for(const name of required)await access(path.join(dir,name));
 const hash=async file=>createHash('sha256').update(await readFile(file)).digest('hex');
 for(const name of required.filter(n=>n.endsWith('.dll')))assert.equal(await hash(path.join(dir,name)),await hash(path.join(root,'src-tauri/target/release',name)),`Stale packaged runtime: ${name}`);
 // Tauri temporarily patches this marker for MSI bundling, then restores UNK
 // in the loose executable. Compare every byte with that one known patch.
-const compiledExecutable=await readFile(path.join(root,'src-tauri/target/release/meeting-copilot.exe'));
+const compiledExecutable=await readFile(path.join(root,'src-tauri/target/release/mscv32.exe'));
 const marker=Buffer.from('__TAURI_BUNDLE_TYPE_VAR_UNK'),markerOffset=compiledExecutable.indexOf(marker);
 if(markerOffset>=0)Buffer.from('__TAURI_BUNDLE_TYPE_VAR_MSI').copy(compiledExecutable,markerOffset);
-assert.deepEqual(await readFile(path.join(dir,'meeting-copilot.exe')),compiledExecutable,'Stale packaged executable');
+assert.deepEqual(await readFile(path.join(dir,'mscv32.exe')),compiledExecutable,'Stale packaged executable');
 assert.equal(await hash(path.join(dir,'models/ggml-tiny.en.bin')),'921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f');
 assert.equal(await hash(path.join(dir,'models/nemotron-speech-streaming-en-0.6b.q8_0.gguf')),'d9a01898d2a611c8764e23a1c2f45e70bbd5a425dc4de93692ac951dd603812d');
 assert.equal(await hash(path.join(dir,'models/gaze/face_landmarker.task')),'64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff');
@@ -30,7 +30,7 @@ for(const name of ['codex.exe','LICENSE.txt','NOTICE.txt','manifest.json']){asse
 let existingEndpoint = false;
 try { existingEndpoint = (await fetch('http://127.0.0.1:9557/json/version')).ok; } catch {}
 assert.equal(existingEndpoint, false, 'CDP port 9557 is already owned; close the verified idle app before checking a new package');
-const app=spawn(path.join(dir,'meeting-copilot.exe'),[],{cwd:dir,detached:keep,windowsHide:true,env:{...process.env,WEBVIEW2_USER_DATA_FOLDER:path.join(root,'.local/packaged-webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9557'},stdio:'ignore'});
+const app=spawn(path.join(dir,'mscv32.exe'),[],{cwd:dir,detached:keep,windowsHide:true,env:{...process.env,WEBVIEW2_USER_DATA_FOLDER:path.join(root,'.local/packaged-webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9557'},stdio:'ignore'});
 let browser,succeeded=false;
 try{
   for(let i=0;i<150;i++){try{browser=await chromium.connectOverCDP('http://127.0.0.1:9557');break;}catch{assert.equal(app.exitCode,null,`Packaged executable exited ${app.exitCode}`);await new Promise(r=>setTimeout(r,100));}}

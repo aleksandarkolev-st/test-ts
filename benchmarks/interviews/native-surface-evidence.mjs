@@ -20,7 +20,7 @@ try{
   for(const t of tests){context.snapshot=t.args;t.actual=vm.runInContext('solve(snapshot)',context,{timeout:1000});t.passed=t.actual===t.expected;}
   evidence.answer={question:s.question.text,text:s.answer,latency:s.latency,functionTests:tests,currentProject:s.project,currentScreenshot:s.screenshot};
  }
- evidence.binarySha256=createHash('sha256').update(await readFile('src-tauri/target/debug/meeting-copilot.exe')).digest('hex');
+ evidence.binarySha256=createHash('sha256').update(await readFile('src-tauri/target/debug/mscv32.exe')).digest('hex');
  const files=['src/App.tsx','src/style.css','src/overlay/Answer.tsx','src/overlay/Overlay.tsx','src/ui/PixelCompanion.tsx'];
  evidence.frontendSha256=createHash('sha256').update((await Promise.all(files.map(f=>readFile(f)))).map(b=>b.toString()).join('\n')).digest('hex');
  const geometry=await overlay.evaluate(()=>{const c=document.querySelector('.answer-content'),pre=document.querySelector('.code-block pre'),root=document.querySelector('.overlay'),footer=document.querySelector('.overlay-footer');return{top:c.scrollTop,height:c.scrollHeight,viewport:c.clientHeight,code:pre?{left:pre.scrollLeft,width:pre.scrollWidth,viewport:pre.clientWidth}:null,rootBottom:root.getBoundingClientRect().bottom,footerBottom:footer.getBoundingClientRect().bottom,windowHeight:innerHeight};});

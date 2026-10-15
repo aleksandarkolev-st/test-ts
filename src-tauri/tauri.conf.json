@@ -14,6 +14,7 @@
                                 {
                                     "label":  "main",
                                     "title":  "Meeting Copilot",
+                                    "skipTaskbar":  true,
                                     "width":  520,
                                     "height":  700,
                                     "minWidth":  480,

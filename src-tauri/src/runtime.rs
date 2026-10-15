@@ -1426,6 +1426,7 @@ fn open_debug(app: tauri::AppHandle) -> Result<(), String> {
         )
         .title("Local transcript Â· development only")
         .inner_size(720., 600.)
+        .skip_taskbar(true)
         .build()
         .map_err(|e| e.to_string())?;
     }

@@ -47,7 +47,7 @@ async function nativeFixture(page: Page) {
           broadcast(); return;
         }
         if (cmd === 'ask') { state.question = { id: 'q', text: args.question, detectedAt: 1000 }; state.answer = ''; state.status = 'thinking'; state.manual = false; broadcast(); return; }
-        if (cmd === 'resize_overlay') return;
+        if (cmd === 'resize_overlay') { (w.fixtureResizeRequests ||= []).push(args.height); return; }
         if (cmd === 'answer_visible') return;
         if (cmd === 'answer_displayed') { (w.fixturePaint ||= []).push(args);return; }
         throw new Error(`Unexpected fixture command ${cmd}`);
@@ -162,6 +162,16 @@ test('attached projects expose their files and refresh without redetecting anoth
   await expect(page.getByText('interview-project', { exact: true })).toBeVisible();
 });
 
+test('a small native overlay requests enough height for the task and context immediately', async ({ page }) => {
+  await nativeFixture(page); await page.setViewportSize({ width: 520, height: 140 }); await page.goto('/?view=overlay');
+  await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'answer',
+    question: { id: 'task', text: 'Find the boundary bug', detectedAt: 1 },
+    answer: 'Explain the invariant and check the boundary.\n'.repeat(40),
+    screenshot: { width: 1920, height: 1080, capturedAt: Date.now() } }));
+  await expect.poll(() => page.evaluate(() => (window as any).fixtureResizeRequests?.at(-1) || 0)).toBeGreaterThan(600);
+  expect(await page.evaluate(() => (window as any).fixtureResizeRequests.at(-1))).toBeLessThanOrEqual(700);
+});
+
 for (const route of ['/', '/?view=overlay']) {
   test(`screenshots show capture time and a clear retake action in ${route}`, async ({ page }) => {
     await nativeFixture(page); await page.goto(route);
@@ -265,6 +275,14 @@ test('setup navigation and crowded overlay preserve readable content and reachab
   });
   expect(geometry.rootBottom).toBeLessThanOrEqual(700);expect(geometry.footerBottom).toBeLessThanOrEqual(700);
   expect(geometry.readingHeight).toBeGreaterThan(170);expect(geometry.answerScrolls).toBe(true);expect(geometry.toolsScroll).toBe(true);
+  if(process.env.CONTEXT_CAPTURE) {
+    await page.locator('.overlay-tools').evaluate(e => { e.scrollTop = 0; });
+    await page.screenshot({animations:'disabled',path:'.local/context-review/overlay-520.png'});
+  }
+  await page.setViewportSize({width:480,height:600});
+  await expect.poll(() => page.locator('.overlay-footer').evaluate(e => e.getBoundingClientRect().bottom)).toBeLessThanOrEqual(600);
+  if(process.env.CONTEXT_CAPTURE) await page.screenshot({animations:'disabled',path:'.local/context-review/overlay-480.png'});
+  await page.setViewportSize({width:520,height:700});
   await page.evaluate(()=>(window as any).fixtureScroll('end'));
   await expect(page.getByText('Check the boundary before committing the update.',{exact:true})).toBeVisible();
   if(process.env.UI_CAPTURE) await page.screenshot({animations:'disabled',path:'.impeccable/review/overlay-code-end-520.png'});

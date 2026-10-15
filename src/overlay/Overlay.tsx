@@ -11,7 +11,33 @@ export default function Overlay() {
   const [question, setQuestion] = useState(''); const [error, setError] = useState('');
   useEffect(() => { if (!s.active || !s.manual) setQuestion(''); if (!s.active) setError(''); }, [s.active, s.manual]);
   useEffect(() => { let off: (() => void) | undefined; let disposed = false; connectState().then(f => { if (disposed) f(); else off = f; }).catch(e => setError(errorText(e))); return () => { disposed = true; off?.(); }; }, []);
-  useEffect(() => { if (!ref.current || !native()) return; let timer: ReturnType<typeof setTimeout>; const obs = new ResizeObserver(([e]) => { clearTimeout(timer); timer = setTimeout(() => command('resize_overlay', { height: Math.ceil(e.contentRect.height) + 4 }).catch(e => setError(errorText(e))), 50); }); obs.observe(ref.current); return () => { obs.disconnect(); clearTimeout(timer); }; }, []);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || !native()) return;
+    let timer: ReturnType<typeof setTimeout> | undefined; let requestedHeight = 0;
+    const schedule = () => {
+      if (timer !== undefined) return;
+      timer = setTimeout(() => {
+        timer = undefined;
+        // Measure the reading and tools surfaces before the viewport clips them,
+        // so a small native window can grow directly to fit new content.
+        const naturalHeight = Array.from(root.children).reduce((total, child) => {
+          const limit = parseFloat(getComputedStyle(child).maxHeight);
+          const height = Math.max(child.scrollHeight, child.getBoundingClientRect().height);
+          return total + (Number.isFinite(limit) ? Math.min(height, limit) : height);
+        }, 4);
+        const height = Math.min(700, Math.max(100, Math.ceil(naturalHeight)));
+        if (height === requestedHeight) return;
+        requestedHeight = height;
+        command('resize_overlay', { height }).catch(e => setError(errorText(e)));
+      }, 50);
+    };
+    const obs = new ResizeObserver(schedule); obs.observe(root);
+    const changes = new MutationObserver(schedule);
+    changes.observe(root, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['open'] });
+    schedule();
+    return () => { obs.disconnect(); changes.disconnect(); clearTimeout(timer); };
+  }, []);
   useEffect(() => { if (s.manual) input.current?.focus(); }, [s.manual]);
   const candidateId = s.questions?.filter(q => q.state === 'speculative').at(-1)?.id;
   const act = (action: string) => command('action', { action, ...(action === 'expand' ? { generationId: s.question?.id } : action === 'answer_now' ? { generationId: candidateId } : {}) }).catch(e => setError(errorText(e)));

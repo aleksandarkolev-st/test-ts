@@ -78,7 +78,7 @@ label > span { float:none; display:block; margin-top:3px; }
 .setup > footer { margin-top:8px; font-size:11px; padding-top:16px; row-gap:16px; }
 kbd { color:#b9cdc3; font-size:11px; }
 .privacy { font-size:11px; line-height:1.6; }
-.overlay { display:flex; flex-direction:column; max-height:694px; border:0; background:var(--surface); box-shadow:0 8px 25px #0005; }
+.overlay { display:flex; flex-direction:column; max-height:min(694px,calc(100dvh - 2px)); border:0; background:var(--surface); box-shadow:0 8px 25px #0005; }
 .overlay > * { flex:0 0 auto; }
 .overlay-header { padding:12px 18px; border-bottom:1px solid var(--border); }
 .drag-handle { display:flex; gap:12px; align-items:center; padding:0; }

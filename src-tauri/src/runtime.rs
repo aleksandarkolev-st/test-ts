@@ -507,12 +507,12 @@ async fn actor(
                 Work::SummaryError(id,error)=>{if let Some(s)=session.as_ref().filter(|s|s.id==id){summary=None;engine.context.fail_summary();summary_retry_at=s.clock.elapsed().as_millis()as u64+30_000;emit(&app,"context.error",error);}}
                 Work::Project(session_id,id,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&project_request.as_ref()==Some(&id)){
                     project_request=None;engine.view.attachment_busy=screenshot_request.is_some();
-                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Give a concise overview of this project and explain its main architecture.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(project)=>{engine.view.project=Some(project.info());engine.project=Some(project);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),PROJECT_CONTEXT_QUESTION);let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     publish(&app,&mut engine,&view);
                 }},
                 Work::Screenshot(session_id,id,result)=>{if session.is_some(){window::show(&app,&hidden);}if let Some(s)=session.as_ref().filter(|s|s.id==session_id&&screenshot_request.as_ref()==Some(&id)){
                     screenshot_request=None;engine.view.attachment_busy=project_request.is_some();
-                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question="Explain what is on this screen and help me with the visible task.".to_string();let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
+                    match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),SCREEN_CONTEXT_QUESTION);let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
             }},
@@ -1170,11 +1170,32 @@ async fn answer_token(auth: &Arc<Auth>, client: &Client, cancel: &CancellationTo
     if !client.requires_token() { return Ok(String::new()); }
     tokio::select! { _=cancel.cancelled()=>Err("cancelled".into()), token=auth.token()=>token }
 }
+const PROJECT_CONTEXT_QUESTION: &str = "Give a concise overview of this project and explain its main architecture.";
+const SCREEN_CONTEXT_QUESTION: &str = "Explain what is on this screen and help me with the visible task.";
+fn attachment_question(current: Option<&meeting::state::CurrentQuestion>, fallback: &str) -> String {
+    current.map(|question| question.text.as_str())
+        .filter(|text| !text.trim().is_empty() && ![PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION].contains(text))
+        .unwrap_or(fallback).to_string()
+}
 fn active_attachment_reference(project:&str,screenshot:bool)->String{
     format!("\nAPPLICATION ATTACHMENTS (current request): {}\nEarlier attachments are historical context. Use only the current attachments when asked about the current project or screen. If a source is absent, do not claim an older attachment is still attached.{}",serde_json::json!({"project":!project.is_empty(),"screenshot":screenshot}),project)
 }
 #[cfg(test)]mod attachment_frame_tests{
-    use super::active_attachment_reference;
+    use super::{active_attachment_reference, attachment_question, PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION};
+    #[test]fn context_updates_keep_the_interview_question_and_choose_source_specific_defaults(){
+        use crate::meeting::state::CurrentQuestion;
+        let mut question = CurrentQuestion { id: "q".into(), text: "Find the boundary bug and explain the fix".into(), detected_at: 1 };
+        for fallback in [PROJECT_CONTEXT_QUESTION, SCREEN_CONTEXT_QUESTION] {
+            assert_eq!(attachment_question(Some(&question), fallback), question.text);
+            assert_eq!(attachment_question(None, fallback), fallback);
+        }
+        question.text = PROJECT_CONTEXT_QUESTION.into();
+        assert_eq!(attachment_question(Some(&question), SCREEN_CONTEXT_QUESTION), SCREEN_CONTEXT_QUESTION);
+        question.text = SCREEN_CONTEXT_QUESTION.into();
+        assert_eq!(attachment_question(Some(&question), PROJECT_CONTEXT_QUESTION), PROJECT_CONTEXT_QUESTION);
+        question.text = "  ".into();
+        assert_eq!(attachment_question(Some(&question), SCREEN_CONTEXT_QUESTION), SCREEN_CONTEXT_QUESTION);
+    }
     #[test]fn clearing_a_project_explicitly_declares_it_absent_even_with_a_screen(){
         let frame=active_attachment_reference("",true);
         assert!(frame.contains("\"project\":false"));assert!(frame.contains("\"screenshot\":true"));

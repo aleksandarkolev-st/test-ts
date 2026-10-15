@@ -42,7 +42,7 @@ async function nativeFixture(page: Page) {
             state.project = { ...state.project, files: 3, filePaths: ['src/main.ts', 'src/parser.ts', 'README.md'], collectedAt: Date.now() };
           }
           if (args.action === 'clear_project') state.project = null;
-          if (args.action === 'screenshot') state.screenshot = { width: 1920, height: 1080 };
+          if (args.action === 'screenshot') state.screenshot = { width: 1920, height: 1080, capturedAt: Date.now() };
           if (args.action === 'clear_screenshot') state.screenshot = null;
           broadcast(); return;
         }
@@ -162,6 +162,27 @@ test('attached projects expose their files and refresh without redetecting anoth
   await expect(page.getByText('interview-project', { exact: true })).toBeVisible();
 });
 
+for (const route of ['/', '/?view=overlay']) {
+  test(`screenshots show capture time and a clear retake action in ${route}`, async ({ page }) => {
+    await nativeFixture(page); await page.goto(route);
+    if (route === '/') await page.getByRole('tab', { name: 'Context', exact: true }).click();
+    const oldCapture = Date.now() - 60_000;
+    await page.evaluate(capturedAt => (window as any).fixtureState({ active: true, status: 'listening', screenshot: { width: 1280, height: 720, capturedAt } }), oldCapture);
+    const time = page.locator('.context-attachments time');
+    await expect(time).toHaveAttribute('datetime', new Date(oldCapture).toISOString());
+    const retake = page.getByRole('button', { name: 'Retake screenshot', exact: false });
+    await retake.click();
+    await expect(page.getByText('Screenshot attached · 1920 × 1080', { exact: false })).toBeVisible();
+    await expect(time).not.toHaveAttribute('datetime', new Date(oldCapture).toISOString());
+    await page.evaluate(() => (window as any).fixtureState({ attachmentBusy: true }));
+    await expect(retake).toBeDisabled();
+    await page.evaluate(() => (window as any).fixtureState({ attachmentBusy: false }));
+    await page.getByRole('button', { name: 'Remove screenshot' }).click();
+    await expect(retake).toHaveCount(0);
+    await expect(time).toHaveCount(0);
+  });
+}
+
 test('a long complete question leaves the useful answer visible and remains scrollable', async ({ page }) => {
   await page.setViewportSize({ width: 500, height: 700 });
   await nativeFixture(page); await page.goto('/?view=overlay');
@@ -232,7 +253,7 @@ test('setup navigation and crowded overlay preserve readable content and reachab
   const answer='Use the map to preserve the invariant.\n```javascript\n'+Array.from({length:55},(_,i)=>`const value${i} = ${i}; // preserve exact code`).join('\n')+'\n```\nCheck the boundary before committing the update.';
   await page.evaluate(answer=>(window as any).fixtureState({active:true,status:'answer',manual:true,protection:true,
     question:{id:'crowded',text:'Find the boundary bug and return a complete implementation.',detectedAt:1},answer,
-    project:{name:'inventory-service',files:12,bytes:6400,skipped:[{path:'image.png',reason:'binary'}]},screenshot:{width:1920,height:1080}}),answer);
+    project:{name:'inventory-service',files:12,bytes:6400,sourcePath:'C:\\interview\\inventory-service',collectedAt:Date.now(),filePaths:['src/inventory.ts','src/reservations.ts','README.md'],skipped:[{path:'image.png',reason:'binary'}]},screenshot:{width:1920,height:1080,capturedAt:Date.now()}}),answer);
   await expect(page.getByRole('button',{name:'Dismiss answer'})).toBeVisible();
   const geometry=await page.evaluate(()=>{
     const root=document.querySelector('.overlay')!.getBoundingClientRect();

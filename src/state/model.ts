@@ -30,7 +30,7 @@ export interface Snapshot {
   remoteLevel: number; selfLevel: number;
   project: { name: string; files: number; bytes: number; sourcePath?: string; collectedAt?: number; filePaths?: string[]; skipped: { path: string; reason: string }[] } | null;
   attachmentBusy: boolean;
-  screenshot: { width: number; height: number } | null;
+  screenshot: { width: number; height: number; capturedAt?: number } | null;
 }
 export interface Settings { microphone: string; output: string; modelPath: string; model: string; speechBackend?: 'nemotron' | 'whisper'; speechChunkMs?: 80 | 160 | 560 | 1120; nemotronRuntime?: string; nemotronDevice?: number; nemotronDeviceName?: string | null; projectPath?: string; answerObjective?: 'brief' | 'detailed'; reasoningEffort?: 'none' | 'low' | 'medium' | 'high' | 'xhigh' | null; answerBackend?: 'chatgpt' | 'codex'; serviceTier?: 'default' | 'fast' | null; codexRefillPolicy?: 'immediate' | 'first_token' | 'disabled' }
 export interface AudioDevice { id: string; name: string; source: SpeakerSource; default: boolean }

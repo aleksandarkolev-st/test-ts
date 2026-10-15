@@ -3,7 +3,7 @@ use serde::Serialize;
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ScreenshotInfo { pub width: u32, pub height: u32 }
+pub struct ScreenshotInfo { pub width: u32, pub height: u32, pub captured_at: u64 }
 pub struct Screenshot { pub info: ScreenshotInfo, pub data_url: String }
 
 fn encode(width: u32, height: u32, bgra: &[u8]) -> Result<Screenshot, String> {
@@ -20,7 +20,8 @@ fn encode(width: u32, height: u32, bgra: &[u8]) -> Result<Screenshot, String> {
         writer.write_image_data(&rgb).map_err(|_| "Could not encode screenshot")?;
     }
     if bytes.len() > 14 * 1024 * 1024 { return Err("Screenshot exceeds the image input size limit".into()); }
-    Ok(Screenshot { info: ScreenshotInfo { width, height }, data_url: format!("data:image/png;base64,{}", base64::engine::general_purpose::STANDARD.encode(bytes)) })
+    let captured_at = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis() as u64;
+    Ok(Screenshot { info: ScreenshotInfo { width, height, captured_at }, data_url: format!("data:image/png;base64,{}", base64::engine::general_purpose::STANDARD.encode(bytes)) })
 }
 
 #[cfg(windows)]
@@ -79,6 +80,7 @@ mod tests {
     #[test]
     fn encodes_top_down_bgra_as_lossless_rgb_png() {
         let shot = encode(2, 1, &[0, 0, 255, 0, 255, 0, 0, 0]).unwrap();
+        assert!(shot.info.captured_at > 0);
         let bytes = base64::engine::general_purpose::STANDARD.decode(shot.data_url.strip_prefix("data:image/png;base64,").unwrap()).unwrap();
         let mut reader = png::Decoder::new(std::io::Cursor::new(bytes)).read_info().unwrap();
         let mut decoded = vec![0; reader.output_buffer_size()]; reader.next_frame(&mut decoded).unwrap();

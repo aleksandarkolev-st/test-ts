@@ -54,6 +54,8 @@ Project collection respects `.gitignore`, `.ignore`, and Git exclusions; generat
 
 Save editor changes, then use **Refresh project** beside the attachment to re-read the same folder, even if another window is now active. **Included files** lists the shared paths and total text size; the read time helps identify an older snapshot. Unsaved editor buffers are not included.
 
+Sharing or refreshing context re-answers the current interview question using the latest attachments. With no current question, a project starts an architecture overview and a screenshot starts help with the visible task. **Retake screenshot** replaces the previous image and updates its capture time. Dismiss the current answer first when switching to a different task.
+
 - Raw audio is processed locally. No audio upload, recording library, or transcript database is implemented.
 - Recent transcript and compact meeting memory are sent to OpenAI when answering questions or compressing context. Codex uses ephemeral threads with history persistence disabled; the ChatGPT-plan API uses `store:false` and `stream:true`. These settings do not override the service's data policies.
 - SQLite stores settings, host registration ID, selected account ID, and meeting start/end metadata. The native Codex runtime manages its own account credentials. ChatGPT-plan API tokens and account metadata are stored in Windows Credential Manager.

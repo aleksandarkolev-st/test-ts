@@ -94,7 +94,7 @@ export default function App() {
       <p className="field-note context-shortcut"><kbd>Ctrl Shift P</kbd> sends the active VS Code or Explorer project. In a browser IDE, or when the folder cannot be resolved, it sends a screenshot. Nothing is shared in the background. The folder above overrides Send selected project.</p>
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy || !settings.projectPath} onClick={() => run('Sending project…', () => command('action', { action: 'project' }))}>Send selected project</button>}
       <ContextAttachments snapshot={snapshot} onError={setError} />
-      {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>Send screenshot</button>}
+      {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>{snapshot.screenshot ? 'Retake screenshot' : 'Send screenshot'}</button>}
       <p className="field-note">The screenshot shortcut sends the monitor under your pointer to OpenAI. It replaces the previous screenshot and remains attached until removed or the meeting stops.</p>
     </section></TabsPanel>
     <TabsPanel value="camera"><Camera /></TabsPanel>

@@ -1297,6 +1297,55 @@
         "explicitlySpecified": false,
         "evidence": "interview-window-length-metric-ambiguity.json"
       }
+    },
+    {
+      "id": "stable-order",
+      "kind": "bug",
+      "finalAnswerSha256": "2a9179db588054cb23afef468a1227d1a034cecda51e3e953014d3e25a42671d",
+      "finalContractPassed": true,
+      "diagnosisReview": {
+        "passed": true,
+        "source": "src/core.mjs",
+        "expression": "a[j-1].key>=a[j].key",
+        "counterexample": {
+          "args": [
+            [
+              {
+                "key": 1,
+                "id": "a"
+              },
+              {
+                "key": 1,
+                "id": "b"
+              }
+            ]
+          ],
+          "originalActual": [
+            {
+              "key": 1,
+              "id": "b"
+            },
+            {
+              "key": 1,
+              "id": "a"
+            }
+          ],
+          "expected": [
+            {
+              "key": 1,
+              "id": "a"
+            },
+            {
+              "key": 1,
+              "id": "b"
+            }
+          ]
+        },
+        "note": "Two distinct equal-key records are minimal for observing a relative-order reversal."
+      },
+      "note": "Strictly inverted adjacent records swap; equal keys never cross, so insertion prefixes remain sorted and stable. Records are cloned before sorting, preserving input array and properties. Both fixes pass all 364 key sequences through length five over [-2,0,10] against explicit original-index tie-break oracle, with deep input snapshots unchanged. O(n^2) worst-case time/O(n) copy storage; no stronger complexity requirement supplied. API/dependencies/tests unchanged; actual smoke, original/patched markers and reading pass.",
+      "evidence": "interview-stable-order-completed.json",
+      "supplementaryEvidence": "interview-stable-order-domain.json"
     }
   ]
 }

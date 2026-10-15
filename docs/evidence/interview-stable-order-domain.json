@@ -1,0 +1,21 @@
+{
+  "scope": "Supplementary actual fixes; frozen fixtures and interview counts unchanged",
+  "domain": "All 364 key sequences of length 0..5 over [-2,0,10], with distinct record IDs.",
+  "oracle": "Independent decorate-sort-undecorate with explicit original-index tie-break. Deep JSON snapshot verifies input remains unchanged.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "b78d1aaf4d9fbcf472dee11dc40e33135404a8d81d28990fd9d1f3d219c41e80",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "2a9179db588054cb23afef468a1227d1a034cecda51e3e953014d3e25a42671d",
+      "cases": 364,
+      "passedCases": 364,
+      "failures": []
+    }
+  ]
+}

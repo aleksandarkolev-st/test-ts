@@ -1377,6 +1377,10 @@ fn active_task_id(rt: &Runtime) -> Result<String,String> {
     Ok(view.task.id.clone())
 }
 #[tauri::command]
+fn runtime_ready(app: tauri::AppHandle) -> bool {
+    app.try_state::<Runtime>().is_some()
+}
+#[tauri::command]
 async fn update_task(rt: State<'_, Runtime>, task_id: String, field: String, text: String) -> Result<(), String> {
     meeting::task::validate(&field,&text)?;
     if active_task_id(&rt)?!=task_id { return Err("This task has ended; add context to the new task".into()); }
@@ -1551,6 +1555,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(plugin)
         .invoke_handler(tauri::generate_handler![
+            runtime_ready,
             answer_visible,
             answer_displayed,
             get_answer_timings,

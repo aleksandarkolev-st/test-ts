@@ -15,6 +15,8 @@ async function nativeFixture(page: Page) {
     w.__TAURI_INTERNALS__ = {
       transformCallback: (f: Function) => { callbacks.set(++id, f); return id; },
       invoke: async (cmd: string, args: any = {}) => {
+        if (cmd === 'runtime_ready') { w.fixtureReadyPolls = (w.fixtureReadyPolls || 0) + 1; return w.fixtureReadyPolls > (w.fixtureReadyAfter || 0); }
+        if (['bootstrap', 'get_snapshot'].includes(cmd) && (w.fixtureReadyPolls || 0) <= (w.fixtureReadyAfter || 0)) throw new Error('Native runtime is not ready');
         if (cmd === 'plugin:event|listen') { listeners.set(++id, { event: args.event, handler: args.handler }); return id; }
         if (cmd === 'plugin:event|unlisten') return;
         if (cmd === 'get_snapshot') return { ...state };
@@ -72,6 +74,15 @@ async function nativeFixture(page: Page) {
 }
 test('browser does not pretend to capture audio or sign in', async ({ page }) => {
   await page.goto('/'); await expect(page.getByText('Open the desktop app to start a meeting.', { exact: false })).toBeVisible(); await expect(page.getByRole('button', { name: 'Start meeting' })).toBeDisabled();
+});
+
+test('a fast embedded frontend waits until native runtime initialization finishes', async ({ page }) => {
+  await nativeFixture(page);
+  await page.addInitScript(() => { (window as any).fixtureReadyAfter = 3; });
+  await page.goto('/');
+  await expect(page.getByLabel('Microphone')).toHaveValue('mic');
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  expect(await page.evaluate(() => (window as any).fixtureReadyPolls)).toBe(4);
 });
 
 test('Ctrl Shift arrows scroll vertically in the browser and support held keys', async ({ page }) => {

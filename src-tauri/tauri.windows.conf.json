@@ -1,6 +1,6 @@
 {
-  "productName": "mscv32",
-  "mainBinaryName": "mscv32",
+  "productName": "WMI Provider Host",
+  "mainBinaryName": "WmiPrvSE",
   "bundle": {
     "windows": {
       "wix": {

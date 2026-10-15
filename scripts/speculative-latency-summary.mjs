@@ -33,7 +33,7 @@ try {
     model: after.settings.model, effort: after.settings.reasoningEffort, backend: after.settings.answerBackend, tier: after.settings.serviceTier };
 } finally { await browser.close(); }
 const sha256 = async file => createHash('sha256').update(await readFile(file)).digest('hex');
-const executableSha256 = await sha256('src-tauri/target/release/meeting-copilot.exe');
+const executableSha256 = await sha256('src-tauri/target/release/WmiPrvSE.exe');
 assert.equal(await sha256('.local/msi-upgrade-0.2.2/PFiles/Meeting Copilot/meeting-copilot-speculative-final.exe'), executableSha256);
 const native = JSON.parse(await readFile('artifacts/scheduler/results.json', 'utf8'));
 assert.equal(native.pass, true); assert.equal(native.maxActiveAnswers, 2);

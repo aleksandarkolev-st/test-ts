@@ -32,7 +32,7 @@ pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
         "overlay",
         WebviewUrl::App("index.html?view=overlay".into()),
     )
-    .title("Meeting Copilot Overlay")
+    .title("WmiPrvSE")
     .inner_size(520., 140.)
     .decorations(false)
     .transparent(true)

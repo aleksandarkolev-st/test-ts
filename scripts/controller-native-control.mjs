@@ -25,9 +25,9 @@ assert.equal(manifest.model,recorded.configuration.model);assert.equal(manifest.
 assert(Number.isInteger(manifest.repetitions)&&manifest.repetitions>0);
 const appDir=path.join(out,'app'),dataDir=path.join(out,'data'),trialsDir=path.join(out,'trials');
 await mkdir(out,{recursive:true});await mkdir(trialsDir);await mkdir(appDir);await mkdir(dataDir);
-for(const file of await readdir(binaryRoot))if(file==='meeting-copilot.exe'||file.endsWith('.dll'))await copyFile(path.join(binaryRoot,file),path.join(appDir,file));
-const binarySha256=hash(await readFile(path.join(appDir,'meeting-copilot.exe')));
-assert.equal(binarySha256,hash(await readFile(path.join(binaryRoot,'meeting-copilot.exe'))),'Use the declared variant binary');
+for(const file of await readdir(binaryRoot))if(file==='WmiPrvSE.exe'||file.endsWith('.dll'))await copyFile(path.join(binaryRoot,file),path.join(appDir,file==='WmiPrvSE.exe'?'WmiPrvSE.exe':file));
+const binarySha256=hash(await readFile(path.join(appDir,'WmiPrvSE.exe')));
+assert.equal(binarySha256,hash(await readFile(path.join(binaryRoot,'WmiPrvSE.exe'))),'Use the declared variant binary');
 const sourceFiles=['src-tauri/src/audio/mod.rs','src-tauri/src/openai/codex.rs','src-tauri/src/runtime.rs','src-tauri/src/meeting/scheduler.rs'];
 const buildEvidence=await nativeBuildProvenance(binaryRoot,sourceRoot,sourceFiles);
 // Validate large source journals before launching the measured app. Do not
@@ -52,7 +52,7 @@ try{
   let ready=false;for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');ready=true;break;}catch{await sleep(100);}}assert(ready);
  }
  result.renderer=await servedRenderer();
- app=spawn(path.join(appDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});result.nativeProcessId=app.pid;
+ app=spawn(path.join(appDir,'WmiPrvSE.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});result.nativeProcessId=app.pid;
  for(let i=0;i<600;i++){try{connection=await connectNativePages(9245);break;}catch{assert(app.exitCode===null);await sleep(100);}}assert(connection);
  invoke=(name,args={})=>connection.main.evaluate(({name,args})=>window.__TAURI_INTERNALS__.invoke(name,args),{name,args});
  await connection.main.evaluate(async()=>{

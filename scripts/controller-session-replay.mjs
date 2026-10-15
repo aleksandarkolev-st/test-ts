@@ -2,7 +2,7 @@
 // conversations remain RAM-only. This collector never selects assistant policy.
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,copyFile,readdir} from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {connectNativePages} from './lib/native-cdp.mjs';
@@ -24,7 +24,7 @@ for(const file of [manifestFile,applicationDir,outputDir])assert(path.resolve(fi
 const bytes=await readFile(manifestFile),plan=JSON.parse(bytes);assert.equal(plan.model,'gpt-6.1-sol');assert.equal(plan.effort,'low');
 await mkdir(out,{recursive:true});
 const journal={status:'in_progress',evaluationKind:'authenticated_native_session_replay',model:plan.model,effort:plan.effort,tier:plan.serviceTier??null,backend,
- manifestSha256:hash(bytes),authMode,nativeBinarySha256:hash(await readFile(path.join(applicationDir,'meeting-copilot.exe'))),
+ manifestSha256:hash(bytes),authMode,nativeBinarySha256:hash(await readFile(path.join(applicationDir,'WmiPrvSE.exe'))),
  scope:'Synthetic saved audio through T24E390, local ASR, real signed-in backend, production conversation controller and overlay. Typed probes explicitly exclude audio/ASR. No human-interview certification.',
  rows:[],deepObservations:[],overlayPaintSamples:[],pollErrors:[],resourceSamples:[],startedAt:new Date().toISOString()};
 let app,vite,connection,invoke,active=false,sampling=false,sampler;
@@ -40,7 +40,10 @@ try {
  journal.collectorSha256=hash(await readFile(new URL(import.meta.url)));
  try{journal.buildEvidence=JSON.parse(await readFile(path.join(applicationDir,'build.json')));}catch(error){if(error.code!=='ENOENT')throw error;}
  await mkdir(path.join(out,'data'),{recursive:true});
- app=spawn(path.join(root,applicationDir,'meeting-copilot.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});journal.nativeProcessId=app.pid;
+ const appDir=path.join(out,'app');await mkdir(appDir,{recursive:true});
+ for(const file of await readdir(path.join(root,applicationDir)))if(file==='WmiPrvSE.exe'||file.endsWith('.dll'))await copyFile(path.join(root,applicationDir,file),path.join(appDir,file==='WmiPrvSE.exe'?'WmiPrvSE.exe':file));
+ journal.nativeBinarySha256=hash(await readFile(path.join(appDir,'WmiPrvSE.exe')));
+ app=spawn(path.join(appDir,'WmiPrvSE.exe'),[],{cwd:root,windowsHide:true,env,stdio:'ignore'});journal.nativeProcessId=app.pid;
  for(let i=0;i<600;i++){try{connection=await connectNativePages(9251);break;}catch{assert.equal(app.exitCode,null);await sleep(100);}}assert(connection);
  invoke=async(name,args={})=>{const result=await connection.main.evaluate(async({name,args})=>{try{return{ok:true,value:await window.__TAURI_INTERNALS__.invoke(name,args)};}catch(error){return{ok:false,error:String(error)};}},{name,args});if(!result.ok)throw Error(name+': '+result.error);return result.value;};
  await connection.main.evaluate(async()=>{window.replayEvents=[];for(const [event,name]of [['copilot:event',null],['copilot:transcript','transcript']])await window.__TAURI_INTERNALS__.invoke('plugin:event|listen',{event,target:{kind:'Any'},handler:window.__TAURI_INTERNALS__.transformCallback(e=>window.replayEvents.push(name?{name,payload:e.payload,receivedHostMs:Date.now()}:{...e.payload,receivedHostMs:Date.now()}))});});

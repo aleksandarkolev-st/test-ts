@@ -70,7 +70,7 @@ const release=await record('.local/latency-app-refresh-proof.json');
 assert.equal(release.data.debug,false);assert.equal(release.data.active,false);assert.equal(release.data.settingsPreserved,true);
 assert.equal(release.data.model,'gpt-6-luna');assert.equal(release.data.effort,'low');assert.equal(release.data.tier,'fast');
 assert(release.data.output.includes('T24E390'));
-assert.equal(release.data.binarySha256,sha(await readFile('src-tauri/target/release/meeting-copilot.exe')));
+assert.equal(release.data.binarySha256,sha(await readFile('src-tauri/target/release/WmiPrvSE.exe')));
 const result={scope:'Unpromoted classifier-prefix supervision experiment and native adaptive audio evidence. Synthetic assistant-reviewed labels and model grades are not human certification. No latency target or deep-interview correctness is certified.',
  metric:'Client receipt of first alphanumeric character of retained decoded and validated answer; speech-end metric includes capture/ASR. Rendering is separate, whole-sentence completion is not the primary metric.',
  previousPartialAudio:{file:oldRun.file,sha256:oldRun.sha256,status:oldRun.data.status,requestedRounds:6,recordedRounds:1,failure:oldRun.data.failure,

@@ -5,7 +5,7 @@
     "sha256": "b5fe5daea2f57207131dbe60fb138319f9cc1af5ebe3238864fb060c178acb5c"
   },
   "nativeBinary": {
-    "file": "src-tauri/target/debug/meeting-copilot.exe",
+    "file": "src-tauri/target/debug/WmiPrvSE.exe",
     "sha256": "c2be20fafd990f6436989fd1885d3370de5791206acef9e01508649b5d6bd078"
   },
   "referenceRecording": {

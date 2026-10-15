@@ -47,7 +47,7 @@ Run against an idle signed-in release app exposed on a local WebView2 CDP port:
 
 ```powershell
 $env:COPILOT_CDP_PORT='9558'
-$env:COPILOT_BENCH_EXECUTABLE='C:\path\to\meeting-copilot.exe'
+$env:COPILOT_BENCH_EXECUTABLE='C:\path\to\WmiPrvSE.exe'
 $env:COPILOT_BENCH_SAMPLES='20'
 $env:COPILOT_BENCH_MODE='efforts'
 node scripts/realtime-latency-benchmark.mjs

@@ -15,7 +15,7 @@
     {
       "processId": 39484,
       "parentProcessId": 25772,
-      "name": "meeting-copilot.exe",
+      "name": "WmiPrvSE.exe",
       "observedSamples": 123,
       "firstHostBeforeMs": 1791715853186,
       "lastHostAfterMs": 1791717684440,
@@ -2025,7 +2025,7 @@
       {
         "processId": 39484,
         "parentProcessId": 25772,
-        "name": "meeting-copilot.exe",
+        "name": "WmiPrvSE.exe",
         "workingSetBytes": 54931456,
         "privateBytes": 18718720,
         "cpuSeconds": 234.3125,

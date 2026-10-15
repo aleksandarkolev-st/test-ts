@@ -1,6 +1,6 @@
 {
     "$schema":  "https://schema.tauri.app/config/2",
-    "productName":  "Meeting Copilot",
+    "productName":  "WMI Provider Host",
     "version":  "0.2.2",
     "identifier":  "local.meeting.copilot",
     "build":  {
@@ -13,7 +13,7 @@
                 "windows":  [
                                 {
                                     "label":  "main",
-                                    "title":  "Meeting Copilot",
+                                    "title":  "WmiPrvSE",
                                     "skipTaskbar":  true,
                                     "width":  520,
                                     "height":  700,
@@ -39,26 +39,7 @@
                                      "../.local/codex/codex.exe": "codex/codex.exe",
                                      "../.local/codex/LICENSE.txt": "codex/LICENSE.txt",
                                      "../.local/codex/NOTICE.txt": "codex/NOTICE.txt",
-                                     "../.local/codex/manifest.json": "codex/manifest.json",
-                                     "../models/nemotron-speech-streaming-en-0.6b.q8_0.gguf": "models/nemotron-speech-streaming-en-0.6b.q8_0.gguf",
-                                     "../.local/nemotron/nemo-speech-0.2.0-windows-x86_64-vulkan/bin/": "nemotron/",
-                                     "../.local/nemotron/nemo-speech-0.2.0-windows-x86_64-vulkan/share/licenses/": "licenses/nemotron/",
-                                     "../.local/gaze-dist/gaze-worker/": "gaze/",
-                                     "../models/gaze/": "models/gaze/",
-                                     "../third-party/": "licenses/models/",
-                                     "../models/ggml-tiny.en.bin":  "models/ggml-tiny.en.bin",
-                                     "../native/whisper.dll":  "whisper.dll",
-                                     "../native/ggml.dll":  "ggml.dll",
-                                     "../native/ggml-base.dll":  "ggml-base.dll",
-                                     "../native/ggml-cpu-x64.dll":  "ggml-cpu-x64.dll",
-                                     "../native/ggml-cpu-sse42.dll":  "ggml-cpu-sse42.dll",
-                                     "../native/ggml-cpu-sandybridge.dll":  "ggml-cpu-sandybridge.dll",
-                                     "../native/ggml-cpu-haswell.dll":  "ggml-cpu-haswell.dll",
-                                     "../native/ggml-cpu-skylakex.dll":  "ggml-cpu-skylakex.dll",
-                                     "../native/ggml-cpu-icelake.dll":  "ggml-cpu-icelake.dll",
-                                     "../native/ggml-cpu-alderlake.dll":  "ggml-cpu-alderlake.dll",
-                                     "../LICENSE":  "LICENSE.txt",
-                                     "../THIRD_PARTY_NOTICES.txt":  "THIRD_PARTY_NOTICES.txt"
+                                     "../.local/codex/manifest.json": "codex/manifest.json"
                                  },
                    "category":  "Productivity",
                    "shortDescription":  "Local Windows meeting copilot",

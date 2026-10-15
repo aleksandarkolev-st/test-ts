@@ -1414,6 +1414,51 @@
       "diagnosisReview": null,
       "note": "Shrinking top/bottom/left/right bounds consume each perimeter once. Additional row/column guards prevent duplicates when a single row or column remains; loop bounds naturally skip exhausted right and bottom loops. Empty outer/first row returns empty. Input preserved, O(rows*columns) time/output storage. Both pass 442 independently rotated-matrix oracle cases covering all dimensions 0..20 and a 20000-cell column.",
       "evidence": "interview-spiral-matrix-domain.json"
+    },
+    {
+      "id": "rotate-square-matrix",
+      "kind": "regular",
+      "finalAnswerSha256": "428e153684f26cc8574ab52e2527691dae804520f5f5d946c4f246f1a21bf974",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Coordinate transformation result[col][n-1-row]=matrix[row][col] maps each input cell to the unique clockwise destination. Rows are freshly allocated, input preserved and empty square returns empty. O(n squared) time/output storage. Both pass sizes 0..30 with unique labels and copy assertions.",
+      "evidence": "interview-rotate-square-matrix-domain.json"
+    },
+    {
+      "id": "maximum-island-area",
+      "kind": "regular",
+      "finalAnswerSha256": "26e2ae59c8c93060efb08cf1d3c50b29aa5a56d036ff81c7c13908fb17e6ae0a",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Full rectangular scan starts a component only on an unvisited numeric one. Marking before push prevents duplicate counting; exactly four neighbors preserve orthogonal connectivity. Iterative stack avoids recursion depth. O(rows*cols) time/storage, input preserved. Both pass 690 disjoint-set oracle cases including all small binary rectangular shapes and a 20000-cell island.",
+      "evidence": "interview-maximum-island-area-domain.json"
+    },
+    {
+      "id": "interval-intersections",
+      "kind": "regular",
+      "finalAnswerSha256": "f9eea04d80fe2a6bf16978731753e2a78d7ef0346d90faa1f5619162bb01c2aa",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Two pointers calculate max starts/min ends; <= includes closed point intersections. Advancing only earlier end cannot miss later intersections; equal ends advance both under separately disjoint-list contract. Comparisons avoid precision-losing arithmetic for result endpoints. O(m+n) time/O(1) auxiliary excluding output, input preserved. Both pass 6241 independent Cartesian overlap lists.",
+      "evidence": "interview-interval-intersections-domain.json"
+    },
+    {
+      "id": "minimum-meeting-rooms",
+      "kind": "regular",
+      "finalAnswerSha256": "90f2547b3d2680e7f686f6b4015952de06ff9e740bbed115894db3d9318467a1",
+      "finalContractPassed": true,
+      "diagnosisReview": null,
+      "note": "Skips zero-duration empty half-open intervals. Sorting by timestamp then delta processes ends before starts; maximum prefix occupancy equals minimum rooms. O(n log n) time/O(n) storage, input preserved. Both pass 1117 direct occupancy cases including empty durations and extreme safe-integer timestamps.",
+      "evidence": "interview-minimum-meeting-rooms-domain.json"
+    },
+    {
+      "id": "smallest-range-covering-lists",
+      "kind": "regular",
+      "finalAnswerSha256": "777c1b93a5089a737661a70aae9b9a0eebc28495c0db7ef761aa699087bcedc3",
+      "finalContractPassed": false,
+      "diagnosisReview": null,
+      "note": "Heap retains one current value per nonempty list and running maximum; advancing a minimum explores necessary candidate ranges and exhaustion terminates correctly. Sift-down after increasing root and bottom-up heap construction correct; O(N log(k+1)) time/O(k) storage. Both pass 819 small list collections but fail safe-integer endpoints [[-9007199254740991,-9007199254740990],[2]]: widths 9007199254740993 and 9007199254740992 both round to the latter Number, preserving the wider first range. Expected [-9007199254740990,2], actual [-9007199254740991,2]. Outputs and inputs are exactly representable; no numeric bound is in the task. Frozen fixtures remain passed; broader final contract fails.",
+      "evidence": "interview-smallest-range-covering-lists-domain.json"
     }
   ]
 }

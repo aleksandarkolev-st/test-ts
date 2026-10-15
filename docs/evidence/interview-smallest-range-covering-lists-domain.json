@@ -1,0 +1,73 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every 1..3-list collection from nine nonempty sorted arrays over -1..1, plus a safe-integer endpoint precision witness.",
+  "oracle": "Exhaustive one-value-per-list Cartesian choices; exact BigInt width comparison and smaller-left tie breaking.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "039d182d032b0f93c129ba31de9498c1aed52e80bd90c66a0f086c156eb5deab",
+      "cases": 820,
+      "passedCases": 819,
+      "changedInputs": 0,
+      "failures": [
+        {
+          "case": 819,
+          "args": [
+            [
+              [
+                -9007199254740991,
+                -9007199254740990
+              ],
+              [
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            -9007199254740990,
+            2
+          ],
+          "actual": [
+            -9007199254740991,
+            2
+          ],
+          "unchanged": true,
+          "copy": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "answerSha256": "777c1b93a5089a737661a70aae9b9a0eebc28495c0db7ef761aa699087bcedc3",
+      "cases": 820,
+      "passedCases": 819,
+      "changedInputs": 0,
+      "failures": [
+        {
+          "case": 819,
+          "args": [
+            [
+              [
+                -9007199254740991,
+                -9007199254740990
+              ],
+              [
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            -9007199254740990,
+            2
+          ],
+          "actual": [
+            -9007199254740991,
+            2
+          ],
+          "unchanged": true,
+          "copy": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every binary rectangular shape h,w=0..3; 20000-cell island.",
+  "oracle": "Independent disjoint-set merging of original orthogonal numeric-one cells.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "c11a8cae08dfb5bedb6b42169fb9e785bb0793156de8b4208cb4775ac30403ad",
+      "cases": 690,
+      "passedCases": 690,
+      "changedInputs": 0,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "26e2ae59c8c93060efb08cf1d3c50b29aa5a56d036ff81c7c13908fb17e6ae0a",
+      "cases": 690,
+      "passedCases": 690,
+      "changedInputs": 0,
+      "failures": []
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every ordered list of length 0..3 from ten positive-duration intervals on endpoints -1..3. Six additional zero-duration, mixed-empty and extreme safe-integer endpoint cases.",
+  "oracle": "Maximum direct half-open occupancy at every distinct endpoint.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "95a318219cf300575683081d53b982ade9c6c429b951f3f37aa1eef80e0fbc03",
+      "cases": 1117,
+      "passedCases": 1117,
+      "changedInputs": 0,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "90f2547b3d2680e7f686f6b4015952de06ff9e740bbed115894db3d9318467a1",
+      "cases": 1117,
+      "passedCases": 1117,
+      "changedInputs": 0,
+      "failures": []
+    }
+  ]
+}

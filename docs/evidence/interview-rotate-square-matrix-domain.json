@@ -1,0 +1,23 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every square size 0..30, unique cells; fresh outer/row copy and deep preservation.",
+  "oracle": "Independent coordinate map output[r][c]=input[n-1-c][r].",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "3cc878981440afee13c2e9e7efc19cee3fa86d748c854e237a3129e6248c29e5",
+      "cases": 31,
+      "passedCases": 31,
+      "changedInputs": 0,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "428e153684f26cc8574ab52e2527691dae804520f5f5d946c4f246f1a21bf974",
+      "cases": 31,
+      "passedCases": 31,
+      "changedInputs": 0,
+      "failures": []
+    }
+  ]
+}

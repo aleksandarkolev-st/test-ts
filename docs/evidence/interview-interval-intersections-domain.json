@@ -1,0 +1,23 @@
+{
+  "scope": "Supplementary actual candidates; frozen fixtures unchanged",
+  "domain": "Every pair of closed disjoint sorted lists up to three intervals on endpoints -2..2: 79 lists squared.",
+  "oracle": "Independent Cartesian pair overlap enumeration sorted by endpoints.",
+  "outcomes": [
+    {
+      "round": 2,
+      "answerSha256": "68b50b176c1604153bee34abfee1cd26e270f789f7af2a24e7015dd4dde71f34",
+      "cases": 6241,
+      "passedCases": 6241,
+      "changedInputs": 0,
+      "failures": []
+    },
+    {
+      "round": 3,
+      "answerSha256": "f9eea04d80fe2a6bf16978731753e2a78d7ef0346d90faa1f5619162bb01c2aa",
+      "cases": 6241,
+      "passedCases": 6241,
+      "changedInputs": 0,
+      "failures": []
+    }
+  ]
+}

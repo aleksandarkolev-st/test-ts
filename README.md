@@ -72,6 +72,8 @@ During a meeting, open **Context** in setup or use **Interview task** in the ove
 
 **Dismiss answer** clears the displayed question and answer while keeping the task context. Use **Stop meeting** when the session is over.
 
+For coding problems, the AI instructions prioritize time and auxiliary-space efficiency under your constraints, with the simplest correct implementation and no unnecessary abstractions or dependencies. Answers should explain any time/space trade-off and briefly justify correctness and complexity.
+
 <a href="docs/images/interview-task.png"><img src="docs/images/interview-task.png" width="520" alt="Interview task editor with a saved bracket-validation problem, failing test output, New task, and update controls."></a>
 
 ### Share and refresh context

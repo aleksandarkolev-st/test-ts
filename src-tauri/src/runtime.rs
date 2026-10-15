@@ -1430,6 +1430,8 @@ pub fn run() {
             }
             let rt = app.state::<Runtime>();
             let scroll=match shortcut.key {
+                Code::ArrowUp if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("up"),
+                Code::ArrowDown if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("down"),
                 Code::PageUp=>Some("page_up"),Code::PageDown=>Some("page_down"),
                 Code::Home=>Some("start"),Code::End=>Some("end"),
                 Code::ArrowLeft if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("left"),
@@ -1454,7 +1456,7 @@ pub fn run() {
                 Code::Space => Control::ManualOpen,
                 Code::KeyX => Control::Dismiss,
                 Code::KeyM => Control::Pause,
-                Code::ArrowUp => Control::Expand(None),
+                Code::KeyE => Control::Expand(None),
                 Code::F8 => Control::Screenshot(None),
                 _ => return,
             };
@@ -1531,7 +1533,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+ArrowUp","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             let timings:crate::openai::timing::Registry=Default::default();

@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {listen} from '@tauri-apps/api/event';
 import {native} from './bridge';
-export type ScrollOperation='page_up'|'page_down'|'start'|'end'|'left'|'right';
+export type ScrollOperation='up'|'down'|'page_up'|'page_down'|'start'|'end'|'left'|'right';
 export function scrollSurface(operation:ScrollOperation,element:HTMLElement) {
   if(operation==='left'||operation==='right'){
     const bounds=element.getBoundingClientRect();
@@ -13,15 +13,16 @@ export function scrollSurface(operation:ScrollOperation,element:HTMLElement) {
   const focused=document.activeElement;
   if(focused instanceof HTMLElement && element.contains(focused) && focused.matches('[data-keyboard-scroll]')) element=focused;
   const page=Math.max(80,element.clientHeight-48);
-  const top=operation==='start'?0:operation==='end'?element.scrollHeight:element.scrollTop+(operation==='page_up'?-page:page);
+  const step=operation==='up'||operation==='down'?80:page;
+  const top=operation==='start'?0:operation==='end'?element.scrollHeight:element.scrollTop+(operation==='up'||operation==='page_up'?-step:step);
   element.scrollTo({top,behavior:'instant'});
 }
 export function useKeyboardScroll(target:()=>HTMLElement|null){
   useEffect(()=>{
     const apply=(operation:ScrollOperation)=>{const element=target();if(element)scrollSurface(operation,element);};
     const keyboard=(event:KeyboardEvent)=>{
-      if(!event.ctrlKey||!event.shiftKey||event.altKey||event.repeat)return;
-      const operation=({PageUp:'page_up',PageDown:'page_down',Home:'start',End:'end',ArrowLeft:'left',ArrowRight:'right'}as const)[event.key as 'PageUp'];
+      if(!event.ctrlKey||!event.shiftKey||event.altKey||event.metaKey)return;
+      const operation=({ArrowUp:'up',ArrowDown:'down',PageUp:'page_up',PageDown:'page_down',Home:'start',End:'end',ArrowLeft:'left',ArrowRight:'right'}as const)[event.key as 'PageUp'];
       if(operation){event.preventDefault();apply(operation);}
     };
     // Native global shortcuts suppress the local keydown, so use one route per environment.

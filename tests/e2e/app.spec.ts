@@ -57,6 +57,20 @@ async function nativeFixture(page: Page) {
 test('browser does not pretend to capture audio or sign in', async ({ page }) => {
   await page.goto('/'); await expect(page.getByText('Open the desktop app to start a meeting.', { exact: false })).toBeVisible(); await expect(page.getByRole('button', { name: 'Start meeting' })).toBeDisabled();
 });
+
+test('Ctrl Shift arrows scroll vertically in the browser and support held keys', async ({ page }) => {
+  await page.setViewportSize({ width: 520, height: 400 });
+  await page.goto('/');
+  const scrollTop = () => page.evaluate(() => document.scrollingElement!.scrollTop);
+  await page.keyboard.press('Control+Shift+ArrowDown');
+  await expect.poll(scrollTop).toBe(80);
+  await page.keyboard.press('Control+Shift+ArrowUp');
+  await expect.poll(scrollTop).toBe(0);
+  await page.keyboard.down('Control'); await page.keyboard.down('Shift');
+  await page.keyboard.down('ArrowDown'); await page.keyboard.down('ArrowDown');
+  await page.keyboard.up('ArrowDown'); await page.keyboard.up('Shift'); await page.keyboard.up('Control');
+  await expect.poll(scrollTop).toBe(160);
+});
 test('Codex discovers its model and passes Fast mode separately from reasoning effort', async ({ page }) => {
   await nativeFixture(page); await page.goto('/');
   await page.getByRole('tab', { name: 'Answers', exact: true }).click();
@@ -155,6 +169,8 @@ test('streamed code retains exact source offsets, safe markup and keyboard scrol
   const paints=await page.evaluate(()=>(window as any).fixturePaint);for(const paint of paints){expect(paint.text).toBe(answer);expect(paint.visibleStart).toBeGreaterThanOrEqual(0);expect(paint.visibleEnd).toBeLessThanOrEqual(answer.length);}
   await page.evaluate(()=>(window as any).fixtureScroll('right'));await expect.poll(()=>page.locator('.code-block pre').evaluate(e=>e.scrollLeft)).toBeGreaterThan(0);
   await page.evaluate(()=>(window as any).fixtureScroll('left'));await expect.poll(()=>page.locator('.code-block pre').evaluate(e=>e.scrollLeft)).toBe(0);
+  await page.evaluate(()=>(window as any).fixtureScroll('down'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBe(80);
+  await page.evaluate(()=>(window as any).fixtureScroll('up'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBe(0);
   await page.evaluate(()=>(window as any).fixtureScroll('end'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBeGreaterThan(0);
   await page.evaluate(()=>(window as any).fixtureScroll('start'));await expect.poll(()=>page.locator('.answer-content').evaluate(e=>e.scrollTop)).toBe(0);
 });

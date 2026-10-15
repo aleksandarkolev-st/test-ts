@@ -19,9 +19,10 @@ Headphones help avoid playback voices entering the microphone. Loopback captures
 | Ctrl + Shift + H | Hide/show overlay in native code |
 | Ctrl + Shift + X | Dismiss answer |
 | Ctrl + Shift + M | Pause/resume capture |
-| Ctrl + Shift + Up | Request a longer answer |
+| Ctrl + Shift + E | Request a longer answer |
 | Ctrl + Shift + P | Detect and send the active project or browser view to AI |
 | Ctrl + Alt + Arrow keys | Move the focused setup window, or the overlay |
+| Ctrl + Shift + Up / Down | Scroll the focused setup window, or the answer overlay vertically |
 | Ctrl + Shift + Page Up / Page Down | Scroll the focused setup window, or the answer overlay |
 | Ctrl + Shift + Home / End | Jump to the top / bottom of that reading surface |
 | Ctrl + Shift + Left / Right | Scroll the visible code block horizontally |

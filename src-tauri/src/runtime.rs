@@ -1530,7 +1530,7 @@ pub fn run() {
                 let _=window::move_by(app,delta.0,delta.1);return;
             }
             if shortcut.key == Code::F9 {
-                let _=window::show_main(app);return;
+                let _=window::toggle_main(app);return;
             }
             if shortcut.key == Code::KeyP {
                 let handle=app.clone();tauri::async_runtime::spawn(async move{

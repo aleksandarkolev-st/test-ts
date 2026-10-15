@@ -44,7 +44,7 @@ export default function Overlay() {
   const candidateId = s.questions?.filter(q => q.state === 'speculative').at(-1)?.id;
   const act = (action: string) => command('action', { action, ...(action === 'expand' ? { generationId: s.question?.id } : action === 'answer_now' ? { generationId: candidateId } : {}) }).catch(e => setError(errorText(e)));
   return <div className={`overlay ${s.expanded ? 'expanded' : ''}`} ref={ref}>
-    <header className="overlay-header"><div onPointerDown={e => { if (e.button === 0 && native()) getCurrentWindow().startDragging(); }} className="drag-handle"><span className="overlay-wordmark" aria-hidden="true">m</span><Status snapshot={s} /></div><button title="Open setup · Ctrl Shift F9" onClick={() => act('show_main')}>Setup</button><button title="Hide overlay · Ctrl Shift H" onClick={() => act('hide')}>Hide <Icon name="hide" /></button></header>
+    <header className="overlay-header"><div onPointerDown={e => { if (e.button === 0 && native()) getCurrentWindow().startDragging(); }} className="drag-handle"><span className="overlay-wordmark" aria-hidden="true">m</span><Status snapshot={s} /></div><button title="Open setup · Ctrl Shift F9 shows / hides setup" onClick={() => act('show_main')}>Setup</button><button title="Hide overlay · Ctrl Shift H" onClick={() => act('hide')}>Hide <Icon name="hide" /></button></header>
     <Answer snapshot={s} />
     {s.answer&&<details className="scroll-hint"><summary>Reading shortcuts <kbd>Ctrl Shift ↑ / ↓</kbd></summary><p>Page up / down <kbd>Ctrl Shift Page Up / Down</kbd><br/>Top / bottom <kbd>Ctrl Shift Home / End</kbd><br/>Code left / right <kbd>Ctrl Shift ← / →</kbd><br/>Move window <kbd>Ctrl Alt ← ↑ → ↓</kbd></p></details>}
     <div className="overlay-tools">

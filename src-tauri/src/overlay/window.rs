@@ -16,6 +16,16 @@ pub fn show_main(app: &tauri::AppHandle) -> Result<(), String> {
     window.show().map_err(|error| error.to_string())?;
     window.set_focus().map_err(|error| error.to_string())
 }
+pub fn toggle_main(app: &tauri::AppHandle) -> Result<(), String> {
+    let window = app.get_webview_window("main").ok_or("Setup window missing")?;
+    let visible = window.is_visible().map_err(|error| error.to_string())?;
+    let minimized = window.is_minimized().map_err(|error| error.to_string())?;
+    if visible && !minimized {
+        window.hide().map_err(|error| error.to_string())
+    } else {
+        show_main(app)
+    }
+}
 pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
     let window = WebviewWindowBuilder::new(
         app,

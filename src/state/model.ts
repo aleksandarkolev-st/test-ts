@@ -28,7 +28,7 @@ export interface Snapshot {
   question: CurrentQuestion | null; answer: string; error: string | null;
   protection: boolean; expanded: boolean; manual: boolean; canAnswerNow?: boolean; latency: Latency | null;
   remoteLevel: number; selfLevel: number;
-  project: { name: string; files: number; bytes: number; skipped: { path: string; reason: string }[] } | null;
+  project: { name: string; files: number; bytes: number; sourcePath?: string; collectedAt?: number; filePaths?: string[]; skipped: { path: string; reason: string }[] } | null;
   attachmentBusy: boolean;
   screenshot: { width: number; height: number } | null;
 }

@@ -36,7 +36,11 @@ async function nativeFixture(page: Page) {
           if (args.action === 'pause') state.paused = !state.paused;
           if (args.action === 'dismiss') { state.question = null; state.answer = ''; state.status = 'listening'; state.manual = false; }
           if (args.action === 'expand') state.expanded = true;
-          if (args.action === 'project') state.project = { name: 'project', files: 2, bytes: 120, skipped: [{ path: 'image.png', reason: 'binary or non-UTF-8 file' }] };
+          if (args.action === 'project') state.project = { name: 'project', files: 2, bytes: 120, sourcePath: 'C:\\fixture\\project', collectedAt: Date.now(), filePaths: ['src/main.ts', 'README.md'], skipped: [{ path: 'image.png', reason: 'binary or non-UTF-8 file' }] };
+          if (args.action === 'refresh_project') {
+            if (w.fixtureRefreshError) throw new Error(w.fixtureRefreshError);
+            state.project = { ...state.project, files: 3, filePaths: ['src/main.ts', 'src/parser.ts', 'README.md'], collectedAt: Date.now() };
+          }
           if (args.action === 'clear_project') state.project = null;
           if (args.action === 'screenshot') state.screenshot = { width: 1920, height: 1080 };
           if (args.action === 'clear_screenshot') state.screenshot = null;
@@ -136,6 +140,26 @@ test('project selection and screenshot controls expose attached context and remo
   await expect(page.getByText('Screenshot attached', { exact: false })).toHaveCount(0);
   await page.getByRole('button', { name: 'Remove project' }).click();
   await expect(page.getByText('2 files attached', { exact: false })).toHaveCount(0);
+});
+
+test('attached projects expose their files and refresh without redetecting another window', async ({ page }) => {
+  await nativeFixture(page); await page.goto('/?view=overlay');
+  await page.evaluate(() => (window as any).fixtureState({ active: true, status: 'listening',
+    project: { name: 'interview-project', sourcePath: 'C:\\interview-project', files: 2, bytes: 2048,
+      filePaths: ['src/main.ts', 'README.md'], collectedAt: Date.now(), skipped: [] } }));
+  await page.getByText('Included files · 2 KiB').click();
+  await expect(page.getByText('src/main.ts', { exact: true })).toBeVisible();
+  await expect(page.getByText('Refresh after saving edits.', { exact: false })).toBeVisible();
+  const refresh = page.getByRole('button', { name: 'Refresh project' });
+  await refresh.click();
+  expect(await page.evaluate(() => (window as any).fixtureLastAction)).toEqual({ action: 'refresh_project' });
+  await expect(page.getByText('src/parser.ts', { exact: true })).toBeVisible();
+  await page.evaluate(() => (window as any).fixtureState({ attachmentBusy: true }));
+  await expect(refresh).toBeDisabled();
+  await page.evaluate(() => { (window as any).fixtureState({ attachmentBusy: false }); (window as any).fixtureRefreshError = 'Folder is unavailable; reconnect the drive'; });
+  await refresh.click();
+  await expect(page.getByRole('alert')).toHaveText('Folder is unavailable; reconnect the drive');
+  await expect(page.getByText('interview-project', { exact: true })).toBeVisible();
 });
 
 test('a long complete question leaves the useful answer visible and remains scrollable', async ({ page }) => {

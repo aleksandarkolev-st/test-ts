@@ -52,6 +52,8 @@ During a meeting, **Ctrl + Shift + P** (or **Send active context**) detects the 
 
 Project collection respects `.gitignore`, `.ignore`, and Git exclusions; generated folders, repository metadata, and common credential files are excluded. Binary/non-UTF-8 files and symbolic links appear in the skipped-file list. Limits are 2 MiB per file, 4 MiB total text, and 4000 scanned files. Exceeding a limit fails the attachment instead of silently truncating it. These local limits do not guarantee the selected answer model can accept the project's full context; a model/service context-limit error is shown normally.
 
+Save editor changes, then use **Refresh project** beside the attachment to re-read the same folder, even if another window is now active. **Included files** lists the shared paths and total text size; the read time helps identify an older snapshot. Unsaved editor buffers are not included.
+
 - Raw audio is processed locally. No audio upload, recording library, or transcript database is implemented.
 - Recent transcript and compact meeting memory are sent to OpenAI when answering questions or compressing context. Codex uses ephemeral threads with history persistence disabled; the ChatGPT-plan API uses `store:false` and `stream:true`. These settings do not override the service's data policies.
 - SQLite stores settings, host registration ID, selected account ID, and meeting start/end metadata. The native Codex runtime manages its own account credentials. ChatGPT-plan API tokens and account metadata are stored in Windows Credential Manager.

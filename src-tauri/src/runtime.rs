@@ -1344,6 +1344,15 @@ async fn action(
         "dismiss" => send(&rt, Control::Dismiss).await,
         "expand" => send(&rt, Control::Expand(generation_id)).await,
         "project" => send(&rt, Control::Project(None)).await,
+        "refresh_project" => {
+            let path = {
+                let view = rt.view.lock().unwrap();
+                if !view.active { return Err("Start a meeting first".into()); }
+                if view.attachment_busy { return Err("Wait for the current context update".into()); }
+                view.project.as_ref().ok_or("Attach a project first")?.source_path.clone()
+            };
+            send(&rt, Control::Project(Some(path))).await
+        },
         "clear_project" => send(&rt, Control::ClearProject).await,
         "screenshot" => send(&rt, Control::Screenshot(None)).await,
         "clear_screenshot" => send(&rt, Control::ClearScreenshot).await,

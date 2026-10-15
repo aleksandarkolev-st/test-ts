@@ -1,0 +1,324 @@
+{
+  "verifiedAt": "2026-10-15T01:15:32.516Z",
+  "verificationComplete": true,
+  "runId": "run-935cb972a18c",
+  "initialRawSha256": "e9f35459dc03d7a197eaf8bd589c14c025af7d217dce04c26516718fce732309",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "completed": {
+    "regular": 100,
+    "bug": 20
+  },
+  "measuredInterviewRoundResponses": 360,
+  "retainedRoundResponses": {
+    "total": 362,
+    "completedAttemptResponses": 360,
+    "incompleteAttempts": 2
+  },
+  "explicitInitialHandoffModes": {
+    "screenshot": 34,
+    "project-vscode": 43,
+    "project-explorer": 43
+  },
+  "explicitPatchedProjectHandoffs": 20,
+  "attachmentOverviews": {
+    "scope": "Triggered by explicit attachment shortcuts; excluded from interview-round accuracy and latency distributions; raw overviews are preserved.",
+    "count": 140,
+    "firstWord": {
+      "samples": 140,
+      "medianMs": 2824,
+      "p95Ms": 6985
+    },
+    "completion": {
+      "samples": 140,
+      "medianMs": 5169,
+      "p95Ms": 10905
+    }
+  },
+  "checks": {
+    "denominator": 120,
+    "firstImplementationFixturesPassed": 119,
+    "finalImplementationFixturesPassed": 119,
+    "allMarkersCorrect": 120,
+    "paintSourcesExact": 120,
+    "keyboardPassed": 120,
+    "finalContractsReviewed": 120,
+    "finalContractsPassed": 91
+  },
+  "diagnosesPassed": 20,
+  "broaderFinalReviewByKind": {
+    "regular": {
+      "passed": 77,
+      "total": 100
+    },
+    "bug": {
+      "passed": 14,
+      "total": 20
+    }
+  },
+  "readingDirections": {
+    "end": 120,
+    "home": 120,
+    "right": 29,
+    "left": 29
+  },
+  "acceptedPaintEvents": 14516,
+  "evidenceLinksChecked": 143,
+  "latency": {
+    "firstWord": {
+      "samples": 360,
+      "minMs": 1921,
+      "medianMs": 3078,
+      "p95Ms": 7872,
+      "maxMs": 22628
+    },
+    "firstPaint": {
+      "samples": 360,
+      "minMs": 1949,
+      "medianMs": 3115,
+      "p95Ms": 7891,
+      "maxMs": 22652
+    },
+    "completion": {
+      "samples": 360,
+      "minMs": 3462,
+      "medianMs": 7763,
+      "p95Ms": 15250,
+      "maxMs": 24734
+    }
+  },
+  "separateRecheck": {
+    "passed": true,
+    "distinctInterviewsAdded": 0,
+    "measuredRounds": 3,
+    "review": "interview-screenshot-context-recheck-review.json"
+  },
+  "referenceRepairs": {
+    "complete": true,
+    "count": 3,
+    "regressionsPassed": 11,
+    "existingFixtureExpectationsPreserved": 74,
+    "recordedImplementationGradesPreserved": 40
+  },
+  "failedFinalReviews": [
+    {
+      "id": "product-except-self",
+      "kind": "regular",
+      "evidence": "interview-product-except-self-overflow.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "three-sum",
+      "kind": "regular",
+      "evidence": "interview-three-sum-integer-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "subarray-sum-count",
+      "kind": "regular",
+      "evidence": "interview-subarray-sum-integer-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "pivot-index",
+      "kind": "regular",
+      "evidence": "interview-pivot-integer-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "reverse-polish-notation",
+      "kind": "regular",
+      "evidence": "interview-rpn-integer-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "ttl-expiry",
+      "kind": "bug",
+      "evidence": "interview-ttl-expiry-completed.json",
+      "supplementaryEvidence": "interview-ttl-integer-deadline-precision.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "window-reset",
+      "kind": "bug",
+      "evidence": "interview-window-reset-completed.json",
+      "supplementaryEvidence": null,
+      "category": "fractional capacity or limit"
+    },
+    {
+      "id": "remove-invalid-parentheses",
+      "kind": "regular",
+      "evidence": "interview-parentheses-recursion-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "practical depth or memory"
+    },
+    {
+      "id": "event-identity",
+      "kind": "bug",
+      "evidence": "interview-event-identity-completed.json",
+      "supplementaryEvidence": "interview-event-total-integer-precision.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "digit-message-decoding",
+      "kind": "regular",
+      "evidence": "interview-decoding-count-precision.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "minimum-stair-cost",
+      "kind": "regular",
+      "evidence": "interview-stair-cost-overflow.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "house-robber",
+      "kind": "regular",
+      "evidence": "interview-house-robber-precision.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "equal-subset-partition",
+      "kind": "regular",
+      "evidence": "interview-partition-array-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "practical depth or memory"
+    },
+    {
+      "id": "obstacle-grid-path-count",
+      "kind": "regular",
+      "evidence": "interview-grid-count-precision.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "minimum-grid-path-sum",
+      "kind": "regular",
+      "evidence": "interview-minimum-grid-sum-precision.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "zero-one-knapsack",
+      "kind": "regular",
+      "evidence": "interview-knapsack-capacity-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "practical depth or memory"
+    },
+    {
+      "id": "combination-sum",
+      "kind": "regular",
+      "evidence": "interview-combination-recursion-boundary.json",
+      "supplementaryEvidence": null,
+      "category": "practical depth or memory"
+    },
+    {
+      "id": "unique-permutations",
+      "kind": "regular",
+      "evidence": "interview-permutations-recursion-boundary.json",
+      "supplementaryEvidence": "interview-numeric-enumeration-supplementary.json",
+      "category": "practical depth or memory"
+    },
+    {
+      "id": "signed-division",
+      "kind": "bug",
+      "evidence": "interview-signed-division-completed.json",
+      "supplementaryEvidence": "interview-division-precision-boundary.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "shortest-path-settlement",
+      "kind": "bug",
+      "evidence": "interview-shortest-path-settlement-completed.json",
+      "supplementaryEvidence": "interview-routing-integer-precision.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "zero-product",
+      "kind": "bug",
+      "evidence": "interview-zero-product-completed.json",
+      "supplementaryEvidence": "interview-exclusion-product-zero-domain.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "nonnegative-weight-shortest-paths",
+      "kind": "regular",
+      "evidence": "interview-weighted-paths-integer-precision.json",
+      "supplementaryEvidence": "interview-weighted-paths-small-graphs.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "smallest-range-covering-lists",
+      "kind": "regular",
+      "evidence": "interview-smallest-range-covering-lists-domain.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "ttl-cache-simulation",
+      "kind": "regular",
+      "evidence": "interview-ttl-cache-simulation-domain.json",
+      "supplementaryEvidence": "interview-ttl-integer-deadline-precision.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "fixed-window-rate-limiter",
+      "kind": "regular",
+      "evidence": "interview-fixed-window-rate-limiter-domain.json",
+      "supplementaryEvidence": null,
+      "category": "fractional capacity or limit"
+    },
+    {
+      "id": "token-bucket-rate-limiter",
+      "kind": "regular",
+      "evidence": "interview-token-bucket-rate-limiter-domain.json",
+      "supplementaryEvidence": null,
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "time-indexed-key-value",
+      "kind": "regular",
+      "evidence": "interview-counted-synthetic-96-100.json",
+      "supplementaryEvidence": null,
+      "category": "occluded screenshot"
+    },
+    {
+      "id": "idempotent-event-processing",
+      "kind": "regular",
+      "evidence": "interview-idempotent-event-processing-domain.json",
+      "supplementaryEvidence": "interview-event-total-integer-precision.json",
+      "category": "numeric precision or overflow"
+    },
+    {
+      "id": "bounded-fifo-queue",
+      "kind": "regular",
+      "evidence": "interview-bounded-fifo-queue-domain.json",
+      "supplementaryEvidence": null,
+      "category": "fractional capacity or limit"
+    }
+  ],
+  "limitations": [
+    "Text-driven simulated interviews; audio paused, no ASR or real-participant reliability claim.",
+    "Attachment overviews precede the three scripted rounds; this is not a cold-start model benchmark.",
+    "Frozen fixture accuracy differs from broader literal-contract stress review, which includes unbounded numeric, fractional-capacity and practical depth/memory witnesses.",
+    "Accepted paints verify source identity and rendered source offsets, not every syntax-colored pixel.",
+    "Initial screenshot occlusion failure is preserved; visible-prompt recheck is separate.",
+    "One Unicode minimum-window length metric is ambiguous and documented in its review.",
+    "Requested fast service tier is recorded; actual server routing tier was not reported."
+  ],
+  "remainingWork": [],
+  "failureCategories": {
+    "numeric precision or overflow": 20,
+    "fractional capacity or limit": 3,
+    "practical depth or memory": 5,
+    "occluded screenshot": 1
+  }
+}

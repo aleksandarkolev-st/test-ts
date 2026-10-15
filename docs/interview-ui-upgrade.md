@@ -1,226 +1,82 @@
-# Interview UI upgrade
+# Meeting Copilot: UI and interview evaluation
 
-The setup and answer overlay now share the incumbent dark mint identity with an original pixel companion. Setup has four keyboard-accessible sections and persistent meeting controls. Answers separate code from prose, preserve exact source offsets, provide copy controls, and keep their reading area and footer within the native window. The implementation uses adapted Space UI tab primitives, Componentry pixel rendering, and Canvas UI ripple rendering; source notices and licenses are in `THIRD_PARTY_NOTICES.md`.
+The setup and answer overlay now share a restrained mint-and-ink design, an original pixel companion, clearer controls, readable code, and keyboard navigation. Context detection stays local until an explicit shortcut or button sends the selected project or screen.
 
-The user confirmed that both surfaces should feel finished, readable code and source-aware context matter, and future UI work should start directly in code. The design record is in `DESIGN.md` and `.impeccable/design.json`. The original pixel-art prompt is embedded in the PNG and saved beside it.
+The requested **100 distinct regular interviews and 20 distinct bug interviews are complete**, using the native signed-in app with **gpt-6.1-sol, low effort**. Every interview has three measured rounds. Changes were committed in atomic implementation, fix, and evidence batches.
 
-## Verification
+## What changed
 
-- Production frontend build succeeds; six unit tests and eleven interaction tests pass.
-- Seven synthetic browser captures at 520×700 cover all setup sections, the empty overlay, and both ends of a long code answer with attachments and manual input. These are layout evidence, not native AI trials.
-- A fresh Impeccable reviewer found a disconnected pointer route in the pixel effect. The fix forwards coordinates from the visible companion while leaving its canvas non-intercepting. The passing test reads nonzero canvas alpha and verifies cleanup on leave and suppression under reduced motion. The reviewer scored that material fix resolved.
-- Computer Use verified setup paging and Home in the native app, then shared a synthetic browser fixture through Ctrl+Shift+P. Process detection classified its spoofed VS Code title as a browser and attached a 2880×1800 screenshot; no project was attached.
-- Native code horizontal scrolling moved from 0 to 418.86px and back. End reached 1568px, matching 2018px content minus 450px reading height; Home returned to zero. The footer bottom was 694.36px in a 699px native viewport.
-- Ctrl+Alt+Left moved the overlay 70 physical pixels on this scaled display. Native affinity readback remained 17, with the overlay always on top and no-activate enabled.
+- Setup has Meeting, Answers, Context, and Camera tabs with persistent readiness/start controls, keyboard tab navigation, and bounded scrolling. Space UI/Base UI tabs, Componentry pixel effects, Canvas UI ripples, and original pixel art provide the visual character. Attribution and licenses are in `THIRD_PARTY_NOTICES.md`.
+- The answer overlay keeps its footer reachable while long answers and code scroll independently. Fenced code and common unfenced JavaScript, Python, and SQL snippets receive code presentation, source-preserving highlighting, and copy controls.
+- Active-context detection distinguishes VS Code, Explorer folders, and browsers. VS Code/Explorer handoffs attach the detected project; browser and web IDE surfaces use screen context. Detection does not upload context. Current attachment references prevent earlier projects from being treated as current.
+- Global scrolling and window movement work while another application has focus. Reduced motion, non-intercepting visual effects, empty states, notices, and failure messages were checked.
+- A native streaming bug was fixed: fragmented SSE events no longer repeatedly rescan an expanding prefix. The parser preserves Unicode and handles large batched events.
 
-The native UI answer correctly identified the screenshot and spoofed browser title. Its generated helper assumed the boolean attachment flags provided in the application reference; the UI question had not specified field types. Object-shaped native snapshot fixtures therefore passed 2/3, and the original code and mismatch are retained. This acceptance question is excluded from interview accuracy. Its first word was 8.953 seconds and completion 25.102 seconds; one deliberately long UI answer is not a latency distribution.
+| Action | Shortcut |
+| --- | --- |
+| Send detected project or screen context | Ctrl+Shift+P |
+| Send a screenshot | Ctrl+Shift+F8 |
+| Scroll answers | Ctrl+Shift+Page Up / Page Down |
+| Answer start / end | Ctrl+Shift+Home / End |
+| Scroll visible code horizontally | Ctrl+Shift+Left / Right |
+| Move the answer window | Ctrl+Alt+Arrow keys |
 
-Raw native evidence is `docs/evidence/interview-ui-native-2026-10-14.json`. The evidence reader is `benchmarks/interviews/native-surface-evidence.mjs`.
+## Initial measured results
 
-## Remaining requested work
+The corpus contains 25 LeetCode problems (15 hard, 5 medium, 5 easy), 75 additional synthetic technical scenarios, and 20 different injected project defects. These are simulated, text-driven interviews; audio was paused. Each explicit attachment shortcut triggered a context overview, followed by approach, implementation, and independent self-review rounds. Bug replacements were written to `src/core.mjs` and explicitly reattached before verification. Each attached bug project exposes its first smoke fixture; remaining grading fixtures and supplementary oracles remain outside it. This is an application workflow test, not a cold-start model benchmark.
 
-The current corpus has 100 distinct regular interviews and 20 distinct bug interviews, with three rounds each. The 75 additional regular tasks have 307 frozen functional fixtures, and the resumable runner passed an excluded native pilot. The first counted checkpoint contains three regular interviews, all three rounds, across browser, VS Code and Explorer context handoffs. All final implementations pass their fixtures and manual contract/complexity review. The median round 2 answer overflowed on an additional Number.MAX_VALUE check; round 3 identified and corrected it. The raw checkpoint and review are in `docs/evidence/interview-counted-first-three-2026-10-14.json` and `interview-counted-first-three-review.md`.
+| Check | Result |
+| --- | --- |
+| Distinct interviews completed and reviewed | 100 regular + 20 bug |
+| Measured interview-round responses | 360 |
+| Correct fresh markers | 120/120 |
+| Exact accepted source-paint checks | 120/120 |
+| Native keyboard reading and reachable footer | 120/120 |
+| First / final implementation frozen fixtures | 119/120 each (99.2%) |
+| Broader final implementation stress review | 91/120 (75.8%) |
+| Broader review by kind | 77/100 regular; 14/20 bug fixes |
+| Correct injected-defect diagnoses | 20/20 |
 
-The next counted checkpoint contains nine regular interviews (27 responses), with passing final fixtures, exact source paints and keyboard checks. Final contract and complexity reviews are bound to their actual answer hashes in `docs/evidence/interview-contract-reviews.json`; raw evidence is `interview-counted-through-nine-2026-10-14.json`. Across those 27 responses, median first-word latency is 4.265s (p95 10.128s), and median completion is 11.043s (p95 20.848s). These are an interim distribution, not the requested full result.
+There were 34 browser screenshot, 43 VS Code project, and 43 Explorer project initial handoffs, plus 20 explicit patched-project handoffs. All detected source kinds and project identities matched. The raw evidence also retains 140 attachment-triggered overviews and two responses from incomplete interview attempts; neither group enters the 360-round accuracy/latency cohort.
 
-The hard-problem checkpoint now contains all 15 hard LeetCode interviews, with the six new rows preserved separately in `docs/evidence/interview-counted-regular-10-15.json`. Together with the completed bug interview, 16 scenarios and 48 completed-attempt responses pass final fixtures, source-marker checks, exact accepted paint-source checks and native keyboard reading checks. All 16 final implementations have manual contract reviews; the bug also has a diagnosis review. Median first-word latency across those 48 responses is 4.265s (p95 10.317s); median completion is 10.866s (p95 20.848s). The earlier overflow finding and interrupted attempt remain retained.
+| Latency from question confirmation | Median | p95 |
+| --- | --- | --- |
+| First answer word | 3.078 s | 7.872 s |
+| First accepted visible paint | 3.115 s | 7.891 s |
+| Completed answer | 7.763 s | 15.250 s |
 
-The five medium interviews are now complete as well, preserved in `docs/evidence/interview-counted-medium-16-20.json`. The latest checkpoint totals 20 regular interviews and one bug interview: 63 completed-attempt responses, with all final fixtures, marker checks, accepted paint-source checks, keyboard checks and final contract reviews passing. Median first-word latency is 3.470s (p95 10.128s); median completion is 9.593s (p95 20.801s). Reviews state interpretation limits, including Coin Change's referenced integer input domain. The earlier median overflow finding remains retained.
+These are nearest-rank percentiles over the latest completed attempt for each initial interview. Requested fast service tier is recorded; the backend did not report actual routing tier.
 
-The five easy interviews are now complete, preserved in `docs/evidence/interview-counted-easy-21-25.json`. All 25 counted LeetCode final implementations pass the frozen fixtures and their manual reviews. `interview-leetcode-25-summary.json` separates the 15 hard, 5 medium and 5 easy measurements. Including the completed bug interview, the latest checkpoint contains 26 completed scenarios and 78 completed-attempt responses: median first word 3.349s (p95 10.128s), completion 9.135s (p95 20.801s). The earlier model defect and interrupted bug attempt remain preserved.
+All 25 LeetCode final implementations passed their bounded contract reviews and functional fixtures, covering 1,820 fixture cases per implementation round across that cohort.
 
-Five additional synthetic interviews are complete in `docs/evidence/interview-counted-synthetic-26-30.json`. The latest checkpoint is 30 regular plus one bug interview, with 93 completed-attempt responses. All frozen fixture grades, current-marker checks, accepted paint-source checks and native keyboard checks pass. Manual contract review passes 30/31: product-except-self fails an additional witness with 310 tens followed by two zeros. Both generated implementations return three NaN values even though every result should be zero; the executed witness is retained in `interview-product-except-self-overflow.json`. Frozen scores remain unchanged. Median first word is 3.349s (p95 10.128s); median completion is 8.345s (p95 20.050s).
+| LeetCode difficulty | Interviews | Final passes | First word median / p95 | Completion median / p95 |
+| --- | --- | --- | --- | --- |
+| Hard | 15 | 15 | 4.265 / 10.317 s | 10.866 / 20.848 s |
+| Medium | 5 | 5 | 3.179 / 5.205 s | 7.584 / 14.255 s |
+| Easy | 5 | 5 | 3.143 / 4.468 s | 6.702 / 11.062 s |
 
-The next five synthetic interviews are complete in `docs/evidence/interview-counted-synthetic-31-35.json`. The checkpoint now contains 35 regular and one bug interview, with 108 completed-attempt responses. Frozen fixtures, markers, accepted paint sources and native reading checks pass for all 36 scenarios; manual final contract review passes 35/36, retaining the product-except-self failure. Longest consecutive sequence independently corrected a round 2 numeric-boundary bug: supplementary execution timed out at +2^53 and returned zero at -2^53 for the original, while the final implementation returned one for both. That evidence is in `interview-consecutive-integer-boundary.json`. Median first word is 3.349s (p95 10.128s), and median completion is 8.214s (p95 17.767s).
+## Failures and the screenshot recheck
 
-The second source-bug interview is complete in `docs/evidence/interview-duplicate-search-completed.json`. It correctly cited the immediate `return mid` expression, supplied and verified the minimal `[1,1,2]`, target 1 witness (original 1, required 0), and replaced it with a lower-bound search. Both implementations passed 4/4 fixtures and the actual service smoke test passed. Round 3 recovered the fresh edited-project marker, and native reading checks passed. The latest checkpoint is 35 regular plus two bug interviews, 111 completed-attempt responses, and 36/37 passing manual final reviews; the earlier product-except-self failure remains. Median first word is 3.377s (p95 10.128s), completion 8.214s (p95 17.767s).
+Frozen fixture accuracy does not establish correctness over every literal contract input. Independent stress review retained 29 final failures: 20 numerical precision/overflow failures, five practical depth/memory failures, three fractional capacity/limit failures, and one obscured screenshot. Synthetic contracts often omit numeric or size bounds; those broader results must not be confused with bounded LeetCode accuracy. Counterexamples, actual outputs, answer hashes, and complexity reviews are linked from the review ledger and final audit. The Unicode minimum-window task also leaves its length metric ambiguous; the chosen interpretation and competing witness are documented.
 
-Five more regular interviews are complete in `docs/evidence/interview-counted-synthetic-36-40.json`. The checkpoint contains 40 regular plus two bug interviews and 126 completed-attempt responses. All 42 fixture, marker, accepted paint-source and keyboard checks pass. Manual final contract review passes 38/42: the earlier product-except-self failure remains, and new supplementary exact-integer witnesses expose final failures in three-sum, subarray counting and pivot-index. Three-sum returns a triplet whose exact sum is -1; subarray counting misses `[1,1]` after a large prefix; pivot-index misses a symmetric pivot after total rounding. The last two witnesses use safe-integer entries. Raw generated answers and frozen grades remain unchanged, and the executed witnesses are saved in separate `interview-*-integer-boundary.json` files. Median first word is 3.349s (p95 9.279s), and median completion is 8.153s (p95 17.305s).
+In the historical-lookup screenshot, a toolbar covered the no-match rule. The assistant identified the missing information and requested clarification rather than producing code. That failed initial attempt remains in the 119/120 and 91/120 scores. Toolbar ownership was not established, and the app already suppresses its answer overlay during capture; no application overlay defect is inferred.
 
-The third bug interview is complete in `docs/evidence/interview-bounded-queue-completed.json`. It cited `q.length>capacity` and the minimal zero-capacity single-push witness, fixed integer admission, then independently found that fractional capacities also violate the unrestricted contract. Supplementary execution in `interview-queue-fractional-capacity.json` confirms the round 2 failure and round 3 correction. The fresh edited-project marker, final fixtures and native reading checks pass. The checkpoint now contains 40 regular plus three bug interviews, 129 completed-attempt responses, and 39/43 passing final contract reviews. Median first word remains 3.349s (p95 9.279s), completion 8.153s (p95 17.305s).
+A **separate recheck** used a fresh marker and narrower synthetic prompt. Computer Use verified the entire contract before sending it. Both returned implementations passed their four frozen fixtures and **1,556 independent history-query cases each**, along with source-paint and native reading checks. Its three response latencies and successful result are reported separately; they do not replace the initial failure or add a distinct interview.
 
-The next five regular interviews are complete in `docs/evidence/interview-counted-synthetic-41-45.json`: daily temperatures, circular next greater, asteroid collisions, postfix evaluation and nested decoding. All fixture, marker, accepted paint-source and keyboard checks pass. Manual review records another final arithmetic failure: postfix `MAX_SAFE_INTEGER + 2 - 2` returns one less than required after intermediate rounding, retained in `interview-rpn-integer-boundary.json`. Decoder review accounts for intermediate string materialization rather than claiming time solely proportional to final output. The checkpoint totals 45 regular plus three bug interviews, 144 completed-attempt responses and 43/48 passing final contract reviews. Median first word is 3.289s (p95 9.279s), completion 8.031s (p95 15.598s).
+## Validation and provenance
 
-The fourth bug interview is complete in `docs/evidence/interview-lru-recency-completed.json`. It correctly cited the get expression that fails to refresh Map insertion order, supplied a minimal capacity-two/five-operation witness, and restored recency for successful reads and replacement writes. The witness executed as original `[1,-1]` versus required `[1,1]`. Both implementations, service smoke, fresh edited-project marker and native reading checks pass. The checkpoint totals 45 regular plus four bug interviews, 147 completed-attempt responses and 44/49 passing final contract reviews. Median first word is 3.326s (p95 9.279s), completion 8.053s (p95 15.598s).
+The measured app build passed the frontend build, six unit tests, 11 browser tests, and 210 Rust tests (14 ignored). Native acceptance separately verified setup scrolling, answer/code scrolling, physical window movement, display affinity, and explicit context handoffs. Seven 520×700 browser fixture captures are under `.impeccable/review/`; source-paint checks establish exact rendered source identity and offsets, not correctness of every syntax-colored pixel. The existing MSI predates these changes; this report covers source and the tested native debug build.
 
-Five more regular interviews are complete in `docs/evidence/interview-counted-synthetic-46-50.json`: anagram grouping and windows, longest palindrome, Roman parsing and encoding. All fixture, marker, accepted paint-source, keyboard and final contract reviews pass for this batch. The string reviews explicitly state JavaScript UTF-16 semantics. The supplementary `interview-roman-exhaustive-domain.json` independently verifies all 3999 valid values for both implementation rounds of both Roman tasks. The checkpoint totals 50 regular plus four bug interviews, 162 completed-attempt responses and 49/54 passing final contract reviews. Median first word is 3.257s (p95 8.618s), completion 8.031s (p95 15.404s).
+After measurement, three reference-helper gaps were repaired: empty minimum-window targets, zero products after overflow, and integer TTL deadline addition. All three regressions failed before the patch, then the full **11-test benchmark suite passed**. All 74 original bug fixture expectations and all 40 recorded bug implementation grades remained identical. The native binary/frontend hashes are unchanged. The changed reference hash and exact pre-repair contract bytes are archived; no recorded answer or initial score was changed.
 
-The fifth bug interview is complete in `docs/evidence/interview-ttl-expiry-completed.json`. It cited the strict expiry comparison, supplied and executed a minimal two-operation witness (original `[7]`, required `[null]`), and replaced it with the required inclusive expiry boundary. Final fixtures, service smoke, fresh edited-source marker, keyboard and diagnosis review pass. The checkpoint totals 50 regular plus five bug interviews, 165 completed-attempt responses and 50/55 passing final contract reviews; the five algorithm failures remain retained. Latency remains median first word 3.257s (p95 8.618s), completion 8.031s (p95 15.404s).
+- [Final audit and all failed-review evidence](evidence/interview-ui-final-audit.json)
+- [Initial raw native run](evidence/interview-native-120-initial-results.json) and [reviewed summary](evidence/interview-native-120-initial-summary.json)
+- [SHA-bound contract and diagnosis reviews](evidence/interview-contract-reviews.json)
+- [LeetCode difficulty and latency details](evidence/interview-leetcode-25-summary.json)
+- [Separate screenshot recheck review](evidence/interview-screenshot-context-recheck-review.json) and [raw recheck](evidence/interview-screenshot-context-recheck.json)
+- [Reference repair verification](evidence/interview-reference-repair-verification.json) and [original contract bytes](evidence/interview-frozen-contract-snapshot.json)
+- [Native UI acceptance](evidence/interview-ui-native-2026-10-14.json)
+- [Reproduction protocol](../benchmarks/interviews/README.md)
 
-Five more regular interviews are complete in `docs/evidence/interview-counted-synthetic-51-55.json`: Unicode run-length encoding, quoted CSV parsing, absolute path normalization, version comparison and binary string addition. All fixture, marker, accepted paint-source, keyboard and final contract reviews pass for this batch. Version comparison uses normalized decimal strings, and binary addition uses bounded local digit/carry arithmetic; neither converts whole large values to Number. The checkpoint totals 55 regular plus five bug interviews, 180 completed-attempt responses and 55/60 passing final contract reviews. Median first word is 3.252s (p95 8.365s), completion 8.001s (p95 15.250s).
+The raw runner status says `responses_complete_pending_contract_review` because reviews are stored separately. The final audit verifies all 120 answer hashes against completed reviews, all handoffs and reading checks, the separate recheck, and the completed reference repairs. Historical checkpoint files and Git history retain earlier progress and assessments.
 
-The sixth bug interview is complete in `docs/evidence/interview-window-reset-completed.json`. It correctly identified timestamp-based resets and supplied the minimal two-event witness (original `[true,true]`, required `[true,false]`). The edited-source marker, frozen integer fixtures, service smoke and native reading checks pass. Broader final contract review fails: `limit=1.5` admits two events although the at-most contract has no integer-limit restriction. Both generated failures remain in `interview-quota-fractional-limit.json`; the original diagnosis still passes. The checkpoint totals 55 regular plus six bug interviews, 183 completed-attempt responses and 55/61 passing final contract reviews. Median first word is 3.255s (p95 8.365s), completion 8.001s (p95 15.250s).
-
-Two more regular interviews are complete in `docs/evidence/interview-counted-synthetic-56-57.json`: decimal multiplication and IP classification. Three supplementary decimal carry/zero cases and ten strict-character IP cases pass for both implementation rounds in `interview-decimal-ip-supplementary.json`. Candidates respect the multiplication conversion restrictions and reject trailing newlines without dollar-anchor ambiguity. The checkpoint totals 57 regular plus six bug interviews, 189 completed-attempt responses and 57/63 passing final contract reviews. All 63 marker, accepted paint-source, frozen fixture and keyboard checks pass. Median first word is 3.255s (p95 8.365s), completion 8.016s (p95 15.318s).
-
-Interview 58's original screenshot handoff waited while an untargetable Windows low-battery modal blocked input. After the user dismissed it and connected power, the native app remained live but the runner's Playwright connection was closed. Independent read-only native inspection confirmed that the actual shortcut delivered the correct screenshot and marker; a fresh Playwright connection also encountered a shared-worker attachment assertion. The original runner then exited with its connection error preserved. `interview-common-prefix-interrupted-connection.json` retains the zero-round attempt, and `interview-native-idle-connection-recovery.json` retains the independent handoff inspection. The harness now detects a closed native connection while waiting, and its acknowledgment helper reports native HTTP errors directly. The completed retry uses a fresh marker; the interrupted attempt adds no completed interview or measured round.
-
-Three more regular interviews are complete in `docs/evidence/interview-counted-synthetic-58-60.json`: common prefix, parentheses removal and subsequence matching. All fixture, marker, accepted paint-source and keyboard checks pass. Broader final review fails parentheses removal: both recursive implementations overflow the call stack on a 12000-character already-valid literal string, retained in `interview-parentheses-recursion-boundary.json`. The checkpoint totals 60 regular plus six bug interviews, 198 completed-attempt responses and 59/66 passing final contract reviews. Median first word is 3.257s (p95 8.618s), completion 8.055s (p95 15.404s).
-
-The seventh bug interview is complete in `docs/evidence/interview-event-identity-completed.json`. It cited `if(!seen[id])`, supplied and executed the minimal single `constructor` event witness (original zero/empty accepted IDs, required one/constructor), and replaced inherited object lookup with Set membership. Final contract and diagnosis reviews, frozen fixtures, service smoke, fresh edited-project marker and native reading checks pass. The checkpoint totals 60 regular plus seven bug interviews, 201 completed-attempt responses and 60/67 passing final contract reviews. Median first word is 3.277s (p95 8.365s), completion 8.081s (p95 15.318s).
-
-Five more regular interviews are complete in `docs/evidence/interview-counted-synthetic-61-65.json`: edit distance, word segmentation, digit decoding, bounded stair counting and minimum stair cost. All fixture, marker, accepted paint-source and keyboard checks pass. Broader review retains two new numerical failures: 78 ones decode to an exact count one higher than both generated Number results (`interview-decoding-count-precision.json`), and a six-stair finite-optimum case returns Infinity instead of zero (`interview-stair-cost-overflow.json`). The latter candidates correctly handle ordinary negative costs; the witness independently enumerates legal paths with exact sums. The checkpoint totals 65 regular plus seven bug interviews, 216 completed-attempt responses and 63/72 passing final contract reviews. Median first word is 3.255s (p95 8.365s), completion 8.153s (p95 15.318s).
-
-The remaining 35 regular and 13 bug interviews, and their contract/diagnosis reviews, remain outstanding at this checkpoint. The older 25-problem report and UI acceptance question do not count toward those 120 interviews. Audio transcription reliability is outside this text-driven evidence. Run `node benchmarks/interviews/summarize.mjs` for current local counts; it separates fixture checks from reviewed contracts and excludes pilots.
-
-The first search-boundary bug attempt completed a correct source diagnosis and a replacement passing 4/4 fixtures, then its edited-source handoff was interrupted by foreground input. Computer Use rejected the shortcut, but the orchestration mistakenly continued the acknowledgment; native detection returned Task Switching and the runner rejected that source. The incomplete attempt is retained in `docs/evidence/interview-search-boundary-interrupted-attempt.json` and is excluded from completed counts. The handoff helper now rejects a changed source kind or folder before posting an acknowledgment, and shortcut results are inspected separately.
-
-The retry completed all three rounds, both explicit source handoffs and keyboard reading checks, with the original attempt retained in `interview-search-boundary-completed.json`. Diagnosis review confirmed the cited `src/core.mjs` expression `hi=nums.length-1` and executed the minimal witness `solve([0],1)`: original 0, required 1. Both replacements passed 4/4 independent fixtures; the edited module also passed its real service smoke test. Round 3 recovered the fresh patch marker from the reattached project. Final contract and diagnosis reviews pass; this is one completed bug interview, not two.
-
-### Reservation service checkpoint
-
-65 regular and 8 bug interviews are complete (219 measured completed-attempt responses). All 73 marker, frozen-fixture, accepted paint-source and native keyboard checks pass. Hash-bound final contract review passes 64/73; the nine prior failures remain retained.
-
-The eighth bug interview identifies missing rollback with the minimal two-item duplicate-SKU rejection. After an explicit updated-source handoff, round 3 also finds and fixes inherited-property inventory in the round 2 candidate. Supplementary execution confirms rejection of absent `toString` and correct handling of owned `constructor` and `__proto__` stock entries. Raw responses and latency: `evidence/interview-reservation-transaction-completed.json`; supplementary results: `evidence/interview-reservation-property-boundary.json`.
-
-Remaining: 35 regular and 12 bug interviews. Full 100+20 scope is unfinished.
-
-### Regular interviews 66–70
-
-70 regular and 8 bug interviews are complete (234 completed-attempt measured responses). All 78 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 65/78, with 13 failures retained. The five newest final responses were reviewed against their exact saved hashes.
-
-Increasing-subsequence meets its O(n log n) requirement. Four supplementary witnesses expose the unconstrained synthetic numeric contracts: repeated large-value additions lose precision in house-robber and minimum-grid-sum; two equal 2^32 values make partition DP allocate an invalid array; a 24×40 free grid yields an incorrect exact path count. The three precision witnesses have correct outputs exactly representable as JavaScript Numbers. Frozen fixtures and actual model responses remain unchanged.
-
-Median first word: 3182 ms (p95 8003 ms). Median completion: 8053 ms (p95 15318 ms). Raw checkpoint: `evidence/interview-counted-synthetic-66-70.json`; supplementary files are linked by the contract-review ledger.
-
-Remaining: 30 regular and 12 bug interviews; full requested scope remains unfinished.
-
-### Delimited record bug checkpoint
-
-70 regular and 9 bug interviews are complete (237 measured completed-attempt responses). All 79 frozen-fixture, marker, accepted paint-source and native keyboard checks pass; broader final contract review passes 66/79. All nine completed bug diagnoses pass their separate source/counterexample review.
-
-The CSV diagnosis cites unconditional quote-state toggling and gives the minimal four-quote valid row: original output is one empty field, required output one literal quote. Both implementations pass 100 additional distinct valid rows produced by independently encoding expected field pairs, including empty values, Unicode, commas, CRLF/newlines and repeated quotes. These supplementary rows do not increase the distinct interview count. Original and fresh patched-source handoffs remain explicit shortcuts.
-
-Raw evidence: `evidence/interview-csv-escaping-completed.json`; additional execution: `evidence/interview-csv-valid-row-supplementary.json`. Remaining: 30 regular and 11 bug interviews.
-
-### Regular interviews 71–75
-
-75 regular and 9 bug interviews are complete (252 completed-attempt measured responses). All 84 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 68/84; 16 failures remain retained and unchanged.
-
-Knapsack exceeds the legal array-length boundary for a trivially solvable one-item case under a large integer capacity. Combination-sum and unique-permutations exceed the call stack on cases with only one linear-size result. Balanced-parentheses passes complete enumeration checks for n=0..10 using independent Catalan counts, balance/length validation, uniqueness and order. Subsets and permutations additionally pass every one of 364 arrays of length 0..5 over [-2,0,10] against independent exhaustive oracles; this does not erase the permutation recursion failure. Enumeration reviews describe resource-dependent limits and do not imply a universal runtime guarantee.
-
-Median first word is 3179 ms (p95 8365 ms), median completion 8053 ms (p95 15318 ms). The new 22628 ms first-word sample is retained. Evidence: `evidence/interview-counted-synthetic-71-75.json` and supplementary files referenced by the hash-bound contract ledger. Remaining: 25 regular and 11 bug interviews.
-
-### Signed division bug checkpoint
-
-75 regular and 10 bug interviews are complete (255 completed-attempt measured responses). All 85 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All ten completed source-bug diagnoses pass their separate review. Broader final-answer contract review passes 68/85, with 17 known failures retained.
-
-The tenth diagnosis correctly identifies `Math.floor(a/b)` and the smallest total-magnitude counterexample `solve(-1,2)`: original -1, required zero. Both fixes use `Math.trunc`, with round 3 additionally normalizing negative zero. Supplementary execution exposes a remaining unrestricted-integer failure: exactly represented numerator 18014398509481988 divided by 3 rounds upward before truncation. Both candidates return 6004799503160663, while independent exact BigInt division gives the safe, exactly represented quotient 6004799503160662. Frozen sign fixtures and actual answers remain unchanged.
-
-Raw evidence: `evidence/interview-signed-division-completed.json`; numerical witness: `evidence/interview-division-precision-boundary.json`. Median first word is 3182 ms (p95 8365 ms); median completion is 8053 ms (p95 15318 ms). Remaining: 25 regular and 10 bug interviews. Full requested scope remains active and unfinished.
-
-### Regular interviews 76–80
-
-80 regular and 10 bug interviews are complete (270 completed-attempt measured responses). All 90 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. Broader final contract review passes 73/90; all 17 earlier failures remain retained. This batch adds five passing final reviews.
-
-Both N-Queens candidates pass independent exhaustive board enumeration across their entire stated n=0..10 domain. Both components and bipartite candidates pass all 1099 undirected graphs through four vertices with optional self-loops; shortest-path candidates pass all 610 endpoint queries through three vertices. Topological-order candidates pass all 1062 directed graph/duplicated-edge checks through three vertices. All four graph implementations also pass 20000-vertex shape checks, including a long chain, duplicated directed edges and a wide isolated frontier. Supplementary cases do not increase distinct interview counts.
-
-Median first word: 3179 ms (p95 8003 ms). Median completion: 8034 ms (p95 15296 ms). Raw evidence: `evidence/interview-counted-synthetic-76-80.json`; supplementary files are referenced by the exact-answer-hash review ledger. Remaining: 20 regular and 10 bug interviews; full scope remains active.
-
-### Bracket validation bug checkpoint
-
-80 regular and 11 bug interviews are complete (273 completed-attempt measured responses). All 91 frozen-fixture, marker, accepted paint-source and native keyboard checks pass; broader final contract review passes 74/91. All eleven completed bug diagnoses pass separate source/counterexample review.
-
-The bracket diagnosis correctly cites final unconditional success and a single unmatched opening as the smallest counterexample. Both fixes pass every bracket word of length 0..4 plus two deep-input witnesses (1557 supplementary cases each). The final answer distinguishes unspecified non-bracket input behavior before adding conservative rejection. Actual original and patched-source handoffs remain explicit shortcuts. Raw evidence: `evidence/interview-opening-brackets-completed.json`; supplementary execution: `evidence/interview-bracket-domain-supplementary.json`. Remaining: 20 regular and 9 bug interviews.
-
-### Directed routing bug checkpoint
-
-80 regular and 12 bug interviews are complete (276 completed-attempt measured responses). All 92 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All twelve bug diagnoses pass; broader final contract review passes 74/92, retaining 18 known failures.
-
-The routing diagnosis uses the minimal two-vertex parallel-edge counterexample and correctly explains premature settlement at discovery. Both candidates pass 2356 additional nonnegative weighted graph/witness checks against independent vertex-simple path enumeration. A unique-chain safe-integer-edge witness still yields an incorrect exactly representable terminal distance after intermediate precision loss. The final answer acknowledges Number limitations, which remain recorded as a broader mathematical-distance contract failure; no hidden size bound is added. The numerical evidence explicitly does not claim every intermediate exact distance is representable.
-
-Evidence: `evidence/interview-shortest-path-settlement-completed.json`, `evidence/interview-routing-weighted-graphs.json`, and `evidence/interview-routing-integer-precision.json`. Remaining: 20 regular and 8 bug interviews.
-
-### Dependency completion bug checkpoint
-
-80 regular and 13 bug interviews are complete (279 completed-attempt measured responses). All 93 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All thirteen bug diagnoses pass; broader final contract review passes 75/93, retaining the same 18 failures.
-
-The dependency diagnosis identifies the n-1 completion condition, with the minimal one-vertex empty-edge graph returning [] instead of [0]. Both fixes pass 1062 independently checked directed graph/duplicate-edge cases. Their repeated queue sorting and full edge scans are documented without claiming heap-level complexity. Source/API/dependencies/tests constraints, actual smoke, original/patched handoffs and reading checks passed. Evidence: `evidence/interview-dependency-completion-completed.json` and `evidence/interview-dependency-ordering-supplementary.json`. Remaining: 20 regular and 7 bug interviews.
-
-### Room allocation bug checkpoint
-
-80 regular and 14 bug interviews are complete (282 completed-attempt measured responses). All 94 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All fourteen bug diagnoses pass; broader final review passes 76/94, retaining 18 failures.
-
-The room diagnosis identifies starts preceding ends at equal times and uses the minimal two-touching-interval witness. Both fixes pass 1557 independent direct-overlap tests, including negative and extreme finite endpoints, duplicates and empty input. Source constraints, actual smoke, explicit original/patched context and reading checks passed. Evidence: `evidence/interview-meeting-endpoint-completed.json` and `evidence/interview-room-half-open-domain.json`. Remaining: 20 regular and 6 bug interviews.
-
-### Unicode counting bug checkpoint
-
-80 regular and 15 bug interviews are complete (285 completed-attempt measured responses; 287 retained including prior incomplete attempts). All 95 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All fifteen completed source-bug diagnoses pass separate review. Broader final contract review passes 77/95, retaining 18 known failures.
-
-The Unicode diagnosis correctly cites code-unit splitting and the minimal one-supplementary-character witness: original count two, required count one. Both fixes pass 1112 independently encoded code-point-domain checks, including combining marks, joiner/variation selector, BMP and supplementary boundaries, repetition and a long mixture. The final answer preserves code-point semantics instead of counting graphemes. Constraints, actual smoke, original/patched source handoffs and reading checks passed.
-
-Median first word is 3161 ms (p95 7935 ms); median completion is 7987 ms (p95 15296 ms). Evidence: `evidence/interview-unicode-iteration-completed.json` and `evidence/interview-unicode-codepoint-domain.json`. The five pending bug cases ran in one native session using the new kind filter, with unchanged frozen binary/frontend/contracts and independent handoffs for each original and patched project. Remaining: 20 regular and 5 bug interviews. Full requested scope remains active and unfinished.
-
-### Value lookup bug checkpoint
-
-80 regular and 16 bug interviews are complete (288 completed-attempt measured responses). All 96 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All sixteen completed bug diagnoses pass; broader final review passes 78/96, retaining 18 failures.
-
-The lookup diagnosis identifies falsy-value fallback and the minimal stored-zero request. Both fixes pass 56 additional own/absent property tests, preserving zero/false/empty/null and handling prototype-named keys, shadowed hasOwnProperty, owned __proto__, repeated and empty requests. Original/patched source context and vertical/horizontal reading passed. Evidence: `evidence/interview-cache-zero-completed.json` and `evidence/interview-value-lookup-property-domain.json`. Remaining: 20 regular and 4 bug interviews.
-
-### Exclusion product bug checkpoint
-
-80 regular and 17 bug interviews are complete (291 completed-attempt measured responses). All 97 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All seventeen completed diagnoses pass; broader final implementation review passes 78/97, retaining 19 failures.
-
-The product diagnosis correctly uses singleton zero: original NaN, required empty product one. Both division-free fixes pass 1365 additional small integer arrays, but both still emit three NaNs on 310 finite tens followed by two zeros, where every exclusion product must be zero. This failure is retained separately from the passing frozen fixtures and diagnosis. API/dependencies/tests, actual smoke, original/patched source handoffs and reading checks passed. Evidence: `evidence/interview-zero-product-completed.json` and `evidence/interview-exclusion-product-zero-domain.json`. Remaining: 20 regular and 3 bug interviews.
-
-### Character-window bug checkpoint
-
-80 regular and 18 bug interviews are complete (294 completed-attempt measured responses). All 98 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All eighteen diagnoses pass; broader final implementation review passes 79/98, retaining 19 failures.
-
-Both window fixes pass 945 exhaustive A/B pairs including empty targets and four Unicode identity cases. Round 3 switches from UTF-16-unit window length to code-point length; the supplied task does not specify that metric. The review accepts its coherent code-point interpretation and preserves the unresolved alternative and actual conditional witness separately, without claiming that ASCII fixtures settle it. The final answer's discarded Unicode witness is also executed and retained in the metric evidence.
-
-Two reference-helper edge gaps are recorded in `evidence/interview-pending-reference-repairs.json`: empty target in the window oracle and overflow before zero in the product oracle. Repair them with regressions after the entire native 120-case run is frozen; preserve original evidence/fingerprints and verify existing fixture expectations unchanged. Application source/binary are unaffected. Evidence: `evidence/interview-window-multiplicity-completed.json`, `evidence/interview-window-multiplicity-domain.json`, and `evidence/interview-window-length-metric-ambiguity.json`. Remaining: 20 regular and 2 bug interviews, plus the reference-helper repairs before completion.
-
-### Stable-order bug checkpoint
-
-80 regular and 19 bug interviews are complete (297 completed-attempt measured responses). All 99 frozen-fixture, marker, accepted paint-source and native keyboard checks pass. All nineteen completed diagnoses pass; broader final implementation review passes 80/99, retaining 19 failures and the recorded Unicode metric ambiguity.
-
-The stable-order diagnosis identifies equal-key swapping and the minimal two-record witness. Both fixes pass all 364 small key sequences with explicit original-index tie-break oracles and unchanged deep input snapshots. Actual smoke, source constraints, original/patched handoffs and reading checks passed. Evidence: `evidence/interview-stable-order-completed.json` and `evidence/interview-stable-order-domain.json`. Remaining: 20 regular and 1 bug interview, plus reference-helper repairs after the frozen run.
-
-### All twenty bug interviews complete
-
-80 regular and 20 bug interviews are complete (300 completed-attempt measured responses). All 100 completed interviews pass frozen fixtures, current markers, accepted paint-source and native keyboard checks. All twenty source-bug diagnoses pass exact file/expression/counterexample review. Final bug implementation review passes 16/20; four numerical/quota limitations remain retained. Across the current 100 completed interviews, broader final implementation review passes 81/100, with 19 known failures and the documented Unicode metric interpretation.
-
-The last path diagnosis identifies dot-dot being pushed at root and uses the minimal /.. witness. Both fixes pass 1557 independent path-rewrite, ordinary-name and deep/root-boundary tests. Evidence: `evidence/interview-root-path-completed.json`, `evidence/interview-root-path-domain.json`, and the twenty-bug comparison `evidence/interview-bug-20-summary.json`.
-
-Overall median first word is 3133 ms (p95 8003 ms); median completion is 7784 ms (p95 15296 ms). The new longest completion, 24734 ms, is retained. Remaining: 20 regular interviews and the two recorded reference-helper repairs after the full frozen native run. The requested 100 regular + 20 bug objective remains active.
-
-### Native regular checkpoint 81–85 (2026-10-15)
-
-The signed-in gpt-6.1-sol/low run has completed 85 distinct regular and all 20 bug interviews, with 315 measured completed-attempt responses. All 105 latest completed attempts passed frozen implementation fixtures, exact accepted source paints, task markers and physical keyboard reading checks. SHA-bound broader final review passes 85/105; this batch adds four passes and retains the weighted-path terminal integer precision failure (individual weights safe, terminal expected 9007199254740996, actual 9007199254740992).
-
-Independent checks per candidate: 2356 small weighted graphs plus the failing precision witness; 1064 course-cycle graphs and large chain/cycle; 1475 flood-fill cases with input/copy preservation; 532 eight-direction binary paths; 442 spiral matrix shapes. These supplementary cases do not increase distinct interview counts. Current first-word median/p95 3163/8365 ms and completion median/p95 7876/15318 ms. Fifteen regular interviews and the two recorded reference-helper repairs remain required; the frozen native run remains resumable before those repairs.
-
-### Native regular checkpoint 86–90 (2026-10-15)
-
-Completed 90 distinct regular interviews and all 20 bugs (330 measured completed-attempt responses). All 110 completed attempts passed frozen fixtures, task markers, exact accepted source paints and actual global keyboard reading checks. Broader SHA-bound final review passes 89/110. Rotation, island area, interval intersections and meeting rooms passed independent domains (31, 690, 6241 and 1117 cases per candidate); the smallest-range candidates passed 819 small list collections but failed an exact safe-integer endpoint width comparison. The failing range is retained in `interview-smallest-range-covering-lists-domain.json`, independently compared using BigInt widths.
-
-Current first-word median/p95: 3133/8003 ms; completion median/p95: 7844/15318 ms. Ten regular interviews and two pending reference-helper repairs remain. Full native completion still precedes reference mutation, preserving the original measurement fingerprint.
-
-### Native regular checkpoint 91–95 and TTL reassessment (2026-10-15)
-
-Completed 95 regular and all 20 bug interviews (345 measured completed-attempt responses). All 115 completed attempts pass frozen fixtures, fresh task markers, exact accepted source paints and global keyboard reading checks. The broader final review passes 90/115. This batch adds interval insertion and LRU passes; TTL integer deadline rounding, fixed-window fractional limits and token-bucket refill rounding fail broader constraints. The same integer deadline witness revises the previously passed TTL bug implementation to failed broader accuracy; its correct diagnosis remains passed. Current bug final review is 15/20; the earlier 20-bug snapshot records the review available at that checkpoint.
-
-Independent cases per candidate: 1185 insertion overlap components, 2343 LRU operation traces, 781 TTL histories plus exact deadline witness, 1890 fixed-window scenarios (all 1134 integer-limit cases passed), and 1513 token-bucket scenarios (1512 dyadic cases passed). The rate-0.1 witness also fails under exact IEEE binary-rational accounting, so it does not rely on reinterpreting decimal representation. First-word median/p95: 3082/7935 ms; completion median/p95: 7777/15296 ms.
-
-Five regular interviews remain. Pending reference repairs now include integer TTL deadline comparison in addition to empty minimum-window targets and overflowing products with multiple zeros. All reference mutations remain deferred until the full frozen native corpus completes; measured answers, grades and original fingerprint remain unchanged.
-
-### Full initial native corpus (2026-10-15)
-
-All 100 distinct regular and 20 distinct bug interviews completed three measured rounds with gpt-6.1-sol/low. The immutable full initial raw report is `docs/evidence/interview-native-120-initial-results.json`; the SHA-bound reviewed summary is `interview-native-120-initial-summary.json`. There are 360 measured completed-attempt responses plus two retained responses from incomplete attempts. All 120 marker, exact accepted source-paint and physical keyboard checks pass. Frozen first/final implementation fixtures pass 119/120; one historical-lookup screenshot had its missing-value rule covered by a toolbar, so the assistant correctly requested clarification and did not implement. That failure remains in the initial run.
-
-All 120 final contracts are reviewed: 91 pass broader constraints (77/100 regular and 14/20 bug implementations). All 20 injected-defect diagnoses pass. The final batch adds median and dependency batching passes; event summation and fractional-capacity queue failures remain. A shared integer-total witness also revises the earlier event-identity bug implementation to failed broader accuracy while retaining its diagnosis pass. These numerical/capacity stress checks are separate from frozen fixture accuracy.
-
-First-word median/p95 are 3078/7872 ms; completion median/p95 are 7763/15250 ms. A separate visible-prompt recheck remains required for the occluded historical-lookup screenshot, followed by three pending reference-helper regressions and the final audit/report. Original measurement fingerprints, raw answers, failed attempts and this initial summary must be preserved.
-
-### Separate visible-prompt recheck (2026-10-15)
-
-The historical-lookup task was rechecked with a fresh marker and 520 CSS-pixel fixture width. Computer Use verified the complete contract, including `or null`, before explicitly sending the screenshot. Both implementation rounds passed the four frozen fixtures and 1556 independent history-query cases each; exact source paints and physical End/Home keys also passed. Set uses increasing per-key histories and get uses an upper-bound timestamp search, preserving zero values and inherited-name keys.
-
-The separate report and hash-bound review are `interview-screenshot-context-recheck.json` and `interview-screenshot-context-recheck-review.json`. Its three response latencies are excluded from the original 360-response distributions. The initial 120-interview raw file and artifacts copy were verified byte-identical to their saved SHA; the 119/120 frozen and 91/120 broader initial scores remain unchanged. The toolbar's owner was not established, and the app already suppresses its own answer overlay during capture; this was a corrected test presentation, not evidence of an application overlay bug.
-
-### Reference-helper repairs verified (2026-10-15)
-
-After the frozen corpus and separate recheck finished, the three recorded reference gaps were repaired. Empty target windows return empty; exclusion products count zeros before multiplying, avoiding NaN after overflow; integer TTL deadlines use exact BigInt addition and relational comparison. All three focused regressions failed before the patch and pass afterward, along with the full 11-test benchmark suite.
-
-The verification preserves all 74 original bug fixture expectations and all 40 recorded bug implementation grades exactly. Original injected sources/contracts/cases are unchanged. The native binary and frontend fingerprints remain identical; only the current reference contracts hash changed. Exact pre-repair contracts are archived in `interview-frozen-contract-snapshot.json`, and provenance/witness results are in `interview-reference-repair-verification.json`. Pending repair status is now completed. No recorded AI answer or initial accuracy score was revised by these helper repairs.

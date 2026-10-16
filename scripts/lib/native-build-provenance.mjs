@@ -6,7 +6,7 @@ import path from 'node:path';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 export async function nativeBuildProvenance(binaryRoot,sourceRoot,files){
  const bytes=await readFile(path.join(binaryRoot,'build.json')),declared=JSON.parse(bytes);
- const binarySha256=sha(await readFile(path.join(binaryRoot,'WmiPrvSE.exe')));
+ const binarySha256=sha(await readFile(path.join(binaryRoot,'wavesSvc64.exe')));
  assert.equal(declared.nativeBinarySha256,binarySha256,'Frozen binary does not match its build manifest');
  assert(/^[a-f0-9]{7,40}$/.test(declared.productionCommit),'Build manifest must name a Git commit');
  for(const file of files)assert(/^src-tauri\/src\/[A-Za-z0-9_./-]+\.rs$/.test(file)&&!file.split('/').includes('..'));

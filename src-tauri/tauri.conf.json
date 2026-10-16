@@ -13,7 +13,7 @@
                 "windows":  [
                                 {
                                     "label":  "main",
-                                    "title":  "WmiPrvSE",
+                                    "title":  "wavesSvc64",
                                     "skipTaskbar":  true,
                                     "width":  520,
                                     "height":  700,

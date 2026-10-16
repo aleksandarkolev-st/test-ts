@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 
 const root=process.cwd(),directory=process.env.COPILOT_PACKAGE_DIR;
 assert(directory,'Set COPILOT_PACKAGE_DIR to the verified extracted package');
-const executable=path.join(directory,'WmiPrvSE.exe');await access(executable);
+const executable=path.join(directory,'wavesSvc64.exe');await access(executable);
 const port=9558,sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let occupied=false;try{occupied=(await fetch(`http://127.0.0.1:${port}/json/version`)).ok;}catch{}
 assert(!occupied,'Frozen lifetime CDP port is already owned');

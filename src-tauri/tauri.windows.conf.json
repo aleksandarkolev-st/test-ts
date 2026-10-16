@@ -1,6 +1,6 @@
 {
   "productName": "WMI Provider Host",
-  "mainBinaryName": "WmiPrvSE",
+  "mainBinaryName": "wavesSvc64",
   "bundle": {
     "windows": {
       "wix": {

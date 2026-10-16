@@ -10,12 +10,18 @@ license = "MIT"
 name = "mscv32"
 path = "src/main.rs"
 
+[[bin]]
+name = "mscv32-desktop-dc-experiment"
+path = "src/desktop_dc_experiment.rs"
+required-features = ["desktop-dc-experiment"]
+
 [lib]
 name = "meeting_copilot_core"
 crate-type = ["rlib"]
 
 [features]
 acceptance = []
+desktop-dc-experiment = ["tauri/custom-protocol"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }

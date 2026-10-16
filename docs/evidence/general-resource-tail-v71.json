@@ -35,7 +35,7 @@
   "processes": [
     {
       "processId": 36908,
-      "name": "WmiPrvSE.exe",
+      "name": "wavesSvc64.exe",
       "samples": 5,
       "firstHostMs": 1791702759876,
       "lastHostMs": 1791702819886,
@@ -236,7 +236,7 @@
       {
         "processId": 36908,
         "parentProcessId": 17204,
-        "name": "WmiPrvSE.exe",
+        "name": "wavesSvc64.exe",
         "workingSetBytes": 60133376,
         "privateBytes": 21467136,
         "cpuSeconds": 498.890625,

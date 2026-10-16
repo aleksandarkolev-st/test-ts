@@ -12,9 +12,24 @@ pub fn suspend_for_capture(app: &tauri::AppHandle) -> CaptureSuspension {
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 pub fn show_main(app: &tauri::AppHandle) -> Result<(), String> {
     let window = app.get_webview_window("main").ok_or("Setup window missing")?;
-    window.unminimize().map_err(|error| error.to_string())?;
-    window.show().map_err(|error| error.to_string())?;
-    window.set_focus().map_err(|error| error.to_string())
+    #[cfg(windows)]
+    {
+        use windows::Win32::{
+            Foundation::HWND,
+            UI::WindowsAndMessaging::{ShowWindow, SW_SHOWNOACTIVATE},
+        };
+        let hwnd = HWND(window.hwnd().map_err(|error| error.to_string())?.0);
+        // Restore and show in one step; unminimize() would activate the window.
+        unsafe {
+            let _ = ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+        }
+        Ok(())
+    }
+    #[cfg(not(windows))]
+    {
+        window.unminimize().map_err(|error| error.to_string())?;
+        window.show().map_err(|error| error.to_string())
+    }
 }
 pub fn toggle_main(app: &tauri::AppHandle) -> Result<(), String> {
     let window = app.get_webview_window("main").ok_or("Setup window missing")?;
@@ -32,7 +47,7 @@ pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
         "overlay",
         WebviewUrl::App("index.html?view=overlay".into()),
     )
-    .title("WmiPrvSE")
+    .title("wavesSvc64")
     .inner_size(520., 140.)
     .decorations(false)
     .transparent(true)
@@ -43,9 +58,9 @@ pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {
     .visible(false)
     .build()
     .map_err(|e| e.to_string())?;
+    set_manual(app, false);
     let protection = super::capture_protection::protect(&window);
     position(app)?;
-    set_manual(app, false);
     Ok(protection)
 }
 pub fn position(app: &tauri::AppHandle) -> Result<(), String> {
@@ -127,7 +142,10 @@ pub fn set_manual(app: &tauri::AppHandle, manual: bool) {
             use windows::Win32::{Foundation::HWND, UI::WindowsAndMessaging::*};
             if let Ok(raw) = w.hwnd() {
                 let hwnd = HWND(raw.0);
-                let style = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+                // Keep a top-level HWND for display affinity while excluding it from Alt+Tab.
+                let style = (GetWindowLongPtrW(hwnd, GWL_EXSTYLE)
+                    | WS_EX_TOOLWINDOW.0 as isize)
+                    & !(WS_EX_APPWINDOW.0 as isize);
                 let new = if manual {
                     style & !(WS_EX_NOACTIVATE.0 as isize)
                 } else {

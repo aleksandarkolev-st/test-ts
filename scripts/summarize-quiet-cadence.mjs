@@ -50,7 +50,7 @@ const release=await read('.local/latency-app-refresh-proof.json');
 assert.equal(release.data.debug,false);assert.equal(release.data.active,false);assert.equal(release.data.settingsPreserved,true);
 assert.equal(release.data.model,'gpt-6-luna');assert.equal(release.data.effort,'low');assert.equal(release.data.tier,'fast');
 assert(release.data.output.includes('T24E390'));
-assert.equal(release.data.binarySha256,sha(await readFile('src-tauri/target/release/WmiPrvSE.exe')));
+assert.equal(release.data.binarySha256,sha(await readFile('src-tauri/target/release/wavesSvc64.exe')));
 const result={scope:'Unpromoted CPU classification timing experiment. Three fixed public audio replays, not newly adaptive follow-ups or population latency/correctness certification. User edits, Luna Fast/low and Nemotron remain preserved.',
  metric:'First client-received alphanumeric character of retained decoded and validated answer, measured from speech end including capture/ASR. Rendering is separate; not full-word or sentence completion or pure model compute.',
  policy:'Opt-in acceptance/debug COPILOT_INTENT_QUIET_PRIORITY=1 permits one cadence bypass per acoustic pause for text stable at least 100 ms, while keeping normal 250 ms cadence otherwise. Only CPU classification is expedited. No prediction, intent, confirmation, one-job-per-floor or output gate is bypassed. No topic rules, canned replies or live context changes.',

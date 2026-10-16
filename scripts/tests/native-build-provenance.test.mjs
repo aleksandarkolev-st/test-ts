@@ -10,7 +10,7 @@ const sha=x=>createHash('sha256').update(x).digest('hex');
 async function fixture(t){
  const root=await mkdtemp(path.join(tmpdir(),'controller-build-provenance-'));
  t.after(async()=>{assert(path.resolve(root).startsWith(path.resolve(tmpdir())+path.sep));await rm(root,{recursive:true,force:true});});
- const binary='frozen test binary';await writeFile(path.join(root,'WmiPrvSE.exe'),binary);
+ const binary='frozen test binary';await writeFile(path.join(root,'wavesSvc64.exe'),binary);
  return {root,binary};
 }
 function git(root,args){return new Promise((resolve,reject)=>{

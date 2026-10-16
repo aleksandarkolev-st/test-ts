@@ -1,0 +1,4155 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "goal": {
+    "locallyVisible": true,
+    "noEnumerableOverlay": true,
+    "captureShowsCurrentBackgroundWithoutOverlayOrBlackMask": true,
+    "observerIncludesAdministratorAndDriverInspection": true,
+    "previousObserverRequirement": "All local software, including administrator and driver-level inspection",
+    "currentObserverScope": {
+      "clarifiedOn": "2026-10-16",
+      "userDescription": "Invisible to all local software except the user; latest request also asks for independent detection and capture test software",
+      "workingInterpretation": "All local software, including administrator and driver inspection; user-mode diagnostic coverage is a bounded subset",
+      "administratorElevation": "Included in the restored scope; elevation does not change an application into a kernel-mode or ring-2 program",
+      "actualDetectorArchitectureVerified": false,
+      "exactWindowPredicatesVerified": false,
+      "privilegedDriverInvisibilityRequiredByCurrentWorkingScope": true,
+      "rawHwndEnumerationAbsenceRequired": true,
+      "filteredListAbsenceAloneIsInsufficient": true,
+      "privacyTargetClarifiedOn": "2026-10-16",
+      "privacyTarget": "Actual Ctrl+Shift+H meeting overlay only; setup is outside the target and hidden in observed privacy states."
+    },
+    "samePhysicalPcOnly": true,
+    "conventionalVmExcludedByUser": true,
+    "thinHypervisorResearchRequested": true,
+    "achieved": false
+  },
+  "investigationLog": "ideas.md",
+  "runtimeObservations": {
+    "verifiedAt": "2026-10-15T20:24:41.948Z",
+    "scope": "Synthetic owned windows; independent capture process; no live driver or compositor modification",
+    "environment": {
+      "OS": "Microsoft Windows 11 Home",
+      "Build": "26200",
+      "SKU": 101,
+      "HypervisorPresent": true,
+      "Model": "83JQ",
+      "VMCommands": [],
+      "VMServices": [
+        {
+          "Name": "vmcompute",
+          "Status": 4
+        }
+      ],
+      "SDKs": [
+        {
+          "Path": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0",
+          "KernelHeaders": false
+        }
+      ]
+    },
+    "cpu": {
+      "CPU": "Intel(R) Core(TM) Ultra 7 258V",
+      "SGXAdvertised": false,
+      "Leaf7EBX": "0x239CA7A9"
+    },
+    "guard": {
+      "VirtualizationBasedSecurityStatus": 2,
+      "SecurityServicesConfigured": [
+        2,
+        3,
+        4
+      ],
+      "SecurityServicesRunning": [
+        2,
+        3,
+        4
+      ]
+    },
+    "casesVerified": 8,
+    "captureSamplesVerified": 40,
+    "cleanOmissionObservedInTheseProtectedCases": false,
+    "fullGoalAchieved": false,
+    "checks": [
+      {
+        "case": "mirror_0",
+        "capturerPid": 29416,
+        "rendererPid": 34100,
+        "protected": false,
+        "samples": {
+          "gdi": "255,0,255",
+          "print_window": "255,0,255",
+          "duplication": "255,0,255",
+          "wgc_window": "255,0,255",
+          "wgc_monitor": "255,0,255"
+        },
+        "enumeration": {
+          "case": "mirror_0",
+          "protected": "0",
+          "cloaked": "0",
+          "source_enum_top": "1",
+          "destination_enum_top": "0",
+          "destination_enum_child": "1",
+          "source_affinity_read": "1",
+          "source_affinity": "0",
+          "capture_exit": "0"
+        },
+        "outcome": "magenta positive control"
+      },
+      {
+        "case": "mirror_1",
+        "capturerPid": 10180,
+        "rendererPid": 34100,
+        "protected": true,
+        "samples": {
+          "gdi": "0,0,0",
+          "print_window": "0,0,0",
+          "duplication": "0,0,0",
+          "wgc_window": "0,0,0",
+          "wgc_monitor": "0,0,0"
+        },
+        "enumeration": {
+          "case": "mirror_1",
+          "protected": "1",
+          "cloaked": "0",
+          "source_affinity_set": "1",
+          "source_affinity_error": "0",
+          "source_enum_top": "1",
+          "destination_enum_top": "0",
+          "destination_enum_child": "1",
+          "source_affinity_read": "1",
+          "source_affinity": "17",
+          "capture_exit": "0"
+        },
+        "outcome": "opaque black mask; clean omission requirement failed"
+      },
+      {
+        "case": "mirror_2",
+        "capturerPid": 32500,
+        "rendererPid": 34100,
+        "protected": false,
+        "samples": {
+          "gdi": "255,0,255",
+          "print_window": "255,0,255",
+          "duplication": "255,0,255",
+          "wgc_window": "255,0,255",
+          "wgc_monitor": "255,0,255"
+        },
+        "enumeration": {
+          "case": "mirror_2",
+          "protected": "0",
+          "cloaked": "1",
+          "source_cloak_hr": "0x00000000",
+          "source_enum_top": "1",
+          "destination_enum_top": "0",
+          "destination_enum_child": "1",
+          "source_affinity_read": "1",
+          "source_affinity": "0",
+          "capture_exit": "0"
+        },
+        "outcome": "magenta positive control"
+      },
+      {
+        "case": "mirror_3",
+        "capturerPid": 29144,
+        "rendererPid": 34100,
+        "protected": true,
+        "samples": {
+          "gdi": "0,0,0",
+          "print_window": "0,0,0",
+          "duplication": "0,0,0",
+          "wgc_window": "0,0,0",
+          "wgc_monitor": "0,0,0"
+        },
+        "enumeration": {
+          "case": "mirror_3",
+          "protected": "1",
+          "cloaked": "1",
+          "source_affinity_set": "1",
+          "source_affinity_error": "0",
+          "source_cloak_hr": "0x00000000",
+          "source_enum_top": "1",
+          "destination_enum_top": "0",
+          "destination_enum_child": "1",
+          "source_affinity_read": "1",
+          "source_affinity": "17",
+          "capture_exit": "0"
+        },
+        "outcome": "opaque black mask; clean omission requirement failed"
+      },
+      {
+        "case": "desktop_0",
+        "capturerPid": 25632,
+        "rendererPid": 20440,
+        "protected": false,
+        "samples": {
+          "gdi": "255,0,255",
+          "print_window": "255,0,255",
+          "duplication": "255,0,255",
+          "wgc_window": "255,0,255",
+          "wgc_monitor": "255,0,255"
+        },
+        "enumeration": {
+          "case": "desktop_0",
+          "protected": "0",
+          "source_enum_current": "0",
+          "source_enum_private": "1",
+          "desktop_enum_ok": "1",
+          "source_enum_thread": "1",
+          "thread_enum_ok": "1",
+          "wrapper_hr": "0x00000000",
+          "capture_exit": "0",
+          "worker_error": "none",
+          "desktop_closed": "1"
+        },
+        "outcome": "magenta positive control"
+      },
+      {
+        "case": "desktop_1",
+        "capturerPid": 15852,
+        "rendererPid": 20440,
+        "protected": true,
+        "samples": {
+          "gdi": "0,0,0",
+          "print_window": "0,0,0",
+          "duplication": "0,0,0",
+          "wgc_window": "0,0,0",
+          "wgc_monitor": "0,0,0"
+        },
+        "enumeration": {
+          "case": "desktop_1",
+          "protected": "1",
+          "source_enum_current": "0",
+          "source_enum_private": "1",
+          "desktop_enum_ok": "1",
+          "source_enum_thread": "1",
+          "thread_enum_ok": "1",
+          "wrapper_hr": "0x00000000",
+          "capture_exit": "0",
+          "worker_error": "none",
+          "desktop_closed": "1"
+        },
+        "outcome": "opaque black mask; clean omission requirement failed"
+      },
+      {
+        "case": "visual_0",
+        "capturerPid": 35224,
+        "rendererPid": 15356,
+        "protected": false,
+        "samples": {
+          "gdi": "255,0,255",
+          "print_window": "255,0,255",
+          "duplication": "255,0,255",
+          "wgc_window": "255,0,255",
+          "wgc_monitor": "255,0,255"
+        },
+        "enumeration": {
+          "case": "visual_0",
+          "protected": "0",
+          "host_enum_top": "1",
+          "overlay_child_count": "0",
+          "capture_exit": "0"
+        },
+        "outcome": "magenta positive control"
+      },
+      {
+        "case": "visual_1",
+        "capturerPid": 22552,
+        "rendererPid": 15356,
+        "protected": true,
+        "samples": {
+          "gdi": "0,0,0",
+          "print_window": "0,0,0",
+          "duplication": "0,0,0",
+          "wgc_window": "0,0,0",
+          "wgc_monitor": "0,0,0"
+        },
+        "enumeration": {
+          "case": "visual_1",
+          "protected": "1",
+          "host_enum_top": "1",
+          "overlay_child_count": "0",
+          "capture_exit": "0"
+        },
+        "outcome": "opaque black mask; clean omission requirement failed"
+      }
+    ],
+    "limitations": [
+      "Single Windows build and Intel GPU",
+      "Static solid-color controls",
+      "No independent verification of physical display appearance",
+      "Enumeration results are renderer-side probes; capture is a separate process",
+      "Does not test every capture implementation or privileged observer",
+      "Does not validate a production Tauri overlay or a kernel/hypervisor implementation"
+    ]
+  },
+  "readOnlyEnclaveCapability": {
+    "VbsEnclaveType": 16,
+    "Supported": true,
+    "EnclaveCreated": false
+  },
+  "privilegedResearch": [
+    {
+      "candidate": "Display-only miniport / final scanout composition",
+      "evidence": "KMDOD source separates desktop source and destination framebuffer and acquires POST-display ownership.",
+      "result": "Architecture candidate; actual Intel display-path control, clean capture, and privileged invisibility unvalidated.",
+      "runtimeTested": false,
+      "sources": [
+        "https://github.com/microsoft/Windows-driver-samples/blob/main/video/KMDOD/bdd.cxx"
+      ]
+    },
+    {
+      "candidate": "WDDM hardware planes",
+      "evidence": "Local hardware-composition support reported; this is not private-plane ownership.",
+      "result": "Reject standard WDDM MPO as a complete solution against the requested driver-level observer.",
+      "runtimeTested": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/multiplane-overlay-support"
+      ],
+      "contractAudit": {
+        "date": "2026-10-15",
+        "method": "Primary-source contract review; no runtime driver experiment",
+        "observedContract": "The MPO3 display-driver callback receives the plane count and plane list. Per-plane data includes layer index, presentation identifier, contributing contexts, and attributes.",
+        "inference": "A standard WDDM MPO plane is known to the participating kernel display driver. Protected pixel confidentiality does not conceal that plane from the driver.",
+        "decision": "Reject standard WDDM MPO as a complete solution against the requested driver-level observer.",
+        "limits": [
+          "Does not establish recorder-specific capture behavior",
+          "Does not rule out every possible below-driver architecture",
+          "No driver loaded, patched, or installed"
+        ],
+        "sources": [
+          "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmddi/nc-d3dkmddi-dxgkddi_setvidpnsourceaddresswithmultiplaneoverlay3",
+          "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmddi/ns-d3dkmddi-_dxgkarg_setvidpnsourceaddresswithmultiplaneoverlay3",
+          "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmddi/ns-d3dkmddi-_dxgk_multiplane_overlay_plane3"
+        ]
+      }
+    },
+    {
+      "candidate": "Thin late-launch hypervisor",
+      "evidence": "SimpleVisor demonstrates virtualizing the running host state; BitVisor documents a single unmodified OS with mostly direct device access.",
+      "result": "Real architectural precedent; CPU virtualization does not establish GPU isolation or universal transparency.",
+      "runtimeTested": false,
+      "sources": [
+        "https://github.com/ionescu007/SimpleVisor",
+        "https://www.bitvisor.org/en/about/overview/",
+        "https://research.hyperdbg.org/vmm/transparency/"
+      ]
+    },
+    {
+      "candidate": "ADvisor / BitVisor below-OS graphics",
+      "evidence": "Original author describes independent guest-framebuffer updates. Current mirrored code accesses the existing framebuffer, with old Intel graphics layouts and a separate GOP framebuffer path.",
+      "result": "No verified clean-readback separation, Lunar Lake runtime support, or universal stealth.",
+      "runtimeTested": false,
+      "provenance": {
+        "SHA": "a6a2c2a41bb2873e3300cb4672aa984e7db6c61c",
+        "Date": "2026-09-18T03:08:31Z",
+        "Message": "pci, drivers: avoid 32-bit access to Command Register\n\nThe Command Register in PCI configuration space is 16 bits wide, while\nthe upper 16 bits at offset 0x06 contain the Status Register.\nPerforming a 32-bit access to offset 0x04 writes back the Status\nRegister, which can inadvertently clear Write-1-to-Clear (W1C) status\nbits.\n\nThis patch updates pci_enable_device() to use 16-bit values,\nintroduces pci_disable_device(), and updates drivers to avoid 32-bit\naccesses to the Command Register."
+      },
+      "officialMercurialRevision": "69d076bbbe4381557d83e131b398d45952a320c8",
+      "sources": [
+        "https://www.sslab.ics.keio.ac.jp/apsys2015/assets/posters/4.pdf",
+        "https://github.com/matsu/bitvisor/blob/a6a2c2a41bb2873e3300cb4672aa984e7db6c61c/drivers/vga_intel.c",
+        "https://github.com/matsu/bitvisor/blob/a6a2c2a41bb2873e3300cb4672aa984e7db6c61c/drivers/vga_uefi.c"
+      ]
+    },
+    {
+      "candidate": "Private DWM protection",
+      "evidence": "Original researcher reports protected-object detection, attribution, and privileged readback bypass on build 26100.",
+      "result": "Source counterexample to universal invisibility; not reproduced on local build 26200.",
+      "runtimeTested": false,
+      "sources": [
+        "https://hawkeye-leo.github.io/hawkeye/research/capture/02-visual-hiding/",
+        "https://hawkeye-leo.github.io/hawkeye/research/capture/03-readback-mode/"
+      ]
+    },
+    {
+      "candidate": "SGXIO and GPU separation-kernel trusted-display research",
+      "evidence": "Trusted-I/O and trusted-display research protects content from an untrusted OS. Local CPU does not advertise SGX.",
+      "result": "SGXIO implementation prerequisites not present; a non-SGX adaptation and modern trusted display remain unvalidated. Content secrecy is not existence concealment.",
+      "runtimeTested": false,
+      "sources": [
+        "https://arxiv.org/abs/1701.01061",
+        "https://www.sigsac.org/ccs/CCS2015/pro_paper.html",
+        "https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/xapic-deprecation-plan.html"
+      ]
+    },
+    {
+      "candidate": "ME/PAVP protected transaction display and Xe PXP",
+      "evidence": "PTD describes encrypted sprites and a host proxy; Xe documents protected-content status and sessions.",
+      "result": "Pixel-protection precedent; arbitrary clean omission and existence concealment not established.",
+      "runtimeTested": false,
+      "sources": [
+        "https://link.springer.com/chapter/10.1007/978-1-4302-6572-6_10",
+        "https://www.kernel.org/doc/html/next/gpu/driver-uapi.html#c.drm_xe_query_pxp_status"
+      ]
+    },
+    {
+      "candidate": "VBS enclaves",
+      "evidence": "Local read-only availability query returned true; no enclave was created. Public lifecycle uses a normal host application.",
+      "result": "Memory-isolation option; no independent private display or invisibility established.",
+      "runtimeTested": "Availability query only",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/trusted-execution/vbs-enclaves",
+        "https://learn.microsoft.com/en-us/windows/win32/trusted-execution/vbs-enclaves-dev-guide"
+      ]
+    },
+    {
+      "candidate": "Firmware/SMM, GOP, and panel self refresh",
+      "evidence": "Documented DMC power-state management, GOP framebuffer mapping, and PSR framebuffer caching do not establish an arbitrary private overlay path.",
+      "result": "No validated implementation or privileged-invisibility guarantee on this laptop.",
+      "runtimeTested": false,
+      "sources": [
+        "https://origin.kernel.org/doc/html/next/gpu/intel-display/dmc.html",
+        "https://cdn.kernel.org/doc/html/latest/gpu/intel-display/psr.html"
+      ]
+    }
+  ],
+  "researchLimits": [
+    "Not an exhaustive proof about every possible future implementation or observer.",
+    "USENIX 2007 transparency analysis has an explicitly passive VMM threat model; it is not a proof covering every actively modified guest.",
+    "CCS 2015 original author PDF returned 404; publisher returned 403. Full modern implementation was not validated.",
+    "PTD PDF local fetches returned HTML; its capture figure was not visually verified.",
+    "No kernel driver, hypervisor, private compositor patch, boot change, firmware change, or production overlay change was deployed."
+  ],
+  "lastUpdated": "2026-10-16T11:32:00.651Z",
+  "additionalExperiments": [
+    {
+      "verifiedAt": "2026-10-15T20:38:19.877Z",
+      "idea": 26,
+      "casesVerified": 12,
+      "samplesVerified": 60,
+      "captureResult": "Protected surface plus alpha-from-red effect returns the host background in tested capture paths.",
+      "physicalDisplayObservation": {
+        "status": "pending user observation",
+        "visibleOverlayVerified": false
+      },
+      "privilegedInvisibility": {
+        "status": "not established",
+        "hostStillEnumerable": true
+      },
+      "fullGoalAchieved": false,
+      "observations": [
+        {
+          "name": "effect_background",
+          "capturePid": 25048,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "128,128,128",
+            "print_window": "128,128,128",
+            "duplication": "128,128,128",
+            "wgc_window": "128,128,128",
+            "wgc_monitor": "128,128,128"
+          },
+          "ddaProtectedMasked": false
+        },
+        {
+          "name": "effect_0",
+          "capturePid": 29896,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "255,0,255",
+            "print_window": "255,0,255",
+            "duplication": "255,0,255",
+            "wgc_window": "255,0,255",
+            "wgc_monitor": "255,0,255"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_0",
+            "protected": "0",
+            "effect_location": "0",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_1",
+          "capturePid": 38824,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "0,0,0",
+            "print_window": "0,0,0",
+            "duplication": "0,0,0",
+            "wgc_window": "0,0,0",
+            "wgc_monitor": "0,0,0"
+          },
+          "ddaProtectedMasked": true,
+          "configuration": {
+            "case": "effect_1",
+            "protected": "1",
+            "effect_location": "0",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_2",
+          "capturePid": 7072,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "255,0,255",
+            "print_window": "255,0,255",
+            "duplication": "255,0,255",
+            "wgc_window": "255,0,255",
+            "wgc_monitor": "255,0,255"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_2",
+            "protected": "0",
+            "effect_location": "1",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_3",
+          "capturePid": 27752,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "128,128,128",
+            "print_window": "128,128,128",
+            "duplication": "128,128,128",
+            "wgc_window": "128,128,128",
+            "wgc_monitor": "128,128,128"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_3",
+            "protected": "1",
+            "effect_location": "1",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_4",
+          "capturePid": 28228,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "255,0,255",
+            "print_window": "255,0,255",
+            "duplication": "255,0,255",
+            "wgc_window": "255,0,255",
+            "wgc_monitor": "255,0,255"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_4",
+            "protected": "0",
+            "effect_location": "2",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_5",
+          "capturePid": 37384,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "128,128,128",
+            "print_window": "128,128,128",
+            "duplication": "128,128,128",
+            "wgc_window": "128,128,128",
+            "wgc_monitor": "128,128,128"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_5",
+            "protected": "1",
+            "effect_location": "2",
+            "black_input": "0",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_6",
+          "capturePid": 33844,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "128,128,128",
+            "print_window": "128,128,128",
+            "duplication": "128,128,128",
+            "wgc_window": "128,128,128",
+            "wgc_monitor": "128,128,128"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_6",
+            "protected": "0",
+            "effect_location": "1",
+            "black_input": "1",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_7",
+          "capturePid": 29508,
+          "rendererPid": 38256,
+          "samples": {
+            "gdi": "128,128,128",
+            "print_window": "128,128,128",
+            "duplication": "128,128,128",
+            "wgc_window": "128,128,128",
+            "wgc_monitor": "128,128,128"
+          },
+          "ddaProtectedMasked": false,
+          "configuration": {
+            "case": "effect_7",
+            "protected": "0",
+            "effect_location": "2",
+            "black_input": "1",
+            "host_enum_top": "1",
+            "overlay_child_count": "0",
+            "capture_exit": "0"
+          }
+        },
+        {
+          "name": "effect_live_0",
+          "capturePid": 35140,
+          "rendererPid": 14984,
+          "samples": {
+            "gdi": "32,96,192",
+            "print_window": "32,96,192",
+            "duplication": "32,96,192",
+            "wgc_window": "32,96,192",
+            "wgc_monitor": "32,96,192"
+          },
+          "ddaProtectedMasked": false,
+          "expectedBackground": "32,96,192"
+        },
+        {
+          "name": "effect_live_1",
+          "capturePid": 1268,
+          "rendererPid": 14984,
+          "samples": {
+            "gdi": "64,160,80",
+            "print_window": "64,160,80",
+            "duplication": "64,160,80",
+            "wgc_window": "64,160,80",
+            "wgc_monitor": "64,160,80"
+          },
+          "ddaProtectedMasked": false,
+          "expectedBackground": "64,160,80"
+        },
+        {
+          "name": "effect_live_2",
+          "capturePid": 38172,
+          "rendererPid": 14984,
+          "samples": {
+            "gdi": "192,112,32",
+            "print_window": "192,112,32",
+            "duplication": "192,112,32",
+            "wgc_window": "192,112,32",
+            "wgc_monitor": "192,112,32"
+          },
+          "ddaProtectedMasked": false,
+          "expectedBackground": "192,112,32"
+        }
+      ],
+      "limitations": [
+        "Single Windows build and GPU",
+        "Synthetic solid-color input",
+        "Background colors changed between capture passes; each pass used a stable background",
+        "A missing rectangle in capture does not prove that it remains visible on the physical display",
+        "Does not demonstrate concealment from administrator or driver-level inspection"
+      ]
+    }
+  ],
+  "totalCasesVerified": 20,
+  "totalCaptureSamplesVerified": 100,
+  "remainingVerification": {
+    "physicalVisibilityOfProtectedEffect": "Unverified after Computer Use attempt: synthetic test was not targetable, and capture-based inspection cannot independently establish protected physical pixels.",
+    "currentBackgroundInTestedCaptures": "Verified for three distinct backgrounds with the protected effect.",
+    "privilegedInvisibility": "Not established; the host HWND and graphics resources are not concealed.",
+    "productionOverlayIntegration": "No windowless backend exists. Overlay-only replacement leaves Tao, global-hotkey and WebView HWNDs; the protected physical-output mechanism is also unresolved.",
+    "rawHwndAbsence": "Failed by the actual active meeting overlay: HWND 0x20DCA raw-enumerable in hidden/shown/reopened states; 43 HWNDs across 12 app-tree processes.",
+    "displayOwnershipAndCaptureBoundary": "No selected compatible drawing mechanism satisfies HWND absence plus clean capture and all-local-software scope. Reviewed compositor-shader candidate leaves observable module/IPC/GPU state; experimental bridge supplies no established independent scanout; color transforms lack spatial input.",
+    "actualDesktopContent": "Two separate stationary actual-desktop cohorts (Calculator and File Explorer) each pass all3monitor triples. Arbitrary motion and physical panel output remain unverified."
+  },
+  "recoveredPrimarySource": {
+    "title": "An I/O Separation Model and its Applications to On-Demand I/O on Commodity Platforms",
+    "author": "Miao Yu",
+    "year": 2019,
+    "institution": "Carnegie Mellon University",
+    "path": ".local/overlay-capture-probe/references/io-separation-thesis.pdf",
+    "sha256": "2B48BCCB967B07F003A90ACD07EA7C4C93A95C3E420EA5771D1D66BD1C23B004",
+    "relevantPagesInspected": [
+      53,
+      66
+    ],
+    "scopeFindings": "Trusted display confidentiality/authenticity model excludes side-channel and denial-of-service attacks; prototype used IronLake graphics with Ubuntu 12.04. This is not a modern Windows or universal concealment validation.",
+    "url": "https://pstorage-cmu-348901238291901.s3.amazonaws.com/18543056/Yu_cmu_0041E_10472.pdf"
+  },
+  "blockingAudit": {
+    "recordedAt": "2026-10-15T20:49:44.110Z",
+    "previousTurnClassification": "no progress: unchanged prerequisites and missing observation",
+    "currentTurnClassification": "no progress: revalidated unchanged prerequisites and missing observation",
+    "consecutiveNoProgressTurns": 3,
+    "blockedAuditThresholdMet": true,
+    "completionGateAudit": {
+      "locallyVisibleAndUsable": "Unverified for the protected alpha-effect candidate",
+      "noDiscoverableOverlayOrHelper": "Fails for the current candidate: host HWND remains enumerable",
+      "cleanCapture": "Supported for tested synthetic cases and capture paths only; not every privileged capture method",
+      "applicationBehavior": "Production integration not implemented or verified by this research",
+      "allLocalSoftwareIncludingAdministratorAndDriverInspection": "No passing mechanism established"
+    },
+    "condition": "No validated same-PC display mechanism meeting privileged invisibility; the latest capture candidate also awaits physical observation.",
+    "liveChecks": {
+      "hypervisorPresent": true,
+      "virtualizationBasedSecurityStatus": 2,
+      "securityServicesRunning": [
+        2,
+        3,
+        4
+      ],
+      "probeProcessesRunning": false
+    },
+    "nextEvidenceNeeded": [
+      "Physical-display observation of the protected alpha-effect candidate, which cannot alone meet the full goal",
+      "Independently supported display-path mechanism and observer contract for this machine before another low-level implementation experiment"
+    ]
+  },
+  "computerUseFollowUp": {
+    "date": "2026-10-16",
+    "request": "User requested Computer Use instead of reporting physical-display observation.",
+    "mainWindow": {
+      "app": "wavesSvc64_new.exe",
+      "title": "wavesSvc64",
+      "result": "Found in Computer Use app inventory; after restoring from minimized state, its screenshot showed the Meeting Copilot setup screen.",
+      "accessibility": "Limited because the app has higher integrity than the helper.",
+      "limitation": "The setup window is not the synthetic protected-alpha candidate."
+    },
+    "syntheticWindow": {
+      "entryPoint": ".local/overlay-capture-probe/computer-use-20261016/computer-use-view.exe",
+      "implementation": "Existing effect test with visual mode selected by default, separate log directory, and unchanged 90-second cleanup.",
+      "launchResult": "Computer Use reported that the launched app did not expose a targetable window.",
+      "inventoryRecovery": "One follow-up Computer Use list_windows returned no matching window.",
+      "nativeProcessObservation": "Process 15764 was confirmed live with MainWindowTitle Synthetic capture probe; no raw window identifier was supplied to the UI helper.",
+      "physicalDisplayVisibility": "Unverified; no Computer Use image of this candidate was obtained."
+    },
+    "repeatedNativeCaptureObservations": [
+      {
+        "filename": "effect-live-capture-0.txt",
+        "capturePid": 13684,
+        "rendererPid": 15764,
+        "samples": {
+          "gdi": "32,96,192",
+          "print_window": "32,96,192",
+          "duplication": "32,96,192",
+          "wgc_window": "32,96,192",
+          "wgc_monitor": "32,96,192"
+        },
+        "ddaProtectedMasked": true
+      },
+      {
+        "filename": "effect-live-capture-1.txt",
+        "capturePid": 37800,
+        "rendererPid": 15764,
+        "samples": {
+          "gdi": "64,160,80",
+          "print_window": "64,160,80",
+          "duplication": "64,160,80",
+          "wgc_window": "64,160,80",
+          "wgc_monitor": "64,160,80"
+        },
+        "ddaProtectedMasked": true
+      },
+      {
+        "filename": "effect-live-capture-2.txt",
+        "capturePid": 23400,
+        "rendererPid": 15764,
+        "samples": {
+          "gdi": "192,112,32",
+          "print_window": "192,112,32",
+          "duplication": "192,112,32",
+          "wgc_window": "192,112,32",
+          "wgc_monitor": "192,112,32"
+        },
+        "ddaProtectedMasked": true
+      }
+    ],
+    "repeatedSamplesVerified": 15,
+    "interpretation": "The native captures again contain the three current backgrounds. The DDA protected-mask flag was true in this run; no source attribution is inferred. These repeated observations do not verify physical output or privileged invisibility.",
+    "fullGoalAchieved": false
+  },
+  "resumedBlockingAudit": {
+    "recordedAt": "2026-10-16T01:16:01.067Z",
+    "resumedBy": "User request for Computer Use on 2026-10-16",
+    "previousTurnClassification": "no progress: unchanged evidence and missing physical observation/full-scope mechanism",
+    "currentTurnClassification": "no progress: unchanged evidence and missing physical observation/full-scope mechanism",
+    "consecutiveNoProgressTurns": 3,
+    "blockedAuditThresholdMet": true,
+    "completionGateAuditUnchangedFromPrior": true,
+    "condition": "No validated same-PC display mechanism meeting privileged invisibility; the latest capture candidate also awaits physical observation.",
+    "liveProbeProcesses": false,
+    "fullGoalAchieved": false
+  },
+  "additionalDirections": [
+    {
+      "idea": 27,
+      "candidate": "Existing monitor-side OSD / MCCS text renderer",
+      "drawingHypothesis": "Send text to a display-owned renderer downstream of the normal desktop image.",
+      "runtime": {
+        "monitor": "Lenovo HDR Monitor",
+        "connection": "Internal",
+        "physicalMonitorCount": 1,
+        "physicalHandleAcquired": true,
+        "physicalHandleClosed": true,
+        "capabilitiesQuerySucceeded": false,
+        "capabilitiesError": "0xC0262589",
+        "capabilitiesErrorName": "ERROR_GRAPHICS_DDCCI_INVALID_MESSAGE_COMMAND",
+        "settingsWritten": false
+      },
+      "sourceDecision": "Standard auxiliary-display text and no-video descriptors do not establish an active primary-panel overlay. No supported canvas was discovered by the local query.",
+      "limits": "A failed capability query does not prove absence of all vendor-specific hardware functions; privileged invisibility is not established.",
+      "sources": [
+        "https://milek7.pl/ddcbacklight/mccs.pdf",
+        "https://www.ddcutil.com/vcpinfo_output/",
+        "https://learn.microsoft.com/en-us/windows/win32/api/lowlevelmonitorconfigurationapi/nf-lowlevelmonitorconfigurationapi-capabilitiesrequestandcapabilitiesreply"
+      ]
+    },
+    {
+      "idea": 28,
+      "candidate": "Temporal/perceptual rendering",
+      "runtimeExperiment": false,
+      "sourceDecision": "The reviewed TPVM privacy design requires synchronized viewing glasses. The projection-light work targets camera exposure, not capture of digital source frames.",
+      "inference": "These optical mechanisms do not establish confidentiality or concealment from the requested digital and privileged observers.",
+      "sources": [
+        "https://arxiv.org/abs/1201.1601",
+        "https://www.sciencedirect.com/science/article/pii/S0141938225000320"
+      ]
+    },
+    {
+      "idea": 29,
+      "candidate": "Legacy DirectDraw / D3D9Ex overlays and WGL layer planes",
+      "runtime": {
+        "adapter": "Intel Arc 140V",
+        "apiSetupSucceeded": true,
+        "directdrawDriverOverlay": false,
+        "directdrawHelOverlay": false,
+        "directdrawMaximumVisibleOverlays": 0,
+        "d3d9HardwareOverlay": false,
+        "glVendor": "Intel",
+        "glVersion": "4.6.0 - Build 32.0.101.8132",
+        "legacyPixelFormats": 102,
+        "windowDrawableOpenGlFormats": 27,
+        "advertisedOverlayPlanes": 0,
+        "advertisedUnderlayPlanes": 0,
+        "wglResourcesReleased": true,
+        "desktopPixelsDrawn": false,
+        "displayModeChanged": false,
+        "overlaySurfaceCreated": false
+      },
+      "result": "The tested legacy APIs do not expose the required planes on the current driver.",
+      "limits": "Single current adapter/driver configuration; not a capture test or a claim that modern MPO is absent.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/api/ddraw/nf-ddraw-idirectdraw7-getcaps",
+        "https://learn.microsoft.com/en-us/windows/win32/medfound/hardware-overlay-support",
+        "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-pixelformatdescriptor"
+      ]
+    },
+    {
+      "idea": 30,
+      "candidate": "Existing capture exclusion, hidden host, and no activation",
+      "userReportedSymptom": "Close-apps/window list changes when the overlay is shown; background operation is not listed.",
+      "detectorImplementationVerified": false,
+      "sourceAuditOnly": false,
+      "installedBinaryParityVerified": false,
+      "sourceFindings": [
+        "Overlay is constructed hidden during setup; showing reuses the existing HWND.",
+        "Default tool-window and no-activation styles are already set in the source.",
+        "Normal show uses non-activating show/topmost calls.",
+        "Manual-input mode intentionally permits activation and requests focus.",
+        "Capture affinity is applied and checked during construction."
+      ],
+      "interpretation": "The installed overlay remains raw-enumerable and has a measured source/runtime style discrepancy. Visibility-only filtering is consistent with the reported symptom, but actual detector predicates and the discrepancy cause remain unverified.",
+      "metadataEvidence": "get-windows exposes title and owner.name separately; mixed UI labels do not prove lookup failure or a specific filter pipeline.",
+      "sourceSnapshots": [
+        {
+          "path": "src-tauri/src/overlay/window.rs",
+          "sha256": "9ee8929a2f234e4c264bb6e985c5d7f4f3de8df72b26589f37577b79339fee8c"
+        },
+        {
+          "path": "src-tauri/src/overlay/capture_protection.rs",
+          "sha256": "2f68ce969b30cf617c7f9b2033d241edd6c7fca5949f0fda554027a599331de5"
+        },
+        {
+          "path": "src-tauri/src/runtime.rs",
+          "sha256": "5d86d4ab09b82814f79576307604df792d6da6a5d0fc0618fef2cd1d594e8ac6"
+        }
+      ],
+      "productionCodeChanged": false,
+      "sources": [
+        "https://github.com/sindresorhus/get-windows",
+        "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumwindows",
+        "https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features",
+        "https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles",
+        "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity"
+      ],
+      "runtimeAudit": {
+        "date": "2026-10-16",
+        "binary": {
+          "path": "C:\\Program Files\\Audio Service\\wavesSvc64_new.exe",
+          "sha256": "2e716e7dcd411d8c1135650c8e369c23b71433fbb7581050c357b0ac1f4851d4",
+          "bytes": 22377832,
+          "modifiedUtc": "2026-10-15T19:46:32.384Z"
+        },
+        "appPid": 18888,
+        "observer": "Separate native process; EnumWindows with an explicit app-PID selection; read-only window-property queries",
+        "observerSource": ".local/overlay-capture-probe/own-window-state.cpp",
+        "observerSourceSha256": "14d8d889736c89aecaf0ce4800e6dbd3403aa2ad1db00fd2f18d6c5e98587fb1",
+        "inputs": "Computer Use; three visibility-only Ctrl+Shift+H actions after launch, followed by setup Close",
+        "firstToggleLeftOverlayHidden": true,
+        "snapshots": [
+          {
+            "phase": "before",
+            "rawLog": ".local/overlay-capture-probe/app-window-state-before-20261016.txt",
+            "rawLogSha256": "6a6920038e7d9662c4b06f235506055025dda835364c4e4ec9a3937fa79e3a32",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 70672,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 0,
+              "noactivate": 1,
+              "appwindow": 1,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8040118"
+            },
+            "foregroundHwnd": 70560
+          },
+          {
+            "phase": "toggle1",
+            "rawLog": ".local/overlay-capture-probe/app-window-state-toggle1-20261016.txt",
+            "rawLogSha256": "6a6920038e7d9662c4b06f235506055025dda835364c4e4ec9a3937fa79e3a32",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 70672,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 0,
+              "noactivate": 1,
+              "appwindow": 1,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8040118"
+            },
+            "foregroundHwnd": 70560
+          },
+          {
+            "phase": "shown",
+            "rawLog": ".local/overlay-capture-probe/app-window-state-shown-20261016.txt",
+            "rawLogSha256": "640154450bfba59e40453f99e37bbc16952461dbc0d036bcd29d5172c333baac",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 3,
+            "overlay": {
+              "hwnd": 70672,
+              "visible": 1,
+              "child": 0,
+              "toolwindow": 0,
+              "noactivate": 1,
+              "appwindow": 1,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x14CB0000",
+              "exstyle": "0x8040118"
+            },
+            "foregroundHwnd": 70560
+          },
+          {
+            "phase": "restored",
+            "rawLog": ".local/overlay-capture-probe/app-window-state-restored-20261016.txt",
+            "rawLogSha256": "45e1b8da39d0dbce752b4baed524ec9d4311c2b113e578b48d3971ad0d7afec7",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 70672,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 0,
+              "noactivate": 1,
+              "appwindow": 1,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 0,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8040118"
+            },
+            "foregroundHwnd": 70560
+          },
+          {
+            "phase": "restored-later",
+            "rawLog": ".local/overlay-capture-probe/app-window-state-restored-later-20261016.txt",
+            "rawLogSha256": "45e1b8da39d0dbce752b4baed524ec9d4311c2b113e578b48d3971ad0d7afec7",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 70672,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 0,
+              "noactivate": 1,
+              "appwindow": 1,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 0,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8040118"
+            },
+            "foregroundHwnd": 70560
+          }
+        ],
+        "findings": [
+          "The same protected overlay HWND is returned by raw EnumWindows both hidden and shown.",
+          "Showing changes its visibility and increases the app visible top-level count from two to three.",
+          "The setup window remains foreground; the overlay remains top-level, unowned, topmost, and no-activation.",
+          "Installed runtime has TOOLWINDOW clear and APPWINDOW set, unlike the intended workspace source styles.",
+          "Affinity readback is 17 initially and while shown, but 0 after hiding, including a later query."
+        ],
+        "unresolved": [
+          "Stale build versus a later runtime style rewrite was not distinguished.",
+          "Affinity readback change was not attributed and was not followed by a capture test.",
+          "No external foreground-window context or manual-input transition was tested.",
+          "The third-party detector and its filter predicates were not inspected or reproduced.",
+          "This property audit does not establish physical overlay appearance or clean capture output."
+        ],
+        "productionCodeChanged": false,
+        "nativeObserverMutations": false,
+        "cleanup": {
+          "dateUtc": "2026-10-16T05:23:58.4644153Z",
+          "auditedPid": 18888,
+          "processExited": true,
+          "setupClosedViaComputerUse": true,
+          "meetingStarted": false,
+          "audioCaptureStarted": false,
+          "computerUseWindowListEmptyAfterExit": true
+        }
+      },
+      "packageImplementationAudit": {
+        "repository": "sindresorhus/get-windows",
+        "revision": "8fbea97ecd6edc42295696c87081bd29432ab461",
+        "source": "https://github.com/sindresorhus/get-windows/blob/8fbea97ecd6edc42295696c87081bd29432ab461/Sources/windows/main.cc",
+        "sha256": "e55553dc3d088bfb028a903133df5bb657600694459c71aee6a3c0e64d5c4205",
+        "nativeLanguage": "C++",
+        "enumerationApi": "EnumDesktopWindows",
+        "excludesToolWindows": true,
+        "requiresNonEmptyTitle": false,
+        "appNameUsesFileDescriptionWhenAvailable": true,
+        "usedByActualDetectorVerified": false
+      }
+    },
+    {
+      "idea": 31,
+      "candidate": "Fresh-build parity and framework style lifecycle",
+      "build": {
+        "command": "cargo build --manifest-path src-tauri/Cargo.toml --release --locked --offline --bin mscv32 --features tauri/custom-protocol",
+        "exitCode": 0,
+        "sourceSnapshots": [
+          {
+            "path": "src-tauri/src/overlay/window.rs",
+            "sha256": "9ee8929a2f234e4c264bb6e985c5d7f4f3de8df72b26589f37577b79339fee8c"
+          },
+          {
+            "path": "src-tauri/src/overlay/capture_protection.rs",
+            "sha256": "2f68ce969b30cf617c7f9b2033d241edd6c7fca5949f0fda554027a599331de5"
+          },
+          {
+            "path": "src-tauri/src/runtime.rs",
+            "sha256": "5d86d4ab09b82814f79576307604df792d6da6a5d0fc0618fef2cd1d594e8ac6"
+          },
+          {
+            "path": "src-tauri/Cargo.toml",
+            "sha256": "b8e0809e4b3a463873f12c8ee2be8e7b337ad0704bd3d7c5105614aa85e34505"
+          },
+          {
+            "path": "src-tauri/Cargo.lock",
+            "sha256": "71f190ada4285d2c858890b7f9f9e019fdcaedc8e84781916f35eaa59c4ecc9b"
+          },
+          {
+            "path": "src-tauri/tauri.conf.json",
+            "sha256": "917703058ffcfa4ebddfd0709560462617d0df22c5c4d6c3ff048da9627e975e"
+          },
+          {
+            "path": "src-tauri/tauri.windows.conf.json",
+            "sha256": "fcd9b5280504960945855bbbb5ae5c6b4f6db74735a1d2ff734e5761ec854c97"
+          },
+          {
+            "path": "src-tauri/build.rs",
+            "sha256": "4dc2d234815cb478f2da09c927f703b7d72e415df7797d53914736ccc87065dd"
+          }
+        ],
+        "binary": {
+          "completedUtc": "2026-10-16T05:32:55.1701842Z",
+          "buildExitCode": 0,
+          "inputsUnchanged": true,
+          "binaryPath": "C:\\Users\\dev\\Downloads\\test-ts\\src-tauri\\target\\release\\mscv32.exe",
+          "binaryBytes": 22365696,
+          "binarySha256": "da2bc438745b2b242d5fc69d8aa772b20d4a94c1a93b7f0eea0b189e60ce54c3",
+          "nativeDllsChanged": [],
+          "frontendAssets": [
+            {
+              "path": "dist\\index.html",
+              "sha256": "6d5049e5a1a411acf676bfc94b2beec50413a555e4917e20f39b5040c5d1bbfa"
+            },
+            {
+              "path": "dist\\art\\copilot-pixel.png",
+              "sha256": "b191f5818c3de589fd2ab86dc73b552c0711acca7145929014b9e17e481aefa4"
+            },
+            {
+              "path": "dist\\art\\copilot-pixel.png.prompt.txt",
+              "sha256": "8105961ce398797026a6597cc07b39b6ae4b51f5e39611ebed575cd276f24854"
+            },
+            {
+              "path": "dist\\assets\\index-4FT-ORDk.css",
+              "sha256": "9dd487ada2a9ae4aab3fb125ad20404357408c6a001f106eb4505f8522b26223"
+            },
+            {
+              "path": "dist\\assets\\index-CHt_EzhZ.js",
+              "sha256": "8e29a88d957e58675b4ffd61c4170c5535ae12c09d5d474e72996caa7008b453"
+            }
+          ],
+          "installedBinarySha256": "2e716e7dcd411d8c1135650c8e369c23b71433fbb7581050c357b0ac1f4851d4"
+        },
+        "buildLog": ".local/overlay-capture-probe/embedded-build-log-20261016.txt"
+      },
+      "initialBuildLimitation": {
+        "command": "cargo build --manifest-path src-tauri/Cargo.toml --release --locked --offline --bin mscv32",
+        "binarySha256": "e77fc4994fd65e09f74d61b2a1d86610da1b6f8a0d63d970e33e9cb777abe0f0",
+        "frontendLoaded": false,
+        "reason": "Selected development URL; connection refused. Superseded by embedded-frontend build for runtime comparison.",
+        "processExited": true
+      },
+      "runtime": {
+        "appPid": 29288,
+        "frontendLoadedFromLocalAppDocument": true,
+        "setupStartButtonAndVisibilityHotkeyObserved": true,
+        "visibilityHotkeyActions": 5,
+        "snapshots": [
+          {
+            "phase": "starting",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-starting-20261016.txt",
+            "rawLogSha256": "246bf4f38f79a9e2f6d0bc9ae7af17620484fe69d09126aacdcbabc9a98764f4",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "toggle1",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-toggle1-20261016.txt",
+            "rawLogSha256": "246bf4f38f79a9e2f6d0bc9ae7af17620484fe69d09126aacdcbabc9a98764f4",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "shown",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-shown-20261016.txt",
+            "rawLogSha256": "c9284f2fdfb98a7403abd3e4fcc1eecd4f4486ebe1d1b5ce613766a0e5061d57",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 3,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 1,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x14CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "restored",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-restored-20261016.txt",
+            "rawLogSha256": "fb0aafc6a93dcc469a4e1b92e8c9c10ed7714ac0ead93e438dd06206d3eb46fc",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 0,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "restored-later",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-restored-later-20261016.txt",
+            "rawLogSha256": "fb0aafc6a93dcc469a4e1b92e8c9c10ed7714ac0ead93e438dd06206d3eb46fc",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 0,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "reopened",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-reopened-20261016.txt",
+            "rawLogSha256": "c9284f2fdfb98a7403abd3e4fcc1eecd4f4486ebe1d1b5ce613766a0e5061d57",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 3,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 1,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 17,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x14CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          },
+          {
+            "phase": "final-hidden",
+            "rawLog": ".local/overlay-capture-probe/embedded-window-state-final-hidden-20261016.txt",
+            "rawLogSha256": "fb0aafc6a93dcc469a4e1b92e8c9c10ed7714ac0ead93e438dd06206d3eb46fc",
+            "topLevelWindows": 6,
+            "visibleTopLevelWindows": 2,
+            "overlay": {
+              "hwnd": 266794,
+              "visible": 0,
+              "child": 0,
+              "toolwindow": 1,
+              "noactivate": 1,
+              "appwindow": 0,
+              "topmost": 1,
+              "layered": 0,
+              "foreground": 0,
+              "owner_present": 0,
+              "owner_same_pid": 0,
+              "affinity_read": 1,
+              "affinity": 0,
+              "affinity_error": 0,
+              "rect_read": 1,
+              "width": 534,
+              "height": 511,
+              "style": "0x4CB0000",
+              "exstyle": "0x8000198"
+            },
+            "foregroundHwnd": 398156
+          }
+        ],
+        "cleanup": {
+          "dateUtc": "2026-10-16T05:36:06.2480959Z",
+          "firstBuildPid": 27840,
+          "firstBuildExited": true,
+          "embeddedBuildPid": 29288,
+          "embeddedBuildExited": true,
+          "setupClosedViaComputerUse": true,
+          "closeMethod": "Alt+F4",
+          "meetingStarted": false,
+          "audioCaptureStarted": false,
+          "productionAppInstalled": false,
+          "computerUseWindowListEmptyAfterExit": true
+        }
+      },
+      "findings": [
+        "Fresh frontend-loaded build retains TOOLWINDOW=1, APPWINDOW=0, NOACTIVATE=1 across the tested visibility transitions.",
+        "The same overlay HWND remains returned by raw EnumWindows in every phase.",
+        "Affinity readback is 17 while shown and again after reopening; zero after hiding does not establish permanent affinity loss.",
+        "Installed missing-tool-window result does not reproduce on the current source build in this path."
+      ],
+      "frameworkHazard": {
+        "version": "tao 0.37.1",
+        "sourcePath": "C:/Users/dev/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tao-0.37.1/src/platform_impl/windows/window_state.rs",
+        "sourceSha256": "ae8ef28f97f03e093fab36525f808d92a65ad59a4e889e7e55555c409aabcc4d",
+        "description": "Tracked flag changes can replace GWL_EXSTYLE completely; a possible risk for raw native style edits. Not observed as the cause in these visibility tests."
+      },
+      "limits": [
+        "No third-party detector test, installed-binary source attribution, or manual-mode lifecycle verification.",
+        "No capture sample or physical-display proof was produced by this window-property audit.",
+        "No production code, installer, external process, security setting, or capture client was modified."
+      ],
+      "result": "Current source implements the intended shell styles in the tested path, but the overlay is still raw-enumerable. This is not a passing solution."
+    },
+    {
+      "idea": 32,
+      "candidate": "UWP/CoreWindow and compact-overlay app views",
+      "evidenceKind": "Primary API contracts and inspected package source; no local UWP runtime test",
+      "findings": [
+        "ApplicationView.IsScreenCaptureEnabled=false is documented to produce black captured window content.",
+        "CompactOverlay specifies picture-in-picture presentation, with no enumeration or capture-exclusion contract.",
+        "ICoreWindowInterop exposes a CoreWindow HWND; WinUI 3 desktop windows are based on Win32 HWNDs.",
+        "The pinned get-windows implementation can attribute ApplicationFrameHost child windows to another owner."
+      ],
+      "result": "The standard capture-disabling property fails the clean-background requirement. No reviewed variant establishes the combined discovery and capture requirements.",
+      "limitations": "Not an experimental result or a general impossibility claim about all UWP/Win32 interop variants.",
+      "packageInstalled": false,
+      "certificateInstalled": false,
+      "runtimeInstalled": false,
+      "systemSettingsChanged": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.applicationview.isscreencaptureenabled?view=winrt-26100",
+        "https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.applicationviewmode?view=winrt-26100",
+        "https://learn.microsoft.com/en-us/windows/win32/api/corewindow/nn-corewindow-icorewindowinterop",
+        "https://learn.microsoft.com/en-us/windows/apps/develop/ui/retrieve-hwnd",
+        "https://github.com/sindresorhus/get-windows/blob/8fbea97ecd6edc42295696c87081bd29432ab461/Sources/windows/main.cc"
+      ]
+    },
+    {
+      "idea": 33,
+      "candidate": "Child renderer combined with protected alpha surface",
+      "evidenceKind": "Contract-level decision before implementation",
+      "result": "A child HWND remains discoverable through child enumeration, so this route cannot satisfy the strict HWND requirement as proposed.",
+      "combinedCaptureBehaviorTested": false,
+      "codeCreated": false,
+      "runtimeTestPerformed": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumchildwindows"
+      ]
+    },
+    {
+      "idea": 34,
+      "candidate": "Windowless WDDM presentation / raw multiplane-overlay submission",
+      "evidenceKind": "Local read-only native queries plus primary API contracts",
+      "runtime": {
+        "first": {
+          "source": {
+            "path": ".local/overlay-capture-probe/kmt-readonly-caps-v1.cpp",
+            "sha256": "24d7f45a27a2708ba87b6ca5ff833451725db84edc13a8808e48f215f7e0eeb6",
+            "bytes": 4607
+          },
+          "executable": {
+            "path": ".local/overlay-capture-probe/kmt-readonly-caps-v1.exe",
+            "sha256": "de77ae97cb5ea55ba27d8f10f2035a44cfaa0192971327c74c9661502414cccd",
+            "bytes": 144896
+          },
+          "raw": {
+            "path": ".local/overlay-capture-probe/results-kmt-readonly-caps-20261016.txt",
+            "sha256": "3e493422c86f87e97852e1bcb99b9333c1805f0698530c95e5889a8282104005",
+            "bytes": 643
+          },
+          "fields": {
+            "probe_pid": 9968,
+            "own_top_level_before": 0,
+            "open_export": 1,
+            "close_export": 1,
+            "mpo_caps_export": 1,
+            "post_caps_export": 1,
+            "open_adapter_status": 0,
+            "vidpn_source_id": 0,
+            "mpo_caps_status": 0,
+            "max_planes": 3,
+            "max_rgb_planes": 3,
+            "max_yuv_planes": 2,
+            "caps": 2809,
+            "version3_ddi": 1,
+            "shared": 0,
+            "rgb_stretch": 1,
+            "yuv_stretch": 1,
+            "max_stretch": 21,
+            "max_shrink": 0.334448,
+            "post_caps_status": 0,
+            "post_max_stretch": 1,
+            "post_max_shrink": 1,
+            "close_adapter_status": 0,
+            "adapter_closed": 1,
+            "dc_released": 1,
+            "module_released": 1,
+            "own_top_level_after": 0,
+            "present_calls": 0,
+            "source_ownership_changes": 0,
+            "display_mode_changes": 0,
+            "windows_created": 0,
+            "driver_loads": 0,
+            "pixels_read": 0
+          },
+          "targets": []
+        },
+        "followUp": {
+          "source": {
+            "path": ".local/overlay-capture-probe/kmt-readonly-caps.cpp",
+            "sha256": "94ab36b94b036e6581b364ad50f480734d103337d818f1e1bc3e2536b41c3525",
+            "bytes": 5795
+          },
+          "executable": {
+            "path": ".local/overlay-capture-probe/kmt-readonly-caps.exe",
+            "sha256": "33f2cc83b24994d21482171434f454b89b7c21320121dc816d2378ee79e769b2",
+            "bytes": 144896
+          },
+          "raw": {
+            "path": ".local/overlay-capture-probe/results-kmt-ownership-readonly-20261016.txt",
+            "sha256": "ebd3bca216882a85414df543a94624f9709b42caf01d39b8620e112baf1c4d28",
+            "bytes": 811
+          },
+          "fields": {
+            "probe_pid": 23576,
+            "own_top_level_before": 0,
+            "open_export": 1,
+            "close_export": 1,
+            "mpo_caps_export": 1,
+            "post_caps_export": 1,
+            "ownership_query_export": 1,
+            "shared_primary_query_export": 1,
+            "open_adapter_status": 0,
+            "vidpn_source_id": 0,
+            "exclusive_ownership_check_status": 0,
+            "shared_primary_query_status": 0,
+            "shared_primary_nonzero": 0,
+            "mpo_caps_status": 0,
+            "max_planes": 3,
+            "max_rgb_planes": 3,
+            "max_yuv_planes": 2,
+            "caps": 2809,
+            "version3_ddi": 1,
+            "shared": 0,
+            "rgb_stretch": 1,
+            "yuv_stretch": 1,
+            "max_stretch": 21,
+            "max_shrink": 0.334448,
+            "post_caps_status": 0,
+            "post_max_stretch": 1,
+            "post_max_shrink": 1,
+            "close_adapter_status": 0,
+            "adapter_closed": 1,
+            "dc_released": 1,
+            "module_released": 1,
+            "own_top_level_after": 0,
+            "present_calls": 0,
+            "source_ownership_changes": 0,
+            "display_mode_changes": 0,
+            "windows_created": 0,
+            "driver_loads": 0,
+            "pixels_read": 0
+          },
+          "targets": []
+        },
+        "displayCore": {
+          "source": {
+            "path": ".local/overlay-capture-probe/display-core-readonly.cpp",
+            "sha256": "6f4ad4c93a255c0ef1e476eef69c254efe2f6c6a80536da6c0e4099d39f1e2de",
+            "bytes": 3337
+          },
+          "executable": {
+            "path": ".local/overlay-capture-probe/display-core-readonly.exe",
+            "sha256": "2406305493c393be64aee2aa7dec956c2682ef04c1f05326b66400ad13e5c137",
+            "bytes": 178688
+          },
+          "raw": {
+            "path": ".local/overlay-capture-probe/results-display-core-readonly-20261016.txt",
+            "sha256": "d1fe2f4a4eb470abe8ebcff384f5cbc283ab5606113c91c7999db64495004392",
+            "bytes": 1070
+          },
+          "fields": {
+            "probe_pid": 5544,
+            "own_top_level_before": 0,
+            "manager_created": 1,
+            "connected_monitor_object": 1,
+            "monitor_usage_kind": 0,
+            "target_count": 13,
+            "connected_target_count": 1,
+            "standard_connected_count": 1,
+            "special_connected_count": 0,
+            "head_mounted_connected_count": 0,
+            "read_state_code": 0,
+            "read_state_extended": 0,
+            "manager_closed": 1,
+            "own_top_level_after": 0,
+            "target_acquire_calls": 0,
+            "scanouts_created": 0,
+            "display_configuration_changes": 0,
+            "windows_created": 0,
+            "pixels_read": 0
+          },
+          "targets": [
+            {
+              "target_index": 0,
+              "connected": 1,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 1,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 2,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 3,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 4,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 5,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 6,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 7,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 8,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 9,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 10,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 11,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            },
+            {
+              "target_index": 12,
+              "connected": 0,
+              "usage_kind": 0,
+              "stale": 0
+            }
+          ]
+        }
+      },
+      "hardware": {
+        "observation": {
+          "Name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+          "DriverVersion": "32.0.101.8132",
+          "DriverDate": "2025-09-19T03:00:00+03:00",
+          "CurrentHorizontalResolution": 2880,
+          "CurrentVerticalResolution": 1800
+        },
+        "artifact": {
+          "path": ".local/overlay-capture-probe/kmt-current-driver-20261016.json",
+          "sha256": "f4f173d3101756416ea1af0aac6c6b8c9b27173b0e0010a2642cb5c6df79c363",
+          "bytes": 213
+        }
+      },
+      "findings": [
+        "Source 0 reports three supported MPO planes, three RGB planes, two YUV planes, and version-3 DDI support.",
+        "These maxima do not indicate free planes or grant additive presentation access.",
+        "Exclusive-ownership check returns success; it does not acquire ownership.",
+        "Shared-primary query succeeds with a zero handle, providing no legacy primary allocation.",
+        "Display.Core reports one connected Standard target among 13 connector targets; none is HeadMounted or SpecialPurpose.",
+        "Each probe observes zero own top-level HWNDs before and after; this is not a recursive or message-only HWND census.",
+        "No presentation, source-ownership change, mode change, scanout creation, driver load, or pixel read occurs in the inspected probes."
+      ],
+      "correction": "The earlier legacy DXGI overlay flag does not establish that modern MPO hardware support is absent.",
+      "result": "Hardware capability is confirmed; private additive ownership, actual windowless drawing, and clean capture are unvalidated.",
+      "captureSamplesAdded": 0,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmthk/ns-d3dkmthk-_d3dkmt_present_multiplane_overlay3",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmthk/ns-d3dkmthk-_d3dkmt_get_multiplane_overlay_caps",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmthk/nf-d3dkmthk-d3dkmtcheckvidpnexclusiveownership",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmthk/nf-d3dkmthk-d3dkmtgetsharedprimaryhandle",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/multiplane-overlay-support",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors-compositor"
+      ]
+    },
+    {
+      "idea": 35,
+      "candidate": "Logical virtual display plus headless physical compositor on the same OS",
+      "evidenceKind": "Architectural inference, primary contracts, and local eligibility queries; no implementation",
+      "proposedFlow": [
+        "Windows logical desktop",
+        "IddCx desktop DirectX surfaces",
+        "Headless compositor adds local-only content",
+        "Display.Core physical scanout"
+      ],
+      "conventionalVmRequired": false,
+      "operatingSystem": {
+        "observation": {
+          "Caption": "Microsoft Windows 11 Home",
+          "Version": "10.0.26200",
+          "BuildNumber": "26200",
+          "OperatingSystemSKU": 101
+        },
+        "artifact": {
+          "path": ".local/overlay-capture-probe/display-pipeline-os-eligibility-20261016.json",
+          "sha256": "f1cfdd7a01b0f9555d5c84bcd1e0484feae362e4d08ae9eb1fac1a04aef5da98",
+          "bytes": 133
+        }
+      },
+      "physicalTargetEvidence": "Idea 34 Display.Core query: one connected Standard target and Standard monitor.",
+      "documentedEligibleSpecializedDisplayEditions": [
+        "Enterprise",
+        "Pro for Workstations",
+        "IoT Enterprise"
+      ],
+      "currentEditionAmongDocumentedEditions": false,
+      "editionDocumentationCaveat": "Microsoft describes Windows 10 requirements. This is a documented eligibility gap, not a measured Windows 11 target-acquisition failure.",
+      "softwareEdidOverrideSupportedForSpecialization": false,
+      "findings": [
+        "IddCx supports virtual monitors and provides desktop images as DirectX surfaces.",
+        "Display.Core custom compositors require eligible predesignated HMD or specialized physical targets.",
+        "Current Home edition and Standard target do not provide a validated supported output path for this proposal.",
+        "Logical/physical separation does not by itself establish capture behavior, input mapping, synchronization, or recovery.",
+        "A virtual display, compositor process, and graphics resources remain observable through non-HWND inspection."
+      ],
+      "result": "Eligibility review complete; architecture unvalidated on this configuration. No passing drawing method selected.",
+      "driverInstalled": false,
+      "targetAcquired": false,
+      "displaySettingsChanged": false,
+      "operatingSystemEditionChanged": false,
+      "captureTestPerformed": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors-compositor",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/specialized-monitors",
+        "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/indirect-display-driver-model-overview",
+        "https://github.com/microsoft/Windows-driver-samples/tree/main/video/IndirectDisplay"
+      ]
+    },
+    {
+      "idea": 36,
+      "candidate": "Open-source Vulkan direct-display compositor on the installed Intel Windows driver",
+      "source": {
+        "monado": {
+          "repository": "monado/monado",
+          "repositoryUrl": "https://gitlab.freedesktop.org/monado/monado",
+          "revision": "8b259763fdd23c46592fd4cdd30b4eea997d4b70",
+          "commitDate": "2026-10-14T19:30:57.000-07:00",
+          "reviewedLicenseNotice": "BSL-1.0 on reviewed Windows backend",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/monado__monado/source-provenance.json",
+            "bytes": 685,
+            "sha256": "9e3fb45457a0b279c138033777c4df8f7793f506ac4fb77f428cdf0602560737"
+          },
+          "cachedFilesHashVerified": 1
+        },
+        "headers": {
+          "repository": "KhronosGroup/Vulkan-Headers",
+          "repositoryUrl": "https://github.com/KhronosGroup/Vulkan-Headers",
+          "revision": "c46850864f4661461b0f6cb9922c058ffea4915e",
+          "commitDate": "2026-10-02T01:58:17Z",
+          "reviewedLicenseNotice": "Apache-2.0 OR MIT for relevant headers",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/KhronosGroup__Vulkan-Headers/source-provenance.json",
+            "bytes": 5983,
+            "sha256": "890459a672e135961a66298a498a245dfd49d38c3a7dfca2602ffa035c719dc1"
+          },
+          "cachedFilesHashVerified": 17
+        }
+      },
+      "runtime": {
+        "source": {
+          "path": ".local/overlay-capture-probe/vulkan-readonly-display.cpp",
+          "bytes": 9025,
+          "sha256": "d5e045f670f0e46418727cb1f2f91ef031380b9525871357d695a440536b8989"
+        },
+        "executable": {
+          "path": ".local/overlay-capture-probe/vulkan-readonly-display.exe",
+          "bytes": 171520,
+          "sha256": "a8ca275684206dccee838668f9319ee543b10f9e2802880279ff01f6331a8c62"
+        },
+        "buildHelper": {
+          "path": ".local/overlay-capture-probe/build.ps1",
+          "bytes": 1035,
+          "sha256": "64903eb90476230af3d2e3490fea7d16b8f3e23cdf731d6a07ad5c56c2a836fb"
+        },
+        "rawLog": {
+          "path": ".local/overlay-capture-probe/results-vulkan-readonly-display-20261016.txt",
+          "bytes": 5784,
+          "sha256": "0119d6233982ac636de5be417b9bfd003aad7bf161ac64845bc574ab7b9920e6"
+        },
+        "nativeProcessExitCode": 0,
+        "physicalDevice": {
+          "name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+          "vendorId": "0x8086",
+          "deviceId": "0x64A0",
+          "apiVersion": "1.4.325",
+          "driverVersionRaw": "0x00195FC4"
+        },
+        "instanceExtensions": [
+          "VK_KHR_surface",
+          "VK_KHR_win32_surface",
+          "VK_KHR_external_memory_capabilities",
+          "VK_KHR_external_semaphore_capabilities",
+          "VK_KHR_external_fence_capabilities",
+          "VK_KHR_get_physical_device_properties2",
+          "VK_KHR_get_surface_capabilities2",
+          "VK_KHR_device_group_creation",
+          "VK_EXT_swapchain_colorspace",
+          "VK_EXT_debug_utils",
+          "VK_EXT_debug_report",
+          "VK_KHR_portability_enumeration",
+          "VK_LUNARG_direct_driver_loading"
+        ],
+        "deviceExtensions": [
+          "VK_EXT_device_address_binding_report",
+          "VK_EXT_full_screen_exclusive",
+          "VK_KHR_swapchain",
+          "VK_KHR_external_memory",
+          "VK_KHR_external_memory_win32",
+          "VK_EXT_external_memory_host",
+          "VK_KHR_external_semaphore",
+          "VK_KHR_external_semaphore_win32",
+          "VK_KHR_external_fence",
+          "VK_KHR_external_fence_win32",
+          "VK_KHR_timeline_semaphore",
+          "VK_KHR_win32_keyed_mutex",
+          "VK_KHR_get_memory_requirements2",
+          "VK_KHR_bind_memory2",
+          "VK_KHR_dedicated_allocation",
+          "VK_KHR_sampler_mirror_clamp_to_edge",
+          "VK_KHR_maintenance1",
+          "VK_KHR_maintenance2",
+          "VK_KHR_maintenance3",
+          "VK_KHR_maintenance4",
+          "VK_KHR_maintenance5",
+          "VK_KHR_maintenance6",
+          "VK_KHR_maintenance7",
+          "VK_KHR_synchronization2",
+          "VK_KHR_shader_draw_parameters",
+          "VK_KHR_push_descriptor",
+          "VK_KHR_descriptor_update_template",
+          "VK_KHR_multiview",
+          "VK_KHR_shader_float16_int8",
+          "VK_KHR_shader_float_controls",
+          "VK_KHR_16bit_storage",
+          "VK_KHR_8bit_storage",
+          "VK_EXT_shader_subgroup_ballot",
+          "VK_EXT_shader_subgroup_vote",
+          "VK_KHR_storage_buffer_storage_class",
+          "VK_KHR_variable_pointers",
+          "VK_KHR_relaxed_block_layout",
+          "VK_EXT_sampler_filter_minmax",
+          "VK_KHR_device_group",
+          "VK_KHR_sampler_ycbcr_conversion",
+          "VK_EXT_ycbcr_2plane_444_formats",
+          "VK_EXT_4444_formats",
+          "VK_EXT_post_depth_coverage",
+          "VK_EXT_shader_viewport_index_layer",
+          "VK_EXT_shader_stencil_export",
+          "VK_EXT_conservative_rasterization",
+          "VK_AMD_texture_gather_bias_lod",
+          "VK_EXT_sample_locations",
+          "VK_KHR_draw_indirect_count",
+          "VK_EXT_multi_draw",
+          "VK_KHR_image_format_list",
+          "VK_EXT_image_view_min_lod",
+          "VK_KHR_vertex_attribute_divisor",
+          "VK_EXT_vertex_attribute_divisor",
+          "VK_EXT_descriptor_buffer",
+          "VK_EXT_descriptor_indexing",
+          "VK_EXT_mutable_descriptor_type",
+          "VK_EXT_inline_uniform_block",
+          "VK_KHR_create_renderpass2",
+          "VK_KHR_dynamic_rendering",
+          "VK_KHR_dynamic_rendering_local_read",
+          "VK_EXT_dynamic_rendering_unused_attachments",
+          "VK_KHR_load_store_op_none",
+          "VK_EXT_load_store_op_none",
+          "VK_KHR_swapchain_mutable_format",
+          "VK_KHR_depth_stencil_resolve",
+          "VK_KHR_driver_properties",
+          "VK_KHR_vulkan_memory_model",
+          "VK_EXT_conditional_rendering",
+          "VK_EXT_hdr_metadata",
+          "VK_EXT_mesh_shader",
+          "VK_KHR_fragment_shading_rate",
+          "VK_EXT_depth_range_unrestricted",
+          "VK_EXT_depth_clip_enable",
+          "VK_EXT_depth_clip_control",
+          "VK_EXT_scalar_block_layout",
+          "VK_KHR_imageless_framebuffer",
+          "VK_KHR_buffer_device_address",
+          "VK_EXT_buffer_device_address",
+          "VK_KHR_ray_tracing_pipeline",
+          "VK_KHR_acceleration_structure",
+          "VK_KHR_ray_query",
+          "VK_KHR_pipeline_library",
+          "VK_KHR_deferred_host_operations",
+          "VK_KHR_ray_tracing_maintenance1",
+          "VK_EXT_host_query_reset",
+          "VK_KHR_performance_query",
+          "VK_NV_device_diagnostic_checkpoints",
+          "VK_KHR_separate_depth_stencil_layouts",
+          "VK_KHR_shader_clock",
+          "VK_KHR_spirv_1_4",
+          "VK_KHR_uniform_buffer_standard_layout",
+          "VK_EXT_separate_stencil_usage",
+          "VK_EXT_fragment_shader_interlock",
+          "VK_EXT_index_type_uint8",
+          "VK_KHR_index_type_uint8",
+          "VK_EXT_primitive_topology_list_restart",
+          "VK_KHR_shader_subgroup_extended_types",
+          "VK_KHR_line_rasterization",
+          "VK_EXT_line_rasterization",
+          "VK_EXT_memory_budget",
+          "VK_EXT_memory_priority",
+          "VK_EXT_pageable_device_local_memory",
+          "VK_EXT_texel_buffer_alignment",
+          "VK_INTEL_performance_query",
+          "VK_EXT_subgroup_size_control",
+          "VK_EXT_shader_demote_to_helper_invocation",
+          "VK_KHR_shader_atomic_int64",
+          "VK_EXT_pipeline_creation_feedback",
+          "VK_EXT_pipeline_creation_cache_control",
+          "VK_KHR_pipeline_executable_properties",
+          "VK_EXT_graphics_pipeline_library",
+          "VK_EXT_transform_feedback",
+          "VK_EXT_provoking_vertex",
+          "VK_EXT_extended_dynamic_state",
+          "VK_EXT_extended_dynamic_state2",
+          "VK_EXT_extended_dynamic_state3",
+          "VK_EXT_vertex_input_dynamic_state",
+          "VK_EXT_custom_border_color",
+          "VK_EXT_robustness2",
+          "VK_EXT_image_robustness",
+          "VK_EXT_pipeline_robustness",
+          "VK_KHR_calibrated_timestamps",
+          "VK_EXT_calibrated_timestamps",
+          "VK_KHR_shader_integer_dot_product",
+          "VK_KHR_shader_subgroup_uniform_control_flow",
+          "VK_KHR_shader_terminate_invocation",
+          "VK_KHR_workgroup_memory_explicit_layout",
+          "VK_EXT_shader_atomic_float",
+          "VK_KHR_copy_commands2",
+          "VK_KHR_shader_non_semantic_info",
+          "VK_KHR_zero_initialize_workgroup_memory",
+          "VK_EXT_shader_atomic_float2",
+          "VK_EXT_global_priority",
+          "VK_EXT_global_priority_query",
+          "VK_KHR_global_priority",
+          "VK_KHR_fragment_shader_barycentric",
+          "VK_KHR_format_feature_flags2",
+          "VK_KHR_video_queue",
+          "VK_KHR_video_decode_queue",
+          "VK_KHR_video_decode_h264",
+          "VK_KHR_video_decode_h265",
+          "VK_KHR_video_decode_av1",
+          "VK_EXT_color_write_enable",
+          "VK_NV_compute_shader_derivatives",
+          "VK_KHR_compute_shader_derivatives",
+          "VK_EXT_private_data",
+          "VK_KHR_cooperative_matrix",
+          "VK_EXT_image_2d_view_of_3d",
+          "VK_EXT_primitives_generated_query",
+          "VK_EXT_shader_module_identifier",
+          "VK_EXT_non_seamless_cube_map",
+          "VK_EXT_attachment_feedback_loop_layout",
+          "VK_EXT_shader_image_atomic_int64",
+          "VK_KHR_map_memory2",
+          "VK_KHR_shader_maximal_reconvergence",
+          "VK_KHR_shader_quad_control",
+          "VK_EXT_host_image_copy",
+          "VK_KHR_shader_subgroup_rotate",
+          "VK_KHR_shader_expect_assume",
+          "VK_KHR_shader_float_controls2"
+        ],
+        "ownTopLevelBefore": 0,
+        "ownTopLevelAfter": 0,
+        "logicalDevicesCreated": 0,
+        "surfacesCreated": 0,
+        "swapchainsCreated": 0,
+        "framesPresented": 0,
+        "displayAcquisitions": 0,
+        "captureSamplesAdded": 0,
+        "instanceDestroyed": true,
+        "loaderModuleReleased": true
+      },
+      "findings": [
+        "The installed Intel driver does not expose VK_KHR_display, VK_EXT_direct_mode_display, VK_NV_acquire_winrt_display, or VK_KHR_display_swapchain.",
+        "Its exposed Win32 surface path requires a valid HWND; full-screen-exclusive support does not remove that requirement.",
+        "The reviewed Monado Windows backend calls CreateWindowExW and vkCreateWin32SurfaceKHR; its Intel direct-mode documentation describes Linux.",
+        "VK_EXT_headless_surface is absent and its default presentation contract would not produce visible output anyway."
+      ],
+      "result": "The reviewed Vulkan direct-display path is unavailable on this installed driver. Not a claim about every possible Intel driver/backend.",
+      "limitation": "Capability query only; zero top-level HWNDs here do not validate a windowless display renderer or a recursive/message-only window census.",
+      "sources": [
+        "https://docs.vulkan.org/refpages/latest/refpages/source/VK_NV_acquire_winrt_display.html",
+        "https://docs.vulkan.org/refpages/latest/refpages/source/VkWin32SurfaceCreateInfoKHR.html",
+        "https://docs.vulkan.org/refpages/latest/refpages/source/VK_EXT_headless_surface.html",
+        "https://gitlab.freedesktop.org/monado/monado/-/blob/8b259763fdd23c46592fd4cdd30b4eea997d4b70/src/xrt/compositor/main/comp_window_mswin.c"
+      ]
+    },
+    {
+      "idea": 37,
+      "candidate": "Open-source DWM shader rendering without a separate overlay window",
+      "source": {
+        "original": {
+          "repository": "ledoge/dwm_lut",
+          "repositoryUrl": "https://github.com/ledoge/dwm_lut",
+          "revision": "2df0415fea29c4b0149f753b2334fd20fbf673d0",
+          "commitDate": "2023-01-01T23:20:58Z",
+          "reviewedLicenseNotice": "GPL-3.0 repository license",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/ledoge__dwm_lut/source-provenance.json",
+            "bytes": 1043,
+            "sha256": "ff41d2635d47ca25b5222de7b87a12832252569e8a7d05a4b4ae1a664a597628"
+          },
+          "cachedFilesHashVerified": 3
+        },
+        "newerImplementation": {
+          "repository": "sup3rflyer/DesktopLUT",
+          "repositoryUrl": "https://github.com/sup3rflyer/DesktopLUT",
+          "revision": "a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf",
+          "commitDate": "2026-10-15T22:21:40Z",
+          "reviewedLicenseNotice": "GPL-3.0-or-later license notice",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/sup3rflyer__DesktopLUT/source-provenance.json",
+            "bytes": 5087,
+            "sha256": "c4ce752c407cdc959b5e372a29d29e5cb517e4e09e34ed2b602bda6029082ab8"
+          },
+          "cachedFilesHashVerified": 17
+        }
+      },
+      "findingsFromInspectedCode": [
+        "The reviewed renderer applies D3D11 pixel/compute shaders to a compositor back buffer and supplies spatial texture coordinates.",
+        "The reviewed renderer files do not explicitly create a window; this is not a process-wide runtime HWND absence test.",
+        "The complete application unconditionally calls RunGUI and creates a main HWND.",
+        "Static-desktop recomposition creates a layered helper window; monitor identification can also create beacon windows.",
+        "The current shaders provide color correction rather than an application text/image overlay."
+      ],
+      "authorReportedBehavior": {
+        "statement": "The project reference reports Desktop Duplication observing the image before the shader hook.",
+        "referenceFile": "REFERENCE.md",
+        "independentLocalVerification": false,
+        "gdiVerifiedHere": false,
+        "windowsGraphicsCaptureVerifiedHere": false,
+        "intelCompatibility": "Project declares Intel D3D11 support; not a local runtime test of this renderer."
+      },
+      "result": "Concrete source lead for the current user-mode HWND scope, with a partial compatibility prerequisite established by idea 39. Not a drop-in or passing solution.",
+      "remaining": [
+        "Headless control with no helper HWNDs",
+        "Window-free repainting on a static desktop",
+        "Arbitrary overlay content",
+        "Runtime object-layout compatibility",
+        "Physical-display visibility",
+        "Independent GDI/DDA/WGC captures",
+        "Lifecycle/recovery and enumeration verification"
+      ],
+      "injectorExecuted": false,
+      "liveCompositorModified": false,
+      "colorProfileInstalled": false,
+      "sources": [
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/dwm_hook/hook_render.cpp",
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/src/gui.cpp",
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/REFERENCE.md",
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/LICENSE"
+      ]
+    },
+    {
+      "idea": 38,
+      "candidate": "Intel/open-source virtual-display drivers as the physical output stage",
+      "source": {
+        "intel": {
+          "repository": "intel/Display-Virtualization-for-Windows-OS",
+          "repositoryUrl": "https://github.com/intel/Display-Virtualization-for-Windows-OS",
+          "revision": "ed741cc13f24422f4aa4b9776ef49fb85b01c60e",
+          "commitDate": "2026-09-17T10:36:54Z",
+          "reviewedLicenseNotice": "MS-PL and per-component notices; see root/component LICENSE files",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/intel__Display-Virtualization-for-Windows-OS/source-provenance.json",
+            "bytes": 1953,
+            "sha256": "e799c0500217a2f859bcdb341a1d0fecf8a442d940f3a046a5b7b99657aecffa"
+          },
+          "cachedFilesHashVerified": 5
+        },
+        "virtualDisplayDriver": {
+          "repository": "VirtualDrivers/Virtual-Display-Driver",
+          "repositoryUrl": "https://github.com/VirtualDrivers/Virtual-Display-Driver",
+          "revision": "d7244969b2aa8bb38e76d79505eda217996cefea",
+          "commitDate": "2026-06-22T22:00:18Z",
+          "reviewedLicenseNotice": "MIT repository license",
+          "cachedSourceManifest": {
+            "path": ".local/overlay-capture-probe/references/open-source-20261016/VirtualDrivers__Virtual-Display-Driver/source-provenance.json",
+            "bytes": 1625,
+            "sha256": "b715dd804e01b237a4cc66d8581de05fb0ccbef64afc0e3e9e3fb9a242bc6293"
+          },
+          "cachedFilesHashVerified": 4
+        }
+      },
+      "findings": [
+        "The Intel project requires Linux/QEMU hosting a Windows VM and forwards frame-buffer information to host rendering through VirtIO.",
+        "The reviewed VirtualDrivers IddCx frame-processing loop acquires frames, leaves actual processing as a TODO, and finishes/releases them.",
+        "Neither reviewed implementation supplies a private physical scanout stage on this Intel Windows configuration under the no-VM requirement."
+      ],
+      "result": "Not a complete physical-output implementation for this request; a virtual desktop feed alone does not resolve idea 35.",
+      "driverBuilt": false,
+      "driverInstalled": false
+    },
+    {
+      "idea": 39,
+      "candidate": "Offline local compatibility check of the open-source DWM shader candidate",
+      "source": {
+        "repository": "sup3rflyer/DesktopLUT",
+        "repositoryUrl": "https://github.com/sup3rflyer/DesktopLUT",
+        "revision": "a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf",
+        "commitDate": "2026-10-15T22:21:40Z",
+        "reviewedLicenseNotice": "GPL-3.0-or-later license notice",
+        "cachedSourceManifest": {
+          "path": ".local/overlay-capture-probe/references/open-source-20261016/sup3rflyer__DesktopLUT/source-provenance.json",
+          "bytes": 5087,
+          "sha256": "c4ce752c407cdc959b5e372a29d29e5cb517e4e09e34ed2b602bda6029082ab8"
+        },
+        "cachedFilesHashVerified": 17
+      },
+      "checker": {
+        "path": ".local/overlay-capture-probe/check-desktoplut-disk-compatibility.mjs",
+        "bytes": 4433,
+        "sha256": "f8f30ada1b916a4df43ab0d93e4509f3838b21f6922a264470c282684a382dc7"
+      },
+      "resultArtifact": {
+        "path": ".local/overlay-capture-probe/desktoplut-disk-compatibility-20261016.json",
+        "bytes": 2030,
+        "sha256": "5eb8bdebc69c09f9ed1d13e85955451d6cf233b68d21cee0b42104f536a58248"
+      },
+      "binary": {
+        "path": "C:/Windows/System32/dwmcore.dll",
+        "bytes": 4444160,
+        "sha256": "40579ecfa394395677fec84014c32ba5495f334b6d96c5653fd5caa129dc1222",
+        "fileVersion": "10.0.26100.9278 (WinBuild.160101.0800)"
+      },
+      "patterns": [
+        {
+          "name": "COverlayContext_Present_bytes_w11_24h2",
+          "patternLength": 6,
+          "matches": 0
+        },
+        {
+          "name": "COverlayContext_Present_bytes_w11_25h2",
+          "patternLength": 46,
+          "matches": 1
+        },
+        {
+          "name": "COverlayContext_IsCandidateDirectFlipCompatbile_bytes_w11_25h2",
+          "patternLength": 27,
+          "matches": 1
+        },
+        {
+          "name": "COverlayContext_OverlaysEnabled_bytes_w11_25h2",
+          "patternLength": 17,
+          "matches": 1
+        },
+        {
+          "name": "CWindowContext_IsCandidateDirectFlipCompatible_bytes_w11_25h2",
+          "patternLength": 27,
+          "matches": 0
+        },
+        {
+          "name": "CCompSwapChain_IsCandidateDirectFlipCompatible_bytes_w11_25h2",
+          "patternLength": 30,
+          "matches": 0
+        },
+        {
+          "name": "CCompVisual_IsCandidateForPromotion_bytes_w11_25h2",
+          "patternLength": 24,
+          "matches": 0
+        },
+        {
+          "name": "COverlayContext_IsDirectFlipSupportedOnTarget_bytes_w11_25h2",
+          "patternLength": 40,
+          "matches": 1
+        },
+        {
+          "name": "CGlobalCompositionSurfaceInfo_IsAdvancedDirectFlipCompatible_bytes_w11_25h2",
+          "patternLength": 24,
+          "matches": 1
+        }
+      ],
+      "findings": "The 25H2 presentation signature and two core predicates match once; three supplementary signatures are absent and two other target/surface predicates match once.",
+      "liveProcessMemoryRead": false,
+      "moduleLoadedOrExecuted": false,
+      "processModified": false,
+      "windowsCreated": false,
+      "displayChanged": false,
+      "result": "Partial static compatibility prerequisite only. Does not prove object layouts, successful loading, drawing, capture omission, or a passing overlay."
+    },
+    {
+      "idea": 40,
+      "candidate": "Minimal headless compositor shader renderer with independent capture validation",
+      "evidenceKind": "Experimental design based on ideas 37 and 39; no implementation",
+      "requirements": [
+        "No controller/helper HWNDs",
+        "No GUI/repaint/beacon windows",
+        "Static-desktop updates",
+        "Changing text/image content",
+        "Independent physical visibility",
+        "Raw enumeration census",
+        "Independent GDI/DDA/WGC captures with live backgrounds",
+        "Cleanup/recovery/lifecycle"
+      ],
+      "runtimeTestPerformed": false,
+      "result": "No implementation or live test. Source adaptation that only removes GUI HWNDs fails all-local-software invisibility.",
+      "selectionStatus": "Retired as a complete current-scope candidate by source observability audit45"
+    },
+    {
+      "idea": 45,
+      "candidate": "Full-scope observability audit of headless compositor-shader candidate40",
+      "evidenceKind": "Pinned source review only",
+      "revision": "a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf",
+      "cachedFileHashesVerified": 17,
+      "sourceEvidence": [
+        {
+          "file": "src/dwm_inject.cpp",
+          "lines": "388–395",
+          "fact": "Upstream controller detects heartbeat without SYSTEM elevation."
+        },
+        {
+          "file": "dwm_hook/dllmain.cpp",
+          "lines": "1713–1719",
+          "fact": "Globally named heartbeat event with NULL DACL."
+        },
+        {
+          "file": "src/dwm_inject.cpp",
+          "lines": "1195–1211",
+          "fact": "Shared config mapping with NULL DACL."
+        },
+        {
+          "file": "dwm_hook/dllmain.cpp",
+          "lines": "481,1730–1734",
+          "fact": "Resident module and host-monitor thread/event."
+        },
+        {
+          "file": "dwm_hook/hook_render.cpp",
+          "lines": "828–833,874–879,921–923",
+          "fact": "Retained GPU device/context, shader, texture/view resources."
+        }
+      ],
+      "result": "Not a complete all-local-software invisibility solution; removing GUI HWNDs alone leaves independently observable state.",
+      "candidateExecuted": false,
+      "liveDwmModified": false,
+      "sources": [
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/src/dwm_inject.cpp#L388",
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/dwm_hook/dllmain.cpp#L1713",
+        "https://github.com/sup3rflyer/DesktopLUT/blob/a6a4ea9f6420baaae1f9caec3ca37f89fb18a3cf/dwm_hook/hook_render.cpp#L828",
+        "https://learn.microsoft.com/en-us/windows/win32/secauthz/null-dacls-and-empty-dacls"
+      ]
+    },
+    {
+      "idea": 46,
+      "candidate": "Experimental ContentExternalOutputLink",
+      "evidenceKind": "Experimental API and pinned Microsoft source review",
+      "winuiRevision": "866ba81a1c7c644e41fb838c755273e8f73e3a74",
+      "findings": [
+        "Reviewed consumer attaches placement visual to an existing XAML element and routes WebView2 content to the bridge target.",
+        "Ordinary desktop XAML-island host explicitly creates/shows a child HWND.",
+        "No independent physical-output or capture-exclusion contract found in the reviewed API/callsite; helper implementation not located."
+      ],
+      "result": "No newly feasible hostless desktop/capture experiment established; unknown internals remain unverified.",
+      "rendererExecuted": false,
+      "packagesInstalled": false,
+      "displayChanged": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.content.contentexternaloutputlink?view=windows-app-sdk-2.0-experimental",
+        "https://github.com/microsoft/microsoft-ui-xaml/blob/866ba81a1c7c644e41fb838c755273e8f73e3a74/controls/dev/WebView2/WebView2.cpp#L1889",
+        "https://github.com/microsoft/microsoft-ui-xaml/blob/866ba81a1c7c644e41fb838c755273e8f73e3a74/dxaml/xcp/dxaml/lib/DesktopWindowXamlSource_Partial.cpp#L467",
+        "https://github.com/microsoft/microsoft-ui-xaml/blob/866ba81a1c7c644e41fb838c755273e8f73e3a74/docs/design-notes/xaml-islands/desktopwindowxamlsource.md#L20"
+      ]
+    },
+    {
+      "idea": 47,
+      "candidate": "MHC2/Intel color hardware as spatial overlay renderer",
+      "evidenceKind": "Primary API contract review",
+      "findings": [
+        "MHC2 provides an XYZ matrix and channel LUTs, not position/bitmap/alpha input.",
+        "IGCL3D LUT axes are RGB channels."
+      ],
+      "inference": "Position-independent color transforms cannot draw arbitrary UI over arbitrary background colors while preserving surrounding pixels.",
+      "result": "Reviewed color pipelines do not supply the needed spatial canvas.",
+      "profilesChanged": false,
+      "displayChanged": false,
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/wcs/display-calibration-mhc",
+        "https://intel.github.io/drivers.gpu.control-library/Control/api.html#ctl-pixtx-config-t"
+      ]
+    }
+  ],
+  "currentResearchState": {
+    "date": "2026-10-16T11:32:00.651Z",
+    "classification": "no new viable drawing/capture mechanism; actual runtime helper sources attributed and direct-DC contracts checked",
+    "consecutiveNoProgressTurnsSinceLatestEvidence": 1,
+    "selectedVerifiedDrawingMethod": null,
+    "leadingUnverifiedCandidate": null,
+    "fullGoalAchieved": false,
+    "candidate40SelectionRetiredByIdea": 45
+  },
+  "compositionContractFollowUp": {
+    "date": "2026-10-16",
+    "evidenceKind": "Primary contract revalidation, not a runtime experiment",
+    "findings": [
+      "Composition swap chains and surface handles separate rendering from hosting; they do not supply a standalone desktop output.",
+      "DirectComposition requires an owned HWND target before its visual tree can display; the modern Windows.UI.Composition Win32 tutorial also uses an HWND target.",
+      "MPO Shared=0 means resources are dedicated to the queried VidPn source rather than shared across VidPn sources; it does not establish private additive process ownership."
+    ],
+    "newDrawingTestPerformed": false,
+    "newCaptureSamples": 0,
+    "newValidatedDisplayMechanism": false,
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_2/nf-dxgi1_2-idxgifactory2-createswapchainforcomposition",
+      "https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_3/nf-dxgi1_3-idxgifactorymedia-createswapchainforcompositionsurfacehandle",
+      "https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-idcompositiondevice-createtargetforhwnd",
+      "https://learn.microsoft.com/en-us/windows/uwp/composition/using-the-visual-layer-with-win32",
+      "https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/d3dkmthk/ns-d3dkmthk-_d3dkmt_multiplane_overlay_caps"
+    ]
+  },
+  "currentContinuationAudit": {
+    "date": "2026-10-16T11:32:00.651Z",
+    "resumedByDirectUserRequest": true,
+    "freshBlockedAudit": true,
+    "previousGoalTurn": "progress: actual File Explorer overlay capture validation and source candidate decisions",
+    "thisGoalTurn": "no progress toward a passing display mechanism: source attribution clarifies runtime HWND prerequisites but no viable new renderer or actual-app experiment was established",
+    "consecutiveNoProgressTurns": 1,
+    "verifiedWait": false,
+    "researchJobBeingAwaited": false,
+    "blockedThresholdMet": false,
+    "fullGoalAchieved": false
+  },
+  "latestCompletionAudit": {
+    "date": "2026-10-16T11:24:54.419Z",
+    "fullGoalAchieved": false,
+    "requirements": [
+      {
+        "requirement": "No overlay/helper HWND discoverable through raw enumeration",
+        "status": "failed",
+        "evidence": "Actual Ctrl+Shift+H overlay and children remain enumerable; 43 app-tree HWNDs in active meeting states."
+      },
+      {
+        "requirement": "Captured image shows background without overlay or black masking",
+        "status": "Verified for recorded actual-overlay monitor samples over controlled references and two ordinary desktop cohorts",
+        "evidence": "Separate cohorts:42 has39verified images and21exact visible monitor matches;43Calculator has9images and3exact monitor triples;44FileExplorer has9images and3exact monitor triples. Direct-window unavailability remains separate. Arbitrary motion/physical panel output are unverified."
+      },
+      {
+        "requirement": "Locally visible and updating output",
+        "status": "physical panel output not independently verified",
+        "evidence": "Successful native visibility/presentation state and capture omission do not independently establish physical pixels."
+      },
+      {
+        "requirement": "Same PC, no VM",
+        "status": "tested natively on the same PC",
+        "evidence": "Actual production executable and standalone user-mode auditor; no VM or driver installed."
+      },
+      {
+        "requirement": "Invisibility to all local software including administrator/driver inspection",
+        "status": "not established",
+        "evidence": "Raw user-mode enumeration already discovers the target; bounded user-mode tests cannot prove universal invisibility."
+      },
+      {
+        "requirement": "Production integration and lifecycle",
+        "status": "existing production overlay tested; no replacement rendering path implemented",
+        "evidence": "Actual active normal/manual/reopened overlay states tested; movement, shutdown and multi-monitor behavior remain untested."
+      }
+    ]
+  },
+  "userReportedStudy": {
+    "date": "2026-10-16",
+    "provenance": "Direct user report, separate from locally verified synthetic experiments",
+    "appliesTo": "Current application; not the protected-alpha prototype",
+    "findings": [
+      "The overlay uses WDA_EXCLUDEFROMCAPTURE.",
+      "Its pixels are absent from the Windows recordings the user verified.",
+      "The observing software still identifies the application by name.",
+      "Detection correlates with showing the overlay rather than the process merely running."
+    ],
+    "recordingApisIdentified": false,
+    "detectorImplementationVerified": false,
+    "inference": "Consistent with a visibility-triggered window or metadata discovery path; the exact API and predicates are unknown."
+  },
+  "openSourceResearchResume": {
+    "date": "2026-10-16",
+    "requestedByUser": true,
+    "requirements": "Same Windows PC, Intel GPU, no VM, no enumerable overlay/helper HWND, captures show live background without overlay or black mask.",
+    "platform": {
+      "observation": {
+        "ObservedAtUtc": "2026-10-16T07:19:27.6008337Z",
+        "OperatingSystem": {
+          "Caption": "Microsoft Windows 11 Home",
+          "BuildNumber": "26200",
+          "OperatingSystemSKU": 101
+        },
+        "GraphicsAdapter": [
+          {
+            "Name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+            "DriverVersion": "32.0.101.8132"
+          }
+        ],
+        "DwmCore": {
+          "FullName": "C:\\Windows\\System32\\dwmcore.dll",
+          "Length": 4444160,
+          "FileVersion": "10.0.26100.9278 (WinBuild.160101.0800)"
+        },
+        "VulkanLoader": {
+          "FullName": "C:\\Windows\\System32\\vulkan-1.dll",
+          "Length": 1629104,
+          "FileVersion": "1.4.313.0"
+        }
+      },
+      "artifact": {
+        "path": ".local/overlay-capture-probe/open-source-platform-20261016.json",
+        "bytes": 626,
+        "sha256": "8fe663b7aeb358e10485b411903a16bd341ed3e4f1a36cdd5473e6209a4542ff"
+      }
+    },
+    "newCaptureSamplesAdded": 0,
+    "currentLeadingCandidate": 40,
+    "fullGoalAchieved": false
+  },
+  "blockedAuditBeforeOpenSourceResume": {
+    "date": "2026-10-16",
+    "previousGoalTurn": "no progress: platform, evidence, and research-process revalidation supplied no new drawing path",
+    "thisGoalTurn": "no progress: raw source/log/hash and live platform/process audit confirms the same unmet prerequisites",
+    "consecutiveNoProgressTurns": 3,
+    "verifiedWait": false,
+    "researchJobBeingAwaited": false,
+    "blockingCondition": "No validated same-PC output mechanism combines absence of discoverable overlay/helper HWNDs with clean-background capture on this configuration.",
+    "missingPrerequisite": "A concrete output/ownership mechanism and testable capture boundary for the current GPU and OS.",
+    "blockedThresholdMet": true,
+    "fullGoalAchieved": false,
+    "revalidation": {
+      "observedAtUtc": "2026-10-16T06:56:34.4562662Z",
+      "researchProcesses": [],
+      "processScope": "Executables under the local overlay-capture-probe directory or the tested release mscv32.exe path",
+      "operatingSystem": {
+        "caption": "Microsoft Windows 11 Home",
+        "build": "26200",
+        "sku": 101
+      },
+      "graphicsAdapter": {
+        "name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+        "driverVersion": "32.0.101.8132"
+      },
+      "newRuntimeDisplayEvidence": false
+    },
+    "rawEvidenceHashesRevalidated": [
+      ".local/overlay-capture-probe/embedded-window-state-shown-20261016.txt",
+      ".local/overlay-capture-probe/results-kmt-ownership-readonly-20261016.txt",
+      ".local/overlay-capture-probe/results-display-core-readonly-20261016.txt"
+    ],
+    "safeNextExperimentAvailableWithoutMissingPrerequisites": false
+  },
+  "windowAuditDiagnostic": {
+    "idea": 41,
+    "date": "2026-10-16",
+    "evidenceKind": "Built native diagnostic, independent renderer, real-app metadata audit, independent saved-image verification",
+    "scope": "User-mode discovery on accessible desktops of the current window station; no driver/compositor modification",
+    "executable": {
+      "path": "artifacts/window-audit/bin/window-audit.exe",
+      "bytes": 476160,
+      "sha256": "9daf70ca73ae98376434a83545352873bd0cddaec2e5e0d36fb7cc068054f696"
+    },
+    "buildProvenance": {
+      "path": "artifacts/window-audit/bin/build-provenance.json",
+      "bytes": 1702,
+      "sha256": "b16814e36e12697ca94bdf8dc6785003d9df52b8cd86748f65857ccd3fc62a58"
+    },
+    "sourceDirectory": "tools/window-audit",
+    "independentVerifier": {
+      "path": "tools/window-audit/verify-report.mjs",
+      "bytes": 14861,
+      "sha256": "b6308e0e66b6733f15522c33e2f2fded74707b7cfdd3881e433f53f29a82424a"
+    },
+    "report": {
+      "path": "artifacts/window-audit/validated-full-overlay/report.json",
+      "bytes": 211684,
+      "sha256": "754ee6869786600f55612a249b6274d3d7e83dd3585a0141d924e5da06014e6b"
+    },
+    "verification": {
+      "path": "artifacts/window-audit/validated-full-overlay/verification.json",
+      "bytes": 44158,
+      "sha256": "3581daddffdade00030bd6bc477a7600fe07d5d14ff1f1d9e63c51c001d37e10"
+    },
+    "readableSummary": {
+      "path": "artifacts/window-audit/validated-full-overlay/summary.html",
+      "bytes": 4144,
+      "sha256": "4787c49c3487ada8e381f9300b95db138186e49e5aa6ec7d8a5cfba6ad25b0e4"
+    },
+    "appAudit": {
+      "path": "artifacts/window-audit/app-audit-verification.json",
+      "bytes": 8740,
+      "sha256": "db4034edb85255fb6902eaf7ba090ab0dc127f36dbf59f6504edefed04a98f11"
+    },
+    "observerPid": 26984,
+    "rendererPid": 17292,
+    "diagnosticSelfTestPassed": true,
+    "enumeratedFixtureWindows": 10,
+    "classifierTests": 11,
+    "monitorCaptureControls": [
+      {
+        "method": "gdi_monitor",
+        "passed": true
+      },
+      {
+        "method": "desktop_duplication",
+        "passed": true
+      },
+      {
+        "method": "wgc_monitor",
+        "passed": true
+      }
+    ],
+    "attemptedCaptureSamples": 150,
+    "successfulCaptureImagesVerified": 147,
+    "unavailableCaptures": 3,
+    "rgbPixelsVerified": 5419008,
+    "singleBlackPixelRejected": true,
+    "separateFromHistoricalTwentyCaseHundredSampleCohort": true,
+    "configurations": [
+      {
+        "name": "background_only",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "print_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "desktop_duplication": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": true,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "ordinary_tool_popup",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "print_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "desktop_duplication": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "wda_monitor_popup",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "print_window": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "desktop_duplication": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "wgc_window": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "wgc_monitor": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            1,
+            1,
+            1
+          ],
+          "print_window": [
+            1,
+            1,
+            1
+          ],
+          "desktop_duplication": [
+            1,
+            1,
+            1
+          ],
+          "wgc_window": [
+            1,
+            1,
+            1
+          ],
+          "wgc_monitor": [
+            1,
+            1,
+            1
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "wda_excluded_popup",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "print_window": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "desktop_duplication": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_window": [
+            "capture_unavailable",
+            "capture_unavailable",
+            "capture_unavailable"
+          ],
+          "wgc_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            1,
+            1,
+            1
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": true,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "ordinary_child",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumChildWindows",
+          "FindWindowEx.child"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "print_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "desktop_duplication": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "affinity_requested_on_child",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumChildWindows",
+          "FindWindowEx.child"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "print_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "desktop_duplication": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "exclude_then_reparent",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumChildWindows",
+          "FindWindowEx.child"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "print_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "desktop_duplication": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": true,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "surface_unprotected_alpha",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "print_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "desktop_duplication": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_window": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ],
+          "wgc_monitor": [
+            "overlay_visible",
+            "overlay_visible",
+            "overlay_visible"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "surface_protected",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "print_window": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "desktop_duplication": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "wgc_window": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ],
+          "wgc_monitor": [
+            "black_mask",
+            "black_mask",
+            "black_mask"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            1,
+            1,
+            1
+          ],
+          "print_window": [
+            1,
+            1,
+            1
+          ],
+          "desktop_duplication": [
+            1,
+            1,
+            1
+          ],
+          "wgc_window": [
+            1,
+            1,
+            1
+          ],
+          "wgc_monitor": [
+            1,
+            1,
+            1
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": false,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      },
+      {
+        "name": "surface_protected_alpha",
+        "subjectEnumerable": true,
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "methods": {
+          "gdi_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "print_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "desktop_duplication": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_window": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ],
+          "wgc_monitor": [
+            "live_background",
+            "live_background",
+            "live_background"
+          ]
+        },
+        "blackFractions": {
+          "gdi_monitor": [
+            0,
+            0,
+            0
+          ],
+          "print_window": [
+            0,
+            0,
+            0
+          ],
+          "desktop_duplication": [
+            0,
+            0,
+            0
+          ],
+          "wgc_window": [
+            0,
+            0,
+            0
+          ],
+          "wgc_monitor": [
+            0,
+            0,
+            0
+          ]
+        },
+        "allMonitorSamplesShowLiveBackground": true,
+        "combinedRequirementSurvived": false,
+        "physicalVisibilityVerified": false
+      }
+    ],
+    "currentApp": {
+      "pid": 35136,
+      "overlayHwnd": "0x60CDE",
+      "targetWindowsEveryPhase": 16,
+      "rawEnumerationFindsHiddenAndShown": true,
+      "shownAffinity": 17,
+      "watchTransitions": [
+        {
+          "elapsedMs": 23718,
+          "change": "properties_changed",
+          "beforeVisible": false,
+          "afterVisible": true,
+          "affinityAfter": 17
+        },
+        {
+          "elapsedMs": 34672,
+          "change": "properties_changed",
+          "beforeVisible": true,
+          "afterVisible": false,
+          "affinityAfter": 0
+        }
+      ],
+      "actualAppPixelsCapturedByThisAudit": false
+    },
+    "conclusions": [
+      "All ten controlled configurations retain an enumerable subject or host; none survives the combined requirement.",
+      "WDA_EXCLUDEFROMCAPTURE popup monitor captures match every sampled background pixel in all three phases without black pixels.",
+      "WDA_MONITOR and protected readback without an alpha effect produce black masks in the controlled region.",
+      "The protected alpha-effect captures show the live pattern, but its host remains enumerable and physical output is unverified.",
+      "The reparented layered fixture also has clean tested captures, but remains child-enumerable; successful affinity readback after reparenting is unavailable and physical output is unverified.",
+      "Three direct WGC captures of the excluded popup are unavailable, not clean captures; direct PrintWindow of that popup is black, while monitor capture stays clean.",
+      "The real app is discoverable while hidden and shown, including child and message-only helpers; its shown overlay affinity is 17.",
+      "This user-mode test software cannot prove universal detection or invisibility against administrator/driver-level observers."
+    ],
+    "physicalDisplayVisibilityVerified": false,
+    "allLocalSoftwareInvisibilityProven": false,
+    "fullGoalAchieved": false
+  },
+  "realApplicationOverlayAudit": {
+    "idea": 42,
+    "date": "2026-10-16T10:37:20.937Z",
+    "evidenceKind": "Actual unmodified production application, active meeting and complete process-tree window scan",
+    "privacyTarget": "Only the actual Ctrl+Shift+H meeting overlay. Setup must remain hidden during observed states.",
+    "syntheticOverlayUsed": false,
+    "referenceBackgroundIsMeasurementInstrumentationOnly": true,
+    "actualDesktopContentTest": false,
+    "reportDirectory": "artifacts/window-audit/real-application-20261016",
+    "report": "artifacts/window-audit/real-application-20261016/summary.html",
+    "verification": "artifacts/window-audit/real-application-20261016/verification.json",
+    "manifest": "artifacts/window-audit/real-application-20261016/manifest.json",
+    "evidenceSha256": {
+      "manifest.json": "c144c8c90e266c4e044520dd4f1ef1ccb3ad087b23cdfce88361867d0a50cfcd",
+      "verification.json": "86d29f866358ae57bd94575a1dad5080c17046551faf449bf63699668c4c9406",
+      "summary.html": "66b4f37b74b9642184e4fa6ad2958e48effad8ff312ad879a62a181d4b897fc2",
+      "application-provenance.json": "c07c20d58046edcc3a755b259431503b83bb275e2148c209a051628a4e0518a7",
+      "native-auditor-build-provenance.json": "057d9a9fd8b5c0011ba1d1a87197c28e3617ebab1e0a2541e4fb5f69a7c51139",
+      "visibility-filter-comparison.json": "ade0bc2989a6333dea37538d89b7897f96382d7a5300984d3ca4e3577f4a3191"
+    },
+    "independentVerifier": "tools/window-audit/verify-real-app.mjs",
+    "nativeSource": [
+      "tools/window-audit/real-app.cpp",
+      "tools/window-audit/real-app.hpp"
+    ],
+    "applicationTreeScanner": "tools/window-audit/audit-process-tree.ps1",
+    "phaseController": "tools/window-audit/capture-real-phases.ps1",
+    "rootProcessId": 33084,
+    "overlayHwnd": "0x20DCA",
+    "setupHwnd": "0x40A2C",
+    "applicationBinary": "C:\\Users\\dev\\Downloads\\test-ts\\src-tauri\\target\\release\\mscv32.exe",
+    "applicationBinarySha256": "da2bc438745b2b242d5fc69d8aa772b20d4a94c1a93b7f0eea0b189e60ce54c3",
+    "applicationProvenanceVerified": true,
+    "currentBuildInputsMatched": 13,
+    "applicationProcessCount": 12,
+    "applicationHwndCount": 43,
+    "rootProcessHwndCount": 16,
+    "descendantProcessHwndCount": 27,
+    "appTreeRawEnumWindowsCount": 18,
+    "observedPrivacyStateCount": 5,
+    "setupHiddenInEveryObservedPrivacyState": true,
+    "states": [
+      {
+        "label": "Meeting active, manual overlay hidden",
+        "role": "hidden_control",
+        "overlayVisible": false,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      },
+      {
+        "label": "Meeting active, manual overlay shown",
+        "role": "shown_overlay",
+        "overlayVisible": true,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      },
+      {
+        "label": "Meeting active, normal overlay hidden",
+        "role": "hidden_control",
+        "overlayVisible": false,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      },
+      {
+        "label": "Meeting active, normal overlay shown",
+        "role": "shown_overlay",
+        "overlayVisible": true,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      },
+      {
+        "label": "Meeting active, normal overlay reopened",
+        "role": "reopened_overlay",
+        "overlayVisible": true,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      },
+      {
+        "label": "Finished: overlay/setup hidden; pause shortcut sent",
+        "role": "context",
+        "overlayVisible": false,
+        "overlayDiscovered": true,
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "processCount": 12,
+        "applicationWindowCount": 43,
+        "setupConfirmedHidden": true
+      }
+    ],
+    "visibilityFilterComparisons": [
+      {
+        "state": "Meeting active, manual overlay hidden",
+        "overlayVisible": false,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 0,
+        "visibleNamedWindows": [],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "overlayExtendedStyle": "0x198",
+        "setupHidden": true
+      },
+      {
+        "state": "Meeting active, manual overlay shown",
+        "overlayVisible": true,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 1,
+        "visibleNamedWindows": [
+          {
+            "hwnd": "0x20DCA",
+            "pid": 33084,
+            "title": "wavesSvc64"
+          }
+        ],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "overlayExtendedStyle": "0x198",
+        "setupHidden": true
+      },
+      {
+        "state": "Meeting active, normal overlay hidden",
+        "overlayVisible": false,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 0,
+        "visibleNamedWindows": [],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "overlayExtendedStyle": "0x8000198",
+        "setupHidden": true
+      },
+      {
+        "state": "Meeting active, normal overlay shown",
+        "overlayVisible": true,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 1,
+        "visibleNamedWindows": [
+          {
+            "hwnd": "0x20DCA",
+            "pid": 33084,
+            "title": "wavesSvc64"
+          }
+        ],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "overlayExtendedStyle": "0x8000198",
+        "setupHidden": true
+      },
+      {
+        "state": "Meeting active, normal overlay reopened",
+        "overlayVisible": true,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 1,
+        "visibleNamedWindows": [
+          {
+            "hwnd": "0x20DCA",
+            "pid": 33084,
+            "title": "wavesSvc64"
+          }
+        ],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "overlayExtendedStyle": "0x8000198",
+        "setupHidden": true
+      },
+      {
+        "state": "Finished: overlay/setup hidden; pause shortcut sent",
+        "overlayVisible": false,
+        "rawTreeWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 0,
+        "visibleNamedWindows": [],
+        "overlayEnumerable": true,
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "overlayExtendedStyle": "0x8000198",
+        "setupHidden": true
+      }
+    ],
+    "actualThirdPartyDetectorImplementationVerified": false,
+    "meetingEvidence": {
+      "startMeetingClickedInExistingSetup": true,
+      "setupHiddenImmediatelyAfterStarting": true,
+      "speechWorkerPid": 2356,
+      "speechWorkerObservedInApplicationTree": true,
+      "manualOverlayShortcutSucceeded": true,
+      "manualStateEvidence": "Manual open changes actual overlay extended style and frontend-driven bounds; runtime handles this shortcut only with an active session.",
+      "commands": [
+        "Start meeting",
+        "Ctrl+Shift+F9 (hide setup)",
+        "Ctrl+Shift+Space (open actual manual overlay)",
+        "Ctrl+Shift+H (hide/show)",
+        "Ctrl+Shift+X (return to normal listening)",
+        "Ctrl+Shift+H (hide/show/reopen)"
+      ],
+      "typedQuestionSubmitted": false,
+      "answerQualityOrAudioTranscriptionAccuracyTested": false
+    },
+    "cleanup": {
+      "pauseShortcutSent": true,
+      "pausedUiStateIndependentlyRead": false,
+      "pauseCommandSourceStopsAudioPipeline": true,
+      "speechWorkerProcessMayRemainCached": true,
+      "overlayLeftHidden": true,
+      "setupLeftHidden": true,
+      "referenceBackgroundStopped": true,
+      "neutralCalculatorClosed": true
+    },
+    "attemptedCaptureSamples": 52,
+    "successfulCaptureImagesVerified": 39,
+    "unavailableCaptures": 13,
+    "rgbPixelsVerified": 35503416,
+    "backgroundPhases": [
+      0,
+      1,
+      2
+    ],
+    "visibleOverlayCaptureGroups": 7,
+    "exactHiddenMonitorImageComparisonCount": 21,
+    "exactHiddenMonitorImageMatchCount": 21,
+    "exactHiddenMonitorImageMismatchCount": 0,
+    "monitorMethods": [
+      "gdi_monitor",
+      "desktop_duplication",
+      "wgc_monitor"
+    ],
+    "directWindowWgcUnavailableCount": 13,
+    "anyObservedMonitorBlackPixel": false,
+    "monitorCaptureRequirementPassed": true,
+    "actualOverlayEnumerable": true,
+    "hwndInvisibilityRequirementPassed": false,
+    "separateFromSyntheticDiagnosticAndHistoricalTwentyCaseHundredSampleCohorts": true,
+    "physicalPanelVisibilityVerified": false,
+    "allLocalSoftwareInvisibilityProven": false,
+    "fullGoalAchieved": false,
+    "limitations": [
+      "Capture checks cover every pixel inside each recorded actual overlay DWM frame rectangle, not every screen pixel.",
+      "Window capture black pixels or API denial are distinct from black masks in monitor captures.",
+      "Failed, unavailable, changed-target and uncalibrated captures never count as clean omission.",
+      "The synthetic background is test instrumentation; the application overlay is the privacy target.",
+      "Snapshots cannot exclude changes occurring entirely between samples or observers outside the recorded user-mode APIs.",
+      "Capture omission does not establish what a person sees on the physical panel.",
+      "The known reference background is not a test of arbitrary ordinary desktop content; that is a separate requested cohort.",
+      "Reference-after status files were retained but not independently consumed by this verifier version.",
+      "Movement, shutdown, multi-monitor behavior, answer quality and transcription accuracy were not tested."
+    ],
+    "conclusions": [
+      "The actual shown overlay is raw-enumerable, with child HWNDs also discovered.",
+      "The visible/nonempty-title EnumWindows app list changes from zero to one when the overlay is shown; this predicate is not proof of any third-party implementation.",
+      "All 21 shown/reopened monitor images exactly equal same-phase hidden references; no black mask was measured inside the complete captured DWM frames.",
+      "Direct-window WGC failures are unavailable captures and never count as clean omission."
+    ]
+  },
+  "ordinaryDesktopOverlayAudit": {
+    "idea": 43,
+    "date": "2026-10-16T10:44:14.199Z",
+    "evidenceKind": "Actual unmodified Ctrl+Shift+H overlay over ordinary desktop/application content, with separate raw window detector",
+    "privacyTarget": "Actual Ctrl+Shift+H meeting overlay only; setup remains hidden.",
+    "actualDesktopContent": "The ordinary Windows desktop with Calculator maximized and an existing ChatGPT notification. No known test pattern, reference renderer or synthetic overlay was drawn.",
+    "referenceBackgroundUsed": false,
+    "syntheticOverlayUsed": false,
+    "applicationModified": false,
+    "wallpaperOnlyTest": false,
+    "arbitraryMovingBackgroundProof": false,
+    "rootProcessId": 33084,
+    "overlayHwnd": "0x20DCA",
+    "setupHwnd": "0x40A2C",
+    "reportDirectory": "artifacts/window-audit/ordinary-desktop-20261016",
+    "report": "artifacts/window-audit/ordinary-desktop-20261016/summary.html",
+    "verification": "artifacts/window-audit/ordinary-desktop-20261016/verification.json",
+    "manifest": "artifacts/window-audit/ordinary-desktop-20261016/manifest.json",
+    "evidenceSha256": {
+      "manifest.json": "68b3bec04003a35a58f21351b49340b7c1de795bd67a276a7fc4f645d7c0d9f2",
+      "verification.json": "ae55f4e4e0412c02b6e984d8bd7db4be62cbeb4de007e52194c524540f641a91",
+      "summary.html": "d28e79bbc8a1309c717eeba88c8ef5fa68fb3b85695b0ab20c87f6a3004a012f",
+      "visibility-filter-comparison.json": "45590135413460900f60c11998b35ad361ff1b38fc2f584880985cfd0368db4f",
+      "application-provenance.json": "c07c20d58046edcc3a755b259431503b83bb275e2148c209a051628a4e0518a7",
+      "native-auditor-build-provenance.json": "0d73c19976dff084c7c4001b9d947fb13cb1cd124377d0deab6f1f0b2deca379"
+    },
+    "independentVerifier": "tools/window-audit/verify-desktop-content.mjs",
+    "detector": "tools/window-audit/audit-process-tree.ps1 plus native unfiltered raw HWND discovery",
+    "applicationProvenanceVerified": true,
+    "applicationBinarySha256": "da2bc438745b2b242d5fc69d8aa772b20d4a94c1a93b7f0eea0b189e60ce54c3",
+    "captureSetCount": 1,
+    "attemptedCaptureSamples": 12,
+    "successfulCaptureImagesVerified": 9,
+    "unavailableDirectWindowCaptures": 3,
+    "rgbPixelsVerified": 7995672,
+    "monitorComparisons": 3,
+    "cleanMonitorComparisons": 3,
+    "differingMonitorComparisons": 0,
+    "inconclusiveMonitorComparisons": 0,
+    "newNearBlackPixelsInStableMonitorComparisons": 0,
+    "monitorCaptureRequirementPassed": true,
+    "actualOverlayEnumerable": true,
+    "hwndInvisibilityRequirementPassed": false,
+    "detectorComparisons": [
+      {
+        "state": "Ordinary Calculator desktop; actual overlay hidden before",
+        "overlayVisible": false,
+        "overlayEnumerable": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 0,
+        "visibleNamedWindows": [],
+        "setupHidden": true
+      },
+      {
+        "state": "Ordinary Calculator desktop; actual overlay shown",
+        "overlayVisible": true,
+        "overlayEnumerable": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 1,
+        "visibleNamedWindows": [
+          {
+            "hwnd": "0x20DCA",
+            "pid": 33084,
+            "title": "wavesSvc64"
+          }
+        ],
+        "setupHidden": true
+      },
+      {
+        "state": "Ordinary Calculator desktop; actual overlay hidden after",
+        "overlayVisible": false,
+        "overlayEnumerable": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "rawTopLevelCount": 18,
+        "visibleNonemptyTitleTopLevelCount": 0,
+        "visibleNamedWindows": [],
+        "setupHidden": true
+      }
+    ],
+    "windowStates": [
+      {
+        "label": "Ordinary Calculator desktop; actual overlay hidden before",
+        "role": "hidden_before",
+        "reportFile": "state-calculator-hidden-before/application-windows.json",
+        "sampledBefore": "2026-10-16T10:39:59.4053589Z",
+        "sampledAfter": "2026-10-16T10:40:00.7267328Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": false,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 0,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      },
+      {
+        "label": "Ordinary Calculator desktop; actual overlay shown",
+        "role": "shown_overlay",
+        "reportFile": "state-calculator-shown/application-windows.json",
+        "sampledBefore": "2026-10-16T10:40:14.9318548Z",
+        "sampledAfter": "2026-10-16T10:40:16.1792610Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": true,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 1,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      },
+      {
+        "label": "Ordinary Calculator desktop; actual overlay hidden after",
+        "role": "hidden_after",
+        "reportFile": "state-calculator-hidden-after/application-windows.json",
+        "sampledBefore": "2026-10-16T10:40:34.3476226Z",
+        "sampledAfter": "2026-10-16T10:40:35.4822430Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": false,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 0,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      }
+    ],
+    "separateFromControlledBackgroundAndSyntheticAndHistoricalCohorts": true,
+    "actualThirdPartyDetectorImplementationVerified": false,
+    "physicalPanelVisibilityVerified": false,
+    "allLocalSoftwareInvisibilityProven": false,
+    "fullGoalAchieved": false,
+    "cleanup": {
+      "overlayLeftHidden": true,
+      "setupLeftHidden": true,
+      "referenceBackgroundAlreadyStopped": true,
+      "noPauseToggleSentDuringThisCohort": true,
+      "neutralCalculatorClosed": true
+    },
+    "limitations": [
+      "Every decoded pixel is inside the recorded actual overlay DWM frame; pixels outside that frame and other displays are not checked.",
+      "Both hidden endpoint captures must match exactly per method before a shown-frame difference is judged. Changing endpoints make that comparison inconclusive.",
+      "Matching endpoint snapshots cannot exclude a transient desktop change occurring only during the shown snapshot.",
+      "Natural black desktop pixels are allowed; newly black pixels are counted relative to the actual hidden baseline.",
+      "Unavailable direct-window captures do not imply clean monitor omission or black masking.",
+      "Window/process snapshots are not atomic and cover the recorded user-mode APIs, not every local observer.",
+      "Capture omission cannot establish physical panel visibility or universal invisibility."
+    ],
+    "conclusions": [
+      "All three monitor methods returned exactly identical complete overlay-frame RGB images for hidden-before, shown and hidden-after.",
+      "No newly black or otherwise changed pixels were measured in the shown images. Existing ordinary desktop pixels remain visible in captures.",
+      "Independent raw enumeration still finds the actual overlay and its descendants; a visible/nonempty-title app filter changes from zero to one to zero.",
+      "This confirms finite capture omission over stationary natural desktop content, not universal live-background reconstruction or invisibility."
+    ]
+  },
+  "fileExplorerOverlayAudit": {
+    "idea": 44,
+    "date": "2026-10-16T11:24:54.419Z",
+    "evidenceKind": "Actual production Ctrl+Shift+H overlay over real File Explorer workspace icons",
+    "privacyTarget": "Actual Ctrl+Shift+H meeting overlay only; setup hidden throughout.",
+    "actualDesktopContent": "Normal File Explorer showing the real test-ts workspace folder in large-icons view, maximized on the existing desktop.",
+    "report": "artifacts/window-audit/file-explorer-20261016/summary.html",
+    "verification": "artifacts/window-audit/file-explorer-20261016/verification.json",
+    "manifest": "artifacts/window-audit/file-explorer-20261016/manifest.json",
+    "evidenceSha256": {
+      "manifest.json": "f95dccfc11faadae6877e27ffca52e9dbb555c3fc692f2c9754d52abe60e19a6",
+      "verification.json": "1fb75a5c05f93a921ec2c09c59c4a4aabb08a96ba8f52a74d203c37b604e0a21",
+      "summary.html": "8da5c093f5869b754e784c0fad0ad5397bce5fb1dcf63407243a55b4d11bb5b1",
+      "visibility-filter-comparison.json": "c101f94a93221b2afae9d6a0f964773d4e7ea41e4c5d65cad5991b6e7fe60e75",
+      "application-provenance.json": "c07c20d58046edcc3a755b259431503b83bb275e2148c209a051628a4e0518a7",
+      "native-auditor-build-provenance.json": "0d73c19976dff084c7c4001b9d947fb13cb1cd124377d0deab6f1f0b2deca379"
+    },
+    "independentVerifier": "tools/window-audit/verify-desktop-content.mjs",
+    "rootProcessId": 33084,
+    "overlayHwnd": "0x20DCA",
+    "setupHwnd": "0x40A2C",
+    "applicationBinarySha256": "da2bc438745b2b242d5fc69d8aa772b20d4a94c1a93b7f0eea0b189e60ce54c3",
+    "applicationProvenanceVerified": true,
+    "applicationModified": false,
+    "syntheticOverlayUsed": false,
+    "referenceBackgroundUsed": false,
+    "attemptedCaptureSamples": 12,
+    "successfulCaptureImagesVerified": 9,
+    "unavailableDirectWindowCaptures": 3,
+    "rgbPixelsVerified": 7995672,
+    "cleanMonitorComparisons": 3,
+    "differingMonitorComparisons": 0,
+    "inconclusiveMonitorComparisons": 0,
+    "newNearBlackPixelsInStableMonitorComparisons": 0,
+    "monitorCaptureRequirementPassed": true,
+    "actualOverlayEnumerable": true,
+    "hwndInvisibilityRequirementPassed": false,
+    "windowStates": [
+      {
+        "label": "File Explorer workspace icons; overlay hidden before",
+        "role": "hidden_before",
+        "reportFile": "state-hidden-before/application-windows.json",
+        "sampledBefore": "2026-10-16T11:18:36.9912619Z",
+        "sampledAfter": "2026-10-16T11:18:38.0533036Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": false,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 0,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      },
+      {
+        "label": "File Explorer workspace icons; actual Ctrl+Shift+H overlay shown",
+        "role": "shown_overlay",
+        "reportFile": "state-shown/application-windows.json",
+        "sampledBefore": "2026-10-16T11:18:54.9875164Z",
+        "sampledAfter": "2026-10-16T11:18:55.9888204Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": true,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 17
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 1,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      },
+      {
+        "label": "File Explorer workspace icons; overlay hidden after",
+        "role": "hidden_after",
+        "reportFile": "state-hidden-after/application-windows.json",
+        "sampledBefore": "2026-10-16T11:19:13.5306305Z",
+        "sampledAfter": "2026-10-16T11:19:14.5813172Z",
+        "rootProcessId": 33084,
+        "processTreeVerified": true,
+        "applicationProcessCount": 12,
+        "applicationWindowCount": 43,
+        "overlayDiscovered": true,
+        "overlayPid": 33084,
+        "overlayTid": 33864,
+        "overlayVisible": false,
+        "overlayWindowRect": {
+          "bottom": 1776,
+          "left": 1922,
+          "right": 2856,
+          "top": 794
+        },
+        "overlayDiscoverySources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ],
+        "overlayAffinity": {
+          "error": 0,
+          "querySucceeded": true,
+          "value": 0
+        },
+        "rawTopLevelApplicationWindowCount": 18,
+        "visibleNamedTopLevelApplicationWindowCount": 0,
+        "setupConfirmedHidden": true,
+        "visibleDiagnosticBackgrounds": []
+      }
+    ],
+    "separateFromAllPreviousCohorts": true,
+    "cleanup": {
+      "overlayLeftHidden": true,
+      "setupLeftHidden": true,
+      "referenceBackgroundNotStarted": true,
+      "noPauseToggleSentDuringThisCohort": true,
+      "explorerLeftOpen": true
+    },
+    "actualThirdPartyDetectorImplementationVerified": false,
+    "physicalPanelVisibilityVerified": false,
+    "allLocalSoftwareInvisibilityProven": false,
+    "fullGoalAchieved": false,
+    "limitations": [
+      "Every decoded pixel is inside the recorded actual overlay DWM frame; pixels outside that frame and other displays are not checked.",
+      "Both hidden endpoint captures must match exactly per method before a shown-frame difference is judged. Changing endpoints make that comparison inconclusive.",
+      "Matching endpoint snapshots cannot exclude a transient desktop change occurring only during the shown snapshot.",
+      "Natural black desktop pixels are allowed; newly black pixels are counted relative to the actual hidden baseline.",
+      "Unavailable direct-window captures do not imply clean monitor omission or black masking.",
+      "Window/process snapshots are not atomic and cover the recorded user-mode APIs, not every local observer.",
+      "Capture omission cannot establish physical panel visibility or universal invisibility."
+    ]
+  },
+  "windowlessIntegrationPrerequisiteAudit": {
+    "idea": 48,
+    "date": "2026-10-16T11:32:00.651Z",
+    "evidenceKind": "Current source and resolved dependency review correlated to existing actual-app scan",
+    "sourceHashes": [
+      {
+        "path": "src-tauri/src/overlay/window.rs",
+        "lines": "44–62",
+        "sha256": "9ee8929a2f234e4c264bb6e985c5d7f4f3de8df72b26589f37577b79339fee8c"
+      },
+      {
+        "path": "src-tauri/src/runtime.rs",
+        "lines": "1555,1628",
+        "sha256": "5d86d4ab09b82814f79576307604df792d6da6a5d0fc0618fef2cd1d594e8ac6"
+      },
+      {
+        "path": "src-tauri/tauri.conf.json",
+        "lines": "15–23",
+        "sha256": "917703058ffcfa4ebddfd0709560462617d0df22c5c4d6c3ff048da9627e975e"
+      },
+      {
+        "path": "src-tauri/Cargo.toml",
+        "lines": "17–18",
+        "sha256": "b8e0809e4b3a463873f12c8ee2be8e7b337ad0704bd3d7c5105614aa85e34505"
+      },
+      {
+        "path": "C:/Users/dev/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tao-0.37.1/src/platform_impl/windows/event_loop.rs",
+        "lines": "188,628–688",
+        "sha256": "6b32446a660a21a88b1b9ff910327bdf597326830d0bb7a15dd3433b701fe99f"
+      },
+      {
+        "path": "C:/Users/dev/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/global-hotkey-0.8.0/src/platform_impl/windows/mod.rs",
+        "lines": "34–68",
+        "sha256": "15196e73da113179c92855b0f31bdbee29bfd5b7156f383d57e2810c892a6388"
+      },
+      {
+        "path": "C:/Users/dev/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wry-0.57.0/src/webview2/mod.rs",
+        "lines": "211,230–270,420–422",
+        "sha256": "4800257d9d251c59b5aa464814ade5f8f041a854f0e4498afbdb036eba5307b8"
+      }
+    ],
+    "actualAppWindowReport": "artifacts/window-audit/file-explorer-20261016/state-shown/application-windows.json",
+    "actualAppWindowReportSha256": "87ec47e49d11ea43b27f2a2cd98e169e7a7f04add27628014563ae81bde5902a",
+    "observedHelperWindows": [
+      {
+        "hwnd": "0xA0938",
+        "pid": 33084,
+        "class": "Tao Thread Event Target",
+        "visible": true,
+        "bounds": {
+          "bottom": 24,
+          "left": 0,
+          "right": 24,
+          "top": 0
+        },
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ]
+      },
+      {
+        "hwnd": "0xF09A6",
+        "pid": 33084,
+        "class": "global_hotkey_app",
+        "visible": false,
+        "bounds": {
+          "bottom": 1492,
+          "left": 176,
+          "right": 2336,
+          "top": 176
+        },
+        "enumerationSources": [
+          "EnumDesktopWindows",
+          "EnumThreadWindows",
+          "EnumWindows",
+          "FindWindowEx.topLevel"
+        ]
+      },
+      {
+        "hwnd": "0xF0CE6",
+        "pid": 33084,
+        "class": "WRY_WEBVIEW",
+        "visible": false,
+        "bounds": {
+          "bottom": 1497,
+          "left": 232,
+          "right": 1142,
+          "top": 272
+        },
+        "enumerationSources": [
+          "EnumChildWindows",
+          "FindWindowEx.child"
+        ]
+      },
+      {
+        "hwnd": "0x430DB8",
+        "pid": 33084,
+        "class": "WRY_WEBVIEW",
+        "visible": true,
+        "bounds": {
+          "bottom": 1764,
+          "left": 1934,
+          "right": 2844,
+          "top": 796
+        },
+        "enumerationSources": [
+          "EnumChildWindows",
+          "FindWindowEx.child"
+        ]
+      }
+    ],
+    "alternativeBackendFound": false,
+    "actualAppChanged": false,
+    "newRendererExecuted": false,
+    "newCaptureSamples": 0,
+    "conclusion": "Removing only the overlay renderer leaves framework/shortcut/WebView HWNDs. Full lifecycle replacement and a compatible protected output mechanism are both missing.",
+    "physicalVisibilityProven": false,
+    "fullGoalAchieved": false
+  },
+  "desktopDcContractAudit": {
+    "idea": 49,
+    "date": "2026-10-16T11:32:00.651Z",
+    "evidenceKind": "Primary contract review, not a runtime experiment",
+    "findings": [
+      "Desktop screen DC is both drawable and a documented GDI capture source.",
+      "Direct2D DC rendering transfers an internal bitmap to that DC using GDI.",
+      "Composition surface handles supply visual resources, not independent physical-output ownership."
+    ],
+    "newRendererExecuted": false,
+    "newCaptureSamples": 0,
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/direct2d/direct2d-and-gdi-interoperation-overview",
+      "https://learn.microsoft.com/en-us/windows/win32/gdi/capturing-an-image",
+      "https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-dcompositioncreatesurfacehandle"
+    ],
+    "fullGoalAchieved": false
+  }
+}

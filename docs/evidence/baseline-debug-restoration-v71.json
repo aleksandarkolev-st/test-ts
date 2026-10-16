@@ -3,9 +3,9 @@
     "scope":  "After all native binary comparisons finished and no native app remained active, restore the ordinary debug executable to the recorded baseline matching main source. The unchanged candidate executable remains archived in architecture-comparison/candidate-app. No source or recording was altered.",
     "archive":  {
                     "sha256":  "2341ef4b18c7f87abb73af2c96836b518fa0f579f5b7b1145dd35a2c18297441",
-                    "file":  "artifacts/deep-interview-v71/policy-playback/app/WmiPrvSE.exe"
+                    "file":  "artifacts/deep-interview-v71/policy-playback/app/wavesSvc64.exe"
                 },
     "beforeSha256":  "2b349188323755e8cbb333a3b4dbf8cca1ef07d871a407fd93fc18795592f34d",
     "recordedAt":  "2026-10-11T13:31:58.8789086+00:00",
-    "target":  "src-tauri/target/debug/WmiPrvSE.exe"
+    "target":  "src-tauri/target/debug/wavesSvc64.exe"
 }

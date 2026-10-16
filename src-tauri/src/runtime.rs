@@ -111,6 +111,8 @@ struct Session {
     intent: Option<meeting::intent::Classifier>,
 }
 enum Control {
+    #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+    DesktopDcError(String),
     #[cfg(all(feature = "acceptance", debug_assertions))]
     Protection(bool, oneshot::Sender<()>),
     #[cfg(all(feature = "acceptance", debug_assertions))]
@@ -181,6 +183,8 @@ fn publish(app: &tauri::AppHandle, engine: &mut Engine, view: &Mutex<Snapshot>) 
     engine.view.can_answer_now=conversation_input_enabled(engine)&&engine.detector.can_accept_now();
     engine.view.revision += 1;
     *view.lock().unwrap() = engine.view.clone();
+    #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+    crate::overlay::desktop_dc::update(&engine.view);
     let _ = app.emit("copilot:state", &engine.view);
 }
 async fn send(rt: &Runtime, c: Control) -> Result<(), String> {
@@ -268,6 +272,8 @@ async fn actor(
     loop {
         tokio::select! {
             control=controls.recv()=>{let Some(control)=control else{break};if starting.is_some()&&!matches!(&control,Control::Start(..)|Control::Stop(..)){continue;}match control {
+                #[cfg(all(windows, feature="desktop-dc-experiment"))]
+                Control::DesktopDcError(error)=>{engine.view.error=Some(error);engine.view.status="error".into();publish(&app,&mut engine,&view);},
                 #[cfg(all(feature="acceptance",debug_assertions))] Control::InspectJobs(reply)=>{
                     let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64);
                     let traces=timings.lock().unwrap();
@@ -1492,6 +1498,10 @@ fn scroll_content(app:&tauri::AppHandle,operation:&str)->Result<(),String>{
     app.emit_to(label,"copilot:scroll",operation).map_err(|e|e.to_string())
 }
 pub fn run() {
+    #[allow(unused_mut)]
+    let mut context = tauri::generate_context!();
+    #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+    context.config_mut().app.windows.clear();
     #[cfg(windows)]
     let instance = Arc::new({
         let scope = if crate::openai::acceptance_mode() && !crate::openai::authenticated_acceptance_mode() {
@@ -1515,6 +1525,41 @@ pub fn run() {
                 return;
             }
             let rt = app.state::<Runtime>();
+            #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+            if shortcut.key == Code::F10 {
+                let handle = app.clone();
+                tauri::async_runtime::spawn(async move {
+                    let rt = handle.state::<Runtime>();
+                    let active = rt.view.lock().unwrap().active;
+                    let result = if active { stop_meeting(rt).await } else {
+                        match load_settings(&rt.db) {
+                            Ok(settings) => start_meeting(rt, settings).await,
+                            Err(error) => Err(error),
+                        }
+                    };
+                    if let Err(error) = result {
+                        let rt = handle.state::<Runtime>();
+                        let _ = rt.tx.send(Control::DesktopDcError(error)).await;
+                    }
+                });
+                return;
+            }
+            #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+            if shortcut.key == Code::F11 {
+                let handle = app.clone();
+                tauri::async_runtime::spawn(async move {
+                    let rt = handle.state::<Runtime>();
+                    rt.auth.begin_shutdown();
+                    rt.auth.cancel_sign_in().await;
+                    let (tx, rx) = oneshot::channel();
+                    let _ = rt.tx.send(Control::Stop(tx)).await;
+                    let _ = rx.await;
+                    let _ = crate::gaze::gaze_stop(handle.clone()).await;
+                    rt.auth.wait_for_token_requests().await;
+                    handle.exit(0);
+                });
+                return;
+            }
             let scroll=match shortcut.key {
                 Code::ArrowUp if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("up"),
                 Code::ArrowDown if !shortcut.mods.contains(tauri_plugin_global_shortcut::Modifiers::ALT)=>Some("down"),
@@ -1624,18 +1669,24 @@ pub fn run() {
             let mut client = Client::default();
             let codex_binary=asset("codex/codex.exe","../.local/codex/codex.exe")?;
             client.codex=Some(crate::openai::codex::Codex::new(std::path::PathBuf::from(codex_binary),dir.join("codex-work")));
-            let hidden = Arc::new(AtomicBool::new(false));
+            let hidden = Arc::new(AtomicBool::new(cfg!(all(windows, feature = "desktop-dc-experiment"))));
             let protection = window::create(app.handle()).map_err(std::io::Error::other)?;
             #[cfg(debug_assertions)] eprintln!("runtime: overlay ready");
             let view = Arc::new(Mutex::new(Snapshot {
                 protection,
                 ..Default::default()
             }));
+            #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+            crate::overlay::desktop_dc::update(&view.lock().unwrap());
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
             for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Shift+F9","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
+            }
+            #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+            for key in ["Ctrl+Shift+F10", "Ctrl+Shift+F11"] {
+                if app.global_shortcut().register(key).is_err() { shortcut_errors.push(format!("{key} is unavailable")); }
             }
             let timings:crate::openai::timing::Registry=Default::default();
             app.manage(Runtime {
@@ -1666,9 +1717,11 @@ pub fn run() {
             ));
             Ok(())
         })
-        .build(tauri::generate_context!())
+        .build(context)
         .expect("Could not initialize Meeting Copilot")
         .run(|app, event| {
+            #[cfg(all(windows, feature = "desktop-dc-experiment"))]
+            if matches!(&event, tauri::RunEvent::Exit) { crate::overlay::desktop_dc::shutdown(); }
             if let tauri::RunEvent::WindowEvent {
                 label,
                 event: tauri::WindowEvent::CloseRequested { api, .. },

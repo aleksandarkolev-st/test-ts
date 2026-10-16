@@ -43,7 +43,7 @@ The 16-second walkthrough uses the real interface with synthetic data and a scri
 
 If you have a current installed build, open **mscv32** from its shortcut or run `mscv32.exe`. The window is titled **Meeting Copilot** and uses a gray cogwheel icon. It appears as **mscv32** in Task Manager. Setup and overlay windows have no taskbar buttons.
 
-**Can't find the window? Press Ctrl + Shift + F9.** This shows and focuses hidden or minimized setup, and hides it when already visible. Opening the executable again brings the existing setup window forward. The overlay's **Setup** button also opens it.
+**Can't find the window? Press Ctrl + Shift + F9.** This shows hidden or minimized setup without taking focus from the current app, and hides it when already visible. Opening the executable again shows the existing setup window. The overlay's **Setup** button also opens it.
 
 If you cloned the repository, complete [Build from source](#build-from-source) first. `npm run dev` is a UI preview; audio capture, accounts, global shortcuts, and camera integration require the desktop app. The older local 0.2.2 MSI predates the current task and shortcut changes; see [package verification](docs/package-verification.md) for that build's scope.
 
@@ -140,7 +140,7 @@ Global shortcuts work while the desktop app is running. If another app owns a sh
 
 | Shortcut | Action |
 | --- | --- |
-| **Ctrl + Shift + F9** | Show / hide setup; restore it when minimized. |
+| **Ctrl + Shift + F9** | Show / hide setup without taking focus; restore it when minimized. |
 | **Ctrl + Shift + H** | Show / hide the answer overlay. |
 | **Ctrl + Shift + Space** | Open manual question input. |
 | **Ctrl + Shift + F8** | Capture and send the monitor under the pointer. |

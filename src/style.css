@@ -11,6 +11,16 @@ html[data-view=overlay],html[data-view=overlay] body{overflow:hidden}
  .camera-status { font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
  .camera-toggle { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; }
  .camera-toggle input { width: auto; }
+ .screen-monitor { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 22px; }
+ .screen-monitor textarea { display: block; width: 100%; margin-top: 7px; padding: 10px; font: 13px/1.6 'Segoe UI', Arial, sans-serif; color: #e8edf1; background: #182028; border: 1px solid var(--border); border-radius: 8px; resize: vertical; min-height: 76px; max-height: 200px; }
+ .screen-monitor textarea::placeholder { color: #7d8b98; }
+ .screen-monitor textarea:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+ .monitor-toggle { display: flex; align-items: center; gap: 8px; }
+ .monitor-toggle input { width: auto; }
+ .monitor-bridge { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; margin: 0 0 16px; color: var(--muted); }
+ .monitor-bridge.ok { color: var(--green); }
+ .monitor-bridge.warn { color: #f6c17d; }
+ .monitor-bridge button { font-size: 12px; }
 
 .question-queue { padding-top: 12px; font-size: 11px; color: var(--muted); }
 .question-queue > div { display: flex; gap: 6px; padding: 4px 0; }
@@ -122,6 +132,11 @@ kbd { color:#b9cdc3; font-size:11px; }
 .task-buttons { display:flex; flex-wrap:wrap; gap:6px; }
 .task-buttons button { font-size:12px; }
 .context-actions { display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px 16px; border-top:1px solid var(--border); }
+.monitor-actions { display:flex; align-items:center; gap:6px; padding:10px 16px 0; }
+.monitor-chip { flex:1; min-width:0; font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.monitor-chip-busy,.monitor-chip-done { color:var(--green); }
+.monitor-chip-warn { color:#f6c17d; }
+.monitor-actions button { font-size:11px; min-height:30px; padding:5px 8px; background:transparent; }
 .context-actions button { font-size:11px; min-height:30px; padding:5px 8px; background:transparent; }
 .context-actions > span { margin-left:auto; color:var(--muted); font-size:10px; }
 .context-actions kbd { color:var(--green); font-size:10px; }

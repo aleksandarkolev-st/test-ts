@@ -7,6 +7,7 @@ import Answer from './Answer';
 import ContextAttachments from '../ContextAttachments';
 import TaskContext from '../TaskContext';
 import Icon from '../ui/Icon';
+import { monitorLabel, monitorTitle, monitorTone } from './monitorFormat';
 export default function Overlay() {
   const s = useMeeting(v => v.snapshot); const ref = useRef<HTMLDivElement>(null); const input = useRef<HTMLInputElement>(null);
   const [question, setQuestion] = useState(''); const [error, setError] = useState('');
@@ -50,6 +51,7 @@ export default function Overlay() {
     <div className="overlay-tools">
     <TaskContext snapshot={s} onError={setError} />
     <ContextAttachments snapshot={s} onError={setError} />
+    {s.monitor && <div className="monitor-actions"><span className={`monitor-chip monitor-chip-${monitorTone(s.monitor)}`} title={monitorTitle(s.monitor)}>{monitorLabel(s.monitor)}</span><button title="Stop typing the screen answer · Ctrl Shift F12" onClick={() => act('monitor_abort')}>Stop typing</button></div>}
     <div className="context-actions"><button disabled={!s.active || s.attachmentBusy} title="Send screenshot of the monitor under your pointer · Ctrl Shift F8" onClick={() => act('screenshot')}><Icon name="screen"/> {s.screenshot ? 'Retake screenshot' : 'Screenshot'} <kbd>F8</kbd></button><button disabled={!s.active || s.attachmentBusy} title="Send active context · Ctrl Shift P" onClick={() => act('context')}><Icon name="folder"/> Active context <kbd>P</kbd></button><span>Ctrl Shift</span></div>
     {s.manual && <form className="manual-form" onSubmit={async e => { e.preventDefault(); try { await command('ask', { question }); setQuestion(''); setError(''); } catch (e) { setError(errorText(e)); } }}><label htmlFor="manual-question">Ask about this meeting…</label><div className="ask-row"><input ref={input} id="manual-question" value={question} maxLength={4000} onChange={e => setQuestion(e.target.value)} onKeyDown={e => { if (e.key === 'Escape') act('dismiss'); }} placeholder="What did they say the launch date was?" /><button disabled={!question.trim()}>Ask</button></div></form>}
     {error && <div role="alert" className="error">{error}</div>}

@@ -5,6 +5,7 @@ import type { Account, Bootstrap, Model, Settings } from './state/model';
 import Status from './overlay/Status';
 import ContextAttachments from './ContextAttachments';
 import TaskContext from './TaskContext';
+import ScreenMonitor from './ScreenMonitor';
 import Camera from './Camera';
 import PixelCompanion from './ui/PixelCompanion';
 import { Tabs, TabsList, TabsTab, TabsPanel } from './ui/Tabs';
@@ -99,7 +100,9 @@ export default function App() {
       <ContextAttachments snapshot={snapshot} onError={setError} />
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>{snapshot.screenshot ? 'Retake screenshot' : 'Send screenshot'}</button>}
       <p className="field-note">The screenshot shortcut sends the monitor under your pointer to OpenAI. It replaces the previous screenshot and remains attached until removed or the meeting stops.</p>
-    </section></TabsPanel>
+    </section>
+    <ScreenMonitor settings={settings} setSettings={setSettings} resetApps={(data?.settings.screenMonitorApps ?? []).join('\n')} disabled={!!busy || snapshot.active} onError={setError} />
+    </TabsPanel>
     <TabsPanel value="camera"><Camera /></TabsPanel>
     </div></Tabs>
     {(error || snapshot.error) && <div role="alert" className="error">{error || snapshot.error}</div>}

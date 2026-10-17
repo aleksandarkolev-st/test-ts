@@ -19,7 +19,7 @@ pub fn show_main(app: &tauri::AppHandle) -> Result<(), String> {
             UI::WindowsAndMessaging::{ShowWindow, SW_SHOWNOACTIVATE},
         };
         let hwnd = HWND(window.hwnd().map_err(|error| error.to_string())?.0);
-        // Restore and show in one step; unminimize() would activate the window.
+        // Restore without activating; raise() performs the foreground grab.
         unsafe {
             let _ = ShowWindow(hwnd, SW_SHOWNOACTIVATE);
         }
@@ -31,6 +31,43 @@ pub fn show_main(app: &tauri::AppHandle) -> Result<(), String> {
         window.show().map_err(|error| error.to_string())
     }
 }
+/// Brings the setup window to the front and gives it focus. Used when the user
+/// explicitly asks for it (Ctrl+Shift+F9 or launching a second instance), where
+/// stealing focus is the expected outcome.
+pub fn raise_main(app: &tauri::AppHandle) -> Result<(), String> {
+    let window = app.get_webview_window("main").ok_or("Setup window missing")?;
+    #[cfg(windows)]
+    {
+        use windows::Win32::{
+            Foundation::HWND,
+            UI::WindowsAndMessaging::{
+                SetForegroundWindow, SetWindowPos, ShowWindow, HWND_TOP, SWP_NOMOVE, SWP_NOSIZE,
+                SWP_SHOWWINDOW, SW_RESTORE,
+            },
+        };
+        let hwnd = HWND(window.hwnd().map_err(|error| error.to_string())?.0);
+        unsafe {
+            let _ = ShowWindow(hwnd, SW_RESTORE);
+            let _ = SetWindowPos(
+                hwnd,
+                Some(HWND_TOP),
+                0,
+                0,
+                0,
+                0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
+            );
+            let _ = SetForegroundWindow(hwnd);
+        }
+        Ok(())
+    }
+    #[cfg(not(windows))]
+    {
+        window.unminimize().map_err(|error| error.to_string())?;
+        window.show().map_err(|error| error.to_string())?;
+        window.set_focus().map_err(|error| error.to_string())
+    }
+}
 pub fn toggle_main(app: &tauri::AppHandle) -> Result<(), String> {
     let window = app.get_webview_window("main").ok_or("Setup window missing")?;
     let visible = window.is_visible().map_err(|error| error.to_string())?;
@@ -38,7 +75,7 @@ pub fn toggle_main(app: &tauri::AppHandle) -> Result<(), String> {
     if visible && !minimized {
         window.hide().map_err(|error| error.to_string())
     } else {
-        show_main(app)
+        raise_main(app)
     }
 }
 pub fn create(app: &tauri::AppHandle) -> Result<bool, String> {

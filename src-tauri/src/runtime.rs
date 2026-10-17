@@ -1901,7 +1901,7 @@ pub fn run() {
                     let mut interval=tokio::time::interval(Duration::from_millis(150));
                     loop {
                         interval.tick().await;
-                        if instance.take_activation_request(){let _=window::show_main(&handle);}
+                        if instance.take_activation_request(){let _=window::raise_main(&handle);}
                     }
                 });
             }

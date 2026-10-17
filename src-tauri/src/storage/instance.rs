@@ -27,6 +27,11 @@ impl InstanceLock {
             let handle = CreateMutexW(None, false, PCWSTR(wide.as_ptr()))
                 .map_err(|_| { let _ = CloseHandle(activation); "Could not protect the credential session".to_string() })?;
             if GetLastError() == ERROR_ALREADY_EXISTS {
+                // The launcher just started from a user action, so it can pass
+                // the foreground right to the running instance before pinging it.
+                let _ = windows::Win32::UI::WindowsAndMessaging::AllowSetForegroundWindow(
+                    windows::Win32::UI::WindowsAndMessaging::ASFW_ANY,
+                );
                 let requested = SetEvent(activation);
                 let _ = CloseHandle(activation);
                 let _ = CloseHandle(handle);

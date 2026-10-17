@@ -203,8 +203,8 @@ static void send_nack(uint8_t code) {
  * report's modifier byte (application code never adds modifiers to the
  * keys[] array — the HID spec reserves that range).
  *
- * 0x09 (Tab) and 0x0A (newline/Enter) are handled separately in press_ascii()
- * and are not part of this table.
+ * 0x08 (Backspace), 0x09 (Tab), 0x0A (newline/Enter) and 0x7F (Delete) are
+ * handled separately in press_ascii() and are not part of this table.
  *
  * The table is `const`, so on ARM/ChibiOS it lives in flash; no PROGMEM
  * needed (PROGMEM is a no-op outside AVR anyway).
@@ -243,9 +243,12 @@ static const ascii_key_t ascii_keys[] = {
 /* 0x20..0x7E inclusive */
 STATIC_ASSERT(sizeof(ascii_keys) / sizeof(ascii_keys[0]) == 95, "ascii_keys must cover ASCII 0x20..0x7E");
 
-/** Byte values accepted in a TEXT payload: Tab, newline, printable ASCII. */
+/** Byte values accepted in a TEXT payload: backspace, Tab, newline, Delete,
+ *  printable ASCII. 0x08 and 0x7F exist so the host can compensate for the
+ *  editor's auto-indentation and auto-closing brackets (protocol version 2). */
 static inline bool ascii_supported(uint8_t byte) {
-    return byte == 0x09 || byte == 0x0A || (byte >= 0x20 && byte <= 0x7E);
+    return byte == 0x08 || byte == 0x09 || byte == 0x0A || byte == 0x7F
+           || (byte >= 0x20 && byte <= 0x7E);
 }
 
 /** Clamp a millisecond value into [lo, hi]. */
@@ -266,12 +269,18 @@ static inline uint16_t clamp_ms(uint16_t value, uint16_t lo, uint16_t hi) {
 static void press_ascii(uint8_t byte) {
     current_shift = false;
 
-    if (byte == 0x09) {
+    if (byte == 0x08) {
+        /* Backspace, never shifted. */
+        current_key = KC_BSPC;
+    } else if (byte == 0x09) {
         /* Tab, never shifted. */
         current_key = KC_TAB;
     } else if (byte == 0x0A) {
         /* Newline is typed as Enter (please send), never shifted. */
         current_key = KC_ENTER;
+    } else if (byte == 0x7F) {
+        /* Delete, never shifted. */
+        current_key = KC_DEL;
     } else if (byte >= 0x20 && byte <= 0x7E) {
         const ascii_key_t *entry = &ascii_keys[byte - 0x20];
         current_key              = entry->keycode;

@@ -38,8 +38,11 @@ synthetic host input call. Form submission itself is never performed by the app.
      answer, cleared by a `focus:false` or `password:true` analysis.
 5. **Keyboard bridge** (`monitor/hid.rs`, `monitor/protocol.rs`): candidate HID interfaces
    on usage page `0xFF60` / usage `0x61` are opened and only the one answering the frozen
-   PING/PONG handshake (firmware version 1) is used — VIA-only keyboards are skipped
-   without typing. Text is sent as acknowledged 29-byte chunks; the firmware paces real
+   PING/PONG handshake (firmware protocol version 2) is used — VIA-only keyboards are
+   skipped without typing. The answer text is first turned into a byte *typing plan* that
+   compensates for the target editor's auto-indentation and auto-closing brackets (so the
+   answer ends up formatted exactly as written; the plan may include `0x08` backspace and
+   `0x7F` delete opcodes), then sent as acknowledged 29-byte chunks; the firmware paces real
    keystrokes (default press 8 ms / gap 18 ms; Slow 12/40, Fast 4/8) and the host checks an
    abort flag between chunks.
 
@@ -61,10 +64,16 @@ Every report is 32 bytes, usage page `0xFF60` / usage `0x61`.
 | device → host | `0x53` | `0x81` | version, queue length, typing state | — |
 
 Queue: 512 bytes, overflow reported as NACK 2, never silently dropped. Typable bytes are
-`0x09` (Tab), `0x0A` (newline), and `0x20..0x7E`; Unicode punctuation is transliterated
-first, and anything not representable on a US ANSI keyboard fails explicitly rather than
-typing the wrong character. See `src-tauri/src/monitor/protocol.rs` for the single source
-of truth and its tests.
+`0x08` (Backspace), `0x09` (Tab), `0x0A` (newline), `0x7F` (Delete), and `0x20..0x7E`;
+Unicode punctuation is transliterated first, and anything not representable on a US ANSI
+keyboard fails explicitly rather than typing the wrong character. The four non-printable
+bytes map to their own keys on the keyboard (`KC_BSPC`, `KC_TAB`, `KC_ENTER`, `KC_DEL`).
+The typing plan uses `0x08` and `0x7F` to steer the editor: Monaco (LeetCode's editor)
+re-indents lines after Enter, inserts closing brackets automatically when an opener is
+typed, and rewrites the leading whitespace of a line that starts with a closing bracket —
+the plan tracks all of that and removes the editor's insertions so the final text matches
+the answer. See `src-tauri/src/monitor/protocol.rs` for the single source of truth and its
+tests (including a simulator of the editor behaviors).
 
 ## Honest limits
 

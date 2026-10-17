@@ -31,7 +31,8 @@
  *     0x02 CONFIG data[2]=press_ms, data[3]=gap_ms -> CONFIG_ACK
  *                 (clamped to 2..200 and 1..200)
  *     0x03 TEXT   data[2]=len (1..29),
- *                 data[3..3+len)=ASCII            -> PONG on success,
+ *                 data[3..3+len)=backspace(0x08), Tab(0x09), newline(0x0A),
+ *                 Delete(0x7F) or printable ASCII  -> PONG on success,
  *                 NACK(3) bad len/unsupported byte,
  *                 NACK(2) not enough queue space
  *     0x04 CLEAR  data[1]=0x04                     -> PONG (queue emptied)
@@ -44,8 +45,9 @@
  *     CONFIG_ACK [0]=0x53 [1]=0x82 [2]=press_ms [3]=gap_ms, rest zero
  *     NACK       [0]=0x53 [1]=0x83 [2]=code [3..4]=queue_len (LE), rest zero
  *
- *   Only 0x09 (Tab), 0x0A (newline) and 0x20..0x7E are accepted in TEXT.
- *   The full ASCII -> HID keycode table lives in screen_typing.c.
+ *   Only 0x08 (Backspace), 0x09 (Tab), 0x0A (newline), 0x7F (Delete) and
+ *   0x20..0x7E are accepted in TEXT. The ASCII -> HID keycode table lives in
+ *   screen_typing.c.
  */
 
 #pragma once
@@ -56,8 +58,10 @@
 /* Byte 0 of every host -> device packet (ASCII 'S'). */
 #define SCREEN_TYPING_MAGIC 0x53
 
-/* Protocol version reported in PONG byte 2. */
-#define SCREEN_TYPING_PROTOCOL_VERSION 1
+/* Protocol version reported in PONG byte 2. Version 2 adds 0x08 (Backspace)
+ * and 0x7F (Delete) to TEXT so the host can compensate for the editor's
+ * auto-indentation and auto-closing brackets. */
+#define SCREEN_TYPING_PROTOCOL_VERSION 2
 
 /* RAW HID reports are always this many bytes (RAW_EPSIZE in current QMK). */
 #define SCREEN_TYPING_REPORT_SIZE 32

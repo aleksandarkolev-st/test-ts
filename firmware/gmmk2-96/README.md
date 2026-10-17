@@ -127,13 +127,18 @@ Every report is exactly 32 bytes. Host → device: byte 0 is always `0x53` ('S')
 | other     | —       | —                                        | NACK(1) unknown command |
 | `data[0]` ≠ `0x53` | — | —                                   | ignored silently (VIA etc.) |
 
-Allowed TEXT bytes: `0x09` (Tab), `0x0A` (newline), `0x20..0x7E`. Anything else → NACK(3).
+Allowed TEXT bytes: `0x08` (Backspace), `0x09` (Tab), `0x0A` (newline), `0x7F`
+(Delete) and `0x20..0x7E`. Anything else → NACK(3). The two editing bytes exist
+since protocol version 2: the host app plans each answer as a byte stream that
+compensates for the target editor's auto-indentation and auto-closing brackets
+(it needs to backspace over indents an editor inserted and delete auto-inserted
+closing brackets), and forwards those two keys verbatim.
 
 Device → host:
 
 | Reply      | Bytes                                                                   |
 | ---------- | ----------------------------------------------------------------------- |
-| PONG       | `[0]=0x53 [1]=0x81 [2]=1` (protocol version) `[3]=queue_len & 0xFF [4]=queue_len >> 8 [5]=typing_state` (0 idle, 1 pressing a key, 2 gap between keys), rest 0 |
+| PONG       | `[0]=0x53 [1]=0x81 [2]=2` (protocol version) `[3]=queue_len & 0xFF [4]=queue_len >> 8 [5]=typing_state` (0 idle, 1 pressing a key, 2 gap between keys), rest 0 |
 | CONFIG_ACK | `[0]=0x53 [1]=0x82 [2]=press_ms [3]=gap_ms`, rest 0                     |
 | NACK       | `[0]=0x53 [1]=0x83 [2]=code` (1 unknown command, 2 queue full, 3 unsupported byte/content, 4 reserved — CONFIG clamps instead of rejecting) `[3]=queue_len & 0xFF [4]=queue_len >> 8`, rest 0 |
 
@@ -142,7 +147,8 @@ capacity — no wasted slot); defaults press_ms=8, gap_ms=18 (one character ever
 i.e. ≈38 chars/s before per-loop overhead); each byte is pressed for press_ms, released,
 then gap_ms elapses before the next one.
 
-ASCII mapping: US ANSI. `0x0A` → `KC_ENTER` (no shift), `0x09` → `KC_TAB`. Letters, digits
+ASCII mapping: US ANSI. `0x0A` → `KC_ENTER` (no shift), `0x09` → `KC_TAB`,
+`0x08` → `KC_BSPC`, `0x7F` → `KC_DEL` (all four without shift). Letters, digits
 and punctuation map to their US-layout keycodes; uppercase letters and the shifted symbols
 `! " # $ % & ( ) * + : < > @ ^ _ { | } ~` add `KC_LSFT` to the HID report's modifier byte
 via `add_mods(MOD_BIT(KC_LSFT))`. The complete 95-entry table (`0x20..0x7E`) is

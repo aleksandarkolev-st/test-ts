@@ -210,8 +210,12 @@ mod imp {
             }
             Err(BridgeError::Timeout)
         }
-        /// Sends `text` as acknowledged 29-byte chunks. The firmware paces the
-        /// actual keystrokes; a chunk is only considered sent once the firmware
+        /// Sends `text` as acknowledged 29-byte chunks. The text is turned into
+        /// a [`protocol::plan_typing`] byte plan first, so the editor ends up
+        /// with exactly `text` despite its auto-indentation and auto-closing
+        /// brackets (which requires firmware protocol version 2 for the
+        /// `0x08`/`0x7F` compensation bytes). The firmware paces the actual
+        /// keystrokes; a chunk is only considered sent once the firmware
         /// acknowledged it, so a lost acknowledgement can duplicate a chunk but
         /// never silently drops the answer.
         pub fn send_text(&mut self, text: &str) -> Result<(), BridgeError> {
@@ -229,7 +233,10 @@ mod imp {
                 return Err(BridgeError::Lost);
             }
             let normalized = protocol::normalize_for_typing(text);
-            let reports = protocol::text_reports(&normalized)
+            let language = protocol::TypingLanguage::detect(&normalized);
+            let plan = protocol::plan_typing(&normalized, language)
+                .map_err(|error| BridgeError::Text(error.message()))?;
+            let reports = protocol::plan_reports(&plan)
                 .map_err(|error| BridgeError::Text(error.message()))?;
             for report in reports {
                 if should_abort() {

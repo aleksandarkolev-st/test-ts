@@ -202,6 +202,16 @@ mod imp {
         /// acknowledged it, so a lost acknowledgement can duplicate a chunk but
         /// never silently drops the answer.
         pub fn send_text(&mut self, text: &str) -> Result<(), BridgeError> {
+            self.send_text_checked(text, || false).map(|_| ())
+        }
+        /// Like [`KeyboardBridge::send_text`], but checks `should_abort` between
+        /// chunks and retries. Returns `Ok(false)` without sending the remaining
+        /// chunks once abandoned; the caller is responsible for issuing CLEAR.
+        pub fn send_text_checked(
+            &mut self,
+            text: &str,
+            should_abort: impl Fn() -> bool,
+        ) -> Result<bool, BridgeError> {
             if !self.is_alive() {
                 return Err(BridgeError::Lost);
             }
@@ -209,9 +219,15 @@ mod imp {
             let reports = protocol::text_reports(&normalized)
                 .map_err(|error| BridgeError::Text(error.message()))?;
             for report in reports {
+                if should_abort() {
+                    return Ok(false);
+                }
                 let mut last = BridgeError::Timeout;
                 let mut acknowledged = false;
                 for _ in 0..IO_ATTEMPTS {
+                    if should_abort() {
+                        return Ok(false);
+                    }
                     self.drain();
                     self.write(&report)?;
                     match self.wait(IO_TIMEOUT) {
@@ -240,7 +256,7 @@ mod imp {
                     });
                 }
             }
-            Ok(())
+            Ok(true)
         }
         /// Best-effort kill switch: asks the firmware to drop everything that
         /// is still queued. No acknowledgement is expected.
@@ -541,6 +557,9 @@ mod imp {
         pub fn info(&self) -> &KeyboardInfo {
             &self.info
         }
+        pub fn is_alive(&self) -> bool {
+            false
+        }
         pub fn ping(&mut self) -> Result<(), BridgeError> {
             Err(BridgeError::Unsupported)
         }
@@ -548,6 +567,13 @@ mod imp {
             Err(BridgeError::Unsupported)
         }
         pub fn send_text(&mut self, _text: &str) -> Result<(), BridgeError> {
+            Err(BridgeError::Unsupported)
+        }
+        pub fn send_text_checked(
+            &mut self,
+            _text: &str,
+            _should_abort: impl Fn() -> bool,
+        ) -> Result<bool, BridgeError> {
             Err(BridgeError::Unsupported)
         }
         pub fn clear(&mut self) -> Result<(), BridgeError> {
@@ -559,7 +585,7 @@ mod imp {
     }
 }
 
-pub use imp::KeyboardBridge;
+pub use imp::{connect, KeyboardBridge};
 
 #[cfg(test)]
 mod tests {

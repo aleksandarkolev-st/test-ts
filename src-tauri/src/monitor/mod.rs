@@ -8,4 +8,5 @@ pub mod foreground;
 pub mod hid;
 pub mod protocol;
 pub mod service;
+pub mod typing;
 pub mod vision;

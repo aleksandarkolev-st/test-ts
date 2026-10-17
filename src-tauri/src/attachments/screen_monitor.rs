@@ -65,6 +65,9 @@ impl AnswerCache {
         self.latest_generation = self.latest_generation.wrapping_add(1).max(1);
         self.latest_generation
     }
+    pub fn latest_generation(&self) -> u64 {
+        self.latest_generation
+    }
     pub fn insert(
         &mut self,
         question: &str,
@@ -241,6 +244,13 @@ mod tests {
         );
         assert!(c.get("What is Rust?", 120).is_none());
         assert_eq!(c.len(120), 0);
+    }
+    #[test]
+    fn latest_generation_is_readable_without_advancing_it() {
+        let mut c = AnswerCache::default();
+        assert_eq!(c.latest_generation(), 0);
+        let id = c.next_generation();
+        assert_eq!(c.latest_generation(), id);
     }
     #[test]
     fn stale_answers_and_cancelled_generations_cannot_be_saved() {

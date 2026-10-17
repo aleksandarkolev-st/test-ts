@@ -1,5 +1,8 @@
 use crate::{
-    attachments::screen_monitor::{MonitorConfig, QuestionDeduper, DEFAULT_TTL},
+    attachments::screen_monitor::{
+        field_is_eligible, FieldObservation, InsertionGuard, MonitorConfig, QuestionDeduper,
+        DEFAULT_TTL,
+    },
     audio,
     meeting::{
         self,
@@ -7,7 +10,9 @@ use crate::{
         InputEvent, SpeakerSource,
     },
     monitor::{
+        protocol::TypingSpeed,
         service::{MonitorStatus, MonitorUpdate},
+        typing::{self, TypingOutcome},
         vision::clean_solution,
     },
     openai::{
@@ -156,6 +161,7 @@ enum Control {
     ClearProject,
     Screenshot(Option<usize>, String),
     ClearScreenshot,
+    MonitorAbort,
 }
 enum Work {
     Finished(String),
@@ -175,6 +181,8 @@ enum Work {
     /// A solution for an on-screen question: session, source window, question,
     /// cache generation, and the solution-only text (or the generation error).
     MonitorSolution(String, usize, String, u64, Result<String, String>),
+    /// The typing worker finished, aborted, or failed to type one answer.
+    MonitorTyped(TypingOutcome),
 }
 pub struct Runtime {
     timings: crate::openai::timing::Registry,
@@ -258,6 +266,16 @@ async fn start_session(mut settings:Settings, events:mpsc::Sender<InputEvent>, l
     let intent=(meeting::intent::Mode::configured()==meeting::intent::Mode::Learned).then(meeting::intent::Classifier::start);
     Ok(Session{id:uuid::Uuid::new_v4().to_string(),clock,settings,model,pipeline:Some(pipeline),intent})
 }
+/// How long vision evidence that the answer field is focused authorizes a
+/// typing attempt after it was observed. The live foreground window is still
+/// re-checked immediately before typing; evidence older than this is ignored.
+const FOCUS_EVIDENCE_WINDOW_MS: u64 = 30_000;
+/// Vision evidence that the answer field of the analyzed window was focused.
+struct FocusEvidence {
+    at: u64,
+    window: usize,
+    executable: String,
+}
 async fn actor(
     app: tauri::AppHandle,
     mut controls: mpsc::Receiver<Control>,
@@ -288,6 +306,9 @@ async fn actor(
     let mut monitor_deduper = QuestionDeduper::default();
     let mut monitor_question: Option<(String, usize)> = None;
     let mut monitor_pending: Option<u64> = None;
+    let mut monitor_focus: Option<FocusEvidence> = None;
+    let mut monitor_insertion = InsertionGuard::default();
+    let mut typing_worker: Option<typing::Worker> = None;
     let levels = Arc::new(Mutex::new((0., 0.)));
     let mut tick = tokio::time::interval(Duration::from_millis(40));
     let mut transcript_at = 0;
@@ -342,7 +363,8 @@ async fn actor(
                 Control::Stop(reply)=>{project_request=None;screenshot_request=None;
                     timings.lock().unwrap().clear();
                     if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}
-                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;
+                    if let Some(worker)=typing_worker.take(){worker.shutdown();}
+                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();
                     if let Some(pending)=starting.take(){pending.cancel.cancel();let _=pending.reply.send(Err("Speech startup cancelled".into()));}
                     answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
                     if let Some(codex)=&client.codex { codex.close(); }
@@ -352,8 +374,8 @@ async fn actor(
                 Control::Pause=>{if let Some(s)=session.as_mut(){
                     intent_gate.invalidate();
                     answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();
-                    if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;engine.view.monitor=None;}
-                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;if let Some(cancel)=spawn_monitor(s,&client,&auth,monitor_tx.clone()){monitor_cancel=Some(cancel);engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;}},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
+                    if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}if let Some(worker)=typing_worker.take(){worker.shutdown();}monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();engine.view.monitor=None;}
+                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;if let Some(start)=spawn_monitor(s,&client,&auth,monitor_tx.clone(),work_tx.clone()){monitor_cancel=Some(start.cancel);typing_worker=start.typing;engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();}},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
                     publish(&app,&mut engine,&view);
                 }},
                 Control::Displayed(id,revision,text,visible_start,visible_end,paint_host_ms)=>{if let Some(s)=session.as_ref(){
@@ -405,7 +427,7 @@ async fn actor(
                     answers.clear();cancel_answer(&app,&mut generation);
                     if let Some(c)=summary.take(){c.cancel();}
                     intent_gate=meeting::intent::Gate::default();speech_metrics=Latency::default();summary_retry_at=now;
-                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;
+                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();
                     engine.new_task(now);timings.lock().unwrap().clear();
                     emit(&app,"task.started",());
                     window::set_manual(&app,false);window::show(&app,&hidden);
@@ -458,6 +480,7 @@ async fn actor(
                     tauri::async_runtime::spawn(async move{let result=tokio::task::spawn_blocking(move||{let _suppression=suppression;std::thread::sleep(Duration::from_millis(80));crate::attachments::screenshot::capture_window(source_window)}).await.map_err(|_|"Screen capture failed".to_string()).and_then(|r|r);let _=tx.send(Work::Screenshot(session_id,id,result)).await;});
                 }}},
                 Control::ClearScreenshot=>{screenshot_request=None;engine.screenshot_data=None;engine.view.screenshot=None;engine.view.attachment_busy=project_request.is_some();answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();engine.view.status=if session.is_some(){"listening"}else{"off"}.into();if session.is_some(){window::show(&app,&hidden);}publish(&app,&mut engine,&view);},
+                Control::MonitorAbort=>{if let Some(worker)=typing_worker.as_ref(){worker.abort();}monitor_focus=None;monitor_insertion=InsertionGuard::default();},
             }},
             event=events.recv(),if session.is_some()=>{let Some(event)=event else{continue};let s=session.as_ref().unwrap();let now=s.clock.elapsed().as_millis()as u64;engine.detector.semantic_intent=true;engine.detector.conversation_endpoints=true;engine.detector.independent_asr_endpoint=s.settings.speech_backend==SpeechBackend::Nemotron;answers.semantic_intent=engine.detector.semantic_intent;if engine.view.paused{continue;}
                 match event {
@@ -513,7 +536,8 @@ async fn actor(
                     InputEvent::Failure(error)=>{
                         answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);
                         if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}
-                        monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;engine.view.monitor=None;
+                        if let Some(worker)=typing_worker.take(){worker.shutdown();}
+                        monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();engine.view.monitor=None;
                         if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
                         if let Some(s)=session.as_mut(){if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;}}
                         let (tx,rx)=mpsc::channel(256);events_tx=tx;events=rx;
@@ -557,7 +581,7 @@ async fn actor(
                 Work::Started(id,result)=>{if starting.as_ref().is_some_and(|pending|pending.id==id){let pending=starting.take().unwrap();
                     match result {
                         Ok(s)=>{match db.start(&s.id,crate::openai::auth::now()){
-                            Ok(())=>{if let Some(cancel)=spawn_monitor(&s,&client,&auth,monitor_tx.clone()){monitor_cancel=Some(cancel);engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;}session=Some(s);intent_gate=meeting::intent::Gate::default();summary_retry_at=0;transcript_at=0;engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=pending.reply.send(Ok(()));},
+                            Ok(())=>{if let Some(start)=spawn_monitor(&s,&client,&auth,monitor_tx.clone(),work_tx.clone()){monitor_cancel=Some(start.cancel);typing_worker=start.typing;engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;monitor_focus=None;monitor_insertion=InsertionGuard::default();}session=Some(s);intent_gate=meeting::intent::Gate::default();summary_retry_at=0;transcript_at=0;engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=pending.reply.send(Ok(()));},
                             Err(error)=>{drop(s);engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
                         }},
                         Err(error)=>{engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
@@ -592,11 +616,20 @@ async fn actor(
                                 else if length>8_000{status.warning=Some("The generated answer exceeds 8000 characters and was not cached".into());}
                                 else if stored{status.solutions+=1;status.answer_cached=true;status.question=Some(question);status.window=Some(window);status.warning=None;}
                             }
+                            if stored{if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}}}
                             publish(&app,&mut engine,&view);
                         },
                         Err(error)=>{if current{monitor_pending=None;if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;status.warning=Some(format!("Could not generate the on-screen answer: {error}"));}publish(&app,&mut engine,&view);}}
                     }
                 }},
+                Work::MonitorTyped(outcome)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);
+                    let generation=match &outcome{TypingOutcome::Finished{generation}|TypingOutcome::Aborted{generation}|TypingOutcome::Failed{generation,..}=>*generation};
+                    if generation==engine.screen_answers.latest_generation(){
+                        let warning=match &outcome{TypingOutcome::Finished{..}=>None,TypingOutcome::Aborted{..}=>Some("Typing was stopped".to_string()),TypingOutcome::Failed{error,..}=>Some(error.clone())};
+                        if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;if warning.is_none(){status.typed=true;status.warning=None;}else{status.warning=warning;}}
+                        publish(&app,&mut engine,&view);
+                    }
+                },
             }},
             update=monitor_updates.recv()=>{let Some(update)=update else{continue};
                 let Some(s)=session.as_ref() else{continue};
@@ -606,6 +639,8 @@ async fn actor(
                     MonitorUpdate::Captured{window,executable,changed}=>{if let Some(status)=engine.view.monitor.as_mut(){status.window=Some(window);status.executable=Some(executable);status.state=(if changed{"analyzing"}else{"watching"}).into();status.warning=None;status.updated_at=now;}publish(&app,&mut engine,&view);},
                     MonitorUpdate::Failed{error}=>{if let Some(status)=engine.view.monitor.as_mut(){status.state="error".into();status.warning=Some(error);status.updated_at=now;}publish(&app,&mut engine,&view);},
                     MonitorUpdate::Analysis{window,executable,image,analysis}=>{
+                        let focused=analysis.focus&&!analysis.password;
+                        monitor_focus=focused.then(||FocusEvidence{at:now,window,executable:executable.clone()});
                         if let Some(status)=engine.view.monitor.as_mut(){
                             status.window=Some(window);status.executable=Some(executable);status.state="watching".into();status.warning=None;status.updated_at=now;status.analyzed_frames+=1;status.focus=analysis.focus;
                             status.answer_cached=monitor_question.as_ref().is_some_and(|(question,_)|engine.screen_answers.get(question,now).is_some());
@@ -618,7 +653,7 @@ async fn actor(
                                 let Some(cancel)=monitor_cancel.clone()else{continue};
                                 let generation=engine.screen_answers.next_generation();
                                 monitor_pending=Some(generation);monitor_question=Some((question.clone(),window));
-                                if let Some(status)=engine.view.monitor.as_mut(){status.question=Some(question.clone());status.answer_cached=false;}
+                                if let Some(status)=engine.view.monitor.as_mut(){status.question=Some(question.clone());status.answer_cached=false;status.typed=false;}
                                 let mut input=String::from("Solve the task shown in this screenshot.");input.push_str("\nExtracted question text: ");input.push_str(&question);
                                 if !analysis.note.is_empty(){input.push_str("\nScreen note: ");input.push_str(&analysis.note);}
                                 let model=s.settings.model.clone();
@@ -630,6 +665,9 @@ async fn actor(
                                     let _=tx.send(Work::MonitorSolution(session_id,window,question,generation,result)).await;
                                 });
                             }
+                        }
+                        if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){
+                            if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}
                         }
                         publish(&app,&mut engine,&view);
                     },
@@ -1342,9 +1380,14 @@ fn monitor_config(settings: &Settings) -> MonitorConfig {
         authorized_applications: settings.screen_monitor_apps.clone(),
     }
 }
+struct MonitorStart {
+    cancel: CancellationToken,
+    typing: Option<typing::Worker>,
+}
 /// Starts the screen monitor for a session when it is enabled. The monitor
 /// client never types; it only analyzes frames from authorized applications.
-fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: mpsc::Sender<MonitorUpdate>) -> Option<CancellationToken> {
+/// A separate typing worker owns the keyboard bridge when typing is enabled.
+fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: mpsc::Sender<MonitorUpdate>, work: mpsc::Sender<Work>) -> Option<MonitorStart> {
     let config = monitor_config(&session.settings);
     if !config.enabled {
         return None;
@@ -1356,7 +1399,50 @@ fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: 
         .with_reasoning(session.settings.reasoning_effort.as_deref())
         .with_refill(session.settings.codex_refill_policy);
     crate::monitor::service::spawn(monitor_client, auth.clone(), session.settings.model.clone(), config, cancel.clone(), updates);
-    Some(cancel)
+    let typing = session.settings.screen_monitor_typing.then(|| {
+        typing::spawn(move |outcome| {
+            let _ = work.blocking_send(Work::MonitorTyped(outcome));
+        })
+    });
+    Some(MonitorStart { cancel, typing })
+}
+/// Authorizes at most one typing attempt per screen-answer generation. Vision
+/// focus evidence must be recent, the same window must still be foreground,
+/// and the committed eligibility rules must pass; otherwise nothing is typed.
+fn type_monitor_answer(
+    engine: &mut Engine,
+    guard: &mut InsertionGuard,
+    worker: &Option<typing::Worker>,
+    evidence: Option<&FocusEvidence>,
+    question: Option<&(String, usize)>,
+    timings: crate::monitor::protocol::TypingTimings,
+    now: u64,
+) -> Option<String> {
+    let worker = worker.as_ref()?;
+    let (question, _) = question?;
+    let evidence = evidence.filter(|evidence| now.saturating_sub(evidence.at) <= FOCUS_EVIDENCE_WINDOW_MS)?;
+    let foreground = crate::monitor::foreground::current()?;
+    if foreground.window != evidence.window || foreground.executable != evidence.executable {
+        return None;
+    }
+    let answer = engine.screen_answers.get(question, now)?.clone();
+    let current = engine.screen_answers.latest_generation();
+    let field = FieldObservation {
+        source_window: evidence.window,
+        foreground_window: foreground.window,
+        focused: true,
+        editable: true,
+        password: false,
+        generation_id: answer.generation_id,
+    };
+    if !field_is_eligible(&answer, &field, current, now) || !guard.authorize_once(&answer, &field, current, now) {
+        return None;
+    }
+    if worker.type_text(answer.answer.clone(), timings, answer.generation_id) {
+        None
+    } else {
+        Some("The keyboard typing worker stopped".into())
+    }
 }
 fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
     if settings.service_tier.as_deref().is_some_and(|tier| !["fast", "default"].contains(&tier)) {
@@ -1555,6 +1641,7 @@ async fn action(
         "clear_project" => send(&rt, Control::ClearProject).await,
         "screenshot" => send(&rt, Control::Screenshot(None, active_task_id(&rt)?)).await,
         "clear_screenshot" => send(&rt, Control::ClearScreenshot).await,
+        "monitor_abort" => send(&rt, Control::MonitorAbort).await,
         _ => Err("Unknown action".into()),
     }
 }
@@ -1713,6 +1800,7 @@ pub fn run() {
                 Code::KeyM => Control::Pause,
                 Code::KeyE => Control::Expand(None),
                 Code::F8 => Control::Screenshot(None, rt.view.lock().unwrap().task.id.clone()),
+                Code::F12 => Control::MonitorAbort,
                 _ => return,
             };
             let _ = rt.tx.try_send(c);
@@ -1803,7 +1891,7 @@ pub fn run() {
             let (tx, rx) = mpsc::channel(64);
             use tauri_plugin_global_shortcut::GlobalShortcutExt;
             let mut shortcut_errors=vec![];
-            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Shift+F9","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
+            for key in ["Ctrl+Shift+Space","Ctrl+Shift+H","Ctrl+Shift+X","Ctrl+Shift+M","Ctrl+Shift+E","Ctrl+Shift+P","Ctrl+Shift+F8","Ctrl+Shift+F9","Ctrl+Shift+F12","Ctrl+Alt+ArrowLeft","Ctrl+Alt+ArrowRight","Ctrl+Alt+ArrowUp","Ctrl+Alt+ArrowDown","Ctrl+Shift+PageUp","Ctrl+Shift+PageDown","Ctrl+Shift+Home","Ctrl+Shift+End","Ctrl+Shift+ArrowUp","Ctrl+Shift+ArrowDown","Ctrl+Shift+ArrowLeft","Ctrl+Shift+ArrowRight"]{
                 if app.global_shortcut().register(key).is_err(){shortcut_errors.push(format!("{key} is unavailable; another app may be using it. The on-screen control still works."));}
             }
             #[cfg(all(windows, feature = "desktop-dc-experiment"))]

@@ -12,8 +12,8 @@ pub struct Foreground {
     pub executable: String,
 }
 
-/// Lowercased executable basename of a process image path, for the
-/// case-insensitive comparison against the authorized application list.
+/// Lowercased executable basename of a process image path, as reported in
+/// [`Foreground::executable`].
 pub fn executable_name(path: &str) -> String {
     std::path::Path::new(path)
         .file_name()

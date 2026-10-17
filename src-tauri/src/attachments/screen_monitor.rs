@@ -11,15 +11,12 @@ pub const DEFAULT_TTL: Duration = Duration::from_secs(300);
 pub struct MonitorConfig {
     pub enabled: bool,
     pub interval: Duration,
-    /// Executable basenames explicitly allowed by the user. Empty means no targets.
-    pub authorized_applications: Vec<String>,
 }
 impl Default for MonitorConfig {
     fn default() -> Self {
         Self {
             enabled: false,
             interval: Duration::from_secs(10),
-            authorized_applications: Vec::new(),
         }
     }
 }
@@ -28,22 +25,7 @@ impl MonitorConfig {
         if !(MIN_INTERVAL..=MAX_INTERVAL).contains(&self.interval) {
             return Err("Screenshot interval must be between 2 and 300 seconds");
         }
-        if self.authorized_applications.len() > 64
-            || self
-                .authorized_applications
-                .iter()
-                .any(|s| s.is_empty() || s.len() > 260 || s.contains(['/', '\\', ':']))
-        {
-            return Err("Authorized applications must be executable basenames");
-        }
         Ok(())
-    }
-    pub fn permits(&self, executable: &str) -> bool {
-        self.enabled
-            && self
-                .authorized_applications
-                .iter()
-                .any(|name| name.eq_ignore_ascii_case(executable))
     }
 }
 
@@ -321,13 +303,15 @@ mod tests {
         assert!(!guard.authorize_once(&a, &f, 8, 1));
     }
     #[test]
-    fn only_authorized_applications_are_permitted() {
-        let c = MonitorConfig {
+    fn monitor_intervals_are_range_checked() {
+        let mut c = MonitorConfig {
             enabled: true,
             interval: Duration::from_secs(10),
-            authorized_applications: vec!["notepad.exe".into()],
         };
-        assert!(c.permits("NOTEPAD.EXE"));
-        assert!(!c.permits("chrome.exe"));
+        assert!(c.validate().is_ok());
+        c.interval = Duration::from_secs(1);
+        assert!(c.validate().is_err());
+        c.interval = Duration::from_secs(301);
+        assert!(c.validate().is_err());
     }
 }

@@ -101,7 +101,7 @@ export default function App() {
       {snapshot.active && <button disabled={!!busy || snapshot.attachmentBusy} onClick={() => run('Capturing screen…', () => command('action', { action: 'screenshot' }))}>{snapshot.screenshot ? 'Retake screenshot' : 'Send screenshot'}</button>}
       <p className="field-note">The screenshot shortcut sends the monitor under your pointer to OpenAI. It replaces the previous screenshot and remains attached until removed or the meeting stops.</p>
     </section>
-    <ScreenMonitor settings={settings} setSettings={setSettings} resetApps={(data?.settings.screenMonitorApps ?? []).join('\n')} disabled={!!busy || snapshot.active} onError={setError} />
+    <ScreenMonitor settings={settings} setSettings={setSettings} disabled={!!busy || snapshot.active} onError={setError} />
     </TabsPanel>
     <TabsPanel value="camera"><Camera /></TabsPanel>
     </div></Tabs>

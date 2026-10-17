@@ -1,9 +1,10 @@
 //! Opt-in screen-monitor service: polls the foreground application on a fixed
-//! interval, captures it only when its executable basename is authorized, gates
-//! repeated pixels through the SHA-256 [`ChangeGate`], and asks the vision model
-//! to analyze each changed frame. Results are delivered to the meeting actor as
-//! [`MonitorUpdate`]s; the actor owns question deduplication, answer generation,
-//! and the visible [`MonitorStatus`].
+//! interval, captures the monitor that is in front of the user (pausing while
+//! the Copilot's own window is frontmost), gates repeated pixels through the
+//! SHA-256 [`ChangeGate`], and asks the vision model to analyze each changed
+//! frame. Results are delivered to the meeting actor as [`MonitorUpdate`]s; the
+//! actor owns question deduplication, answer generation, and the visible
+//! [`MonitorStatus`].
 //!
 //! The service never types and never touches the meeting screenshot action. It
 //! stops when its [`CancellationToken`] fires, which the actor does on pause,
@@ -60,10 +61,10 @@ impl MonitorStatus {
 /// Messages from the monitor service to the meeting actor.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum MonitorUpdate {
-    /// The interval produced no capture: nothing in the foreground, or the
-    /// foreground executable is not in the authorized application list.
+    /// The interval produced no capture: nothing to watch, or the Copilot's own
+    /// window is in front.
     Skipped { reason: String },
-    /// A frame of an authorized application was captured. `changed` is false
+    /// A frame of the screen in front was captured. `changed` is false
     /// when the pixels match the previous frame and no analysis follows.
     Captured {
         window: usize,
@@ -105,22 +106,12 @@ pub fn spawn(
             let target = match foreground::current() {
                 Some(target) => target,
                 None => {
-                    if !skip(&updates, "No authorized application is in the foreground").await {
+                    if !skip(&updates, "No other window is in the foreground").await {
                         break;
                     }
                     continue;
                 }
             };
-            if !config.permits(&target.executable) {
-                let reason = format!(
-                    "{} is not in the authorized screen-monitor applications",
-                    target.executable
-                );
-                if !skip(&updates, &reason).await {
-                    break;
-                }
-                continue;
-            }
             let window = target.window;
             let executable = target.executable;
             let frame = match tokio::task::spawn_blocking(move || {

@@ -81,15 +81,13 @@ pub struct Settings {
     pub screen_monitor_enabled: bool,
     #[serde(default = "default_monitor_interval")]
     pub screen_monitor_interval_seconds: u32,
-    #[serde(default)]
-    pub screen_monitor_apps: Vec<String>,
     #[serde(default = "default_monitor_typing")]
     pub screen_monitor_typing: bool,
     #[serde(default = "default_monitor_speed")]
     pub screen_monitor_speed: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),screen_monitor_enabled:false,screen_monitor_interval_seconds:default_monitor_interval(),screen_monitor_apps:Vec::new(),screen_monitor_typing:default_monitor_typing(),screen_monitor_speed:default_monitor_speed(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),screen_monitor_enabled:false,screen_monitor_interval_seconds:default_monitor_interval(),screen_monitor_typing:default_monitor_typing(),screen_monitor_speed:default_monitor_speed(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -1377,7 +1375,6 @@ fn monitor_config(settings: &Settings) -> MonitorConfig {
     MonitorConfig {
         enabled: settings.screen_monitor_enabled,
         interval: Duration::from_secs(settings.screen_monitor_interval_seconds as u64),
-        authorized_applications: settings.screen_monitor_apps.clone(),
     }
 }
 struct MonitorStart {
@@ -1385,7 +1382,7 @@ struct MonitorStart {
     typing: Option<typing::Worker>,
 }
 /// Starts the screen monitor for a session when it is enabled. The monitor
-/// client never types; it only analyzes frames from authorized applications.
+/// client never types; it only analyzes frames of the screen in front.
 /// A separate typing worker owns the keyboard bridge when typing is enabled.
 fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: mpsc::Sender<MonitorUpdate>, work: mpsc::Sender<Work>) -> Option<MonitorStart> {
     let config = monitor_config(&session.settings);
@@ -1449,9 +1446,6 @@ fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
         return Err("Choose Standard or Fast answer speed".into());
     }
     if settings.screen_monitor_enabled {
-        if settings.screen_monitor_apps.is_empty() {
-            return Err("List at least one application the screen monitor may capture".into());
-        }
         if crate::monitor::protocol::TypingSpeed::from_setting(&settings.screen_monitor_speed).is_none() {
             return Err("Choose a screen typing speed of Slow, Normal, or Fast".into());
         }
@@ -1659,7 +1653,9 @@ fn resize_overlay(app: tauri::AppHandle, height: f64) -> Result<(), String> {
 }
 #[tauri::command]
 async fn keyboard_bridge_status() -> Result<crate::monitor::hid::BridgeStatus, String> {
-    tokio::task::spawn_blocking(crate::monitor::hid::probe).await.map_err(|_| "Keyboard probe failed".to_string())
+    tokio::task::spawn_blocking(crate::monitor::hid::probe)
+        .await
+        .map_err(|error| format!("Keyboard probe failed: {error:?}"))
 }
 #[tauri::command]
 async fn choose_project(app: tauri::AppHandle) -> Result<Option<String>, String> {

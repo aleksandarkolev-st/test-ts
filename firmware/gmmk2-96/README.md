@@ -66,6 +66,11 @@ Consequences, and what this keymap does:
 - Historical note: old QMK trees (e.g. tag `0.12.0`) had a `raw_hid_receive_kb()` hook with a
   `void` return and a "DO NOT call `raw_hid_send()`" rule; current master has no such symbol.
   This firmware targets current master.
+- `via_command_kb()` is declared in **no** header (checked `quantum/via.h`); it exists only as
+  the weak definition in `quantum/via.c`. The keymap override matches that definition by
+  source inspection, so a future signature change would be a silent (not compiler-checked)
+  mismatch. `raw_hid_receive()`, by contrast, **is** declared in `quantum/raw_hid.h`, which
+  `keymap.c` includes so the override is signature-checked.
 - Our packets always start with `0x53` ('S'); VIA command ids are `0x01..0x15`. Packets
   without our magic byte return `false` / are ignored silently, so VIA and this module can
   share the single RAW HID interface.
@@ -229,7 +234,7 @@ Unverified assumptions to check on the first real build:
 
 - `quantum/raw_hid.c`, `quantum/raw_hid.h`, `quantum/via.c`, `quantum/via.h`
 - `quantum/keyboard.c`, `quantum/main.c`, `tmk_core/protocol/chibios/usb_main.c`
-- `quantum/action_util.h`, `quantum/action_util.c`, `tmk_core/protocol/report.c`, `quantum/keycode.h`, `platforms/timer.h`
+- `quantum/action_util.h`, `quantum/action_util.c`, `tmk_core/protocol/report.c`, `quantum/keycode.h`, `quantum/keycode_config.h`, `quantum/modifiers.h`, `quantum/compiler_support.h`, `platforms/timer.h`
 - `builddefs/common_features.mk`, `builddefs/generic_features.mk`, `lib/python/qmk/flashers.py`
 - `keyboards/gmmk/gmmk2/p96/ansi/keyboard.json`, `.../readme.md`, `.../keymaps/default/keymap.c`
 - https://docs.qmk.fm/features/rawhid (usage page 0xFF60 / usage 0x61; 32-byte reports)

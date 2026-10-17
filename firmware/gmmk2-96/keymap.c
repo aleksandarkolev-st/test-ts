@@ -35,6 +35,7 @@
 
 #include QMK_KEYBOARD_H
 
+#include "raw_hid.h" // declares raw_hid_receive(), so the override below is signature-checked
 #include "screen_typing.h"
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.

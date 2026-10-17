@@ -13,6 +13,15 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::Arc;
 
+/// Debug-build tracing for the typing worker; silent in release builds.
+macro_rules! worker_trace {
+    ($($arg:tt)*) => {
+        if cfg!(debug_assertions) {
+            eprintln!("monitor: typing worker: {}", format_args!($($arg)*));
+        }
+    };
+}
+
 pub enum TypingCommand {
     Type {
         text: String,
@@ -125,12 +134,14 @@ fn run<B: TypingBackend>(
             } => {
                 abort.store(false, Ordering::Release);
                 if backend.is_none() {
+                    worker_trace!("connecting to the keyboard bridge");
                     match connect() {
                         Ok(connected) => {
                             backend = Some(connected);
                             configured = None;
                         }
                         Err(error) => {
+                            worker_trace!("connect failed: {error}");
                             report(TypingOutcome::Failed { generation, error });
                             continue;
                         }
@@ -138,7 +149,9 @@ fn run<B: TypingBackend>(
                 }
                 let bridge = backend.as_mut().unwrap();
                 if configured != Some(timings) {
+                    worker_trace!("configuring press={} gap={}", timings.press_ms, timings.gap_ms);
                     if let Err(error) = bridge.configure(timings) {
+                        worker_trace!("configure failed: {error}");
                         report(TypingOutcome::Failed { generation, error });
                         if !bridge.is_alive() {
                             backend = None;
@@ -147,14 +160,21 @@ fn run<B: TypingBackend>(
                         continue;
                     }
                     configured = Some(timings);
+                    worker_trace!("configured");
                 }
+                worker_trace!("sending {} chars", text.chars().count());
                 match bridge.send_text(&text, &abort) {
-                    Ok(true) => report(TypingOutcome::Finished { generation }),
+                    Ok(true) => {
+                        worker_trace!("send finished");
+                        report(TypingOutcome::Finished { generation });
+                    }
                     Ok(false) => {
+                        worker_trace!("send aborted");
                         bridge.clear();
                         report(TypingOutcome::Aborted { generation });
                     }
                     Err(error) => {
+                        worker_trace!("send failed: {error}");
                         report(TypingOutcome::Failed { generation, error });
                         if !bridge.is_alive() {
                             backend = None;
@@ -295,6 +315,31 @@ mod tests {
                 error: "No keyboard firmware connected".into()
             }
         );
+        worker.shutdown();
+    }
+
+    /// Drives the real worker against the flashed keyboard over USB. The text is
+    /// typed into whatever window is focused, so only run it with a scratch text
+    /// field in front (e.g. the Notepad verification step in the README) and the
+    /// GMMK 2 with the screen-typing firmware connected:
+    ///
+    /// `cargo test --lib -- --ignored --nocapture hardware_smoke`
+    #[test]
+    #[ignore = "types on the real keyboard; requires the flashed GMMK 2"]
+    fn hardware_smoke_types_through_the_worker() {
+        let (report, outcomes) = mpsc::channel();
+        let worker = spawn(move |outcome| {
+            let _ = report.send(outcome);
+        });
+        assert!(worker.type_text("abc 123".into(), TypingTimings::default(), 1));
+        match outcomes.recv_timeout(Duration::from_secs(20)) {
+            Ok(TypingOutcome::Finished { generation: 1 }) => {}
+            Ok(other) => panic!("expected Finished for generation 1, got {other:?}"),
+            Err(error) => panic!("no outcome within 20 s ({error:?}); the worker is stuck"),
+        }
+        // The firmware types the acknowledged bytes at ~26 ms per character;
+        // without this pause the shutdown CLEAR would truncate the sentence.
+        std::thread::sleep(Duration::from_secs(2));
         worker.shutdown();
     }
 }

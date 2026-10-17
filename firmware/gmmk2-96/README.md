@@ -213,22 +213,36 @@ print(send([0x53, 0x04]))                       # CLEAR -> PONG
   magic prevents collisions, but you are now shipping VIA's much larger attack surface too.
 - The firmware only maps keys; it cannot control what the host app or OS does with them.
 
-## Not compiled or tested here
+## Flashed and hardware-verified (2026-10-17)
 
-**This firmware was NOT compiled or flashed in this environment** — no QMK toolchain is
-available here (`qmk` CLI not found; no ARM GCC). Everything below is verified by reading
-QMK master sources (cited above), and the keymap mirrors the board's in-tree default keymap,
-but a real build/flash/hardware test is still required.
+This keymap was compiled and flashed to a real GMMK 2 96% ANSI on 2026-10-17:
 
-Unverified assumptions to check on the first real build:
+- **Image.** `gmmk_gmmk2_p96_ansi_screen_typing.bin`, 48,608 bytes, SHA-256
+  `DA1F0EF1BDB36844E72E311383FDCD8957CF132705F46B864503E35B14C9E8C8` (the artifact name
+  matches `qmk compile -kb gmmk/gmmk2/p96/ansi -km screen_typing`).
+- **Flash.** Written at `0x08000000` through the WB32 DFU bootloader (device `342D:DFA0`,
+  "WB Device in DFU Mode", using the same `wb32-dfu-updater_cli` flow `qmk flash` drives).
+  The written region was read back after flashing and byte-compared: the first 48,608 bytes
+  match the image exactly.
+- **Hardware test.** The keyboard re-enumerates as `320F:504B` with the RAW HID vendor
+  collection; a PING on usage page `0xFF60` / usage `0x61` answers PONG with protocol
+  version 1, and TEXT chunks typed a probe sentence correctly into a focused text field at
+  the default cadence.
+- **Stock restore.** A complete 128 KiB stock image was read back before flashing (SHA-256
+  `3DB8492DEFC19426F4FB7AD785580405506A0B1B6F3EA70C2E33AECCB5B8FC36`, kept outside this
+  repo). Recovery: hold the reset switch under the spacebar while plugging in the cable to
+  enter DFU, then `wb32-dfu-updater_cli.exe -s 0x08000000 -D <stock-image>` followed by
+  `wb32-dfu-updater_cli.exe -R`, and replug. Holding Escape while plugging in erases the
+  keyboard's stored settings and also enters the bootloader.
 
-1. Compilation of `screen_typing.c`/`keymap.c` for `wb32-dfu` (expected to work, not built here).
-2. The `VIA_ENABLE = yes` variant (`via_command_kb` path) — logic verified by reading
-   `quantum/via.c`, not compile-tested.
-3. `qmk flash` + `wb32-dfu-updater_cli` on this Windows machine, and the USB DFU driver
-   setup needed by the WB32 bootloader.
-4. Runtime timing/NKRO behavior on hardware — `add_key`/`send_keyboard_report` semantics were
-   verified by reading `tmk_core/protocol/report.c` and `quantum/action_util.c`, not on a device.
+Still source-verified only (not hardware-tested):
+
+1. The `VIA_ENABLE = yes` variant (`via_command_kb` path) — never compiled; the flashed
+   build has VIA disabled, so the keymap's `raw_hid_receive()` override is the active path.
+2. Timing/NKRO edge cases under concurrent manual typing — the default cadence passed on
+   hardware, but `add_key`/`send_keyboard_report` interleaving rules were validated by
+   reading `tmk_core/protocol/report.c` and `quantum/action_util.c`, not exhaustively on a
+   device.
 
 ## Sources (fetched 2026-10-17, branch `master`)
 

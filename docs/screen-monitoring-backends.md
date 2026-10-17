@@ -1,19 +1,20 @@
 # Screen monitoring, answers, and keyboard typing
 
 Status: **implemented, opt-in, off by default** — with the honest limits listed below. The
-feature is one part of the app: a screen monitor that watches an authorized window, a
-RAM-only answer cache, and a keyboard typist that sends the cached answer through a QMK
+feature is one part of the app: a screen monitor that watches whatever screen is in front,
+a RAM-only answer cache, and a keyboard typist that sends the cached answer through a QMK
 RAW HID bridge so the keystrokes come from the keyboard's own USB device instead of a
 synthetic host input call. Form submission itself is never performed by the app.
 
 ## Pipeline
 
 1. **Capture** (`monitor/service.rs`, `attachments/screenshot.rs`): while a meeting runs and
-   `screenMonitorEnabled` is set, the service polls the foreground window every
-   `screenMonitorIntervalSeconds` (2–300, default 5). Only windows whose executable
-   basename is in `screenMonitorApps` are captured, the app's own windows are skipped, and
-   capture width is capped at 1440. Consecutive frames are compared by pixel hash; an
-   unchanged frame skips analysis.
+   `screenMonitorEnabled` is set, the service checks the foreground window every
+   `screenMonitorIntervalSeconds` (2–300, default 5) and captures **the whole monitor that
+   is in front** — everything visible on the screen that contains the foreground window,
+   whatever application it is (no application allowlist). Capture pauses while the
+   Copilot's own window is frontmost, and capture width is capped at 1440. Consecutive
+   frames are compared by pixel hash; an unchanged frame skips analysis.
 2. **Vision analysis** (`monitor/vision.rs`, prompt `MONITOR_ANALYSIS`): the frame goes to
    the configured vision model as untrusted reference data, which returns one JSON object
    `{question, focus, password, note}`. `focus` is true only when the screenshot shows a
@@ -85,10 +86,13 @@ of truth and its tests.
   question texts (for example a ticker or animation), each change starts a new generation
   and a new model request; there is no smoothing beyond the deduper.
 - **US ANSI ASCII only, one layout.** No IME, no dead keys, no Unicode; newline is `KC_ENTER`.
-- **Firmware was not compiled or flashed in this environment.** The keymap in
-  `firmware/gmmk2-96/` mirrors the board's in-tree default and was verified by reading QMK
-  master sources; a real build, flash, and hardware test is still required. See that
-  folder's README for the build steps, bootloader notes, and unverified assumptions.
+- **Firmware is flashed and hardware-verified.** The keymap in `firmware/gmmk2-96/` was
+  compiled and flashed to a real GMMK 2 96% ANSI on 2026-10-17 (image SHA-256
+  `DA1F0EF1BDB36844E72E311383FDCD8957CF132705F46B864503E35B14C9E8C8`, written at
+  `0x08000000` through the WB32 DFU bootloader, readback byte-compared), and the board
+  answers the PING/PONG handshake and typed a probe sentence on hardware. The VIA-enabled
+  build variant remains source-verified only. See that folder's README for details and the
+  stock-restore procedure.
 - **Answers are ephemeral.** RAM-only, 300-second TTL, replaced when the question changes,
   and cleared when the meeting stops. This does not make the feature undetectable; it only
   keeps the app's own storage honest.
@@ -114,8 +118,8 @@ own USB device emits the keystrokes; this is still automated input, as stated ab
 
 ## Safety boundary
 
-- The app only reads windows the user authorized by executable name, only while one of
-  them is the foreground window, and never captures its own windows.
+- The app captures only the monitor that is in front, only while a meeting runs and the
+  screen monitor is enabled, and never captures its own windows.
 - Answer text is typed only after vision shows the field focused, the live foreground
   window is re-checked, and the per-generation guard authorizes one attempt.
 - The app never triggers a submit control on its own — but see the Enter-keystroke limit above

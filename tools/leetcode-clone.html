@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Practice — Two Sum</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; display: flex; height: 100%;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #1f2328; background: #eef1f5;
+  }
+  .problem {
+    flex: 1.15; min-width: 0; overflow: auto; padding: 30px 38px 40px;
+    background: #ffffff; border-right: 1px solid #d8dde3;
+  }
+  .answer { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 30px 34px 26px; gap: 12px; }
+  h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -0.3px; }
+  .meta { display: flex; gap: 12px; align-items: center; margin: 0 0 22px; font-size: 15px; color: #57606a; }
+  .pill { background: #eaf6ec; color: #1a7f37; border: 1px solid #b7e0c0; padding: 3px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 600; }
+  .problem p { font-size: 17px; line-height: 1.65; margin: 0 0 16px; }
+  .problem h3 { font-size: 17.5px; margin: 24px 0 10px; }
+  pre.example {
+    background: #f3f5f8; border: 1px solid #e1e5ea; border-radius: 8px;
+    padding: 12px 16px; margin: 0 0 14px; overflow: auto;
+    font: 15.5px/1.6 Consolas, 'Cascadia Mono', 'Courier New', monospace; color: #24292f;
+  }
+  code { font-family: Consolas, 'Cascadia Mono', 'Courier New', monospace; background: #f3f5f8; border-radius: 4px; padding: 1px 5px; font-size: 0.94em; }
+  pre.example code { background: none; padding: 0; font-size: inherit; }
+  .constraints { font-size: 16px; line-height: 1.9; color: #3a424c; }
+  .answer .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .answer .row strong { font-size: 17px; }
+  .hint { font-size: 14px; color: #667085; }
+  textarea {
+    flex: 1; min-height: 240px; resize: none; padding: 14px 16px;
+    font: 15.5px/1.6 Consolas, 'Cascadia Mono', 'Courier New', monospace;
+    color: #111418; background: #ffffff;
+    border: 2px solid #c6ccd4; border-radius: 10px; outline: none;
+  }
+  textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+  button {
+    padding: 9px 26px; font-size: 15.5px; font-weight: 600; border-radius: 8px;
+    border: 1px solid #1d4ed8; background: #2563eb; color: #ffffff; cursor: pointer;
+  }
+  button:hover { background: #1d4ed8; }
+</style>
+</head>
+<body>
+  <main class="problem">
+    <h1>1. Two Sum</h1>
+    <div class="meta"><span class="pill">Easy</span><span>Practice · Algorithms</span></div>
+
+    <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return the indices of the two numbers such that they add up to <code>target</code>.</p>
+    <p>You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the same element twice. You can return the answer in any order.</p>
+
+    <h3>Example 1</h3>
+    <pre class="example"><code>Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].</code></pre>
+
+    <h3>Example 2</h3>
+    <pre class="example"><code>Input: nums = [3,2,4], target = 6
+Output: [1,2]</code></pre>
+
+    <h3>Example 3</h3>
+    <pre class="example"><code>Input: nums = [3,3], target = 6
+Output: [0,1]</code></pre>
+
+    <h3>Constraints</h3>
+    <p class="constraints">
+      2 &le; nums.length &le; 10<sup>4</sup><br>
+      -10<sup>9</sup> &le; nums[i] &le; 10<sup>9</sup><br>
+      -10<sup>9</sup> &le; target &le; 10<sup>9</sup><br>
+      Only one valid answer exists.
+    </p>
+  </main>
+
+  <section class="answer">
+    <div class="row"><strong>Your answer</strong><span class="hint" id="status">Not submitted</span></div>
+    <textarea id="field" aria-label="Answer field" spellcheck="false" autocomplete="off" placeholder="// write your solution of Two Sum here"></textarea>
+    <div class="row"><span class="hint">Local practice page — nothing is uploaded.</span><button id="submit" type="button">Submit</button></div>
+  </section>
+
+<script>
+  document.getElementById('submit').addEventListener('click', function () {
+    document.getElementById('status').textContent = 'Submitted (practice)';
+  });
+</script>
+</body>
+</html>

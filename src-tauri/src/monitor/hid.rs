@@ -9,6 +9,12 @@
 //! Typing is deliberately paced by the firmware and acknowledged per chunk; the
 //! host never synthesizes keystrokes through SendInput. If the bridge is gone,
 //! every operation fails and the caller must refuse to type.
+//!
+//! The device handle is opened for overlapped I/O and every operation is
+//! bounded. Windows serializes non-overlapped I/O on a handle even across
+//! threads, so a plain blocking write can wait forever behind the reader's
+//! pending read (observed as a typing worker that went silent after
+//! connecting).
 use serde::Serialize;
 
 use crate::monitor::protocol::NackCode;
@@ -101,7 +107,7 @@ mod imp {
     use std::sync::Arc;
     use std::thread::JoinHandle;
     use std::time::Duration;
-    use windows::core::PCWSTR;
+    use windows::core::{HRESULT, PCWSTR};
     use windows::Win32::Devices::DeviceAndDriverInstallation::{
         SetupDiDestroyDeviceInfoList, SetupDiEnumDeviceInterfaces, SetupDiGetClassDevsW,
         SetupDiGetDeviceInterfaceDetailW, DIGCF_DEVICEINTERFACE, DIGCF_PRESENT,
@@ -112,18 +118,24 @@ mod imp {
         HidD_GetProductString, HidP_GetCaps, HIDD_ATTRIBUTES, HIDP_CAPS, HIDP_STATUS_SUCCESS,
         PHIDP_PREPARSED_DATA,
     };
-    use windows::Win32::Foundation::{CloseHandle, GENERIC_READ, GENERIC_WRITE, HANDLE};
-    use windows::Win32::Storage::FileSystem::{
-        CreateFileW, ReadFile, WriteFile, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, FILE_SHARE_WRITE,
-        OPEN_EXISTING,
+    use windows::Win32::Foundation::{
+        CloseHandle, ERROR_IO_PENDING, GENERIC_READ, GENERIC_WRITE, HANDLE, WAIT_OBJECT_0,
     };
-    use windows::Win32::System::IO::CancelIoEx;
+    use windows::Win32::Storage::FileSystem::{
+        CreateFileW, ReadFile, WriteFile, FILE_ATTRIBUTE_NORMAL, FILE_FLAG_OVERLAPPED,
+        FILE_SHARE_READ, FILE_SHARE_WRITE, OPEN_EXISTING,
+    };
+    use windows::Win32::System::IO::{CancelIoEx, GetOverlappedResult, OVERLAPPED};
+    use windows::Win32::System::Threading::{CreateEventW, ResetEvent, WaitForSingleObject, INFINITE};
 
     const USAGE_PAGE_RAW_HID: u16 = 0xFF60;
     const USAGE_RAW_HID: u16 = 0x61;
     const IO_TIMEOUT: Duration = Duration::from_millis(150);
     const IO_ATTEMPTS: usize = 3;
     const QUEUE_RETRY_DELAY: Duration = Duration::from_millis(50);
+    /// A single HID write must complete within this long or it is cancelled and
+    /// reported as an error instead of blocking the worker forever.
+    const WRITE_TIMEOUT_MS: u32 = 1_000;
 
     /// A process-owned HID file handle shared by the writer and the reader
     /// thread. Win32 file handles are usable from any thread; the wrapper only
@@ -150,6 +162,7 @@ mod imp {
 
     pub struct KeyboardBridge {
         handle: SendHandle,
+        write_event: SendHandle,
         reader: Option<JoinHandle<()>>,
         alive: Arc<AtomicBool>,
         rx: Receiver<Inbound>,
@@ -284,8 +297,46 @@ mod imp {
                 }
                 WriteMode::Raw => report,
             };
-            unsafe { WriteFile(self.handle.0, Some(buffer), None, None) }
-                .map_err(|error| BridgeError::Io(error.message()))
+            let event = self.write_event.0;
+            let _ = unsafe { ResetEvent(event) };
+            let mut overlapped = OVERLAPPED {
+                hEvent: event,
+                ..Default::default()
+            };
+            let mut written = 0u32;
+            let pending = match unsafe {
+                WriteFile(
+                    self.handle.0,
+                    Some(buffer),
+                    Some(&mut written),
+                    Some(&mut overlapped),
+                )
+            } {
+                Ok(()) => false,
+                Err(error) if error.code() == HRESULT::from_win32(ERROR_IO_PENDING.0) => true,
+                Err(error) => return Err(BridgeError::Io(error.message())),
+            };
+            if pending {
+                if unsafe { WaitForSingleObject(event, WRITE_TIMEOUT_MS) } != WAIT_OBJECT_0 {
+                    let _ = unsafe { CancelIoEx(self.handle.0, Some(&overlapped as *const OVERLAPPED)) };
+                    // Wait for the cancellation to complete before the stack
+                    // OVERLAPPED and buffer go out of scope.
+                    let _ = unsafe { WaitForSingleObject(event, WRITE_TIMEOUT_MS) };
+                    return Err(BridgeError::Io(format!(
+                        "HID write timed out after {WRITE_TIMEOUT_MS} ms"
+                    )));
+                }
+            }
+            unsafe { GetOverlappedResult(self.handle.0, &overlapped, &mut written, false) }
+                .map_err(|error| BridgeError::Io(error.message()))?;
+            if written as usize != buffer.len() {
+                return Err(BridgeError::Io(format!(
+                    "HID write reported {} of {} bytes",
+                    written,
+                    buffer.len()
+                )));
+            }
+            Ok(())
         }
         fn wait(&self, timeout: Duration) -> Option<Inbound> {
             self.rx.recv_timeout(timeout).ok()
@@ -294,13 +345,13 @@ mod imp {
             while self.rx.try_recv().is_ok() {}
         }
         fn shutdown(&mut self) {
-            let Some(reader) = self.reader.take() else {
-                return;
-            };
-            let cancelled = unsafe { CancelIoEx(self.handle.0, None) }.is_ok();
-            if cancelled {
-                let _ = reader.join();
+            if let Some(reader) = self.reader.take() {
+                let cancelled = unsafe { CancelIoEx(self.handle.0, None) }.is_ok();
+                if cancelled {
+                    let _ = reader.join();
+                }
             }
+            let _ = unsafe { CloseHandle(self.write_event.0) };
             let _ = unsafe { CloseHandle(self.handle.0) };
         }
     }
@@ -317,6 +368,14 @@ mod imp {
                 Some(device) => device,
                 None => continue,
             };
+            let write_event = match unsafe { CreateEventW(None, true, false, PCWSTR::null()) } {
+                Ok(event) => SendHandle(event),
+                Err(error) => {
+                    let _ = unsafe { CloseHandle(device.handle.0) };
+                    last = Some(BridgeError::Io(error.message()));
+                    continue;
+                }
+            };
             let (tx, rx) = mpsc::channel();
             let alive = Arc::new(AtomicBool::new(true));
             let handle = device.handle;
@@ -329,6 +388,7 @@ mod imp {
                 .map_err(|error| BridgeError::Io(error.to_string()))?;
             let mut bridge = KeyboardBridge {
                 handle,
+                write_event,
                 reader: Some(reader),
                 alive,
                 rx,
@@ -361,11 +421,38 @@ mod imp {
     }
 
     fn reader_loop(handle: SendHandle, in_len: usize, tx: Sender<Inbound>, alive: Arc<AtomicBool>) {
+        let Ok(event) = (unsafe { CreateEventW(None, false, false, PCWSTR::null()) }) else {
+            alive.store(false, Ordering::Release);
+            return;
+        };
         let mut buffer = vec![0u8; in_len];
         loop {
+            let mut overlapped = OVERLAPPED {
+                hEvent: event,
+                ..Default::default()
+            };
             let mut read = 0u32;
-            if unsafe { ReadFile(handle.0, Some(&mut buffer), Some(&mut read), None) }.is_err() {
-                break;
+            let pending = match unsafe {
+                ReadFile(
+                    handle.0,
+                    Some(&mut buffer),
+                    Some(&mut read),
+                    Some(&mut overlapped),
+                )
+            } {
+                Ok(()) => false,
+                Err(error) if error.code() == HRESULT::from_win32(ERROR_IO_PENDING.0) => true,
+                Err(_) => break,
+            };
+            if pending {
+                if unsafe { WaitForSingleObject(event, INFINITE) } != WAIT_OBJECT_0 {
+                    break;
+                }
+                // Fails with ERROR_OPERATION_ABORTED when shutdown cancels us.
+                if unsafe { GetOverlappedResult(handle.0, &overlapped, &mut read, false) }.is_err()
+                {
+                    break;
+                }
             }
             let count = read as usize;
             if count == 0 {
@@ -384,6 +471,7 @@ mod imp {
                 }
             }
         }
+        let _ = unsafe { CloseHandle(event) };
         alive.store(false, Ordering::Release);
     }
 
@@ -465,7 +553,7 @@ mod imp {
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 None,
                 OPEN_EXISTING,
-                FILE_ATTRIBUTE_NORMAL,
+                FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
                 None,
             )
         }

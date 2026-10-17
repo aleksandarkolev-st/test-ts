@@ -148,6 +148,7 @@ Global shortcuts work while the desktop app is running. If another app owns a sh
 | **Ctrl + Shift + M** | Pause / resume audio capture. |
 | **Ctrl + Shift + X** | Dismiss the current answer. |
 | **Ctrl + Shift + E** | Request a longer answer. |
+| **Ctrl + Shift + F12** | Stop screen typing (screen monitor). |
 | **Ctrl + Shift + ↑ / ↓** | Scroll vertically in focused setup, or in the answer overlay. |
 | **Ctrl + Shift + ← / →** | Scroll a visible code block horizontally. |
 | **Ctrl + Shift + Page Up / Page Down** | Page through the reading surface. |
@@ -163,6 +164,16 @@ Want to keep your notes nearby while looking toward the call? Camera correction 
 Open **Camera**, choose your input camera and device, then **Start camera preview**. Calibrate looking at the camera first, then looking at your notes. Select **OBS Virtual Camera** in your call; its driver must already be installed. Start around 10–12° correction; the maximum is 15°. **Stop camera** closes video and clears calibration.
 
 See [camera verification and limitations](docs/camera-verification.md) and [gaze model details](docs/gaze-models.md) for tested configurations.
+
+## Optional screen monitor
+
+The screen monitor is the app's most invasive option, and it is off by default. Turn it on in **Context** to have your copilot watch one authorized window and prepare an answer for it.
+
+1. List the executables it may read, one per line (for example `notepad.exe`). Only the window in front is captured, and only while it belongs to one of those executables; everything else on screen is ignored.
+2. Every few seconds (2–300, default 5) it reads that window and asks for a solution-only answer — no explanation, just the text to type. Answers are kept in RAM, expire after 5 minutes, and are never written to disk.
+3. With **Type prepared answers with my keyboard** enabled, the answer is typed only after you focus the answer field in the watched app, and only while a keyboard running the [screen-typing firmware](firmware/gmmk2-96/README.md) answers the connection check in Context. **Ctrl + Shift + F12** or **Stop typing** on the overlay stops it immediately. If the keyboard cannot be reached, nothing is typed and the overlay shows a warning.
+
+**Honest description:** typing is automated input. The keystrokes come from your keyboard's own USB device — no synthetic host input — but they are not human-originated, and this project makes no claim that they are undetectable. The app never presses a separate submit control, but an answer's line breaks are typed as Enter, so avoid pointing the monitor at chat-style inputs where Enter sends. Details and limits: [screen monitoring, answers, and keyboard typing](docs/screen-monitoring-backends.md).
 
 ## Build from source
 
@@ -217,6 +228,7 @@ npx tauri build --debug --no-bundle --features tauri/custom-protocol
 - **Audio:** microphone and playback transcription run locally. There is no audio-upload or recording library.
 - **AI answers:** recent transcript, compact memory, and attached task context go to OpenAI as needed for answers and context compression. Codex uses ephemeral threads with history persistence disabled; the ChatGPT plan API requests `store:false`. These settings do not override service data policies.
 - **Screenshots:** explicit captures are sent inline. The latest image stays in RAM for follow-ups until removed, replaced, a new task, or Stop. Image input requires a compatible model.
+- **Screen monitor:** when you enable it, frames of the authorized foreground app are sent to OpenAI for analysis and answer generation; answers are RAM-only with a 5-minute TTL. Typing goes through your keyboard's screen-typing firmware, is refused when the keyboard bridge is unavailable, and stops with **Ctrl + Shift + F12**. Off unless you turn it on.
 - **Projects:** explicit sharing sends readable saved text. Collection respects ignore rules and excludes generated folders, repository metadata, and common credential files. Binary files, non-UTF-8 files, and symbolic links are skipped and listed. Limits are **2 MiB per file**, **4 MiB total text**, and **4,000 scanned files**; exceeding a limit fails the attachment. A service may impose a smaller context limit.
 - **Storage:** task content stays in RAM. SQLite stores settings, host/account IDs, and meeting start/end metadata; only an explicitly chosen folder path is saved, not project content. Codex manages its credentials; the alternative backend uses Windows Credential Manager. Logs contain numeric latency metrics, not meeting text.
 - **Share protection:** the status reports whether Windows capture exclusion was applied and verified. Hiding the window or seeing **Share protection active** does not guarantee exclusion from every capture app. See [capture verification](docs/verification.md).
@@ -237,6 +249,7 @@ Small snag? Start here.
 | Context is too large | Choose a smaller relevant folder or remove attachments. Local collection and model limits are separate. |
 | Shortcut does nothing | Check setup's conflict message and use the on-screen control. F9 controls setup; H controls the overlay. |
 | Camera preview/output is unavailable | Prepare camera resources, confirm the input device, and install OBS Virtual Camera's driver for virtual output. |
+| Screen typing does not appear | In Context, check the authorized apps and the keyboard connection check, and confirm you focused the answer field in the watched app. Without the screen-typing firmware, typing is refused and the overlay warns. |
 
 ## Development and evidence
 
@@ -251,6 +264,7 @@ cargo test --manifest-path src-tauri/Cargo.toml --lib
 See [testing and native acceptance](docs/testing.md) for real-audio, credential, soak, and live-service checks. Browser fixtures check UI behavior; they do not establish live meeting accuracy. Live response times vary; the near-instant latency target remains unmet in collected evidence.
 
 - [Runtime design and historical latency measurements](docs/runtime-notes.md)
+- [Screen monitoring, answers, and keyboard typing](docs/screen-monitoring-backends.md)
 - [Adaptive interview evaluation](docs/adaptive-interview.md)
 - [Verification ledger](docs/verification.md)
 - [Remaining upgrade work](docs/upgrade-plan.md)

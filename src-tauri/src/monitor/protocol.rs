@@ -10,17 +10,17 @@
 //! | command | layout | meaning |
 //! |---------|--------|---------|
 //! | `0x01` | `[cmd]` | `PING` |
-//! | `0x02` | `[cmd, press_ms, gap_ms]` | `CONFIG` typing pace |
+//! | `0x02` | `[cmd, press_ms, gap_ms]` | `CONFIG` typing pace (firmware clamps to `2..=200` / `1..=200` and echoes it in `CONFIG_ACK`) |
 //! | `0x03` | `[cmd, len, bytes...]` | `TEXT`, `1..=29` typable ASCII bytes |
-//! | `0x04` | `[cmd]` | `CLEAR` queued text |
+//! | `0x04` | `[cmd]` | `CLEAR` queued text (firmware replies `PONG`; the host does not wait for it) |
 //!
 //! Keyboard to host:
 //!
 //! | command | layout | meaning |
 //! |---------|--------|---------|
-//! | `0x81` | `[version, queue_lo, queue_hi, typing]` | `PONG` |
-//! | `0x82` | `[]` | `CONFIG_ACK` |
-//! | `0x83` | `[code, queue_lo, queue_hi]` | `NACK` |
+//! | `0x81` | `[version, queue_lo, queue_hi, typing]` | `PONG`; `typing` is nonzero while a key phase is active |
+//! | `0x82` | `[press_ms, gap_ms]` | `CONFIG_ACK` echoes the effective pace |
+//! | `0x83` | `[code, queue_lo, queue_hi]` | `NACK`: `1` unknown command, `2` queue full, `3` bad text, `4` bad config (reserved; `CONFIG` clamps) |
 //!
 //! Device packets without the `0x53` marker are ignored silently because VIA
 //! shares the same interface. A strict firmware replies to unknown `0x53`
@@ -56,11 +56,11 @@ impl Default for TypingTimings {
 }
 impl TypingTimings {
     pub fn validate(&self) -> Result<(), &'static str> {
-        if !(1..=50).contains(&self.press_ms) {
-            return Err("Key press duration must be between 1 and 50 milliseconds");
+        if !(2..=200).contains(&self.press_ms) {
+            return Err("Key press duration must be between 2 and 200 milliseconds");
         }
-        if !(1..=250).contains(&self.gap_ms) {
-            return Err("Typing gap must be between 1 and 250 milliseconds");
+        if !(1..=200).contains(&self.gap_ms) {
+            return Err("Typing gap must be between 1 and 200 milliseconds");
         }
         Ok(())
     }
@@ -109,16 +109,16 @@ impl TypingSpeed {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum NackCode {
     UnknownPacket = 1,
-    BadText = 2,
-    QueueFull = 3,
+    QueueFull = 2,
+    BadText = 3,
     BadConfig = 4,
 }
 impl NackCode {
     pub fn from_u8(value: u8) -> Option<Self> {
         match value {
             1 => Some(Self::UnknownPacket),
-            2 => Some(Self::BadText),
-            3 => Some(Self::QueueFull),
+            2 => Some(Self::QueueFull),
+            3 => Some(Self::BadText),
             4 => Some(Self::BadConfig),
             _ => None,
         }
@@ -470,9 +470,22 @@ mod tests {
     #[test]
     fn out_of_range_timings_are_rejected() {
         assert!(TypingTimings { press_ms: 0, gap_ms: 18 }.validate().is_err());
-        assert!(TypingTimings { press_ms: 51, gap_ms: 18 }.validate().is_err());
+        assert!(TypingTimings { press_ms: 1, gap_ms: 18 }.validate().is_err());
+        assert!(TypingTimings { press_ms: 201, gap_ms: 18 }.validate().is_err());
+        assert!(TypingTimings { press_ms: 200, gap_ms: 200 }.validate().is_ok());
+        assert!(TypingTimings { press_ms: 2, gap_ms: 1 }.validate().is_ok());
         assert!(TypingTimings { press_ms: 8, gap_ms: 0 }.validate().is_err());
-        assert!(TypingTimings { press_ms: 8, gap_ms: 251 }.validate().is_err());
+        assert!(TypingTimings { press_ms: 8, gap_ms: 201 }.validate().is_err());
+    }
+
+    #[test]
+    fn nack_codes_pin_the_frozen_wire_contract() {
+        assert_eq!(NackCode::UnknownPacket as u8, 1);
+        assert_eq!(NackCode::QueueFull as u8, 2);
+        assert_eq!(NackCode::BadText as u8, 3);
+        assert_eq!(NackCode::BadConfig as u8, 4);
+        assert_eq!(NackCode::from_u8(3), Some(NackCode::BadText));
+        assert_eq!(NackCode::from_u8(5), None);
     }
 
     #[test]

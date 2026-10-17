@@ -3,6 +3,8 @@
 use std::collections::HashMap;
 use std::time::Duration;
 
+use crate::monitor::typing::TypingOutcome;
+
 pub const MIN_INTERVAL: Duration = Duration::from_secs(2);
 pub const MAX_INTERVAL: Duration = Duration::from_secs(300);
 pub const DEFAULT_TTL: Duration = Duration::from_secs(300);
@@ -104,6 +106,38 @@ fn normalize_question(s: &str) -> String {
         .join(" ")
         .to_lowercase()
 }
+fn question_words(s: &str) -> Vec<String> {
+    s.split(|c: char| !c.is_alphanumeric())
+        .filter(|word| !word.is_empty())
+        .map(|word| word.to_lowercase())
+        .collect()
+}
+fn word_pairs(words: &[String]) -> std::collections::HashSet<(String, String)> {
+    words
+        .windows(2)
+        .map(|pair| (pair[0].clone(), pair[1].clone()))
+        .collect()
+}
+/// Two extractions describe the same problem when they share enough consecutive
+/// word pairs relative to the shorter one. Different sentences or truncations of
+/// one problem statement still match (they share its distinctive phrases), while
+/// unrelated statements do not.
+fn same_problem(a: &[String], b: &[String]) -> bool {
+    if a == b {
+        return true;
+    }
+    let (short, long) = if a.len() <= b.len() { (a, b) } else { (b, a) };
+    if short.len() < 4 {
+        return false;
+    }
+    let short_pairs = word_pairs(short);
+    if short_pairs.is_empty() {
+        return false;
+    }
+    let long_pairs = word_pairs(long);
+    let shared = short_pairs.intersection(&long_pairs).count();
+    shared * 100 >= short_pairs.len() * 35
+}
 
 /// SHA-256 change gate over encoded screen bytes. Repeated frames do not trigger AI work.
 #[derive(Default)]
@@ -126,15 +160,31 @@ impl ChangeGate {
     }
 }
 
-/// Suppresses repeated question text across changed frames until explicitly reset.
+/// Suppresses repeated questions and different excerpts of the same problem
+/// across changed frames until explicitly reset. Vision extractions of one
+/// problem statement vary between frames (a sentence here, a truncated phrase
+/// there); matching them by word pairs prevents re-solving and re-typing the
+/// same problem over and over.
 #[derive(Default)]
 pub struct QuestionDeduper {
-    seen: std::collections::HashSet<String>,
+    seen: Vec<Vec<String>>,
 }
 impl QuestionDeduper {
+    /// Bounded so a long meeting cannot grow without limit.
+    const MAX_SEEN: usize = 64;
     pub fn first_seen(&mut self, question: &str) -> bool {
-        let key = normalize_question(question);
-        !key.is_empty() && self.seen.insert(key)
+        let words = question_words(question);
+        if words.is_empty() {
+            return false;
+        }
+        if self.seen.iter().any(|seen| same_problem(seen, &words)) {
+            return false;
+        }
+        self.seen.push(words);
+        if self.seen.len() > Self::MAX_SEEN {
+            self.seen.remove(0);
+        }
+        true
     }
     pub fn reset(&mut self) {
         self.seen.clear();
@@ -168,10 +218,26 @@ pub fn field_is_eligible(
         && !field.password
 }
 
-/// One-shot insertion authorization. Reusing an authorization cannot type twice.
+/// How long a dispatched attempt blocks a new one while its outcome is still
+/// expected. The worker reports exactly one outcome per attempt (Finished,
+/// Aborted, or Failed), so this only guards a worker that died without
+/// reporting; once it elapses the attempt is presumed lost and becomes
+/// retryable.
+pub const RETRY_AFTER_MS: u64 = 30_000;
+
+/// One insertion attempt per screen-answer generation. A successful typing is
+/// final; a failed or aborted attempt stays retryable, so the user can click
+/// the field again after a failure instead of being locked out by a consumed
+/// authorization. In-flight attempts block duplicates until their outcome.
 #[derive(Default)]
 pub struct InsertionGuard {
-    consumed: std::collections::HashSet<u64>,
+    attempts: HashMap<u64, TypingAttempt>,
+}
+#[derive(Clone, Copy, Debug)]
+struct TypingAttempt {
+    dispatched_at_ms: u64,
+    in_flight: bool,
+    succeeded: bool,
 }
 impl InsertionGuard {
     pub fn authorize_once(
@@ -181,11 +247,41 @@ impl InsertionGuard {
         current_generation: u64,
         now_ms: u64,
     ) -> bool {
-        field_is_eligible(answer, field, current_generation, now_ms)
-            && self.consumed.insert(answer.generation_id)
+        if !field_is_eligible(answer, field, current_generation, now_ms) {
+            return false;
+        }
+        let generation = answer.generation_id;
+        let allowed = match self.attempts.get(&generation) {
+            Some(attempt) if attempt.succeeded => false,
+            Some(attempt)
+                if attempt.in_flight
+                    && now_ms.saturating_sub(attempt.dispatched_at_ms) < RETRY_AFTER_MS =>
+            {
+                false
+            }
+            _ => true,
+        };
+        if allowed {
+            self.attempts.insert(
+                generation,
+                TypingAttempt {
+                    dispatched_at_ms: now_ms,
+                    in_flight: true,
+                    succeeded: false,
+                },
+            );
+        }
+        allowed
+    }
+    /// Applies the typing worker's outcome to the dispatched attempt it answers.
+    pub fn observe_outcome(&mut self, generation: u64, outcome: &TypingOutcome) {
+        if let Some(attempt) = self.attempts.get_mut(&generation) {
+            attempt.in_flight = false;
+            attempt.succeeded = matches!(outcome, TypingOutcome::Finished { .. });
+        }
     }
     pub fn reset(&mut self) {
-        self.consumed.clear();
+        self.attempts.clear();
     }
 }
 
@@ -301,6 +397,45 @@ mod tests {
         let mut guard = InsertionGuard::default();
         assert!(guard.authorize_once(&a, &f, 8, 1));
         assert!(!guard.authorize_once(&a, &f, 8, 1));
+    }
+    #[test]
+    fn failed_attempts_become_retryable_while_finished_ones_stay_final() {
+        let a = answer();
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        assert!(guard.authorize_once(&a, &f, 8, 1));
+        guard.observe_outcome(
+            8,
+            &TypingOutcome::Failed {
+                generation: 8,
+                error: "no keyboard".into(),
+            },
+        );
+        assert!(guard.authorize_once(&a, &f, 8, 2));
+        guard.observe_outcome(8, &TypingOutcome::Finished { generation: 8 });
+        assert!(!guard.authorize_once(&a, &f, 8, 3));
+    }
+    #[test]
+    fn silent_in_flight_attempts_unlock_after_the_retry_window() {
+        let mut a = answer();
+        a.expires_at_ms = u64::MAX;
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        assert!(guard.authorize_once(&a, &f, 8, 1));
+        assert!(!guard.authorize_once(&a, &f, 8, 2));
+        assert!(guard.authorize_once(&a, &f, 8, 1 + RETRY_AFTER_MS + 1));
+    }
+    #[test]
+    fn question_excerpts_of_one_problem_are_deduplicated() {
+        let mut deduper = QuestionDeduper::default();
+        assert!(deduper.first_seen("Return the running sum of nums."));
+        assert!(!deduper.first_seen(
+            "Given an array nums. We define a running sum of an array as runningSum[i] = sum("
+        ));
+        assert!(!deduper.first_seen("Return the running sum of nums."));
+        assert!(deduper.first_seen(
+            "Given an array nums of size n, return the majority element."
+        ));
     }
     #[test]
     fn monitor_intervals_are_range_checked() {

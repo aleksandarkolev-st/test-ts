@@ -268,6 +268,14 @@ async fn start_session(mut settings:Settings, events:mpsc::Sender<InputEvent>, l
 /// typing attempt after it was observed. The live foreground window is still
 /// re-checked immediately before typing; evidence older than this is ignored.
 const FOCUS_EVIDENCE_WINDOW_MS: u64 = 30_000;
+/// Debug-build tracing for the screen monitor; silent in release builds.
+macro_rules! monitor_trace {
+    ($($arg:tt)*) => {
+        if cfg!(debug_assertions) {
+            eprintln!("monitor: {}", format_args!($($arg)*));
+        }
+    };
+}
 /// Vision evidence that the answer field of the analyzed window was focused.
 struct FocusEvidence {
     at: u64,
@@ -606,7 +614,7 @@ async fn actor(
                     let now=s.clock.elapsed().as_millis()as u64;
                     let current=monitor_pending==Some(generation);
                     match result {
-                        Ok(solution)=>{if !current{continue;}monitor_pending=None;
+                        Ok(solution)=>{if !current{monitor_trace!("solution generation {generation} dropped (pending {monitor_pending:?})");continue;}monitor_pending=None;
                             let length=solution.chars().count();
                             let stored=if solution.is_empty()||length>8_000{false}else{engine.screen_answers.insert(&question,&solution,window,generation,now,DEFAULT_TTL)};
                             if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;
@@ -614,14 +622,17 @@ async fn actor(
                                 else if length>8_000{status.warning=Some("The generated answer exceeds 8000 characters and was not cached".into());}
                                 else if stored{status.solutions+=1;status.answer_cached=true;status.question=Some(question);status.window=Some(window);status.warning=None;}
                             }
+                            monitor_trace!("solution stored={stored} generation={generation} chars={length}");
                             if stored{if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}}}
                             publish(&app,&mut engine,&view);
                         },
-                        Err(error)=>{if current{monitor_pending=None;if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;status.warning=Some(format!("Could not generate the on-screen answer: {error}"));}publish(&app,&mut engine,&view);}}
+                        Err(error)=>{monitor_trace!("solution generation {generation} failed: {error}");if current{monitor_pending=None;if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;status.warning=Some(format!("Could not generate the on-screen answer: {error}"));}publish(&app,&mut engine,&view);}}
                     }
                 }},
                 Work::MonitorTyped(outcome)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);
                     let generation=match &outcome{TypingOutcome::Finished{generation}|TypingOutcome::Aborted{generation}|TypingOutcome::Failed{generation,..}=>*generation};
+                    monitor_trace!("typing outcome {:?} generation={generation} latest={}", outcome, engine.screen_answers.latest_generation());
+                    monitor_insertion.observe_outcome(generation, &outcome);
                     if generation==engine.screen_answers.latest_generation(){
                         let warning=match &outcome{TypingOutcome::Finished{..}=>None,TypingOutcome::Aborted{..}=>Some("Typing was stopped".to_string()),TypingOutcome::Failed{error,..}=>Some(error.clone())};
                         if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;if warning.is_none(){status.typed=true;status.warning=None;}else{status.warning=warning;}}
@@ -638,6 +649,7 @@ async fn actor(
                     MonitorUpdate::Failed{error}=>{if let Some(status)=engine.view.monitor.as_mut(){status.state="error".into();status.warning=Some(error);status.updated_at=now;}publish(&app,&mut engine,&view);},
                     MonitorUpdate::Analysis{window,executable,image,analysis}=>{
                         let focused=analysis.focus&&!analysis.password;
+                        monitor_trace!("analysis: focus={} password={} question={:?}", analysis.focus, analysis.password, analysis.question.as_deref().map(|question| question.chars().take(80).collect::<String>()));
                         monitor_focus=focused.then(||FocusEvidence{at:now,window,executable:executable.clone()});
                         if let Some(status)=engine.view.monitor.as_mut(){
                             status.window=Some(window);status.executable=Some(executable);status.state="watching".into();status.warning=None;status.updated_at=now;status.analyzed_frames+=1;status.focus=analysis.focus;
@@ -647,10 +659,11 @@ async fn actor(
                         if let Some(question)=analysis.question.clone(){
                             let fresh=monitor_deduper.first_seen(&question);
                             let cached=engine.screen_answers.get(&question,now).is_some();
-                            if fresh||(!cached&&monitor_pending.is_none()){
+                            if fresh&&!cached&&monitor_pending.is_none(){
                                 let Some(cancel)=monitor_cancel.clone()else{continue};
                                 let generation=engine.screen_answers.next_generation();
                                 monitor_pending=Some(generation);monitor_question=Some((question.clone(),window));
+                                monitor_trace!("solution generation {generation} started (fresh={fresh} cached={cached})");
                                 if let Some(status)=engine.view.monitor.as_mut(){status.question=Some(question.clone());status.answer_cached=false;status.typed=false;}
                                 let mut input=String::from("Solve the task shown in this screenshot.");input.push_str("\nExtracted question text: ");input.push_str(&question);
                                 if !analysis.note.is_empty(){input.push_str("\nScreen note: ");input.push_str(&analysis.note);}
@@ -662,7 +675,7 @@ async fn actor(
                                     if cancel.is_cancelled(){return;}
                                     let _=tx.send(Work::MonitorSolution(session_id,window,question,generation,result)).await;
                                 });
-                            }
+                            }else{monitor_trace!("solution skipped: question already known (fresh={fresh} cached={cached} pending={})",monitor_pending.is_some());}
                         }
                         if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){
                             if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}
@@ -1403,9 +1416,12 @@ fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: 
     });
     Some(MonitorStart { cancel, typing })
 }
-/// Authorizes at most one typing attempt per screen-answer generation. Vision
-/// focus evidence must be recent, the same window must still be foreground,
-/// and the committed eligibility rules must pass; otherwise nothing is typed.
+/// Dispatches typing for the tracked screen answer. Vision focus evidence must
+/// be recent, the same window must still be foreground, and the committed
+/// eligibility rules must pass; otherwise nothing is typed. The guard allows a
+/// retry when the previous attempt failed, aborted, or never reported an
+/// outcome (so a re-clicked field can retry), while a finished typing stays
+/// final for its generation.
 fn type_monitor_answer(
     engine: &mut Engine,
     guard: &mut InsertionGuard,
@@ -1415,14 +1431,38 @@ fn type_monitor_answer(
     timings: crate::monitor::protocol::TypingTimings,
     now: u64,
 ) -> Option<String> {
-    let worker = worker.as_ref()?;
-    let (question, _) = question?;
-    let evidence = evidence.filter(|evidence| now.saturating_sub(evidence.at) <= FOCUS_EVIDENCE_WINDOW_MS)?;
-    let foreground = crate::monitor::foreground::current()?;
+    let Some(worker) = worker.as_ref() else {
+        monitor_trace!("typing skipped: no typing worker");
+        return None;
+    };
+    let Some((question, _)) = question else {
+        monitor_trace!("typing skipped: no tracked question");
+        return None;
+    };
+    let Some(evidence) = evidence
+        .filter(|evidence| now.saturating_sub(evidence.at) <= FOCUS_EVIDENCE_WINDOW_MS)
+    else {
+        monitor_trace!("typing skipped: no fresh focus evidence");
+        return None;
+    };
+    let Some(foreground) = crate::monitor::foreground::current() else {
+        monitor_trace!("typing skipped: no foreground window");
+        return None;
+    };
     if foreground.window != evidence.window || foreground.executable != evidence.executable {
+        monitor_trace!(
+            "typing skipped: foreground {}({}) != evidence {}({})",
+            foreground.executable,
+            foreground.window,
+            evidence.executable,
+            evidence.window
+        );
         return None;
     }
-    let answer = engine.screen_answers.get(question, now)?.clone();
+    let Some(answer) = engine.screen_answers.get(question, now).cloned() else {
+        monitor_trace!("typing skipped: no cached answer for the tracked question");
+        return None;
+    };
     let current = engine.screen_answers.latest_generation();
     let field = FieldObservation {
         source_window: evidence.window,
@@ -1432,9 +1472,26 @@ fn type_monitor_answer(
         password: false,
         generation_id: answer.generation_id,
     };
-    if !field_is_eligible(&answer, &field, current, now) || !guard.authorize_once(&answer, &field, current, now) {
+    if !field_is_eligible(&answer, &field, current, now) {
+        monitor_trace!(
+            "typing skipped: field not eligible (answer generation {}, current {})",
+            answer.generation_id,
+            current
+        );
         return None;
     }
+    if !guard.authorize_once(&answer, &field, current, now) {
+        monitor_trace!(
+            "typing skipped: generation {} already typed or attempt in flight",
+            answer.generation_id
+        );
+        return None;
+    }
+    monitor_trace!(
+        "typing dispatch: generation {} ({} chars)",
+        answer.generation_id,
+        answer.answer.chars().count()
+    );
     if worker.type_text(answer.answer.clone(), timings, answer.generation_id) {
         None
     } else {

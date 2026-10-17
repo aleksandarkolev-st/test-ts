@@ -1,6 +1,7 @@
 pub mod audio;
 pub mod attachments;
 pub mod meeting;
+pub mod monitor;
 pub mod openai;
 pub mod overlay;
 pub mod storage;

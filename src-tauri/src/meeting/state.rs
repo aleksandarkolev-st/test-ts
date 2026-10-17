@@ -70,6 +70,7 @@ pub struct Snapshot {
     pub project: Option<crate::attachments::project::ProjectInfo>,
     pub attachment_busy: bool,
     pub screenshot: Option<crate::attachments::screenshot::ScreenshotInfo>,
+    pub monitor: Option<crate::monitor::service::MonitorStatus>,
 }
 impl Default for Snapshot {
     fn default() -> Self {
@@ -93,6 +94,7 @@ impl Default for Snapshot {
             project: None,
             attachment_busy: false,
             screenshot: None,
+            monitor: None,
         }
     }
 }
@@ -127,6 +129,9 @@ impl Engine {
         self.view.expanded = false;
         self.view.manual = false;
         self.view.can_answer_now = false;
+        if let Some(monitor) = self.view.monitor.as_mut() {
+            *monitor = crate::monitor::service::MonitorStatus::watching();
+        }
         self.view.status = if self.view.active { "listening" } else { "off" }.into();
     }
     pub fn clear_meeting(&mut self) {

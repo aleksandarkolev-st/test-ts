@@ -1,9 +1,14 @@
 use crate::{
+    attachments::screen_monitor::{MonitorConfig, QuestionDeduper, DEFAULT_TTL},
     audio,
     meeting::{
         self,
         state::{Engine, Latency, Snapshot},
         InputEvent, SpeakerSource,
+    },
+    monitor::{
+        service::{MonitorStatus, MonitorUpdate},
+        vision::clean_solution,
     },
     openai::{
         auth::{Account, Auth},
@@ -33,6 +38,9 @@ pub enum SpeechBackend { #[default] Nemotron, Whisper }
 fn default_chunk() -> u32 { 160 }
 fn default_gpu() -> u32 { 1 }
 fn default_reasoning() -> Option<String> { Some("low".into()) }
+fn default_monitor_interval() -> u32 { 5 }
+fn default_monitor_typing() -> bool { true }
+fn default_monitor_speed() -> String { "normal".into() }
 #[derive(Clone,Copy,Default,Serialize,Deserialize)]
 #[serde(rename_all="lowercase")]
 pub enum AnswerObjective {#[default] Brief,Detailed}
@@ -64,9 +72,19 @@ pub struct Settings {
     pub codex_refill_policy: crate::openai::codex::RefillPolicy,
     #[serde(default)]
     pub project_path: String,
+    #[serde(default)]
+    pub screen_monitor_enabled: bool,
+    #[serde(default = "default_monitor_interval")]
+    pub screen_monitor_interval_seconds: u32,
+    #[serde(default)]
+    pub screen_monitor_apps: Vec<String>,
+    #[serde(default = "default_monitor_typing")]
+    pub screen_monitor_typing: bool,
+    #[serde(default = "default_monitor_speed")]
+    pub screen_monitor_speed: String,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),screen_monitor_enabled:false,screen_monitor_interval_seconds:default_monitor_interval(),screen_monitor_apps:Vec::new(),screen_monitor_typing:default_monitor_typing(),screen_monitor_speed:default_monitor_speed(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -154,6 +172,9 @@ enum Work {
     SummaryError(String, String, String),
     Project(String, String, Result<crate::attachments::project::Project, String>),
     Screenshot(String, String, Result<crate::attachments::screenshot::Screenshot, String>),
+    /// A solution for an on-screen question: session, source window, question,
+    /// cache generation, and the solution-only text (or the generation error).
+    MonitorSolution(String, usize, String, u64, Result<String, String>),
 }
 pub struct Runtime {
     timings: crate::openai::timing::Registry,
@@ -262,6 +283,11 @@ async fn actor(
     let mut summary: Option<CancellationToken> = None;
     let (mut events_tx, mut events) = mpsc::channel(256);
     let (work_tx, mut work) = mpsc::channel(256);
+    let (monitor_tx, mut monitor_updates) = mpsc::channel(64);
+    let mut monitor_cancel: Option<CancellationToken> = None;
+    let mut monitor_deduper = QuestionDeduper::default();
+    let mut monitor_question: Option<(String, usize)> = None;
+    let mut monitor_pending: Option<u64> = None;
     let levels = Arc::new(Mutex::new((0., 0.)));
     let mut tick = tokio::time::interval(Duration::from_millis(40));
     let mut transcript_at = 0;
@@ -315,6 +341,8 @@ async fn actor(
                 },
                 Control::Stop(reply)=>{project_request=None;screenshot_request=None;
                     timings.lock().unwrap().clear();
+                    if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}
+                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;
                     if let Some(pending)=starting.take(){pending.cancel.cancel();let _=pending.reply.send(Err("Speech startup cancelled".into()));}
                     answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);if let Some(c)=summary.take(){c.cancel()}
                     if let Some(codex)=&client.codex { codex.close(); }
@@ -324,8 +352,8 @@ async fn actor(
                 Control::Pause=>{if let Some(s)=session.as_mut(){
                     intent_gate.invalidate();
                     answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.view.answer.clear();engine.view.question=None;engine.detector.clear();
-                    if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();}
-                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
+                    if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;engine.view.paused=true;*levels.lock().unwrap()=(0.,0.);let (tx, rx) = mpsc::channel(256); events_tx = tx; events = rx; engine.view.error=None;engine.view.status="listening".into();if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;engine.view.monitor=None;}
+                    else {let model=s.model.clone();let settings=s.settings.clone();let clock=s.clock;let tx=events_tx.clone();let lv=levels.clone();match pipeline(model,&settings,clock,tx,lv).await{Ok(p)=>{s.pipeline=Some(p);engine.view.paused=false;engine.view.status="listening".into();engine.view.error=None;if let Some(cancel)=spawn_monitor(s,&client,&auth,monitor_tx.clone()){monitor_cancel=Some(cancel);engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;}},Err(e)=>{engine.view.error=Some(e);engine.view.status="error".into();}}}
                     publish(&app,&mut engine,&view);
                 }},
                 Control::Displayed(id,revision,text,visible_start,visible_end,paint_host_ms)=>{if let Some(s)=session.as_ref(){
@@ -377,6 +405,7 @@ async fn actor(
                     answers.clear();cancel_answer(&app,&mut generation);
                     if let Some(c)=summary.take(){c.cancel();}
                     intent_gate=meeting::intent::Gate::default();speech_metrics=Latency::default();summary_retry_at=now;
+                    monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;
                     engine.new_task(now);timings.lock().unwrap().clear();
                     emit(&app,"task.started",());
                     window::set_manual(&app,false);window::show(&app,&hidden);
@@ -483,6 +512,8 @@ async fn actor(
                     },
                     InputEvent::Failure(error)=>{
                         answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);
+                        if let Some(cancel)=monitor_cancel.take(){cancel.cancel();}
+                        monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;engine.view.monitor=None;
                         if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}
                         if let Some(s)=session.as_mut(){if let Some(mut p)=s.pipeline.take(){let _=tokio::task::spawn_blocking(move||p.stop()).await;}}
                         let (tx,rx)=mpsc::channel(256);events_tx=tx;events=rx;
@@ -526,7 +557,7 @@ async fn actor(
                 Work::Started(id,result)=>{if starting.as_ref().is_some_and(|pending|pending.id==id){let pending=starting.take().unwrap();
                     match result {
                         Ok(s)=>{match db.start(&s.id,crate::openai::auth::now()){
-                            Ok(())=>{session=Some(s);intent_gate=meeting::intent::Gate::default();summary_retry_at=0;transcript_at=0;engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=pending.reply.send(Ok(()));},
+                            Ok(())=>{if let Some(cancel)=spawn_monitor(&s,&client,&auth,monitor_tx.clone()){monitor_cancel=Some(cancel);engine.view.monitor=Some(MonitorStatus::watching());monitor_deduper=QuestionDeduper::default();monitor_question=None;monitor_pending=None;}session=Some(s);intent_gate=meeting::intent::Gate::default();summary_retry_at=0;transcript_at=0;engine.view.active=true;engine.view.status="listening".into();hidden.store(false,Ordering::Release);let _=window::position(&app);window::show(&app,&hidden);emit(&app,"meeting.started",());let _=pending.reply.send(Ok(()));},
                             Err(error)=>{drop(s);engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
                         }},
                         Err(error)=>{engine.clear_meeting();engine.view.error=Some(error.clone());let _=pending.reply.send(Err(error));},
@@ -549,7 +580,61 @@ async fn actor(
                     match result {Ok(screenshot)=>{engine.view.screenshot=Some(screenshot.info);engine.screenshot_data=Some(screenshot.data_url);answers.clear();engine.view.questions.clear();cancel_answer(&app,&mut generation);engine.detector.clear();if let Some(c)=summary.take(){c.cancel();engine.context.fail_summary();}let now=s.clock.elapsed().as_millis()as u64;let question=attachment_question(engine.view.question.as_ref(),task_question(&engine.view.task,SCREEN_CONTEXT_QUESTION));let context=engine.context.answer_context(&question);let id=answers.confirm_explicit_with_context(question.clone(),now,now,now,context);engine.context.ledger.typed(&id,&question,now);if let Some(job)=answers.find_mut(&id){job.detailed=true;job.context_version=engine.context.ledger.version;}drive_answers(&app,&engine,s,&auth,&client,&timings,work_tx.clone(),&mut answers,now);sync_answers(&mut engine,&answers);},Err(error)=>{engine.view.error=Some(error);}}
                     window::show(&app,&hidden);publish(&app,&mut engine,&view);
                 }},
+                Work::MonitorSolution(session_id,window,question,generation,result)=>{if let Some(s)=session.as_ref().filter(|s|s.id==session_id){
+                    let now=s.clock.elapsed().as_millis()as u64;
+                    let current=monitor_pending==Some(generation);
+                    match result {
+                        Ok(solution)=>{if !current{continue;}monitor_pending=None;
+                            let length=solution.chars().count();
+                            let stored=if solution.is_empty()||length>8_000{false}else{engine.screen_answers.insert(&question,&solution,window,generation,now,DEFAULT_TTL)};
+                            if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;
+                                if solution.is_empty(){status.warning=Some("The vision model returned no answer text".into());}
+                                else if length>8_000{status.warning=Some("The generated answer exceeds 8000 characters and was not cached".into());}
+                                else if stored{status.solutions+=1;status.answer_cached=true;status.question=Some(question);status.window=Some(window);status.warning=None;}
+                            }
+                            publish(&app,&mut engine,&view);
+                        },
+                        Err(error)=>{if current{monitor_pending=None;if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;status.warning=Some(format!("Could not generate the on-screen answer: {error}"));}publish(&app,&mut engine,&view);}}
+                    }
+                }},
             }},
+            update=monitor_updates.recv()=>{let Some(update)=update else{continue};
+                let Some(s)=session.as_ref() else{continue};
+                let now=s.clock.elapsed().as_millis()as u64;
+                match update {
+                    MonitorUpdate::Skipped{reason}=>{if let Some(status)=engine.view.monitor.as_mut(){status.state="watching".into();status.warning=Some(reason);status.updated_at=now;}publish(&app,&mut engine,&view);},
+                    MonitorUpdate::Captured{window,executable,changed}=>{if let Some(status)=engine.view.monitor.as_mut(){status.window=Some(window);status.executable=Some(executable);status.state=(if changed{"analyzing"}else{"watching"}).into();status.warning=None;status.updated_at=now;}publish(&app,&mut engine,&view);},
+                    MonitorUpdate::Failed{error}=>{if let Some(status)=engine.view.monitor.as_mut(){status.state="error".into();status.warning=Some(error);status.updated_at=now;}publish(&app,&mut engine,&view);},
+                    MonitorUpdate::Analysis{window,executable,image,analysis}=>{
+                        if let Some(status)=engine.view.monitor.as_mut(){
+                            status.window=Some(window);status.executable=Some(executable);status.state="watching".into();status.warning=None;status.updated_at=now;status.analyzed_frames+=1;status.focus=analysis.focus;
+                            status.answer_cached=monitor_question.as_ref().is_some_and(|(question,_)|engine.screen_answers.get(question,now).is_some());
+                            if let Some(question)=&analysis.question{status.question=Some(question.clone());}
+                        }
+                        if let Some(question)=analysis.question.clone(){
+                            let fresh=monitor_deduper.first_seen(&question);
+                            let cached=engine.screen_answers.get(&question,now).is_some();
+                            if fresh||(!cached&&monitor_pending.is_none()){
+                                let Some(cancel)=monitor_cancel.clone()else{continue};
+                                let generation=engine.screen_answers.next_generation();
+                                monitor_pending=Some(generation);monitor_question=Some((question.clone(),window));
+                                if let Some(status)=engine.view.monitor.as_mut(){status.question=Some(question.clone());status.answer_cached=false;}
+                                let mut input=String::from("Solve the task shown in this screenshot.");input.push_str("\nExtracted question text: ");input.push_str(&question);
+                                if !analysis.note.is_empty(){input.push_str("\nScreen note: ");input.push_str(&analysis.note);}
+                                let model=s.settings.model.clone();
+                                let solution_client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref()).with_refill(s.settings.codex_refill_policy);
+                                let auth=auth.clone();let tx=work_tx.clone();let session_id=s.id.clone();
+                                tauri::async_runtime::spawn(async move{
+                                    let result=async{let token=answer_token(&auth,&solution_client,&cancel).await?;let solution=solution_client.text_with_image(&token,&model,prompts::MONITOR_SOLUTION,&input,Some(&image),cancel.clone()).await?;Ok::<_,String>(clean_solution(&solution))}.await;
+                                    if cancel.is_cancelled(){return;}
+                                    let _=tx.send(Work::MonitorSolution(session_id,window,question,generation,result)).await;
+                                });
+                            }
+                        }
+                        publish(&app,&mut engine,&view);
+                    },
+                }
+            },
             _=tick.tick()=>{if let Some(s)=session.as_ref(){let now=s.clock.elapsed().as_millis()as u64;
                 if conversation_input_enabled(&engine) {
                     if let Some(classifier)=s.intent.as_ref() {
@@ -1250,9 +1335,41 @@ fn active_attachment_reference(project:&str,screenshot:bool)->String{
         let frame=active_attachment_reference(source,false);assert!(frame.ends_with(source));assert!(frame.contains("\"project\":true"));assert!(frame.contains("\"screenshot\":false"));
     }
 }
+fn monitor_config(settings: &Settings) -> MonitorConfig {
+    MonitorConfig {
+        enabled: settings.screen_monitor_enabled,
+        interval: Duration::from_secs(settings.screen_monitor_interval_seconds as u64),
+        authorized_applications: settings.screen_monitor_apps.clone(),
+    }
+}
+/// Starts the screen monitor for a session when it is enabled. The monitor
+/// client never types; it only analyzes frames from authorized applications.
+fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: mpsc::Sender<MonitorUpdate>) -> Option<CancellationToken> {
+    let config = monitor_config(&session.settings);
+    if !config.enabled {
+        return None;
+    }
+    let cancel = CancellationToken::new();
+    let monitor_client = client
+        .clone()
+        .with_backend(session.settings.answer_backend, session.settings.service_tier.as_deref())
+        .with_reasoning(session.settings.reasoning_effort.as_deref())
+        .with_refill(session.settings.codex_refill_policy);
+    crate::monitor::service::spawn(monitor_client, auth.clone(), session.settings.model.clone(), config, cancel.clone(), updates);
+    Some(cancel)
+}
 fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
     if settings.service_tier.as_deref().is_some_and(|tier| !["fast", "default"].contains(&tier)) {
         return Err("Choose Standard or Fast answer speed".into());
+    }
+    if settings.screen_monitor_enabled {
+        if settings.screen_monitor_apps.is_empty() {
+            return Err("List at least one application the screen monitor may capture".into());
+        }
+        if crate::monitor::protocol::TypingSpeed::from_setting(&settings.screen_monitor_speed).is_none() {
+            return Err("Choose a screen typing speed of Slow, Normal, or Fast".into());
+        }
+        monitor_config(settings).validate().map_err(|error| error.to_string())?;
     }
     Ok(())
 }

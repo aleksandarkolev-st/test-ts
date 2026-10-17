@@ -416,16 +416,28 @@ impl Client {
         input: &str,
         cancel: CancellationToken,
     ) -> Result<String, String> {
+        self.text_with_image(token, model, instructions, input, None, cancel)
+            .await
+    }
+    pub async fn text_with_image(
+        &self,
+        token: &str,
+        model: &str,
+        instructions: &str,
+        input: &str,
+        image: Option<&str>,
+        cancel: CancellationToken,
+    ) -> Result<String, String> {
         let mut result = String::new();
-        self.stream(token, model, instructions, input, cancel, |event| {
+        self.stream_with_image(token, model, instructions, input, image, cancel, |event| {
             if let StreamEvent::Revision(text) = &event {
-                if text.len()>65_536{return std::future::ready(Err("Meeting memory response exceeds size limit".into()));}
+                if text.len()>65_536{return std::future::ready(Err("Answer response exceeds size limit".into()));}
                 result=text.clone();
             }
             if let StreamEvent::Delta(d) = event {
                 if result.len() + d.len() > 65_536 {
                     return std::future::ready(Err(
-                        "Meeting memory response exceeds size limit".into()
+                        "Answer response exceeds size limit".into()
                     ));
                 }
                 result.push_str(&d)

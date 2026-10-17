@@ -104,6 +104,8 @@ pub struct Engine {
     pub detector: QuestionDetector,
     pub project: Option<crate::attachments::project::Project>,
     pub screenshot_data: Option<String>,
+    /// Screen-monitor answers are separate from meeting answers and remain RAM-only.
+    pub screen_answers: crate::attachments::screen_monitor::AnswerCache,
 }
 impl Engine {
     pub fn new_task(&mut self, now: u64) {
@@ -112,6 +114,7 @@ impl Engine {
         self.detector.supersede_remote_before(now);
         self.project = None;
         self.screenshot_data = None;
+        self.screen_answers.clear();
         self.view.task = super::task::Task::default();
         self.view.project = None;
         self.view.screenshot = None;

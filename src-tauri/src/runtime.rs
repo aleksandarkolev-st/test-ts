@@ -1454,6 +1454,10 @@ fn resize_overlay(app: tauri::AppHandle, height: f64) -> Result<(), String> {
     window::resize(&app, height)
 }
 #[tauri::command]
+async fn keyboard_bridge_status() -> Result<crate::monitor::hid::BridgeStatus, String> {
+    tokio::task::spawn_blocking(crate::monitor::hid::probe).await.map_err(|_| "Keyboard probe failed".to_string())
+}
+#[tauri::command]
 async fn choose_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
     #[cfg(windows)]
     let owner = app.get_webview_window("main").ok_or("Main window missing")?.hwnd().map_err(|e| e.to_string())?.0 as usize;
@@ -1627,6 +1631,7 @@ pub fn run() {
             action,
             update_task,
             resize_overlay,
+            keyboard_bridge_status,
             manage_usage,
             open_debug
             ,crate::gaze::gaze_snapshot,crate::gaze::gaze_devices,crate::gaze::gaze_start,crate::gaze::gaze_control,crate::gaze::gaze_stop

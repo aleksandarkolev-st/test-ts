@@ -3,4 +3,5 @@
 //! once fresh evidence confirms focus. Policy, caching, and eligibility rules
 //! live in [`crate::attachments::screen_monitor`]; this module implements the
 //! transport ([`protocol`]) and the hardware client that speaks it.
+pub mod hid;
 pub mod protocol;

@@ -286,13 +286,17 @@ impl InsertionGuard {
                 || matches!(outcome, TypingOutcome::Aborted { started: true, .. });
         }
     }
-    /// The generation whose send is still running, if any. A dispatch for a
-    /// different generation aborts it instead of queueing behind a performance
-    /// that can run for many minutes.
+    /// The newest generation whose send may still be running, if any. A
+    /// dispatch for a different generation aborts it instead of queueing behind
+    /// a performance that can run for many minutes; a dispatch for the same
+    /// generation leaves the running send alone (an older entry whose outcome
+    /// report has not arrived yet must never abort the fresh send).
     pub fn in_flight_generation(&self) -> Option<u64> {
         self.attempts
             .iter()
-            .find_map(|(generation, attempt)| attempt.in_flight.then_some(*generation))
+            .filter(|(_, attempt)| attempt.in_flight)
+            .map(|(generation, _)| *generation)
+            .max()
     }
     pub fn reset(&mut self) {
         self.attempts.clear();
@@ -488,6 +492,17 @@ mod tests {
         let mut guard = InsertionGuard::default();
         assert_eq!(guard.in_flight_generation(), None);
         assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        assert_eq!(guard.in_flight_generation(), Some(8));
+        // A newer generation is dispatched before the older outcome arrived:
+        // the newest send is what an abort must target, never the stale entry.
+        let mut a9 = answer();
+        a9.generation_id = 9;
+        a9.expires_at_ms = u64::MAX;
+        let mut f9 = field();
+        f9.generation_id = 9;
+        assert!(guard.authorize_once(&a9, &f9, 9, 2, RETRY_AFTER_MS));
+        assert_eq!(guard.in_flight_generation(), Some(9));
+        guard.observe_outcome(9, &TypingOutcome::Finished { generation: 9 });
         assert_eq!(guard.in_flight_generation(), Some(8));
         guard.observe_outcome(8, &TypingOutcome::Finished { generation: 8 });
         assert_eq!(guard.in_flight_generation(), None);

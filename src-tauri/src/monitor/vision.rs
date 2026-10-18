@@ -1,5 +1,5 @@
 //! Parsing for the two vision-model outputs of the screen monitor: the JSON
-//! analysis of a captured frame and the solution-only text that is later typed.
+//! analysis of a captured frame and the completion text that is later typed.
 //!
 //! The model is instructed to answer with JSON only and to return solutions
 //! without code fences, but both are treated as untrusted formatting: fences
@@ -63,13 +63,30 @@ pub fn parse_analysis(raw: &str) -> Result<Analysis, String> {
     })
 }
 
-/// Normalizes a solution for caching and typing: trims outer whitespace and
-/// removes at most one wrapping code fence (including a language tag line).
-/// Empty results are preserved so callers can warn instead of typing nothing.
+/// Normalizes a solution for caching and typing: drops blank surrounding
+/// lines, removes at most one wrapping code fence (including a language tag
+/// line), and trims trailing whitespace. The first line's leading spaces are
+/// kept — they are the indentation the text should land with, because the
+/// typing plan writes them out from column zero of the caret's line.
 pub fn clean_solution(raw: &str) -> String {
-    let text = raw.trim();
+    // Normalize line endings first so blank-line trimming is uniform; the
+    // typing path normalizes again (idempotently) in `normalize_for_typing`.
+    let text = raw.replace("\r\n", "\n").replace('\r', "\n");
+    // Leading blank lines — even ones holding only spaces — are formatting,
+    // not content. Real first-line indentation is followed by the first
+    // character of the line, not by a newline.
+    let mut text = text.as_str();
+    while let Some(rest) = text.trim_start_matches([' ', '\t']).strip_prefix('\n') {
+        text = rest;
+    }
+    // An accidentally indented fence is still a fence; content indentation is kept.
+    let text = if text.trim_start_matches([' ', '\t']).starts_with("```") {
+        text.trim_start_matches([' ', '\t'])
+    } else {
+        text
+    };
     let inner = strip_fence(text);
-    inner.trim().to_string()
+    inner.trim_end_matches(['\n', ' ', '\t']).to_string()
 }
 
 fn strip_fence(text: &str) -> &str {
@@ -164,10 +181,13 @@ mod tests {
     }
 
     #[test]
-    fn solutions_are_trimmed_and_stripped_of_one_fenced_block() {
-        assert_eq!(clean_solution("  answer text \n"), "answer text");
+    fn solutions_keep_first_line_indentation_and_strip_one_fenced_block() {
+        assert_eq!(clean_solution("  answer text \n"), "  answer text");
+        assert_eq!(clean_solution("\n\n        int x = 1;\n"), "        int x = 1;");
+        assert_eq!(clean_solution("   \n        x;\n"), "        x;");
         assert_eq!(clean_solution("```\nplain\n```"), "plain");
         assert_eq!(clean_solution("```cpp\nreturn 1;\n```"), "return 1;");
+        assert_eq!(clean_solution("```cpp\n    return 1;\n```"), "    return 1;");
         assert_eq!(
             clean_solution("```objective-c\n[x doThing];\n```"),
             "[x doThing];"

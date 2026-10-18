@@ -671,7 +671,7 @@ async fn actor(
                                 monitor_pending=Some(generation);monitor_question=Some((question.clone(),window));
                                 monitor_trace!("solution generation {generation} started (fresh={fresh} cached={cached})");
                                 if let Some(status)=engine.view.monitor.as_mut(){status.question=Some(question.clone());status.answer_cached=false;status.typed=false;}
-                                let mut input=String::from("Solve the task shown in this screenshot.");input.push_str("\nExtracted question text: ");input.push_str(&question);
+                                let mut input=String::from("Complete the task shown in this screenshot: add only the text missing at the caret.");input.push_str("\nExtracted question text: ");input.push_str(&question);
                                 if !analysis.note.is_empty(){input.push_str("\nScreen note: ");input.push_str(&analysis.note);}
                                 let model=s.settings.model.clone();
                                 let solution_client=client.clone().with_backend(s.settings.answer_backend,s.settings.service_tier.as_deref()).with_reasoning(s.settings.reasoning_effort.as_deref()).with_refill(s.settings.codex_refill_policy);

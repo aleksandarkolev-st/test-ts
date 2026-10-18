@@ -456,4 +456,78 @@ mod tests {
         std::thread::sleep(Duration::from_secs(2));
         worker.shutdown();
     }
+
+    /// One-off hardware validation with a full LeetCode answer: types a Two Sum
+    /// solution into the focused editor and watches the compensation plan
+    /// (auto-indent, auto-closing brackets, Backspace/Delete) edit a real
+    /// Monaco. The worker aborts if the foreground window stops being the
+    /// probe, so a stray focus change cannot leak keystrokes. Run only with
+    /// the Monaco probe window focused:
+    ///
+    /// `cargo test --lib -- --ignored --nocapture hardware_smoke_two_sum`
+    #[test]
+    #[ignore = "types on the real keyboard; requires the flashed GMMK 2 and the Monaco probe focused"]
+    fn hardware_smoke_two_sum_on_the_monaco_probe() {
+        const SAMPLE: &str = "#include <vector>\n#include <unordered_map>\n\nclass Solution {\npublic:\n    std::vector<int> twoSum(std::vector<int>& nums, int target) {\n        std::unordered_map<int, int> seen;\n        for (int i = 0; i < (int)nums.size(); i++) {\n            int need = target - nums[i];\n            if (seen.count(need)) {\n                return {seen[need], i};\n            }\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n";
+        let target = Foreground {
+            window: 723854,
+            executable: "firefox.exe".into(),
+        };
+        let (report, outcomes) = mpsc::channel();
+        let worker = spawn(move |outcome| {
+            let _ = report.send(outcome);
+        });
+        assert!(worker.type_text(
+            SAMPLE.into(),
+            TypingTimings::default(),
+            1,
+            None,
+            Some(target)
+        ));
+        match outcomes.recv_timeout(Duration::from_secs(30)) {
+            Ok(TypingOutcome::Finished { generation: 1 }) => {}
+            Ok(other) => panic!("expected Finished for generation 1, got {other:?}"),
+            Err(error) => panic!("no outcome within 30 s ({error:?}); the worker is stuck"),
+        }
+        // The firmware types the acknowledged bytes at ~26 ms per character;
+        // without this pause the shutdown CLEAR would truncate the answer.
+        std::thread::sleep(Duration::from_millis(SAMPLE.len() as u64 * 26 + 5_000));
+        worker.shutdown();
+    }
+
+    /// Hardware validation of the human pacing: the same Two Sum answer spread
+    /// over a two-minute budget through the real keyboard, with the same focus
+    /// guard as the fast run.
+    #[test]
+    #[ignore = "types on the real keyboard; requires the flashed GMMK 2 and the Monaco probe focused"]
+    fn hardware_smoke_two_sum_as_a_human() {
+        const SAMPLE: &str = "#include <vector>\n#include <unordered_map>\n\nclass Solution {\npublic:\n    std::vector<int> twoSum(std::vector<int>& nums, int target) {\n        std::unordered_map<int, int> seen;\n        for (int i = 0; i < (int)nums.size(); i++) {\n            int need = target - nums[i];\n            if (seen.count(need)) {\n                return {seen[need], i};\n            }\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n";
+        let target = Foreground {
+            window: 723854,
+            executable: "firefox.exe".into(),
+        };
+        let (report, outcomes) = mpsc::channel();
+        let worker = spawn(move |outcome| {
+            let _ = report.send(outcome);
+        });
+        let spec = HumanSpec {
+            target_ms: 120_000,
+            per_byte_ms: 26,
+            seed: 7,
+        };
+        assert!(worker.type_text(
+            SAMPLE.into(),
+            TypingTimings::default(),
+            2,
+            Some(spec),
+            Some(target)
+        ));
+        match outcomes.recv_timeout(Duration::from_secs(240)) {
+            Ok(TypingOutcome::Finished { generation: 2 }) => {}
+            Ok(other) => panic!("expected Finished for generation 2, got {other:?}"),
+            Err(error) => panic!("no outcome within 240 s ({error:?}); the worker is stuck"),
+        }
+        std::thread::sleep(Duration::from_secs(4));
+        worker.shutdown();
+    }
 }

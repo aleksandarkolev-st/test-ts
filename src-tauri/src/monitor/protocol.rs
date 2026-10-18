@@ -400,8 +400,9 @@ fn push_repeated(out: &mut Vec<u8>, byte: u8, count: usize) {
 /// (the LeetCode sheet) with default options.
 ///
 /// `text` must already be normalized with [`normalize_for_typing`]. The plan
-/// assumes the cursor sits on a cleared sheet, so clear the editor before the
-/// first byte is sent.
+/// starts at the caret and types the first line's leading spaces itself, so
+/// the caret must sit at column zero of the line the text begins on, or
+/// directly at the continuation point when the text finishes a typed line.
 ///
 /// Monaco reacts to plain typing in ways that would corrupt a verbatim answer:
 ///
@@ -413,6 +414,9 @@ fn push_repeated(out: &mut Vec<u8>, byte: u8, count: usize) {
 ///   behind the cursor.
 /// * A closer typed as the first non-whitespace character of a line rewrites
 ///   the leading whitespace to the matching opener's indentation.
+/// * Backspace with only spaces before it on the line deletes back to the
+///   previous four-column tab stop (a whole level when the cursor already
+///   sits on one); at column one it joins with the previous line.
 ///
 /// The plan tracks every auto-inserted closer and emits `0x08` backspace and
 /// `0x7F` delete compensation at the right moments so the final buffer
@@ -441,8 +445,20 @@ pub fn plan_typing(text: &str, lang: TypingLanguage) -> Result<Vec<u8>, TextErro
         // Settle the fresh line's indentation on the source's target.
         if src_lead > doc_lead {
             push_repeated(&mut out, b' ', src_lead - doc_lead);
-        } else {
-            push_repeated(&mut out, BS_OPCODE, doc_lead - src_lead);
+        } else if src_lead < doc_lead {
+            // A backspace with only spaces before it on the line deletes
+            // back to the previous four-column tab stop (a whole level when
+            // the cursor already sits on one), so trimming the indentation
+            // costs fewer presses than one per space: 8 -> 4 is one press.
+            let mut lead = doc_lead;
+            while lead > src_lead {
+                out.push(BS_OPCODE);
+                let unit = lead % INDENT_UNIT;
+                lead -= if unit == 0 { INDENT_UNIT } else { unit };
+            }
+            if lead < src_lead {
+                push_repeated(&mut out, b' ', src_lead - lead);
+            }
         }
         let mut line_lead = src_lead;
         let mut first_char = true;
@@ -1246,6 +1262,29 @@ mod plan_tests {
             self.cursor += text.chars().count();
         }
 
+        /// Monaco's Backspace: with only spaces before it on the line it
+        /// deletes back to the previous four-column tab stop (a whole level
+        /// when already on one); at the start of a line it joins with the
+        /// previous line; anywhere else it deletes one character.
+        fn backspace(&mut self) {
+            if self.cursor == 0 {
+                return;
+            }
+            let start = self.line_start();
+            if self.cursor - start > 0 && self.buf[start..self.cursor].iter().all(|c| *c == ' ') {
+                let lead = self.cursor - start;
+                let unit = lead % INDENT_UNIT;
+                let take = if unit == 0 { INDENT_UNIT } else { unit };
+                for _ in 0..take {
+                    self.cursor -= 1;
+                    self.buf.remove(self.cursor);
+                }
+                return;
+            }
+            self.cursor -= 1;
+            self.buf.remove(self.cursor);
+        }
+
         fn enter(&mut self, lang: TypingLanguage) {
             let start = self.line_start();
             let before: String = self.buf[start..self.cursor].iter().collect();
@@ -1327,12 +1366,7 @@ mod plan_tests {
         fn run(&mut self, plan: &[u8], lang: TypingLanguage) {
             for &b in plan {
                 match b {
-                    BS_OPCODE => {
-                        if self.cursor > 0 {
-                            self.cursor -= 1;
-                            self.buf.remove(self.cursor);
-                        }
-                    }
+                    BS_OPCODE => self.backspace(),
                     DEL_OPCODE => {
                         if self.cursor < self.buf.len() {
                             self.buf.remove(self.cursor);
@@ -1395,6 +1429,20 @@ mod plan_tests {
     #[test]
     fn plan_reproduces_standard_continuation_style() {
         let python = "def f(x):\n    return foo(\n        x,\n        x,\n    )\n";
+        assert_eq!(
+            roundtrip(python, TypingLanguage::Python),
+            normalize_for_typing(python)
+        );
+    }
+
+    #[test]
+    fn plan_reproduces_an_indented_completion_body() {
+        // The screen-monitor answer completes code that is already on screen:
+        // the first line arrives indented and the plan types that indentation
+        // from column zero of the caret's line, including dedenting closers.
+        let cpp = "        std::unordered_map<int, int> seen;\n        for (int i = 0; i < (int)nums.size(); i++) {\n            int need = target - nums[i];\n            if (seen.count(need)) return {seen[need], i};\n            seen[nums[i]] = i;\n        }\n        return {};\n";
+        assert_eq!(roundtrip(cpp, TypingLanguage::Cpp), normalize_for_typing(cpp));
+        let python = "        seen = {}\n        for i, num in enumerate(nums):\n            if target - num in seen:\n                return [seen[target - num], i]\n            seen[num] = i\n        return []\n";
         assert_eq!(
             roundtrip(python, TypingLanguage::Python),
             normalize_for_typing(python)
@@ -1613,5 +1661,41 @@ mod plan_tests {
         assert!(total >= spec.target_ms * 85 / 100, "{total}");
         assert_eq!(performance.segments.len(), 1);
         assert_eq!(performance.segments[0].bytes, b"x");
+    }
+
+    #[test]
+    #[ignore = "prints the plan for the Two Sum hardware sample"]
+    fn debug_print_two_sum_plan() {
+        const SAMPLE: &str = "#include <vector>\n#include <unordered_map>\n\nclass Solution {\npublic:\n    std::vector<int> twoSum(std::vector<int>& nums, int target) {\n        std::unordered_map<int, int> seen;\n        for (int i = 0; i < (int)nums.size(); i++) {\n            int need = target - nums[i];\n            if (seen.count(need)) {\n                return {seen[need], i};\n            }\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n";
+        let text = normalize_for_typing(SAMPLE);
+        let plan = plan_typing(&text, TypingLanguage::Cpp).expect("plan");
+        let bs = plan.iter().filter(|byte| **byte == 0x08).count();
+        let del = plan.iter().filter(|byte| **byte == 0x7f).count();
+        println!(
+            "text bytes: {} plan bytes: {} bs: {} del: {} text_in_plan: {}",
+            text.len(),
+            plan.len(),
+            bs,
+            del,
+            plan.len() - bs - del
+        );
+        std::fs::write(
+            "C:\\Users\\polek\\AppData\\Local\\Temp\\opencode\\gmmk2\\plan_twosum.bin",
+            &plan,
+        )
+        .expect("write plan file");
+        for byte in &plan {
+            match byte {
+                0x08 => print!(" \\BS"),
+                0x7f => print!(" \\DEL"),
+                b'\n' => println!("\\n"),
+                _ => print!("{}", *byte as char),
+            }
+        }
+        println!();
+        let mut sim = Sim::default();
+        sim.run(&plan, TypingLanguage::Cpp);
+        assert_eq!(sim.text(), text, "the plan must reproduce the sample");
+        println!("sim roundtrip reproduces the sample byte-exactly");
     }
 }

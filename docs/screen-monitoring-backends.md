@@ -75,12 +75,41 @@ the plan tracks all of that and removes the editor's insertions so the final tex
 the answer. See `src-tauri/src/monitor/protocol.rs` for the single source of truth and its
 tests (including a simulator of the editor behaviors).
 
+## Human performance (app-side)
+
+By default (settings `screen_monitor_human` / `screen_monitor_human_minutes`, UI "Type like
+a human", 1–120 minutes) one answer is spread over a target session length — 30 minutes
+default — instead of being typed as fast as the firmware accepts. The planner is
+`plan_performance` in `src-tauri/src/monitor/protocol.rs`:
+
+- The answer first becomes the usual [`plan_typing`] byte stream, then that stream is wrapped
+  into segments of at most 29 bytes with a pause after each.
+- Occasional wrong-key slips (a QWERTY-neighbour letter, a beat, then Backspace) and second
+  thoughts (type an alternative identifier or a false start, delete it, then type what the
+  answer actually says) are woven between words. Both styles insert only plain letters and
+  remove them again before the next planned byte, so the editor still ends up with exactly
+  the answer.
+- Pauses are drawn from natural distributions (long after Enter, short mid-word) and scaled
+  so `lead + typing + pauses` lands on the target. No single pause is allowed past 180 s;
+  when a short answer cannot absorb the budget in pauses, what is left becomes one opening
+  "reading the problem" pause.
+- The schedule is deterministic per `(seed, spec)`; the seed mixes the dispatch time with
+  the answer generation.
+
+On the wire nothing changes: the keyboard only ever receives ordinary `TEXT` chunks. The
+pauses are app-side sleeps that re-check the abort flag and the foreground window every
+100 ms, so **Ctrl + Shift + F12**, a window switch, or the meeting stopping ends a
+half-hour performance within a moment. While a performance is running, its generation stays
+locked for the full budget, and a new question aborts the old performance before dispatching
+its own.
+
 ## Honest limits
 
 - **Automated input.** Typing is automated input that this app causes. The events are real
   hardware HID reports from the keyboard's USB device, but they are *not* human-originated,
   and this project makes no claim that they are undetectable or that they fool any
-  particular detection scheme. Do not use them to misrepresent who is answering.
+  particular detection scheme. Do not use them to misrepresent who is answering. Human mode
+  changes the rhythm — pauses, slips, second thoughts — not that fact.
 - **Focus detection is vision-only.** There is no UI Automation or TSF check that the
   focused control is an editable text field; that is why typing additionally requires the
   vision `focus` flag, a live foreground re-check, and a per-generation guard. A wrong
@@ -95,13 +124,14 @@ tests (including a simulator of the editor behaviors).
   question texts (for example a ticker or animation), each change starts a new generation
   and a new model request; there is no smoothing beyond the deduper.
 - **US ANSI ASCII only, one layout.** No IME, no dead keys, no Unicode; newline is `KC_ENTER`.
-- **Firmware is flashed and hardware-verified.** The keymap in `firmware/gmmk2-96/` was
-  compiled and flashed to a real GMMK 2 96% ANSI on 2026-10-17 (image SHA-256
-  `DA1F0EF1BDB36844E72E311383FDCD8957CF132705F46B864503E35B14C9E8C8`, written at
-  `0x08000000` through the WB32 DFU bootloader, readback byte-compared), and the board
-  answers the PING/PONG handshake and typed a probe sentence on hardware. The VIA-enabled
-  build variant remains source-verified only. See that folder's README for details and the
-  stock-restore procedure.
+- **Firmware is flashed and hardware-verified.** The keymap in `firmware/gmmk2-96/` runs on
+  a real GMMK 2 96% ANSI: the v1 image (2026-10-17, readback byte-compared) was verified
+  typing a probe sentence, and the current v2 image (2026-10-18, SHA-256
+  `D6058F1FF7EF008B426E9B0BDA66B0359000C59B56A5BF38F7EBBAF068A6F819`, written at
+  `0x08000000` through the WB32 DFU bootloader) answers PING with protocol version 2. The
+  v2 compensation typing in a real editor is still being validated on hardware; the
+  VIA-enabled build variant remains source-verified only. See that folder's README for
+  details and the stock-restore procedure.
 - **Answers are ephemeral.** RAM-only, 300-second TTL, replaced when the question changes,
   and cleared when the meeting stops. This does not make the feature undetectable; it only
   keeps the app's own storage honest.
@@ -130,7 +160,9 @@ own USB device emits the keystrokes; this is still automated input, as stated ab
 - The app captures only the monitor that is in front, only while a meeting runs and the
   screen monitor is enabled, and never captures its own windows.
 - Answer text is typed only after vision shows the field focused, the live foreground
-  window is re-checked, and the per-generation guard authorizes one attempt.
+  window is re-checked, and the per-generation guard authorizes one attempt. The same check
+  runs between chunks: switching away stops the typing. An attempt that was stopped after
+  some bytes were typed is final — a partial answer is never retyped on top of itself.
 - The app never triggers a submit control on its own — but see the Enter-keystroke limit above
   before typing into chat-style inputs.
 - **Ctrl + Shift + F12** (or **Stop typing** in the overlay) aborts typing immediately,

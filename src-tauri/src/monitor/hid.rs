@@ -61,6 +61,15 @@ pub struct KeyboardInfo {
     pub product_id: u16,
 }
 
+/// Result of one checked send.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SendOutcome {
+    /// Every chunk was acknowledged by the firmware.
+    Completed,
+    /// The caller asked to stop; `sent_bytes` were already acknowledged.
+    Aborted { sent_bytes: usize },
+}
+
 /// Live bridge state for the settings UI and snapshot. `detail` is a
 /// human-readable explanation when the bridge is not connected.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize)]
@@ -97,10 +106,10 @@ pub fn probe() -> BridgeStatus {
 
 #[cfg(windows)]
 mod imp {
-    use super::{BridgeError, KeyboardInfo};
+    use super::{BridgeError, KeyboardInfo, SendOutcome};
     use crate::monitor::protocol::{
-        self, clear_report, config_report, ping_report, Inbound, NackCode, TypingTimings,
-        FIRMWARE_VERSION, REPORT_SIZE,
+        self, clear_report, config_report, ping_report, HumanSpec, Inbound, NackCode,
+        TypingTimings, FIRMWARE_VERSION, REPORT_SIZE,
     };
     use std::sync::atomic::{AtomicBool, Ordering};
     use std::sync::mpsc::{self, Receiver, Sender};
@@ -136,6 +145,22 @@ mod imp {
     /// A single HID write must complete within this long or it is cancelled and
     /// reported as an error instead of blocking the worker forever.
     const WRITE_TIMEOUT_MS: u32 = 1_000;
+
+    /// Sleeps `ms` in short slices so a long human pause still aborts promptly.
+    /// Returns true when the caller asked to abort.
+    fn sleep_pausable(ms: u64, should_abort: impl Fn() -> bool) -> bool {
+        const SLICE_MS: u64 = 100;
+        let mut left = ms;
+        while left > 0 {
+            if should_abort() {
+                return true;
+            }
+            let step = left.min(SLICE_MS);
+            std::thread::sleep(Duration::from_millis(step));
+            left -= step;
+        }
+        false
+    }
 
     /// A process-owned HID file handle shared by the writer and the reader
     /// thread. Win32 file handles are usable from any thread; the wrapper only
@@ -222,13 +247,14 @@ mod imp {
             self.send_text_checked(text, || false).map(|_| ())
         }
         /// Like [`KeyboardBridge::send_text`], but checks `should_abort` between
-        /// chunks and retries. Returns `Ok(false)` without sending the remaining
-        /// chunks once abandoned; the caller is responsible for issuing CLEAR.
+        /// chunks and retries. Returns [`SendOutcome::Aborted`] without sending
+        /// the remaining chunks once abandoned; the caller is responsible for
+        /// issuing CLEAR.
         pub fn send_text_checked(
             &mut self,
             text: &str,
             should_abort: impl Fn() -> bool,
-        ) -> Result<bool, BridgeError> {
+        ) -> Result<SendOutcome, BridgeError> {
             if !self.is_alive() {
                 return Err(BridgeError::Lost);
             }
@@ -238,45 +264,97 @@ mod imp {
                 .map_err(|error| BridgeError::Text(error.message()))?;
             let reports = protocol::plan_reports(&plan)
                 .map_err(|error| BridgeError::Text(error.message()))?;
+            let mut sent_bytes = 0usize;
             for report in reports {
+                if should_abort() {
+                    return Ok(SendOutcome::Aborted { sent_bytes });
+                }
+                if !self.send_one_checked(&report, &should_abort)? {
+                    return Ok(SendOutcome::Aborted { sent_bytes });
+                }
+                sent_bytes += report[2] as usize;
+            }
+            Ok(SendOutcome::Completed)
+        }
+        /// Types `text` like [`KeyboardBridge::send_text_checked`], but with a
+        /// human rhythm: [`protocol::plan_performance`] spreads the answer over
+        /// the `spec` budget, with a lead-in pause and inter-unit pauses that
+        /// run as abort-checked app-side sleeps. The firmware only ever sees
+        /// ordinary `TEXT` chunks, so nothing changes on the wire.
+        pub fn send_text_human(
+            &mut self,
+            text: &str,
+            spec: HumanSpec,
+            should_abort: impl Fn() -> bool,
+        ) -> Result<SendOutcome, BridgeError> {
+            if !self.is_alive() {
+                return Err(BridgeError::Lost);
+            }
+            let normalized = protocol::normalize_for_typing(text);
+            let language = protocol::TypingLanguage::detect(&normalized);
+            let performance = protocol::plan_performance(&normalized, language, spec)
+                .map_err(|error| BridgeError::Text(error.message()))?;
+            let mut sent_bytes = 0usize;
+            if sleep_pausable(performance.lead_pause_ms, || should_abort()) {
+                return Ok(SendOutcome::Aborted { sent_bytes });
+            }
+            for segment in &performance.segments {
+                if should_abort() {
+                    return Ok(SendOutcome::Aborted { sent_bytes });
+                }
+                let report = protocol::raw_text_report(&segment.bytes)
+                    .map_err(|error| BridgeError::Text(error.message()))?;
+                if !self.send_one_checked(&report, &should_abort)? {
+                    return Ok(SendOutcome::Aborted { sent_bytes });
+                }
+                sent_bytes += segment.bytes.len();
+                if sleep_pausable(segment.pause_after_ms, || should_abort()) {
+                    return Ok(SendOutcome::Aborted { sent_bytes });
+                }
+            }
+            Ok(SendOutcome::Completed)
+        }
+        /// Sends one `TEXT` report and waits for its acknowledgement, retrying
+        /// queue-full NACKs. `Ok(false)` means the caller asked to abort before
+        /// the report was accepted.
+        fn send_one_checked(
+            &mut self,
+            report: &[u8; REPORT_SIZE],
+            should_abort: &impl Fn() -> bool,
+        ) -> Result<bool, BridgeError> {
+            let mut last = BridgeError::Timeout;
+            let mut acknowledged = false;
+            for _ in 0..IO_ATTEMPTS {
                 if should_abort() {
                     return Ok(false);
                 }
-                let mut last = BridgeError::Timeout;
-                let mut acknowledged = false;
-                for _ in 0..IO_ATTEMPTS {
-                    if should_abort() {
-                        return Ok(false);
+                self.drain();
+                self.write(report)?;
+                match self.wait(IO_TIMEOUT) {
+                    Some(Inbound::Pong { .. }) => {
+                        acknowledged = true;
+                        break;
                     }
-                    self.drain();
-                    self.write(&report)?;
-                    match self.wait(IO_TIMEOUT) {
-                        Some(Inbound::Pong { .. }) => {
-                            acknowledged = true;
-                            break;
-                        }
-                        Some(Inbound::Nack {
-                            code: NackCode::QueueFull,
-                            ..
-                        }) => {
-                            last = BridgeError::Rejected(NackCode::QueueFull);
-                            std::thread::sleep(QUEUE_RETRY_DELAY);
-                        }
-                        Some(Inbound::Nack { code, .. }) => {
-                            return Err(BridgeError::Rejected(code))
-                        }
-                        _ => {}
+                    Some(Inbound::Nack {
+                        code: NackCode::QueueFull,
+                        ..
+                    }) => {
+                        last = BridgeError::Rejected(NackCode::QueueFull);
+                        std::thread::sleep(QUEUE_RETRY_DELAY);
                     }
-                }
-                if !acknowledged {
-                    return Err(if self.is_alive() {
-                        last
-                    } else {
-                        BridgeError::Lost
-                    });
+                    Some(Inbound::Nack { code, .. }) => return Err(BridgeError::Rejected(code)),
+                    _ => {}
                 }
             }
-            Ok(true)
+            if acknowledged {
+                Ok(true)
+            } else {
+                Err(if self.is_alive() {
+                    last
+                } else {
+                    BridgeError::Lost
+                })
+            }
         }
         /// Best-effort kill switch: asks the firmware to drop everything that
         /// is still queued. No acknowledgement is expected.
@@ -642,8 +720,8 @@ mod imp {
 
 #[cfg(not(windows))]
 mod imp {
-    use super::{BridgeError, KeyboardInfo};
-    use crate::monitor::protocol::TypingTimings;
+    use super::{BridgeError, KeyboardInfo, SendOutcome};
+    use crate::monitor::protocol::{HumanSpec, TypingTimings};
 
     pub struct KeyboardBridge {
         info: KeyboardInfo,
@@ -668,7 +746,15 @@ mod imp {
             &mut self,
             _text: &str,
             _should_abort: impl Fn() -> bool,
-        ) -> Result<bool, BridgeError> {
+        ) -> Result<SendOutcome, BridgeError> {
+            Err(BridgeError::Unsupported)
+        }
+        pub fn send_text_human(
+            &mut self,
+            _text: &str,
+            _spec: HumanSpec,
+            _should_abort: impl Fn() -> bool,
+        ) -> Result<SendOutcome, BridgeError> {
             Err(BridgeError::Unsupported)
         }
         pub fn clear(&mut self) -> Result<(), BridgeError> {

@@ -1,7 +1,7 @@
 use crate::{
     attachments::screen_monitor::{
         field_is_eligible, FieldObservation, InsertionGuard, MonitorConfig, QuestionDeduper,
-        DEFAULT_TTL,
+        DEFAULT_TTL, RETRY_AFTER_MS,
     },
     audio,
     meeting::{
@@ -10,7 +10,7 @@ use crate::{
         InputEvent, SpeakerSource,
     },
     monitor::{
-        protocol::TypingSpeed,
+        protocol::{HumanSpec, TypingSpeed},
         service::{MonitorStatus, MonitorUpdate},
         typing::{self, TypingOutcome},
         vision::clean_solution,
@@ -46,6 +46,8 @@ fn default_reasoning() -> Option<String> { Some("low".into()) }
 fn default_monitor_interval() -> u32 { 5 }
 fn default_monitor_typing() -> bool { true }
 fn default_monitor_speed() -> String { "normal".into() }
+fn default_monitor_human() -> bool { true }
+fn default_monitor_human_minutes() -> u32 { 30 }
 #[derive(Clone,Copy,Default,Serialize,Deserialize)]
 #[serde(rename_all="lowercase")]
 pub enum AnswerObjective {#[default] Brief,Detailed}
@@ -85,9 +87,13 @@ pub struct Settings {
     pub screen_monitor_typing: bool,
     #[serde(default = "default_monitor_speed")]
     pub screen_monitor_speed: String,
+    #[serde(default = "default_monitor_human")]
+    pub screen_monitor_human: bool,
+    #[serde(default = "default_monitor_human_minutes")]
+    pub screen_monitor_human_minutes: u32,
 }
 impl Default for Settings {
-    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),screen_monitor_enabled:false,screen_monitor_interval_seconds:default_monitor_interval(),screen_monitor_typing:default_monitor_typing(),screen_monitor_speed:default_monitor_speed(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
+    fn default() -> Self { Self { microphone:String::new(),output:String::new(),model_path:String::new(),model:String::new(),answer_objective:AnswerObjective::Brief,reasoning_effort:Some("low".into()),answer_backend:AnswerBackend::Codex,service_tier:Some("fast".into()),codex_refill_policy:Default::default(),project_path:String::new(),screen_monitor_enabled:false,screen_monitor_interval_seconds:default_monitor_interval(),screen_monitor_typing:default_monitor_typing(),screen_monitor_speed:default_monitor_speed(),screen_monitor_human:default_monitor_human(),screen_monitor_human_minutes:default_monitor_human_minutes(),speech_backend:SpeechBackend::Nemotron,speech_chunk_ms:160,nemotron_runtime:String::new(),nemotron_device:1,nemotron_device_name:None } }
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -623,14 +629,14 @@ async fn actor(
                                 else if stored{status.solutions+=1;status.answer_cached=true;status.question=Some(question);status.window=Some(window);status.warning=None;}
                             }
                             monitor_trace!("solution stored={stored} generation={generation} chars={length}");
-                            if stored{if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}}}
+                            if stored{if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),s.settings.screen_monitor_human.then_some(s.settings.screen_monitor_human_minutes),now){if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}}}
                             publish(&app,&mut engine,&view);
                         },
                         Err(error)=>{monitor_trace!("solution generation {generation} failed: {error}");if current{monitor_pending=None;if let Some(status)=engine.view.monitor.as_mut(){status.updated_at=now;status.warning=Some(format!("Could not generate the on-screen answer: {error}"));}publish(&app,&mut engine,&view);}}
                     }
                 }},
                 Work::MonitorTyped(outcome)=>{let now=session.as_ref().map(|s|s.clock.elapsed().as_millis()as u64).unwrap_or(0);
-                    let generation=match &outcome{TypingOutcome::Finished{generation}|TypingOutcome::Aborted{generation}|TypingOutcome::Failed{generation,..}=>*generation};
+                    let generation=match &outcome{TypingOutcome::Finished{generation}|TypingOutcome::Aborted{generation,..}|TypingOutcome::Failed{generation,..}=>*generation};
                     monitor_trace!("typing outcome {:?} generation={generation} latest={}", outcome, engine.screen_answers.latest_generation());
                     monitor_insertion.observe_outcome(generation, &outcome);
                     if generation==engine.screen_answers.latest_generation(){
@@ -677,7 +683,7 @@ async fn actor(
                                 });
                             }else{monitor_trace!("solution skipped: question already known (fresh={fresh} cached={cached} pending={})",monitor_pending.is_some());}
                         }
-                        if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),now){
+                        if let Some(warning)=type_monitor_answer(&mut engine,&mut monitor_insertion,&typing_worker,monitor_focus.as_ref(),monitor_question.as_ref(),TypingSpeed::from_setting(&s.settings.screen_monitor_speed).unwrap_or(TypingSpeed::Normal).timings(),s.settings.screen_monitor_human.then_some(s.settings.screen_monitor_human_minutes),now){
                             if let Some(status)=engine.view.monitor.as_mut(){status.warning=Some(warning);}
                         }
                         publish(&app,&mut engine,&view);
@@ -1418,10 +1424,14 @@ fn spawn_monitor(session: &Session, client: &Client, auth: &Arc<Auth>, updates: 
 }
 /// Dispatches typing for the tracked screen answer. Vision focus evidence must
 /// be recent, the same window must still be foreground, and the committed
-/// eligibility rules must pass; otherwise nothing is typed. The guard allows a
-/// retry when the previous attempt failed, aborted, or never reported an
-/// outcome (so a re-clicked field can retry), while a finished typing stays
-/// final for its generation.
+/// eligibility rules must pass; otherwise nothing is typed. The worker
+/// re-checks the same window before and between chunks, so focus that drifts
+/// mid-send stops the typing instead of spilling keystrokes into another
+/// window. The guard allows a retry when the previous attempt failed or was
+/// aborted before its first byte (so a re-clicked field can retry), while a
+/// finished or partially typed attempt stays final for its generation. A
+/// dispatch for a new generation aborts a send that is still running, so a
+/// half-hour performance is never queued behind a stale one.
 fn type_monitor_answer(
     engine: &mut Engine,
     guard: &mut InsertionGuard,
@@ -1429,6 +1439,7 @@ fn type_monitor_answer(
     evidence: Option<&FocusEvidence>,
     question: Option<&(String, usize)>,
     timings: crate::monitor::protocol::TypingTimings,
+    human_minutes: Option<u32>,
     now: u64,
 ) -> Option<String> {
     let Some(worker) = worker.as_ref() else {
@@ -1463,6 +1474,14 @@ fn type_monitor_answer(
         monitor_trace!("typing skipped: no cached answer for the tracked question");
         return None;
     };
+    let human = human_minutes.map(|minutes| HumanSpec {
+        target_ms: minutes as u64 * 60_000,
+        per_byte_ms: (timings.press_ms + timings.gap_ms) as u32,
+        seed: now.wrapping_mul(0x9E37_79B9_7F4A_7C15)
+            ^ answer.generation_id.wrapping_mul(0xD6E8_FEB8_6659_FD93),
+    });
+    let stuck_after_ms = human
+        .map_or(RETRY_AFTER_MS, |spec| spec.target_ms.saturating_add(60_000));
     let current = engine.screen_answers.latest_generation();
     let field = FieldObservation {
         source_window: evidence.window,
@@ -1480,7 +1499,13 @@ fn type_monitor_answer(
         );
         return None;
     }
-    if !guard.authorize_once(&answer, &field, current, now) {
+    if let Some(in_flight) = guard.in_flight_generation() {
+        if in_flight != answer.generation_id {
+            monitor_trace!("typing superseded: aborting generation {in_flight}");
+            worker.abort();
+        }
+    }
+    if !guard.authorize_once(&answer, &field, current, now, stuck_after_ms) {
         monitor_trace!(
             "typing skipped: generation {} already typed or attempt in flight",
             answer.generation_id
@@ -1488,11 +1513,22 @@ fn type_monitor_answer(
         return None;
     }
     monitor_trace!(
-        "typing dispatch: generation {} ({} chars)",
+        "typing dispatch: generation {} ({} chars{})",
         answer.generation_id,
-        answer.answer.chars().count()
+        answer.answer.chars().count(),
+        if human.is_some() {
+            ", human performance"
+        } else {
+            ""
+        }
     );
-    if worker.type_text(answer.answer.clone(), timings, answer.generation_id) {
+    if worker.type_text(
+        answer.answer.clone(),
+        timings,
+        answer.generation_id,
+        human,
+        Some(foreground),
+    ) {
         None
     } else {
         Some("The keyboard typing worker stopped".into())
@@ -1505,6 +1541,9 @@ fn validate_answer_settings(settings: &Settings) -> Result<(), String> {
     if settings.screen_monitor_enabled {
         if crate::monitor::protocol::TypingSpeed::from_setting(&settings.screen_monitor_speed).is_none() {
             return Err("Choose a screen typing speed of Slow, Normal, or Fast".into());
+        }
+        if settings.screen_monitor_human && !(1..=120).contains(&settings.screen_monitor_human_minutes) {
+            return Err("Choose a human typing session length between 1 and 120 minutes".into());
         }
         monitor_config(settings).validate().map_err(|error| error.to_string())?;
     }

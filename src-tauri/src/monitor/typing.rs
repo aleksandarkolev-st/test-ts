@@ -7,8 +7,9 @@
 //! If the bridge cannot be reached, the worker reports a failure and nothing is
 //! typed — there is no SendInput fallback. Aborting also issues CLEAR so no
 //! queued keystrokes remain in the firmware.
-use crate::monitor::hid::KeyboardBridge;
-use crate::monitor::protocol::TypingTimings;
+use crate::monitor::foreground::Foreground;
+use crate::monitor::hid::{KeyboardBridge, SendOutcome};
+use crate::monitor::protocol::{HumanSpec, TypingTimings};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::Arc;
@@ -27,6 +28,11 @@ pub enum TypingCommand {
         text: String,
         timings: TypingTimings,
         generation: u64,
+        /// `Some` spreads the answer over a human performance budget.
+        human: Option<HumanSpec>,
+        /// The window the dispatch gate approved; typing stops when it is no
+        /// longer foreground.
+        target: Option<Foreground>,
     },
     /// Stops any typing immediately and drops the firmware queue, even when the
     /// worker is idle (a queued backlog can still be draining on the keyboard).
@@ -38,7 +44,9 @@ pub enum TypingCommand {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum TypingOutcome {
     Finished { generation: u64 },
-    Aborted { generation: u64 },
+    /// Stopped before the end; `started` is true once at least one byte had
+    /// been accepted by the firmware, so a partial answer is never retyped.
+    Aborted { generation: u64, started: bool },
     Failed { generation: u64, error: String },
 }
 
@@ -47,14 +55,27 @@ pub struct Worker {
     abort: Arc<AtomicBool>,
 }
 impl Worker {
-    /// Queues `text` for typing. Returns false when the worker has stopped.
-    pub fn type_text(&self, text: String, timings: TypingTimings, generation: u64) -> bool {
-        self.abort.store(false, Ordering::Release);
+    /// Queues `text` for typing. `human` turns the send into a paced
+    /// performance; `target` is the window the gate approved, re-checked while
+    /// chunks are in flight. Returns false when the worker has stopped.
+    pub fn type_text(
+        &self,
+        text: String,
+        timings: TypingTimings,
+        generation: u64,
+        human: Option<HumanSpec>,
+        target: Option<Foreground>,
+    ) -> bool {
+        // The abort flag is intentionally left as it is: a superseding dispatch
+        // sets it to cancel the send that is still in flight, and the worker
+        // resets it when it starts this command.
         self.commands
             .send(TypingCommand::Type {
                 text,
                 timings,
                 generation,
+                human,
+                target,
             })
             .is_ok()
     }
@@ -64,8 +85,11 @@ impl Worker {
         self.abort.store(true, Ordering::Release);
         let _ = self.commands.send(TypingCommand::Abort);
     }
-    /// Ends the worker after a best-effort CLEAR. The thread is detached.
+    /// Ends the worker after a best-effort CLEAR. The abort flag stops a send
+    /// that is still in flight (a human performance can run for minutes), then
+    /// the queued command clears the firmware. The thread is detached.
     pub fn shutdown(self) {
+        self.abort.store(true, Ordering::Release);
         let _ = self.commands.send(TypingCommand::Shutdown);
     }
 }
@@ -74,8 +98,15 @@ impl Worker {
 /// loop is testable without HID hardware.
 pub trait TypingBackend: Send {
     fn configure(&mut self, timings: TypingTimings) -> Result<(), String>;
-    /// Sends one answer: `Ok(true)` fully sent, `Ok(false)` aborted, `Err` fatal.
-    fn send_text(&mut self, text: &str, abort: &AtomicBool) -> Result<bool, String>;
+    /// Sends one answer; `Err` is fatal, otherwise the send either completed
+    /// or was asked to stop.
+    fn send_text(
+        &mut self,
+        text: &str,
+        human: Option<HumanSpec>,
+        target: Option<&Foreground>,
+        abort: &AtomicBool,
+    ) -> Result<SendOutcome, String>;
     fn clear(&mut self);
     fn is_alive(&self) -> bool;
 }
@@ -83,9 +114,21 @@ impl TypingBackend for KeyboardBridge {
     fn configure(&mut self, timings: TypingTimings) -> Result<(), String> {
         KeyboardBridge::configure(self, timings).map_err(|error| error.message())
     }
-    fn send_text(&mut self, text: &str, abort: &AtomicBool) -> Result<bool, String> {
-        KeyboardBridge::send_text_checked(self, text, || abort.load(Ordering::Acquire))
-            .map_err(|error| error.message())
+    fn send_text(
+        &mut self,
+        text: &str,
+        human: Option<HumanSpec>,
+        target: Option<&Foreground>,
+        abort: &AtomicBool,
+    ) -> Result<SendOutcome, String> {
+        let target = target.cloned();
+        let should_abort =
+            move || abort.load(Ordering::Acquire) || !focus_still_matches(target.as_ref());
+        match human {
+            Some(spec) => KeyboardBridge::send_text_human(self, text, spec, should_abort),
+            None => KeyboardBridge::send_text_checked(self, text, should_abort),
+        }
+        .map_err(|error| error.message())
     }
     fn clear(&mut self) {
         let _ = KeyboardBridge::clear(self);
@@ -93,6 +136,21 @@ impl TypingBackend for KeyboardBridge {
     fn is_alive(&self) -> bool {
         KeyboardBridge::is_alive(self)
     }
+}
+
+/// True while the foreground window still matches the typing target given by
+/// the dispatch gate. With no target the answer types unchecked; the monitor
+/// flow always passes one, so focus that drifts mid-send aborts instead of
+/// typing into whatever window came forward.
+fn focus_still_matches(target: Option<&Foreground>) -> bool {
+    let Some(target) = target else {
+        return true;
+    };
+    matches!(
+        crate::monitor::foreground::current(),
+        Some(foreground)
+            if foreground.window == target.window && foreground.executable == target.executable
+    )
 }
 
 /// Spawns the worker thread. `report` is called from that thread for every
@@ -131,6 +189,8 @@ fn run<B: TypingBackend>(
                 text,
                 timings,
                 generation,
+                human,
+                target,
             } => {
                 abort.store(false, Ordering::Release);
                 if backend.is_none() {
@@ -162,16 +222,27 @@ fn run<B: TypingBackend>(
                     configured = Some(timings);
                     worker_trace!("configured");
                 }
-                worker_trace!("sending {} chars", text.chars().count());
-                match bridge.send_text(&text, &abort) {
-                    Ok(true) => {
+                worker_trace!(
+                    "sending {} chars{}",
+                    text.chars().count(),
+                    if human.is_some() {
+                        " as a human performance"
+                    } else {
+                        ""
+                    }
+                );
+                match bridge.send_text(&text, human, target.as_ref(), &abort) {
+                    Ok(SendOutcome::Completed) => {
                         worker_trace!("send finished");
                         report(TypingOutcome::Finished { generation });
                     }
-                    Ok(false) => {
-                        worker_trace!("send aborted");
+                    Ok(SendOutcome::Aborted { sent_bytes }) => {
+                        worker_trace!("send aborted after {sent_bytes} bytes");
                         bridge.clear();
-                        report(TypingOutcome::Aborted { generation });
+                        report(TypingOutcome::Aborted {
+                            generation,
+                            started: sent_bytes > 0,
+                        });
                     }
                     Err(error) => {
                         worker_trace!("send failed: {error}");
@@ -217,17 +288,30 @@ mod tests {
                 .push(format!("configure {} {}", timings.press_ms, timings.gap_ms));
             Ok(())
         }
-        fn send_text(&mut self, text: &str, abort: &AtomicBool) -> Result<bool, String> {
+        fn send_text(
+            &mut self,
+            text: &str,
+            human: Option<HumanSpec>,
+            _target: Option<&Foreground>,
+            abort: &AtomicBool,
+        ) -> Result<SendOutcome, String> {
             if self.wait_for_abort {
                 for _ in 0..500 {
                     if abort.load(Ordering::Acquire) {
-                        return Ok(false);
+                        return Ok(SendOutcome::Aborted { sent_bytes: 0 });
                     }
                     std::thread::sleep(Duration::from_millis(2));
                 }
             }
-            self.log.lock().unwrap().push(format!("send {text}"));
-            Ok(true)
+            match human {
+                Some(spec) => self
+                    .log
+                    .lock()
+                    .unwrap()
+                    .push(format!("send {text} human={}ms", spec.target_ms)),
+                None => self.log.lock().unwrap().push(format!("send {text}")),
+            }
+            Ok(SendOutcome::Completed)
         }
         fn clear(&mut self) {
             self.log.lock().unwrap().push("clear".into());
@@ -260,8 +344,8 @@ mod tests {
     fn typing_configured_once_and_every_request_reports_finished() {
         let log = Arc::new(Mutex::new(Vec::new()));
         let (worker, outcomes) = worker(log.clone(), false);
-        assert!(worker.type_text("hello".into(), TypingTimings::default(), 1));
-        assert!(worker.type_text("again".into(), TypingTimings::default(), 2));
+        assert!(worker.type_text("hello".into(), TypingTimings::default(), 1, None, None));
+        assert!(worker.type_text("again".into(), TypingTimings::default(), 2, None, None));
         assert_eq!(
             outcomes.recv_timeout(Duration::from_secs(5)).unwrap(),
             TypingOutcome::Finished { generation: 1 }
@@ -281,12 +365,15 @@ mod tests {
     fn abort_stops_typing_and_clears_the_firmware_queue() {
         let log = Arc::new(Mutex::new(Vec::new()));
         let (worker, outcomes) = worker(log.clone(), true);
-        assert!(worker.type_text("long answer".into(), TypingTimings::default(), 7));
+        assert!(worker.type_text("long answer".into(), TypingTimings::default(), 7, None, None));
         std::thread::sleep(Duration::from_millis(40));
         worker.abort();
         assert_eq!(
             outcomes.recv_timeout(Duration::from_secs(5)).unwrap(),
-            TypingOutcome::Aborted { generation: 7 }
+            TypingOutcome::Aborted {
+                generation: 7,
+                started: false
+            }
         );
         // The queued Abort command still clears the (now idle) bridge.
         for _ in 0..100 {
@@ -307,7 +394,7 @@ mod tests {
                 let _ = report.send(outcome);
             },
         );
-        assert!(worker.type_text("hello".into(), TypingTimings::default(), 3));
+        assert!(worker.type_text("hello".into(), TypingTimings::default(), 3, None, None));
         assert_eq!(
             outcomes.recv_timeout(Duration::from_secs(5)).unwrap(),
             TypingOutcome::Failed {
@@ -316,6 +403,33 @@ mod tests {
             }
         );
         worker.shutdown();
+    }
+
+    #[test]
+    fn human_spec_reaches_the_backend() {
+        let log = Arc::new(Mutex::new(Vec::new()));
+        let (worker, outcomes) = worker(log.clone(), false);
+        let spec = HumanSpec {
+            target_ms: 2_000,
+            per_byte_ms: 26,
+            seed: 1,
+        };
+        assert!(worker.type_text(
+            "hello".into(),
+            TypingTimings::default(),
+            4,
+            Some(spec),
+            None
+        ));
+        assert_eq!(
+            outcomes.recv_timeout(Duration::from_secs(5)).unwrap(),
+            TypingOutcome::Finished { generation: 4 }
+        );
+        worker.shutdown();
+        assert!(log
+            .lock()
+            .unwrap()
+            .contains(&"send hello human=2000ms".into()));
     }
 
     /// Drives the real worker against the flashed keyboard over USB. The text is
@@ -331,7 +445,7 @@ mod tests {
         let worker = spawn(move |outcome| {
             let _ = report.send(outcome);
         });
-        assert!(worker.type_text("abc 123".into(), TypingTimings::default(), 1));
+        assert!(worker.type_text("abc 123".into(), TypingTimings::default(), 1, None, None));
         match outcomes.recv_timeout(Duration::from_secs(20)) {
             Ok(TypingOutcome::Finished { generation: 1 }) => {}
             Ok(other) => panic!("expected Finished for generation 1, got {other:?}"),

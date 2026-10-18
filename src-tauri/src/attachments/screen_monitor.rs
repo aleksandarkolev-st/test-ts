@@ -219,16 +219,20 @@ pub fn field_is_eligible(
 }
 
 /// How long a dispatched attempt blocks a new one while its outcome is still
-/// expected. The worker reports exactly one outcome per attempt (Finished,
-/// Aborted, or Failed), so this only guards a worker that died without
-/// reporting; once it elapses the attempt is presumed lost and becomes
-/// retryable.
+/// expected, for fast typing. The worker reports exactly one outcome per
+/// attempt (Finished, Aborted, or Failed), so this only guards a worker that
+/// died without reporting; once it elapses the attempt is presumed lost and
+/// becomes retryable. A human performance instead passes its own budget as the
+/// lock window, because minutes of typing are still "in flight".
 pub const RETRY_AFTER_MS: u64 = 30_000;
 
-/// One insertion attempt per screen-answer generation. A successful typing is
-/// final; a failed or aborted attempt stays retryable, so the user can click
-/// the field again after a failure instead of being locked out by a consumed
-/// authorization. In-flight attempts block duplicates until their outcome.
+/// One insertion attempt per screen-answer generation. A completed typing is
+/// final, and so is an abort that had already typed something (a partial
+/// answer must never be retyped on top of itself); a failure or an abort
+/// before the first byte stays retryable, so the user can click the field
+/// again instead of being locked out by a consumed authorization. In-flight
+/// attempts block duplicates until their outcome or, for a silently stuck
+/// worker, until the dispatch's lock window has passed.
 #[derive(Default)]
 pub struct InsertionGuard {
     attempts: HashMap<u64, TypingAttempt>,
@@ -237,7 +241,7 @@ pub struct InsertionGuard {
 struct TypingAttempt {
     dispatched_at_ms: u64,
     in_flight: bool,
-    succeeded: bool,
+    finalized: bool,
 }
 impl InsertionGuard {
     pub fn authorize_once(
@@ -246,16 +250,17 @@ impl InsertionGuard {
         field: &FieldObservation,
         current_generation: u64,
         now_ms: u64,
+        stuck_after_ms: u64,
     ) -> bool {
         if !field_is_eligible(answer, field, current_generation, now_ms) {
             return false;
         }
         let generation = answer.generation_id;
         let allowed = match self.attempts.get(&generation) {
-            Some(attempt) if attempt.succeeded => false,
+            Some(attempt) if attempt.finalized => false,
             Some(attempt)
                 if attempt.in_flight
-                    && now_ms.saturating_sub(attempt.dispatched_at_ms) < RETRY_AFTER_MS =>
+                    && now_ms.saturating_sub(attempt.dispatched_at_ms) < stuck_after_ms =>
             {
                 false
             }
@@ -267,7 +272,7 @@ impl InsertionGuard {
                 TypingAttempt {
                     dispatched_at_ms: now_ms,
                     in_flight: true,
-                    succeeded: false,
+                    finalized: false,
                 },
             );
         }
@@ -277,8 +282,17 @@ impl InsertionGuard {
     pub fn observe_outcome(&mut self, generation: u64, outcome: &TypingOutcome) {
         if let Some(attempt) = self.attempts.get_mut(&generation) {
             attempt.in_flight = false;
-            attempt.succeeded = matches!(outcome, TypingOutcome::Finished { .. });
+            attempt.finalized = matches!(outcome, TypingOutcome::Finished { .. })
+                || matches!(outcome, TypingOutcome::Aborted { started: true, .. });
         }
+    }
+    /// The generation whose send is still running, if any. A dispatch for a
+    /// different generation aborts it instead of queueing behind a performance
+    /// that can run for many minutes.
+    pub fn in_flight_generation(&self) -> Option<u64> {
+        self.attempts
+            .iter()
+            .find_map(|(generation, attempt)| attempt.in_flight.then_some(*generation))
     }
     pub fn reset(&mut self) {
         self.attempts.clear();
@@ -395,15 +409,15 @@ mod tests {
         let a = answer();
         let f = field();
         let mut guard = InsertionGuard::default();
-        assert!(guard.authorize_once(&a, &f, 8, 1));
-        assert!(!guard.authorize_once(&a, &f, 8, 1));
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        assert!(!guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
     }
     #[test]
     fn failed_attempts_become_retryable_while_finished_ones_stay_final() {
         let a = answer();
         let f = field();
         let mut guard = InsertionGuard::default();
-        assert!(guard.authorize_once(&a, &f, 8, 1));
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
         guard.observe_outcome(
             8,
             &TypingOutcome::Failed {
@@ -411,9 +425,9 @@ mod tests {
                 error: "no keyboard".into(),
             },
         );
-        assert!(guard.authorize_once(&a, &f, 8, 2));
+        assert!(guard.authorize_once(&a, &f, 8, 2, RETRY_AFTER_MS));
         guard.observe_outcome(8, &TypingOutcome::Finished { generation: 8 });
-        assert!(!guard.authorize_once(&a, &f, 8, 3));
+        assert!(!guard.authorize_once(&a, &f, 8, 3, RETRY_AFTER_MS));
     }
     #[test]
     fn silent_in_flight_attempts_unlock_after_the_retry_window() {
@@ -421,9 +435,62 @@ mod tests {
         a.expires_at_ms = u64::MAX;
         let f = field();
         let mut guard = InsertionGuard::default();
-        assert!(guard.authorize_once(&a, &f, 8, 1));
-        assert!(!guard.authorize_once(&a, &f, 8, 2));
-        assert!(guard.authorize_once(&a, &f, 8, 1 + RETRY_AFTER_MS + 1));
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        assert!(!guard.authorize_once(&a, &f, 8, 2, RETRY_AFTER_MS));
+        assert!(guard.authorize_once(&a, &f, 8, 1 + RETRY_AFTER_MS + 1, RETRY_AFTER_MS));
+    }
+    #[test]
+    fn aborts_that_already_typed_stay_final() {
+        let a = answer();
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        guard.observe_outcome(
+            8,
+            &TypingOutcome::Aborted {
+                generation: 8,
+                started: true,
+            },
+        );
+        assert!(!guard.authorize_once(&a, &f, 8, 2, RETRY_AFTER_MS));
+    }
+    #[test]
+    fn aborts_before_the_first_byte_stay_retryable() {
+        let a = answer();
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        guard.observe_outcome(
+            8,
+            &TypingOutcome::Aborted {
+                generation: 8,
+                started: false,
+            },
+        );
+        assert!(guard.authorize_once(&a, &f, 8, 2, RETRY_AFTER_MS));
+    }
+    #[test]
+    fn a_human_performance_locks_its_generation_for_its_budget() {
+        let mut a = answer();
+        a.expires_at_ms = u64::MAX;
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        let budget = 30 * 60_000u64;
+        let lock = budget + 60_000;
+        assert!(guard.authorize_once(&a, &f, 8, 1, lock));
+        assert!(!guard.authorize_once(&a, &f, 8, 1 + budget, lock));
+        assert!(guard.authorize_once(&a, &f, 8, 1 + lock + 1, lock));
+    }
+    #[test]
+    fn in_flight_generation_tracks_the_running_send() {
+        let a = answer();
+        let f = field();
+        let mut guard = InsertionGuard::default();
+        assert_eq!(guard.in_flight_generation(), None);
+        assert!(guard.authorize_once(&a, &f, 8, 1, RETRY_AFTER_MS));
+        assert_eq!(guard.in_flight_generation(), Some(8));
+        guard.observe_outcome(8, &TypingOutcome::Finished { generation: 8 });
+        assert_eq!(guard.in_flight_generation(), None);
     }
     #[test]
     fn question_excerpts_of_one_problem_are_deduplicated() {

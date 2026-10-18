@@ -254,6 +254,19 @@ fn build_text_report(chunk: &[u8]) -> [u8; REPORT_SIZE] {
     report
 }
 
+/// Encodes one already-planned byte group (`1..=29` bytes of a [`plan_typing`]
+/// stream or a [`Performance`] segment) as a `TEXT` report; the alphabet was
+/// validated when the plan or performance was built.
+pub fn raw_text_report(bytes: &[u8]) -> Result<[u8; REPORT_SIZE], TextError> {
+    if bytes.is_empty() {
+        return Err(TextError::Empty);
+    }
+    if bytes.len() > MAX_TEXT_CHUNK {
+        return Err(TextError::TooLong { len: bytes.len() });
+    }
+    Ok(build_text_report(bytes))
+}
+
 /// Transliterates characters a US ANSI keyboard cannot type directly and
 /// normalizes line endings. Characters without a mapping are preserved and are
 /// later rejected by [`text_reports`], keeping the failure explicit.
@@ -506,6 +519,462 @@ pub fn plan_typing(text: &str, lang: TypingLanguage) -> Result<Vec<u8>, TextErro
     }
 
     Ok(out)
+}
+
+// ---------------------------------------------------------------------------
+// Human performance
+// ---------------------------------------------------------------------------
+
+/// Parameters for a human-like typing performance.
+///
+/// The performance is app-side pacing only: the wire protocol and the firmware
+/// are untouched. The typed bytes are the [`plan_typing`] plan plus
+/// editor-neutral mistakes and second thoughts.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct HumanSpec {
+    /// Wall-clock budget for the whole performance (lead-in + typing + pauses).
+    pub target_ms: u64,
+    /// Firmware milliseconds per typed byte (`press_ms + gap_ms`).
+    pub per_byte_ms: u32,
+    /// Seed for the deterministic RNG; identical seeds plan identical sessions.
+    pub seed: u64,
+}
+
+/// One `TEXT` packet of a [`Performance`]: `1..=29` bytes held for
+/// `pause_after_ms` before the next packet is sent.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PerformanceSegment {
+    pub bytes: Vec<u8>,
+    pub pause_after_ms: u64,
+}
+
+/// A humanized typing session: one lead-in pause, then paced segments whose
+/// concatenated bytes reproduce the answer exactly (the mistakes cancel out).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Performance {
+    pub lead_pause_ms: u64,
+    pub segments: Vec<PerformanceSegment>,
+}
+
+impl Performance {
+    /// Total bytes the firmware has to type.
+    pub fn typed_bytes(&self) -> usize {
+        self.segments
+            .iter()
+            .map(|segment| segment.bytes.len())
+            .sum()
+    }
+    /// Total wall-clock time: lead-in, firmware typing time, and every pause.
+    pub fn total_ms(&self, per_byte_ms: u32) -> u64 {
+        let typing = self.typed_bytes() as u64 * per_byte_ms as u64;
+        let pauses: u64 = self
+            .segments
+            .iter()
+            .map(|segment| segment.pause_after_ms)
+            .sum();
+        self.lead_pause_ms + typing + pauses
+    }
+}
+
+/// Deterministic xorshift64* generator: a session must be reproducible from
+/// its seed so tests can pin exact schedules.
+struct Rng(u64);
+impl Rng {
+    fn new(seed: u64) -> Self {
+        Self(if seed == 0 { 0x9E37_79B9_7F4A_7C15 } else { seed })
+    }
+    fn next(&mut self) -> u64 {
+        let mut x = self.0;
+        x ^= x >> 12;
+        x ^= x << 25;
+        x ^= x >> 27;
+        self.0 = x;
+        x.wrapping_mul(0x2545_F491_4F6C_DD1D)
+    }
+    /// Uniform in `lo..=hi`.
+    fn range(&mut self, lo: u64, hi: u64) -> u64 {
+        debug_assert!(lo <= hi);
+        lo + self.next() % (hi - lo + 1)
+    }
+    /// Rolls a percentage in `0..100`.
+    fn chance(&mut self, percent: u64) -> bool {
+        self.next() % 100 < percent
+    }
+}
+
+/// Longest single pause a scaled performance may contain.
+const MAX_PAUSE_MS: u64 = 180_000;
+/// Pauses shorter than this merge their neighboring segments.
+const MIN_PAUSE_MS: u64 = 15;
+/// Odds that a word boundary becomes a wrong-key slip.
+const TYPO_CHANCE_PCT: u64 = 12;
+/// Minimum distance between two wrong-key slips, in plan bytes.
+const TYPO_MIN_GAP: usize = 24;
+/// Odds that a word boundary becomes a second thought.
+const SECOND_THOUGHT_CHANCE_PCT: u64 = 7;
+/// Minimum distance between two second thoughts, in plan bytes.
+const SECOND_THOUGHT_MIN_GAP: usize = 70;
+
+/// Typing units of a plan. Pauses, mistakes, and second thoughts only ever
+/// land on the boundaries between units, so the plan's compensation
+/// bookkeeping stays untouched.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum PieceKind {
+    Word,
+    Punct,
+    Enter,
+    Control,
+}
+
+fn is_word_byte(byte: u8) -> bool {
+    byte.is_ascii_alphanumeric() || byte == b'_'
+}
+
+fn is_control_byte(byte: u8) -> bool {
+    byte == BS_OPCODE || byte == DEL_OPCODE
+}
+
+fn split_pieces(plan: &[u8]) -> Vec<(PieceKind, &[u8])> {
+    let mut pieces = Vec::new();
+    let mut start = 0usize;
+    while start < plan.len() {
+        let byte = plan[start];
+        let kind = if is_control_byte(byte) {
+            PieceKind::Control
+        } else if byte == b'\n' {
+            PieceKind::Enter
+        } else if is_word_byte(byte) {
+            PieceKind::Word
+        } else {
+            PieceKind::Punct
+        };
+        let mut end = start + 1;
+        match kind {
+            PieceKind::Enter => {}
+            PieceKind::Control => {
+                while end < plan.len() && is_control_byte(plan[end]) {
+                    end += 1;
+                }
+            }
+            PieceKind::Word => {
+                while end < plan.len() && is_word_byte(plan[end]) {
+                    end += 1;
+                }
+            }
+            PieceKind::Punct => {
+                while end < plan.len()
+                    && !is_control_byte(plan[end])
+                    && plan[end] != b'\n'
+                    && !is_word_byte(plan[end])
+                {
+                    end += 1;
+                }
+            }
+        }
+        pieces.push((kind, &plan[start..end]));
+        start = end;
+    }
+    pieces
+}
+
+/// A keyboard neighbour of `key`, preserving case: the "wrong key slipped in"
+/// mistake. Always a plain letter, so the editor reacts to it like any other
+/// keystroke.
+fn key_neighbor(key: u8, rng: &mut Rng) -> u8 {
+    let lower = key.to_ascii_lowercase();
+    let neighbors: &[u8] = match lower {
+        b'q' => b"wa",
+        b'w' => b"qea",
+        b'e' => b"wrd",
+        b'r' => b"etf",
+        b't' => b"ryg",
+        b'y' => b"tuh",
+        b'u' => b"yij",
+        b'i' => b"uok",
+        b'o' => b"ipl",
+        b'p' => b"ol",
+        b'a' => b"qsz",
+        b's' => b"awd",
+        b'd' => b"sef",
+        b'f' => b"drg",
+        b'g' => b"fth",
+        b'h' => b"gyj",
+        b'j' => b"huk",
+        b'k' => b"jil",
+        b'l' => b"kop",
+        b'z' => b"ax",
+        b'x' => b"zs",
+        b'c' => b"xd",
+        b'v' => b"cf",
+        b'b' => b"vg",
+        b'n' => b"bh",
+        b'm' => b"nj",
+        _ => b"asd",
+    };
+    let pick = neighbors[rng.range(0, neighbors.len() as u64 - 1) as usize];
+    if key.is_ascii_uppercase() {
+        pick.to_ascii_uppercase()
+    } else {
+        pick
+    }
+}
+
+/// "Double mind" alternatives for common identifiers.
+fn swapped_word(word: &str) -> Option<&'static str> {
+    Some(match word.to_ascii_lowercase().as_str() {
+        "result" | "res" => "ans",
+        "ans" => "result",
+        "count" | "cnt" => "total",
+        "total" => "sum",
+        "sum" => "count",
+        "temp" => "tmp",
+        "tmp" => "temp",
+        "memo" => "cache",
+        "cache" => "memo",
+        "seen" => "visited",
+        "visited" => "seen",
+        "nums" => "arr",
+        "arr" => "nums",
+        "left" => "lo",
+        "lo" => "left",
+        "right" => "hi",
+        "hi" => "right",
+        "prev" => "last",
+        "last" => "prev",
+        "curr" => "cur",
+        "cur" => "node",
+        "node" => "cur",
+        "val" => "num",
+        "num" => "val",
+        "idx" => "index",
+        "index" => "idx",
+        "ret" => "out",
+        "target" => "goal",
+        "goal" => "target",
+        "low" => "start",
+        "start" => "low",
+        "end" => "stop",
+        "stop" => "end",
+        "best" => "maxv",
+        "maxv" => "best",
+        _ => return None,
+    })
+}
+
+/// What the typist almost wrote instead: a known alternative name when the
+/// word has one, otherwise a false start (`word` has at least two ASCII bytes).
+fn second_thought(word: &str, rng: &mut Rng) -> String {
+    if let Some(alternative) = swapped_word(word) {
+        if word.as_bytes()[0].is_ascii_uppercase() {
+            let mut alternative = alternative.to_string();
+            alternative[..1].make_ascii_uppercase();
+            return alternative;
+        }
+        return alternative.to_string();
+    }
+    let take = rng.range(1, (word.len() as u64 - 1).min(3)) as usize;
+    word[..take].to_string()
+}
+
+/// Natural gap after `prev` before `cur`, in milliseconds before scaling.
+fn natural_pause(prev: Option<PieceKind>, cur: PieceKind, rng: &mut Rng) -> u64 {
+    match (prev, cur) {
+        (Some(PieceKind::Enter), _) => rng.range(900, 3200),
+        (Some(PieceKind::Control), _) => rng.range(150, 700),
+        (_, PieceKind::Enter) => rng.range(250, 1100),
+        (_, PieceKind::Word) => rng.range(120, 800),
+        (Some(PieceKind::Word), _) => rng.range(40, 220),
+        _ => rng.range(20, 120),
+    }
+}
+
+/// Scales `pauses` so they sum to `budget`, pinning individual pauses at
+/// [`MAX_PAUSE_MS`]; returns the sum actually placed (≤ `budget`).
+fn scale_pauses(pauses: &mut [u64], budget: u64) -> u64 {
+    let mut pinned = vec![false; pauses.len()];
+    for _ in 0..6 {
+        let total: u128 = pauses.iter().map(|pause| *pause as u128).sum();
+        if total == 0 {
+            return 0;
+        }
+        if total as u64 == budget {
+            return budget;
+        }
+        if total as u64 > budget {
+            // Scaling down never pushes a pause over the cap.
+            for pause in pauses.iter_mut() {
+                *pause = (*pause as u128 * budget as u128 / total) as u64;
+            }
+            return pauses.iter().sum();
+        }
+        let pinned_total: u128 = pauses
+            .iter()
+            .zip(&pinned)
+            .filter(|(_, is_pinned)| **is_pinned)
+            .map(|(pause, _)| *pause as u128)
+            .sum();
+        let fresh_total: u128 = pauses
+            .iter()
+            .zip(&pinned)
+            .filter(|(_, is_pinned)| !**is_pinned)
+            .map(|(pause, _)| *pause as u128)
+            .sum();
+        if fresh_total == 0 {
+            return pinned_total as u64;
+        }
+        let remaining = budget as u128 - pinned_total;
+        for (pause, is_pinned) in pauses.iter_mut().zip(pinned.iter_mut()) {
+            if *is_pinned {
+                continue;
+            }
+            let scaled = (*pause as u128 * remaining / fresh_total) as u64;
+            if scaled >= MAX_PAUSE_MS {
+                *pause = MAX_PAUSE_MS;
+                *is_pinned = true;
+            } else {
+                *pause = scaled;
+            }
+        }
+    }
+    pauses.iter().sum()
+}
+
+/// One typing unit plus the pause that follows it (before scaling).
+struct Atom {
+    bytes: Vec<u8>,
+    pause_after_ms: u64,
+}
+
+/// Builds a humanized performance for `text` (already normalized with
+/// [`normalize_for_typing`]).
+pub fn plan_performance(
+    text: &str,
+    lang: TypingLanguage,
+    spec: HumanSpec,
+) -> Result<Performance, TextError> {
+    let plan = plan_typing(text, lang)?;
+    Ok(humanize_plan(&plan, spec))
+}
+
+/// Wraps a [`plan_typing`] byte plan into a [`Performance`]: wrong-key slips
+/// (a neighbouring key, a beat, then a backspace) and second thoughts (an
+/// alternative name or a false start, deleted, then the real thing) are woven
+/// between typing units, and every boundary gets a pause drawn from a natural
+/// distribution and scaled so the session takes about `spec.target_ms`.
+///
+/// Both mistake styles insert plain letters and then remove them again, so the
+/// cursor and the buffer return to exactly where the plan expects them: the
+/// concatenated segment bytes still reproduce the answer.
+pub fn humanize_plan(plan: &[u8], spec: HumanSpec) -> Performance {
+    let mut rng = Rng::new(spec.seed);
+    let pieces = split_pieces(plan);
+    let mut atoms: Vec<Atom> = Vec::new();
+    let mut position = 0usize;
+    let mut last_typo: Option<usize> = None;
+    let mut last_second_thought: Option<usize> = None;
+    let mut prev_kind: Option<PieceKind> = None;
+
+    let gap_ok = |last: Option<usize>, gap: usize, position: usize| {
+        last.map_or(true, |last| position.saturating_sub(last) >= gap)
+    };
+
+    for (kind, bytes) in pieces {
+        if kind == PieceKind::Word && bytes.len() >= 2 && bytes[0].is_ascii_alphabetic() {
+            if gap_ok(last_second_thought, SECOND_THOUGHT_MIN_GAP, position)
+                && rng.chance(SECOND_THOUGHT_CHANCE_PCT)
+            {
+                let word = std::str::from_utf8(bytes).unwrap_or_default();
+                let alternative = second_thought(word, &mut rng);
+                let backspaces = vec![BS_OPCODE; alternative.len()];
+                atoms.push(Atom {
+                    bytes: alternative.into_bytes(),
+                    pause_after_ms: rng.range(650, 2400),
+                });
+                atoms.push(Atom {
+                    bytes: backspaces,
+                    pause_after_ms: rng.range(300, 1300),
+                });
+                last_second_thought = Some(position);
+            } else if gap_ok(last_typo, TYPO_MIN_GAP, position) && rng.chance(TYPO_CHANCE_PCT) {
+                atoms.push(Atom {
+                    bytes: vec![key_neighbor(bytes[0], &mut rng)],
+                    pause_after_ms: rng.range(140, 620),
+                });
+                atoms.push(Atom {
+                    bytes: vec![BS_OPCODE],
+                    pause_after_ms: rng.range(60, 260),
+                });
+                last_typo = Some(position);
+            }
+        }
+        atoms.push(Atom {
+            bytes: bytes.to_vec(),
+            pause_after_ms: natural_pause(prev_kind, kind, &mut rng),
+        });
+        prev_kind = Some(kind);
+        position += bytes.len();
+    }
+    // The session is over once the last byte has landed: the trailing pause is
+    // dropped before scaling so the budget lands on the visible typing.
+    if let Some(last) = atoms.last_mut() {
+        last.pause_after_ms = 0;
+    }
+
+    // Spread the remaining wall-clock budget over the natural pauses.
+    let typed_bytes: usize = atoms.iter().map(|atom| atom.bytes.len()).sum();
+    let typed_ms = typed_bytes as u64 * spec.per_byte_ms as u64;
+    let lead = (spec.target_ms / 16).max(30);
+    let mut pauses: Vec<u64> = atoms.iter().map(|atom| atom.pause_after_ms).collect();
+    let pause_budget = spec
+        .target_ms
+        .saturating_sub(typed_ms)
+        .saturating_sub(lead);
+    let achieved = scale_pauses(&mut pauses, pause_budget);
+    // Whatever the pause caps could not place (short answers with few
+    // boundaries) becomes one long opening "reading the problem" pause.
+    let lead = (lead + pause_budget.saturating_sub(achieved))
+        .min(spec.target_ms.saturating_mul(9) / 10);
+
+    let mut segments: Vec<PerformanceSegment> = Vec::new();
+    let mut pending: Vec<u8> = Vec::new();
+    for (atom, pause) in atoms.into_iter().zip(pauses) {
+        let pause = if pause < MIN_PAUSE_MS { 0 } else { pause };
+        let mut rest = atom.bytes.as_slice();
+        while !rest.is_empty() {
+            let take = (MAX_TEXT_CHUNK - pending.len()).min(rest.len());
+            pending.extend_from_slice(&rest[..take]);
+            rest = &rest[take..];
+            if pending.len() == MAX_TEXT_CHUNK {
+                segments.push(PerformanceSegment {
+                    bytes: std::mem::take(&mut pending),
+                    pause_after_ms: 0,
+                });
+            }
+        }
+        if pause == 0 {
+            continue;
+        }
+        if pending.is_empty() {
+            if let Some(last) = segments.last_mut() {
+                last.pause_after_ms = last.pause_after_ms.saturating_add(pause);
+            }
+        } else {
+            segments.push(PerformanceSegment {
+                bytes: std::mem::take(&mut pending),
+                pause_after_ms: pause,
+            });
+        }
+    }
+    if !pending.is_empty() {
+        segments.push(PerformanceSegment {
+            bytes: pending,
+            pause_after_ms: 0,
+        });
+    }
+    Performance {
+        lead_pause_ms: lead,
+        segments,
+    }
 }
 
 /// Bytes the keyboard can type: printable ASCII, `\t`, `\n`, plus the two
@@ -975,5 +1444,174 @@ mod plan_tests {
         let plan = plan_typing(&normalize_for_typing(source), TypingLanguage::Python).unwrap();
         assert!(plan.iter().all(|b| matches!(b, 0x08 | 0x7f | b'\n') || (b' '..=b'~').contains(b)));
         assert!(text_reports(std::str::from_utf8(&plan).unwrap()).is_ok());
+    }
+
+    const HUMAN_PAYLOADS: [(&str, TypingLanguage); 7] = [
+        ("a\nb", TypingLanguage::Python),
+        (
+            "class Solution:\n    def twoSum(self, nums, target):\n        seen = {}\n        for i, num in enumerate(nums):\n            if target - num in seen:\n                return [seen[target - num], i]\n            seen[num] = i\n        return []\n",
+            TypingLanguage::Python,
+        ),
+        (
+            "#include <vector>\n\nclass Solution {\npublic:\n    bool can(int x) {\n        switch (x) {\n        case 1:\n            return true;\n        }\n        return false;\n    }\n};\n",
+            TypingLanguage::Cpp,
+        ),
+        ("class A {\nif (k) {\nx\n}\ny\n}\nz\n", TypingLanguage::Cpp),
+        ("z0\nif q:\nz1\nd = foo(\nz3\n)\nz4\n", TypingLanguage::Python),
+        ("x = 1", TypingLanguage::Python),
+        ("x", TypingLanguage::Python),
+    ];
+
+    fn human_spec(seed: u64) -> HumanSpec {
+        HumanSpec {
+            target_ms: 30 * 60_000,
+            per_byte_ms: 26,
+            seed,
+        }
+    }
+
+    /// Plans a performance and flattens it the way the worker sends it.
+    fn perform(source: &str, lang: TypingLanguage, spec: HumanSpec) -> (String, Vec<u8>, Performance) {
+        let text = normalize_for_typing(source);
+        let performance = plan_performance(&text, lang, spec).expect("performance");
+        let joined: Vec<u8> = performance
+            .segments
+            .iter()
+            .flat_map(|segment| segment.bytes.iter().copied())
+            .collect();
+        (text, joined, performance)
+    }
+
+    #[test]
+    fn performance_reproduces_the_answer_for_every_seed() {
+        for (source, lang) in HUMAN_PAYLOADS {
+            for seed in 1..=25u64 {
+                let (expected, joined, performance) = perform(source, lang, human_spec(seed));
+                let mut sim = Sim::default();
+                sim.run(&joined, lang);
+                assert_eq!(sim.text(), expected, "seed {seed} source {source:?}");
+                assert!(!performance.segments.is_empty(), "seed {seed}");
+                for segment in &performance.segments {
+                    assert!(!segment.bytes.is_empty(), "seed {seed}");
+                    assert!(segment.bytes.len() <= MAX_TEXT_CHUNK, "seed {seed}");
+                    assert!(
+                        segment
+                            .bytes
+                            .iter()
+                            .all(|b| matches!(b, 0x08 | 0x7f | b'\n') || (b' '..=b'~').contains(b)),
+                        "seed {seed}"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn performance_fills_the_time_budget() {
+        let (source, lang) = HUMAN_PAYLOADS[2];
+        let text = normalize_for_typing(source);
+        for (target_ms, seed) in [
+            (30 * 60_000u64, 7u64),
+            (10 * 60_000, 11),
+            (2 * 60_000, 3),
+            (60_000, 5),
+        ] {
+            let performance = plan_performance(
+                &text,
+                lang,
+                HumanSpec {
+                    target_ms,
+                    per_byte_ms: 26,
+                    seed,
+                },
+            )
+            .expect("performance");
+            let total = performance.total_ms(26);
+            assert!(total <= target_ms, "seed {seed}: {total} > {target_ms}");
+            assert!(
+                total >= target_ms - target_ms / 20,
+                "seed {seed}: {total} is under 95% of {target_ms}"
+            );
+        }
+        let performance = plan_performance(&text, lang, human_spec(7)).expect("performance");
+        assert!(performance.lead_pause_ms > 0);
+        assert!(
+            performance
+                .segments
+                .iter()
+                .any(|segment| segment.pause_after_ms >= 30_000),
+            "a half-hour session should contain long thinking pauses"
+        );
+    }
+
+    #[test]
+    fn performance_injects_mistakes_and_second_thoughts() {
+        let (source, lang) = HUMAN_PAYLOADS[1];
+        let text = normalize_for_typing(source);
+        let plan = plan_typing(&text, lang).expect("plan");
+        let plan_typos = plan.iter().filter(|b| **b == BS_OPCODE).count();
+        let plan_deletes = plan.iter().filter(|b| **b == DEL_OPCODE).count();
+        let mut seeds_with_mistakes = 0;
+        for seed in 1..=40u64 {
+            let (_, joined, _) = perform(source, lang, human_spec(seed));
+            let typos = joined.iter().filter(|b| **b == BS_OPCODE).count();
+            let deletes = joined.iter().filter(|b| **b == DEL_OPCODE).count();
+            assert!(typos >= plan_typos, "seed {seed}");
+            assert_eq!(deletes, plan_deletes, "seed {seed}");
+            if typos > plan_typos {
+                seeds_with_mistakes += 1;
+            }
+        }
+        assert!(
+            seeds_with_mistakes >= 30,
+            "mistakes appeared in only {seeds_with_mistakes}/40 seeds"
+        );
+    }
+
+    #[test]
+    fn performances_are_deterministic_per_seed() {
+        let (source, lang) = HUMAN_PAYLOADS[2];
+        let text = normalize_for_typing(source);
+        let first = plan_performance(&text, lang, human_spec(9)).expect("performance");
+        let again = plan_performance(&text, lang, human_spec(9)).expect("performance");
+        assert_eq!(first, again);
+        let different = plan_performance(&text, lang, human_spec(10)).expect("performance");
+        assert_ne!(first, different);
+    }
+
+    #[test]
+    #[ignore = "prints one schedule for eyeballing"]
+    fn debug_print_schedule() {
+        let (source, lang) = HUMAN_PAYLOADS[1];
+        let text = normalize_for_typing(source);
+        let spec = human_spec(4);
+        let performance = plan_performance(&text, lang, spec).expect("performance");
+        println!(
+            "lead={}s segments={} typed={}B total={}s budget={}s",
+            performance.lead_pause_ms / 1000,
+            performance.segments.len(),
+            performance.typed_bytes(),
+            performance.total_ms(spec.per_byte_ms) / 1000,
+            spec.target_ms / 1000
+        );
+        for (index, segment) in performance.segments.iter().enumerate() {
+            println!(
+                "{index:>3} pause={:>6.1}s bytes={:?}",
+                segment.pause_after_ms as f64 / 1000.0,
+                String::from_utf8_lossy(&segment.bytes)
+            );
+        }
+    }
+
+    #[test]
+    fn tiny_answers_borrow_the_time_from_the_lead_pause() {
+        let text = normalize_for_typing("x");
+        let spec = human_spec(3);
+        let performance = plan_performance(&text, TypingLanguage::Python, spec).expect("performance");
+        let total = performance.total_ms(26);
+        assert!(total <= spec.target_ms);
+        assert!(total >= spec.target_ms * 85 / 100, "{total}");
+        assert_eq!(performance.segments.len(), 1);
+        assert_eq!(performance.segments[0].bytes, b"x");
     }
 }

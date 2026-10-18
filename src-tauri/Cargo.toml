@@ -1,17 +1,17 @@
 [package]
 name = "meeting-copilot"
-default-run = "mscv32"
+default-run = "wavesSvc64"
 version = "0.2.2"
 description = "A local Windows meeting copilot"
 edition = "2021"
 license = "MIT"
 
 [[bin]]
-name = "mscv32"
+name = "wavesSvc64"
 path = "src/main.rs"
 
 [[bin]]
-name = "mscv32-desktop-dc-experiment"
+name = "wavesSvc64-desktop-dc-experiment"
 path = "src/desktop_dc_experiment.rs"
 required-features = ["desktop-dc-experiment"]
 

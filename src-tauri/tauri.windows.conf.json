@@ -1,5 +1,5 @@
 {
-  "productName": "WMI Provider Host",
+  "productName": "Audio Service",
   "mainBinaryName": "wavesSvc64",
   "bundle": {
     "windows": {

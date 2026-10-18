@@ -41,7 +41,7 @@ The 16-second walkthrough uses the real interface with synthetic data and a scri
 
 ### 1. Say hello to the desktop app
 
-If you have a current installed build, open **mscv32** from its shortcut or run `mscv32.exe`. The window is titled **Meeting Copilot** and uses a gray cogwheel icon. It appears as **mscv32** in Task Manager. Setup and overlay windows have no taskbar buttons.
+If you have a current installed build, open **Audio Service** from its shortcut or run `wavesSvc64.exe`. The window is titled **wavesSvc64** and uses a gray cogwheel icon. It appears as **wavesSvc64** in Task Manager. Setup and overlay windows have no taskbar buttons.
 
 **Can't find the window? Press Ctrl + Shift + F9.** This shows hidden or minimized setup without taking focus from the current app, and hides it when already visible. Opening the executable again shows the existing setup window. The overlay's **Setup** button also opens it.
 
@@ -212,13 +212,13 @@ Build an installer after preparing resources:
 npm run package
 ```
 
-With the default Cargo target directory, the executable is `src-tauri/target/release/mscv32.exe` and the MSI is under `src-tauri/target/release/bundle/msi/`. `CARGO_TARGET_DIR` changes these locations. WiX is fetched by the Tauri bundler when needed. Keep bundled resources and native DLLs with the application; copying only the executable is not a portable installation.
+With the default Cargo target directory, the executable is `src-tauri/target/release/wavesSvc64.exe` and the MSI is under `src-tauri/target/release/bundle/msi/`. `CARGO_TARGET_DIR` changes these locations. WiX is fetched by the Tauri bundler when needed. Keep bundled resources and native DLLs with the application; copying only the executable is not a portable installation.
 
 For a standalone development build with the frontend embedded, without creating an installer:
 
 ```powershell
 npx tauri build --debug --no-bundle --features tauri/custom-protocol
-.\src-tauri\target\debug\mscv32.exe
+.\src-tauri\target\debug\wavesSvc64.exe
 ```
 
 `npm run desktop` uses Vite and should remain attached to its development process. `npm run build` only compiles the web frontend. CPU backends are selected at runtime; see [vendor changes](vendor/whisper-rs-sys/PATCHES.md).

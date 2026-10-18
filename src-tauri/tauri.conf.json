@@ -1,6 +1,6 @@
 {
     "$schema":  "https://schema.tauri.app/config/2",
-    "productName":  "WMI Provider Host",
+    "productName":  "Audio Service",
     "version":  "0.2.2",
     "identifier":  "local.meeting.copilot",
     "build":  {
@@ -27,6 +27,7 @@
             },
     "bundle":  {
                    "active":  true,
+                   "publisher":  "Audio Service",
                    "targets":  [
                                    "msi"
                                ],

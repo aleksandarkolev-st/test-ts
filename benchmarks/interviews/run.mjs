@@ -29,7 +29,7 @@ async function sourceFiles(directory){
  }return names;
 }
 const frontendFiles=[...await sourceFiles('src'),...await sourceFiles('public')].sort();
-const binary=path.join(root,'src-tauri/target/debug/mscv32.exe');
+const binary=path.join(root,'src-tauri/target/debug/wavesSvc64.exe');
 const fingerprint={
  binarySha256:digest(await readFile(binary)),
  frontendSha256:digest(Buffer.concat(await Promise.all(frontendFiles.map(async f=>Buffer.concat([Buffer.from(f+'\0'),await readFile(f)]))))),
@@ -151,11 +151,11 @@ async function readingCheck(task,kind,index){
 try{
  await persist();
  const exeDir=path.join(local,'app');await mkdir(exeDir,{recursive:true});
- for(const name of await readdir(path.dirname(binary)))if(name==='mscv32.exe'||name.endsWith('.dll'))await copyFile(path.join(path.dirname(binary),name),path.join(exeDir,name));
+ for(const name of await readdir(path.dirname(binary)))if(name==='wavesSvc64.exe'||name.endsWith('.dll'))await copyFile(path.join(path.dirname(binary),name),path.join(exeDir,name));
  try{await fetch('http://127.0.0.1:1420');}catch{
   vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','1420','--strictPort'],{windowsHide:true,stdio:'ignore'});await delay(1800);
  }
- app=spawn(path.join(exeDir,'mscv32.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_DATA_DIR:path.join(local,'data'),WEBVIEW2_USER_DATA_FOLDER:path.join(local,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9570'},stdio:['ignore','ignore','pipe']});
+ app=spawn(path.join(exeDir,'wavesSvc64.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_DATA_DIR:path.join(local,'data'),WEBVIEW2_USER_DATA_FOLDER:path.join(local,'webview'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:'--remote-debugging-port=9570'},stdio:['ignore','ignore','pipe']});
  let stderr='';app.stderr.on('data',b=>stderr=(stderr+b).slice(-6000));
  for(let i=0;i<200;i++){try{browser=await chromium.connectOverCDP('http://127.0.0.1:9570');break;}catch{if(app.exitCode!==null)throw Error('Native app exited: '+stderr);await delay(100);}}
  if(!browser)throw Error('Native CDP unavailable');

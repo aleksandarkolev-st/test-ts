@@ -211,8 +211,8 @@ try {
     result.generatedScenario={model:generated.model,effort:generated.effort,file:'scenario-request.scenario.json'};
   }
   const build=path.join(root,'src-tauri/target/debug');
-  for(const file of await readdir(build))if(file==='mscv32.exe'||file.endsWith('.dll'))await copyFile(path.join(build,file),path.join(appDir,file));
-  result.nativeBinarySha256=hash(await readFile(path.join(appDir,'mscv32.exe')));result.examinerBinarySha256=hash(await readFile(examiner));
+  for(const file of await readdir(build))if(file==='wavesSvc64.exe'||file.endsWith('.dll'))await copyFile(path.join(build,file),path.join(appDir,file));
+  result.nativeBinarySha256=hash(await readFile(path.join(appDir,'wavesSvc64.exe')));result.examinerBinarySha256=hash(await readFile(examiner));
   try {await fetch('http://127.0.0.1:1420');} catch {
     vite=spawn(process.execPath,['node_modules/vite/bin/vite.js',...(process.env.COPILOT_DEEP_AUDIO==='1'?['preview']:[]),'--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});
     for(let i=0;i<300;i++){try{await fetch('http://127.0.0.1:1420');break;}catch{await sleep(100);}}
@@ -221,7 +221,7 @@ try {
   if(remoteOnly)env.COPILOT_ACCEPTANCE_REMOTE_ONLY='1';
   if(selfLoopback)env.COPILOT_ACCEPTANCE_SELF_LOOPBACK='1';
   delete env.COPILOT_TEST_API;delete env.COPILOT_INTERVIEW_RESUME;
-  app=spawn(path.join(appDir,'mscv32.exe'),[],{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});
+  app=spawn(path.join(appDir,'wavesSvc64.exe'),[],{cwd:root,windowsHide:true,env,stdio:['ignore','ignore','pipe']});
   result.nativeProcessId=app.pid;
   result.nativeResources=[];
   const sampleNativeResources=()=>{

@@ -34,9 +34,9 @@ try{
   // tests while a long-running native acceptance session owns these files.
   const executableDir=path.join(root,soakMinutes?'.local/soak-app':'.local/native-app');await mkdir(executableDir,{recursive:true});
   const buildDir=path.join(root,'src-tauri/target/debug');
-  for(const name of await readdir(buildDir)){if(name==='mscv32.exe'||name.endsWith('.dll'))await copyFile(path.join(buildDir,name),path.join(executableDir,name));}
+  for(const name of await readdir(buildDir)){if(name==='wavesSvc64.exe'||name.endsWith('.dll'))await copyFile(path.join(buildDir,name),path.join(executableDir,name));}
   try{await fetch('http://127.0.0.1:1420');}catch{vite=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','1420','--strictPort'],{cwd:root,windowsHide:true,stdio:'ignore'});for(let i=0;i<100;i++){try{await fetch('http://127.0.0.1:1420');break;}catch{await sleep(100);}}}
-  app=spawn(path.join(executableDir,'mscv32.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_TEST_API:`http://127.0.0.1:${port}/v1`,COPILOT_DATA_DIR:path.join(root,soakMinutes?'.local/soak-data':'.local/native-data'),WEBVIEW2_USER_DATA_FOLDER:path.join(root,soakMinutes?'.local/webview-soak':'.local/webview-test'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:`--remote-debugging-port=${debugPort}`},stdio:['ignore','ignore','pipe']});
+  app=spawn(path.join(executableDir,'wavesSvc64.exe'),[],{cwd:root,windowsHide:true,env:{...process.env,COPILOT_ACCEPTANCE:'1',COPILOT_TEST_API:`http://127.0.0.1:${port}/v1`,COPILOT_DATA_DIR:path.join(root,soakMinutes?'.local/soak-data':'.local/native-data'),WEBVIEW2_USER_DATA_FOLDER:path.join(root,soakMinutes?'.local/webview-soak':'.local/webview-test'),WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS:`--remote-debugging-port=${debugPort}`},stdio:['ignore','ignore','pipe']});
   app.stderr.on('data',b=>{stderr+=b.toString();});
   for(let i=0;i<150;i++){try{browser=await chromium.connectOverCDP(`http://127.0.0.1:${debugPort}`);break;}catch{if(app.exitCode!==null)throw Error(`Native app exited ${app.exitCode}: ${stderr.slice(-2000)}`);await sleep(100);}}
   assert(browser,'WebView2 debug endpoint did not open');const context=browser.contexts()[0];let overlay;

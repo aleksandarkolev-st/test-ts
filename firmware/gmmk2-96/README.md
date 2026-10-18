@@ -241,6 +241,24 @@ This keymap was compiled and flashed to a real GMMK 2 96% ANSI on 2026-10-17:
   `wb32-dfu-updater_cli.exe -R`, and replug. Holding Escape while plugging in erases the
   keyboard's stored settings and also enters the bootloader.
 
+### Reflashed — protocol v2 (2026-10-18)
+
+The keymap was rebuilt with the two v2 editing bytes (`0x08` → `KC_BSPC`, `0x7F` →
+`KC_DEL`, see the protocol table) and flashed over the v1 image:
+
+- **Image.** `gmmk_gmmk2_p96_ansi_screen_typing.bin`, 48,624 bytes, SHA-256
+  `D6058F1FF7EF008B426E9B0BDA66B0359000C59B56A5BF38F7EBBAF068A6F819`.
+- **Flash.** Written at `0x08000000` through the same WB32 DFU bootloader flow
+  (`342D:DFA0`, bootloader 0.3, 128 KiB flash; `wb32-dfu-updater_cli.exe -t -s
+  0x08000000 -D …` followed by `-R`), and the board re-enumerated as `320F:504B`.
+- **Hardware test.** A PING over RAW HID (usage page `0xFF60` / usage `0x61`) answers PONG
+  with protocol version 2, queue 0, typing idle, product string `GMMK V2 96 ANSI`.
+- **Not yet hardware-verified for v2.** The end-to-end compensation plan (Backspace/Delete
+  bytes woven around a real editor's auto-indent and auto-closing brackets) has not yet
+  been watched editing a real editor on this board; it is covered by the host-side
+  simulator and tests in `src-tauri/src/monitor/protocol.rs`. TEXT cadence was verified on
+  hardware with the v1 image.
+
 Still source-verified only (not hardware-tested):
 
 1. The `VIA_ENABLE = yes` variant (`via_command_kb` path) — never compiled; the flashed
